@@ -59,6 +59,23 @@ sap.ui.define(
                     });
             },
 
+            onChangeZformType : function(){
+                var oController = this.getView().getController();
+                var vZformType = oController.ApplyModel.getProperty("/Data/ZformType");
+                if(vZformType == "04"){
+                    var vMonth = new Date().getMonth() + 1,
+                        vDay   = new Date().getDay();
+
+                    if(vMonth <= 3 && vDay < 10){
+                        // 기본값 설정
+                         oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 2 );
+                    }else{
+                        // 기본값 설정
+                        oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 1 );
+                    }   
+                }
+            },
+
             checkError: function () {
                 var oController = this.getView().getController();
 

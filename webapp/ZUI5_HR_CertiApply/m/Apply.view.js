@@ -57,7 +57,8 @@ sap.ui.define(
                             if (v && v === "X") return false;
                             return true;
                         }
-                    }
+                    },
+                    change : oController.onChangeZformType
                 });
 
                 // 키보드 입력 방지
