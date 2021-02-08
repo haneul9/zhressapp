@@ -60,7 +60,9 @@ sap.ui.define(
             },
 
             onChangeZformType : function(){
-                var oController = this.getView().getController();
+                var oView = sap.ui.getCore().byId("ZUI5_HR_CertiApply.m.Apply");
+                var oController = oView.getController();
+
                 var vZformType = oController.ApplyModel.getProperty("/Data/ZformType");
                 if(vZformType == "04"){
                     var vMonth = new Date().getMonth() + 1,

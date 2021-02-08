@@ -58,7 +58,7 @@ sap.ui.define(
                             return true;
                         }
                     },
-                    change : oController.onChangeZformType
+                    change : oController.onChangeZformType.bind(this)
                 });
 
                 // 키보드 입력 방지
