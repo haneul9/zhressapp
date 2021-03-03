@@ -107,13 +107,27 @@ sap.ui.define(
                 var ZformType = $.app.byId(oController.PAGEID + "_RadioGroup1").getSelectedIndex();
                 var Aptyp = $.app.byId(oController.PAGEID + "_RadioGroup2").getSelectedIndex();
                 if (ZformType == 0) oController.ApplyModel.setProperty("/Data/ZformType", "01");
-                if (ZformType == 1) oController.ApplyModel.setProperty("/Data/ZformType", "02");
-                if (ZformType == 2) oController.ApplyModel.setProperty("/Data/ZformType", "04");
-                if (ZformType == 3) oController.ApplyModel.setProperty("/Data/ZformType", "05");
-                // 구분이 경력 증명서 이면, 수령방법은 담당자 출력
-                if (ZformType == 1) {
+                else if (ZformType == 1){
+                    oController.ApplyModel.setProperty("/Data/ZformType", "02");
+                    // 구분이 경력 증명서 이면, 수령방법은 담당자 출력
                     oController.ApplyModel.setProperty("/Data/Aptyp", "2");
+                } 
+                else if (ZformType == 2) oController.ApplyModel.setProperty("/Data/ZformType", "04");
+                if (ZformType == 3){
+                    oController.ApplyModel.setProperty("/Data/ZformType", "05");
+                    //원천징수증 일 경우 3.10 일 이전일 경우 작년으로 설정
+                    var vMonth = new Date().getMonth() + 1,
+                        vDay   = new Date().getDay();
+
+                    if(vMonth <= 3 && vDay < 10){
+                        // 기본값 설정
+                         oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 1 );
+                    }    
+                }else{
+                    // 기본값 설정
+                    oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear());
                 }
+                
             },
 
             onChangeAptyp: function () {
