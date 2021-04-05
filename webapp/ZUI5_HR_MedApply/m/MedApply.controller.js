@@ -722,11 +722,13 @@ sap.ui.define([
 					data: [oData,sData1,oController._onDialog,oController._SessionData,Flag]
 				});
 			}else if(Flag=="A100"){
-				if (!oController.oDialog2) {
-					oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
-					$.app.getView().addDependent(oController.oDialog2);
-				}
-				oController.oDialog2.open();
+				var oData=oController._tData;
+				var sData1=oController._SelData;
+				var vPageId="MedApplyDetA100";
+				sap.ui.getCore().getEventBus().publish("nav", "to", {
+					id: [$.app.CONTEXT_PATH, vPageId].join($.app.getDeviceSuffix()),
+					data: [oData,sData1,oController._onDialog,oController._SessionData,Flag]
+				});
 			}else if(Flag=="N3"){
 				if (!oController.oDialog3) {
 					oController.oDialog3 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.prepopup", oController);
