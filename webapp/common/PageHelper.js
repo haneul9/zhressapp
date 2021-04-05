@@ -80,7 +80,7 @@ new common.PageHelper({
 				titleItems.push(o.headerButton);
 			}
 
-			if (parent && UriParameters.fromQuery(document.location.search).get("useEmpInfoBox") !== "N") {
+			if (parent && UriParameters.fromQuery(document.location.search).get("useEmpInfoBox") === "N") {
 				window._CommonEmployeeModel = new EmployeeModel();
 				window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
 
