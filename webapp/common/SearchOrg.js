@@ -203,13 +203,10 @@ common.SearchOrg = {
 						oPlans.destroyItems();
 						oPlans.addItem(new sap.ui.core.Item({key : "0000", text : common.SearchOrg.oController.getBundleText("LABEL_02035")}));
 						
-					var oWerks = "", oOrgeh = "";
+					var oWerks = "";
 	            	for(var i=0; i<common.SearchOrg.oController._vActiveControl.length; i++){
 	            		if(common.SearchOrg.oController._vActiveControl[i].Fieldname == "WERKS"){
 	            			oWerks = common.SearchOrg.oController._vActiveControl[i].Dcode;
-	            		}
-	            		if(common.SearchOrg.oController._vActiveControl[i].Fieldname == "ORGEH"){
-	            			oOrgeh = common.SearchOrg.oController._vActiveControl[i].Dcode;
 	            		}
 	            	}
 						
@@ -217,7 +214,7 @@ common.SearchOrg = {
 						async: false,
 						filters: [
 							new sap.ui.model.Filter("Field", "EQ", "Plans"),
-							new sap.ui.model.Filter("Persa", "EQ", sap.ui.getCore().byId(vPrefix + "Werks").getSelectedKey()),
+							new sap.ui.model.Filter("Persa", "EQ", oWerks), 
 							new sap.ui.model.Filter("Excod", "EQ", vSelectedOrg[0].Orgeh),
 							new sap.ui.model.Filter("Actda", "EQ", common.SearchOrg.oController._vActda),
 						],
