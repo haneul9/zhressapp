@@ -1,0 +1,107 @@
+<html>
+	<head>
+		<style>
+			.Container {
+				width: 700px;
+				padding-left: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+			}
+
+			.Note {
+				font-weight: bold;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 25px;
+			}
+
+			.RejectComment {
+				font-weight: normal;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				padding-left: 10px;
+			}
+
+			.TableLabel {
+				background-color: #e5e5e5;
+				padding-left: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 25px;
+			}
+
+			.TableData {
+				background-color: #ffffff;
+				padding-left: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 25px;
+			}
+
+			.TableDataNumber {
+				background-color: #ffffff;
+				padding-right: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: right;
+				height: 25px;
+			}
+
+			.TableContainer {
+				width: 100%;
+				background-color: #666666;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="Container">
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="Note">[REJECT_REASON_TITLE] :</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="RejectComment" valign="top">
+						<pre>
+[REJECT_REASON]
+    </pre
+						>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<div class="Note">[RETIRE_PERSON_TITLE]</div>
+			<table cellspacing="1" cellpadding="1" class="TableContainer">
+				[INFO_START]
+				<tr>
+					<td class="TableLabel" style="width: 30%">[INFO_LABEL]</td>
+					<td class="TableData" style="width: 70%">[INFO_DATA]</td>
+				</tr>
+				[INFO_END]
+			</table>
+			<br />
+			<div class="Note">[RETIRE_ITEM_TITLE]</div>
+			<table cellspacing="1" cellpadding="1" class="TableContainer">
+				<tr>
+					<td class="TableLabel" style="width: 5%">No.</td>
+					<td class="TableLabel" style="width: 30%">[ITEM_LABEL1]</td>
+					<td class="TableLabel" style="width: 35%">[ITEM_LABEL2]</td>
+					<td class="TableLabel" style="width: 30%">[ITEM_LABEL3]</td>
+				</tr>
+				[ITEM_START]
+				<tr>
+					<td class="TableDataNumber">[ITEM_NO]</td>
+					<td class="TableData">[ITEM_DATA1]</td>
+					<td class="TableData">[ITEM_DATA2]</td>
+					<td class="TableData">[ITEM_DATA3]</td>
+				</tr>
+				[ITEM_END]
+			</table>
+		</div>
+	</body>
+</html>

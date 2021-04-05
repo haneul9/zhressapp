@@ -1,0 +1,21 @@
+.LabelCell{
+    border : 1px solid #d8dadf;
+    padding : 2px;
+    background : #f3f4f6;
+}
+.DataCell{
+    border : 1px solid #d8dadf;
+    padding : 2px;
+}
+.Bold{
+    font-weight:bold !important;
+}
+.Font16{
+    font-size:16px;
+}
+.Font15{
+    font-size:15px;
+}
+.Font14{
+    font-size:14px;
+}

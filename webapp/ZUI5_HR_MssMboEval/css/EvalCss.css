@@ -1,0 +1,58 @@
+.LabelCell{
+    border : 1px solid #d8dadf;
+    padding : 2px;
+    background :#f3f4f6;
+}
+.DataCell{
+    border : 1px solid #d8dadf;
+    padding : 2px;
+}
+.TableLabelCell{
+    border : 1px solid #d8dadf;
+    padding : 2px !important;
+    background : #f3f4f6;
+}
+.TableDataCell{
+    border-bottom : 1px solid #d8dadf;
+    border-left : 1px solid #d8dadf;
+    border-right : 1px solid #d8dadf;
+    padding : 2px !important;
+}
+.Bold{
+    font-weight:bold !important;
+}
+.Font16{
+    font-size:16px;
+}
+.Font15{
+    font-size:15px;
+}
+.Font14{
+    font-size:14px;
+}
+.UnderBar{
+    padding : 5px;
+    border-bottom:1px solid #d8dadf;
+}
+.sapUiSmallMargin{
+    margin : 0px !important;
+}
+.centerAlign{
+    text-align: center !important;
+    vertical-align : middle !important;
+}
+.BlueBox{
+    padding: 2px;
+    margin: 1px;
+    border: 1px solid #0070bd;
+    border-radius: .1875rem;
+    border-color: #0070bd;
+    background-color: #fff;
+    color: #0070bd;
+    cursor:pointer !important;
+}
+.NoBox{
+    padding: 2px;
+    margin: 1px;
+    background-color: #fff;
+}

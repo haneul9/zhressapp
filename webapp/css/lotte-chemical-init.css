@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+@import url('noto-sans-kr.css');
+@import url('utils/border-width-radius.css');
+@import url('utils/box-size.css');
+@import url('utils/font-size.css');
+@import url('utils/z-index.css');
+@import url('utils/spinner.css');
+
+html *:not(.sapUiIcon):not(i) {font-family:NotoSansKR !important}
+
+html, #ui-body {height:100%; padding:0; background-color:#fff}
+body {overflow:hidden}
+.app-preparing {position:absolute; top:30%; left:calc(50% - 150px); width:300px; display:flex; flex-direction:column; justify-content:center; align-items:center}
+.app-preparing .spinner {position:relative; display:block; top:-30px}

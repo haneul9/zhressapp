@@ -1,0 +1,101 @@
+$.sap.require("common.Common");
+$.sap.require("common.Formatter");
+$.sap.require("common.makeTable");
+$.sap.require("common.EmpBasicInfoBox");
+jQuery.sap.require("control.ODataFileUploader");
+sap.ui.jsview("ZUI5_HR_FamilyApply.FamilyApply", {
+
+	/** Specifies the Controller belonging to this View. 
+	 * In the case that it is not implemented, or that "null" is returned, this View does not have a Controller.
+	 * @memberOf controller.main
+	 */
+	getControllerName: function () {
+		return "ZUI5_HR_FamilyApply.FamilyApply";
+	},
+
+	/** Is initially called once after the Controller has been instantiated. It is the place where the UI is constructed. 
+	 * Since the Controller is given to this method, its event handlers can be attached right away.
+	 * @memberOf controller.main
+	 */
+	createContent: function (oController) {
+		$.app.setModel("ZHR_COMMON_SRV");
+		$.app.setModel("ZHR_BENEFIT_SRV");
+		var oRow,oCell,oMat;
+		oMat=new sap.ui.commons.layout.MatrixLayout();
+		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+			content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"})
+		});
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
+		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+			hAlign : "Right",
+			content:[new sap.m.Button({text:oBundleText.getText("LABEL_00153"),press:function(oEvent){oController.onDialog("N")}}).addStyleClass("button-light"),
+					new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),
+					new sap.m.Button({text:oBundleText.getText("LABEL_44042"),press:oController.onModLines}).addStyleClass("button-light"),
+					new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),
+					new sap.m.Button({text:oBundleText.getText("LABEL_00103"),
+					press : oController.onDeleteLines
+				}).addStyleClass("button-delete")]
+		});
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
+		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+			content:new sap.ui.core.HTML({content:"<div style='height:5px;'/>"})
+		});
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
+		var oTable = new sap.ui.table.Table(oController.PAGEID+"_Table", {
+			selectionMode: "MultiToggle",
+			enableColumnReordering: false,
+			enableColumnFreeze: false,
+			enableBusyIndicator: true,
+			visibleRowCount: 15,
+			showOverlay: false,
+			showNoData: true,
+			width: "auto",
+			noData: "{i18n>MSG_05001}"
+		}).addStyleClass("mt-8px").attachCellClick(oController.onSelectedRow);
+
+		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+			content:oTable
+		});
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
+
+		oController.oTableInit();
+		
+		var oContent = new sap.m.FlexBox({
+			  justifyContent: "Center",
+			  fitContainer: true,
+			  items: [new sap.m.FlexBox({
+						  direction: sap.m.FlexDirection.Column,
+						  items: [new sap.m.FlexBox({
+									  alignItems: "End",
+									  fitContainer: true,
+									  items: [new sap.m.Text({text: oBundleText.getText("LABEL_44001")}).addStyleClass("app-title")]
+								  }).addStyleClass("app-title-container"),
+								  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
+								  oMat
+								  ]
+					  }).addStyleClass("app-content-container-wide")]
+		}).addStyleClass("app-content-body");
+				
+		/////////////////////////////////////////////////////////
+
+		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+			customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
+			content: [oContent]
+		}).addStyleClass("app-content");
+		
+		oPage.addStyleClass("WhiteBackground");
+		
+		oPage.setModel(oController._ListCondJSonModel);
+		oPage.bindElement("/Data");
+		return oPage;
+	}
+
+});

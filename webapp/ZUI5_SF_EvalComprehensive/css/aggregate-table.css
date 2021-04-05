@@ -1,0 +1,29 @@
+@charset "utf-8";
+
+.sub-app-content {min-width:1600px}
+
+#AggregateTable .sapUiTableCnt {border-top:0}
+#AggregateTable .sapUiTableCCnt {border-bottom:0}
+#AggregateTable .sapUiTableColHdrCnt .sapUiTableHeaderRow:first-child td {border-top:1px solid #b7b9bc}
+#AggregateTable .sapUiTableColHdrCnt .sapUiTableHeaderRow:first-child td[id*="cnt"] .sapUiTv {font-size:14px; font-weight:700; color:#333}
+#AggregateTable td[data-sap-ui-colid="AggregateTableSumorgtx"],
+#AggregateTable td[data-sap-ui-colid="AggregateTableEmpcnt1"],
+#AggregateTable td[data-sap-ui-colid="AggregateTableEmpcnt2"],
+#AggregateTable td[data-sap-ui-colid="AggregateTableEmpcnt3"],
+#AggregateTable td[data-sap-ui-colid="AggregateTableEmpcnt4"],
+#AggregateTable td[data-sap-ui-colid="AggregateTableEmpcnt5"],
+#AggregateTable td[data-sap-ui-colid="AggregateTableEmpcnt6"] {border-left:1px solid #b7b9bc !important}
+#AggregateTable td.sapUiTableCellLast {border-right:1px solid #b7b9bc !important}
+#AggregateTable td.sapUiTableDataCell[data-sap-ui-colid="AggregateTableEvapnt1"],
+#AggregateTable td.sapUiTableDataCell[data-sap-ui-colid="AggregateTableEvapnt2"],
+#AggregateTable td.sapUiTableDataCell[data-sap-ui-colid="AggregateTableEvapnt3"],
+#AggregateTable td.sapUiTableDataCell[data-sap-ui-colid="AggregateTableEvapnt4"],
+#AggregateTable td.sapUiTableDataCell[data-sap-ui-colid="AggregateTableEvapnt5"],
+#AggregateTable td.sapUiTableDataCell[data-sap-ui-colid="AggregateTableEvapnt6"],
+#GradingTable td.sapUiTableDataCell[data-sap-ui-colid="GradingTablePepnt"],
+#GradingTable td.sapUiTableDataCell[data-sap-ui-colid="GradingTableCepnt"],
+#GradingTable td.sapUiTableDataCell[data-sap-ui-colid="GradingTableMepnt"],
+#GradingTable td.sapUiTableDataCell[data-sap-ui-colid="GradingTablePegrade"] {background-color:#eff9fb}
+#AggregateTable tr.sapUiTableLastRow .sapUiTableDataCell {border-bottom:1px solid #b7b9bc; background-color:#f3f4f6}
+#AggregateTable .sapUiTableRowLastScrollable>.sapUiTableCell {border-bottom:1px solid #b7b9bc}
+#AggregateTable .sapUiTableRowFirstFixedBottom>.sapUiTableCell {box-shadow:none}

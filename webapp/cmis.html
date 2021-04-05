@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Use CMIS from HTML5 Application</title>
+<!--<script src="common/cmis/cmis-polyfills.js"></script>-->
+<script src=https://cdn.jsdelivr.net/npm/promise-polyfill@8.1/dist/polyfill.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0/dist/fetch.umd.min.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+<script src="common/Cmis.js"></script>
+<script type="text/javascript">
+	
+	function onSubmit() {
+	    var session = new Cmis();
+	    var file = document.getElementById('filename').files[0];
+	    
+	    session.getObjectByPath('/zhressapp/2021-02-19')
+    		.then(function(data) {
+    		    var folderObjectId = data.succinctProperties['cmis:objectId'];
+    		    
+    		    // parentId, content, input, mimeTypeExtension
+    		    session.createDocument(folderObjectId, file, file.name, file.type)
+    		        .catch(function(err) {
+    		            if (err.response) {
+                            err.response.json().then(function(json) {
+                                var exc = json.exception;
+                                var msg = json.message;
+                                alert(msg);
+                                console.log(exc);
+                            });
+                        }
+    		        });
+    		})
+    		.catch(function(err) {
+    		    if (err.response) {
+                    err.response.json().then(function(json) {
+                        var exc = json.exception;
+                        var msg = json.message;
+                        alert(msg);
+                        console.log(exc);
+                    });
+                }
+    		});
+	}
+	
+	function deleteObject(objid) {
+        var session = new Cmis();
+        
+        session.deleteObject(objid).then(function(data) {
+            console.log(data);
+            
+            getChildren();
+        });
+	}
+	
+	function makeFolder(path) {
+	    var session = new Cmis();
+	    var newFolderId = "";
+	    
+	    session.getObjectByPath('/zhressapp/' + path).then(function(data) {
+	        return data.succinctProperties['cmis:objectId'];
+	    }).catch(function() {
+	        session.createFolder('SKfcd03XN4XgI6zX-eZv_4fSVH-xA-BxFo1767R0HSE', path).then(function(data) {
+	            return data.succinctProperties['cmis:objectId'];
+	        });
+	    });
+	    
+	    return newFolderId;
+	}
+	
+	function getChildren(objid) {
+		var session = new Cmis();
+	    if(objid == null || objid == '') objid = session.defaultRepository.repositoryId;
+        
+        // session.getObjectByPath('/zhressapp/2020-02-19/36AA23A3.PNG');
+		session.getChildren(objid).then(function(data) {
+		    var str = "<ul>";
+		    var repoUrl = "url//";
+			for (var i = 0; i <data.objects.length; i++) {
+				if (data.objects[i].object.succinctProperties["cmis:baseTypeId"] == 'cmis:folder') {
+				    var objectId = data.objects[i].object.succinctProperties["cmis:objectId"];
+					str += '<li><a href="javascript:getChildren(\'' + objectId + '\')">'
+							+ data.objects[i].object.succinctProperties["cmis:name"]
+							+ ' (folder)</a> <a href="javascript:deleteObject(\'' + objectId + '\')">삭제</a></li>';
+				} else {
+					var name = data.objects[i].object.succinctProperties["cmis:name"];
+					var objectId = data.objects[i].object.succinctProperties["cmis:objectId"];
+					str += '<li><a href="' + session.getContentStreamURL(objectId) + '">' + name
+							+ '</a> <a href="javascript:deleteObject(\'' + objectId + '\')">삭제</a></li>';
+				}
+			}
+			str += "</ul>";
+			document.getElementById("listchildren").innerHTML = str;
+		});
+	}
+</script>
+</head>
+<body>
+	<h1>Document Service from HTML App</h1>
+	<p>
+		<a href="https://essproxyyzdueo754l.jp1.hana.ondemand.com/ESSProxy/cmis/json/3868fc5f124c35d7e47cc206"> Link
+			to</a> Repository Info from Repository (requires authentication) <br />
+		<a href="/cmis/3868fc5f124c35d7e47cc206?cmisselector=repositoryInfo">Link
+			using destination to </a> Repository Info from Repository
+	</p>
+	<hr/>
+	Upload a file to the document service (browse, then press upload)
+	<form action="onSubmit();return false;"
+		enctype="multipart/form-data" method="post">
+		<p>
+			Please specify a file:<br> <input type="file" id="filename"
+				 name="datafile" size="40"><!-- onchange="setFilename()" -->
+		</p>
+		<div>
+			<input type="button" onClick="onSubmit()" value="Upload" /> 
+		</div>
+	</form>
+	<hr/>
+	List all objects in the root folder of your repository (press button
+	after uploding to refresh)
+	<br/>
+	<input type="button" onclick="getChildren()" value="List">
+	<div id="listchildren"></div>
+</body>
+</html>

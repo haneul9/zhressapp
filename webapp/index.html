@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko-KR" locale="ko_KR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lotte Chemical e-HR</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-500.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-900.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="css/noto-sans-kr.css" />
+<link rel="stylesheet" href="css/fontawesome-all.min.css" />
+<link rel="stylesheet" href="css/utils/box-size.css" />
+<link rel="stylesheet" href="css/utils/spinner.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery-ui.min.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane.css" media="all" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
+<script src="common/PromisePolyfillNpm.min.js"></script>
+<script src="common/moment-with-locales.js"></script>
+<script src="common/moment-timezone-with-data.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery-ui.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery.mousewheel.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery.jscrollpane.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
+<script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
+<script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
+<script src="ZUI5_HR_Home/js/HomeSession.js"></script>
+<script src="ZUI5_HR_Home/js/MegaDropdownMenu.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
+<script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--		P102 공지사항 -->
+<script src="ZUI5_HR_Home/js/portlets/QuickLinkPortlet.js"></script><!--	P103 바로가기 -->
+<script src="ZUI5_HR_Home/js/portlets/FavoriteMenuPortlet.js"></script><!--	P104 즐겨찾는 메뉴 -->
+<script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--		P105 팀 달력 -->
+<script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
+<script src="ZUI5_HR_Home/js/Portlets.js"></script>
+<script>
+function initHome() {
+
+	var _gateway = window._gateway;
+
+	if (_gateway.isPopup()) {
+		return;
+	}
+
+	setTimeout(function() {
+		var locale = sessionStorage.getItem('ess.sf-user.locale');
+		if (!locale) {
+			return;
+		}
+
+		$('#sf-locale')
+			.val(locale)
+			.change(function() {
+				window._session.changeSFUserLocale();
+			});
+	});
+
+	setTimeout(function() {
+		window._menu = new MegaDropdownMenu(_gateway, '.ehr-gnb');
+		window._menu
+			.generate() // 메뉴 목록 조회 및 링크 생성
+			.then(function() {
+				setTimeout(function() {
+					window._menu.setupFavorites(); // 즐겨찾기 설정
+				}, 0);
+
+				$(window).resize(); // .ehr-body resizing --> scrollbar resizing
+				$('.header-toggle-up').show();
+			});
+	}, 0);
+
+	setTimeout(function() {
+		window._portlet = new Portlets(_gateway);
+		window._portlet
+			.generate() // Portlet 설정 조회 및 생성
+			.then(function() {
+				$('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
+					resizeSensor: true,
+					verticalGutter: 0,
+					horizontalGutter: 0
+				});
+			});
+	}, 0);
+
+	$(document).on('click', 'a[data-popup-menu-url]', function() {
+		var anchor = $(this), popupMenuUrl = anchor.data('popupMenuUrl');
+		if (popupMenuUrl) {
+			var params = {
+				popup: popupMenuUrl,
+				mid: _gateway.mid(popupMenuUrl)
+			};
+			if (!_gateway.isPRD()) {
+				params.pernr = _gateway.parameter('pernr');
+			}
+			_gateway.openWindow({ // openPopup openWindow
+				url: 'index.html?' + $.param(params),
+				name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
+				width: 1280,
+				height: 800
+			});
+		}
+	});
+
+	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
+
+	$('[data-toggle="tooltip"]')
+		.tooltip()
+		.click(function() {
+			var show = !$(this).find('.fa-chevron-up').length;
+			setTimeout(function() {
+				_gateway.toggleMenu(show);
+			}, 0);
+		});
+}
+
+$(window).resize(function() {
+	$('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) + 'px)'); // scrollbar resizing
+	$('.portlet-col').css('min-height', $('.ehr-body').height() + 'px');
+});
+
+$(function() {
+
+var _gateway = window._gateway = new HomeGateway();
+window._basis = new HomeBasis(_gateway);
+window._session = new HomeSession(_gateway, initHome);
+
+var popupUrl = _gateway.parameter('popup');
+if (!popupUrl) {
+	$('.ehr-header').toggleClass('d-none', false);
+	$('.ehr-body').height('calc(100% - 46px)');
+} else {
+	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+	$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+	new MegaDropdownMenu(_gateway).goToLink(_gateway.parameter('mid'), popupUrl);
+}
+
+});
+</script>
+</head>
+<body oncontextmenu="return false">
+
+<div class="ehr-header d-none">
+	<!-- HEADER -->
+	<div class="menu-spinner-wrapper">
+		<div class="spinner menu-spinner"></div>
+	</div>
+	<div class="header-toggle header-toggle-up" style="display:none">
+		<a href="#" data-toggle="tooltip" data-placement="left" title="메뉴 접기"><i class="fas fa-chevron-up"></i></a>
+	</div>
+	<header class="container-fluid">
+		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" aria-label="상단 보조 메뉴 영역">
+			<a class="navbar-brand ehr-logo" href="javascript:;"></a>
+			<ul class="navbar-nav ehr-popup-menu ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="javascript:;" data-popup-menu-url="OpenHelpRoomESS.html"><i class="fas fa-info-circle"></i> 열린도움방</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="javascript:;">
+						<select id="sf-locale" class="custom-select custom-select-locale py-0" aria-labelledby="언어 선택">
+							<option value="en_US" data-lang="EN">ENG</option>
+							<option value="ko_KR" data-lang="KO">KOR</option>
+							<option value="zh_CN" data-lang="ZH">CHN</option>
+						</select>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="javascript:;" data-toggle="modal" data-target="#portlet-personalization"><i class="fas fa-user-cog"></i> 설정</a>
+				</li>
+			</ul>
+		</nav>
+		<nav class="navbar navbar-expand-lg navbar-light ehr-gnb" aria-label="글로벌 메뉴 영역">
+<!--
+			<ul class="navbar-nav flex-wrap ehr-gnb">
+				<li class="nav-item dropdown has-megamenu">
+					<div class="dropdown-menu mega-menu" role="menu">
+						<div class="row col-10 mx-auto px-0 ehr-snb">
+
+							<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+								<div class="col-mega-menu">
+									<h6 class="title">Title Menu One</h6>
+									<ul class="list-unstyled">
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+								<div class="col-mega-menu">
+									<h6 class="title">Title Menu Two</h6>
+									<ul class="list-unstyled">
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+										<li><a href="#">Custom Menu</a></li>
+									</ul>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+			</ul>
+-->
+		</nav>
+	</header>
+	<!-- //HEADER -->
+</div>
+
+<div class="ehr-body">
+	<div class="menu-spinner-wrapper">
+		<div class="spinner menu-spinner"></div>
+	</div>
+	<div class="header-toggle header-toggle-down">
+		<a href="#" data-toggle="tooltip" data-placement="left" title="메뉴 펼치기"><i class="fas fa-chevron-down"></i></a>
+	</div>
+	<div class="container-fluid">
+<!--
+		<div class="portlet-masonry-wrapper mx-auto">
+			<div class="row portlet-masonry">
+				<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="1"></div>
+				<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="2"></div>
+				<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="3"></div>
+					<div class="card portlet portlet-5h">
+						<div class="card-header">Header</div>
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						</div>
+					</div>
+					<div class="card portlet portlet-3h">
+						<div class="card-header">Header</div>
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-3 portlet-col">
+					<div class="card portlet portlet-2h">
+						<div class="card-header">Header</div>
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						</div>
+					</div>
+					<div class="card portlet portlet-1h">
+						<div class="card-header">Header</div>
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-3 portlet-col"></div>
+			</div>
+		</div>
+-->
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<html>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+      .title{
+        margin-bottom: 10px; 
+        font-weight: bold; 
+        font-size: 17px; 
+        letter-spacing: -0.107em;
+        line-height: 1.3; 
+        font-family: 'Malgun Gothic', '맑은고딕', Arial, Tahoma, sans-serif;
+        letter-spacing: 0px;
+      }
+      
+      .fontFamily{
+        font-family: 'Malgun Gothic', '맑은고딕', Arial, Tahoma, sans-serif;
+        font-size: 13px;
+      }
+      
+      .label{
+        font-family: 'Malgun Gothic', '맑은고딕', Arial, Tahoma, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        color: #0070bd;
+      }
+      
+      .label2{
+        font-family: 'Malgun Gothic', '맑은고딕', Arial, Tahoma, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        color: #bd0000;
+      }
+      
+      .table{
+        border-top: 1px solid #afafaf; 
+        border-bottom: 1px solid #d2d2d2;
+        /* width: 964px; */
+        font-family: 'Malgun Gothic', '맑은고딕', Arial, Tahoma, sans-serif; 
+        font-size: 13px; 
+        border-spacing: 0px;
+      }
+      
+      .table_label{
+        display: table-cell; 
+        /*padding: 5px 15px; */
+        padding: 0px 10px; 
+        background-color: #ffcc99; 
+        color: #575757; 
+        vertical-align: middle;
+        font-weight: bold;
+        word-wrap: break-word; 
+        word-break: keep-all; 
+        text-align: center; 
+        border-bottom: 1px solid #d2d2d2;
+      }
+      
+      .table_label2{
+        display: table-cell; 
+        /*padding: 5px 15px; */
+        padding: 0px 10px; 
+        background-color: #ccffff; 
+        color: #575757; 
+        vertical-align: middle;
+        font-weight: bold;
+        word-wrap: break-word; 
+        word-break: keep-all; 
+        text-align: center; 
+        border-bottom: 1px solid #d2d2d2;
+      }
+      
+      .table_data{
+        /*padding: 5px 15px; */
+        padding: 0px 10px; 
+        /* border-left: 1px solid #d2d2d2; */
+        border-bottom: 1px solid #d2d2d2;
+      }
+      
+      .text_end{
+      	text-align: end;
+      }
+    </style>
+    <body>
+      <div contenteditable="false" id="FormContent" oncontextmenu="return false" ondragstart="return false" onselectstart="return false" style="width: 800px">
+        <p class="title" style="text-align: center; font-size: 17px;">[ZYEAR]년 연봉내역 안내</p>
+        <br/>
+        <p class="fontFamily">
+          지난 1년간 회사를 위해 애쓰신 귀하의 노고에 진심으로 감사드리며, <br/>       
+          회사의 규정 및 절차에 따라 책정된 귀하의 2021년도 연봉을 아래와 같이 안내드립니다.
+        </p>
+        <table width="100%" class="table">
+          <colgroup>
+            <col width="15%"/>
+            <col width=""/>
+            <col width="15%"/>
+            <col width=""/>
+            <col width="15%"/>
+            <col width=""/>
+          </colgroup>
+          
+           <tr>
+            <td class="table_label" colSpan="6">인적사항</td>
+          </tr>
+          <tr>
+            <td class="table_label2">소속</td>
+            <td class="table_data" style="text-align:center">[ORGTX]</td>
+            <td class="table_label2">Grade</td>
+            <td class="table_data" style="text-align:center">[GRADE]</td>
+            <td class="table_label2">성명</td>
+            <td class="table_data" style="text-align:center">[ENAME]</td>
+          </tr>
+        </table>
+        
+        <br/>
+        <table width="100%" class="table">
+          <colgroup>
+            <col width="20%"/>
+            <col width="25%"/>
+            <col width="25%"/>
+            <col width="30%"/>
+          </colgroup>
+          
+           <tr>
+            <td class="table_label" colSpan="4">[ZYEAR]년 연봉내역</td>
+          </tr>
+          <tr>
+            <td class="table_label" style="border-right: 1px solid #d2d2d2;">임금 항목</td>
+            <td class="table_label" style="border-right: 1px solid #d2d2d2;">월급 기준</td>
+            <td class="table_label" style="border-right: 1px solid #d2d2d2;">연봉 기준</td>
+            <td class="table_label">비고</td>
+          </tr>
+          [TABLE_START]
+          <tr>
+            <td class="table_label2" style="border-right: 1px solid #d2d2d2; text-align: left;">[DATA1]</td>
+            <td class="table_data text_end" style="border-right: 1px solid #d2d2d2; font-weight:bold; text-align: right;">[DATA2]</td>
+            <td class="table_data text_end" style="border-right: 1px solid #d2d2d2; font-weight:bold; text-align: right;">[DATA3]</td>
+            <td class="table_data" style="text-align: center;">[DATA4]</td>
+          </tr>
+          [TABLE_END]
+          <tr>
+            <td class="table_label" style="border-right: 1px solid #d2d2d2; font-weight:bold;">총계</td>
+            <td class="table_label text_end" style="border-right: 1px solid #d2d2d2; font-weight:bold; text-align: right;">[TOTAL1]</td>
+            <td class="table_label text_end" style="border-right: 1px solid #d2d2d2; font-weight:bold; text-align: right;">[TOTAL2]</td>
+            <td class="table_label">[TOTAL3]</td>
+          </tr>
+        </table>
+        
+        <p class="fontFamily">
+          [DETAIL]
+        </p>
+        
+        <hr/>
+        <p class="label">1. 대상기간 : [BEGDA] ~ [ENDDA] (1년)</p>
+        <p class="label">2. 지급방법 및 시기</p>
+        <p class="fontFamily" style="padding-left:15px;">
+          ① 급여는 매월 21일에 지급합니다. (휴일인 경우 전일)<br/>
+          ② 지급액은 회사에서 별도로 정한 바에 따라 감액하여 지급할 수 있습니다.<br/>
+          <span style="padding-left:15px;">
+            (입사 시기, 휴직, 징계 등에 의한 감액 등)<br/>
+          </span>
+          ③ 승진, 보직, 담당직무 등의 변동으로 대상기간 중에도 연봉이 조정될 수 있습니다.<br/>
+          ④ 기타 사항은 급여규칙, 급여운영요령 등 회사 제규정에 따릅니다.
+        </p>
+        <p class="label2">
+          3. 본인 및 다른 직원의 연봉을 외부나 타인에게 누설할 경우 인사상의 불이익이 있을 수 있습니다.</p>
+        <br/>
+        <p class="title" style="text-align:Center;">
+        	[BEGDA]<br/>
+        	롯데케미칼(주) 대표이사
+        </p>
+      </div>
+    </body>
+  </head>
+</html>

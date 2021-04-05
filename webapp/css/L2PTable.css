@@ -1,0 +1,184 @@
+/* Let's get this party started */
+::-webkit-scrollbar {
+	width: 16px;
+	height: 16px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #e6e6e6;
+	-webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background-color: #e6e6e6;
+}
+
+.L2PTableContainer {
+	padding: 0px;
+	margin: 0px;
+}
+
+.L2PTableHeaderContainer {
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	background-color: #ffffff;
+	left: 0px;
+	position: relative;
+}
+
+.L2PTableFixedHeaderContainer {
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	background-color: #ffffff;
+}
+
+.L2PTableDataContainer {
+	padding: 0px;
+	margin: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: #ffffff;
+	left: 0px;
+	position: relative;
+}
+
+.L2PTableFixedDataContainer {
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	background-color: #ffffff;
+	left: 0px;
+	position: relative;
+}
+
+.L2PTableHeader {
+	table-layout: fixed;
+}
+
+.L2PTableHeaderTr {
+}
+
+.L2PTableHeaderTd {
+	background-color: #eeeeee;
+	color: #000000;
+	border-bottom: 1px solid red;
+	text-align: center;
+	cursor: pointer;
+	font-size: 13px;
+	font-family: "Malgun Gothic";
+}
+
+.L2PTableHeaderTd_dummy {
+	background-color: #eeeeee;
+	color: #000000;
+	border-bottom: 1px solid red;
+}
+
+.L2PTableHeaderTd_div {
+	background-color: #eeeeee;
+	border-right: 1px solid blue;
+	border-bottom: 1px solid red;
+	width: 3px;
+	cursor: e-resize;
+}
+
+.L2PTableFixedHeaderTd_div {
+	background-color: #eeeeee;
+	border-right: 1px solid blue;
+	border-bottom: 1px solid red;
+	width: 3px;
+}
+
+.L2PTableData {
+	table-layout: fixed;
+}
+
+.L2PTableFixedData {
+	table-layout: fixed;
+	position: relative;
+}
+
+.L2PTableDataCol {
+	background-color: #ffffff;
+	color: #000000;
+}
+
+.L2PTableDataCol_div {
+	background-color: #ffffff;
+}
+
+.L2PTableDataTd {
+	border-bottom: 1px solid #eeeeee;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-family: "Malgun Gothic";
+}
+
+.L2PTableDataTd_div {
+	border-right: 1px solid #eeeeee;
+	border-bottom: 1px solid #eeeeee;
+	width: 3px;
+}
+
+.L2PTablePageNumber {
+	padding-left: 2px;
+	padding-right: 2px;
+	font-size: 12px;
+}
+
+.L2PTablePageNumberSelect {
+	font-weight: bold;
+	color: rgba(0, 0, 255, 1);
+}
+
+.L2PTablePageNumberUnSelect {
+	font-weight: bold;
+	color: rgba(0, 0, 255, 0.4);
+	cursor: pointer;
+}
+
+.L2PTablePageNumberPrev {
+	font-weight: bold;
+	color: rgba(0, 0, 255, 1);
+	cursor: pointer;
+}
+
+.L2PTablePageNumberNext {
+	font-weight: bold;
+	color: rgba(0, 0, 255, 1);
+	cursor: pointer;
+}
+
+.L2PTableDataLink {
+	color: black;
+}
+
+.L2PTableDataLink:hover {
+	color: #009de0;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.L2PTableDataLink:visited {
+	color: #ff9de0;
+	text-decoration: none;
+}
+
+.L2PTablePageInfo {
+	padding-left: 2px;
+	padding-right: 2px;
+	font-size: 12px;
+	font-weight: bold;
+	color: rgba(0, 0, 255, 1);
+}

@@ -1,0 +1,1034 @@
+@charset "utf-8";
+/*
+------------------------------------------------------------
+Project Name: L2P CO., LTD
+file name: l2p.css
+Author: jihee,kim
+date: 2015.01.22 
+------------------------------------------------------------*/
+
+/* a:link { */
+/* 	color:#000000 !important; */
+/* 	font: 14px 'Malgun Gothic', Arial !important; */
+/* } */
+/* a:visited { */
+/* 	color:#000000 !important; */
+/* 	font: 14px 'Malgun Gothic', Arial !important; */
+/* }  visited link */
+a:hover {
+	color:#009DE0;
+	font: 13px 'Malgun Gothic', Arial;
+	font-weight: bold;
+	text-decoration: none;
+}  /* mouse over link */
+/* a:active { */
+/* 	color:#000000 !important; */
+/* 	font: 14px 'Malgun Gothic', Arial !important; */
+/* }  selected link */
+
+.L2P12Font {
+	font-size: 12Px !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2P13Font {
+	font-size: 13px !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2P14Font {
+	font-size: 1rem !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2P26Font {
+	font-size: 26Px !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2P22Font {
+	font-size: 22Px !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2P34Font {
+	font-size: 34Px !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2PFontBold {
+	font-weight: bold !important;
+}
+
+.L2PFontColorBlue {
+	color : #009DE0 !important;
+}
+
+.L2PFontColorRed {
+	color : #cc1919 !important;
+}
+
+.L2PFontColorGray {
+	color : #aaaaaa !important;
+}
+
+
+.L2PFontColorLightRed {
+	color : #ff2424 !important;
+}
+
+.L2PToolbarNoBottomLine {
+	border-bottom: 0px solid #cccccc !important;
+}
+
+.L2PNoBottomLine {
+	border-bottom: 0px solid #cccccc !important;
+}
+
+.L2PNoTopLine {
+	border-top: 0px solid #cccccc !important;
+}
+
+.L2P12Notice {
+	color : #CC1919 !important;  
+}
+
+/* .L2PHeaderBar { */
+/* 	background: -webkit-linear-gradient(#FFFFFF, #CCCCCC); For Safari 5.1 to 6.0 */
+/* 	background: -o-linear-gradient(#FFFFFF, #CCCCCC); For Opera 11.1 to 12.0 */
+/* 	background: -moz-linear-gradient(#FFFFFF, #CCCCCC); For Firefox 3.6 to 15 */
+/* 	background: linear-gradient(#FFFFFF, #CCCCCC); Standard syntax */
+/* } */
+
+.L2PInputTableLabel {	
+	background-color : #f7f7f7;
+	border : 1px solid #dddddd;
+	padding-left: 10px !important;
+}
+
+.L2PTableLabel {
+	background-color:#e5e5e5;
+}
+
+/* .L2PInputTableTitle { */
+/*     background-color:#DFF1F3; */
+/* } */
+.L2PInputTableTitle {
+	background-image : linear-gradient(to bottom,#2a4f67,#9ec5de) !important; 
+	background-position : center !important; 
+	background-size : cover !important; 
+	background-repeat: no-repeat; 
+}
+
+.L2PInputTableData {	
+	background-color:rgb(255,255,255);
+	border : 1px solid #dddddd;
+	padding-left: 10px !important;;
+}
+
+.L2PTablePictureData {	
+	border: 3px solid #d9d9d9;
+    width: 153px;
+    height: 172px;
+    margin: 0 20px 0 auto;
+}
+
+.L2PInputTableDataNoLine {	
+	background-color:rgb(255,255,255);
+	border:0px solid rgb(221,224,229);
+}
+
+.L2PInputTableDataHeader {	
+	background-color:rgba(249,249,249,1.0);
+	border:1px solid rgb(221,224,229);
+	padding-top: 4px !important;
+}
+
+.L2PInputTableDataHeader2 {	
+	background-color:rgba(255,255,255,1.0);
+	border:1px solid rgb(221,224,229);
+	padding-top: 4px !important;
+}
+
+.L2PInputTableLabel47 {	
+	background-color:rgb(229,229,229);
+    border:1px solid rgb(204,204,204);
+    padding-top: 7px !important;
+}
+
+.L2PInputTableData47 {	
+	background-color:rgb(255,255,255);
+	border:1px solid rgb(204,204,204);
+	padding-top: 7px !important;
+}
+
+.L2PPaddingLeft10 {
+    padding-left:10px;
+}
+
+.L2PPaddingRight10 {
+    padding-right:10px;
+}
+
+.L2PPaddingLeft20 {
+    padding-left:20px;
+}
+
+.L2PPaddingLeft12 {
+    padding-left:12px;
+}
+
+.L2PPaddingLeft2rem {
+    padding-left:2rem;
+}
+
+.L2PPaddingRight20 {
+    padding-right:20px;
+}
+
+.L2PPaddingRight30 {
+    padding-right:30px;
+}
+
+.L2PPaddingRight0 {
+    padding-right:0px !important;
+}
+
+.L2PMarginBottom {
+    margin-bottom:1rem;
+}
+
+.L2PPaddingHeader {
+    padding-top: 10px !important;
+	padding-bottom: 10px !important;
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+}
+
+.L2PPaddingLeft1Rem {
+	padding-left:1rem;
+} 
+
+.L2PMarginTop10 {
+    margin-top: 10px !important;
+}
+
+.L2PPageTitle {
+	font-size: 20px !important;  
+	font-family: 'Malgun Gothic' !important;
+	font-weight: bold !important;
+}
+
+.L2PFilterBar {
+	background-color: transparent !important;
+	padding-top: 0.5rem !important;
+	padding-bottom: 0.1rem !important;
+	padding-left: 0rem !important;
+	padding-right: 0rem !important;
+}
+
+.L2PFilterBar1 {
+	background-color: transparent !important;
+	padding-top: 0.5rem !important;
+	padding-bottom: 0.1rem !important;
+	padding-left: 1rem !important;
+	padding-right: 1rem !important;
+}
+
+.L2PBackgroundWhite {
+	background-color: #FFFFFF !important;
+}
+
+.L2PBackgroundLightGray {
+	background-color: #F2F2F2 !important;
+}
+
+.L2PBackgroundGray {
+	background-color: #999999 !important;
+}
+
+.L2PBackgroundYellow {
+	background-color: #ffff80!important;
+}
+
+.L2PBackgroundMain {
+	background-color: #DCE9EE !important;
+}
+
+.L2POrgTree {
+	height : 300px;
+/* 	padding:1%;  */
+/* 	margin-top:5px;  */
+/* 	margin-bottom:5px; */
+/* 	border-radius:1px; */
+	border:0px solid rgb(230, 229, 228);
+/* 	background-color:rgb(255, 255, 228); */
+/* 	padding-top: 5px; */
+/* 	padding-bottom: 5px; */
+/* 	vertical-align: top;  */
+/* 	box-shadow: 1px 1px 1px 1px #DDDDDD; */
+/* 	box-sizing:border-box; */
+/* 	overflow : auto !important; */
+}
+
+.L2PStellTree {
+	height : 300px;
+/* 	padding:1%;  */
+/* 	margin-top:5px;  */
+/* 	margin-bottom:5px; */
+/* 	border-radius:1px; */
+	border:1px solid rgb(230, 229, 228);
+	overflow : auto !important;
+/* 	background-color:rgb(255, 255, 228); */
+/* 	padding-top: 5px; */
+/* 	padding-bottom: 5px; */
+/* 	vertical-align: top;  */
+/* 	box-shadow: 1px 1px 1px 1px #DDDDDD; */
+/* 	box-sizing:border-box; */
+}
+
+.L2PTopTeamOrgTree {
+	height : 300px;
+}
+
+.L2PBuBgTree {
+	height : 560px;
+/* 	padding:1%;  */
+/* 	margin-top:5px;  */
+/* 	margin-bottom:5px; */
+/* 	border-radius:1px; */
+	border:1px solid rgb(230, 229, 228);
+/* 	background-color:rgb(255, 255, 228); */
+/* 	padding-top: 5px; */
+/* 	padding-bottom: 5px; */
+/* 	vertical-align: top;  */
+/* 	box-shadow: 1px 1px 1px 1px #DDDDDD; */
+/* 	box-sizing:border-box; */
+}
+
+.L2PSearchBox {
+	border:1px solid #DDDDDD;
+	background-color:#EEEEEE;
+	padding-top : 5px;
+	padding-left : 5px
+}
+
+.L2PESDialog {
+	background-color:#F3F0F0 !important;
+}
+
+.L2PSelectActiveBorder {
+	border:2px solid #008A3B !important;
+}
+
+.L2PSelectInvalidBorder {
+	border:2px solid red !important;
+}
+
+.L2PQViewEmpName {
+	color : #00679e !important;
+	font-size : 1.5rem;
+	font-family: 'Malgun Gothic' !important;
+}
+
+.L2PQViewCell {	
+	background-color:rgb(255,255,255);
+	padding-top: 2px !important;
+}
+
+.L2PQViewLabel {
+	color : #666666 !important;
+	font-size : 13px !important;
+	font-family: 'Malgun Gothic' !important;
+}
+
+.L2PQViewData {
+	color : #00679e !important;
+	font-size : 13px !important;
+	font-family: 'Malgun Gothic' !important;
+}
+
+.L2PQViewData1 {
+	color : #000000 !important;
+	font-size : 13px !important;
+	font-family: 'Malgun Gothic' !important;
+}
+
+.L2PQViewSubTitle {
+	color : #000000;
+	font-size : 1.2rem !important;
+	font-family: 'Malgun Gothic' !important;
+}
+
+.L2PCursorDefualt {
+	cursor : default !important;
+}
+
+.L2PGoogleMap {
+	height : 430px;
+	padding:1%; 
+	margin-top:5px; 
+	margin-bottom:5px;
+	border-radius:1px;
+	border:1px solid rgb(230, 229, 228);
+	background-color:rgb(230, 229, 228);
+	padding-top: 5px;
+	padding-bottom: 5px;
+	vertical-align: top; 
+	box-shadow: 1px 1px 1px 1px #DDDDDD;
+	box-sizing:border-box;
+}
+
+.L2PFilterItem {
+	padding-right : 1rem;
+	padding-top : 0.5rem;
+	padding-bottom : 0.5rem;
+	vertical-align: bottom !important;
+}
+
+.L2PFilterItemButton {
+	padding-right : 1rem;
+	padding-top : 0.5rem;
+	vertical-align: bottom;
+}
+
+.L2PFilterLayout {
+	padding-left : 1.1rem;
+}
+
+.L2PSearchBtn {
+	background-color: #009de0;
+	border-color: #008bc7;
+	color: #ffffff;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+}
+
+.L2PSearchBtn .sapMBtnTransparent {
+	color: #ffffff !important;
+}
+
+
+/* Overlay CSS */
+.L2POverlayBackLayout {
+	z-index: 78;
+	visibility: hidden;
+	display: none;
+	position : fixed;
+	left : 0px;
+	right : 0px;
+	top : 0px;
+	bottom : 0px;
+	background-color: #000000;
+	opacity: 0.4;
+}
+.L2POverlay {
+	z-index: 7800;
+	visibility: hidden;
+	display: none;
+	left : 10px;
+	top : 20px;
+	position: absolute;
+	background-color: rgba(255,255,255,0);
+	vertical-align: middle;
+}
+
+.L2PDisplayNone {
+	display: none;
+}
+
+.L2POverlay .close {
+    background-image:url('../images/close.png');
+    position:absolute;
+    right:-0.875rem;
+    top:-0.875rem;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+}
+
+.L2POverlay .notice {
+	font-size : 3rem;
+	font-family: 'Malgun Gothic' !important;
+	color : darkred;
+}
+
+.L2POverlay .inner {
+    position:absolute;
+    right:5%;
+    top:5%;
+    width : 90%;
+    height : 90%; 
+    overflow : auto;
+    align-items: center;
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
+}
+
+.L2PMessageDialog {
+	max-width: 700px !important;
+}
+
+.l2p_circular_range-guage-input {
+  /* position:absolute; */ 
+  width:50px;
+  text-align:center; 
+  margin-top:17px; 
+  border:0px transparent; 
+  background-color: transparent;    
+  font-size:1em;
+  font-weight: bold;
+  color: #333;
+  opacity: 0.9;
+  z-index: 2;
+}
+
+.L2PAfterCell {
+	font-size: 13Px !important;  
+    font-family: 'Malgun Gothic' !important;
+    height : 25px;
+    vertical-align: middle;
+    line-height: 30px;
+    border-bottom : 1px solid #e5e5e5; 
+}
+
+.L2PBeforeCell {
+	font-size: 13Px !important;  
+    font-family: 'Malgun Gothic' !important;
+    height : 25px;
+    vertical-align: middle;
+    line-height: 30px; 
+}
+
+.L2PPaddingTop4 {
+	padding-top : 4px !important;
+}
+
+.L2PPaddingTop6 {
+	padding-top : 6px !important;
+}
+
+
+.L2PBottomLine {
+	border-bottom : 1px solid #e5e5e5 !important;
+}
+
+.L2PHeight25 {
+	height : 25px !important;
+}
+
+.L2PHeight32 {
+	height : 32px !important;
+}
+
+.L2PInputTableDataNoRightBorder {	
+	background-color:rgb(255,255,255);
+	border-top:1px solid rgb(221,224,229);
+	border-left:1px solid rgb(221,224,229);
+	border-bottom:1px solid rgb(221,224,229);
+	padding-top: 4px !important;
+}
+
+.L2PInputTableDataNoLeftBorder {	
+	background-color:rgb(255,255,255) !important;
+	border-top:1px solid rgb(204,204,204) !important;
+	border-right:1px solid rgb(204,204,204) !important;
+	border-bottom:1px solid rgb(204,204,204) !important;
+	padding-top: 4px !important;
+}
+
+@media screen and (max-width: 1280px) {
+  .L2PListMinWidth {
+	min-width: 200px;
+	max-width: 250px;
+	}
+}
+
+@media screen and (min-width: 1300px) {
+  .L2PListMinWidth {
+	min-width: 300px;
+	max-width: 450px;
+	}
+}
+
+/* .L2PListMinWidth { */
+/* 	min-width: 300px; */
+/* 	max-width: 450px; */
+/* } */
+
+.L2PRefPannel{
+	padding-top :10px;
+	background-color:#f0f0f0;
+}
+
+.circlegray div {
+    width:50px;
+    height:50px
+    border-radius:25px;
+    -moz-border-radius : 25px;
+    -webkit-border-radius : 25px;
+    -ms-border-radius : 25px;
+    -khtml-border-radius : 25px;
+    -o-border-radius : 25px;
+    backgroud : #66f;
+}
+
+.L2PSelectedListItemBG {
+	background-color:rgb(250, 250, 250) !important;
+/* 	font-weight : bold !important; */
+}
+
+.L2PNoPadding {
+	padding : 0px !important;
+	margin : 0px !important;
+}
+
+.L2PPaddingRight8 {
+	padding-right: 8px !important;
+}
+
+.L2PPaddingRight30 {
+	padding-right: 30px !important;
+}
+
+.L2PPaddingRight32 {
+	padding-right: 32px !important;
+}
+
+.L2P13FontShadow {
+	font-size: 13px !important;  
+    font-family: 'Malgun Gothic' !important;
+    text-shadow : 0 0 0 #060606 !important;
+}
+
+.L2PInputRefData {	
+	background-color:rgb(255,255,255);
+	border:1px solid rgb(204,204,204);
+	padding-top: 10px !important;
+	padding-left: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+.L2PInputTableDataNoRightLeftBorder {	
+	background-color:rgb(255,255,255);
+	border-top:1px solid rgb(204,204,204);
+	border-bottom:1px solid rgb(204,204,204);
+	padding-top: 4px !important;
+}
+
+.L2PTextAlignRight {
+	text-align: right !important;
+}
+
+.L2PGridLink {
+	cursor : pointer;
+	color : blue;
+}
+
+.L2PStrongFont {
+	font-weight : bold;
+	font-style:italic;
+}
+
+.L2PAUTHNOTHING {
+	font-weight : bold;
+	font-style:italic;
+	color : blue;
+	font-size: 2rem !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2PTaskChipTableData {	
+	padding-top: 4px !important;
+}
+
+.L2PTaskChipTableBorder {
+	border-bottom: 2px solid #53abe6;
+}
+
+.L2PINFOBAR {
+	background-color: #F7F7F7;
+}
+
+.L2PUiUfdSpltCont {
+	height : auto !important;
+}
+
+.L2PEMPBACKIMAGE {
+	background-image: url('/sap/bc/ui5_ui5/sap/ZL2P01UI59000/images/DOOSAN_BG.GIF');
+	background-repeat: no-repeat; 
+	background-position: center; 
+}
+
+.L2PEMPBACKIMAGE2 {
+	background-image: url('/sap/bc/ui5_ui5/sap/ZL2P01UI59000/images/DOOSAN_BG.GIF');
+	background-repeat: no-repeat; 
+	background-position: center; 
+	background-color: white;
+}
+
+.L2PTabMenu1 {
+	border-bottom: 1px solid #101010;
+	background-color: #dddddd;
+}
+
+.L2PProceeMessageBox {
+	display:none;
+	position: absolute;
+	width:350px;
+	height:80px;
+	border:1px solid #888888;
+	background-color: white;
+	box-shadow: 10px 10px 5px #888888;
+    border-radius: 10px;
+}
+
+.L2PButtonHeight {
+	height: 2.2rem !important;
+}
+
+.L2PPointer {
+	cursor:pointer !important;	
+}
+
+.L2PPadding05rem {
+	padding : 0.5rem;
+}
+
+.L2PPadding05remLR {
+	padding-left : 0.5rem;
+	padding-right : 0.5rem;
+}
+
+.L2PPadding10 {
+	padding : 10px;
+	text-align : center;
+}
+
+.L2PPaddingTop7{
+	padding-top : 7px;
+}
+
+.L2PPaddingLeft1rem {
+	padding-left : 1rem;
+}
+
+.L2PLabelMinWidth {
+	min-width: 0rem !important;
+}
+
+.L2PHeaderToolBar {
+	border: 0px solid #cccccc !important;
+	background-color : rgb(242,242,242) !important;
+}
+
+.L2PDetailInfoLayout {
+	border-left : 1px solid rgb(226,226,226);
+	border-right : 1px solid rgb(226,226,226);
+	border-bottom : 1px solid rgb(226,226,226);
+}
+
+.L2PDisplayBlock {
+	display : block !important;
+}
+
+.L2PMatrixLabel {	
+/*	background-color:rgb(229,229,229); */
+/*  border-right:1px solid rgb(204,204,204); */
+/*  border-bottom:1px solid rgb(204,204,204); */
+    padding-top: 7px !important;    
+	padding-left: 10px !important;
+	
+    background-color: #d9d9d9;
+	border-bottom : 1px solid #e9e9e9;
+	border-left : 1px solid #e9e9e9;
+	border-right : 1px solid #e9e9e9;
+}
+
+.L2PMatrixLabel2 {
+	padding-top: 7px !important;    
+    background-color: #d9d9d9;
+	border-bottom : 1px solid #e9e9e9;
+	border-left : 1px solid #e9e9e9;
+	border-right : 1px solid #e9e9e9;
+}
+
+.L2PMatrixData {	
+	background-color:rgb(255,255,255);
+	border-right:1px solid rgb(204,204,204);
+    border-bottom:1px solid rgb(204,204,204);
+	padding-top: 4px !important;
+}
+
+.L2PMatrixRow {	
+	border-left:1px solid rgb(204,204,204);
+}
+
+.L2PMatrixRowTop {	
+	border-top:1px solid rgb(204,204,204);
+}
+
+.L2PSubOrg {
+	padding-top: 20px;
+    border-top: 1px solid #cdcdcd;
+}
+
+.L2PSelectOption {
+  padding-right: 2.5rem;
+  padding-left: 0.5rem;
+  color: #000000;
+  background-color: #ffffff;
+  border: 1px solid #c0c0c0;
+  cursor: pointer;
+  font-size: 13px !important;
+  font-family: 'Malgun Gothic' !important;
+  height: 1.625rem;
+  margin-top:3px;
+}
+
+.L2PMarginLeft0 {
+	margin-left: 0px !important;
+}
+
+.L2PMarginLeft5 {
+	margin-left: 5px !important;
+}
+
+.L2PMarginLeft10 {
+	margin-left: 10px !important;
+}
+
+.L2PMarginTop5 {
+	margin-top: 5px !important;
+}
+
+.L2PButtonAsTab {
+	border-top: 0px solid #bfbfbf;
+    border-right: 0px solid #bfbfbf;
+    border-left: 1px solid #bfbfbf;
+    border-bottom: 1px solid #bfbfbf;
+    border-radius: 0.125rem 0.125rem 0rem 0rem;
+    background-image: none;
+    background-color: #ffffff; 
+}
+
+.L2PHoldFont {
+	font-size: 0.875rem !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2PMarginLeft5P {
+	margin-left: 5% !important;
+}
+
+.L2PTextAlignCenter{
+	text-align : center !important;
+}
+
+.L2PFontFamily {
+ 	font-family: 'Malgun Gothic' !important; 
+	font-size: 0.875rem !important;
+	font-weight : normal !important;
+	color: #333333 ;
+}
+
+/* .L2PGRID { */
+/* 	height: 480px; */
+/* 	margin-top: 1px; */
+/* 	border-radius: 0px; */
+/* 	text-align: center; */
+/* 	border: 1px solid rgb(255, 255, 255); */
+/* 	box-shadow: 1px 1px 1px 1px #FFFFFF; */
+/* 	box-sizing: border-box; */
+/* } */
+
+.L2PGRID {
+/* 	height: 480px; */
+/*	margin-top: 0.875rem; */
+	width : 100% !important;
+	border-radius: 0px;
+	text-align: center;
+/* 	padding: 2px; */
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	border-top: 1px solid #dddddd;
+	border-collapse: collapse !important;
+	border-bottom : 1px solid #dddddd;
+/* 	box-shadow: 1px 1px 1px 1px #FFFFFF;*/
+	box-sizing: border-box;
+}
+
+.sapMTB {
+	border-bottom: 0px solid white !important;
+}
+
+.L2PImeActive {
+    ime-mode:active;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.L2P15Font {
+	font-size: 0.875rem !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2P15FontWhite {
+	font-size: 0.875rem !important;  
+	color : #FFFFFF !important;  
+    font-family: 'Malgun Gothic' !important;
+}
+
+.L2PStandardBackground {
+	background-color :#3f5161 ;
+}
+
+.L2P18FontBold {
+	font-family: 'Malgun Gothic' !important; 
+    font-size: 18px !important;
+	font-weight : bold !important;
+
+}
+
+.L2PFontWhite{
+	color: #ffffff !important;
+}
+
+.L2PPaddingTop10 {
+	padding-top : 10px !important;
+}
+
+.L2PFontGray {
+	color: #F8F8F8 !important;
+}
+
+.L2PEmployeePic {
+	/* border-radius : 100%; */
+	border : 0.188rem solid #4f667a !important;
+}
+.L2PMTableTopBorder {
+	border-top : 1px solid #cccccc !important;
+}
+.L2PFontitalic{
+	font-style : italic !important;
+}
+.L2PButtonBorder {
+	border-bottom: 2px solid #53abe6 !important;
+}
+
+.TitleFont {
+	font-size: 20px;
+	font-weight: bold;
+	font-family: 'Malgun Gothic' !important;
+	color: white !important;
+	vertical-align: middle !important;
+}
+
+.L2PVerticalTop {
+	vertical-align : top !important;
+}
+.L2PVerticalMiddle {
+	vertical-align : middle !important;
+}
+.L2PHeader {
+	background-color : #2f3c48 !important;
+}
+.L2PPersonCardText18Bold {
+	padding-left:10px;
+	font-size: 18px !important;  
+    font-family: 'Malgun Gothic' !important;
+    color : #000000;
+    font-weight : bold;
+    height : 21px;
+}
+
+.L2PPersonCardTextBold {
+	padding-left:10px;
+	font-size: 0.875rem !important;  
+    font-family: 'Malgun Gothic' !important;
+    color : #000000;
+    font-weight : bold;
+    height : 21px;
+}
+
+.L2PPersonCardText {
+	padding-left:10px;
+	font-size: 0.875rem !important;  
+    font-family: 'Malgun Gothic' !important;
+    color : #000000;
+    height : 21px;
+}
+
+.WhiteBackground {
+ 	background: white !important; 
+}
+
+.L2PMatrixData {	
+	background-color:rgb(255,255,255);
+	border : 1px solid #dddddd;
+	padding-left: 10px !important;
+}
+
+.L2PMatrixData2 {	
+	background-color:rgb(255,255,255);
+	border : 1px solid #dddddd;
+}
+
+.L2PFontFamilyBold {
+	font-family: 'Malgun Gothic' !important;
+	font-size: 0.875rem !important;  
+	color: #333333 !important;
+	font-weight: bold !important;
+}
+
+.L2pHeaderPadding {
+	padding-top : 4px ;
+	padding-bottom : 4px ;
+}
+
+/* .LaunchpadBackground { */
+/* 	background-image: linear-gradient(to bottom,#2a4f67,#9ec5de); */
+/* 	background-repeat:no-repeat; */
+/* 	background-position:center; */
+/* 	background-size:cover */
+/* } */
+
+.LaunchpadBackground{
+	background-image: linear-gradient(to bottom,#a9c6de,#e7ecf0);
+	background-repeat:no-repeat;
+	background-position:center;
+	background-size:cover;
+	opacity : 1;
+}
+
+.PageWidth{
+	width : 1600px !important;
+	margin:0 auto; 
+}
+
+
+.L2PMatrixTopRight {	
+	background-color:rgb(255,255,255);
+	border-right : 1px solid #dddddd;
+	border-Top : 1px solid #dddddd;
+}
+
+.L2PMatrixBottomRight {	
+	background-color:rgb(255,255,255);
+	border-right : 1px solid #dddddd;
+	border-Bottom : 1px solid #dddddd;
+}

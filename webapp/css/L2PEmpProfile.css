@@ -1,0 +1,172 @@
+@charset "utf-8";
+
+.pe-txt-data-set-box .pe-txt-dataset-title {
+	font-size: 13px;
+	border-bottom: 1px solid #f6f6f6;
+	line-height: 25px;
+	color: black;
+	font-weight: bold;
+	font-family: "Malgun Gothic" !important;
+}
+
+.pe-txt-data-set-box {
+	width: 100%;
+	min-width: 400px;
+	margin-top: 30px;
+}
+.pe-txt-data-set-box:first-child {
+	margin-top: 0px;
+}
+.pe-txt-data-set-box > ul {
+	float: left;
+	list-style: none;
+	/* 	-webkit-padding-start: 0px; */
+	/* 	-moz-padding-start: 0px; */
+	/* 	-khtml-padding-start: 0px; */
+	/* 	-o-padding-start: 0px; */
+	/* 	padding-start: 0px; */
+	padding: 0px;
+}
+.pe-txt-data-set-box .pe-txt-dataset-ul.pe-al-right > li {
+	text-align: right;
+	width: 180px;
+}
+.float-none {
+	clear: both !important;
+}
+
+.pe-txt-data-set-box ul li {
+	font-size: 12px;
+	color: black;
+	min-height: 26px;
+	list-style: none;
+	font-family: "Malgun Gothic" !important;
+}
+.pe-txt-data-set-box ul li.pe-b {
+	font-size: 12px;
+	font-weight: bold;
+	list-style: none;
+	font-family: "Malgun Gothic" !important;
+}
+.pe-txt-data-set-box ul li:first-child {
+	margin-top: 8px;
+	list-style: none;
+}
+.pe-txt-data-set-box ul.pe-txt-upda1 {
+	margin-left: 70px;
+	list-style: none;
+}
+
+/* Basic Profile */
+
+.ep-user-detail-info1 {
+	margin-left: 0px;
+	min-width: 800px;
+	min-height: 180px;
+}
+.ep-user-detail-info1 .pe-photo-box1 {
+	border: 0;
+	mso-cellspacing: 0;
+	mso-cellpadding: 0;
+	margin: 0px 0 0 0;
+	padding: 0;
+}
+.pe-photo {
+	border: 3px solid #d9d9d9;
+	/*     width: 140px; */
+	/*     height: 152px; */
+	width: 117px;
+	height: 153px;
+	margin: 0 20px 0 auto;
+}
+
+.pe-top-txt-box1 {
+	float: left;
+	width: 80%;
+}
+.pe-top-txt-name {
+	font-size: 22px;
+	line-height: 40px;
+	color: black;
+	border-bottom: 2px solid #dadcdc;
+	font-family: "Malgun Gothic" !important;
+}
+
+.pe-top-txt-name2 {
+	font-size: 13px;
+	line-height: 40px;
+	color: black;
+	padding-right: 5px;
+	border-bottom: 2px solid #dadcdc;
+	font-family: "Malgun Gothic" !important;
+}
+
+.pe-td-name {
+	padding-left: 0px;
+}
+
+.pe-td-photo-set {
+	width: 160px;
+}
+
+.pe-td-width1 {
+	width: 100%;
+	min-width: 400px;
+}
+.pe-td-width1 > ul {
+	float: left;
+	list-style: none;
+	/* 	-webkit-padding-start: 0px; */
+	/* 	-moz-padding-start: 0px; */
+	/* 	-webkit-padding-start: 0px; */
+	/* 	-khtml-padding-start: 0px; */
+	/* 	-o-padding-start: 0px; */
+	padding: 0px;
+}
+.pe-td-width1.pe-al-right > ul {
+	text-align: right;
+}
+
+.pe-td-width1 ul li {
+	font-size: 13px;
+	color: black;
+	min-height: 22px;
+	list-style: none;
+	font-family: "Malgun Gothic" !important;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+.pe-td-width1 ul.pe-txt-upda1 {
+	margin-left: 10px;
+}
+
+.pe-td-width2 {
+	width: 100%;
+	min-width: 400px;
+}
+.pe-td-width2 > ul {
+	float: left;
+	list-style: none;
+	/* 	-webkit-padding-start: 0px; */
+	/* 	-moz-padding-start: 0px; */
+	/* 	-webkit-padding-start: 0px; */
+	/* 	-khtml-padding-start: 0px; */
+	/* 	-o-padding-start: 0px; */
+	/* 	padding-start: 0px; */
+	padding: 0px;
+}
+.pe-td-width2.pe-al-right > ul {
+	text-align: right;
+}
+
+.pe-td-width2 ul li {
+	font-size: 13px;
+	color: black;
+	min-height: 22px;
+	list-style: none;
+	font-family: "Malgun Gothic" !important;
+}
+.pe-td-width2 ul.pe-txt-upda1 {
+	margin-left: 10px;
+}

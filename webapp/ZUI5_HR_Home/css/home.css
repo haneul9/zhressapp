@@ -1,0 +1,220 @@
+html, body {height:100%; overflow:hidden}
+html *:not(i) {font-family:NotoSansKR !important}
+body {min-width:576px; font-size:14px}
+
+.menu-spinner-wrapper {position:absolute; z-index:18; display:flex; justify-content:center; align-items:center; width:100%; height:100%; background:rgba(0, 0, 0, 0.16)}
+.menu-spinner {display:block; top:calc(50% - 4px); left:calc(50% - 4px)}
+
+.ehr-header {position:relative; width:100%; padding:0; margin:0; border-bottom:1px solid #ccc}
+.ehr-header .navbar {padding:0 30px}
+.ehr-header .ehr-logo-container {height:46px}
+.ehr-header .ehr-logo {width:199px; height:31px; background:url('../../images/logo-lotte-chemical.png') no-repeat}
+.ehr-header .custom-select-locale {margin-top:-2px; height:auto; border:0; font-size:14px; color:#777; background:#fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23777777' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px; cursor:pointer}
+.ehr-header .container-fluid {min-height:46px; padding-left:0; padding-right:0}
+
+.header-toggle {z-index:1; position:absolute; color:#777;font-size: 1.375rem;}
+.header-toggle.header-toggle-up {right:30px; bottom:0}
+.header-toggle.header-toggle-down {display:none; top:0; right:10px}
+.header-toggle a {padding:0 1rem}
+.header-toggle i {color:#777}
+.header-toggle i:hover {color:#064975}
+
+.ehr-gnb {justify-content:center}
+.ehr-gnb .mega-menu {position:absolute; margin-top:0; min-height:10rem; border:0; border-top:5px solid transparent; border-radius:0; padding:0 0 1rem 0; box-shadow:0 3px 3px rgba(0,0,0,0.16); background-color:#f9f9f9; overflow-y:auto}
+.ehr-gnb > ul {font-size:1.25rem; font-weight:700}
+[locale="en_US"] .ehr-gnb > ul {font-size:1.15rem}
+.ehr-gnb > ul > li {border-bottom:4px solid transparent; padding:0 20px;margin:0 1px}
+.ehr-gnb > ul > li:hover, .ehr-gnb > ul > li.active {border-bottom:4px solid #064975}
+.ehr-gnb > ul > li.active a.active {color:#064975}
+.ehr-snb {max-width:1440px}
+.ehr-snb.col-count-1 {width:calc(240px * 1)}
+.ehr-snb.col-count-2 {width:calc(240px * 2)}
+.ehr-snb.col-count-3 {width:calc(240px * 3)}
+.ehr-snb.col-count-4 {width:calc(240px * 4)}
+.ehr-snb.col-count-5 {width:calc(240px * 5)}
+.ehr-snb.col-count-6 {width:calc(240px * 6)}
+.ehr-snb > [class*="col"] {margin:1rem 0; min-width:240px; max-width:240px; width:240px; flex-basis:240px}
+.navbar-light .navbar-nav.ehr-popup-menu li {padding:0 8px}
+.navbar-light .navbar-nav.ehr-popup-menu .nav-link {color:#777}
+.navbar-light .navbar-nav.ehr-popup-menu .nav-link:hover {color:#333}
+.navbar-light .navbar-nav .nav-link {color:#333}
+.navbar-light .navbar-nav .nav-link:hover {color:#064975}
+.col-mega-menu .list-unstyled {padding-left:10px}
+.col-mega-menu > a {font-size:1rem; font-weight:700; padding:1rem .5rem}
+.col-mega-menu li {font-size:.875rem; font-weight:400; line-height:2.3rem}
+.col-mega-menu li a {color:#666}
+.col-mega-menu .navbar .nav-link {padding:1rem 0rem}
+.col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none}
+.col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}
+
+.ehr-body {position:relative; overflow-y:hidden}
+.ehr-body .container-fluid {height:100%}
+.ehr-body .container-fluid iframe {width:100%; height:100%; border:0}
+.ehr-body .jspPane {width:100% !important; min-height:100%}
+.ehr-body .jspHorizontalBar {display:none; left:0 !important}
+.ehr-body.menu-loaded .jspPane, .ehr-body.menu-loaded .container-fluid {height:100%}
+.ehr-body.menu-loaded .container-fluid {padding:0}
+.ehr-body.menu-loaded .jspVerticalBar {display:none}
+
+.portlet-masonry {padding-bottom:1.5rem}
+.portlet-col {flex-basis:412px; min-width:412px; width:412px}
+.portlet {margin-top:1.5rem; width:100%; border:1px solid #e8e9e9; border-radius:8px; box-shadow:rgba(0, 0, 0, 0.16) 0 3px 6px}
+.portlet .card-header {display:flex; justify-content:space-between; height:4.25rem; cursor:move; border-bottom:0}
+.portlet .card-header h6 {margin-bottom:0; line-height:3rem; font-size:1rem; font-weight:700}
+.portlet .card-header div {display:flex; align-items:center}
+.portlet .card-header button {border:0; padding:0; line-height:1; font-size:1.5rem; font-weight:700; text-shadow:0 1px 0 #fff; color:#000; opacity:.5; background-color:transparent; -webkit-appearance:none; -moz-appearance:none; appearance:none; padding-left:5px}
+.portlet .card-header button + button {margin-left:1rem}
+.portlet .card-header button span {font-size:1.125rem; color:#333}
+.portlet-1h {height:206px}
+.portlet-2h {height:calc((206px * 2) + (1.5rem * 1))}
+.portlet-3h {height:calc((206px * 3) + (1.5rem * 2))}
+.portlet-4h {height:calc((206px * 4) + (1.5rem * 3))}
+.portlet-5h {height:calc((206px * 5) + (1.5rem * 4))}
+.portlet-6h {height:calc((206px * 6) + (1.5rem * 5))}
+.portlet-7h {height:calc((206px * 7) + (1.5rem * 6))}
+.portlet-8h {height:calc((206px * 8) + (1.5rem * 7))}
+.portlet-9h {height:calc((206px * 9) + (1.5rem * 8))}
+
+.portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
+.portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
+.portlet-employee .portlet-spinner-background {top:0; height:100%}
+.portlet-employee .portlet-spinner {top:11rem}
+
+.portlet-employee {position:relative; background:#fff url('../../images/employee-information-bg.png') no-repeat right bottom; cursor:pointer}
+.portlet-employee .employee-information {display:flex; flex-direction:column; min-width:128px; height:128px; padding-top:1.75rem; padding-left:2rem; border-top-right-radius:.5rem; border-top-left-radius:.5rem; background-color:#064975}
+.portlet-employee .employee-information * {color:rgba(255, 255, 255, 0.8)}
+.portlet-employee .employee-information .employee-name {font-size:1.125rem; color:#fff; font-weight:500; letter-spacing:0.5px; padding-bottom:.25rem}
+.portlet-employee .employee-photo {position:absolute; top:72px; right:21px; width:112px; height:112px; overflow:hidden; background-color:#fff}
+.portlet-employee .employee-photo img {position:absolute; top:0; left:0; z-index:1; width:100%}
+.portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
+.portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:70%}
+.portlet-employee .employee-photo svg {position:absolute; top:-1px; left:-1px; z-index:2; width:calc(100% + 2px); height:calc(100% + 2px)}
+.portlet-employee .employee-d-day {display:flex; flex-direction:column; padding:2rem 1.25rem 1.25rem}
+.portlet-employee .employee-d-day .title {font-size:1rem; font-weight:700}
+.portlet-employee .employee-d-day h6 {margin-top:2rem; margin-bottom:0; font-size:.875rem; font-weight:400; padding-left:.75rem}
+.portlet-employee .employee-d-day .d-day {font-size:2.25rem; font-weight:400; padding-left:.75rem}
+.portlet-employee .employee-d-day .d-day.color-lcc-signature-green {font-size:2.875rem; font-weight:700; padding-left:.75rem}
+.portlet-employee .employee-d-day span + span {margin-left:.5rem}
+
+.portlet-notice .list-group {height:100%; overflow:auto}
+.portlet-notice .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
+.portlet-notice .list-group-item:hover {color:#0070bd; background:transparent}
+.portlet-notice-item {display:flex; justify-content:space-between; align-items:center; width:100%}
+.portlet-notice-item .portlet-notice-date {font-size:100%;color:#888}
+.portlet-notice-title {display:flex; align-items:center; width:239px}
+.portlet-notice-title .portlet-notice-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.portlet-notice-title span + span, .portlet-notice-title span + i {margin-left:3px}
+.portlet-notice-title i {vertical-align:middle; font-size:15.25px}
+.portlet-notice .badge {font-weight:500;}
+.portlet-notice .badge-pill {padding-left:.25rem;padding-right:.25rem;border-radius:.25rem}
+.portlet-notice .badge.badge-primary {font-weight:500;background-color:#0070BD} 
+.portlet-notice i.fas.fa-exclamation-circle {color:#CC1919}
+
+.portlet-quick-link button[disabled] {color:#777}
+.portlet-quick-link-box {display:flex; justify-content:space-between; align-items:center; height:100%}
+.portlet-quick-link-box > div {position:relative; width:25%; margin:0 2px}
+.portlet-quick-link-box .btn {padding:0 .25rem; width:62px; height:62px; border-radius:20px; background-color:#ebf5fe; color:#064975; letter-spacing:-0.5px; line-height:1.2; word-break:keep-all;/*overflow: hidden;*/border-color: transparent}
+.portlet-quick-link-box .btn-remove {display:none; position:absolute; z-index:1; top:0; left:0; font-weight:400; background:rgba(0,0,0,.20)}
+.portlet-quick-link-box .btn-remove i {position:absolute; top:-.5rem; right:-.25rem; font-size:1.25rem; color:#999; background-color:#f9f9f9; border-radius:50%}
+.portlet-quick-link-box .btn span {font-size:.9rem; overflow:hidden; text-overflow:ellipsis}
+.portlet-quick-link-box.remove-mode .btn-remove {display:block}
+
+.portlet-favorite-menu .list-group {height:100%; overflow:auto}
+.portlet-favorite-menu .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
+.portlet-favorite-menu .list-group-item:hover {color:#0070bd; background:transparent}
+.portlet-favorite-menu .list-group-item > div {display:inline-block; max-width:315px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+
+.portlet-calendar-inline .ui-datepicker-inline {width:100%}
+.portlet-calendar-inline .ui-datepicker-calendar {margin:0 auto; width:322px; border:0; border-spacing:0; table-layout:fixed}
+.portlet-calendar-inline .ui-datepicker select.ui-datepicker-year {margin-left:1rem; width:4rem}
+.portlet-calendar-inline .ui-datepicker select.ui-datepicker-month {width:3.5rem}
+[locale="ko_KR"] .portlet-calendar-inline .ui-datepicker select.ui-datepicker-year {margin-left:0}
+[locale="ko_KR"] .portlet-calendar-inline .ui-datepicker select.ui-datepicker-month {margin-left:1rem}
+.portlet-calendar-inline .ui-datepicker td {width:46px; padding:0}
+.portlet-calendar-inline .ui-datepicker td a {margin:8px 5px; width:36px; border:0; padding:0; line-height:36px; text-align:center}
+.portlet-calendar-inline .ui-datepicker td a.ui-state-default {background:transparent}
+.portlet-calendar-inline .ui-datepicker td a.ui-state-active {border-radius:18px; background:#007fff}/* selected */
+.portlet-calendar-inline .ui-datepicker td a.ui-state-highlight {border-radius:18px; background:#fffa90}/* today */
+.portlet-calendar-inline .ui-datepicker td.holiday a.ui-state-default {color:#f00}
+.portlet-calendar-inline .ui-datepicker td.absence a.ui-state-default {border-top:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; background:#f6f6f6}
+.portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; border-left:1px solid #e5e5e5; border-top-left-radius:18px; border-bottom-left-radius:18px; padding-right:5px}
+.portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%}
+.portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-right:1px solid #e5e5e5; border-top-right-radius:18px; border-bottom-right-radius:18px; padding-left:5px}
+.portlet-calendar-date {margin-top:1rem}
+.portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:0}
+.portlet-calendar-daily-report .list-group-item h6, .portlet-calendar-daily-report .list-group-item p {text-align:center}
+.portlet-calendar-daily-report .list-group-item h6 {margin-top:1rem; margin-bottom:0}
+.portlet-calendar-daily-report .list-group-item p {margin-top:.5rem; margin-bottom:0}
+
+.portlet-switch {margin-top:.75rem; cursor:pointer}
+.portlet-switch.active {border-color:rgba(0,112,189,.7); background-color:#ebf5fe}
+.portlet-switch.active.disabled {border-color:rgba(0,0,0,.7); background-color:#e0e0e0; cursor:default}
+.portlet-switch .card-body {display:flex; justify-content:space-between; align-items:center}
+.portlet-switch .card-body i {margin-right:1rem; font-size:1.25rem; color:rgba(0, 0, 0, 0.2)}
+.portlet-switch.active .card-body i {margin-right:1rem; font-size:1.25rem; color:rgba(0, 0, 0, 0.5)}
+.custom-switch-reverse {display:inline-block; padding-right:2.25rem; padding-left:0}
+.custom-switch-reverse .custom-control-label::before {right:-2.25rem; left:unset}
+.custom-switch-reverse .custom-control-label::after {right:calc(-1.5rem + 2px); left:unset}
+[data-sap-ui-browser="ie11"] .custom-switch-reverse {padding-right:0}
+.modal-open .modal.portlet-switch-modal {overflow:hidden}
+.modal-dialog.ui-draggable {top:1.75rem; left:calc(50% - 400px); margin:0}
+.modal-dialog.ui-draggable .modal-header {cursor:move}
+.portlet-data-not-found {display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px 0}
+.portlet-data-not-found span {padding:0 .5rem; line-height:2; font-size:20px; font-weight:700}
+.portlet-data-not-found a {text-decoration:none; color:#777}
+.portlet-data-not-found a:hover {color:#333}
+.custom-control-input:checked~.custom-control-label::before {background-color:#0070bd; border-color:#0070bd}
+.card.portlet-switch {border-radius:.375rem}
+
+<<<<<<< HEAD
+.portlet .list-group-item {border:none; padding:.5rem .625rem .5rem 0}   
+.portlet .list-group-item:hover {color:#0070BD; background:transparent}
+
+=======
+>>>>>>> hpjt0857-portlet
+.color-lcc-signature-blue {color:#064975 !important}
+.color-lcc-signature-green {color:#8dc63f !important}
+.color-lcc-signature-red {color:#da291c !important}
+.bg-lcc-signature-blue {background-color:#064975 !important}
+.bg-lcc-signature-green {background-color:#8dc63f !important}
+.bg-lcc-signature-red {background-color:#da291c !important}
+
+@media all and (min-width:499px) {
+	.navbar {padding-top:0; padding-bottom:0}
+	.navbar .nav-link {padding:.75rem .5rem}
+	.navbar .mega-menu {right:0; width:100%; padding:0 30px 20px}
+	.navbar-nav {flex-direction:row}
+}
+@media (min-width:499px) {
+	.portlet-masonry-wrapper {width:382px}
+}
+@media (min-width:992px) {
+	.portlet-masonry-wrapper {width:794px}
+}
+@media (min-width:1200px) {
+	.portlet-masonry-wrapper {width:1206px}
+}
+
+/* Modal Style */
+.modal-header {padding:2px 25px; background-color:#f4f5f6;border-bottom:1px solid #e4e4e4}
+.modal-header .modal-title {line-height:2.75}
+.modal-header h4 {font-size:1rem}
+.modal-header .close {font-size:2rem;font-weight:400; padding:.25rem; margin:0}
+.modal-footer {border-top:1px solid #d9d9d9; padding:0 20px 0 0}
+.modal-footer .btn {height:36px; border-radius:.1875rem; padding:0 20px; font-size:.875rem} 
+.modal-footer .btn.btn-primary {background-color:#0070bd; color:#fff; border:1px solid #0070bd}
+.modal-footer .btn.btn-primary:hover {background-color:#064975; border:1px solid #064975}
+.modal-footer .btn.btn-light {background-color:#fff; color:#0070bd; border:1px solid #0070bd}
+.modal-footer .btn.btn-light:hover {background-color:#ebf5fe}
+
+/* Mobile Splash */
+.app-wrap.splash {
+    width:100%;
+    height:100%;
+    background:linear-gradient(#f9f9f9, #eaebec);
+    background:-moz-linear-gradient(top, #f8f9f9 70%, #eaebec 100%);
+    background:-webkit-linear-gradient(top, #f8f9f9 70%,#eaebec 100%);
+    background:linear-gradient(top bottom, #f8f9f9 70%,#eaebec 100%);
+}
+.flex-item-sign {margin:auto 0; padding-bottom:2rem; justify-content:center}
+.flex-item-logo {padding-bottom:2rem; justify-content:center}

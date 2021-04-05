@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<style>
+			.Container {
+				width: 500px;
+				padding-left: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+			}
+
+			.Note {
+				font-weight: bold;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 25px;
+			}
+
+			.Note2 {
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 25px;
+				color: red;
+			}
+
+			.TableLabel {
+				background-color: #e5e5e5;
+				padding-left: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 30px;
+			}
+
+			.TableData {
+				background-color: #ffffff;
+				padding-left: 10px;
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				text-align: left;
+				height: 30px;
+			}
+
+			.TableContainer {
+				width: 100%;
+				background-color: #666666;
+				border: 1px solid #666666;
+			}
+
+			.GotoButton {
+				font-size: 13px;
+				font-family: "Malgun Gothic";
+				height: 30px;
+				cursor: pointer;
+			}
+		</style>
+		<script>
+			var gotoRd = function (a, b, c) {
+				window.open();
+			};
+		</script>
+	</head>
+	<body>
+		<div class="Container">
+			<table cellspacing="0" cellpadding="0" style="width: 100%">
+				<tr>
+					<td class="Note">[HRDOC_NOTE1]</td>
+				</tr>
+				<tr>
+					<td class="Note">[HRDOC_NOTE2]</td>
+				</tr>
+			</table>
+			<br />
+			<table cellspacing="1" cellpadding="1" class="TableContainer">
+				<tr>
+					<td class="TableLabel" style="width: 25%">[ITEM_LABEL1]</td>
+					<td class="TableData">[ITEM_DATA1]</td>
+				</tr>
+				<tr>
+					<td class="TableLabel" style="width: 25%">[ITEM_LABEL2]</td>
+					<td class="TableData">[ITEM_DATA2]</td>
+				</tr>
+				<tr>
+					<td class="TableLabel" style="width: 25%">[ITEM_LABEL3]</td>
+					<td class="TableData">[ITEM_DATA3]</td>
+				</tr>
+				<tr>
+					<td class="TableLabel" style="width: 25%">[ITEM_LABEL4]</td>
+					<td class="TableData">[ITEM_DATA4]</td>
+				</tr>
+			</table>
+			<br />
+			<table cellspacing="0" cellpadding="0" style="width: 100%">
+				<tr>
+					<td align="center">[GOTO_BUTTON]</td>
+				</tr>
+			</table>
+			<table cellspacing="0" cellpadding="0" style="width: 100%">
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="Note2">[HRDOC_NOTE3]</td>
+				</tr>
+				<tr>
+					<td class="Note2">[HRDOC_NOTE4]</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,133 @@
+/* Enter your custom styles here */
+@charset "utf-8";
+
+.Label{
+	background-color:#f3f4f4 !important;
+	border-left: 0 !important;
+	border-right: 0 !important;
+	padding-right: 16px !important;
+	text-align: end !important;
+}
+
+.Label .sapUiMltCell .sapMLabel {
+	font-size:14px; 
+	font-weight:500; 
+	color:#333;
+}
+
+.Label2{
+	background-color:#f3f4f4 !important;
+	border-left: 0 !important;
+	border-right: 0 !important;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
+
+.Label3{
+	background-color:#f3f4f4 !important;
+	border: 1px solid #e5e5e5;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
+
+.Label .sapMLabel .sapMLabelTextWrapper{font-size:14px; font-weight:500; color:#333;}
+.Label2 .sapMLabel .sapMLabelTextWrapper{font-size:14px; font-weight:500; color:#333;}
+.Label3 .sapMLabel .sapMLabelTextWrapper{font-size:14px; font-weight:500; color:#333;}
+
+.Data{
+	border-left: 0 !important;
+	border-right: 0 !important;	
+}
+
+.Data .sapUiMltCell .sapMInputBase .sapMInputBaseContentWrapper {
+	border: 1px solid #c3c3c3;
+	border-radius: .1875rem;
+}
+
+.Data .sapUiMltCell .sapMInputBase,
+.Data .sapUiMltCell .sapMInputBaseContentWrapper,
+.Data .sapUiMltCell .sapMInputBaseInner {
+	height:36px; 
+	font-size:14px; 
+	color:#333
+}
+
+.Data .sapUiMltCell .sapMInputBaseIcon {
+	line-height:35px;
+}
+
+.Data .sapUiMltCell .sapMBtnContent {
+	line-height: 2.215rem;
+}
+
+.Data2{
+	padding-left: 10px !important;
+    padding-right: 10px !important;
+    background-color: white;
+    border: 1px solid #dddddd;
+}
+
+.button-default .sapMBtnInner.sapMBtnText{
+	line-height: 2.215rem !important;
+}
+
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication01 { background-color: #A6A6A6 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication02 { background-color: #8dc63f !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication05 { background-color: #ae80e2 !important; }
+
+/** calendar **/
+.calendar-TableHeader2 {
+	background-color:#f3f4f4;
+    padding: 5px !important;
+    border-right: 1px solid rgb(204,204,204);
+    border-top: 1px solid rgb(204,204,204);
+    border-bottom: 1px solid rgb(204,204,204);
+    font-weight: bold;
+}
+
+.calendar-TableHeader2-Start {
+	background-color:#f3f4f4;
+    padding: 5px !important;
+    border-left: 1px solid rgb(204,204,204);
+    border-right: 1px solid rgb(204,204,204);
+    border-top: 1px solid rgb(204,204,204);
+    border-bottom: 1px solid rgb(204,204,204);
+    font-weight: bold;
+}
+
+.calendar-TableData {
+	background-color:rgb(254,254,255);
+	border-right:1px solid rgb(204,204,204);
+	border-bottom:1px solid rgb(204,204,204);
+/* 	padding: 5px !important; */
+}
+
+.calendar-TableData-Start {
+	background-color:rgb(254,254,255);
+	border-left:1px solid rgb(204,204,204);
+	border-right:1px solid rgb(204,204,204);
+	border-bottom:1px solid rgb(204,204,204);
+/* 	padding: 5px !important; */
+}
+
+.calendar-today { 
+	background: #FECE00 !important;
+	font-weight:bold; 
+}
+
+.calendar-other-month {
+	opacity: 0.5;
+	filter: alpha(opacity=50); /* for IE */
+}
+
+.calendar-Padding0 {
+	padding: 0px !important;
+}
+
+.calendar-datum{
+	background-color: #dde2eb;
+}
+
+#signature-pad {border: 1px solid black}

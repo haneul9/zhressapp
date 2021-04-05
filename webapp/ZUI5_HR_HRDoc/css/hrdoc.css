@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+.action-buttons {z-index: 1;position: absolute;right: 40px;}
+.non-scroll-y {overflow-y: hidden;}
+.signature-image {border: 1px solid #ccc}
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication01 { background-color: #A6A6A6 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication02 { background-color: #8dc63f !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
+.sapMPIBarNeutral {background: #A6A6A6 !important;}
+.sapMPIBarInformation {background: #8dc63f !important;}
+.sapMPIBarNegative {background: #ffb400 !important;}
+.sapMPIBarPositive {background: #82b0df !important;}
+.search-field-group .sapMFlexItem .sapMLabel.sapMRbBLabel { padding-right: 5px !important; }
+.toolbarNoBottomLine{border-bottom: 0 !important;}
+.paddingLeft1rem{padding-left: 1rem};
+
+#mailBox.panel-inner-box {height: 55vh;}
+#signature-pad {border: 1px solid black}
+
+.form-font {font-size:0.86em !important; line-height: 27px !important; white-space: pre-wrap !important;}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평가항목 생성</title>
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-500.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-900.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
+<script src="common/AppPrefilter.js"></script>
+<script id="sap-ui-bootstrap" src="resources/sap-ui-core.js"
+data-sap-ui-libs="sap.m, sap.ui.commons, sap.ui.table, sap.ushell, sap.uxap"
+data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
+data-sap-ui-theme="sap_fiori_3"
+data-sap-ui-async="true"
+data-sap-ui-compatVersion="edge"
+data-sap-ui-frameOptions="allow">
+</script>
+<script src="common/AppBasis.js"></script>
+<script>
+function startAppInit() {
+
+	var contextPath = "ZUI5_SF_EvalAchvCompItemCleanApp";
+	$.extend(true, $.app, {
+		CONTEXT_PATH: contextPath,
+		APP_SFMAIN_ID: "ZUI5_SF.SFMain",
+		APP_ID: [contextPath, "Page"].join("."),
+		APP_TILE: $.app.geti18nResource().getText("LABEL_01001"), // 평가항목 생성
+		LOG: {
+			ENABLE_SUCCESS: true
+		}
+	});
+
+	$.app.init();
+}
+</script>
+</head>
+<body id="ui-body" class="sapUiBody" oncontextmenu="return false">
+<div class="app-preparing">
+	<div class="spinner"></div>
+	<div>화면 생성중입니다. 잠시만 기다려주세요.</div>
+</div>
+</body>
+</html>

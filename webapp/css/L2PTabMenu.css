@@ -1,0 +1,130 @@
+.L2PTabContainer {
+	table-layout: auto;
+	padding: 0px;
+	margin: 0px;
+	padding-bottom: 4px;
+}
+
+.L2PTabContainerBorder {
+	/* 	border-left : 1px solid #53abe6; */
+	/* 	border-right : 1px solid #53abe6; */
+	/* 	border-bottom : 2px solid #53abe6; */
+}
+
+.L2PTabMenu {
+	/* background-color : RGB(225, 225, 225);*/
+	/* border-bottom : 1px solid #000000; */
+	text-align: center;
+	vertical-align: middle;
+	padding-right: 5px;
+	padding-left: 0px;
+	overflow: hidden;
+}
+
+.L2PTabMenuUnderLine {
+	border-bottom: 5px solid #53abe6;
+	vertical-align: middle;
+}
+
+.L2PTabMenuDiv {
+	background-color: #e9e9e9;
+	vertical-align: middle;
+	/* 	border-top-left-radius: 0.7em; */
+	/* 	border-top-right-radius: 0.7em; */
+	margin-top: 2px;
+	padding-right: 1px;
+	border: 1px solid #d8d9dc;
+	cursor: pointer;
+	text-align: center;
+	overflow: hidden;
+}
+
+.L2PTabMenuSelectedDiv {
+	vertical-align: middle;
+	background-color: RGB(255, 255, 255);
+	/* 	border-top-left-radius: 0.7em; */
+	/* 	border-top-right-radius: 0.7em; */
+	margin-top: 2px;
+	border: 1px solid #d8d9dc;
+	border-bottom: none;
+	text-align: center;
+	overflow: hidden;
+}
+
+.L2PTabDUmmy {
+	margin-top: 2px;
+	background-color: RGB(255, 255, 255);
+	border-bottom: 1px solid #d8d9dc;
+}
+
+.L2PTabMenuText {
+	color: #333333;
+	font-size: 13px;
+	font-family: "Malgun Gothic";
+	font-weight: normal;
+	padding-left: 10px;
+	cursor: pointer;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+
+.L2PTabMenuSelectedText {
+	color: #000000;
+	font-size: 13px;
+	font-family: "Malgun Gothic";
+	font-weight: bold;
+	padding-left: 10px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+
+.L2PTabSubMenuText {
+	color: #919191;
+	font-size: 12px;
+	font-family: "Malgun Gothic";
+	font-weight: normal;
+	padding-left: 10px;
+	cursor: pointer;
+	padding-right: 10px;
+}
+
+.L2PTabSubMenuSelectedText {
+	color: #000000;
+	font-size: 12px;
+	font-family: "Malgun Gothic";
+	font-weight: bold;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.L2PTabSubMenuDivide {
+	background: url(../images/title_gap.png) bottom right no-repeat;
+}
+
+.sapUiUx3NavBarItem {
+	font-family: "Malgun Gothic" !important;
+	font-size: 12px !important;
+	/*     background: url(../images/title_gap.png) bottom right no-repeat; */
+}
+
+.sapUiUx3NavBarItemSel {
+	color: #333333;
+	font-size: 12px !important;
+}
+
+.sapUiUx3NavBarItemSel > a:hover {
+	color: #333333 !important;
+	font-size: 12px !important;
+}
+.sapUiUx3NavBarItem:hover {
+	color: #666666 !important;
+	font-size: 12px !important;
+}
+
+.sapUiMnuLst {
+	color: #333333 !important;
+	font-size: 12px !important;
+	font-family: "Malgun Gothic" !important;
+}

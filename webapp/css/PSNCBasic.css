@@ -1,0 +1,297 @@
+@charset "utf-8";
+/*
+------------------------------------------------------------
+Project Name: L2P CO., LTD
+file name: L2PBasic.css
+Author: Yeonjun.kang
+date: 2016.06.23 
+L2P Custom CSS
+------------------------------------------------------------*/
+.L2PFontFamily {
+	font-family: "Malgun Gothic" !important;
+	font-size: 0.875rem !important;
+	font-weight: normal !important;
+	color: #000000 !important;
+}
+
+.L2PFontFamilyRed {
+	font-family: "Malgun Gothic" !important;
+	font-size: 0.875rem !important;
+	font-weight: normal !important;
+	color: red !important;
+}
+
+.L2P15FontRedBold {
+	font-family: "Malgun Gothic" !important;
+	font-size: 0.875rem !important;
+	font-weight: bold !important;
+	color: red !important;
+}
+
+.L2P15Font {
+	font-family: "Malgun Gothic" !important;
+	font-size: 0.875rem !important;
+}
+
+.L2P18FontBold {
+	font-family: "Malgun Gothic" !important;
+	font-size: 18px !important;
+	font-weight: bold !important;
+}
+
+.L2PFontWhite {
+	color: #ffffff !important;
+}
+
+.L2P13Font {
+	font-family: "Malgun Gothic" !important;
+	font-size: 13px !important;
+	font-weight: normal !important;
+	color: #000000;
+}
+
+.L2P15FontBold {
+	font-family: "Malgun Gothic" !important;
+	font-size: 0.875rem !important;
+	font-weight: bold !important;
+}
+
+.L2PFontGray {
+	color: rgb(217, 217, 217) !important;
+}
+
+.L2PFontGreen {
+	color: rgb(146, 192, 150) !important;
+}
+
+.L2PFontRed {
+	color: #ee8081 !important;
+}
+
+.L2P13FontGray {
+	font-family: "Malgun Gothic" !important;
+	font-size: 13px !important;
+	font-weight: normal !important;
+	color: rgb(217, 217, 217) !important;
+}
+
+.L2PFilterItem {
+	padding-right: 1rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	vertical-align: bottom !important;
+}
+
+.L2PFilterLayout {
+	padding-left: 1.1rem;
+}
+
+.L2PFilterLayout2 {
+	padding-left: 0.8rem;
+}
+
+.L2PToolbarNoBottomLine {
+	border-bottom: 0px solid #cccccc !important;
+}
+
+.L2PFontFamilyBold {
+	font-family: "Malgun Gothic" !important;
+	font-size: 0.875rem !important;
+	color: #333333 !important;
+	font-weight: bold !important;
+}
+
+.L2PMatrixData {
+	background-color: rgb(255, 255, 255);
+	border: 1px solid #aaaaaa;
+	padding-left: 10px !important;
+}
+
+.L2PMatrixLabel {
+	background-color: #fafafa;
+	border: 1px solid #aaaaaa;
+	padding-left: 10px !important;
+}
+
+.L2PMatrixLabel2 {
+	background-color: #fafafa;
+	border-bottom: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	padding-left: 10px !important;
+}
+
+.L2PMatrixData2 {
+	background-color: rgb(255, 255, 255);
+	border-bottom: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	padding-left: 10px !important;
+}
+
+.L2PDisplayNone {
+	display: none;
+}
+
+.WhiteBackground {
+	background: white !important;
+}
+
+.TitleFont {
+	font-size: 20px;
+	font-weight: bold;
+	font-family: "Malgun Gothic" !important;
+	color: white !important;
+	vertical-align: middle !important;
+}
+
+.L2PHeader {
+	background-color: #2f3c48 !important;
+}
+
+.L2PPaddingBottom13 {
+	padding-bottom: 13px !important;
+}
+
+.L2PPaddingLeft10 {
+	padding-left: 10px !important;
+}
+
+.L2PPaddingRight10 {
+	padding-right: 10px !important;
+}
+
+.L2PPaddingBottom0 {
+	padding-bottom: 0px !important;
+}
+
+.L2PPaddingTop4 {
+	padding-top: 4px !important;
+}
+
+.L2PMarginTop5 {
+	margin-top: 5px !important;
+}
+
+.L2PHeight40 {
+	height: 40px !important;
+}
+
+.L2PHeight48 {
+	height: 48px !important;
+}
+
+.L2PStandardBackground {
+	background-color: #3f5161;
+}
+
+.L2PAlignBottom {
+	vertical-align: bottom !important;
+}
+
+.L2pMinWidth1rem {
+	min-width: 1rem !important;
+}
+
+/* 일근태입력 인원수 text align 조절 */
+.L2PBaseline {
+	align-items: baseline !important;
+}
+
+.L2PRightPadding30px {
+	padding-right: 30px !important;
+}
+
+.L2PBottomPadding10px {
+	padding-bottom: 10px !important;
+}
+
+.L2P15FontWhite {
+	font-size: 0.875rem !important;
+	color: #ffffff !important;
+	font-family: "Malgun Gothic" !important;
+}
+
+/* .LaunchpadBackground { */
+/* 	background-image: linear-gradient(to bottom,#2a4f67,#9ec5de); */
+/* 	background-repeat:no-repeat; */
+/* 	background-position:center; */
+/* 	background-size:cover */
+/* } */
+
+.LaunchpadBackground {
+	background-image: linear-gradient(to bottom, #a9c6de, #e7ecf0);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	opacity: 1;
+}
+
+.PageWidth {
+	width: 1600px !important;
+	margin: 0 auto;
+}
+
+.L2PMatrixBottomBorder {
+	border-bottom: 1px solid #aaaaaa;
+}
+
+.L2POrgTree {
+	height: 300px;
+	/* 	padding:1%;  */
+	/* 	margin-top:5px;  */
+	/* 	margin-bottom:5px; */
+	/* 	border-radius:1px; */
+	border: 0px solid rgb(230, 229, 228);
+	/* 	overflow-y : auto !important; */
+	/* 	background-color:rgb(255, 255, 228); */
+	/* 	padding-top: 5px; */
+	/* 	padding-bottom: 5px; */
+	/* 	vertical-align: top;  */
+	/* 	box-shadow: 1px 1px 1px 1px #DDDDDD; */
+	/* 	box-sizing:border-box; */
+	/* 	overflow : auto !important; */
+}
+
+.L2PGridLink {
+	cursor: pointer;
+}
+
+.L2POverFlowYH {
+	overflow-y: hidden !important;
+}
+
+.L2pHeaderPadding {
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.L2PBackfafafa {
+	background-color: #fafafa;
+}
+
+.L2PPersonCardTextBold {
+	padding-left: 10px;
+	font-size: 0.875rem !important;
+	font-family: "Malgun Gothic" !important;
+	color: #000000;
+	font-weight: bold;
+	height: 21px;
+}
+
+.L2PPersonCardText {
+	padding-left: 10px;
+	font-size: 0.875rem !important;
+	font-family: "Malgun Gothic" !important;
+	color: #000000;
+	height: 21px;
+}
+
+.L2PFloatLeft {
+	float: left;
+}
+.L2PFloatRight {
+	float: right;
+}
+.sapUiTableHeaderCell[role="columnheader"][colspan] {
+	border-bottom:1px solid #dddddd
+}

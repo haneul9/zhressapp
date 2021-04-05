@@ -1,0 +1,44 @@
+.LabelCell{
+    border : 1px solid #d8dadf;
+    padding : 4px !important;
+    background : #f3f4f6;
+}
+.DataCell{
+    border : 1px solid #d8dadf;
+    padding : 4px !important;
+}
+.Bold{
+    font-weight:bold !important;
+}
+.Font16{
+    font-size:16px;
+}
+.Font15{
+    font-size:15px;
+}
+.Font14{
+    font-size:14px;
+}
+.RightZone{
+    float: right;
+}
+.righter{
+    float: right;
+}
+.paddingbody{
+    padding : 10px;
+}
+.sapUiSmallMargin{
+    margin : 0px !important;
+}
+.centerAlign{
+    text-align: center !important;
+    vertical-align : middle !important;
+}
+.L2P13FontCustom{
+    font-weight:bold !important;
+    color:#0070bd !important;
+}
+.busyDialog{
+    width:320px !important;
+}

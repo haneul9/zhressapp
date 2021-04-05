@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+#List_TableApointAvr, #List_TableGradePnt, #List_TableMgrPnt, #List_TableLanPnt, #List_TableRpPnt,
+#List_TableLicensePnt, #List_TableEduPnt, #List_TableIdeaPnt {background-color:#feffa3 !important}
+#List_TableRecSeqGrade, #List_TableRecSeqS, #List_TableRecProof {background-color:#b5dcf7 !important}
+#List_TableTotalPnt {background-color:#ffb400 !important}
+#listBox>.sapMFlexItem:not(:first-child) {height: 100% !important;}
+
+@media all and (-ms-high-contrast:none) { 
+    #sideNavigationBox>.sapMFlexItem {height: 100% !important;}
+    #sideNavigation {height: 100%;}
+}
+
+td.sapUiTableDataCell[data-sap-ui-colid="List_TableTotalPnt"] SPAN {color:#0070bd !important}
+td.sapUiTableDataCell[data-sap-ui-colid="List_TablePtypeTx"] SPAN.color-signature-blue {color:#0070bd !important}
+.sapUiTableCell.sapUiTableCellLastFixed {border-right: 1px solid #999 !important;}

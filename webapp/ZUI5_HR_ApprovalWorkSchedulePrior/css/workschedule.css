@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication01 { background-color: #A6A6A6 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication02 { background-color: #8dc63f !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
+
+#ApprovalTableWt40, #ApprovalTableWt12, #ApprovalTableWtsum,
+#ApprovalTable-table td:nth-child(13), #ApprovalTable-table td:nth-child(14), #ApprovalTable-table td:nth-child(15) {background-color:#feffa3 !important}
+#ApprovalTable-table td:nth-child(13) span, 
+#ApprovalTable-table td:nth-child(14) span, 
+#ApprovalTable-table td:nth-child(15) span {color:#0070bd !important}
+
+.table-font { font-size: 14px !important; font-weight: normal !important; line-height: 24px !important;}
+.custom-select-time.sapMSltWithArrow>.sapMSltLabel, .custom-select-time.sapMSltWithArrow .sapMSelectListItemBase {padding:0 0.625rem}
+.custom-select-time .sapMSltArrow {width:auto; padding:0 0.625rem}
+.label-wrap { height: 40px; line-height: 22px !important;}
+.checkbox-label .sapMLabel { margin-left: 0 !important; padding-right: 0 !important; text-align: left !important; background-color: transparent !important;}
