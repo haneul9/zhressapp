@@ -3,12 +3,11 @@
 	"../common/CommonController",
 	"../common/JSONModelHelper",
 	"../common/EmployeeModel",
-	"../common/AttachFileAction",
 	"./delegate/ViewTemplates",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, JSONModelHelper, EmployeeModel, AttachFileAction, ViewTemplates, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, EmployeeModel, ViewTemplates, MessageBox, BusyIndicator) {
 	"use strict";
 
 	
@@ -135,6 +134,21 @@
 				textAlign: "Center"
 			});
         },
+
+		getEalryDate: function() {
+			return new sap.m.Text({
+				text: {
+					path: "Zseeym",
+					formatter: function (v) {
+						if (!v) return "";
+						v = v.substr(0,4) + "-" + v.substr(4);
+
+						return v;
+					}
+				},
+				textAlign: "Center"
+			});
+		},
 		
 		getLabel: function() {
 			return ViewTemplates.getLabel("header", "{i18n>LABEL_59013}", "150px") // 파견자 생활경비
@@ -293,16 +307,26 @@
 			var oEarlyYears = $.app.byId(oController.PAGEID + "_EarlyYears"),
 				oEarlyMonth = $.app.byId(oController.PAGEID + "_EarlyMonth");
 				
-			oFilesB.setVisible(true);
-			oFileB.setVisible(false);
-			oEarlyYears.setEditable(false);
-			oEarlyMonth.setEditable(false);
-
-
-            oController.ApplyModel.setData({FormData: oCopiedRow});
+				
+				
+			oController.ApplyModel.setData({FormData: oCopiedRow});
 			oController.setZyears(oController);
 			oController.setZmonths(oController);
-			oController.ApplyModel.setProperty("/EarlyApp", "");
+				
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zseeym"))){
+				oController.ApplyModel.setProperty("/EarlyApp", "");
+				oFilesB.setVisible(true);
+				oFileB.setVisible(false);
+				oEarlyYears.setEditable(false);
+				oEarlyMonth.setEditable(false);
+			}else{
+				oController.ApplyModel.setProperty("/EarlyApp", "X");
+				oFilesB.setVisible(false);
+				oFileB.setVisible(true);
+				oEarlyYears.setEditable(true);
+				oEarlyMonth.setEditable(true);
+			};
+
 			oController.ApplyModel.setProperty("/FormData/RangYearB", oCopiedRow.Zscsym.slice(0,4));
 			oController.ApplyModel.setProperty("/FormData/RangMonthB", oCopiedRow.Zscsym.slice(4));
 			oController.ApplyModel.setProperty("/FormData/RangYearsE", oCopiedRow.Zsceym.slice(0,4));
@@ -473,6 +497,18 @@
 			this.getDispatchCost();
 		},
 
+		onChangeRadio: function(oEvent) {
+			var vPath = oEvent.getSource().getBindingContext().getPath();
+
+			if(oEvent.mParameters.selectedIndex === 0){
+				this.ApplyModel.setProperty(vPath + "/Zmuflg", "1");
+				this.ApplyModel.setProperty(vPath + "/ZmuflgT", this.getBundleText("LABEL_59030"));
+			}else{
+				this.ApplyModel.setProperty(vPath + "/Zmuflg", "2");
+				this.ApplyModel.setProperty(vPath + "/ZmuflgT", this.getBundleText("LABEL_59031"));
+			}
+		},
+
 		checkError: function() {
 			var oController = $.app.getController();
 
@@ -539,7 +575,7 @@
 					return true;
 				};
 			}else {
-				if(AttachFileAction.getFileLength(oController) === 0) {
+				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "005") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_59027"), { title: oController.getBundleText("LABEL_00149")});
 					return true;
 				}
@@ -669,14 +705,14 @@
 
 					// 첨부파일 저장
 
-					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, "005");
 					oRowData.Pernr = vPernr;
 
 					var sendObject = {};
 					// Header
 					sendObject.IEmpid = vPernr;
 					sendObject.IBukrs = vBukrs;
-					sendObject.IConType = "3";
+					sendObject.IConType = "8";
 					// Navigation property
                     sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 					
@@ -721,12 +757,17 @@
 				if (fVal && fVal == oController.getBundleText("LABEL_59029")) { // 저장
 
 					// 첨부파일 저장
-					var uFiles = [];
-					for(var i=1; i<4; i++)	uFiles.push("00" + i);
+					if(oController.ApplyModel.getProperty("/EarlyApp") === "X"){
+						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, "005");
+					}else {
+						var uFiles = [];
+						for(var i=1; i<4; i++)	uFiles.push("00" + i);
+	
+						if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
+	
+						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+					};
 
-					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
-
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
 					oRowData.Pernr = vPernr;
 
 					var sendObject = {};
@@ -816,13 +857,13 @@
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 
 			if(oController.ApplyModel.getProperty("/EarlyApp") === "X") {
-				AttachFileAction.setAttachFile(oController, {
+				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 첨부파일
+					Label: oController.getBundleText("LABEL_59021"),
+					Required : true,
 					Appnm: vAppnm,
-					Required: true,
-					Mode: "M",
-					Max: "3",
-					Editable: (oController.ApplyModel.getProperty("/EarlyApp") === "X") ? true : false,
-				});
+					Mode: "S",
+					Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false,
+				},"005");
 			}else {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 파견 발령지
 					Label: oController.getBundleText("LABEL_59022"),

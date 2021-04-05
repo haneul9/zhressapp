@@ -4,9 +4,8 @@
 	"sap/m/InputBase",
     "../delegate/ViewTemplates",
 	"../../common/ZHR_TABLES",
-    "../../common/PickOnlyDatePicker",
-    "../../common/PickOnlyDateRangeSelection",
-], function (Common, HoverIcon, InputBase, ViewTemplates, ZHR_TABLES, PickOnlyDatePicker, PickOnlyDateRangeSelection) {
+    "../../common/PickOnlyDatePicker"
+], function (Common, HoverIcon, InputBase, ViewTemplates, ZHR_TABLES, PickOnlyDatePicker) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_DispatchLivingCost.fragment.CostApply", {
@@ -327,6 +326,7 @@
 									}
 								},
 								columns: 2,
+								select: oController.onChangeRadio.bind(oController),
 								selectedIndex: 0,
 								buttons: [
 									new sap.m.RadioButton({
@@ -395,7 +395,7 @@
                     new sap.m.HBox({
                         width: "100%",
                         items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_59007}", "150px", "Right"), // 교통비 지급 기준지
+							ViewTemplates.getLabel("header", "{i18n>LABEL_59007}", "150px", "Right", true), // 교통비 지급 기준지
 							oLocationCombo3,
 							new sap.ui.core.Icon({ src: "sap-icon://arrow-right" }).addStyleClass("mx-5px"),
 							oLocationCombo4.addStyleClass("mr-5px"),
@@ -551,7 +551,7 @@
 			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
 				fitContainer: true,
 				items: [
-					sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+					fragment.COMMON_ATTACH_FILES.renderer(oController,"005")
 				]
 			})
 			.addStyleClass("mt-8px");
@@ -565,9 +565,9 @@
 						press: oController.onDialogApplyBtn.bind(oController),
 						text: "{i18n>LABEL_59026}", // 신청,
 						visible: {
-							parts: [{path: "Status"}, {path: "Zflag"}],
+							parts: [{path: "Status"}, {path: "/EarlyApp"}],
 							formatter: function (v1, v2) {
-								return !v1 || v2 === "X";
+								return !v1 || (!v1 && v2 === "X");
 							}
 						}
 					}).addStyleClass("button-dark"),
