@@ -1,9 +1,17 @@
 sap.ui.define([
-	"sap/m/Page"
-], function (Page) {
-	"use strict";
+	"common/EmpBasicInfoBox",
+	"common/EmployeeModel",
+	"sap/m/Page",
+	"sap/base/util/UriParameters"
+], function(
+	EmpBasicInfoBox,
+	EmployeeModel,
+	Page,
+	UriParameters
+) {
+"use strict";
 
-	return Page.extend("common.PageHelper", {
+return Page.extend("common.PageHelper", {
 
 /*
 @param o = {
@@ -34,95 +42,119 @@ new common.PageHelper({
 	footer: new sap.m.Bar()
 });
 */
-		constructor: function(o) {
+	constructor: function(o) {
 
-			var prefix = o.idPrefix || "",
-			originals = o.originals || {},
-			items = !originals.title ? [
+		var prefix = o.idPrefix || "",
+		originals = o.originals || {},
+		items;
+
+		if (!originals.title) {
+			var titleItems;
+			if (o.showNavButton) {
+				titleItems = [
+					new sap.m.FlexBox({
+						alignContent: sap.m.FlexAlignContent.Start,
+						alignItems: sap.m.FlexAlignItems.Center,
+						fitContainer: true,
+						items: [
+							new sap.ui.core.Icon({
+								size: "1.3125rem",
+								src: "sap-icon://navigation-left-arrow",
+								press: o.navBackFunc
+							}).addStyleClass("app-nav-button"),
+							new sap.m.Text(prefix + "app-title", {
+								text: o.title ? o.title : $.app.APP_TILE
+							}).addStyleClass("app-title-mobile")
+						]
+					})
+				];
+			} else {
+				titleItems = [
+					new sap.m.Text(prefix + "app-title", { text: o.title ? o.title : $.app.APP_TILE }).addStyleClass("app-title")
+				];
+			}
+
+			titleItems.push(new sap.m.FormattedText(prefix + "async-spinner", {width: "24px", height: "26px", htmlText: "<em>Loading...</em>"}).addStyleClass("spinner-container"));
+
+			if (o.headerButton) {
+				titleItems.push(o.headerButton);
+			}
+
+			if (parent && UriParameters.fromQuery(document.location.search).get("useEmpInfoBox") !== "N") {
+				window._CommonEmployeeModel = new EmployeeModel();
+				window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
+
+				titleItems.push(new EmpBasicInfoBox(window._CommonEmployeeModel));
+			}
+
+			items = [
 				new sap.m.FlexBox(prefix + "app-title-container", {
 					justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 					alignContent: sap.m.FlexAlignContent.Start,
 					alignItems: sap.m.FlexAlignItems.Center,
 					fitContainer: true,
-					items: [
-						o.showNavButton
-							? new sap.m.FlexBox({
-								alignContent: sap.m.FlexAlignContent.Start,
-								alignItems: sap.m.FlexAlignItems.Center,
-								fitContainer: true,
-								items: [
-									new sap.ui.core.Icon({
-										size: "1.3125rem",
-										src: "sap-icon://navigation-left-arrow",										
-										press: o.navBackFunc
-									}).addStyleClass("app-nav-button"),
-									new sap.m.Text(prefix + "app-title", {
-										text: o.title ? o.title : $.app.APP_TILE
-									}).addStyleClass("app-title-mobile")
-								]
-							})
-							: new sap.m.Text(prefix + "app-title", { text: o.title ? o.title : $.app.APP_TILE }).addStyleClass("app-title"),
-						new sap.m.FormattedText(prefix + "async-spinner", {width: "24px", height: "26px", htmlText: "<em>Loading...</em>"}).addStyleClass("spinner-container"),
-						o.headerButton ? o.headerButton : null
-					]
+					items: titleItems
 				})
 				.addStyleClass("app-title-container")
-			] : [];
-
-			if (o.contentItems && o.contentItems.length) {
-				o.contentItems[o.contentItems.length - 1].setLayoutData(new sap.m.FlexItemData({growFactor: 1}));
-
-				items = items.concat(o.contentItems);
-			}
-
-			Page.apply(this, [prefix + "app-content", $.extend(true, originals, {
-				content: [
-					new sap.m.FlexBox(prefix + "app-content-body", {
-						justifyContent: sap.m.FlexJustifyContent.Center,
-						fitContainer: true,
-						items: [
-							new sap.m.FlexBox(prefix + "app-content-container", {
-								direction: sap.m.FlexDirection.Column,
-								items: items
-							})
-							.addStyleClass(o.contentContainerStyleClass || "app-content-container-wide")
-						]
-					})
-					.addStyleClass("app-content-body")
-				]
-			})]);
-
-			if ((o.contentHeaderLeft || []).length || (o.contentHeaderMiddle || []).length || (o.contentHeaderRight || []).length) {
-				var contentHeader = new sap.m.Bar(prefix + "app-content-header", {
-					design: sap.m.BarDesign.Header,
-					enableFlexBox: true
-				})
-				.addStyleClass("app-content-header");
-
-				if ((o.contentHeaderLeft || []).length) {
-					contentHeader.addContentLeft(o.contentHeaderLeft);
-				}
-				if ((o.contentHeaderMiddle || []).length) {
-					contentHeader.addContentMiddle(o.contentHeaderMiddle);
-				}
-				if ((o.contentHeaderRight || []).length) {
-					contentHeader.addContentRight(o.contentHeaderRight);
-				}
-
-				this.setCustomHeader(contentHeader);
-			} else {
-				if (!originals.showNavButton && !originals.showHeader) {
-					this.setShowHeader(false);
-				}
-			}
-
-			if (o.footer) {
-				this.setFooter(o.footer);
-			}
-
-			this.addStyleClass(o.contentStyleClass || "app-content");
+			];
+		} else {
+			items = [];
 		}
 
-	});
+		if (o.contentItems && o.contentItems.length) {
+			o.contentItems[o.contentItems.length - 1].setLayoutData(new sap.m.FlexItemData({growFactor: 1}));
+
+			items = items.concat(o.contentItems);
+		}
+
+		Page.apply(this, [prefix + "app-content", $.extend(true, originals, {
+			content: [
+				new sap.m.FlexBox(prefix + "app-content-body", {
+					justifyContent: sap.m.FlexJustifyContent.Center,
+					fitContainer: true,
+					items: [
+						new sap.m.FlexBox(prefix + "app-content-container", {
+							direction: sap.m.FlexDirection.Column,
+							items: items
+						})
+						.addStyleClass(o.contentContainerStyleClass || "app-content-container-wide")
+					]
+				})
+				.addStyleClass("app-content-body")
+			]
+		})]);
+
+		if ((o.contentHeaderLeft || []).length || (o.contentHeaderMiddle || []).length || (o.contentHeaderRight || []).length) {
+			var contentHeader = new sap.m.Bar(prefix + "app-content-header", {
+				design: sap.m.BarDesign.Header,
+				enableFlexBox: true
+			})
+			.addStyleClass("app-content-header");
+
+			if ((o.contentHeaderLeft || []).length) {
+				contentHeader.addContentLeft(o.contentHeaderLeft);
+			}
+			if ((o.contentHeaderMiddle || []).length) {
+				contentHeader.addContentMiddle(o.contentHeaderMiddle);
+			}
+			if ((o.contentHeaderRight || []).length) {
+				contentHeader.addContentRight(o.contentHeaderRight);
+			}
+
+			this.setCustomHeader(contentHeader);
+		} else {
+			if (!originals.showNavButton && !originals.showHeader) {
+				this.setShowHeader(false);
+			}
+		}
+
+		if (o.footer) {
+			this.setFooter(o.footer);
+		}
+
+		this.addStyleClass(o.contentStyleClass || "app-content");
+	}
+
+});
 
 });
