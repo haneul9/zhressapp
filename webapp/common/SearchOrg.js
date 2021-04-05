@@ -214,7 +214,7 @@ common.SearchOrg = {
 						async: false,
 						filters: [
 							new sap.ui.model.Filter("Field", "EQ", "Plans"),
-							new sap.ui.model.Filter("Persa", "EQ", oWerks),
+							new sap.ui.model.Filter("Persa", "EQ", oWerks), 
 							new sap.ui.model.Filter("Excod", "EQ", vSelectedOrg[0].Orgeh),
 							new sap.ui.model.Filter("Actda", "EQ", common.SearchOrg.oController._vActda),
 						],
