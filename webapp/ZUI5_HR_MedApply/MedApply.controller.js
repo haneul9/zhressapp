@@ -339,7 +339,7 @@ sap.ui.define([
 		
 		getTxt:function(vTxt,vNo){
 			var redStar="<span style='color:red;font-weight:bold;font-size:14px;'>*</span>";
-			var oTxt=vNo<=22||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
+			var oTxt=vNo<=23||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
 			vNo==89?"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>"+redStar:
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
 			return new sap.ui.core.HTML({content:oTxt});
@@ -1405,6 +1405,9 @@ sap.ui.define([
 				if(oPro.Chk2&&fragment.COMMON_ATTACH_FILES.getFileLength(oController,"002")===0){
 					oMsg=oBundleText.getText("MSG_47032");
 				}
+				if(oPro.DiseName.trim()==""){
+					oMsg=oBundleText.getText("MSG_47035");
+				}
 
 			}else{
 				var oPro=$.app.byId(oController.PAGEID+"_Dialog2").getModel().getProperty("/Pop2")[0];		
@@ -1476,6 +1479,11 @@ sap.ui.define([
 					return;
 				}
 				vData.MedicalApplyTableIn.push($.app.getController()._DataModel.getProperty("/Pop1")[0]);				
+				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
+					$.app.getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
+					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
+					return;
+				}
 				oController._vArr1.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
 				});
@@ -1517,16 +1525,14 @@ sap.ui.define([
 						}
 					},
 					function (oError) {
-						if(vSig2!="S"){
-							var Err = {};						
-							if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							} else {
-								sap.m.MessageBox.alert(oError.toString());
-							}
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
 						}
 						vTmp=false;
 					}
