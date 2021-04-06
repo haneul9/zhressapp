@@ -373,7 +373,7 @@ sap.ui.define([
 			oController._tData={
 				MedDate:null,
 				Inpdt:null,
-				Begda:new Date(),
+				Begda:new Date(new Date().getFullYear,new Date().getMonth(),new Date().getDate(),9,0,0),
 				Endda:"\/Date("+new Date().getTime()+")\/",
 				HospType:"",
 				Kdsvh:"",

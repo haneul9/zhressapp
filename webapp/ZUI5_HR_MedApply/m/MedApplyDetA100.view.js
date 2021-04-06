@@ -13,8 +13,8 @@ sap.ui.define([
 			
 		getControllerName: function () {
 			return SUB_APP_ID;
-		},
-
+		}, 
+ 
 		createContent: function (oController) {
 			var oRow,oCell,oMat,c=sap.ui.commons;
 			for(var i=63;i<87;i++) { 
