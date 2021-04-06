@@ -179,7 +179,7 @@ link: function(button) {
 		if (button) {
 			attributes = [
 				'<button type="button" data-popup-menu-url="${url}" data-menu-id="${menu-id}" aria-label="Link">'.interpolate(this.url1(), this.mid1()),
-					'<span aria-hidden="true"><i class="fas fa-angle-right" title="메뉴로 이동"></i></span>',
+					'<span aria-hidden="true"><i class="fas fa-chevron-right" title="메뉴로 이동"></i></span>',
 				'</button>'
 			];
 		} else {
@@ -192,7 +192,7 @@ link: function(button) {
 		if (button) {
 			attributes = [
 				'<button type="button" data-url="${url}" data-menu-id="${menu-id}" aria-label="Link">'.interpolate(this.url1(), this.mid1()),
-					'<span aria-hidden="true"><i class="fas fa-angle-right" title="메뉴로 이동"></i></span>',
+					'<span aria-hidden="true"><i class="fas fas fa-chevron-right" title="메뉴로 이동"></i></span>',
 				'</button>'
 			];
 		} else {
