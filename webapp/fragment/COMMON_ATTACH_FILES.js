@@ -205,6 +205,15 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
 
 		this.refreshAttachFileList(oController,null,vPage);
+		this.hideLine(oAttachbox);
+	},
+
+	hideLine : function(oAttachbox){
+		if(oAttachbox.getModel().getProperty("/Settings/Mode")=="S"){
+			if(oAttachbox.getModel().getProperty("/Data").length!=0){
+				$("#"+oAttachbox.getId()).children()[0].style.display="none";
+			}
+		}
 	},
 
 	/*
@@ -399,6 +408,7 @@ fragment.COMMON_ATTACH_FILES = {
 		var oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"+vPage),
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"+vPage),
 			f1 = document.getElementById(oController.PAGEID + "_ATTACHFILE_BTN"+vPage+"-fu_input-inner"),
+			oTable=sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
 			JSonModel = oAttachbox.getModel(),
 			vFileData = JSonModel.getProperty("/Data"),
 			aFileList = [],
@@ -435,6 +445,8 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.clear();
 		oFileUploader.setValue("");
 		if (f1) f1.setAttribute("value", "");
+
+		fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
 	},
 
 	callDeleteFileService: function(fileInfo) {

@@ -5,6 +5,7 @@ $.sap.require("common.EmpBasicInfoBoxCustom");
 $.sap.require("common.PickOnlyDateRangeSelection");
 jQuery.sap.require("control.ODataFileUploader");
 jQuery.sap.require("fragment.COMMON_ATTACH_FILES");
+jQuery.sap.includeStyleSheet("ZUI5_HR_MedApply/css/MyCss.css");
 sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 
 	/** Specifies the Controller belonging to this View. 

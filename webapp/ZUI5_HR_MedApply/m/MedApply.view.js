@@ -5,7 +5,6 @@ sap.ui.define([
 	"../../common/EmpBasicInfoBox",
 	"../../control/ODataFileUploader"
 ], function (Common, Formatter, PageHelper, EmpBasicInfoBox,ODataFileUploader) {
-
 	sap.ui.jsview($.app.APP_ID, {
 		
 		getControllerName: function () {
@@ -13,6 +12,7 @@ sap.ui.define([
 		},
 
 		createContent: function (oController) {
+			jQuery.sap.includeStyleSheet("ZUI5_HR_MedApply/css/MyCssMobile.css");
 			this.loadModel();
 
 			var oInfoBox = new sap.m.FlexBox({
