@@ -434,7 +434,7 @@ sap.ui.define([
 			// Header
 			sendObject.IPernr = vPernr;
 			sendObject.IConType = "5";
-			sendObject.IZlangu = oController.DetailModel.getProperty("/FormData/Zltype");
+			sendObject.IZlangu = oController.DetailModel.getProperty("/FormData/Zlangu");
 			// Navigation property
 			sendObject.LanguPayApplyExport = [];
 			sendObject.LanguPayApplyTableIn = [oSendDate];
