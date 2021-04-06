@@ -171,7 +171,7 @@ sap.ui.define([
 				if(oController._onClose!="X"){
 					oController.changeSel();
 				}
-
+ 
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
 					Mode: "S",
