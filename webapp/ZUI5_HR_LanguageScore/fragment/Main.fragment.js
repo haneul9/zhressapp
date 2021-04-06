@@ -139,6 +139,11 @@ sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.Main", {
 							press: oController.onPressSearch,
 							text: "{i18n>LABEL_33005}", // 조회
 						}).addStyleClass("button-search"),
+						new sap.m.Button({
+							press: oController.pressChart,
+							text: "{i18n>LABEL_51017}" // 어학성적 조건표
+						})
+						.addStyleClass("button-light"),
 					]
 				})
 				.addStyleClass("button-group")
