@@ -136,8 +136,8 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oApplyDate = $.app.byId(oController.PAGEID + "_ApplyDate");
-			var vDate1 = oApplyDate.mProperties.dateValue;
-			var vDate2 = oApplyDate.mProperties.secondDateValue;
+			var vDate1 = oApplyDate.getDateValue();
+			var vDate2 = oApplyDate.getSecondDateValue();
 
 			oController.TableModel.setData({Data: []});
 			
@@ -145,8 +145,8 @@ sap.ui.define([
 			// Header
 			sendObject.IPernr = vPernr;
 			sendObject.IBukrs = vBukrs2;
-			sendObject.IBegda = new Date(vDate1.setDate(vDate1.getDate()+1));
-			sendObject.IEndda = new Date(vDate2.setDate(vDate2.getDate()+1));
+			sendObject.IBegda = Common.adjustGMTOdataFormat(vDate1);
+			sendObject.IEndda = Common.adjustGMTOdataFormat(vDate2);
 			// Navigation property
 			sendObject.RegalsealExport = [];
 			sendObject.RegalsealTableIn1 = [];

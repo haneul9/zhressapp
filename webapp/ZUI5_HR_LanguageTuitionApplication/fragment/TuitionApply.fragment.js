@@ -105,7 +105,7 @@ sap.ui.define([
 										new sap.m.Label({ text: "{i18n>LABEL_29003}", required: true, width: "130px", layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }) }),
 										new PickOnlyDateRangeSelection(oController.PAGEID + "_PeriodDate", { // 수강기간
 											displayFormat: oController.getSessionInfoByKey("Dtfmt"),
-											//change: oController.getSupPeriod.bind(oController),
+											change: oController.getSupPeriod.bind(oController),
 											dateValue: "{Lecbe}",
 											secondDateValue: "{Lecen}",
 											delimiter: "~",

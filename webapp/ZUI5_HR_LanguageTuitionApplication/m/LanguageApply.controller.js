@@ -60,7 +60,7 @@
 						this.DetailModel.setProperty("/FormData/Acqpot", oEvent.data.oTableData.Acqpot ? oEvent.data.oTableData.Acqpot : "");
 						this.DetailModel.setProperty("/FormData/AcqgrdT", oEvent.data.oTableData.AcqgrdT ? oEvent.data.oTableData.AcqgrdT : "");
 						this.DetailModel.setProperty("/FormData/Acqgrd", oEvent.data.oTableData.Acqgrd ? oEvent.data.oTableData.Acqgrd : "");
-						this.getSupPeriod(this);
+						this.getSupPeriod();
 					}
 
                 }
@@ -176,14 +176,17 @@
                 else this.DetailModel.setProperty("/FormData/Suport", String(vClassPay));
             },
 
-            getSupPeriod: function(oController) { // 수강기간 선택시 지원기간값 가져옴
+            getSupPeriod: function() { // 수강기간 선택시 지원기간값 가져옴
+				var oController = $.app.getView("ZUI5_HR_LanguageTuitionApplication.m.LanguageApply").getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vPernr = oController.getUserId(); 
                     
                 var oSendDate = {};
 				oSendDate.Lecbe =  Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Lecbe"));
 				oSendDate.Lecen =  Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Lecen"));
-                
+
+                if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Zlangu"))) return;
+
                 var	oSendObject = {
                     IPernr: vPernr,
                     IConType: "5",

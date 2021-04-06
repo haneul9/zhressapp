@@ -153,6 +153,7 @@
 								dateValue: "{Lecbe}",
 								secondDateValue: "{Lecen}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
+								change: oController.getSupPeriod.bind(oController),
                                 editable: {
                                     path: "Status",
                                     formatter: function(v) {

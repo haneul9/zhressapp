@@ -430,6 +430,8 @@ sap.ui.define([
 			oSendDate.Lecbe =  Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Lecbe"));
 			oSendDate.Lecen =  Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Lecen"));
 			
+			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Zlangu"))) return;
+
 			var	sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;

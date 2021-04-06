@@ -109,9 +109,9 @@ sap.ui.define([
                                         textAlign: "End",
                                         liveChange: oController.getDonation,
 										value: {
-											path: "DoamtT",
+											path: "Doamt",
 											formatter: function (v) {
-												return (v) ? v : "0";
+												return (v) ? Common.numberWithCommas(v) : "0";
 											}
 										},
 										editable:{

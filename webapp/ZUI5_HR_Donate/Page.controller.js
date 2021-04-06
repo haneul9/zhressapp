@@ -114,7 +114,7 @@ sap.ui.define([
         getTopText: function() {
             var oController = $.app.getController();
             var vEname = oController.getUserEname();
-            var vDonate = Common.checkNull(oController.DetailModel.getProperty("/Data/DoamtT")) ? "0" : oController.DetailModel.getProperty("/Data/DoamtT");
+            var vDonate = Common.checkNull(oController.DetailModel.getProperty("/Data/Doamt")) ? "0" : oController.DetailModel.getProperty("/Data/Doamt");
             var vEname2 = "<strong style='font-size:16px; color:#333333'>" + vEname + "</strong>" ;
             var vDonate2 = "<strong style='font-size:18px; color:#0070BD'>" + Common.numberWithCommas(vDonate) + "</strong>";
             var vMsg = oController.getBundleText("MSG_33001");
@@ -138,7 +138,7 @@ sap.ui.define([
 
         getBotText: function() {
 			var oController = $.app.getController();
-			var vDonate = Common.checkNull(oController.DetailModel.getProperty("/Data/DoamtT")) ? "0" : oController.DetailModel.getProperty("/Data/DoamtT");
+			var vDonate = Common.checkNull(oController.DetailModel.getProperty("/Data/Doamt")) ? "0" : oController.DetailModel.getProperty("/Data/Doamt");
 			var vDonate2 = "</strong><strong style='font-size:18px; color:#0070BD'>" + Common.numberWithCommas(vDonate) + "</strong><strong style='color:#333333'>";
             var vMsg = oController.getBundleText("MSG_33007");
             vMsg = vMsg.replace("${Donate}", vDonate2);
@@ -154,7 +154,7 @@ sap.ui.define([
 			var inputValue = oEvent.getParameter('value').trim(),
 				convertValue = inputValue.replace(/[^\d]/g, '');
 
-			oController.DetailModel.setProperty("/Data/DoamtT", convertValue);
+			oController.DetailModel.setProperty("/Data/Doamt", convertValue);
 			oEvent.getSource().setValue(Common.numberWithCommas(convertValue));
 			oTopFormatterT.setHtmlText(oController.getTopText());
 			oBotFormatterT.setHtmlText(oController.getBotText());
@@ -295,7 +295,7 @@ sap.ui.define([
 			var vBukrs = oController.getUserGubun();
 			var	oSendData = oController.DetailModel.getProperty("/SendData");
 
-			oSendData.Doamt = oController.DetailModel.getProperty("/Data/DoamtT");
+			oSendData.Doamt = oController.DetailModel.getProperty("/Data/Doamt");
 
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
