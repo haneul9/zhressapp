@@ -373,8 +373,8 @@ sap.ui.define([
 			oController._tData={
 				MedDate:null,
 				Inpdt:null,
-				Begda:new Date(new Date().getFullYear,new Date().getMonth(),new Date().getDate(),9,0,0),
-				Endda:"\/Date("+new Date().getTime()+")\/",
+				Begda:new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),9,0,0),
+				Endda:"\/Date("+new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),9,0,0).getTime()+")\/",
 				HospType:"",
 				Kdsvh:"",
 				Pernr:oSessionData.Pernr,
@@ -1471,6 +1471,10 @@ sap.ui.define([
 						MedicalApplyTableInH:[]
 						}
 			if(vSig=="1000"){
+				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""){
+					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
+					return;
+				}
 				vData.MedicalApplyTableIn.push($.app.getController()._DataModel.getProperty("/Pop1")[0]);				
 				oController._vArr1.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
