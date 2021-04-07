@@ -48,8 +48,9 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID + "_HeadSel").addItem();
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
+			oController._Bukrs=oSessionData.Bukrs3;
 			var vData={ IConType:"0",
-						IBukrs:oSessionData.Bukrs2,
+						IBukrs:oSessionData.Bukrs3,
 						IPernr:oSessionData.Pernr,
 						ILangu:oSessionData.Langu,
 						IDatum:"\/Date("+new Date().getTime()+")\/",
@@ -1080,7 +1081,7 @@ sap.ui.define([
 			var vFirstDate = $.app.byId(oController.PAGEID + "_ApplyDate").getDateValue();
             var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
 			var vData={ IConType:"1",
-						IBukrs:oSessionData.Bukrs2,
+						IBukrs:oSessionData.Bukrs3,
 						IPernr:oSessionData.Pernr,
 						ILangu:oSessionData.Langu,
 						IMolga:oSessionData.Molga,
@@ -1378,7 +1379,7 @@ sap.ui.define([
 
 		onFocusMini : function(){
 			var oController=$.app.getController();
-			var oInp=$.app.byId(oController.PAGEID+"_mInput");	
+			var oInp=$.app.byId(oController.PAGEID+"_mInput");
 			oInp.focus();
 		},
 
