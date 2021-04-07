@@ -1,10 +1,10 @@
-/* global AbstractPortlet moment */
+/* global AbstractPortlet */
 function CalendarPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
 	this.yearMonth = null;
-	this.dailyStyleMap = null;
+	this.dailyReportMap = null;
 }
 
 CalendarPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -28,27 +28,27 @@ ui: function() {
 				'<div class="portlet-calendar-daily-report list-group list-group-horizontal flex-wrap">',
 					'<li class="list-group-item vacation">',
 						'<h6>휴가</h6>',
-						'<span>5</span>',
+						'<span class="count">5</span>',
 						'<span class="unit">명</span>',
 					'</li>',
 					'<li class="list-group-item education">',
 						'<h6>교육</h6>',
-						'<span>10</span>',
+						'<span class="count">10</span>',
 						'<span class="unit">명</span>',
 					'</li>',
 					'<li class="list-group-item biztrip">',
 						'<h6>출장</h6>',
-						'<span>100</span>',
+						'<span class="count">100</span>',
 						'<span class="unit">명</span>',
 					'</li>',
 					'<li class="list-group-item telecommuting">',
 						'<h6>재택근무</h6>',
-						'<span>50</span>',
+						'<span class="count">50</span>',
 						'<span class="unit">명</span>',
 					'</li>',
 					'<li class="list-group-item birthday">',
 						'<h6>생일</h6>',
-						'<span>3</span>',
+						'<span class="count">3</span>',
 						'<span class="unit">명</span>',
 					'</li>',
 				'</div>',
@@ -60,7 +60,7 @@ ui: function() {
 onceBefore: function() {
 
 	this.yearMonth = moment().format('YYYYMM');
-	this.dailyStyleMap = {};
+	this.dailyReportMap = {};
 
 	this.initI18n();
 
@@ -71,21 +71,25 @@ onceBefore: function() {
 		changeYear: true,
 		beforeShowDay: function(date) {
 
-			var mDate = moment(date),
-			dailyStyle = this.dailyStyleMap[mDate.format(this._gateway.loginInfo('Dtfmt').toUpperCase())];
-			if (mDate.isSame('2021-04-07')) {
-				return [true, 'absence absence-start', ''];
+			var classes = [],
+			mDate = moment(date).format(this._gateway.loginInfo('Dtfmt').toUpperCase()),
+			dailyReport = this.dailyReportMap[mDate];
+			if (mDate === '2021-04-06') {
+				classes.push('absence absence-start');
 			}
-			if (mDate.isSame('2021-04-08')) {
-				return [true, 'absence absence-between', ''];
+			else if (mDate === '2021-04-07') {
+				classes.push('absence absence-between');
 			}
-			if (mDate.isSame('2021-04-09')) {
-				return [true, 'absence absence-end', ''];
+			else if (mDate === '2021-04-08') {
+				classes.push('absence absence-end');
 			}
-			if (mDate.isSame('2021-04-10') || mDate.isSame('2021-04-11')) {
-				return [true, 'holiday', ''];
+			else if (mDate === '2021-04-27') {
+				classes.push('absence');
 			}
-			return [true, '', ''];
+			if (dailyReport.holiday) {
+				classes.push('holiday');
+			}
+			return [true, classes.join(' '), ''];
 		}.bind(this),
 		onSelect: function(dateText) {
 
@@ -97,6 +101,51 @@ onceBefore: function() {
 			this.fill();
 		}.bind(this)
 	}));
+
+	$('.portlet-calendar .list-group-item')
+		.popover({
+			html: true,
+			container: 'body',
+			placement: 'top',
+			template: [
+				'<div class="popover" role="tooltip">',
+					'<div class="arrow"></div>',
+					'<h6 class="popover-header"></h6>',
+					'<div class="popover-body"></div>',
+				'</div>'
+			].join(''),
+			content: function() {
+				var item = $(this), colgroup, thead, tbody;
+				// 휴가
+				if (item.hasClass('vacation')) {
+					colgroup = '<col /><col /><col /><col />';
+					thead = '';
+				}
+				// 교육 / 출장 / 재택근무
+				else if (item.hasClass('education') || item.hasClass('biztrip') || item.hasClass('telecommuting')) {
+					colgroup = '<col /><col /><col />';
+					thead = '';
+				}
+				// 생일
+				else {
+					colgroup = '<col /><col /><col />';
+					thead = '';
+				}
+				return [
+					'<table class="portlet-calendar-popover">',
+						'<colgroup>', colgroup, '</colgroup>',
+						'<thead>', thead, '</thead>',
+						'<tbody>', tbody, '</tbody>',
+					'</table>'
+				].join('');
+			}
+		})
+		.on('show.bs.popover', function() {
+			
+		});
+		// .on('hidden.bs.popover', function() {
+		// 	$(this).remove();
+		// });
 },
 fill: function() {
 
@@ -111,7 +160,7 @@ fill: function() {
 			ILangu: loginInfo.Langu,
 			IMonth: this.yearMonth,
 			IDatum: Date.toODataString(),
-			TableIn1: [], // 달력 : 일자/요일키/휴일flag(근무일정상 휴일)/휴무(2001)정보 여부 flag
+			TableIn1: [], // 달력 : 일자/요일키/휴일flag(근무 일정상 휴일)/휴무(2001)정보 여부 flag
 			TableIn2: [], // 본인 근태 : 휴무유형명, 시작일, 종료일
 			TableIn3: [], // 부서 휴가 인원 : 이름/직위명/휴가명/기간
 			TableIn4: [], // 부서 교육 인원 : 이름/직위명/기간
@@ -122,7 +171,41 @@ fill: function() {
 		success: function(data) {
 			this._gateway.prepareLog('CalendarPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			this.dailyStyleMap = {};
+			var results = this._gateway.odataResults(data),
+			Dtfmt = this._gateway.loginInfo('Dtfmt').toUpperCase();
+
+			var dailyReportMap = this.dailyReportMap = {};
+			$.map(results.TableIn1, function(o) {
+				dailyReportMap[moment(Number.fromODataDate(o.Datum)).format(Dtfmt)] = {
+					holiday: o.HolFlag === 'X',
+					absence: o.P2001Flag === 'X'
+				};
+			});
+			$.map(results.TableIn2, function(o) { // 본인 근태
+				this.addDailyReport(o, 'self');
+			});
+
+			results.TableIn3 = [
+				{ Begda: '/Date(1617548400000)/', Endda: '/Date(1617721200000)/' }, // 0405 - 0407
+				{ Begda: '/Date(1617634800000)/', Endda: '/Date(1617721200000)/' }, // 0406 - 0407
+				{ Begda: '/Date(1618326000000)/', Endda: '/Date(1618412400000)/' }, // 0414 - 0415
+				{ Begda: '/Date(1618758000000)/', Endda: '/Date(1618844400000)/' }  // 0419 - 0420
+			];
+			$.map(results.TableIn3, function(o) { // 휴가
+				this.addDailyReport(o, 'vacation');
+			}.bind(this));
+			$.map(results.TableIn4, function(o) { // 교육
+				this.addDailyReport(o, 'education');
+			}.bind(this));
+			$.map(results.TableIn5, function(o) { // 출장
+				this.addDailyReport(o, 'biztrip');
+			}.bind(this));
+			$.map(results.TableIn6, function(o) { // 재택
+				this.addDailyReport(o, 'telecommuting');
+			}.bind(this));
+			$.map(results.TableIn7, function(o) { // 생일
+				this.addDailyReport(o, 'birthday');
+			}.bind(this));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.fill ' + url);
@@ -132,8 +215,39 @@ fill: function() {
 		}.bind(this)
 	});
 },
+addDailyReport: function(o, type) {
+
+	$.map(this.toDateArray(o.Begda, o.Endda), function(date) {
+		var array = this.dailyReportMap[date][type];
+		if (array) {
+			array.push(o);
+		} else {
+			this.dailyReportMap[date][type] = [o];
+		}
+	}.bind(this));
+},
+toDateArray: function(begda, endda) {
+
+	begda = !begda ? moment() : moment(Number.fromODataDate(begda));
+	endda = !endda ? moment() : moment(Number.fromODataDate(endda));
+
+	var Dtfmt = this._gateway.loginInfo('Dtfmt').toUpperCase();
+	return $.map(new Array(moment.duration(endda.diff(begda)).days() + 1), function(n, i) {
+		return begda.clone().add(i, 'days').format(Dtfmt);
+	});
+},
 renderDailyReport: function(dateText) {
 
+	var ko = this._gateway.locale() === 'ko_KR',
+	unit = ko ? '명' : '',
+	pattern = ko ? 'YYYY년 MM월 DD일' : 'MM/DD/YYYY',
+	dailyReport = this.dailyReportMap[dateText];
+
+	$('.portlet-calendar-date').text(moment(dateText.replace(/\D/g, ''), 'YYYYMMDD').format(pattern));
+
+	$.map('vacation,education,biztrip,telecommuting,birthday'.split(','), function(key) {
+		$('.list-group-item.${key} .count'.interpolate(key)).text((dailyReport[key] || []).length + unit);
+	});
 },
 changeLocale: function() {
 
@@ -150,7 +264,7 @@ i18n: function(defaults) {
 },
 initI18n: function() {
 
-	var Dtfmt = this._gateway.loginInfo('Dtfmt');
+	var Dtfmt = this._gateway.loginInfo('Dtfmt').toLowerCase().replace(/yyyy/, 'yy');
 
 	$.datepicker.regional.ko_KR = {
 		closeText: '닫기',

@@ -1,4 +1,5 @@
 {
+	"extends": "eslint:recommended",
 	"rules": {
 		"accessor-pairs": 0,
 		"array-bracket-spacing": [0, "never"],
@@ -10,7 +11,7 @@
 		"block-spacing": 0,
 		"brace-style": [0, "1tbs"],
 		"callback-return": 0,
-		"camelcase": 1,
+		"camelcase": 0,
 		"class-methods-use-this": 0,
 		"comma-dangle": [2, "never"],
 		"comma-spacing": 0,
@@ -220,7 +221,7 @@
 		"prefer-spread": 0,
 		"prefer-template": 0,
 		"quote-props": 0,
-		"quotes": [1, "double"],
+		"quotes": [1, "single"],
 		"radix": 0,
 		"require-jsdoc": 0,
 		"require-yield": 0,
@@ -462,7 +463,9 @@
 		"d3": false,
 		"sinon": false,
 		"sap": false,
-		"gPernr": false
+		"gPernr": false,
+		"moment": false,
+		"Promise": false
 	},
 	"env": {
 		"browser": true,

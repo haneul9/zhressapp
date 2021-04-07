@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* global AbstractPortlet moment */
 function NoticePortlet() {
 

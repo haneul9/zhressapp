@@ -136,18 +136,15 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker td {width:46px; padding:0}
 .portlet-calendar-inline .ui-datepicker td a {margin:8px 5px; width:36px; border:0; padding:0; line-height:36px; text-align:center}
 .portlet-calendar-inline .ui-datepicker td a.ui-state-default {background:transparent}
-.portlet-calendar-inline .ui-datepicker td a.ui-state-active {border-radius:18px; background:#064975}/* selected */
-.portlet-calendar-inline .ui-datepicker td a.ui-state-highlight {border-radius:18px; background:#8DC63F;color:#fff;font-weight:500}/* today */
+.portlet-calendar-inline .ui-datepicker td a.ui-state-active {border-radius:18px; background:#064975 !important}/* selected */
+.portlet-calendar-inline .ui-datepicker td a.ui-state-highlight {border-radius:18px; background:#8dc63f !important; color:#fff; font-weight:500}/* today */
 .portlet-calendar-inline .ui-datepicker td.holiday a.ui-state-default {color:#f00}
-.portlet-calendar-inline .ui-datepicker td.absence a.ui-state-default {/*border-top:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5;*/ background:rgba(141,198,63,.3)}
-.portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; /*border-left:1px solid #e5e5e5;*/ border-top-left-radius:18px; border-bottom-left-radius:18px; padding-right:5px}
-.portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%}
-.portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; /*border-right:1px solid #e5e5e5;*/ border-top-right-radius:18px; border-bottom-right-radius:18px; padding-left:5px}
-.portlet-calendar-date {margin-top:1rem;font-weight: 700;}  
-.portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:0;text-align: center;}
-.portlet-calendar-daily-report .list-group-item h6, .portlet-calendar-daily-report .list-group-item p {text-align:center}
-.portlet-calendar-daily-report .list-group-item h6 {margin-top:.5rem; margin-bottom:.5rem}
-.portlet-calendar-daily-report .list-group-item p {margin-top:.5rem; margin-bottom:0}
+.portlet-calendar-inline .ui-datepicker td.absence a.ui-state-default {border-radius:18px; background:#f6f6f6; background:rgba(141,198,63,.3)}
+.portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; border-top-right-radius:0; border-bottom-right-radius:0; padding-right:5px}
+.portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%; border-radius:0}
+.portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-top-left-radius:0; border-bottom-left-radius:0; padding-left:5px}
+.portlet-calendar-date {margin-top:2rem; font-weight:700}
+.portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:0; text-align:center}
 .portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header  {border:none;}
 .portlet-calendar-inline .ui-widget-header {background-color: transparent;}
 .portlet .portlet-calendar-daily-report .list-group-item {padding: .5rem 0rem .25rem;}
@@ -180,9 +177,12 @@ body {min-width:576px; font-size:14px}
 .custom-control-input:checked~.custom-control-label::before {background-color:#0070bd; border-color:#0070bd}
 .card.portlet-switch {border-radius:.375rem}
 
+<<<<<<< HEAD
 .portlet .list-group-item {border:none; padding:.5rem .625rem .5rem 0}   
 .portlet .list-group-item:hover {color:#064975; background:transparent}
 
+=======
+>>>>>>> hpjt0857-portlet
 .color-lcc-signature-blue {color:#064975 !important}
 .color-lcc-signature-green {color:#8dc63f !important}
 .color-lcc-signature-red {color:#da291c !important}

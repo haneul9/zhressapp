@@ -98,6 +98,12 @@ init: function() {
 		}
 	});
 
+	$.extend(Number, {
+		fromODataDate: function(v) {
+			return !v ? new Date(0).getTime() : Number(v.replace(/\D/g, ''));
+		}
+	});
+
 	$.extend(Date, {
 		toODataString: function(v) {
 			if (!v) {
@@ -116,6 +122,9 @@ init: function() {
 				}
 			}
 			return null;
+		},
+		fromODataString: function(v) {
+			return !v ? null : new Date(v.toNumber());
 		}
 	});
 	$.extend(Date.prototype, {
