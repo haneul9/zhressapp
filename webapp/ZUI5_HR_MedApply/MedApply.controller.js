@@ -884,36 +884,69 @@ sap.ui.define([
 			var c=sap.ui.commons;
 			var oTable=$.app.byId(oController.PAGEID+"_Table");
 			oTable.destroyColumns();
-			var oFields=["Begda","MedDate","PatiName","RelationTx","HospName","DiseName","MychargeT","SuppAmtT","PayDateT","StatusText"];			
-			var oWidths=['','','','','200px','200px','','','',''];			
-			var oAligns=['Center','Center','Center','Center','Begin','Begin','End','End','Center','Center'];	
-			var oLabels=new Array();
-			for(var i=91;i<101;i++){
-				i<100?i="0"+i:null;
-				oLabels.push({Label:"LABEL_47"+i,Width:oWidths[i-91],Align:"Center"});
-			}
-			oLabels.forEach(function(e,i){
-				var oCol=new sap.ui.table.Column({
-					flexible : false,
-		        	autoResizable : true,
-		        	resizable : true,
-					showFilterMenuEntry : true,
-					filtered : false,
-					sorted : false
+			if(oController._Bukrs=="1000"){
+				var oFields=["Begda","MedDate","PatiName","RelationTx","HospName","DiseName","MychargeT","SuppAmtT","PayDateT","StatusText"];			
+				var oWidths=['','','','','200px','200px','','','',''];			
+				var oAligns=['Center','Center','Center','Center','Begin','Begin','End','End','Center','Center'];	
+				var oLabels=new Array();
+				for(var i=91;i<101;i++){
+					i<100?i="0"+i:null;
+					oLabels.push({Label:"LABEL_47"+i,Width:oWidths[i-91],Align:"Center"});
+				}
+				oLabels.forEach(function(e,i){
+					var oCol=new sap.ui.table.Column({
+						flexible : false,
+						autoResizable : true,
+						resizable : true,
+						showFilterMenuEntry : true,
+						filtered : false,
+						sorted : false
+					});
+					oCol.setWidth(e.Width);
+					oCol.setHAlign(e.Align);
+					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));	
+					if(i<2){
+						oCol.setTemplate(new sap.ui.commons.TextView({text : {
+							path :oFields[i], 						
+							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
+						},textAlign:oAligns[i]}).addStyleClass("FontFamily"))
+					}else{
+						oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));			
+					}					
+					oTable.addColumn(oCol);
 				});
-				oCol.setWidth(e.Width);
-				oCol.setHAlign(e.Align);
-				oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));	
-				if(i<2){
-					oCol.setTemplate(new sap.ui.commons.TextView({text : {
-						path :oFields[i], 						
-						type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
-					},textAlign:oAligns[i]}).addStyleClass("FontFamily"))
-				}else{
-					oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));			
-				}					
-				oTable.addColumn(oCol);
-			});
+			}else{
+				var oFields=["Begda","MedDate","Inpdt","PatiName","RelationTx","HospName","Gtz51sT","SuppAmtT","FramtT","StatusText"];			
+				var oWidths=['','','','','','200px','200px','','',''];			
+				var oAligns=['Center','Center','Center','Center','Begin','Begin','Center','End','End','Center'];	
+				var oLabels=new Array();
+				for(var i=108;i<117;i++){
+					i<100?i="0"+i:null;
+					oLabels.push({Label:"LABEL_47"+i,Width:oWidths[i-108],Align:"Center"});
+				}
+				oLabels.forEach(function(e,i){
+					var oCol=new sap.ui.table.Column({
+						flexible : false,
+						autoResizable : true,
+						resizable : true,
+						showFilterMenuEntry : true,
+						filtered : false,
+						sorted : false
+					});
+					oCol.setWidth(e.Width);
+					oCol.setHAlign(e.Align);
+					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));	
+					if(i<3){
+						oCol.setTemplate(new sap.ui.commons.TextView({text : {
+							path :oFields[i], 						
+							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
+						},textAlign:oAligns[i]}).addStyleClass("FontFamily"))
+					}else{
+						oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));			
+					}					
+					oTable.addColumn(oCol);
+				});
+			}
 		},
 
 		onMiniAdd : function(){
