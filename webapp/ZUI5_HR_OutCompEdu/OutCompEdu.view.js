@@ -158,14 +158,14 @@ sap.ui.define([
 							new sap.m.Label({ text: "{i18n>LABEL_40005}" }), // 결재상태
                             oStatusCombo,
 							new sap.m.Label({ text: "{i18n>LABEL_40006}" }), // 보고서 제출여부
-                            oIsReportCombo,
+                            oIsReportCombo
 						]
 					}).addStyleClass("search-field-group"),
 					new sap.m.HBox({
 						items: [							
 							new sap.m.Button({
 								press: oController.onTableSearch.bind(oController),
-								text: "{i18n>LABEL_40007}", // 조회
+								text: "{i18n>LABEL_40007}" // 조회
 							}).addStyleClass("button-search")
 						]
 					})
@@ -211,5 +211,5 @@ sap.ui.define([
 			$.app.setModel("ZHR_TRAINING_SRV");
 			$.app.setModel("ZHR_COMMON_SRV");
 		}
-	})
+	});
 });
