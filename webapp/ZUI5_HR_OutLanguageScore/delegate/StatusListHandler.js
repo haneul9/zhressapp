@@ -74,7 +74,15 @@ sap.ui.define(
             loadTableData: function () {
                 var results = ODataService.LanguageApplySet.call(this.oController);
 
-                this.oModel.setProperty("/List", results);
+                this.oModel.setProperty("/List", results.map(function(elem) {
+                    return $.extend(true, elem, {
+                        Lcsco: elem.Lcsco === "0" ? "-" : elem.Lcsco,
+                        Rcsco: elem.Rcsco === "0" ? "-" : elem.Rcsco,
+                        Wcsco: elem.Wcsco === "0" ? "-" : elem.Wcsco,
+                        Ttsco: elem.Ttsco === "0" ? "-" : elem.Ttsco,
+                        Tcsco: elem.Tcsco === "0" ? "-" : elem.Tcsco
+                    });
+                }));
 
                 $.app.byId("StatusListTable").setFirstVisibleRow(0);
                 $.app.byId("StatusListTable").clearSelection();

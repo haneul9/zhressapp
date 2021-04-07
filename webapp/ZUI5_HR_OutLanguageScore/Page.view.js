@@ -33,8 +33,8 @@ sap.ui.define([
 					new sap.m.HBox({
 						items: [		
 							new sap.m.Label({
-								text: "{i18n>LABEL_51005}", // 현황
-							}).addStyleClass("sub-title"), 
+								text: "{i18n>LABEL_51005}" // 현황
+							}).addStyleClass("sub-title") 
 						]
 					})
 					.addStyleClass("info-field-group"),
@@ -127,17 +127,19 @@ sap.ui.define([
 			.bindRows("/List");
 			
 			ZHR_TABLES.makeColumn(oController, oTable, [
-				{id: "FortyT",    label: "{i18n>LABEL_51006}" /* 외국어 */,  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "12%"},
-				{id: "Certn", 	  label: "{i18n>LABEL_51007}" /* 수험번호 */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "12%"},
-				{id: "Evldd", 	  label: "{i18n>LABEL_51008}" /* 평가일 */,  plabel: "", resize: true, span: 0, type: "date",	 sort: true,  filter: true,  width: "10%"},
-				{id: "Tcsco", 	  label: "{i18n>LABEL_51018}" /* S 점수 */,  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "6%"},
+				{id: "Stext",     label: "{i18n>LABEL_51019}" /* 어학구분 */,  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "8%"},
+				{id: "TescdT",    label: "{i18n>LABEL_51020}" /* 시험종류 */,  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "8%"},
+				{id: "Certn", 	  label: "{i18n>LABEL_51007}" /* 수험번호 */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "10%"},
+				{id: "Evldd", 	  label: "{i18n>LABEL_51008}" /* 평가일 */,  plabel: "", resize: true, span: 0, type: "date",	 sort: true,  filter: true,  width: "8%"},
+				{id: "Findd", 	  label: "{i18n>LABEL_51021}" /* 유효일자 */, plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "8%"},
 				{id: "Lcsco", 	  label: "L/C",  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "6%"},
 				{id: "Rcsco", 	  label: "R/C",  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "6%"},
 				{id: "Wcsco", 	  label: "W/C",  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "6%"},
 				{id: "Ttsco", 	  label: "{i18n>LABEL_51009}" /* 총점 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "6%"},
-				{id: "TesgrT",    label: "{i18n>LABEL_51010}" /* 외부등급 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "10%"},
-				{id: "TesarT",    label: "{i18n>LABEL_51011}" /* 응시지역 */,  plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "10%"},
-				{id: "StatusT",   label: "{i18n>LABEL_51012}" /* 반영상태 */, plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "10%"},
+				{id: "Tcsco", 	  label: "{i18n>LABEL_51018}" /* 점수 */,  plabel: "", resize: true, span: 0, type: "string",	 sort: true,  filter: true,  width: "6%"},
+				{id: "TesgrT",    label: "{i18n>LABEL_51010}" /* 등급 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
+				{id: "TesarT",    label: "{i18n>LABEL_51011}" /* 응시지역 */,  plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "6%"},
+				{id: "StatusT",   label: "{i18n>LABEL_51012}" /* 반영상태 */, plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "8%"},
 				{id: "ApplyDt",   label: "{i18n>LABEL_51013}" /* 신청일 */, plabel: "", resize: true, span: 0, type: "date", sort: false, filter: false, width: "auto"}
 			]);
 
