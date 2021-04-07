@@ -92,6 +92,7 @@ sap.ui.define([
 			var oController=$.app.getController();
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
 			var vData={Pernr:oController._SessionData.Pernr,Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",BukrsExport:[]};
+			oController._MedDate=new Date(vDatum.getValue());
 			function getBukrs(){
 				oModel.create("/BukrsImportSet", vData, null,
 					function(data,res){
