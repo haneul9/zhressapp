@@ -526,14 +526,14 @@
 					.addStyleClass("search-field-group")
 				]
 			})
-			.addStyleClass("search-inner-vbox mt-8px");
+			.addStyleClass("mt-20px");
 
-			var oBotFlexBox = new sap.m.HBox(oController.PAGEID + "_FilesBox", {
+			var oBotFlexBox = new sap.m.VBox(oController.PAGEID + "_FilesBox", {
 				width: "100%",
 				height: "280px",
 				fitContainer: true,
 				items: [
-					ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Right"), // 첨부파일
+					ViewTemplates.getLabel("header", "{i18n>LABEL_59021}").addStyleClass("sub-title"), // 첨부파일
 					new sap.m.VBox({
 						fitContainer: true,
 						items: [
@@ -543,7 +543,7 @@
 							fragment.COMMON_ATTACH_FILES.renderer(oController,"004")						
 						]
 						
-					})
+					}).addStyleClass("custom-attach-file")
 				]
 			})
 			.addStyleClass("mt-8px");
