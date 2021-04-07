@@ -917,9 +917,9 @@ sap.ui.define([
 					oTable.addColumn(oCol);
 				});
 			}else{
-				var oFields=["Begda","MedDate","Inpdt","PatiName","RelationTx","HospName","Gtz51sT","SuppAmtT","FramtT","StatusText"];			
+				var oFields=["Begda","MedDate","Inpdt","PatiName","RelationTx","HospName","Gtz51sT","FramtT","PayDateT","StatusText"];			
 				var oWidths=['','','','','','200px','200px','','',''];			
-				var oAligns=['Center','Center','Center','Center','Begin','Begin','Center','End','End','Center'];	
+				var oAligns=['Center','Center','Center','Center','Center','Begin','Begin','End','Center','Center'];	
 				var oLabels=new Array();
 				for(var i=108;i<117;i++){
 					i<100?i="0"+i:null;
