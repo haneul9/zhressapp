@@ -180,10 +180,7 @@ sap.ui.define([
 				vEdit=false;
 			}
 
-			setTimeout(function(){	
-				if(oController._onClose!="X"){
-					oController.changeSel();
-				}			
+			setTimeout(function(){			
 				var vProperty1={
 					Appnm: vAppnm,
 					Mode: "S",
@@ -258,6 +255,10 @@ sap.ui.define([
 					UseMultiCategories : true,
 					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
 				},"007");
+				
+				if(oController._onClose!="X"){
+					oController.changeSel();
+				}	
 				if(oController._onDialog!="M"){
 					oController.changeSel2();
 				}

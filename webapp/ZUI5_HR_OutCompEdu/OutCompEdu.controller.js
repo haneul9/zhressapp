@@ -1,23 +1,39 @@
-jQuery.sap.require("sap.m.MessageBox");
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
+	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
 	"../common/PageHelper",
-	"../common/EmployeeModel"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper,EmployeeModel) {
+	"../common/EmployeeModel",
+	"sap/m/MessageBox",
+	"sap/ui/core/BusyIndicator",
+	"sap/ui/core/util/File",
+	], 
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, EmployeeModel, MessageBox, BusyIndicator, File) {
 	"use strict";
 
-	return CommonController.extend("ZUI5_HR_OutCompEdu.OutCompEdu", {
-
+	
+	return CommonController.extend($.app.APP_ID, {
+		
 		PAGEID: "OutCompEdu",
-		_BusyDialog : new sap.m.BusyDialog(),
-		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
-		_Docid : "",
-		_Bukrs : "",
-		_SessionData : {},
+		
+		TableModel: new JSONModelHelper(),
+		DetailModel: new JSONModelHelper(),
+		SearchModel: new JSONModelHelper(),
 		EmployeeModel: new EmployeeModel(),
+		
+		getUserId: function() {
+
+			return this.getSessionInfoByKey("name");
+		},
+		
+		getUserGubun  : function() {
+
+			return this.getSessionInfoByKey("Bukrs2");
+		},
+		
 		onInit: function () {
+
 			this.setupView()
 				.getView()
 				.addEventDelegate({
@@ -28,335 +44,453 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this)
-				
-			this.getView().addStyleClass("sapUiSizeCompact");
-			
 		},
 		
-		loadModel : function(oController) {
-			var oServiceURL = oController.getUrl("/sap/opu/odata/sap/ZHR_COMMON_SRV/");
-			var oModel = new sap.ui.model.odata.ODataModel(oServiceURL, true, undefined, undefined, undefined, undefined, undefined, false);
-			oModel.setCountSupported(false);
-			oModel.setRefreshAfterChange(false);
-			sap.ui.getCore().setModel(oModel, "ZHR_COMMON_SRV");
-			var oServiceURL2 = oController.getUrl("/sap/opu/odata/sap/ZHR_APPRAISAL2_SRV/");
-			var oModel2 = new sap.ui.model.odata.ODataModel(oServiceURL2, true, undefined, undefined, undefined, undefined, undefined, false);
-			oModel2.setCountSupported(false);
-			oModel2.setRefreshAfterChange(false);
-			sap.ui.getCore().setModel(oModel2, "ZHR_APPRAISAL2_SRV");
-		},
-
-		onBeforeShow: function(oEvent){
-			var oController = this;
-			if(!oController._ListCondJSonModel.getProperty("/Data")){
-				var oPhoto = "";				
-				new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + oController.getView().getModel("session").getData().Pernr + "' and photoType eq '1'")
-									 .select("photo")
-									 .setAsync(false)
-									 .attachRequestCompleted(function(){
-											var data = this.getData().d;
-											
-											if(data && data.results.length){
-												oPhoto = "data:text/plain;base64," + data.results[0].photo;
-											} else {
-												oPhoto = "images/male.jpg";
-											}
-									 })
-									 .attachRequestFailed(function() {
-											oPhoto = "images/male.jpg";
-									 })
-									 .load();
-							 
-				var vData = {
-					Data : Object.assign({photo : oPhoto, Apyear : new Date().getFullYear() + ""}, oController.getView().getModel("session").getData())
-				};
-				
-				oController._ListCondJSonModel.setData(vData);		
-			}
-			oController._SessionData=oController._ListCondJSonModel.getProperty("/Data");
+		onBeforeShow: function() {
+			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function(oEvent){
-			var oController = this;
+		onAfterShow: function() {
+            
 			this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
-		},
-
-		chkAll : function(){
-			var	oController = $.app.getController();
-		},
-
-		onDeleteLines : function(){
-			var	oController = $.app.getController();
-			sap.ui.getCore().getEventBus().publish("nav", "to", {
-				id : "ZUI5_HR_OutCompEdu.OutCompEduDet"
-			});
-		},
-
-		getSelector : function(){
-			var	oController = $.app.getController();
-			var oSel1=$.app.byId(oController.PAGEID+"_Sel1");
-			var oSel2=$.app.byId(oController.PAGEID+"_Sel2");
-			var oSel3=$.app.byId(oController.PAGEID+"_Sel3");
-			var oSel4=$.app.byId(oController.PAGEID+"_Year");
-			var oSel5=$.app.byId(oController.PAGEID+"_Month");
-			for(var i=1;i<=5;i++){
-				if(i!=4){
-					eval("oSel"+i+".addItem(new sap.ui.core.Item({text:oBundleText.getText('LABEL_00181'),key:''}));");
-				}
-			}
-		},
-
-		oTableInit : function(){
-			var	oController = $.app.getController();
-			var c=sap.ui.commons;
-			var oTable=$.app.byId(oController.PAGEID+"_Table");
-			oTable.destroyColumns();
-			var oFields=["Chk","Seqno","AporgTx","EnameP1","Appee","AppgrTx","AptypeTx","ApstuTx","Apgrd0T","Apgrd1T"];			
-			var oWidths=["40px","120px","120px","","","","","120px","120px","120px"];			
-			var oLabels=new Array();
-			for(var i=12;i<22;i++){
-				oLabels.push({Label:"LABEL_400"+i,Width:oWidths[i-12],Align:"Center"});
-			}
-			oLabels.forEach(function(e,i){
-				var oCol=new sap.ui.table.Column({
-					flexible : false,
-		        	autoResizable : true,
-		        	resizable : true,
-					showFilterMenuEntry : true,
-					filtered : false,
-					sorted : false
-				});
-				oCol.setWidth(e.Width);
-				oCol.setHAlign(e.Align);
-				i==0?oCol.setLabel(new sap.m.CheckBox({select:oController.chkAll})):
-				oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));
-				oCol.setTemplate(new sap.m.Text({text:"{"+oFields[i]+"}"}));
-				oTable.addColumn(oCol);
-			});
-		},
-
-		onSearch : function(){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_OutCompEdu.OutCompEdu");
-			var oController = oView.getController();
-		},
-
-		onSelectedRow: function(oEvent) {
-			var	oController = $.app.getController();
-			var sPath = oEvent.getParameters().rowBindingContext.sPath;			
-			var oTable = sap.ui.getCore().byId(oController.PAGEID +"_"+oController.vPage+ "_Table1");
-			var oData = oTable.getModel().getProperty(sPath);
-			oController._tData=oData;		
-			oController.nextPage1(oData);
-		},
-
-		nextPage1 : function(oEvent){
-
-		},
-
-		onValid : function(oController){
-			if($.app.byId(oController.PAGEID+"_TextA1").getValue().trim()==""){
-				sap.m.MessageBox.alert(oBundleText.getText("MSG_35002"));
-				return false;
-			}
-			if($.app.byId(oController.PAGEID+"_Sel1").getSelectedKey()==""){
-				sap.m.MessageBox.alert(oBundleText.getText("MSG_35003"));
-				return false;
-			}
-			return true;
-		},
-
-		onSaveProcess : function(oController,Sig){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_OutCompEdu.OutCompEdu");
-			var oController = oView.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-			var oPreData=oController._PreData;
-			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
-			var oTa1=$.app.byId(oController.PAGEID+"_TextA1");
-			var oTa2=$.app.byId(oController.PAGEID+"_TextA2");
-			var oSel1=$.app.byId(oController.PAGEID+"_Sel1");
-			var oTableIn2=oController._SheetData.TableIn2.results;
-			var oTableIn4=oController._SheetData.TableIn4.results;
-
-			function dataChecknSave(){
-				if(oController._SheetData.TableIn2.results.length==0){
-					oTableIn2.push({
-						ApoptT: "",
-						Apopt: "28",
-						Apop: oTa1.getValue(),
-						Docid: oController._Docid,
-						IOdkey: ""
-					});
-					oTableIn2.push({
-						ApoptT: "",
-						Apopt: "29",
-						Apop: oTa2.getValue(),
-						Docid: oController._Docid,
-						IOdkey: ""
-					});
-				}
-
-				if(oController._SheetData.TableIn4.results.length==0){
-					oTableIn4.push({
-						Docid:oController._Docid,
-						Apgrd0:oSel1.getSelectedKey(),
-						Apgrd0T:oSel1.getSelectedItem().getText(),
-					});
-				}
-				
-				oTableIn2.forEach(function(e){
-					if(e.Apopt=="28"){
-						e.Apop=oTa1.getValue();
-					}
-					if(e.Apopt=="29"){
-						e.Apop=oTa2.getValue();
-					}
-				});
-				oTableIn4.forEach(function(e){
-					e.Apgrd0=oSel1.getSelectedKey();
-				});
-				var vData={IOdkey:"", 
-					IBukrs:"1000",
-					IAppid:oPreData.Appid,
-					IDocid:oController._Docid,
-					IPernr:oSessionData.Pernr,
-					IApprc:"40",
-					IGolst:"",
-					ILangu:oSessionData.Langu,
-					TableIn2:oTableIn2,
-					TableIn4:oTableIn4
-				};
-				switch (Sig) {
-					case "S":
-					vData.IConType="2";
-					oModel.create("/AppraisalMboSheetSet", vData, null,
-					function(data,res){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_35005"),{
-							title:oBundleText.getText("LABEL_35023"),
-							onClose:function(){oController.bindData2(oController);}
-						})
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					}
-				);
-						break;
-					case "F":
-					vData.IConType="9";
-					oModel.create("/AppraisalMboSheetSet", vData, null,
-					function(data,res){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_35006"),{
-							title:oBundleText.getText("LABEL_35023"),
-							onClose:function(){oController.bindData2(oController);}
-						})
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					});
-						break;
-					default:
-						break;
-				}
-			}
-			var fVal1=false;
-			var fVal2=false;
-			var fVal3=false;
-			oTableIn2.forEach(function(e){
-				if(e.Apopt=="28"){
-					if(e.Apop==oTa1.getValue()){
-						fVal1=true;
-					}
-				}
-				if(e.Apopt=="29"){
-					if(e.Apop==oTa2.getValue()){
-						fVal2=true;
-					}
-				}
-			});
-			oTableIn4.forEach(function(e){
-				if(e.Apgrd0==oSel1.getSelectedKey()){
-					fVal3=true;
-				}
-			});	
-			
-			if(fVal1&&fVal2&&fVal3){
-				sap.m.MessageBox.alert(oBundleText.getText("MSG_35007"),{title:oBundleText.getText("LABEL_35023"),onClose:function(){dataChecknSave();}});
-			}else{
-				dataChecknSave();
-			}
-		},
-
-		onSave : function(Sig){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_OutCompEdu.OutCompEdu");
-			var oController = oView.getController();		
-			if(Sig=="F"){
-				var oValid = oController.onValid(oController);
-				if(oValid){
-					var oMsg="";
-					Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
-					sap.m.MessageBox.show(
-						oMsg, {				
-						icon: sap.m.MessageBox.Icon.INFORMATION,				
-						title: oBundleText.getText("LABEL_35023"),				
-						actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
-						onClose: function(fVal) {
-							if(fVal=="YES"){
-								oController.onSaveProcess(oController,Sig);
-							}
-						}				
-						}		
-					);
-				}
-			}else{
-				var oMsg="";
-				Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
-				sap.m.MessageBox.show(
-					oMsg, {				
-					icon: sap.m.MessageBox.Icon.INFORMATION,				
-					title: oBundleText.getText("LABEL_35023"),				
-					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
-					onClose: function(fVal) {
-						if(fVal=="YES"){
-							oController.onSaveProcess(oController,Sig);
-						}
-					}				
-					}		
-				);				
-			}
+            this.initDateCreate(this);
+			this.onTableSearch();
 		},
 		
-		getUrl : function(sUrl) {
-			var param = $.map(location.search.replace(/\?/, "").split(/&/), function(p) {
-				var pair = p.split(/=/);
-				if (pair[0] === "s4hana") { return pair[1]; }
-			})[0];
-	
-			var destination = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
+		getDateFormatter1: function() {
+			return new sap.ui.commons.TextView({
+				text: {
+					parts: [{ path: "Lecbe" }, { path: "Lecen" }],
+					formatter: function (v1, v2) {
+						if (!v1 || !v2) {
+							return "";
+						}
+
+						return Common.DateFormatter(v1) + " ~ " + Common.DateFormatter(v2);
+					}
+				},
+				textAlign: "Center"
+			});
+		},
+
+		getUrl: function() {
+			return "";
+		},
+        
+        initDateCreate: function(oController) { // 년과 월로 따로 셋팅하는곳
+            var vBukrs = oController.getUserGubun();
+            
+            oController.SearchModel.setData({
+                        Data: { Zyear: "", Zmonth: "" },
+                        Zyears: [],
+                        Zmonths: [],
+                        vBukrs: vBukrs
+            });
+            
+            this.setZyears(this);
+            this.setZmonths(this);
+        },
+        
+        setZyears: function(oController) {
+            var vZyear = new Date().getFullYear(),
+                vConvertYear = "",
+                aYears = [];
+
+			aYears.push({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
+
+            Common.makeNumbersArray({length: 11}).forEach(function(idx) {
+                vConvertYear = String(vZyear - idx);
+                aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
+			});
+
+			oController.SearchModel.setProperty("/Data/Zyear1", "ALL");
+			oController.SearchModel.setProperty("/Zyears1", aYears);
+        },
+
+        setZmonths: function(oController) {
+            var vConvertMonth = "",
+                aMonths = [];
+
+			aMonths.push({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
+
+            Common.makeNumbersArray({length: 12, isZeroStart: false}).forEach(function(idx) {
+                vConvertMonth = String(idx);
+                aMonths.push({ Code: vConvertMonth, Text: vConvertMonth + "월" });
+            });
+
+            oController.SearchModel.setProperty("/Data/Zmonth1", "ALL");
+			oController.SearchModel.setProperty("/Zmonths1", aMonths);
+        },
+		
+		onTableSearch: function() {
+			var oController = $.app.getController();
+			var oTable = $.app.byId(oController.PAGEID + "_Table");
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var vZyear1 = oController.SearchModel.getProperty("/Data/Zyear1");
+			var vMonth1 = oController.SearchModel.getProperty("/Data/Zmonth1");
+
+			oController.TableModel.setData({Data: []}); //직접적으로 화면 테이블에 셋팅하는 작업
+
+			var vBDate = vZyear1 === "ALL" ? "" : new Date(vZyear1, vMonth1 - 1, 1);
+			var vEDate = vMonth1 === "ALL" ? "" : new Date(vZyear1, vMonth1, 0);
+
+			var sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.IEmpid = vPernr;
+			sendObject.IBukrs = vBukrs2;
+			sendObject.IConType = "1";
+			sendObject.IBegda = Common.adjustGMTOdataFormat(vBDate);
+			sendObject.IEndda = Common.adjustGMTOdataFormat(vEDate);
+			// Navigation property
+			sendObject.TrainingOutApplyExport = [];
+			sendObject.TrainingOutApplyTableIn1 = [];
 			
-			return (destination + sUrl);
+			oModel.create("/TrainingOutApplySet", sendObject, {
+				success: function(oData, oResponse) {
+					var dataLength = 10;
+					if (oData && oData.TrainingOutApplyTableIn1) { //값을 제대로 받아 왔을 때
+						Common.log(oData);
+						var rDatas1 = oData.TrainingOutApplyTableIn1.results;
+						dataLength = rDatas1.length;
+						oController.TableModel.setData({Data: rDatas1}); //직접적으로 화면 테이블에 셋팅하는 작업
+					}
+					
+					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
+
+					oController.SearchModel.setProperty("/ExportData", oData.LanguPayApplyExport.results[0]);
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
 		},
 		
+		onSelectedRow: function(oEvent) { // Row선택
+			var oView = $.app.byId("ZUI5_HR_OutCompEdu.OutCompEdu"),
+				oController = $.app.getController();
+			var oPath = oEvent.mParameters.rowBindingContext.getPath();
+			var oRowData = oController.TableModel.getProperty(oPath);
+			
+			var oCopyRow = $.extend(true, {}, oRowData);
+
+			if (!oController._ApplyModel) {
+				oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", oController);
+				oView.addDependent(oController._ApplyModel);
+			};
+			
+			oController.getComboData();
+
+			oController.onBeforeOpenDetailDialog();
+			oController._ApplyModel.open();
+		},
+
+		onPressAppBtn: function() {
+
+		},
+
+		onPressRepBtn: function() {
+
+		},
+
+		onPressReqBtn: function() {
+
+		},
+
+		onPressDelBtn: function() {
+
+		},
+
+		getComboData: function() {
+			var oController = $.app.getController();
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+
+			oController.DetailModel.setProperty("/CostCombo", []);
+			oController.DetailModel.setProperty("/WBSCombo", []);
+
+			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
+
+			var sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "998";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "16";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 원가코드
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oController.DetailModel.setProperty("/CostCombo", oData.NavCommonCodeList.results);
+						oController.DetailModel.setProperty("/FormData/Kostl", oData.NavCommonCodeList.results[0].Code);
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
+
+			sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "998";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "17";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // WBS
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oController.DetailModel.setProperty("/WBSCombo", oData.NavCommonCodeList.results);
+						oController.DetailModel.setProperty("/FormData/Plstx", oData.NavCommonCodeList.results[0].Code);
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+				}
+			});
+		},
+
+		ErrorCheck: function() {
+			var oController = $.app.getController();
+			var oCostCombo = $.app.byId(oController.PAGEID + "_CostCombo");
+
+			if(Common.checkNull(oCostCombo.getSelectedKey())){
+				MessageBox.error(oController.getBundleText("MSG_29007"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Lecen"))){
+				MessageBox.error(oController.getBundleText("MSG_29008"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Zlaorg"))){
+				MessageBox.error(oController.getBundleText("MSG_29010"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Latell"))){
+				MessageBox.error(oController.getBundleText("MSG_29011"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Caldt"))){
+				MessageBox.error(oController.getBundleText("MSG_29013"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Lecbet"))){
+				MessageBox.error(oController.getBundleText("MSG_29015"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(AttachFileAction.getFileLength(oController) <= 1) {
+				MessageBox.error(oController.getBundleText("MSG_29012"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			return false;
+		},
+
+		onDialogApplyBtn: function() { // Dialog 신청 
+			var oController = $.app.getController();
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oSendData = oController.DetailModel.getProperty("/FormData");
+
+			if(oController.ErrorCheck()) return;
+			
+			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
+			oSendData.Waers = "KRW";
+			
+			BusyIndicator.show(0);
+			var onProcessApply = function (fVal) {
+				//신청 클릭시 발생하는 이벤트
+				if (fVal && fVal == oController.getBundleText("LABEL_29044")) { //신청
+					
+					// 첨부파일 저장
+					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+
+					var sendObject = {};
+					// Header
+					sendObject.IPernr = vPernr;
+					sendObject.IEmpid = vPernr;
+					sendObject.IConType = "3";
+					sendObject.IBukrs = vBukrs2;
+					// Navigation property
+					sendObject.LanguPayApplyTableIn = [
+						$.extend(true, Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData), {
+							Lecen: new Date(oController.DetailModel.getProperty("/FormData/Lecen"))
+						})
+					];
+					
+					oModel.create("/TrainingOutApplySet", sendObject, {
+						async: true,
+						success: function(oData, oResponse) {
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_29019"), { title: oController.getBundleText("MSG_08107")});
+							oController.onTableSearch();
+							BusyIndicator.hide();
+							oController._ApplyModel.close();
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
+						}
+					});
+				}
+				BusyIndicator.hide();
+			}
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29018"), {
+				title: oController.getBundleText("LABEL_29001"),
+				actions: [oController.getBundleText("LABEL_29044"), oController.getBundleText("LABEL_00119")],
+				onClose: onProcessApply
+			});
+		},
+		
+		onDialogSaveBtn: function(oEvent) { // Dialog 저장
+			var oController = $.app.getController();
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oSendData = oController.DetailModel.getProperty("/FormData");
+
+			if(oController.ErrorCheck()) return;
+			
+			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
+			
+			BusyIndicator.show(0);
+			var onProcessSave = function (fVal) {
+				//저장 클릭시 발생하는 이벤트
+				if (fVal && fVal == oController.getBundleText("LABEL_29026")) { //저장
+					
+					// 첨부파일 저장
+					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+
+					var sendObject = {};
+					// Header
+					sendObject.IPernr = vPernr;
+					sendObject.IEmpid = vPernr;
+					sendObject.IConType = "2";
+					sendObject.IBukrs = vBukrs2;
+					// Navigation property
+					sendObject.LanguPayApplyExport = [];
+					sendObject.LanguPayApplyTableIn = [Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData)];
+					sendObject.LanguPayApplyTableIn3 = [];
+					
+					oModel.create("/TrainingOutApplySet", sendObject, {
+						async: true,
+						success: function(oData, oResponse) {
+							Common.log(oData);
+							oController.onTableSearch();
+							BusyIndicator.hide();
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_29004"), { title: oController.getBundleText("MSG_08107")});
+							oController._ApplyModel.close();
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
+						}
+					});
+				}
+				BusyIndicator.hide();
+			}
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29003"), {
+				title: oController.getBundleText("LABEL_29001"),
+				actions: [oController.getBundleText("LABEL_29026"), oController.getBundleText("LABEL_00119")],
+				onClose: onProcessSave
+			});
+		},
+
+		onDialogDelBtn: function(oEvent) { // Dialog 삭제
+			var oController = $.app.getController();
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oSendData = oController.DetailModel.getProperty("/FormData");
+			
+			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
+			
+			BusyIndicator.show(0);
+			var onProcessDelete = function (fVal) {
+				//삭제 클릭시 발생하는 이벤트
+				if (fVal && fVal == oController.getBundleText("LABEL_29027")) { // 삭제
+					
+					var sendObject = {};
+					// Header
+					sendObject.IPernr = vPernr;
+					sendObject.IEmpid = vPernr;
+					sendObject.IConType = "4";
+					sendObject.IBukrs = vBukrs2;
+					// Navigation property
+					sendObject.LanguPayApplyTableIn = [Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData)];
+					
+					oModel.create("/TrainingOutApplySet", sendObject, {
+						success: function(oData, oResponse) {
+							Common.log(oData);
+							oController.onTableSearch();
+							BusyIndicator.hide();
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_29006"), { title: oController.getBundleText("MSG_08107")});
+							oController._ApplyModel.close();
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
+						}
+					});
+				}
+				BusyIndicator.hide();
+			}
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29005"), {
+				title: oController.getBundleText("LABEL_29001"),
+				actions: [oController.getBundleText("LABEL_29027"), oController.getBundleText("LABEL_00119")],
+				onClose: onProcessDelete
+			});
+		},
+
+		onBeforeOpenDetailDialog: function() {
+			var oController = $.app.getController();
+			var vStatus = oController.DetailModel.getProperty("/FormData/Status"),
+				vAppnm = oController.DetailModel.getProperty("/FormData/Appnm") || "",
+				vInfoMessage = oController.getBundleText("MSG_29017");
+			
+			AttachFileAction.setAttachFile(oController, {
+				Appnm: vAppnm,
+				Required: true,
+				Mode: "M",
+				Max: "10",
+				InfoMessage: vInfoMessage,
+				Editable: (!vStatus || vStatus === "AA") ? true : false,
+			});
+		},
+
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			// return new JSONModelHelper({name: "20120220"});
-			// return new JSONModelHelper({name: "931006"});
-			return new JSONModelHelper({name: "991004"});
+			return new JSONModelHelper({name: "35129354"}); // 35129354
 		} : null
-		
 	});
-
 });

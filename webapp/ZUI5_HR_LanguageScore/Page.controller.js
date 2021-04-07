@@ -212,6 +212,16 @@ sap.ui.define([
 			oController.onTableSearch();
 		},
 		
+		pressChart: function() {
+			var oController = $.app.getController();
+            if (!oController.oChartDialog) {
+				oController.oChartDialog = sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.ScoreChart", oController);
+				$.app.getView().addDependent(oController.oChartDialog);
+            }
+            
+            oController.oChartDialog.open();
+        },
+		
 		 /**
          * @brief [공통]부서/사원 조직도호출
          */
