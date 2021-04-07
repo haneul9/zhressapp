@@ -205,7 +205,9 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
 
 		this.refreshAttachFileList(oController,null,vPage);
-		this.hideLine(oAttachbox);
+		if(oController.PAGEID=="MedApply"){
+			this.hideLine(oAttachbox);
+		}
 	},
 
 	hideLine : function(oAttachbox){
@@ -445,8 +447,9 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.clear();
 		oFileUploader.setValue("");
 		if (f1) f1.setAttribute("value", "");
-
-		fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
+		if(oController.PAGEID=="MedApply"){
+			fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
+		}		
 	},
 
 	callDeleteFileService: function(fileInfo) {
