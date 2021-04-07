@@ -350,6 +350,27 @@ common.makeTable = {
 									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
 								});
 					break;
+				case "formatter":
+					switch(col_info[i].id){
+						case "DutycT":
+							oTemplate = new sap.ui.commons.TextView({
+								text : {
+									parts : [{path : col_info[i].id}, {path : "Dutyc"}],
+									formatter : function(fVal1, fVal2){
+										this.removeStyleClass("color-info-red");
+										
+										if(fVal2 != "1"){
+											this.addStyleClass("color-info-red");
+										}
+										
+										return fVal1;
+									}
+								},
+								textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+							});
+						break;
+					}
+					break;
 				default:
 					oTemplate = new sap.ui.commons.TextView({
 									text : "{" + col_info[i].id + "}",
