@@ -33,7 +33,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
                                 items: [
                                     this.getLabel2("{i18n>LABEL_58002}", false), // 현재 근로소득세율
                                     new sap.m.Text({
-                                    	layoutData: new sap.m.FlexItemData({ baseSize: "40%", styleClass: "ml-32px" }),
+                                    	layoutData: new sap.m.FlexItemData({ baseSize: "40%" }),
 										text: "{Itpctx}"
 									})
                                 ]
@@ -48,7 +48,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
                                 items: [
                                     this.getLabel2("{i18n>LABEL_58003}", false), // 적용기간 시작일
                                     new sap.m.Text({
-                                    	layoutData: new sap.m.FlexItemData({ baseSize: "40%", styleClass: "ml-32px" }),
+                                    	layoutData: new sap.m.FlexItemData({ baseSize: "40%" }),
 										text: "{Begda}"
 									})
                                 ]
@@ -63,7 +63,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
                                 items: [
                                 	this.getLabel2("{i18n>LABEL_58004}", false), // 적용기간 종료일
 									new sap.m.Text({
-										layoutData: new sap.m.FlexItemData({ baseSize: "40%", styleClass: "ml-32px" }),
+										layoutData: new sap.m.FlexItemData({ baseSize: "40%" }),
 										text: "{Endda}"
 									})
                                 ]
@@ -92,7 +92,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
 					]
 				}),
 			]
-		});
+		}).addStyleClass("mt-16px");
 	},
 	
 	getChangeTitleBox: function(oController) {
@@ -211,17 +211,17 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
 									})
                     			]
                     })
-		}).addStyleClass("custom-panel");
+		}).addStyleClass("custom-panel custom-incomeTax");
 	},
 	getLabel: function(text, required, width) {
 
 		return new sap.m.Label({
 			// layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 			text: text,
-			width: width ? width : "300px",
+			width: "150px",
 			required: required,
 			wrapping: true,
-			design: sap.m.LabelDesign.Bold,
+		//	design: sap.m.LabelDesign.Bold,
 			textAlign: sap.ui.core.TextAlign.Right,
 			vAlign: sap.ui.core.VerticalAlign.Middle
 		});
@@ -229,13 +229,13 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
 	getLabel2: function(text, required, width) {
 
 		return new sap.m.Label({
-			layoutData: new sap.m.FlexItemData({ baseSize: "60%" }),
+		//	layoutData: new sap.m.FlexItemData({ baseSize: "60%" }),
 			text: text,
-			width : "100%",
+			width : "150px",
 			// width: width ? width : "20%",
 			required: required,
 			wrapping: true,
-			design: sap.m.LabelDesign.Bold,
+		//	design: sap.m.LabelDesign.Bold,
 			textAlign: sap.ui.core.TextAlign.Right,
 			vAlign: sap.ui.core.VerticalAlign.Middle
 		});
