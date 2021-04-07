@@ -2088,7 +2088,13 @@ sap.ui.define([
 						function(data,res){
 							sap.m.MessageBox.alert(oBundleText.getText("MSG_35005"),{
 								title:oBundleText.getText("LABEL_35023"),
-								onClose:function(){oController.initAndLoadPage1(oController._tData);}
+								onClose:function(){
+										if(oController.vPage=="2"||oController.vPage=="3"){
+											oController.onBack();
+										}else{
+											oController.initAndLoadPage1(oController._tData);
+										}
+									}
 							})
 						},
 						function (oError) {
