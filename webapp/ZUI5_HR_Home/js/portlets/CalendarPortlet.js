@@ -3,8 +3,10 @@ function CalendarPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
+	this.pattern = null;
 	this.yearMonth = null;
-	this.dailyReportMap = null;
+	this.calendarMap = null;
+	this.selectedDate = null;
 }
 
 CalendarPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -26,30 +28,30 @@ ui: function() {
 				'<div class="portlet-calendar-inline"></div>',
 				'<h6 class="portlet-calendar-date">Today</h6>',
 				'<div class="portlet-calendar-daily-report list-group list-group-horizontal flex-wrap">',
-					'<li class="list-group-item vacation">',
+					'<li class="list-group-item" data-type="vacation">',
 						'<h6>휴가</h6>',
-						'<span class="count">5</span>',
-						'<span class="unit">명</span>',
+						'<span class="count">0</span>',
+						'<span class="unit"></span>',
 					'</li>',
-					'<li class="list-group-item education">',
+					'<li class="list-group-item" data-type="education">',
 						'<h6>교육</h6>',
-						'<span class="count">10</span>',
-						'<span class="unit">명</span>',
+						'<span class="count">0</span>',
+						'<span class="unit"></span>',
 					'</li>',
-					'<li class="list-group-item biztrip">',
+					'<li class="list-group-item" data-type="biztrip">',
 						'<h6>출장</h6>',
-						'<span class="count">100</span>',
-						'<span class="unit">명</span>',
+						'<span class="count">0</span>',
+						'<span class="unit"></span>',
 					'</li>',
-					'<li class="list-group-item telecommuting">',
+					'<li class="list-group-item" data-type="telecommuting">',
 						'<h6>재택근무</h6>',
-						'<span class="count">50</span>',
-						'<span class="unit">명</span>',
+						'<span class="count">0</span>',
+						'<span class="unit"></span>',
 					'</li>',
-					'<li class="list-group-item birthday">',
+					'<li class="list-group-item" data-type="birthday">',
 						'<h6>생일</h6>',
-						'<span class="count">3</span>',
-						'<span class="unit">명</span>',
+						'<span class="count">0</span>',
+						'<span class="unit"></span>',
 					'</li>',
 				'</div>',
 			'</div>',
@@ -59,93 +61,13 @@ ui: function() {
 },
 onceBefore: function() {
 
-	this.yearMonth = moment().format('YYYYMM');
-	this.dailyReportMap = {};
-
 	this.initI18n();
 
-	$('.portlet-calendar-inline').datepicker(this.i18n({
-		showOtherMonths: true,
-		selectOtherMonths: true,
-		changeMonth: true,
-		changeYear: true,
-		beforeShowDay: function(date) {
+	this.yearMonth = moment().format('YYYYMM');
+	this.calendarMap = {};
 
-			var classes = [],
-			mDate = moment(date).format(this._gateway.loginInfo('Dtfmt').toUpperCase()),
-			dailyReport = this.dailyReportMap[mDate];
-			if (mDate === '2021-04-06') {
-				classes.push('absence absence-start');
-			}
-			else if (mDate === '2021-04-07') {
-				classes.push('absence absence-between');
-			}
-			else if (mDate === '2021-04-08') {
-				classes.push('absence absence-end');
-			}
-			else if (mDate === '2021-04-27') {
-				classes.push('absence');
-			}
-			if (dailyReport.holiday) {
-				classes.push('holiday');
-			}
-			return [true, classes.join(' '), ''];
-		}.bind(this),
-		onSelect: function(dateText) {
-
-			this.renderDailyReport(dateText);
-		}.bind(this),
-		onChangeMonthYear: function(year, month) {
-
-			this.yearMonth = [year, String.lpad(month, 2, '0')].join('');
-			this.fill();
-		}.bind(this)
-	}));
-
-	$('.portlet-calendar .list-group-item')
-		.popover({
-			html: true,
-			container: 'body',
-			placement: 'top',
-			template: [
-				'<div class="popover" role="tooltip">',
-					'<div class="arrow"></div>',
-					'<h6 class="popover-header"></h6>',
-					'<div class="popover-body"></div>',
-				'</div>'
-			].join(''),
-			content: function() {
-				var item = $(this), colgroup, thead, tbody;
-				// 휴가
-				if (item.hasClass('vacation')) {
-					colgroup = '<col /><col /><col /><col />';
-					thead = '';
-				}
-				// 교육 / 출장 / 재택근무
-				else if (item.hasClass('education') || item.hasClass('biztrip') || item.hasClass('telecommuting')) {
-					colgroup = '<col /><col /><col />';
-					thead = '';
-				}
-				// 생일
-				else {
-					colgroup = '<col /><col /><col />';
-					thead = '';
-				}
-				return [
-					'<table class="portlet-calendar-popover">',
-						'<colgroup>', colgroup, '</colgroup>',
-						'<thead>', thead, '</thead>',
-						'<tbody>', tbody, '</tbody>',
-					'</table>'
-				].join('');
-			}
-		})
-		.on('show.bs.popover', function() {
-			
-		});
-		// .on('hidden.bs.popover', function() {
-		// 	$(this).remove();
-		// });
+	this.initCalendar();
+	this.initPopover();
 },
 fill: function() {
 
@@ -172,24 +94,90 @@ fill: function() {
 			this._gateway.prepareLog('CalendarPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
 			var results = this._gateway.odataResults(data),
-			Dtfmt = this._gateway.loginInfo('Dtfmt').toUpperCase();
+			pattern = this.pattern.moment;
 
-			var dailyReportMap = this.dailyReportMap = {};
+			/*
+				this.calendarMap = {
+					20210401: {
+						holiday: false,
+						absence: false,
+						absenceStart: false,
+						absenceBetween: false,
+						absenceEnd: false,
+						vacation: [],
+						education: [],
+						biztrip: [],
+						telecommuting: [],
+						birthday: []
+					},
+					...,
+					20210430: {
+						holiday: false,
+						absence: false,
+						absenceStart: false,
+						absenceBetween: false,
+						absenceEnd: false,
+						vacation: [],
+						education: [],
+						biztrip: [],
+						telecommuting: [],
+						birthday: []
+					}
+				};
+			*/
+			var calendarMap = this.calendarMap = {};
 			$.map(results.TableIn1, function(o) {
-				dailyReportMap[moment(Number.fromODataDate(o.Datum)).format(Dtfmt)] = {
+				calendarMap[moment(Number.fromODataDate(o.Datum)).format(pattern)] = {
 					holiday: o.HolFlag === 'X',
-					absence: o.P2001Flag === 'X'
+					absence: false, // o.P2001Flag === 'X',
+					absenceStart: false,
+					absenceBetween: false,
+					absenceEnd: false,
+					vacation: [],
+					education: [],
+					biztrip: [],
+					telecommuting: [],
+					birthday: []
 				};
 			});
+
+			results.TableIn2 = [
+				{ Begda: Date.toODataString('2021-04-02'), Endda: Date.toODataString('2021-04-02') },
+				{ Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-07') },
+				{ Begda: Date.toODataString('2021-04-20'), Endda: Date.toODataString('2021-04-21') },
+				{ Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') }
+			];
 			$.map(results.TableIn2, function(o) { // 본인 근태
-				this.addDailyReport(o, 'self');
-			});
+				this.setAbsence(o);
+			}.bind(this));
 
 			results.TableIn3 = [
-				{ Begda: '/Date(1617548400000)/', Endda: '/Date(1617721200000)/' }, // 0405 - 0407
-				{ Begda: '/Date(1617634800000)/', Endda: '/Date(1617721200000)/' }, // 0406 - 0407
-				{ Begda: '/Date(1618326000000)/', Endda: '/Date(1618412400000)/' }, // 0414 - 0415
-				{ Begda: '/Date(1618758000000)/', Endda: '/Date(1618844400000)/' }  // 0419 - 0420
+				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '연차', Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') },
+				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '연차', Begda: Date.toODataString('2021-04-06'), Endda: Date.toODataString('2021-04-07') },
+				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '병가', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
+				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '반차', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
+			];
+			results.TableIn4 = [
+				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '교육', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-07') },
+				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '교육', Begda: Date.toODataString('2021-04-06'), Endda: Date.toODataString('2021-04-07') },
+				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '교육', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
+				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '교육', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
+			];
+			results.TableIn5 = [
+				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-02'), Endda: Date.toODataString('2021-04-02') },
+				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
+				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '출장', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
+				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
+			];
+			results.TableIn6 = [
+				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-12'), Endda: Date.toODataString('2021-04-16') },
+				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-23') },
+				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') }
+			];
+			results.TableIn7 = [
+				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '생일', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-05') },
+				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '생일', Begda: Date.toODataString('2021-04-16'), Endda: Date.toODataString('2021-04-16') }
 			];
 			$.map(results.TableIn3, function(o) { // 휴가
 				this.addDailyReport(o, 'vacation');
@@ -206,6 +194,13 @@ fill: function() {
 			$.map(results.TableIn7, function(o) { // 생일
 				this.addDailyReport(o, 'birthday');
 			}.bind(this));
+
+			this.calendar().datepicker('refresh');
+
+			var today = moment();
+			if (this.yearMonth === today.format('YYYYMM')) {
+				this.renderDailyReport(today.format(pattern));
+			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.fill ' + url);
@@ -215,56 +210,272 @@ fill: function() {
 		}.bind(this)
 	});
 },
+setAbsence: function(o) {
+
+	var calendarMap = this.calendarMap,
+	dateTextArray = this.toDateTextArray(o.Begda, o.Endda),
+	length = dateTextArray.length;
+	$.map(dateTextArray, function(dateText, i) {
+		calendarMap[dateText].absence = true;
+		if (i > 0 && i < length - 1) {
+			calendarMap[dateText].absenceBetween = true;
+		}
+	});
+
+	if (length > 1) {
+		calendarMap[dateTextArray[0]].absenceStart = true;
+		calendarMap[dateTextArray[length - 1]].absenceEnd = true;
+	}
+},
 addDailyReport: function(o, type) {
 
-	$.map(this.toDateArray(o.Begda, o.Endda), function(date) {
-		var array = this.dailyReportMap[date][type];
-		if (array) {
-			array.push(o);
-		} else {
-			this.dailyReportMap[date][type] = [o];
-		}
-	}.bind(this));
+	var calendarMap = this.calendarMap;
+	$.map(this.toDateTextArray(o.Begda, o.Endda), function(dateText) {
+		calendarMap[dateText][type].push(o);
+	});
 },
-toDateArray: function(begda, endda) {
+toDateTextArray: function(begda, endda) {
 
 	begda = !begda ? moment() : moment(Number.fromODataDate(begda));
 	endda = !endda ? moment() : moment(Number.fromODataDate(endda));
 
-	var Dtfmt = this._gateway.loginInfo('Dtfmt').toUpperCase();
+	var pattern = this.pattern.moment;
 	return $.map(new Array(moment.duration(endda.diff(begda)).days() + 1), function(n, i) {
-		return begda.clone().add(i, 'days').format(Dtfmt);
+		return begda.clone().add(i, 'days').format(pattern);
 	});
 },
 renderDailyReport: function(dateText) {
 
-	var ko = this._gateway.locale() === 'ko_KR',
-	unit = ko ? '명' : '',
-	pattern = ko ? 'YYYY년 MM월 DD일' : 'MM/DD/YYYY',
-	dailyReport = this.dailyReportMap[dateText];
+	var unit = this.countUnit,
+	dayData = this.calendarMap[dateText];
 
-	$('.portlet-calendar-date').text(moment(dateText.replace(/\D/g, ''), 'YYYYMMDD').format(pattern));
+	this.selectedDate = dateText;
 
-	$.map('vacation,education,biztrip,telecommuting,birthday'.split(','), function(key) {
-		$('.list-group-item.${key} .count'.interpolate(key)).text((dailyReport[key] || []).length + unit);
+	var mDate = moment(dateText, this.pattern.moment);
+	$('.portlet-calendar-date').text([mDate.format(this.pattern.report), moment().format(this.pattern.moment) === dateText ? '(Today)' : ''].join(' '));
+
+	$.map('vacation,education,biztrip,telecommuting,birthday'.split(','), function(type) {
+		$('.list-group-item[data-type="${type}"]'.interpolate(type))
+			.find('.count').text((dayData[type] || []).length).end()
+			.find('.unit').text(unit);
 	});
 },
-changeLocale: function() {
+period: function(o) {
 
-	this.spinner(true);
+	if (!o.Begda && !o.Endda) {
+		return '';
+	}
 
-	$('.portlet-calendar-inline').datepicker('option', this.i18n());
+	var result = [];
+	if (o.Begda) {
+		result.push(moment(Number.fromODataDate(o.Begda)).format(this.pattern.period));
+	}
+	if (o.Endda && o.Endda !== o.Begda) {
+		result.push(moment(Number.fromODataDate(o.Endda)).format(this.pattern.period));
+	}
+	return result.join(' ~ ');
+},
+calendar: function() {
 
-	this.fill();
-	this.renderDailyReport();
+	return $('.portlet-calendar-inline');
+},
+initCalendar: function() {
+
+	this.calendar().datepicker(this.i18n({
+		showOtherMonths: true,
+		selectOtherMonths: true,
+		changeMonth: true,
+		changeYear: true,
+		beforeShowDay: function(date) {
+
+			var dateText = moment(date).format(this.pattern.moment),
+			dayData = this.calendarMap[dateText],
+			classes = [];
+
+			if (!dayData) {
+				return [false, '', ''];
+			}
+
+			if (dayData.holiday) {
+				classes.push('holiday');
+			}
+			if (dayData.absence) {
+				classes.push('absence');
+			}
+			if (dayData.absenceStart) {
+				classes.push('absence-start');
+			} else if (dayData.absenceBetween) {
+				classes.push('absence-between');
+			} else if (dayData.absenceEnd) {
+				classes.push('absence-end');
+			}
+
+			return [true, classes.join(' '), ''];
+		}.bind(this),
+		onSelect: function(dateText) {
+
+			this.renderDailyReport(dateText);
+		}.bind(this),
+		onChangeMonthYear: function(year, month) {
+
+			this.yearMonth = [year, String.lpad(month, 2, '0')].join('');
+			this.fill();
+		}.bind(this)
+	}));
+},
+initPopover: function() {
+
+	var portlet = this,
+	template = [
+		'<div class="tooltip" role="tooltip">',
+			'<div class="arrow"></div>',
+			'<div class="tooltip-inner"></div>',
+		'</div>'
+	].join('');
+
+	$('.portlet-calendar .list-group-item[data-type="vacation"]') // 휴가 인원 목록
+		.tooltip({
+			html: true,
+			sanitize: false,
+			container: '.portlet-calendar',
+			placement: 'top',
+			template: template,
+			title: function() {
+				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
+				if (!tooltipBody.length) {
+					return '해당 인원이 없습니다.';
+				}
+				return [
+					'<table class="portlet-calendar-tooltip">',
+						'<colgroup>',
+							'<col /><col /><col /><col />',
+						'</colgroup>',
+						'<thead>',
+							'<tr><th>이름</th><th>직위</th><th>휴가명</th><th>기간</th></tr>',
+						'</thead>',
+						'<tbody>',
+							tooltipBody,
+						'</tbody>',
+					'</table>'
+				].join('');
+			}
+		});
+
+	$([
+		'.portlet-calendar .list-group-item[data-type="education"]',	// 교육 인원 목록
+		'.portlet-calendar .list-group-item[data-type="biztrip"]',		// 출장 인원 목록
+		'.portlet-calendar .list-group-item[data-type="telecommuting"]'	// 재택근무 인원 목록
+	].join(','))
+		.tooltip({
+			html: true,
+			sanitize: false,
+			container: '.portlet-calendar',
+			placement: 'top',
+			template: template,
+			title: function() {
+				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
+				if (!tooltipBody.length) {
+					return '해당 인원이 없습니다.';
+				}
+				return [
+					'<table class="portlet-calendar-tooltip">',
+						'<colgroup>', 
+							'<col /><col /><col />',
+						'</colgroup>',
+						'<thead>',
+							'<tr><th>이름</th><th>직위</th><th>기간</th></tr>',
+						'</thead>',
+						'<tbody>',
+							tooltipBody,
+						'</tbody>',
+					'</table>'
+				].join('');
+			}
+		});
+
+	$('.portlet-calendar .list-group-item[data-type="birthday"]') // 생일 인원 목록
+		.tooltip({
+			html: true,
+			sanitize: false,
+			container: '.portlet-calendar',
+			placement: 'top',
+			template: template,
+			title: function() {
+				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
+				if (!tooltipBody.length) {
+					return '해당 인원이 없습니다.';
+				}
+				return [
+					'<table class="portlet-calendar-tooltip">',
+						'<colgroup>',
+							'<col /><col /><col />',
+						'</colgroup>',
+						'<thead>',
+							'<tr><th>이름</th><th>직위</th><th>양음</th></tr>',
+						'</thead>',
+						'<tbody>',
+							tooltipBody,
+						'</tbody>',
+					'</table>'
+				].join('');
+			}
+		});
+},
+tooltipBody: function(dateText, type) {
+
+	var list = this.calendarMap[dateText][type] || [];
+	if (type === 'vacation') {
+		return $.map(list, function(o) { // 휴가
+			return [
+				'<tr>',
+					'<td>', o.Ename || '', '</td>',
+					'<td>', o.ZtitleTxt || '', '</td>',
+					'<td>', o.AwartTxt || '', '</td>',
+					'<td>', this.period(o), '</td>',
+				'</tr>'
+			].join('');
+		}.bind(this)).join('');
+	}
+	if ($.inArray(type, 'education,biztrip,telecommuting'.split(',')) > -1) {
+		return $.map(list, function(o) { // 교육, 출장, 재택근무
+			return [
+				'<tr>',
+					'<td>', o.Ename || '', '</td>',
+					'<td>', o.ZtitleTxt || '', '</td>',
+					'<td>', this.period(o), '</td>',
+				'</tr>'
+			].join('');
+		}.bind(this)).join('');
+	}
+	if (type === 'birthday') {
+		return $.map(list, function(o) { // 생일
+			return [
+				'<tr>',
+					'<td>', o.Ename || '', '</td>',
+					'<td>', o.ZtitleTxt || '', '</td>',
+					'<td>', o.Zzclass === '2' ? '음력' : '양력', '</td>',
+				'</tr>'
+			].join('');
+		}).join('');
+	}
+	return '';
 },
 i18n: function(defaults) {
 
-	return $.extend(true, defaults || {}, $.datepicker.regional[this._gateway.locale() === 'ko_KR' ? 'ko_KR' : 'en_US']);
+	return $.extend(true, defaults || {}, $.datepicker.regional[this.locale]);
 },
 initI18n: function() {
 
-	var Dtfmt = this._gateway.loginInfo('Dtfmt').toLowerCase().replace(/yyyy/, 'yy');
+	var ko = this._gateway.locale() === 'ko_KR';
+
+	this.locale = ko ? 'ko_KR' : 'en_US';
+	this.countUnit = ko ? '명': '';
+	this.pattern = {
+		datepicker: 'yymmdd',
+		moment: 'YYYYMMDD',
+		report: ko ? 'YYYY년 MM월 DD일' : 'MM/DD/YYYY',
+		period: ko ? 'DD일' : 'DD'
+	};
 
 	$.datepicker.regional.ko_KR = {
 		closeText: '닫기',
@@ -277,7 +488,7 @@ initI18n: function() {
 		dayNamesShort: [ '일','월','화','수','목','금','토' ],
 		dayNamesMin: [ '일','월','화','수','목','금','토' ],
 		weekHeader: '주',
-		dateFormat: Dtfmt,
+		dateFormat: this.pattern.datepicker,
 		firstDay: 0,
 		isRTL: false,
 		showMonthAfterYear: true,
@@ -288,9 +499,18 @@ initI18n: function() {
 		monthNamesShort: [ '1','2','3','4','5','6','7','8','9','10','11','12' ],
 		dayNamesShort: [ 'S','M','T','W','T','F','S' ], // 'Sun','Mon','Tue','Wed','Thu','Fri','Sat'
 		dayNamesMin: [ 'S','M','T','W','T','F','S' ], // 'Su','Mo','Tu','We','Th','Fr','Sa'
-		dateFormat: Dtfmt,
+		dateFormat: this.pattern.datepicker,
 		yearSuffix: ''
 	});
+},
+changeLocale: function() {
+
+	this.spinner(true);
+
+	this.initI18n();
+	this.calendar().datepicker('option', this.i18n());
+
+	this.fill();
 }
 
 });
