@@ -2197,8 +2197,8 @@ sap.ui.define([
 		onSave : function(Sig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
 			var oController = oView.getController();			
-			if(Sig=="F"){
-				var oValid = oController.onValid(oController);
+			var oValid = oController.onValid(oController);
+			if(Sig=="F"){				
 				if(oValid){
 					var oMsg="";
 					Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
@@ -2216,20 +2216,39 @@ sap.ui.define([
 					);
 				}
 			}else{
-				var oMsg="";
-				Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
-				sap.m.MessageBox.show(
-					oMsg, {				
-					icon: sap.m.MessageBox.Icon.INFORMATION,				
-					title: oBundleText.getText("LABEL_35023"),				
-					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
-					onClose: function(fVal) {
-						if(fVal=="YES"){
-							oController.onSaveProcess(oController,Sig);
-						}
-					}				
-					}		
-				);
+				if(oController.vPage=="2"||oController.vPage=="3"){
+					if(oValid){
+						var oMsg="";
+						Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
+						sap.m.MessageBox.show(
+							oMsg, {				
+							icon: sap.m.MessageBox.Icon.INFORMATION,				
+							title: oBundleText.getText("LABEL_35023"),				
+							actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
+							onClose: function(fVal) {
+								if(fVal=="YES"){
+									oController.onSaveProcess(oController,Sig);
+								}
+							}				
+							}		
+						);
+					}
+				}else{
+					var oMsg="";
+					Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
+					sap.m.MessageBox.show(
+						oMsg, {				
+						icon: sap.m.MessageBox.Icon.INFORMATION,				
+						title: oBundleText.getText("LABEL_35023"),				
+						actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
+						onClose: function(fVal) {
+							if(fVal=="YES"){
+								oController.onSaveProcess(oController,Sig);
+							}
+						}				
+						}		
+					);
+				}
 			}
 		},
 
