@@ -320,27 +320,27 @@ sap.ui.define([
 					TableIn4:oTableIn4
 				};
 				switch (Sig) {
-					case "S":
-					vData.IConType="2";
-					oModel.create("/AppraisalMboSheetSet", vData, null,
-					function(data,res){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_35005"),{
-							title:oBundleText.getText("LABEL_35023"),
-							onClose:function(){oController.bindData2(oController);}
-						})
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
+						case "S":
+						vData.IConType="2";
+						oModel.create("/AppraisalMboSheetSet", vData, null,
+						function(data,res){
+							sap.m.MessageBox.alert(oBundleText.getText("MSG_35005"),{
+								title:oBundleText.getText("LABEL_35023"),
+								onClose:function(){oController.bindData2(oController);}
+							})
+						},
+						function (oError) {
+							var Err = {};						
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							} else {
+								sap.m.MessageBox.alert(oError.toString());
+							}
 						}
-					}
-				);
+					);
 						break;
 					case "F":
 					vData.IConType="9";
