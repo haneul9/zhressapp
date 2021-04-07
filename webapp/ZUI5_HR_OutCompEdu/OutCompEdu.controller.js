@@ -55,12 +55,13 @@ sap.ui.define([
 			this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
             this.initDateCreate(this);
 			this.onTableSearch();
+			this.getComboData();
 		},
 		
 		getDateFormatter1: function() {
 			return new sap.ui.commons.TextView({
 				text: {
-					parts: [{ path: "Lecbe" }, { path: "Lecen" }],
+					parts: [{ path: "Begdhb" }, { path: "Enddhe" }],
 					formatter: function (v1, v2) {
 						if (!v1 || !v2) {
 							return "";
@@ -130,6 +131,9 @@ sap.ui.define([
 			var vBukrs2 = oController.getUserGubun();
 			var vZyear1 = oController.SearchModel.getProperty("/Data/Zyear1");
 			var vMonth1 = oController.SearchModel.getProperty("/Data/Zmonth1");
+			var vGubun = oController.SearchModel.getProperty("/Data/Gubun");
+			var vStatus = oController.SearchModel.getProperty("/Data/Status");
+			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
 
 			oController.TableModel.setData({Data: []}); //직접적으로 화면 테이블에 셋팅하는 작업
 
@@ -144,6 +148,9 @@ sap.ui.define([
 			sendObject.IConType = "1";
 			sendObject.IBegda = Common.adjustGMTOdataFormat(vBDate);
 			sendObject.IEndda = Common.adjustGMTOdataFormat(vEDate);
+			sendObject.IEdoty = vGubun === "ALL" ? "" : vGubun;
+			sendObject.IEdsta = vStatus === "ALL" ? "" : vStatus;
+			sendObject.IRepst = vIsReport === "ALL" ? "" : vIsReport;
 			// Navigation property
 			sendObject.TrainingOutApplyExport = [];
 			sendObject.TrainingOutApplyTableIn1 = [];
@@ -160,7 +167,7 @@ sap.ui.define([
 					
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 
-					oController.SearchModel.setProperty("/ExportData", oData.LanguPayApplyExport.results[0]);
+					oController.SearchModel.setProperty("/ExportData", oData.TrainingOutApplyExport.results[0]);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -183,8 +190,6 @@ sap.ui.define([
 				oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", oController);
 				oView.addDependent(oController._ApplyModel);
 			};
-			
-			oController.getComboData();
 
 			oController.onBeforeOpenDetailDialog();
 			oController._ApplyModel.open();
@@ -208,28 +213,25 @@ sap.ui.define([
 
 		getComboData: function() {
 			var oController = $.app.getController();
+			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
-
-			oController.DetailModel.setProperty("/CostCombo", []);
-			oController.DetailModel.setProperty("/WBSCombo", []);
-
-			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 
 			var sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;
-			sendObject.ICodeT = "998";
+			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
-			sendObject.ICodty = "16";
+			sendObject.ICodty = "ZHRD_EDOTY";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
-			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 원가코드
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 구분
 				success: function(oData, oResponse) {
 					if(oData && oData.NavCommonCodeList){
-						oController.DetailModel.setProperty("/CostCombo", oData.NavCommonCodeList.results);
-						oController.DetailModel.setProperty("/FormData/Kostl", oData.NavCommonCodeList.results[0].Code);
+						oData.NavCommonCodeList.results.unshift({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
+						oController.SearchModel.setProperty("/GubunCombo", oData.NavCommonCodeList.results);
+						oController.SearchModel.setProperty("/Data/Gubun", "ALL");
 					}
 				},
 				error: function(oResponse) {
@@ -243,17 +245,40 @@ sap.ui.define([
 			sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;
-			sendObject.ICodeT = "998";
+			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
-			sendObject.ICodty = "17";
+			sendObject.ICodty = "ZHRD_REPST";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
-			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // WBS
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 결재상태
 				success: function(oData, oResponse) {
 					if(oData && oData.NavCommonCodeList){
-						oController.DetailModel.setProperty("/WBSCombo", oData.NavCommonCodeList.results);
-						oController.DetailModel.setProperty("/FormData/Plstx", oData.NavCommonCodeList.results[0].Code);
+						oData.NavCommonCodeList.results.unshift({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
+						oController.SearchModel.setProperty("/StatusCombo", oData.NavCommonCodeList.results);
+						oController.SearchModel.setProperty("/Data/Status", "ALL");
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+				}
+			});
+
+			sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "004";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZHRD_EDSTA";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 보고서 제출여부
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
+						oController.SearchModel.setProperty("/IsReportCombo", oData.NavCommonCodeList.results);
+						oController.SearchModel.setProperty("/Data/IsReport", "ALL");
 					}
 				},
 				error: function(oResponse) {
