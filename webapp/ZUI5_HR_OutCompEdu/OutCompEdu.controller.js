@@ -18,8 +18,9 @@ sap.ui.define([
 		PAGEID: "OutCompEdu",
 		
 		TableModel: new JSONModelHelper(),
-		DetailModel: new JSONModelHelper(),
+		ApplyModel: new JSONModelHelper(),
 		SearchModel: new JSONModelHelper(),
+		AttModel: new JSONModelHelper(),
 		EmployeeModel: new EmployeeModel(),
 		
 		getUserId: function() {
@@ -189,7 +190,7 @@ sap.ui.define([
 			if (!oController._ApplyModel) {
 				oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", oController);
 				oView.addDependent(oController._ApplyModel);
-			};
+			}
 
 			oController.onBeforeOpenDetailDialog();
 			oController._ApplyModel.open();
@@ -287,6 +288,18 @@ sap.ui.define([
 			});
 		},
 
+		onPressAddRow: function(oEvent) { // 참석자 추가
+
+		},
+
+		onPressDelRow: function(oEvent) { // 참석자 삭제
+
+		},
+
+		onChangeRadio: function(oEvent) {
+
+		},
+
 		ErrorCheck: function() {
 			var oController = $.app.getController();
 			var oCostCombo = $.app.byId(oController.PAGEID + "_CostCombo");
@@ -296,27 +309,27 @@ sap.ui.define([
 				return true;
 			}
 
-			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Lecen"))){
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Lecen"))){
 				MessageBox.error(oController.getBundleText("MSG_29008"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Zlaorg"))){
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zlaorg"))){
 				MessageBox.error(oController.getBundleText("MSG_29010"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Latell"))){
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Latell"))){
 				MessageBox.error(oController.getBundleText("MSG_29011"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Caldt"))){
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Caldt"))){
 				MessageBox.error(oController.getBundleText("MSG_29013"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Lecbet"))){
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Lecbet"))){
 				MessageBox.error(oController.getBundleText("MSG_29015"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
@@ -334,7 +347,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
-			var oSendData = oController.DetailModel.getProperty("/FormData");
+			var oSendData = oController.ApplyModel.getProperty("/FormData");
 
 			if(oController.ErrorCheck()) return;
 			
@@ -358,7 +371,7 @@ sap.ui.define([
 					// Navigation property
 					sendObject.LanguPayApplyTableIn = [
 						$.extend(true, Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData), {
-							Lecen: new Date(oController.DetailModel.getProperty("/FormData/Lecen"))
+							Lecen: new Date(oController.ApplyModel.getProperty("/FormData/Lecen"))
 						})
 					];
 					
@@ -381,7 +394,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29018"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -395,7 +408,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
-			var oSendData = oController.DetailModel.getProperty("/FormData");
+			var oSendData = oController.ApplyModel.getProperty("/FormData");
 
 			if(oController.ErrorCheck()) return;
 			
@@ -439,7 +452,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29003"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -453,7 +466,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
-			var oSendData = oController.DetailModel.getProperty("/FormData");
+			var oSendData = oController.ApplyModel.getProperty("/FormData");
 			
 			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
 			
@@ -489,7 +502,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29005"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -500,18 +513,16 @@ sap.ui.define([
 
 		onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
-			var vStatus = oController.DetailModel.getProperty("/FormData/Status"),
-				vAppnm = oController.DetailModel.getProperty("/FormData/Appnm") || "",
-				vInfoMessage = oController.getBundleText("MSG_29017");
+			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
+				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 			
-			AttachFileAction.setAttachFile(oController, {
+			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
+				Label: oController.getBundleText("LABEL_40043"),
+				Required : true,
 				Appnm: vAppnm,
-				Required: true,
-				Mode: "M",
-				Max: "10",
-				InfoMessage: vInfoMessage,
+				Mode: "S",
 				Editable: (!vStatus || vStatus === "AA") ? true : false,
-			});
+			},"001");
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {
