@@ -132,6 +132,25 @@ sap.ui.define(
 
                         this.oModel.setProperty("/Info/Codty", vExamInfo.Seqnr);
                         this.oModel.setProperty("/Info/TextA", vExamInfo.TextA);
+
+                        this.oModel.setProperty(
+                            "/Info/IsHSK",
+                            (this.oController.getSessionInfoByKey("Bukrs") === "A100" || this.oController.getSessionInfoByKey("Bukrs") === "1000")
+                                && this.oModel.getProperty("/Info/Forcd") === "0003" && this.oModel.getProperty("/Info/Tescd") === "01"
+                                    ? true : false
+                        );
+                        this.oModel.setProperty(
+                            "/Tesgrs", 
+                            ODataService.CommonCodeListHeaderSet.call(this.oController, {
+                                Pernr: this.oController.getSessionInfoByKey("Pernr"),
+                                Bukrs: this.oController.getSessionInfoByKey("Bukrs2"),
+                                Langu: this.oController.getSessionInfoByKey("Langu"),
+                                CodeT: "033",
+                                Codty: vExamInfo.Seqnr,
+                                Code: this.oModel.getProperty("/Info/Forcd") + this.oModel.getProperty("/Info/Tescd"),
+                                IsContainsAll: true
+                            })
+                        );
                     }
 
                     AttachFileAction.setAttachFile(this.oController, {
@@ -171,7 +190,7 @@ sap.ui.define(
             validControl: function (oControl) {
                 // base case
                 var childItems = oControl.getAggregation("items");
-                if (oControl === null || childItems === null) return;
+                if (oControl === null || childItems === null) {return;}
 
                 // Recursion
                 childItems.forEach(function (control) {
@@ -224,7 +243,7 @@ sap.ui.define(
                     );
                 }.bind(this)).then(function() {
                     BusyIndicator.hide();
-                })
+                });
             },
 
             onChangeExam: function(oEvent) {
@@ -246,7 +265,7 @@ sap.ui.define(
                 this.oModel.setProperty("/Info/Tcsco", undefined);
                 this.oModel.setProperty("/Info/Ttsco", 0);
 
-                if(vSelectedKey === "ALL") return;
+                if(vSelectedKey === "ALL") {return;}
 
                 Common.getPromise(function() {
                     this.oModel.setProperty(
@@ -267,7 +286,7 @@ sap.ui.define(
                             IsContainsAll: true
                         })
                     );
-                }.bind(this))
+                }.bind(this));
             },
 
             calcTotScore: function() {
@@ -286,7 +305,7 @@ sap.ui.define(
                 var oInputData = this.oModel.getProperty("/Info");
 
                 var Process = function (fVal) {
-                    if (!fVal || fVal === MessageBox.Action.NO) return;
+                    if (!fVal || fVal === MessageBox.Action.NO) {return;}
 
                     BusyIndicator.show(0);
 
@@ -349,7 +368,7 @@ sap.ui.define(
                 var oInputData = this.oModel.getProperty("/Info");
 
                 var Process = function (fVal) {
-                    if (!fVal || fVal === MessageBox.Action.NO) return;
+                    if (!fVal || fVal === MessageBox.Action.NO) {return;}
 
                     BusyIndicator.show(0);
 

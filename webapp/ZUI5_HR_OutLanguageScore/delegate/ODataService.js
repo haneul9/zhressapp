@@ -75,7 +75,7 @@ sap.ui.define(
                     {
                         success: function (data) {
                             if (data.LanguageApp1Nav)
-                                results = data.LanguageApp1Nav.results;
+                                {results = data.LanguageApp1Nav.results;}
                         },
                         error: function (res) {
                             Common.log(res);
@@ -94,10 +94,10 @@ sap.ui.define(
                     payload,
                     {
                         success: function (data) {
-                            if (typeof success === "function") success.call(this, data);
+                            if (typeof success === "function") {success.call(this, data);}
                         }.bind(this),
                         error: function (res) {
-                            if (typeof error === "function") error.call(null, res);
+                            if (typeof error === "function") {error.call(null, res);}
                         }
                     }
                 );
