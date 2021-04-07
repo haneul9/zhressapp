@@ -42,7 +42,23 @@ sap.ui.define([
 				columns:2,
 				width:"100%",
 				widths:['40%','60%']
-			}).setModel(oController._DataModel);	
+			}).setModel(oController._DataModel);
+			
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,
+				hAlign:"Right",content:new sap.m.Button({
+				press: function(){oController.onSave("1000")},
+				text: "{i18n>LABEL_47006}" // 신청
+				,visible:{parts:[{path:"Close"},{path:"Status"}],
+				formatter:function(fVal,fVal2){
+					if(fVal2==""){
+						return fVal=="X"?false:true;
+					}else{
+						return false;
+					}
+				}}}).addStyleClass("button-light")});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);			
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel0});
