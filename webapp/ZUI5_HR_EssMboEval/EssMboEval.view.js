@@ -20,7 +20,7 @@ sap.ui.jsview("ZUI5_HR_EssMboEval.EssMboEval", {
 	 */
 	createContent: function (oController) {
 		$.app.setModel("ZHR_COMMON_SRV");
-		$.app.setModel("ZHR_APPRAISAL2_SRV");
+		$.app.setModel("ZHR_APPRAISAL2_SRV"); 
 // 사원정보
 		// var oHeader = new sap.ui.commons.layout.MatrixLayout({
 		// 	columns : 1,
