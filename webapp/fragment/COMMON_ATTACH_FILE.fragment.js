@@ -67,7 +67,7 @@ sap.ui.define([
 										if(v === true) return true;
 										else return false;
 									}
-								},				
+								}			
 							}).addStyleClass("sub-title pt-9px"), // 첨부파일
 							new sap.m.MessageStrip({								
 								text: "{/Settings/InfoMessage}",

@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-proto */
 // require("cmis-polyfills");
 
 "use strict";
@@ -45,7 +47,7 @@ var __serialize = function(obj) {
             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
         }
     return str.join("&");
-}
+};
 
 var Cmis = (function() {
     function Cmis() {
@@ -62,17 +64,17 @@ var Cmis = (function() {
 Cmis.prototype.setProperties = function (options, properties) {
     var i = 0;
     for (var id in properties) {
-        options['propertyId[' + i + ']'] = id;
+        options["propertyId[" + i + "]"] = id;
         var propertyValue = properties[id];
         if (propertyValue !== null && propertyValue !== undefined) {
-            if (Object.prototype.toString.apply(propertyValue) == '[object Array]') {
+            if (Object.prototype.toString.apply(propertyValue) == "[object Array]") {
                 var multiProperty = propertyValue;
                 for (var j = 0; j < multiProperty.length; j++) {
-                    options['propertyValue[' + i + '][' + j + ']'] = multiProperty[j];
+                    options["propertyValue[" + i + "][" + j + "]"] = multiProperty[j];
                 }
             }
             else {
-                options['propertyValue[' + i + ']'] = propertyValue;
+                options["propertyValue[" + i + "]"] = propertyValue;
             }
         }
         i++;
@@ -81,17 +83,17 @@ Cmis.prototype.setProperties = function (options, properties) {
 
 Cmis.prototype.setPolicies = function (options, policies) {
     for (var i = 0; i < policies.length; i++) {
-        options['policy[' + i + ']'] = policies[i];
+        options["policy[" + i + "]"] = policies[i];
     }
 };
 
 Cmis.prototype.setACEs = function (options, ACEs, action) {
     var i = 0;
     for (var id in ACEs) {
-        options[action + 'ACEPrincipal[' + i + ']'] = id;
+        options[action + "ACEPrincipal[" + i + "]"] = id;
         var ace = ACEs[id];
         for (var j = 0; j < ace.length; j++) {
-            options[action + 'ACEPermission[' + i + '][' + j + ']'] = ACEs[id][j];
+            options[action + "ACEPermission[" + i + "][" + j + "]"] = ACEs[id][j];
         }
         i++;
     }
@@ -155,11 +157,11 @@ Cmis.prototype.http = function (method, url, options, multipartData) {
 };
 
 Cmis.prototype.get = function (url, options) {
-    return this.http('GET', url, options);
+    return this.http("GET", url, options);
 };
 
 Cmis.prototype.post = function (url, options, multipartData) {
-    return this.http('POST', url, options, multipartData);
+    return this.http("POST", url, options, multipartData);
 };
 
 Cmis.prototype.setToken = function (token) {
@@ -177,14 +179,14 @@ Cmis.prototype.setErrorHandler = function (handler) {
 };
 
 Cmis.prototype.getRepositoryInfo = function () {
-    return this.get(this.defaultRepository.repositoryUrl, { cmisselector: 'repositoryInfo' })
+    return this.get(this.defaultRepository.repositoryUrl, { cmisselector: "repositoryInfo" })
         .then(function (res) { return res.json(); });
 };
 
 Cmis.prototype.getParents = function (objectId, options) {
     if (options === void 0) { options = {}; }
     var o = options;
-    o.cmisselector = 'parents';
+    o.cmisselector = "parents";
     o.objectId = objectId;
     return this.get(this.defaultRepository.rootFolderUrl, o).then(function (res) { return res.json(); });
 };
@@ -192,7 +194,7 @@ Cmis.prototype.getParents = function (objectId, options) {
 Cmis.prototype.getChildren = function (objectId, options) {
     if (options === void 0) { options = {}; }
     var o = options;
-    o.cmisselector = 'children';
+    o.cmisselector = "children";
     o.objectId = objectId;
     return this.get(this.defaultRepository.rootFolderUrl, o).then(function (res) { return res.json(); });
 };
@@ -200,27 +202,27 @@ Cmis.prototype.getChildren = function (objectId, options) {
 Cmis.prototype.getObjectByPath = function (path, options) {
     if (options === void 0) { options = {}; }
     var o = options;
-    o.cmisselector = 'object';
-    var sp = path.split('/');
+    o.cmisselector = "object";
+    var sp = path.split("/");
     for (var i = sp.length - 1; i >= 0; i--) {
         sp[i] = encodeURIComponent(sp[i]);
     }
-    return this.get(this.defaultRepository.rootFolderUrl + sp.join('/'), o).then(function (res) { return res.json(); });
+    return this.get(this.defaultRepository.rootFolderUrl + sp.join("/"), o).then(function (res) { return res.json(); });
 };
 
 Cmis.prototype.getObject = function (objectId, returnVersion, options) {
     if (options === void 0) { options = {}; }
     var o = options;
-    o.cmisselector = 'object';
+    o.cmisselector = "object";
     o.objectId = objectId;
     o.returnVersion = returnVersion;
     return this.get(this.defaultRepository.rootFolderUrl, o).then(function (res) { return res.json(); });
 };
 
 Cmis.prototype.getContentStreamURL = function (objectId, download, streamId) {
-    if (download === void 0) { download = 'inline'; }
+    if (download === void 0) { download = "inline"; }
     var options = new Options();
-    options.cmisselector = 'content';
+    options.cmisselector = "content";
     options.objectId = objectId;
     options.download = download;
     options.streamId = streamId;
@@ -239,36 +241,36 @@ Cmis.prototype.getContentStreamURL = function (objectId, download, streamId) {
 };
 
 Cmis.prototype.createFolder = function (parentId, name, type, policies, addACEs, removeACEs) {
-    if (type === void 0) { type = 'cmis:folder'; }
+    if (type === void 0) { type = "cmis:folder"; }
     if (policies === void 0) { policies = []; }
     if (addACEs === void 0) { addACEs = {}; }
     if (removeACEs === void 0) { removeACEs = {}; }
     var options = new Options();
     options.objectId = parentId;
     options.repositoryId = this.defaultRepository.repositoryId;
-    options.cmisaction = 'createFolder';
+    options.cmisaction = "createFolder";
     var properties = {
-        'cmis:name': name,
-        'cmis:objectTypeId': type
+        "cmis:name": name,
+        "cmis:objectTypeId": type
     };
     this.setProperties(options, properties);
     this.setPolicies(options, policies);
-    this.setACEs(options, addACEs, 'add');
-    this.setACEs(options, removeACEs, 'remove');
+    this.setACEs(options, addACEs, "add");
+    this.setACEs(options, removeACEs, "remove");
     return this.post(this.defaultRepository.rootFolderUrl, options).then(function (res) { return res.json(); });
 };
 
 Cmis.prototype.createDocument = function (parentId, content, input, mimeTypeExtension, versioningState, policies, addACEs, removeACEs, options) {
     if (options === void 0) { options = {}; }
     var o = options;
-    if ('string' == typeof input) {
+    if ("string" == typeof input) {
         input = {
-            'cmis:name': input
+            "cmis:name": input
         };
     }
     var properties = input || {};
-    if (!properties['cmis:objectTypeId']) {
-        properties['cmis:objectTypeId'] = 'cmis:document';
+    if (!properties["cmis:objectTypeId"]) {
+        properties["cmis:objectTypeId"] = "cmis:document";
     }
     if (versioningState) {
         o.versioningState = versioningState;
@@ -279,16 +281,16 @@ Cmis.prototype.createDocument = function (parentId, content, input, mimeTypeExte
         this.setPolicies(o, policies);
     }
     if (addACEs) {
-        this.setACEs(o, addACEs, 'add');
+        this.setACEs(o, addACEs, "add");
     }
     if (removeACEs) {
-        this.setACEs(o, removeACEs, 'remove');
+        this.setACEs(o, removeACEs, "remove");
     }
     o.repositoryId = this.defaultRepository.repositoryId;
-    o.cmisaction = 'createDocument';
+    o.cmisaction = "createDocument";
     return this.post(this.defaultRepository.rootFolderUrl, o, {
         content: content,
-        filename: properties['cmis:name'],
+        filename: properties["cmis:name"],
         mimeTypeExtension: mimeTypeExtension
     }).then(function (res) { return res.json(); });
 };
@@ -297,7 +299,7 @@ Cmis.prototype.deleteObject = function (objectId, allVersions) {
     if (allVersions === void 0) { allVersions = false; }
     var options = new Options();
     options.repositoryId = this.defaultRepository.repositoryId;
-    options.cmisaction = 'delete';
+    options.cmisaction = "delete";
     options.objectId = objectId;
     options.allVersions = allVersions;
     return this.post(this.defaultRepository.rootFolderUrl, options);
@@ -307,6 +309,6 @@ Cmis.prototype.deleteContentStream = function (objectId, options) {
     if (options === void 0) { options = {}; }
     var o = options;
     o.objectId = objectId;
-    o.cmisaction = 'deleteContent';
+    o.cmisaction = "deleteContent";
     return this.post(this.defaultRepository.rootFolderUrl, o);
 };

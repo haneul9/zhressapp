@@ -1,3 +1,5 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-undef */
 jQuery.sap.declare("common.ActionSearchUser");
 jQuery.sap.require("common.Common");
 
@@ -31,7 +33,7 @@ common.ActionSearchUser = {
 		{ id: "Retda", label: "퇴사일", control: "Text", width: "80", align: "left" }
 	],
 
-	searchFilterBar: function (oEvent) {
+	searchFilterBar: function () {
 		var oController = common.ActionSearchUser.oController;
 
 		var dateFormat1 = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy.MM.dd" });
@@ -138,7 +140,7 @@ common.ActionSearchUser = {
 			null,
 			null,
 			false,
-			function (oData, oResponse) {
+			function (oData) {
 				if (oData && oData.results) {
 
 					var gridData = { data: [] };
@@ -175,7 +177,7 @@ common.ActionSearchUser = {
 		);
 	},
 
-	onAfterOpenSearchDialog: function (oEvent) {
+	onAfterOpenSearchDialog: function () {
 		var oController = common.ActionSearchUser.oController;
 
 		common.ActionSearchUser.onAfterRendering();
@@ -210,7 +212,7 @@ common.ActionSearchUser = {
 				null,
 				null,
 				false,
-				function (oData, oResponse) {
+				function (oData) {
 					if (oData && oData.results.length) {
 						for (var i = 0; i < oData.results.length; i++) {
 							oPersa.addItem(
@@ -260,7 +262,7 @@ common.ActionSearchUser = {
 			null,
 			null,
 			false,
-			function (oData, oResponse) {
+			function (oData) {
 				if (oData && oData.results) {
 					for (var i = 0; i < oData.results.length; i++) {
 						vEmpCodeList.EmpCodeListSet.push(oData.results[i]);
@@ -286,7 +288,7 @@ common.ActionSearchUser = {
 		oStat1.setSelectedKey("3");
 	},
 
-	onBeforeOpenSearchDialog: function (oEvent) {
+	onBeforeOpenSearchDialog: function () {
 		var oController = common.ActionSearchUser.oController;
 
 		var oPersa = sap.ui.getCore().byId(oController.PAGEID + "_AES_Persa");
@@ -325,7 +327,7 @@ common.ActionSearchUser = {
 		mEmpSearchResult.setData(null);
     },
     
-	onClose: function (oEvent) {
+	onClose: function () {
 		var oDialog = sap.ui.getCore().byId(common.ActionSearchUser.oController.PAGEID + "_AES_Dialog");
 		if (oDialog) oDialog.close();
 	},
@@ -474,7 +476,7 @@ common.ActionSearchUser = {
 			null,
 			null,
 			false,
-			function (oData, oResponse) {
+			function (oData) {
 				if (oData && oData.results) {
 					for (var i = 0; i < oData.results.length; i++) {
 						vEmpCodeList.EmpCodeListSet.push(oData.results[i]);
@@ -536,7 +538,7 @@ common.ActionSearchUser = {
 			null,
 			null,
 			false,
-			function (oData, oResponse) {
+			function (oData) {
 				if (oData && oData.results) {
 					for (var i = 0; i < oData.results.length; i++) {
 						oPersk.addItem(
@@ -580,7 +582,7 @@ common.ActionSearchUser = {
 		}
 	},
 
-	onAESSelectPerson: function (oEvent) {
+	onAESSelectPerson: function () {
 		var mEmpSearchResult = sap.ui.getCore().getModel("ActionEmpSearchResult");
 		var vEmpSearchResult = mEmpSearchResult.getProperty("/EmpSearchResultSet");
 
@@ -623,6 +625,7 @@ common.ActionSearchUser = {
 	}
 };
 
+// eslint-disable-next-line no-unused-vars
 function ActionEmpSearchSheet_OnSearchEnd(result) {
 	//	if(result) {
 	ActionEmpSearchSheet.FitSize(1, 1);
@@ -646,6 +649,7 @@ function ActionEmpSearchSheet_OnSearchEnd(result) {
 	//	}
 }
 
+// eslint-disable-next-line no-unused-vars
 function ActionEmpSearchSheet_OnBeforeCheck(Row, Col) {
 	var mEmpSearchResult = sap.ui.getCore().getModel("ActionEmpSearchResult");
 	var vEmpSearchResult = mEmpSearchResult.getProperty("/EmpSearchResultSet");

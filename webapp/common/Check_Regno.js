@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 $.sap.declare("common.Check_Regno");
 //바른 주민번호 = true를 return. 틀린 주민번호 = false를 리턴.
 //하이픈 빼고 숫자만 13자리 보내주세요.
@@ -9,7 +10,8 @@ common.Check_Regno={
         var mm     = jumin1.substr(2,2);        // 월
         var dd     = jumin1.substr(4,2);        // 일
         var genda  = jumin2.substr(0,1);        // 성별
-        var msg, ss, cc;
+        // var msg, ss, cc;
+        var cc;
       
         // 숫자가 아닌 것을 입력한 경우
         if (!this.isNumeric(jumin1)) {
@@ -103,4 +105,4 @@ common.Check_Regno={
         }			 
         return true;
     }
-}
+};
