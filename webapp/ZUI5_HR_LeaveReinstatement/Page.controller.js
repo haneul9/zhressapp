@@ -351,6 +351,7 @@
 								oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 								oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
 								oController.ApplyModel.setProperty("/FormData/Zspsap", "");
+								oPartner.setVisible(false);
 								break;
 					case "15":  oBabyDateBox.setVisible(false);
 								oController.ApplyModel.setProperty("/FormData/Zexbdt", null);
@@ -362,6 +363,7 @@
 								oBotBox.setVisible(false);
 								oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
 								oController.ApplyModel.setProperty("/FormData/Zspsap", "");
+								oPartner.setVisible(false);
 								break;
 					case "18":  oBabyDateBox.setVisible(false);
 								oController.ApplyModel.setProperty("/FormData/Zexbdt", null);
@@ -390,12 +392,9 @@
 								oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 								oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
 								oController.ApplyModel.setProperty("/FormData/Zspsap", "");
+								oPartner.setVisible(false);
 								oMidBox.setVisible(false);
-								oController.ApplyModel.setProperty("/FormData/Zelmnm", "");
-								oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 								oBotBox.setVisible(false);
-								oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
-								oController.ApplyModel.setProperty("/FormData/Zspsap", "");
 				}
 			}else {
 				oBabyDateBox.setVisible(false);
@@ -423,7 +422,7 @@
 					if(vBukrs !== "A100"){
 						oController.ApplyModel.setProperty("/InfoText", ele.TextA);
 						return;
-					}else{
+					}else if(oController.ApplyModel.getProperty("/FormData/Massn") === "0R"){
 						var vMsg = "";
 
 						switch(vKey){
@@ -445,8 +444,11 @@
 										break;
 						}
 						return;
-					}
-                };
+					}else{
+						oController.ApplyModel.setProperty("/InfoText", ele.TextA);
+						return;
+					} 
+                }
             });
 			
 			if(oController.ApplyModel.getProperty("/UsedTypeCombo").some(function(ele) {return ele.Code === vKey && parseInt(ele.Cvalu) === 1}))
@@ -600,52 +602,52 @@
 			if(oBabyDateBox.getVisible() === true && Common.checkNull(oFormData.Zexbdt) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42016"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 성명
 			if(oFamilyInfoBox.getVisible() === true && Common.checkNull(oFormData.Zfmlnm) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42017"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 생년월일
 			if(oFamilyInfoBox.getVisible() === true && Common.checkNull(oFormData.Zfgbdt) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42018"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 초등학교 명
 			if(oFamilyInfoBox.getVisible() === true && oMidBox.getVisible() === true && Common.checkNull(oFormData.Zelmnm) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42019"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 배우자 육아휴직 신청여부
 			if(oFamilyInfoBox.getVisible() === true && oPartner.getVisible() === true && Common.checkNull(oFormData.Zspsap) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42029"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 입학일
 			if(oFamilyInfoBox.getVisible() === true && oMidBox.getVisible() === true && Common.checkNull(oFormData.Zentdt) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42020"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 관계
 			if(oFamilyInfoBox.getVisible() === true && oRelationCombo.getVisible() === true && Common.checkNull(oFormData.Kdsvh) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42021"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 질병 명
 			if(oSickInfoBox.getVisible() === true && Common.checkNull(oFormData.Zdsase) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42022"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 의사 소견 (요약)
 			if(oSickInfoBox.getVisible() === true && Common.checkNull(oFormData.Zdtopn) && IsType === "X"){
 				MessageBox.error(oController.getBundleText("MSG_42023"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 			// 첨부파일
 			if(AttachFileAction.getFileLength(oController) === 0 && oController.ApplyModel.getProperty("/IsFileRequired") === true && IsType === "X") {
 				MessageBox.error(oController.getBundleText("MSG_42027"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
-			};
+			}
 
 			return false;
 		},
