@@ -1245,10 +1245,10 @@ sap.ui.define([
 				oPro.Znobcm="0";
 				oPro.Insnp="0";
 			}
-			oController.eqFunc();
 			if(oController._onDialog!="M"){
 				oController.onCal(oController._Bukrs);
 			}
+			oController.eqFunc();
 		},
 
 		
@@ -1527,7 +1527,13 @@ sap.ui.define([
 					vData.MedicalApplyTableIn[0].Begda=new Date(vData.MedicalApplyTableIn[0].Begda+"T09:00:00");
 				}else{
 					vData.MedicalApplyTableIn[0].Begda=null;
-				}			
+				}	
+				if(oPro.MedDate!=""&&oPro.MedDate!=null&&oPro.MedDate!="Invalid Date"){
+					vData.MedicalApplyTableIn[0].MedDate=dateFormat.format(vData.MedicalApplyTableIn[0].MedDate);
+					vData.MedicalApplyTableIn[0].MedDate=new Date(vData.MedicalApplyTableIn[0].MedDate+"T09:00:00");
+				}else{
+					vData.MedicalApplyTableIn[0].MedDate=null;
+				}		
 				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
 					$.app.getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
 					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
@@ -1553,6 +1559,12 @@ sap.ui.define([
 					vData.MedicalApplyTableIn[0].Inpdt=new Date(vData.MedicalApplyTableIn[0].Inpdt+"T09:00:00");
 				}else{
 					vData.MedicalApplyTableIn[0].Inpdt=null;
+				}
+				if(oPro.MedDate!=""&&oPro.MedDate!=null&&oPro.MedDate!="Invalid Date"){
+					vData.MedicalApplyTableIn[0].MedDate=dateFormat.format(vData.MedicalApplyTableIn[0].MedDate);
+					vData.MedicalApplyTableIn[0].MedDate=new Date(vData.MedicalApplyTableIn[0].MedDate+"T09:00:00");
+				}else{
+					vData.MedicalApplyTableIn[0].MedDate=null;
 				}
 				oController._vArr2.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=new String(vData.MedicalApplyTableIn[0]."+e+").replace(/\,/gi,'')");
@@ -1822,8 +1834,8 @@ sap.ui.define([
 					-parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Inspp.replace(/\,/gi,""))-
 					parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medmp.replace(/\,/gi,""))
 					-parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Insnp.replace(/\,/gi,""))-
-					parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Oiamt.replace(/\,/gi,""))
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt<0?$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=0:
+					parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Oiamt.replace(/\,/gi,""));
+					parseFloat($.app.getController()._DataModel.getProperty("/Pop2")[0].Framt)<0?$.app.getController()._DataModel.setProperty("/Pop2/0/Framt","0"):
 					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Framt));
 				}
 			}			
