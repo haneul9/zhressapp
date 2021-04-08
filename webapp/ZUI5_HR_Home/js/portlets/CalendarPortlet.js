@@ -143,7 +143,7 @@ fill: function() {
 
 			results.TableIn2 = [
 				{ Begda: Date.toODataString('2021-04-02'), Endda: Date.toODataString('2021-04-02') },
-				{ Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-07') },
+				{ Begda: Date.toODataString('2021-04-06'), Endda: Date.toODataString('2021-04-08') },
 				{ Begda: Date.toODataString('2021-04-20'), Endda: Date.toODataString('2021-04-21') },
 				{ Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') }
 			];
@@ -170,10 +170,21 @@ fill: function() {
 				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
 			];
 			results.TableIn6 = [
-				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-12'), Endda: Date.toODataString('2021-04-16') },
-				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-23') },
-				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') }
+				{ Ename: '강연준', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '곽성철', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '김강운', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '김대영', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '김동현', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '김정환', ZtitleTxt: '이사', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '김지훈', ZtitleTxt: '대표', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '박경자', ZtitleTxt: '부장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '윤명용', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '전태석', ZtitleTxt: '이사', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '차경영', ZtitleTxt: '이사', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
+				{ Ename: '표지영', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') }
 			];
 			results.TableIn7 = [
 				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '생일', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-05') },
@@ -216,6 +227,9 @@ setAbsence: function(o) {
 	dateTextArray = this.toDateTextArray(o.Begda, o.Endda),
 	length = dateTextArray.length;
 	$.map(dateTextArray, function(dateText, i) {
+		if (!calendarMap[dateText]) {
+			return;
+		}
 		calendarMap[dateText].absence = true;
 		if (i > 0 && i < length - 1) {
 			calendarMap[dateText].absenceBetween = true;
@@ -223,15 +237,15 @@ setAbsence: function(o) {
 	});
 
 	if (length > 1) {
-		calendarMap[dateTextArray[0]].absenceStart = true;
-		calendarMap[dateTextArray[length - 1]].absenceEnd = true;
+		(calendarMap[dateTextArray[0]] || {}).absenceStart = true;
+		(calendarMap[dateTextArray[length - 1]] || {}).absenceEnd = true;
 	}
 },
 addDailyReport: function(o, type) {
 
 	var calendarMap = this.calendarMap;
 	$.map(this.toDateTextArray(o.Begda, o.Endda), function(dateText) {
-		calendarMap[dateText][type].push(o);
+		((calendarMap[dateText] || {})[type] || []).push(o);
 	});
 },
 toDateTextArray: function(begda, endda) {
@@ -247,7 +261,7 @@ toDateTextArray: function(begda, endda) {
 renderDailyReport: function(dateText) {
 
 	var unit = this.countUnit,
-	dayData = this.calendarMap[dateText];
+	dayData = this.calendarMap[dateText] || {};
 
 	this.selectedDate = dateText;
 
@@ -289,7 +303,7 @@ initCalendar: function() {
 		beforeShowDay: function(date) {
 
 			var dateText = moment(date).format(this.pattern.moment),
-			dayData = this.calendarMap[dateText],
+			dayData = this.calendarMap[dateText] || {},
 			classes = [];
 
 			if (!dayData) {
@@ -423,7 +437,7 @@ initPopover: function() {
 },
 tooltipBody: function(dateText, type) {
 
-	var list = this.calendarMap[dateText][type] || [];
+	var list = (this.calendarMap[dateText] || {})[type] || [];
 	if (type === 'vacation') {
 		return $.map(list, function(o) { // 휴가
 			return [

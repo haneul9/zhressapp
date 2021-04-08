@@ -112,7 +112,7 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 
 AppPrefilter.prototype.confirmADPW = function(result) {
 
-	if (result.ECheckPw === "X" && sessionStorage.getItem("ess.ad-pw-confirm.state") !== "ok") {
+	if (result.ECheckPw === "X" && sessionStorage.getItem("ehr.ad-pw-confirm.state") !== "ok") {
 		this._gateway.spinner(false);
 		this._gateway.confirmADPW({
 			message: "개인/민감정보 조회를 위해 MOIN 비밀번호를 입력하시기 바랍니다.",
@@ -132,7 +132,7 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 
 	} else {
 		if (result.ECheckPw !== "X") {
-			sessionStorage.removeItem('ess.ad-pw-confirm.state');
+			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
 		}
 
 		this._gateway.successAppPrefilter(); // 메뉴 iframe 정상 로딩시 Home 화면 후속 처리

@@ -16,7 +16,7 @@ ui: function() {
 
 	var loginInfo = this._gateway.loginInfo(),
 	pernr = [this._gateway.pernr()],
-	photo = sessionStorage.getItem('ess.sf-user.photo'),
+		photo = sessionStorage.getItem('ehr.sf-user.photo'),
 	photoNotAvailable = !photo || /photoNotAvailable/.test(photo);
 
 	if (loginInfo.PGradeTxt) {
@@ -70,7 +70,7 @@ fill: function() {
 
 	setTimeout(function() {
 		var pernr = [this._gateway.pernr()],
-		photo = sessionStorage.getItem('ess.sf-user.photo'),
+			photo = sessionStorage.getItem('ehr.sf-user.photo'),
 		photoNotAvailable = !photo || /photoNotAvailable/.test(photo);
 
 		if (loginInfo.PGradeTxt) {

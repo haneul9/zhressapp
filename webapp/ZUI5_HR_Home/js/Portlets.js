@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet TempPortlet */
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet TempPortlet */
 function Portlets(_gateway) {
 
 	this._gateway = _gateway;
@@ -78,14 +78,22 @@ init: function() {
 	this._gateway.addLocaleChangeCallbackOwner(this);
 },
 
-changeLocale: function() { // TODO : Portlet title 때문에 Portlets 객체를 완전히 삭제하고 다시 생성해야함
+changeLocale: function() {
 
 	setTimeout(function() {
-		$.map(this.items, function(item) {
-			if (item.use()) {
-				setTimeout(item.changeLocale.bind(item), 0); // Portlet 데이터 조회
-			}
-		});
+		var container = $('.ehr-body .container-fluid');
+		if (container.data('jsp')) {
+			container.data('jsp').destroy();
+		}
+
+		this.generate()
+			.then(function() {
+				$('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
+					resizeSensor: true,
+					verticalGutter: 0,
+					horizontalGutter: 0
+				});
+			});
 	}.bind(this), 0);
 },
 
@@ -244,9 +252,12 @@ initSwitchModal: function() {
 	if (t.length) {
 		$(document).off('click', '.portlet-switch');
 		$(document).off('click', '.portlet-switch [type="checkbox"]');
+		$(document).off('click', '.portlet-switch:not(.disabled)');
+		$(document).off('click', '.portlet-switch [type="checkbox"]:not([disabled])');
 		t.off('click', '.btn-primary');
 		t.find('.modal-dialog').draggable('destroy');
 		t.modal('dispose');
+		t.remove();
 	}
 
 	$([
