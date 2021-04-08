@@ -1486,9 +1486,6 @@ sap.ui.define([
 				if(oPro.Framt.trim()=="0"){
 					oMsg=oBundleText.getText("MSG_47036");
 				}
-				if(oPro.Framt.trim()=="0"){
-					oMsg=oBundleText.getText("MSG_47036");
-				}
 				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController,"008")===0){
 					oMsg=oBundleText.getText("MSG_47030");
 				}
@@ -1831,7 +1828,7 @@ sap.ui.define([
 					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=$.app.getController()._DataModel.getProperty("/Pop2")[0].Medpp;
 				}else if($.app.getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="C"){
 					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(
-						parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medpp.replace(/\,/gi,""))+
+						parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medsp.replace(/\,/gi,""))+
 						parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Znobcd.replace(/\,/gi,"")));
 				}else{
 					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=
