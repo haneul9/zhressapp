@@ -1,12 +1,12 @@
 /* global moment:true */
 sap.ui.define([
-	"../../common/CommaInteger",
-	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/HoverIcon",
-	"../../common/moment-with-locales",
-	"../../common/PickOnlyDatePicker",
-	"../../common/ZHR_TABLES",
+	"common/CommaInteger",
+	"common/Common",
+	"common/Formatter",
+	"common/HoverIcon",
+	"common/moment-with-locales",
+	"common/PickOnlyDatePicker",
+	"common/ZHR_TABLES",
 	"../delegate/OnSettlement",
 	"../delegate/ViewTemplates",
 	"sap/m/InputBase"
@@ -307,7 +307,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 							new sap.m.HBox({
 								items: [
 									ViewTemplates.getHeaderLabel("{i18n>LABEL_19309}", false), // WBS
-									ViewTemplates.getCustomInput({
+									ViewTemplates.getCustomInput("SettlementHeaderPsPosid", {
 										layoutData: new sap.m.FlexItemData({ growFactor: 1, minWidth: "350px" }),
 										customData: [
 											new sap.ui.core.CustomData({
