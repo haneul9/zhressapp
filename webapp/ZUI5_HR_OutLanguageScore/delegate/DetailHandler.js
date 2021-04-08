@@ -165,7 +165,7 @@ sap.ui.define(
                         }
                     });
 
-                    // this.toggleIsPossibleSave();
+                    this.toggleIsPossibleSave();
                 }.bind(this));
             },
 
