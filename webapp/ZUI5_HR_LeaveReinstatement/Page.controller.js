@@ -409,12 +409,9 @@
 				oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 				oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
 				oController.ApplyModel.setProperty("/FormData/Zspsap", "");
+				oPartner.setVisible(false);
 				oMidBox.setVisible(false);
-				oController.ApplyModel.setProperty("/FormData/Zelmnm", "");
-				oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 				oBotBox.setVisible(false);
-				oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
-				oController.ApplyModel.setProperty("/FormData/Zspsap", "");
 			}
 
             oUsedCombo.forEach(function(ele) {
