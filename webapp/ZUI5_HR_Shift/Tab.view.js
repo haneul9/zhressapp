@@ -1,7 +1,7 @@
 sap.ui.define(
     [
         "common/PageHelper",  //
-        "./delegate/Shift",
+        "./delegate/Shift"
     ],
     function (PageHelper, Shift) {
         "use strict";

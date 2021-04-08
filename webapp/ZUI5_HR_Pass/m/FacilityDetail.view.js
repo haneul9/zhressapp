@@ -167,7 +167,7 @@ sap.ui.define([
 								else return true;
 							}
 						}
-					}),
+					})
 				]
 			})
 			.bindElement("/Detail")

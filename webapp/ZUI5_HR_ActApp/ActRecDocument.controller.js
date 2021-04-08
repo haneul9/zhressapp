@@ -335,7 +335,7 @@ sap.ui.define(
 					}	// end if
 
 					BusyIndicator.hide();
-				}	// end function
+				};	// end function
 
 				BusyIndicator.show(0);
 
@@ -1193,7 +1193,7 @@ sap.ui.define(
 						vOneData.VoltId = vActionSubjectListSet[check_idxs[i]].VoltId;
 
 						for (var t = 0; t < vSelectedTabIds.length; t++) {
-							vOneData["Cnt" + vSelectedTabIds[t]] = 'X';
+							vOneData["Cnt" + vSelectedTabIds[t]] = "X";
 						}
 
 						process_result = false;

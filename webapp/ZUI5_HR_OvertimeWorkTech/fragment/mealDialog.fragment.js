@@ -21,14 +21,14 @@ sap.ui.define([], function() {
                 resizable: true,
                 growing: false,
                 items: {
-                    path: '/List',
+                    path: "/List",
                     template: new sap.m.StandardListItem({
                         title: "{TmctyT}",
                         description: "{BegdaTx} {BeguzTx}",
                         type: sap.m.ListType.Active
                     }),
                     sorter: {
-                        path: 'Innam',
+                        path: "Innam",
                         descending: false
                     }
                 }			

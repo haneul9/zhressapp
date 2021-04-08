@@ -1,7 +1,8 @@
 sap.ui.define([
-	"../../common/Common",
+	"common/Common",
+	"common/ZHR_TABLES",
     "ZUI5_HR_ActApp/common/Common"
-], function (Common, AcpAppCommon) {
+], function (Common, ZHR_TABLES, AcpAppCommon) {
     "use strict";
 
     var SubjectHandler = {
@@ -84,7 +85,7 @@ sap.ui.define([
 
             // Build table column object
             oTable.destroyColumns();
-            common.ZHR_TABLES.makeColumn(this.oController, oTable, aColModel);
+            ZHR_TABLES.makeColumn(this.oController, oTable, aColModel);
 
             AcpAppCommon.buildTableCommonFields(this.oController, oTable, param.isShowBatyp);
 
@@ -116,7 +117,7 @@ sap.ui.define([
             // Common.adjustAutoVisibleRowCount.call(oTable);
 
             var oDeleteBtn = $.app.byId(this.oController.PAGEID + "_REQUESTDELETE_BTN");
-            if (oDeleteBtn) oDeleteBtn.setVisible(fCompleteCount ? false : true);
+            if (oDeleteBtn) {oDeleteBtn.setVisible(fCompleteCount ? false : true);}
         },
 
         setRecSubjectList: function () {
@@ -162,7 +163,7 @@ sap.ui.define([
 
                 var calculatePerColSize = Math.floor(90 / (aColModel.length - 2));
                 aColModel.forEach(function(elem, idx) {
-                    if(idx > 1) elem.width = calculatePerColSize + "%";
+                    if(idx > 1) {elem.width = calculatePerColSize + "%";}
                 });
             }
             // Make Column model
@@ -172,7 +173,7 @@ sap.ui.define([
 
             // Build table column object
             oTable.destroyColumns();
-            common.ZHR_TABLES.makeColumn(this.oController, oTable, aColModel);
+            ZHR_TABLES.makeColumn(this.oController, oTable, aColModel);
 
             var isShowBatyp = false;
             AcpAppCommon.buildTableCommonFields(this.oController, oTable, isShowBatyp);
@@ -206,8 +207,8 @@ sap.ui.define([
                 oneData.ProcessStatusText = this.oController.getBundleText("LABEL_02252");
                 oneData.ProcessMsg = "";
 
-                if (oneData.Massn1 != "") this.oController._vActionCount++;
-                if (oneData.Sub08 != "") this.oController._vRehireCount++;
+                if (oneData.Massn1 != "") {this.oController._vActionCount++;}
+                if (oneData.Sub08 != "") {this.oController._vRehireCount++;}
 
                 vActionSubjectList.ActionSubjectListSet.push(oneData);
             }.bind(this));
@@ -219,13 +220,13 @@ sap.ui.define([
             // Common.adjustAutoVisibleRowCount.call(oTable);
 
             var oDeleteBtn = $.app.byId(this.oController.PAGEID + "_REQUESTDELETE_BTN");
-            if (oDeleteBtn) oDeleteBtn.setVisible(fCompleteCount? false : true);
+            if (oDeleteBtn) {oDeleteBtn.setVisible(fCompleteCount? false : true);}
         },
 
         getActionSubjectList: function() {
             var results = [];
 
-            if(!this.oController._vDocno) return [];
+            if(!this.oController._vDocno) {return [];}
 
             $.app.getModel("ZHR_ACTIONAPP_SRV").read("/ActionSubjectListSet", {
                 async: false,
@@ -237,7 +238,7 @@ sap.ui.define([
                     if (oData.results && oData.results.length) {
                         results = oData.results;
                     }
-                }.bind(this),
+                },
                 error: function (oError) {
                     Common.log(oError);
                 }
@@ -287,7 +288,7 @@ sap.ui.define([
                         }
                     }
                 }
-            })
+            });
         },
 
         templateIconCheck: function(oColumnInfo) {
@@ -349,7 +350,7 @@ sap.ui.define([
                         var pCells = pRow.getCells();
 
                         // if theCols is empty we use aggregation for all cells in a row
-                        if (theCols.length < 1) byCols = cCells.map(function(x, i) { return i; });
+                        if (theCols.length < 1) {byCols = cCells.map(function(x, i) { return i; });}
 
                         if (byCols.filter(function(x) { return pCells[x].getText() == cCells[x].getText(); }).length == byCols.length) {
                             theCols.forEach(function(i) {

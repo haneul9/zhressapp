@@ -1,7 +1,7 @@
 sap.ui.define(
     [
         "common/PageHelper",  //
-        "./delegate/WorkSchedule",
+        "./delegate/WorkSchedule"
     ],
     function (PageHelper, WorkSchedule) {
         "use strict";

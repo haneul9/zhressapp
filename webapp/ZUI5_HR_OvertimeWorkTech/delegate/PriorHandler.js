@@ -193,7 +193,7 @@ sap.ui.define(
                 this.oModel.setProperty("/Detail/IsPossibleApproval", true);
                 this.oModel.setProperty("/Detail/IsPossibleDelete", true);
                 this.oModel.setProperty("/Detail/Header", $.extend(true, results.OtWorkTab1[0], {
-                    MinDate: moment().startOf('month').hours(10).toDate(),
+                    MinDate: moment().startOf("month").hours(10).toDate(),
                     Holick: results.OtWorkTab1[0].Holick === "X" ? true : false,
                     OtbetmT: results.OtWorkTab1[0].Otbetm.substring(0, 2),
                     OtbetmM: results.OtWorkTab1[0].Otbetm.substring(2, 4),
@@ -232,7 +232,7 @@ sap.ui.define(
                         OtentmM: "00",
                         Brkhr1: "00",
                         Brkmm1: "00",
-                        MinDate: moment().startOf('month').hours(10).toDate(),
+                        MinDate: moment().startOf("month").hours(10).toDate(),
                         Begda: new Date()
                     },
                     List: []
@@ -548,7 +548,7 @@ sap.ui.define(
                             results.OtWorkTab2.map(function(elem) {
                                 return $.extend(true, elem, {
                                     AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(elem.Aprsq)  // ${v}차 결재자
-                                })
+                                });
                             }.bind(this))
                         );
                         this.oModel.setProperty(
@@ -722,7 +722,7 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: "",
+                            Mssty: ""
                         };
         
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);

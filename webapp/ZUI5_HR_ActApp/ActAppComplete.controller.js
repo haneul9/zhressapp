@@ -129,7 +129,7 @@ sap.ui.define(
                     $.app.byId(oController.PAGEID + "_COMPLETE_BTN").setVisible((oController._vListLength > 0) ? true : false);
 
                     BusyIndicator.hide();
-                }.bind(this)
+                };
 
                 BusyIndicator.show(0);
                 setTimeout(dataProcess, 100);

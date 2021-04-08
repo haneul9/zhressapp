@@ -89,7 +89,7 @@ sap.ui.define([
 					new sap.m.FlexBox({
                         items: [
 							new sap.m.Label({
-                                text: "{i18n>LABEL_09014}",                                
+                                text: "{i18n>LABEL_09014}"
                             }).addStyleClass("sub-title") // 신청내역
 						]
                     })
@@ -215,7 +215,7 @@ sap.ui.define([
 					new sap.m.FlexBox({
                         items: [
 							new sap.m.Label({
-                                text: "{i18n>LABEL_09015}",                                
+                                text: "{i18n>LABEL_09015}"
                             }).addStyleClass("sub-title") // 이용신청
 						]
                     })

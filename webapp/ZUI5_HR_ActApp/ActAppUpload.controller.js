@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable no-undef */
 sap.ui.define(
 	[
@@ -490,7 +491,7 @@ sap.ui.define(
                     }
 
                     if (parseInt($firstRowTd.attr("colspan")) > 1) {
-                        $firstRowTd.css('border-bottom', '.0625rem solid #e5e5e5');
+                        $firstRowTd.css("border-bottom", ".0625rem solid #e5e5e5");
                     }
                 }
             },
@@ -1141,13 +1142,13 @@ sap.ui.define(
                         var oMassg = $.app.byId(oController.PAGEID + "_Massg" + (i + 1));
 
                         if (oMassn.getSelectedKey() == "0000" || oMassn.getSelectedKey() == "") {
-                            controlData["Massn" + (i + 1)] = '';
+                            controlData["Massn" + (i + 1)] = "";
                         } else {
                             controlData["Massn" + (i + 1)] = oMassn.getSelectedKey();
                         }
 
                         if (oMassg.getSelectedKey() == "0000" || oMassg.getSelectedKey() == "") {
-                            controlData["Massg" + (i + 1)] = '';
+                            controlData["Massg" + (i + 1)] = "";
                         } else {
                             controlData["Massg" + (i + 1)] = oMassg.getSelectedKey();
                         }
@@ -1449,14 +1450,14 @@ sap.ui.define(
                             var oMassg = $.app.byId(oController.PAGEID + "_Massg" + (i + 1));
 
                             if (oMassn.getSelectedKey() == "0000" || oMassn.getSelectedKey() == "") {
-                                createData["Massn" + (i + 1)] = '';
+                                createData["Massn" + (i + 1)] = "";
                             } else {
                                 if (oMassn.getSelectedKey() == "11") fReEntry = true;
                                 createData["Massn" + (i + 1)] = oMassn.getSelectedKey();
                             }
 
                             if (oMassg.getSelectedKey() == "0000" || oMassg.getSelectedKey() == "") {
-                                createData["Massg" + (i + 1)] = '';
+                                createData["Massg" + (i + 1)] = "";
                             } else {
                                 createData["Massg" + (i + 1)] = oMassg.getSelectedKey();
                             }
