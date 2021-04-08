@@ -1,13 +1,11 @@
 sap.ui.define([
 	"common/EmpBasicInfoBox",
 	"common/EmployeeModel",
-	"sap/m/Page",
-	"sap/base/util/UriParameters"
+	"sap/m/Page"
 ], function(
 	EmpBasicInfoBox,
 	EmployeeModel,
-	Page,
-	UriParameters
+	Page
 ) {
 "use strict";
 
@@ -80,7 +78,7 @@ new common.PageHelper({
 				titleItems.push(o.headerButton);
 			}
 
-			if (parent && UriParameters.fromQuery(document.location.search).get("useEmpInfoBox") === "N") {
+			if (parent && window._use_emp_info_box === true) {
 				window._CommonEmployeeModel = new EmployeeModel();
 				window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
 
