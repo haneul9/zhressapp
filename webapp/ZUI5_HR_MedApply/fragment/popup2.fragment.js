@@ -255,7 +255,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
                 return false;
             }else{
                 if(fVal3==""){
-                    if(fVal2=="D"){
+                    if(fVal2!="C"){
                         return false;
                     }else{
                         return true;
@@ -389,9 +389,13 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
             buttons: [new sap.m.Button({
                 press: function(){oController.onSave("A100")},
                 text: "{i18n>LABEL_47006}" // 신청
-                ,visible:{path:"Close",
-                formatter:function(fVal){
-                    return fVal=="X"?false:true;
+                ,visible:{parts:[{path:"Close"},{path:"Status"}],
+                formatter:function(fVal,fVal2){
+                    if(fVal2==""){
+                        return fVal=="X"?false:true;
+                    }else{
+                        return false;
+                    }
                 }}}).addStyleClass("button-search"),new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose2}).addStyleClass("button-delete")],
             contentWidth: "1600px",
             afterOpen : oController.onAfterOpen2
