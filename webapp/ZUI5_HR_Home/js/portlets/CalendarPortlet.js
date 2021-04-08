@@ -141,55 +141,9 @@ fill: function() {
 				};
 			});
 
-			results.TableIn2 = [
-				{ Begda: Date.toODataString('2021-04-02'), Endda: Date.toODataString('2021-04-02') },
-				{ Begda: Date.toODataString('2021-04-06'), Endda: Date.toODataString('2021-04-08') },
-				{ Begda: Date.toODataString('2021-04-20'), Endda: Date.toODataString('2021-04-21') },
-				{ Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') }
-			];
 			$.map(results.TableIn2, function(o) { // 본인 근태
 				this.setAbsence(o);
 			}.bind(this));
-
-			results.TableIn3 = [
-				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '연차', Begda: Date.toODataString('2021-04-26'), Endda: Date.toODataString('2021-04-30') },
-				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '연차', Begda: Date.toODataString('2021-04-06'), Endda: Date.toODataString('2021-04-07') },
-				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '병가', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
-				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '반차', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
-			];
-			results.TableIn4 = [
-				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '교육', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-07') },
-				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '교육', Begda: Date.toODataString('2021-04-06'), Endda: Date.toODataString('2021-04-07') },
-				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '교육', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
-				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '교육', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
-			];
-			results.TableIn5 = [
-				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-02'), Endda: Date.toODataString('2021-04-02') },
-				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
-				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '출장', Begda: Date.toODataString('2021-04-14'), Endda: Date.toODataString('2021-04-15') },
-				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '출장', Begda: Date.toODataString('2021-04-19'), Endda: Date.toODataString('2021-04-20') }
-			];
-			results.TableIn6 = [
-				{ Ename: '강연준', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '곽성철', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '김강운', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '김대영', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '김동현', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '김정환', ZtitleTxt: '이사', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '김지훈', ZtitleTxt: '대표', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '김태완', ZtitleTxt: '과장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '박경자', ZtitleTxt: '부장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '성환희', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '윤명용', ZtitleTxt: '차장', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '전태석', ZtitleTxt: '이사', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '차경영', ZtitleTxt: '이사', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') },
-				{ Ename: '표지영', ZtitleTxt: '대리', AwartTxt: '재택', Begda: Date.toODataString('2021-04-08'), Endda: Date.toODataString('2021-04-09') }
-			];
-			results.TableIn7 = [
-				{ Ename: '유정우', ZtitleTxt: '차장', AwartTxt: '생일', Begda: Date.toODataString('2021-04-05'), Endda: Date.toODataString('2021-04-05') },
-				{ Ename: '진형욱', ZtitleTxt: '대리', AwartTxt: '생일', Begda: Date.toODataString('2021-04-16'), Endda: Date.toODataString('2021-04-16') }
-			];
 			$.map(results.TableIn3, function(o) { // 휴가
 				this.addDailyReport(o, 'vacation');
 			}.bind(this));
