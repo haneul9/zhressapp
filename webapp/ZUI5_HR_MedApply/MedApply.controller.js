@@ -1458,6 +1458,9 @@ sap.ui.define([
 				if(oPro.Gtz51.trim()==""){
 					oMsg=oBundleText.getText("MSG_47026");
 				}
+				if(oPro.Gtz51s.trim()==""){
+					oMsg=oBundleText.getText("MSG_47037");
+				}
 				if(oPro.PatiName.trim()==""){
 					oMsg=oBundleText.getText("MSG_47018");
 				}
@@ -1475,10 +1478,10 @@ sap.ui.define([
 				if(oPro.DiseName.trim()==""){
 					oMsg=oBundleText.getText("MSG_47027");
 				}
-				if(oPro.Ptamt.trim()==""){
+				if(oPro.Ptamt.trim()=="0"){
 					oMsg=oBundleText.getText("MSG_47028");
 				}
-				if(oPro.Medsp.trim()==""){
+				if(oPro.Medsp.trim()=="0"){
 					oMsg=oBundleText.getText("MSG_47029");
 				}
 				if(oPro.Framt.trim()=="0"){
