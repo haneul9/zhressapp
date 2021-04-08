@@ -41,7 +41,7 @@ sap.ui.define(
                     SearchConditions: { // 검색조건
                         Aftck: OvertimeWork.PRIOR,
                         Begda: null,
-                        Endda: null,
+                        Endda: null
                     },
                     List: [],
                     ListSize: 0,

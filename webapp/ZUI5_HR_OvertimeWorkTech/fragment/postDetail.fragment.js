@@ -96,7 +96,7 @@ sap.ui.define(
                                                         text: "{i18n>LABEL_32041}",    // 사전신청일 선택
                                                         enabled: "{= ${/Detail/Header/Pernr} === '' ? false : true }",
                                                         visible: "{= !${/Detail/IsViewMode} }",
-                                                        press: PostHandler.pressSelectPriorBtn.bind(PostHandler),
+                                                        press: PostHandler.pressSelectPriorBtn.bind(PostHandler)
                                                     }).addStyleClass("mr-10px"),
                                                     new PickOnlyDatePicker({ 
                                                         required: true,

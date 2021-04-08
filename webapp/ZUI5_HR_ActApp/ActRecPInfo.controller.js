@@ -131,7 +131,7 @@ sap.ui.define(
 					{id : "State", label : this.getBundleText("LABEL_02251"), control : "Hidden", width : 10, align : "Left", filter : "#text_filter"},
 					{id : "Ltext1", label : this.getBundleText("LABEL_02285"), control : "Text", width : 250, align : "Left", filter : "#text_filter"},
 					{id : "Ltext2", label : this.getBundleText("LABEL_02286"), control : "Text", width : 250, align : "Left", filter : "#text_filter"},
-					{id : "Ltext3", label : this.getBundleText("LABEL_02287"), control : "Text", width : 250, align : "Left", filter : "#text_filter"},
+					{id : "Ltext3", label : this.getBundleText("LABEL_02287"), control : "Text", width : 250, align : "Left", filter : "#text_filter"}
 				];
 			},
 			
@@ -145,14 +145,11 @@ sap.ui.define(
 						this._vDocno = oEvent.data.Docno;
 						this._vDocty = oEvent.data.Docty;
 						this._vPersa = oEvent.data.Persa;
-						this._vActda = oEvent.data.Actda;
-						if(typeof(this._vActda) === "object") {
-							this._vActda = Common.DateFormatter(this._vActda);
-						}
-						this._vIntca = oEvent.data.Intca,
+						this._vIntca = oEvent.data.Intca;
 						this._oContext = oEvent.data.context;
 						this._vFromPageId = oEvent.data.FromPageId;
 						this._vVoltId = oEvent.data.VoltId;
+						this._vActda = typeof this._vActda === "object" ? Common.DateFormatter(this._vActda) : oEvent.data.Actda;
 					
 						if(oEvent.data.Pdata) {
 							this._vCntSub01 = oEvent.data.Pdata.Sub01;
@@ -422,7 +419,7 @@ sap.ui.define(
 					if(oController._vModifyContent) {
 						var saveFunction = function(fVal) {
 							if(fVal && fVal == "YES") {
-								var fSaveResult = oController["save" + oController._JobPage]('BACK');
+								var fSaveResult = oController["save" + oController._JobPage]("BACK");
 								if(fSaveResult) backFunction();
 							} else {
 								backFunction();
@@ -470,7 +467,7 @@ sap.ui.define(
 					if(fVal && fVal == "YES") {
 						fPrevTab = true;
 						oControl.setSelectedKey(oController._JobPage);
-						var fSaveResult = oController["save" + oController._JobPage]('BACK');
+						var fSaveResult = oController["save" + oController._JobPage]("BACK");
 						if(!fSaveResult){
 							return;
 						}
@@ -619,7 +616,7 @@ sap.ui.define(
 				var oView = $.app.getView(SUB_APP_ID);
 				var oController = $.app.getController(SUB_APP_ID);
 				
-				oController.subAction = 'C';
+				oController.subAction = "C";
 				var oPopupName = "";
 				var vMolga = "";
 				if(oController._JobPage == "Sub24"){
@@ -694,7 +691,7 @@ sap.ui.define(
 					return;
 				}
 		
-				oController.subAction = 'M';
+				oController.subAction = "M";
 				
 				var oPopupName = "";
 				var vMolga = "";
@@ -776,7 +773,7 @@ sap.ui.define(
 						var sPath = "";
 						var process_result = false;
 
-						for(var i = 0; i < vIDXs.length ; i ++){
+						for(var i = 0; i < vIDXs.length ; i++){
 							var _selPath = oTable.getContextByIndex(vIDXs[i]).sPath;
 							var vContexts = oController._Sub02TableJson.getProperty(_selPath);
 
@@ -1672,7 +1669,7 @@ sap.ui.define(
 						width : "99%",
 						layoutFixed : false,
 						columns : 4,
-						widths: ["15%","35%","15%","35%"],
+						widths: ["15%","35%","15%","35%"]
 					}).addStyleClass("act-tbl-write mt10");
 					
 					var c_idx = 0;
@@ -1910,7 +1907,7 @@ sap.ui.define(
 							return false;
 						} else {
 							oControl.setValueState(sap.ui.core.ValueState.None);
-							vOneData[Fieldname] = vValue == '' || vValue == '0NaN-NaN-NaN' ? null : '/Date(' + Common.getTime(vValue) + ')/';
+							vOneData[Fieldname] = vValue == "" || vValue == "0NaN-NaN-NaN" ? null : "/Date(" + Common.getTime(vValue) + ")/";
 						}
 					} else if(Fieldtype == "M6") {
 						if(oControl.getSelected() == false) {
@@ -1921,7 +1918,7 @@ sap.ui.define(
 							return false;
 						} else {
 							oControl.setValueState(sap.ui.core.ValueState.None);
-							vOneData[Fieldname] = 'X';
+							vOneData[Fieldname] = "X";
 						}
 					} else if(Fieldtype == "M7") {	
 						vValue = oController.getTelNum(oControl.getId());
@@ -1984,12 +1981,12 @@ sap.ui.define(
 						}
 					} else if(Fieldtype == "O4") {
 						vValue = oControl.getValue();	
-						vOneData[Fieldname] = vValue == '' || vValue == '0NaN-NaN-NaN' ? null : '/Date(' + Common.getTime(vValue) + ')/';
+						vOneData[Fieldname] = vValue == "" || vValue == "0NaN-NaN-NaN" ? null : "/Date(" + Common.getTime(vValue) + ")/";
 					} else if(Fieldtype == "O6") {
 						if(oControl.getSelected() == true) {
-							vOneData[Fieldname] = 'X';
+							vOneData[Fieldname] = "X";
 						} else {
-							vOneData[Fieldname] = '';
+							vOneData[Fieldname] = "";
 						}
 					} else if(Fieldtype == "O7") {
 						vValue = oController.getTelNum(oControl.getId());
@@ -2402,7 +2399,7 @@ sap.ui.define(
 						Land1 : oLand1.getCustomData()[0].getValue(),
 		//				Zzlndep	: oZzlndep.getValue(),	
 						Arbgb : oArbgb.getValue(),
-						Zzjbttx	: oZzjbttx.getValue(),
+						Zzjbttx	: oZzjbttx.getValue()
 				};
 				
 				var oArbgbCustomData = oArbgb.getCustomData();
@@ -2644,7 +2641,7 @@ sap.ui.define(
 						Eamdt : oEamdt.getValue() == "" ? null : "/Date(" + Common.getTime(oEamdt.getValue()) + ")/",
 						Exmsc : oExmsc.getValue() == "" || oExmsc.getValue() == "0" ? null : oExmsc.getValue(),
 						Eamgr : oEamgr.getSelectedKey() == "0000" ? "" : oEamgr.getSelectedKey(),		
-						Exmto : oExmto.getValue() == "" ? null : "/Date(" + Common.getTime(oExmto.getValue()) + ")/",
+						Exmto : oExmto.getValue() == "" ? null : "/Date(" + Common.getTime(oExmto.getValue()) + ")/"
 				};
 				
 				// 언어구분(Quali)
@@ -3376,7 +3373,7 @@ sap.ui.define(
 						Bankl : oBankl.getCustomData().length ? oBankl.getCustomData()[0].getValue() : "",
 						Bankn : oBankn.getValue(),
 						Zlsch : oZlsch.getSelectedKey() == "0000" ? "" : oZlsch.getSelectedKey(),
-						Waers : oWaers.getValue(),		
+						Waers : oWaers.getValue()		
 				};
 				
 				if(oBkplz) vOneData.Bkplz = oBkplz.getValue();
@@ -3574,7 +3571,7 @@ sap.ui.define(
 						VoltId : oController._vVoltId,
 						Seqnr : oController._vSelectedContext ? oController._vSelectedContext[0].getProperty("Seqnr") : "",
 						Quali : oQuali.getSelectedKey() == "0000" ? "" : oQuali.getSelectedKey(),
-						Auspr : oAuspr.getSelectedKey() == "0000" ? "" : oAuspr.getSelectedKey(),
+						Auspr : oAuspr.getSelectedKey() == "0000" ? "" : oAuspr.getSelectedKey()
 				};
 
 				var vMsg = "";
@@ -3760,7 +3757,7 @@ sap.ui.define(
 					width : "100%",
 					layoutFixed : false,
 					columns : 4,
-					widths: ["15%","35%","15%","35%"],
+					widths: ["15%","35%","15%","35%"]
 				});
 				
 				var idx = 0;
@@ -3859,7 +3856,7 @@ sap.ui.define(
 											customData : {key : "Subty", value: vSubty},
 											press : oController.onEmptyAddressData})
 								]
-							}).addStyleClass("L2PToolbarNoBottomLine"),
+							}).addStyleClass("L2PToolbarNoBottomLine")
 						});
 					} else {
 						oPanel = new sap.m.Panel(oController.PAGEID + "_Sub21_" + vSubty + "_Panel", {
@@ -3877,7 +3874,7 @@ sap.ui.define(
 											customData : {key : "Subty", value: vSubty},
 											press : oController.onEmptyAddressData})
 								]
-							}).addStyleClass("L2PToolbarNoBottomLine"),
+							}).addStyleClass("L2PToolbarNoBottomLine")
 						});
 					}			
 					
@@ -3901,7 +3898,7 @@ sap.ui.define(
 					width : "100%",
 					layoutFixed : false,
 					columns : 4,
-					widths: ["15%","35%","15%","35%"],
+					widths: ["15%","35%","15%","35%"]
 				}).addStyleClass("L2PMarginTop10");
 				
 				var idx = 0;
@@ -3994,7 +3991,7 @@ sap.ui.define(
 					width : "100%",
 					layoutFixed : false,
 					columns : 4,
-					widths: ["15%","35%","15%","35%"],
+					widths: ["15%","35%","15%","35%"]
 				}).addStyleClass("L2PMarginTop10");
 				
 				var idx = 0;
@@ -4565,7 +4562,7 @@ sap.ui.define(
 							});
 						}
 					}
-				}
+				};
 				
 				MessageBox.confirm(oController.getBundleText("MSG_02040"), {
 					title : oController.getBundleText("LABEL_02093"),
@@ -4623,7 +4620,7 @@ sap.ui.define(
 							oCheckbox.setEnabled(vEnabled);
 						}
 					}
-				}
+				};
 				
 				$.app.getModel("ZHR_ACTIONAPP_SRV").read("/RecruitingSubjects0077Set", {
 					async: false,
@@ -4742,7 +4739,7 @@ sap.ui.define(
 						Racky : oRacky.getSelectedKey() == "0000" ? "" : oRacky.getSelectedKey(),
 						Milsa : oMilsa.getSelectedKey() == "0000" ? "" : oMilsa.getSelectedKey(),	
 						Vetst1 : vVetst1,
-						Vetst2 : vVetst2,
+						Vetst2 : vVetst2
 				};
 				
 				if(oDisab) {
@@ -4871,7 +4868,7 @@ sap.ui.define(
 
 				oController._vModifyContent = true;
 				
-				if (isNaN(vInputValue) || vInputValue.indexOf('.') != -1 || vInputValue.indexOf(' ') != -1) {
+				if (isNaN(vInputValue) || vInputValue.indexOf(".") != -1 || vInputValue.indexOf(" ") != -1) {
 					vInputValue = vInputValue.substr(0, vInputValue.length-1 );
 					oEvent.getSource().setValue(vInputValue);
 				}
@@ -4918,7 +4915,7 @@ sap.ui.define(
 				}
 		
 				var month_day = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-				var dateToken = d.split('-');
+				var dateToken = d.split("-");
 				var year = Number(dateToken[0]);
 				var month = Number(dateToken[1]);
 				var day = Number(dateToken[2]);
@@ -5571,7 +5568,7 @@ sap.ui.define(
 						
 						var oControl = $.app.byId(oController.PAGEID + "_Rehire_Data" + oController._vActiveTabNames[i].Tabid);
 						if(oControl && oControl.getSelected() == true) {
-							oController["_vCreateRehireData.Cnt" + oController._vActiveTabNames[i].Tabid] = 'X';
+							oController["_vCreateRehireData.Cnt" + oController._vActiveTabNames[i].Tabid] = "X";
 						}
 					}
 					
@@ -6526,7 +6523,7 @@ sap.ui.define(
 						}));
 					} else {
 						oControl = new sap.m.Input(vControlId, {
-							width : "95%",
+							width : "95%"
 						}).addStyleClass("L2PFontFamily");
 						oControl.setValue(vUpdateTextValue);
 						oControl.addCustomData(new sap.ui.core.CustomData({
@@ -6687,7 +6684,7 @@ sap.ui.define(
 						width : "95%",
 						valueFormat : "yyyy-MM-dd",
 						displayFormat : gDtfmt,
-						change : oController.changeDate, 
+						change : oController.changeDate 
 					}).addStyleClass("L2PFontFamily");
 					if(vUpdateValue != null && vUpdateValue != "") {
 						var tDate2 = Common.setTime(new Date(vUpdateValue));
@@ -6782,7 +6779,7 @@ sap.ui.define(
 				} else if(Fieldtype == "D0" || Fieldtype == "D1") {
 					oControl = new sap.m.Input(vControlId, {
 						width : "95%",
-						editable : false,
+						editable : false
 					}).addStyleClass("L2PFontFamily");
 					oControl.setValue(vUpdateValue);
 				} 
@@ -6814,7 +6811,7 @@ sap.ui.define(
 					{"Fieldname" : "Disab"}, //장애유형
 					{"Fieldname" : "Auspr"}, //언어 숙련도
 					{"Fieldname" : "Rctvc"},  //Municipal city code,
-					{"Fieldname" : "P08disty"},  //장애유형
+					{"Fieldname" : "P08disty"}  //장애유형
 				];
 				
 				for(var i=0; i<oController._vHiringPersonalInfomationLayout.length; i++) {
@@ -6887,7 +6884,7 @@ sap.ui.define(
 				if(vDefaultValues && vDefaultValues.length) {
 					for(var d=0; d<vDefaultValues.length; d++) {
 						if(vDefaultValues[d].Fieldname == vFieldname) {
-							vDefaultValue = vDefaultValues[d].Code
+							vDefaultValue = vDefaultValues[d].Code;
 							break;
 						}
 					}
@@ -6924,7 +6921,7 @@ sap.ui.define(
 				if(Fieldtype == "M1" || Fieldtype == "O1") {
 					oControl = new sap.m.ComboBox(vControlId, {
 						width : "95%",
-						change : oController.changeModifyContent,
+						change : oController.changeModifyContent
 					}).addStyleClass("L2PFontFamily");
 					
 					if(Fieldname == "State") {
@@ -7032,7 +7029,7 @@ sap.ui.define(
 						width : "95%",
 						valueFormat : "yyyy-MM-dd",
 						displayFormat : gDtfmt,
-						change : oController.changeModifyDate,
+						change : oController.changeModifyDate
 					}).addStyleClass("L2PFontFamily");
 					if(vUpdateValue != null && vUpdateValue != "") {
 						var tDate = Common.setTime(new Date(vUpdateValue));
@@ -7255,7 +7252,7 @@ sap.ui.define(
 				var oBinding = oEvent.getSource().getBinding("items");
 				var oFilters = [];
 				oBinding.filter(oFilters);
-			},
+			}
 		});
 	}
 );

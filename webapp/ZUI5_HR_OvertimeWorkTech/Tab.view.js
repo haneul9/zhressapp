@@ -1,7 +1,7 @@
 sap.ui.define(
     [
         "common/PageHelper",  //
-        "./delegate/OvertimeWork",
+        "./delegate/OvertimeWork"
     ],
     function (PageHelper, OvertimeWork) {
         "use strict";

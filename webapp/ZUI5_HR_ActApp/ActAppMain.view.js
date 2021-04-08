@@ -18,7 +18,7 @@ sap.ui.define([
 			{ id: "Eecnt", label: "{i18n>LABEL_02068}", plabel: "", span: 0, type: "string", sort: true, filter: true, width: "9%" },
 			{ id: "Actda", label: "{i18n>LABEL_02014}", plabel: "", span: 0, type: "date", sort: true, filter: true, width: "9%" },
 			{ id: "Reqda", label: "{i18n>LABEL_02141}", plabel: "", span: 0, type: "date", sort: true, filter: true, width: "9%" },
-			{ id: "Datlo", label: "{i18n>LABEL_02057}", plabel: "", span: 0, type: "string", sort: true, filter: true, width: "9%" },
+			{ id: "Datlo", label: "{i18n>LABEL_02057}", plabel: "", span: 0, type: "string", sort: true, filter: true, width: "9%" }
 		],
 
 		/** Specifies the Controller belonging to this View.
@@ -159,7 +159,7 @@ sap.ui.define([
 				icon: "",
 				text: "{i18n>LABEL_02157}",
 				design: sap.m.IconTabFilterDesign.Vertical,
-				key: "creation",
+				key: "creation"
 			});
 	
 			// var oIConFilter3 = new sap.m.IconTabFilter(oController.PAGEID + "_ICONFILTER_APPROVAL", {
@@ -174,21 +174,21 @@ sap.ui.define([
 				icon: "",
 				text: "{i18n>LABEL_02159}",
 				design: sap.m.IconTabFilterDesign.Vertical,
-				key: "confirmation",
+				key: "confirmation"
 			});
 	
 			var oIConFilter5 = new sap.m.IconTabFilter(oController.PAGEID + "_ICONFILTER_REJECT", {
 				icon: "",
 				text: "{i18n>LABEL_02160}",
 				design: sap.m.IconTabFilterDesign.Vertical,
-				key: "reject",
+				key: "reject"
 			});
 	
 			var oIConFilter6 = new sap.m.IconTabFilter(oController.PAGEID + "_ICONFILTER_COMPLETE", {
 				icon: "",
 				text: "{i18n>LABEL_02161}",
 				design: sap.m.IconTabFilterDesign.Vertical,
-				key: "complete",
+				key: "complete"
 			});
 
 			var oIConBar = new sap.m.IconTabBar(oController.PAGEID + "_ICONBAR", {

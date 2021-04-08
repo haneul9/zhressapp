@@ -27,6 +27,8 @@ sap.ui.jsfragment("ZUI5_HR_ActApp.fragment.CompleteProcessing", {
 								return sap.ui.commons.TextViewColor.Positive;
 							} else if (fVal == "F") {
 								return sap.ui.commons.TextViewColor.Critical;
+							} else {
+								return "";
 							}
 						}
 					}

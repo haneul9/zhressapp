@@ -20,5 +20,5 @@ zui5_hrxx_actapp2.fragment.ZKL_TableMakr = {
 		oTable.bindRows("/Data");
 		return oTable;
 
-	},	
+	}
 };

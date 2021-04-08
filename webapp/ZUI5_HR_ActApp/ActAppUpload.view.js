@@ -26,7 +26,7 @@ sap.ui.define([
 				layoutFixed: true,
 				columns: 4,
 				widths: ["15%", "35%", "15%", "35%"]
-			}).addStyleClass("act-tbl-write");;
+			}).addStyleClass("act-tbl-write");
 
 			var oIssuedTypeMatrix2 = new sap.ui.commons.layout.MatrixLayout(oController.PAGEID + "_IssuedTypeMatrix2", {
 				width: "100%",
@@ -34,7 +34,7 @@ sap.ui.define([
 				columns: 4,
 				visible: false,
 				widths: ["15%", "35%", "15%", "35%"]
-			}).addStyleClass("act-tbl-write");;
+			}).addStyleClass("act-tbl-write");
 
 			for (var i = 0; i < 1; i++) {
 				oRow1 = new sap.ui.commons.layout.MatrixLayoutRow();

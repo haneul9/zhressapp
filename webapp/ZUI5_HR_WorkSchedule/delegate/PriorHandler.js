@@ -77,8 +77,8 @@ sap.ui.define(
             load: function () {
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/SearchConditions/Apsta", "ALL");
-                this.oModel.setProperty("/SearchConditions/Begda", moment().subtract(14, 'days').toDate());
-                this.oModel.setProperty("/SearchConditions/Endda", moment().add(14, 'days').toDate());
+                this.oModel.setProperty("/SearchConditions/Begda", moment().subtract(14, "days").toDate());
+                this.oModel.setProperty("/SearchConditions/Endda", moment().add(14, "days").toDate());
                 if($.app.getAuth() === $.app.Auth.MSS) {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
                     this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
@@ -170,7 +170,7 @@ sap.ui.define(
                             WorkTime: elem.Wkbuz ? "${start} ~ ${End}".interpolate(moment(elem.Wkbuz.ms).subtract(9, "hours").format("HH:mm"), moment(elem.Wkeuz.ms).subtract(9, "hours").format("HH:mm")) : "",
                             AddTime1: elem.Trbuz ? "${start} ~ ${End}".interpolate(moment(elem.Trbuz.ms).subtract(9, "hours").format("HH:mm"), moment(elem.Treuz.ms).subtract(9, "hours").format("HH:mm")) : "",
                             AddTime2: elem.Trbu1 ? "${start} ~ ${End}".interpolate(moment(elem.Trbu1.ms).subtract(9, "hours").format("HH:mm"), moment(elem.Treu1.ms).subtract(9, "hours").format("HH:mm")) : ""
-                        })
+                        });
                     })
                 );
 
@@ -312,7 +312,7 @@ sap.ui.define(
                         return {
                             Status: "JJ",
                             Appnm: appnm
-                        }
+                        };
                     });
                     payload.Worktimetab2 = [];
 
@@ -465,7 +465,7 @@ sap.ui.define(
                         ? results.Worktimetab2.map(function(elem) {
                             return $.extend(true, elem, {
                                 AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(elem.Aprsq)  // ${v}차 결재자
-                            })
+                            });
                         }.bind(this))
                         : []
                 );
@@ -614,7 +614,7 @@ sap.ui.define(
                             Trbuzc: oInputData.Header.TrbuzT && oInputData.Header.TrbuzM ? oInputData.Header.TrbuzT + oInputData.Header.TrbuzM : null,
                             Treuzc: oInputData.Header.TreuzT && oInputData.Header.TreuzM ? oInputData.Header.TreuzT + oInputData.Header.TreuzM : null,
                             Trbu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M ? oInputData.Header.Trbu1T + oInputData.Header.Trbu1M : null,
-                            Treu1c: oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Treu1T + oInputData.Header.Treu1M : null,
+                            Treu1c: oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Treu1T + oInputData.Header.Treu1M : null
                         })
                     ];
                     payload.Worktimetab2 = oInputData.List.map(function (elem) {
@@ -666,7 +666,7 @@ sap.ui.define(
                             Trbuzc: oInputData.Header.TrbuzT && oInputData.Header.TrbuzM && oInputData.Header.TreuzT && oInputData.Header.TreuzM ? oInputData.Header.TrbuzT + oInputData.Header.TrbuzM : null,
                             Treuzc: oInputData.Header.TrbuzT && oInputData.Header.TrbuzM && oInputData.Header.TreuzT && oInputData.Header.TreuzM ? oInputData.Header.TreuzT + oInputData.Header.TreuzM : null,
                             Trbu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M && oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Trbu1T + oInputData.Header.Trbu1M : null,
-                            Treu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M && oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Treu1T + oInputData.Header.Treu1M : null,
+                            Treu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M && oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Treu1T + oInputData.Header.Treu1M : null
                         })
                     ];
                     payload.Worktimetab2 = oInputData.List.map(function (elem) {
@@ -717,7 +717,7 @@ sap.ui.define(
                             Trbuzc: oInputData.Header.TrbuzT && oInputData.Header.TrbuzM && oInputData.Header.TreuzT && oInputData.Header.TreuzM ? oInputData.Header.TrbuzT + oInputData.Header.TrbuzM : null,
                             Treuzc: oInputData.Header.TrbuzT && oInputData.Header.TrbuzM && oInputData.Header.TreuzT && oInputData.Header.TreuzM ? oInputData.Header.TreuzT + oInputData.Header.TreuzM : null,
                             Trbu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M && oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Trbu1T + oInputData.Header.Trbu1M : null,
-                            Treu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M && oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Treu1T + oInputData.Header.Treu1M : null,
+                            Treu1c: oInputData.Header.Trbu1T && oInputData.Header.Trbu1M && oInputData.Header.Treu1T && oInputData.Header.Treu1M ? oInputData.Header.Treu1T + oInputData.Header.Treu1M : null
                         })
                     ];
                     payload.Worktimetab2 = oInputData.List.map(function (elem) {
@@ -908,7 +908,7 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: "",
+                            Mssty: ""
                         };
         
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);

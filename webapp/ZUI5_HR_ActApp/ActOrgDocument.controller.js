@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable no-undef */
 sap.ui.define(
 	[
@@ -236,7 +237,7 @@ sap.ui.define(
 					}
 
 					BusyIndicator.hide();
-				}
+				};
 
 				BusyIndicator.show(0);
 
@@ -301,7 +302,7 @@ sap.ui.define(
 					}
 
 					BusyIndicator.hide();
-				}
+				};
 
 				BusyIndicator.show(0);
 
