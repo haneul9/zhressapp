@@ -77,7 +77,7 @@ body {min-width:576px; font-size:14px}
 
 .portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
 .portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
-.portlet-employee .portlet-spinner-background {top:0; height:100%}
+.portlet-employee .portlet-spinner-background {z-index:2; top:0; height:100%}
 .portlet-employee .portlet-spinner {top:11rem}
 
 .portlet-employee {position:relative; background:#fff url('../../images/employee-information-bg.png') no-repeat right bottom; cursor:pointer}
