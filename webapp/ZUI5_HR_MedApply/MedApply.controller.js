@@ -1080,6 +1080,7 @@ sap.ui.define([
 			var oSel=$.app.byId(oController.PAGEID + "_HeadSel");
 			var vFirstDate = $.app.byId(oController.PAGEID + "_ApplyDate").getDateValue();
             var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
+			oController.oTableInit();
 			var vData={ IConType:"1",
 						IBukrs:oSessionData.Bukrs3,
 						IPernr:oSessionData.Pernr,
@@ -1230,21 +1231,15 @@ sap.ui.define([
 			}else{
 				oPro.Inspp="0";
 			}
-			if(oSel3.getSelectedKey()=="C"){
-				oPro.Inpdt=null;
-				oPro.Ptamt="0";
-				oPro.Oiamt="0";
-				oPro.Medpp="0";
-				oPro.Insnp="0";
+			if(oSel3.getSelectedKey()=="C"||oSel3.getSelectedKey()=="D"){
+				oPro.Inpdt=null;				
 			}
-			if(oSel3.getSelectedKey()=="D"){
-				oPro.Inpdt=null;
-				oPro.Ptamt="0";
-				oPro.Medsp="0";
-				oPro.Oiamt="0";
-				oPro.Znobcm="0";
-				oPro.Insnp="0";
-			}
+			oPro.Ptamt="0";
+			oPro.Medsp="0";
+			oPro.Oiamt="0";
+			oPro.Znobcm="0";
+			oPro.Insnp="0";
+			oPro.Medpp="0";
 			if(oController._onDialog!="M"){
 				oController.onCal(oController._Bukrs);
 			}
@@ -1478,11 +1473,18 @@ sap.ui.define([
 				if(oPro.DiseName.trim()==""){
 					oMsg=oBundleText.getText("MSG_47027");
 				}
-				if(oPro.Ptamt.trim()=="0"){
-					oMsg=oBundleText.getText("MSG_47028");
+				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
+					if(oPro.Ptamt.trim()=="0"){
+						oMsg=oBundleText.getText("MSG_47028");
+					}
 				}
-				if(oPro.Medsp.trim()=="0"){
-					oMsg=oBundleText.getText("MSG_47029");
+				if(oPro.Gtz51!="D"){
+					if(oPro.Medsp.trim()=="0"){
+						oMsg=oBundleText.getText("MSG_47029");
+					}
+				}
+				if(oPro.Framt.trim()=="0"){
+					oMsg=oBundleText.getText("MSG_47036");
 				}
 				if(oPro.Framt.trim()=="0"){
 					oMsg=oBundleText.getText("MSG_47036");

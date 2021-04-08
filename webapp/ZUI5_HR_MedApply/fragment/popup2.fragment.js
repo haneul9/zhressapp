@@ -212,7 +212,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
                 return false;
             }else{
                 if(fVal3==""){
-                    if(fVal2=="C"||fVal2=="D"){
+                    if(fVal2=="D"){
                         return false;
                     }else{
                         return true;

@@ -123,8 +123,6 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		oRow.addCell(oCell);
 		oMat.addRow(oRow);
 
-		oController.oTableInit();
-
 		var oContent = new sap.m.FlexBox({
 			  justifyContent: "Center",
 			  fitContainer: true,
