@@ -17,7 +17,7 @@ sap.ui.define([
 				select: oController.onChangeZformType,
 				buttons: [
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64013}", // 재직
+						text: "{i18n>LABEL_65013}", // 재직
 						width: "auto",
 						selected: {
 							path: "ZformType",
@@ -27,7 +27,7 @@ sap.ui.define([
 						},
 					}),
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64014}", // 경력
+						text: "{i18n>LABEL_65014}", // 경력
 						width: "auto",
 						selected: {
 							path: "ZformType",
@@ -37,7 +37,7 @@ sap.ui.define([
 						},
 					}),
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64015}", // 갑근세납세필
+						text: "{i18n>LABEL_65015}", // 갑근세납세필
 						width: "auto",
 						selected: {
 							path: "ZformType",
@@ -47,7 +47,7 @@ sap.ui.define([
 						},
 					}),
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64016}", // 원천징수영수증
+						text: "{i18n>LABEL_65016}", // 원천징수영수증
 						width: "auto",
 						selected: {
 							path: "ZformType",
@@ -74,7 +74,7 @@ sap.ui.define([
 				select: oController.onChangeAptyp,
 				buttons: [
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64011}", // ESS 출력
+						text: "{i18n>LABEL_65011}", // ESS 출력
 						width: "auto",
 						selected: {
 							path: "Aptyp",
@@ -91,7 +91,7 @@ sap.ui.define([
 						}, 
 					}),
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64012}", // 인사팀 발행
+						text: "{i18n>LABEL_65012}", // 인사팀 발행
 						width: "auto",
 						selected: {
 							path: "Aptyp",
@@ -101,7 +101,7 @@ sap.ui.define([
 						},
 					}),
 					new sap.m.RadioButton({
-						text: "{i18n>LABEL_64020}", // 메일발송
+						text: "{i18n>LABEL_65020}", // 메일발송
 						width: "auto",
 						selected: {
 							path: "Aptyp",
@@ -116,8 +116,8 @@ sap.ui.define([
 			 var oZLang = new sap.m.ComboBox({
 				width: "150px",
 				items : [
-					new sap.ui.core.ListItem({ key : "1" ,text : "{i18n>LABEL_64018}" }),
-					new sap.ui.core.ListItem({ key : "2" ,text : "{i18n>LABEL_64019}" }),
+					new sap.ui.core.ListItem({ key : "1" ,text : "{i18n>LABEL_65018}" }),
+					new sap.ui.core.ListItem({ key : "2" ,text : "{i18n>LABEL_65019}" }),
 				],
 				selectedKey: "{Zlang}",
 				editable: {  // 재신청일 경우 수정 불가
@@ -143,7 +143,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64002}", "150px", "Right"), // 구분
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65002}", "150px", "Right"), // 구분
 							ZformType,
                         ]
 					})
@@ -152,9 +152,9 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64003}", "150px", "Right", true), // 언어
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65003}", "150px", "Right", true), // 언어
 							oZLang,
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_64004}", "150px", "Right", true).addStyleClass("mr-8px"), // 기준년도
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_65004}", "150px", "Right", true).addStyleClass("mr-8px"), // 기준년도
                             new sap.m.Input({
 								width: "180px",
 								value: "{Zyear}",
@@ -174,7 +174,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64006}", "150px", "Right", false), // 용도
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65006}", "150px", "Right", false), // 용도
 							new sap.m.Input({
 								width: "180px",
 								value: "{Zuse}",
@@ -183,7 +183,7 @@ sap.ui.define([
 							}),
 							new sap.m.Text({
 								width: "100%",
-								text: "{i18n>MSG_64007}",
+								text: "{i18n>MSG_65007}",
                                 textAlign: "Begin"
 							}).addStyleClass("px-20px"),
 						],
@@ -200,7 +200,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64005}", "150px", "Right", false), // 제출처
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65005}", "150px", "Right", false), // 제출처
 							new sap.m.Input({
 								width: "180px",
 								value: "{Zsubmit}",
@@ -208,7 +208,7 @@ sap.ui.define([
 							}),
 							new sap.m.Text({
 								width: "100%",
-								text: "{i18n>MSG_64008}",
+								text: "{i18n>MSG_65008}",
                                 textAlign: "Begin"
 							}).addStyleClass("px-20px")
 						],
@@ -225,7 +225,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64007}", "150px", "Right", true), // 수량
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65007}", "150px", "Right", true), // 수량
                         	new sap.m.Input({
 								textAlign: "Begin",
 								width: "120px",
@@ -246,7 +246,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64010}", "150px", "Right", false), // 비고
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65010}", "150px", "Right", false), // 비고
                         	new sap.m.Input({
                         		layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								textAlign: "Begin",
@@ -268,7 +268,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64017}", "150px", "Right", true), // 수령방법
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65017}", "150px", "Right", true), // 수령방법
                         	oAptyp
 						],
 						visible: {  // 재신청일 경우 보이지 않는다. 
@@ -284,7 +284,7 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_64021}", "150px", "Right", false), // 재출력사유
+							ViewTemplates.getLabel("header", "{i18n>LABEL_65021}", "150px", "Right", false), // 재출력사유
                         	new sap.m.Input({
                         		layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								textAlign: "Begin",
@@ -315,39 +315,39 @@ sap.ui.define([
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
-							text: "{i18n>MSG_64001}"
+							text: "{i18n>MSG_65001}"
 						}).addStyleClass("lineHeight30"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
-							text: "{i18n>MSG_64002}"
+							text: "{i18n>MSG_65002}"
 						}).addStyleClass("px-20px lineHeight30"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
-							text: "{i18n>MSG_64003}"
+							text: "{i18n>MSG_65003}"
 						}).addStyleClass("lineHeight30"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
-							text: "{i18n>MSG_64004}"
+							text: "{i18n>MSG_65004}"
 						}).addStyleClass("lineHeight30"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
-							text: "{i18n>MSG_64005}"
+							text: "{i18n>MSG_65005}"
 						}).addStyleClass("px-20px lineHeight30"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
-							text: "{i18n>MSG_64006}"
+							text: "{i18n>MSG_65006}"
 						}).addStyleClass("px-20px lineHeight30"),
 					
 					]
 			}).addStyleClass("tableMargin5 px-20px");
 				
 			var oDialog = new sap.m.Dialog({
-				title: "{i18n>LABEL_64001}",    // 제증명 신청
+				title: "{i18n>LABEL_65001}",    // 제증명 신청
 				contentWidth: "1000px",
 				contentHeight: "640px",
 				buttons: [

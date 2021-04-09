@@ -14,9 +14,8 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Announcement", {
 					{id: "Mntxt", label: "{i18n>LABEL_37084}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Mgtxt", label: "{i18n>LABEL_37085}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Stext2", label: "{i18n>LABEL_00155}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-					{id: "PGradeTxt", label: "{i18n>LABEL_18015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-					{id: "Zzmass", label: "{i18n>LABEL_18008}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "20%" , align : "Begin"},
-					{id: "Zzreason", label: "{i18n>ZZREASON}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
+					{id: "PGradeTxt", label: "{i18n>LABEL_18015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
+					{id: "Zzmass", label: "{i18n>LABEL_18008}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "30%" , align : "Begin"}];
 		
 		var oTable = new sap.ui.table.Table(oController.PAGEID + "_AnnouncementTable", {
 			selectionBehavior : sap.ui.table.SelectionBehavior.RowOnly,
@@ -41,7 +40,6 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Announcement", {
 		oTable.attachBrowserEvent("dblclick", function(oEvent) {
 			oTable.clearSelection();
 			oTable.addSelectionInterval(vIndex, vIndex);
-			// oController.onAnnouncementDblClick("1"); // only display mode
 		});
 		
 		oTable.setModel(new sap.ui.model.json.JSONModel());

@@ -93,7 +93,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Handicap", {
 												 			   new sap.m.ToolbarSpacer(),
 												 			   new sap.m.Button({text : "{i18n>LABEL_37042}", // 신규
 												 								visible: {
-																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actmode"}, {path: "Openf"}],
+																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actMode"}, {path: "Openf"}],
 																						formatter : function(v1, v2, v3, v4) {
 																						if(v1 == "E" && v2 === "2" && v3 === "3" && v4 === "Y") return true;
 																						else return false;
@@ -104,7 +104,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Handicap", {
 												 								}}).addStyleClass("button-light"),
 												 			   new sap.m.Button({text : "{i18n>LABEL_00102}", // 수정
 												 							    visible: {
-																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actmode"}, {path: "Openf"}],
+																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actMode"}, {path: "Openf"}],
 																						formatter : function(v1, v2, v3, v4) {
 																						if(v1 == "E" && v2 === "2" && v3 === "2" && v4 === "Y") return true;
 																						else return false;
@@ -115,7 +115,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Handicap", {
 												 								}}).addStyleClass("button-light"),
 								 								new sap.m.Button({text : "{i18n>LABEL_08003}", // 삭제   	
 								 												visible: {
-																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actmode"}, {path: "Openf"}],
+																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actMode"}, {path: "Openf"}],
 																						formatter : function(v1, v2, v3, v4) {
 																						if(v1 == "E" && v2 === "2" && v3 === "2" && v4 === "Y") return true;
 																						else return false;

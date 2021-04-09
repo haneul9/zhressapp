@@ -163,7 +163,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 					}
 				}
 			);
-			
+
 			oController._ListJSonModel.setProperty("/Data",vData.Data);
 			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
 			oController._BusyDialog.close();
@@ -173,6 +173,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				sap.m.MessageBox.error(oController.ErrorMessage);
 				return;
 			}
+			
+			$.app.byId(oController.PAGEID + "_Table").clearSelection();
 		}
 	
 		oController._BusyDialog.open();
@@ -265,24 +267,31 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		var oView = sap.ui.getCore().byId("ZUI5_HR_PayDeductionRequest.Tabs");
 		var oController = oView.getController();
 		var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table"),
-		vIdx = oTable.getSelectedIndices();
+			createData = {TempPayDeductionTableIn1 : []},
+			vIdx = oTable.getSelectedIndices();
 		if (vIdx.length < 1) {
-			MessageBox.warning(this.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
+			sap.m.MessageBox.error(oController.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
 			return;
 		}
+		for(var i = 0; i< vIdx.length; i++){
+			var detailData = {};
+			Object.assign(detailData, oController._ListJSonModel.getProperty(oTable.getContextByIndex(vIdx[i]).sPath));
+			if (detailData.Status == "ZZ"){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_50004")); // 진행상태가 중복인 것은 저장된 데이터가 아니라 삭제가 불가능합니다. 
+				return;
+			}		
+	
+			delete detailData.Idx;
+			createData.TempPayDeductionTableIn1.push(detailData);
+		}
+		
 
 		var create = function(){
 			var oPath = "";
-			var createData = {TempPayDeductionTableIn1 : []};
 			oPath = "/TempPayDeductionSet";
 			createData.IMode = "D";
 			
-			for(var i = 0; i< vIdx.length; i++){
-				var detailData = {};
-				Object.assign(detailData, oController._ListJSonModel.getProperty(oTable.getContextByIndex(vIdx[i]).sPath));
-				delete detailData.Idx;
-				createData.TempPayDeductionTableIn1.push(detailData);
-			}
+			
 			
 			var oModel = sap.ui.getCore().getModel("ZHR_PAY_RESULT_SRV");
 			oModel.create(oPath, createData, null,
@@ -396,6 +405,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_EXCEL_UPLOAD_BTN"), 
 			oModel = sap.ui.getCore().getModel("ZHR_PAY_RESULT_SRV"),
 			Datas = {Data : []},
+		    vData = {Data : []},
 			createData = {TempPayDeductionTableIn1 : []},
 			rowDatas = [],
 			vIdx = 0,
@@ -446,6 +456,13 @@ return CommonController.extend($.app.APP_ID, { // 출장
 								vMessage = vMessage.replace("&Fail",data.TempPayDeductionExport.results[0].EFail );
 							}
 						}
+						if(data.TempPayDeductionTableIn1 && data.TempPayDeductionTableIn1.results.length > 0){
+							for(var i=0; i<data.TempPayDeductionTableIn1.results.length; i++){
+								data.TempPayDeductionTableIn1.results[i].Idx = (i+1);
+								
+								vData.Data.push(data.TempPayDeductionTableIn1.results[i]);
+							}
+						}
 					}
 				},
 				function (oError) {
@@ -463,8 +480,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				}
 			)
 			
-			// oController._BusyDialog.close();
-			
+			oController._ListJSonModel.setProperty("/Data",vData.Data);
+			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));	
 			oController._UploadTableJSonModel.setData(Datas);
 			oController._UploadTableJSonModel.refresh();
 			
@@ -476,12 +493,12 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				sap.m.MessageBox.error(oController.ErrorMessage);
 				return;
 			}
-
+			
+			$.app.byId(oController.PAGEID + "_Table").clearSelection();
+			
 			sap.m.MessageBox.alert( vMessage, { // 업로드 완료하였습니다. 
 				title: oController.getBundleText("LABEL_00150"), // 확인. 
 				onClose: function () {
-					// Data setting
-		            oController.onPressSearch();
 				}
 			});
 			

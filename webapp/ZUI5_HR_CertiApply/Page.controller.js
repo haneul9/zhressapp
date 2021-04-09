@@ -132,7 +132,7 @@ sap.ui.define([
 		onPressReq: function() { //신청
 			var oController = $.app.getController();
            	// 기본값 설정
-           	oController.ApplyModel.setData({Data:{ ZformType : "01", Aptyp : "1", Zlang : "", Zcount : "1", Zyear : new Date().getFullYear()}});
+           	oController.ApplyModel.setData({Data:{ ZformType : "01", Aptyp : "1", Zlang : "1", Zcount : "1", Zyear : new Date().getFullYear()}});
 			
 			oController._ApplyDialog.open();
 		},
@@ -142,13 +142,13 @@ sap.ui.define([
 		
 			// 구분
 			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/ZformType"))){
-				MessageBox.error(oController.getBundleText("MSG_64009"), { title: oController.getBundleText("LABEL_00149")});
+				MessageBox.error(oController.getBundleText("MSG_65009"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			};
 
 			// 언어
 			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/Zlang"))){
-				MessageBox.error(oController.getBundleText("MSG_64010"), { title: oController.getBundleText("LABEL_00149")});
+				MessageBox.error(oController.getBundleText("MSG_65010"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			};
 
@@ -164,7 +164,7 @@ sap.ui.define([
 
 			// 수령방법
 			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/Aptyp"))){
-				MessageBox.error(oController.getBundleText("MSG_64015"), { title: oController.getBundleText("LABEL_00149")});
+				MessageBox.error(oController.getBundleText("MSG_65015"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			};
 
@@ -198,6 +198,7 @@ sap.ui.define([
 		            sendObject.IReapp = oRowData.actmode == "X" ? "X" : "" ; 
 					// Navigation property
 					delete oRowData.actmode;
+					oRowData.Zyear = "" + oRowData.Zyear;
                     sendObject.TableIn = [Common.copyByMetadata(oModel, "CertiAppTableIn", oRowData)];
 					
 					oModel.create("/CertiAppSet", sendObject, {
@@ -221,7 +222,7 @@ sap.ui.define([
 			}
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38001"), {
-				title: oController.getBundleText("LABEL_64001"),
+				title: oController.getBundleText("LABEL_65001"),
 				actions: [oController.getBundleText("LABEL_38044"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressApply
 			});
@@ -306,7 +307,7 @@ sap.ui.define([
         
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			return new JSONModelHelper({name: "35114489"}); // 20190018 20063005 (기초) 35111238 35114489 35111012(첨단)
+			return new JSONModelHelper({name: "20140099"}); // 20190018 20063005 (기초) 35111238 35114489 35111012(첨단)
 		} : null
 	});
 });

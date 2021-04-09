@@ -9,7 +9,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 		var oAwdtp  = new sap.m.ComboBox({
 			selectedKey : "{Awdtp}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -20,7 +20,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 		var oZzcause  = new sap.m.ComboBox({
 			selectedKey : "{Zzcause}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -104,7 +104,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 													displayFormat: gDtfmt,
 													width: "150px",
 													editable: {
-													    path: "actmode",
+													    path: "actMode",
 														formatter: function(v) {
 															if( v === "3" ) return true;
 															else return false;
@@ -164,7 +164,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Zzreason}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -193,7 +193,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Prins}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -216,7 +216,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Prtyp}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -271,14 +271,14 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AwardInfo", {
 						new sap.m.Button({
 							text : "{i18n>LABEL_00101}", // 저장
 							visible : {
-							    path: "actmode",
+							    path: "actMode",
 								formatter: function(v) {
 									if(v === "2" || v === "3" ) return true;
 									else return false;
 								}
 				    	    },
 							press : function(){
-								oController.onSaveAward(oController._AwardJSonModel.getProperty("/Data/actmode"));
+								oController.onSaveAward(oController._AwardJSonModel.getProperty("/Data/actMode"));
 							}
 						}), 
 						new sap.m.Button({

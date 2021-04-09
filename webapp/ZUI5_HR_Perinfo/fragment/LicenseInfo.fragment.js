@@ -9,7 +9,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 		var oLicnn  = new sap.m.ComboBox({
 			selectedKey : "{Licnn}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -22,7 +22,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 		var oOrgCode  = new sap.m.ComboBox({
 			selectedKey : "{OrgCode}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -34,7 +34,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 		var oLicnl  = new sap.m.ComboBox({
 			selectedKey : "{Licnl}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -122,7 +122,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 													displayFormat: gDtfmt,
 													width: "150px",
 													editable: {
-													    path: "actmode",
+													    path: "actMode",
 														formatter: function(v) {
 															if(v === "2" || v === "3" ) return true;
 															else return false;
@@ -199,7 +199,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 														displayFormat: gDtfmt,
 														width: "150px",
 														editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -227,7 +227,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{LicnNum}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -251,7 +251,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Zbigo}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -307,14 +307,14 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.LicenseInfo", {
 						new sap.m.Button({
 							text : "{i18n>LABEL_00101}", // 저장
 							visible : {
-							    path: "actmode",
+							    path: "actMode",
 								formatter: function(v) {
 									if(v === "2" || v === "3" ) return true;
 									else return false;
 								}
 				    	    },
 							press : function(){
-								oController.onSaveLicense(oController._LicenseJSonModel.getProperty("/Data/actmode"));
+								oController.onSaveLicense(oController._LicenseJSonModel.getProperty("/Data/actMode"));
 							}
 						}), 
 						new sap.m.Button({

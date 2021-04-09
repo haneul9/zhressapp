@@ -9,7 +9,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 		var oCountry  = new sap.m.ComboBox({
 			selectedKey : "{Land1}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -68,7 +68,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 													displayFormat: gDtfmt,
 													width: "150px",
 													editable: {
-													    path: "actmode",
+													    path: "actMode",
 														formatter: function(v) {
 															if(v === "2" || v === "3" ) return true;
 															else return false;
@@ -82,7 +82,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 													displayFormat: gDtfmt,
 													width: "150px",
 													editable: {
-													    path: "actmode",
+													    path: "actMode",
 														formatter: function(v) {
 															if(v === "2" || v === "3" ) return true;
 															else return false;
@@ -111,7 +111,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Arbgb}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -135,7 +135,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Ort01}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -156,6 +156,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 									 content : [new sap.m.Label({text : "{i18n>LABEL_19334}"})], // 국가
 									 hAlign : "Center",
 									 vAlign : "Middle",
+									 required : true
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Toolbar({
@@ -177,7 +178,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Zztitle}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -206,7 +207,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Zzjob}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -262,14 +263,14 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.CareerInfo", {
 						new sap.m.Button({
 							text : "{i18n>LABEL_00101}", // 저장
 							visible : {
-							    path: "actmode",
+							    path: "actMode",
 								formatter: function(v) {
 									if(v === "2" || v === "3" ) return true;
 									else return false;
 								}
 				    	    },
 							press : function(){
-								oController.onSaveCareer(oController._CareerJSonModel.getProperty("/Data/actmode"));
+								oController.onSaveCareer(oController._CareerJSonModel.getProperty("/Data/actMode"));
 							}
 						}), 
 						new sap.m.Button({

@@ -161,7 +161,7 @@ sap.ui.define([
         },
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			return new JSONModelHelper({name: "35114489"}); // 20190018 20063005 (기초) 35111238 35114489 35111012(첨단)
+			return new JSONModelHelper({name: "20140099"}); // 20190018 20063005 (기초) 35111238 35114489 35111012(첨단)
 		} : null
 	});
 });

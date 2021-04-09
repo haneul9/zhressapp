@@ -101,11 +101,11 @@ sap.ui.define([
 											],
 											formatter : function(v, v2) {
 												if(v === "1"){
-													return oController.getBundleText("LABEL_64022"); // 처리중
+													return oController.getBundleText("LABEL_65022"); // 처리중
 												}else if(v === "2" && v2 === "1"){
-													return oController.getBundleText("LABEL_64023"); // 재발급
+													return oController.getBundleText("LABEL_65023"); // 재발급
 												}else if(v === "3"){
-													return oController.getBundleText("LABEL_64026"); // 다운로드
+													return oController.getBundleText("LABEL_65026"); // 다운로드
 												}
 											}
 										},

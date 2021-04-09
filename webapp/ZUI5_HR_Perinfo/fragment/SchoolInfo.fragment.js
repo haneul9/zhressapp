@@ -9,7 +9,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 		var oSlart  = new sap.m.ComboBox({
 			selectedKey : "{Slart}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -23,7 +23,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 		var oCountry  = new sap.m.ComboBox({
 			selectedKey : "{Sland}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -34,7 +34,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 		var oSlabs  = new sap.m.ComboBox({
 			selectedKey : "{Slabs}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -49,7 +49,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 		var oAusbi  = new sap.m.ComboBox({
 			selectedKey : "{Ausbi}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -71,7 +71,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 		var oInsti = new sap.m.Input({
 						value : "{Insti}",
 			            editable: {
-						    path: "actmode",
+						    path: "actMode",
 							formatter: function(v) {
 								if(v === "2" || v === "3" ) return true;
 								else return false;
@@ -90,18 +90,48 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 		var oZzmajor  = new sap.m.Input({
 			value : "{Zzmajor}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
 				}
     	    },
+    	    visible : {
+    	    	path: "Slart",
+				formatter: function(v) {
+					if(v === "H4" || v === "H5" || v === "H6" ) return false;
+					else return true;
+				}
+    	    },
 		});
-		// 전공1
+		
 		var oSltp1  = new sap.m.ComboBox({
+			selectedKey : "{Sltp1}",
+            editable: {
+			    path: "actMode",
+				formatter: function(v) {
+					if(v === "2" || v === "3" ) return true;
+					else return false;
+				}
+    	    },
+    	     items : {
+    	    	path : "/Sltp",
+	    		template : new sap.ui.core.Item({key : "{Code}", text : "{Text}"})
+    	    },
+    	    visible : {
+    	    	path: "Slart",
+				formatter: function(v) {
+					if(v === "H4" || v === "H5" || v === "H6" ) return true;
+					else return false;
+				}
+    	    },
+		});
+		
+		// 복수전공1
+		var oMiny1  = new sap.m.ComboBox({
 			selectedKey : "{Miny1}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -112,11 +142,11 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 	    		template : new sap.ui.core.Item({key : "{Code}", text : "{Text}"})
     	    }
 		});
-		// 전공2
-		var oSltp2  = new sap.m.ComboBox({
+		// 복수전공2
+		var oMiny2  = new sap.m.ComboBox({
 			selectedKey : "{Miny2}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -203,7 +233,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 													displayFormat: gDtfmt,
 													width: "150px",
 													editable: {
-													    path: "actmode",
+													    path: "actMode",
 														formatter: function(v) {
 															if(v === "2" || v === "3" ) return true;
 															else return false;
@@ -217,7 +247,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 													displayFormat: gDtfmt,
 													width: "150px",
 													editable: {
-													    path: "actmode",
+													    path: "actMode",
 														formatter: function(v) {
 															if(v === "2" || v === "3" ) return true;
 															else return false;
@@ -278,7 +308,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Toolbar({
 								 	 	height : "45px",
-									 	content : [oZzmajor]
+									 	content : [oZzmajor, oSltp1]
 										}).addStyleClass("toolbarNoBottomLine")
 									 ],
 								 	 hAlign : "Begin",
@@ -313,7 +343,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [ new sap.m.CheckBox({
 														selected : "{Zzlmark}",
 														editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -375,7 +405,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Majth}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -404,7 +434,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Degno}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -427,7 +457,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Proff}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -451,7 +481,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Toolbar({
-									 	content : [ oSltp1 ] 
+									 	content : [ oMiny1 ] 
 										}).addStyleClass("toolbarNoBottomLine")
 									],
 								 	 hAlign : "Begin",
@@ -464,7 +494,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Toolbar({
-									 	content : [ oSltp2 ] 
+									 	content : [ oMiny2 ] 
 										}).addStyleClass("toolbarNoBottomLine")
 									],
 								 	 hAlign : "Begin",
@@ -484,7 +514,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Degn1}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -507,7 +537,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [new sap.m.Input({
 														value : "{Degn2}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -535,7 +565,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Aprsn}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -631,14 +661,14 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.SchoolInfo", {
 						new sap.m.Button({
 							text : "{i18n>LABEL_00101}", // 저장
 							visible : {
-							    path: "actmode",
+							    path: "actMode",
 								formatter: function(v) {
 									if(v === "2" || v === "3" ) return true;
 									else return false;
 								}
 				    	    },
 							press : function(){
-								oController.onSaveSchool(oController._SchoolJSonModel.getProperty("/Data/actmode"));
+								oController.onSaveSchool(oController._SchoolJSonModel.getProperty("/Data/actMode"));
 							}
 						}), 
 						new sap.m.Button({
