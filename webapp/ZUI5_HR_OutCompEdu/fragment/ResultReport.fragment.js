@@ -1,23 +1,20 @@
-﻿sap.ui.define([
+﻿/* eslint-disable no-undef */
+sap.ui.define([
     "../../common/Common",
     "../delegate/ViewTemplates",
 	"../../common/ZHR_TABLES",
-	"../../common/PickOnlyDateRangeSelection"
-], function (Common, ViewTemplates, ZHR_TABLES, PickOnlyDateRangeSelection) {
+	"../../common/PickOnlyDateRangeSelection",
+    "../../common/PickOnlyDatePicker"
+], function (Common, ViewTemplates, ZHR_TABLES, PickOnlyDateRangeSelection, PickOnlyDatePicker) {
 	"use strict";
 
-    sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", {
+    sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ResultReport", {
 
 		createContent: function (oController) {
 			
-            var oEduCombo = new sap.m.ComboBox(oController.PAGEID + "_EduCombo", { // 교육구분
+            var oEduCombo = new sap.m.ComboBox({ // 교육구분
 				width: "250px",
-				editable: {
-					path: "Status",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
+				editable: false,
 				items: {
 					path: "/EduCombo",
 					template: new sap.ui.core.ListItem({
@@ -35,14 +32,9 @@
 				}
             }, oEduCombo);
 
-            var oTypeCombo = new sap.m.ComboBox(oController.PAGEID + "_TypeCombo", { // 교육유형
+            var oTypeCombo = new sap.m.ComboBox({ // 교육유형
 				width: "250px",
-				editable: {
-					path: "Status",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
+				editable: false,
 				items: {
 					path: "/TypeCombo",
 					template: new sap.ui.core.ListItem({
@@ -60,14 +52,9 @@
 				}
             }, oTypeCombo);
 
-            var oSelectCombo = new sap.m.ComboBox(oController.PAGEID + "_SelectCombo", { // 필수/선택
+            var oSelectCombo = new sap.m.ComboBox({ // 필수/선택
 				width: "250px",
-				editable: {
-					path: "Status",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
+				editable: false,
 				items: {
 					path: "/SelectCombo",
 					template: new sap.ui.core.ListItem({
@@ -85,14 +72,9 @@
 				}
             }, oSelectCombo);
             
-            var oNomalCombo = new sap.m.ComboBox(oController.PAGEID + "_NomalCombo", { // 법정/일반
+            var oNomalCombo = new sap.m.ComboBox({ // 법정/일반
 				width: "250px",
-				editable: {
-					path: "Status",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
+				editable: false,
 				items: {
 					path: "/NomalCombo",
 					template: new sap.ui.core.ListItem({
@@ -110,14 +92,9 @@
 				}
             }, oNomalCombo);
 
-            var oTimeCombo = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo", { // 학습시간 (시)
+            var oTimeCombo = new sap.m.ComboBox({ // 학습시간 (시)
 				width: "70px",
-				editable: {
-					path: "Status",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
+				editable: false,
 				items: {
 					path: "/TimeCombo",
 					template: new sap.ui.core.ListItem({
@@ -135,14 +112,9 @@
 				}
             }, oTimeCombo);
 
-            var oTimeCombo2 = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo2", { // 학습시간 (분)
+            var oTimeCombo2 = new sap.m.ComboBox({ // 학습시간 (분)
 				width: "70px",
-				editable: {
-					path: "Status",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
+				editable: false,
 				items: {
 					path: "/TimeCombo2",
 					template: new sap.ui.core.ListItem({
@@ -160,7 +132,57 @@
 				}
             }, oTimeCombo2);
 
-			var oAttTable = new sap.ui.table.Table(oController.PAGEID + "_AttTable", {
+            var oSatisCombo = new sap.m.ComboBox({ // 학습자만족도
+				width: "250px",
+				editable: {
+					path: "Status",
+					formatter: function(v1) {
+						return !v1 || v1 === "AA";
+					}
+				},
+				items: {
+					path: "/SatisCombo",
+					template: new sap.ui.core.ListItem({
+						key: "{Code}",
+						text: "{Text}"
+					})
+				},
+				selectedKey: "{Trnfb}"
+			});
+			
+			// 키보드 입력 방지
+			oSatisCombo.addDelegate({
+				onAfterRendering: function () {
+					oSatisCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+				}
+            }, oSatisCombo);
+
+            var oEduEffectCombo = new sap.m.ComboBox({ // 교육효과평가
+				width: "250px",
+				editable: {
+					path: "Status",
+					formatter: function(v1) {
+						return !v1 || v1 === "AA";
+					}
+				},
+				items: {
+					path: "/EduEffectCombo",
+					template: new sap.ui.core.ListItem({
+						key: "{Code}",
+						text: "{Text}"
+					})
+				},
+				selectedKey: "{Evtfb}"
+			});
+			
+			// 키보드 입력 방지
+			oEduEffectCombo.addDelegate({
+				onAfterRendering: function () {
+					oEduEffectCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+				}
+            }, oEduEffectCombo);
+
+			var oAttTable2 = new sap.ui.table.Table(oController.PAGEID + "_AttTable2", {
 				selectionMode: sap.ui.table.SelectionMode.None,
 				enableColumnReordering: false,
 				enableColumnFreeze: false,
@@ -177,9 +199,8 @@
 			.setModel(oController.AttModel)
 			.bindRows("/Data");
 			
-			ZHR_TABLES.makeColumn(oController, oAttTable, [
-				{id: "Pchk", 		label: ""				   /* CheckBox */,	plabel: "", resize: true, span: 0, type: "Checkbox",  sort: true,  filter: true, width: "auto"},
-				{id: "Stext1",		label: "{i18n>LABEL_40030}" /* 부서명 */,  	plabel: "",  resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
+			ZHR_TABLES.makeColumn(oController, oAttTable2, [
+				{id: "Stext1",	    label: "{i18n>LABEL_40030}" /* 부서명 */,  	plabel: "",  resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 				{id: "PGradeTxt",   label: "{i18n>LABEL_40031}" /* 직급 */,     plabel: "",  resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto"},
 				{id: "Ename", 		label: "{i18n>LABEL_40032}" /* 성명 */,		plabel: "" , resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto"}
 			]);
@@ -196,12 +217,7 @@
                                         textAlign: "Begin",
                                         width: "704px",
                                         maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edkaj", false),
-                                        editable: {
-                                            path: "Status",
-                                            formatter: function(v1) {
-                                                return !v1 || v1 === "AA";
-                                            }
-                                        },
+                                        editable: false,
                                         value: "{Edkaj}"
                                     })
 								]
@@ -260,28 +276,18 @@
 												icon: "sap-icon://add",
 												press: oController.onPressAddRow.bind(oController),
 												text: "{i18n>LABEL_40034}", // 추가
-												visible: {
-													path: "Status",
-													formatter: function(v1) {
-														return !v1 || v1 === "AA";
-													}
-												}
+												visible: false
 											}).addStyleClass("button-light-sm mr-5px"),
 											new sap.m.Button({
 												icon: "sap-icon://less",
 												press: oController.onPressDelRow.bind(oController),
 												text: "{i18n>LABEL_40011}", // 삭제
-												visible: {
-													path: "Status",
-													formatter: function(v1) {
-														return !v1 || v1 === "AA";
-													}
-												}
+												visible: false
 											}).addStyleClass("button-light-sm")
 										]
 									})
 									.addStyleClass("mt-6px"),
-									oAttTable
+									oAttTable2
 								]
 							})
                         ]
@@ -299,7 +305,8 @@
 										displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
 										delimiter: "~",
 										dateValue: "{Begdhb}",
-										secondDateValue: "{Enddhe}"
+										secondDateValue: "{Enddhe}",
+                                        editable: false
 									})
 								]
 							})
@@ -325,23 +332,13 @@
 								textAlign: "Begin",
 								width: "443px",
 								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edrom", false),
-								editable: {
-									path: "Status",
-									formatter: function(v1) {
-										return !v1 || v1 === "AA";
-									}
-								},
+								editable: false,
 								value: "{Edrom}"
 							}),
-							new sap.m.RadioButtonGroup(oController.PAGEID + "_RadioGroup", {
+							new sap.m.RadioButtonGroup({
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
 								width: "250px",
-								editable: {
-									path: "Status",
-									formatter: function(v1) {
-										return !v1 || v1 === "AA";
-									}
-								},
+								editable: false,
 								columns: 2,
 								select: oController.onChangeRadio.bind(oController),
 								selectedIndex: 0,
@@ -379,12 +376,7 @@
 								textAlign: "Begin",
 								width: "704px",
 								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "EdstaObjid", false),
-								editable: {
-									path: "Status",
-									formatter: function(v1) {
-										return !v1 || v1 === "AA";
-									}
-								},
+								editable: false,
 								value: "{Edsta}"
 							})
 						]
@@ -393,77 +385,147 @@
 					new sap.m.HBox({
 						width: "100%",
 						items: [
-							new sap.m.HBox({
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_40063}", "94px", "Right" ).addStyleClass("mr-0"), // 전달교육
+                            new sap.m.VBox({
                                 items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_40041}", "150px", "Right", true ), // 인당교육비
-									new sap.m.Input({
-										textAlign: "End",
-										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzpretun", false),
-										liveChange: oController.getMoneyComma1.bind(oController),
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
-											}
-										},
-										value: {
-											path: "Costp",
-											formatter: function(v) {
-												if(v) return Common.numberWithCommas(v);
-												else return "0";
-											}
-										},
-									})
-								]
-							})
-							.addStyleClass("search-field-group mr-30px"),
-							new sap.m.HBox({
-                                items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_40042}", "150px", "Right", true ), // 부가세
-									new sap.m.Input({
-										textAlign: "End",
-										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzvalbt", false),
-										liveChange: oController.getMoneyComma2.bind(oController),
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
-											}
-										},
-										value: {
-											path: "Vatax",
-											formatter: function(v) {
-												if(v) return Common.numberWithCommas(v);
-												else return "0";
-											}
-										},
-									})
-								]
-							})
-							.addStyleClass("search-field-group")
-						]
-					})
-					.addStyleClass("search-field-group"),
-					new sap.m.HBox({
-						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_40044}", "150px", "Right", true ), // 전담교육 실시계획
-							new sap.m.TextArea({
-								rows: 3,
-								width: "704px",
-								value:"{Planx}",
-								editable: {
-									path: "Status",
-									formatter: function(v1) {
-										return !v1 || v1 === "AA";
-									}
-								}
-							})
+                                    new sap.m.HBox({
+                                        items: [
+                                            ViewTemplates.getLabel("header", "{i18n>LABEL_40047}", "40px", "Right" ), // 대상
+                                            new sap.m.Input({
+                                                textAlign: "Begin",
+                                                width: "250px",
+                                                maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Pltgt", false),
+                                                editable: {
+                                                    path: "Status",
+                                                    formatter: function(v1) {
+                                                        return !v1 || v1 === "AA";
+                                                    }
+                                                },
+                                                value: "{Pltgt}"
+                                            })
+                                        ]
+                                    })
+                                    .addStyleClass("search-field-group"),
+                                    new sap.m.HBox({
+                                        items: [
+                                            ViewTemplates.getLabel("header", "{i18n>LABEL_40045}", "40px", "Right" ), // 일시
+                                            new PickOnlyDatePicker({
+                                                width: "250px",
+                                                dateValue: "{Pldat}",
+                                                displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
+                                                valueFormat: "yyyy-MM-dd",
+                                                placeholder: "yyyy-mm-dd",
+                                                editable: {
+                                                    path: "Status",
+                                                    formatter: function(v1) {
+                                                        return !v1 || v1 === "AA";
+                                                    }
+                                                }
+                                            })
+                                        ]
+                                    })
+                                    .addStyleClass("search-field-group"),
+                                    new sap.m.HBox({
+                                        items: [
+                                            ViewTemplates.getLabel("header", "{i18n>LABEL_40046}", "40px", "Right" ), // 장소
+                                            new sap.m.Input({
+                                                textAlign: "Begin",
+                                                width: "250px",
+                                                maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Plloc", false),
+                                                editable: {
+                                                    path: "Status",
+                                                    formatter: function(v1) {
+                                                        return !v1 || v1 === "AA";
+                                                    }
+                                                },
+                                                value: "{Plloc}"
+                                            })
+                                        ]
+                                    })
+                                    .addStyleClass("search-field-group")
+                                ]
+                            })
 						]
 					})
 					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox({
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40064}", "150px", "Right", true ), // 전달교육 내용요약
+                            new sap.m.VBox({
+                                items: [
+                                    new sap.m.TextArea({
+                                        rows: 3,
+                                        width: "704px",
+                                        value:"{Plcon}",
+                                        editable: {
+                                            path: "Status",
+                                            formatter: function(v1) {
+                                                return !v1 || v1 === "AA";
+                                            }
+                                        }
+                                    }),
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+                                ]
+                            })
+						]
+					})
+					.addStyleClass("search-field-group h-auto"),
+					new sap.m.HBox({
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40065}", "150px", "Right", true ), // 직무개선 방안요약
+                            new sap.m.VBox({
+                                items: [
+                                    new sap.m.TextArea({
+                                        rows: 3,
+                                        width: "704px",
+                                        value:"{Plimp}",
+                                        editable: {
+                                            path: "Status",
+                                            formatter: function(v1) {
+                                                return !v1 || v1 === "AA";
+                                            }
+                                        }
+                                    }),
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+                                ]
+                            })
+						]
+					})
+					.addStyleClass("search-field-group h-auto"),
+					new sap.m.HBox({
+						items: [
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 수료증
+                            new sap.m.VBox({
+                                items: [
+                                    new sap.m.Text({text: "{i18n>MSG_40027}", width: "auto", textAlign: "Begin"}),
+                                    new sap.m.Text({text: "{i18n>MSG_40028}", width: "auto", textAlign: "Begin"}),
+                                    new sap.m.Text({text: "{i18n>MSG_40029}", width: "auto", textAlign: "Begin"}),
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
+                                ]
+                            })
+						]
+					})
+					.addStyleClass("search-field-group h-auto"),
+                    new sap.m.HBox({
+						items: [
+                            new sap.m.HBox({
+                                items: [
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_40067}", "150px", "Right"), // 학습자만족도
+                                    oSatisCombo
+                                ]
+                            })
+                            .addStyleClass("search-field-group"),
+                            new sap.m.HBox({
+                                items: [
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_40068}", "150px", "Right"), // 교육효과평가
+                                    oEduEffectCombo
+                                ]
+                            })
+                            .addStyleClass("search-field-group")
+                        ]
+                    })
+                    .addStyleClass("search-field-group"),
+                    new sap.m.HBox({
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_40048}", "150px", "Right"), // 이수기준
 							new sap.m.Text({
@@ -480,7 +542,7 @@
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 이수시간
 									new sap.m.Text({
-										text: "{Times}",
+										text: "",
 										width: "250px",
 										textAlign: "Begin"
 									})
@@ -503,15 +565,59 @@
 					.addStyleClass("search-field-group"),
 					new sap.m.HBox({
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_40055}", "150px", "Right"), // 보고서필수
-							new sap.m.Text({
-								text: "{Rptyn}",
-								textAlign: "Begin"
+							new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40051}", "150px", "Right"), // 선행자격요건
+									new sap.m.Text({
+										text: "{Pret1}",
+										width: "250px",
+										textAlign: "Begin"
+									})
+								]
 							})
+							.addStyleClass("search-field-group mr-30px"),
+							new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40052}", "150px", "Right"), // 선행교육과정
+									new sap.m.Text({
+										text: "{Pret2}",
+										width: "250px",
+										textAlign: "Begin"
+									})
+								]
+							})
+							.addStyleClass("search-field-group")
 						]
 					})
 					.addStyleClass("search-field-group"),
 					new sap.m.HBox({
+						items: [
+							new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40053}", "150px", "Right"), // 관련자격요견
+									new sap.m.Text({
+										text: "{Pret3}",
+										width: "250px",
+										textAlign: "Begin"
+									})
+								]
+							})
+							.addStyleClass("search-field-group mr-30px"),
+							new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40054}", "150px", "Right"), // 관련자격숙련도
+									new sap.m.Text({
+										text: "{Pret4}",
+										width: "250px",
+										textAlign: "Begin"
+									})
+								]
+							})
+							.addStyleClass("search-field-group")
+						]
+					})
+					.addStyleClass("search-field-group"),
+                    new sap.m.HBox({
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_40056}", "150px", "Right"), // 기타사항
 							new sap.m.TextArea({
@@ -577,13 +683,6 @@
 				]
 			})
 			.addStyleClass("mt-5px");
-
-			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
-				fitContainer: true,
-				items: [
-					sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
-				]
-			});
 				
 			var oDialog = new sap.m.Dialog({
 				title: "{i18n>LABEL_40001}",    // 사외위탁교육 신청
@@ -629,8 +728,7 @@
 				],
 				content: [
 					oApplyBox,
-					oTextBox,
-					oFlexBox
+					oTextBox
                 ]
 			})
 			.setModel(oController.ApplyModel)

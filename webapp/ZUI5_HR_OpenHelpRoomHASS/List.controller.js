@@ -570,31 +570,34 @@ sap.ui.define([
 			var oMiddleData = oController.OpenHelpModel.getProperty("/MiddleData");
 			var oBottomData = oController.OpenHelpModel.getProperty("/BottomData");
 			var sendObject = {};
-
+			
 			if(!oTopData.Bukrs){
 				oTopData.Bukrs = vBukrs2;
-				oTopData.InfoCd = "1";
 				oTopData.L1id = oController.gSelectedRoute.L1id;
 				oTopData.L2id = oController.gSelectedRoute.L2id;
 				oTopData.L3id = oController.gSelectedRoute.L3id;
 				oTopData.L4id = oController.gSelectedRoute.L4id;
 			}
+			oTopData.InfoCd = "1";
+
 			if(!oMiddleData.Bukrs){
 				oMiddleData.Bukrs = vBukrs2;
-				oMiddleData.InfoCd = "2";
 				oMiddleData.L1id = oController.gSelectedRoute.L1id;
 				oMiddleData.L2id = oController.gSelectedRoute.L2id;
 				oMiddleData.L3id = oController.gSelectedRoute.L3id;
 				oMiddleData.L4id = oController.gSelectedRoute.L4id;
 			}
+			oMiddleData.InfoCd = "2";
+
 			if(!oBottomData.Bukrs){
 				oBottomData.Bukrs = vBukrs2;
-				oBottomData.InfoCd = "3";
 				oBottomData.L1id = oController.gSelectedRoute.L1id;
 				oBottomData.L2id = oController.gSelectedRoute.L2id;
 				oBottomData.L3id = oController.gSelectedRoute.L3id;
 				oBottomData.L4id = oController.gSelectedRoute.L4id;
 			}
+			oBottomData.InfoCd = "3";
+			
 			// 첨부파일 저장
 			sendObject.OpenhelpTableIn4 = [{Appnm: AttachFileAction.uploadFile.call(oController)}];
 			sendObject.OpenhelpTableIn5 = [{Appnm: oController.uploadFile2.call(oController)}];

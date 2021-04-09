@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
@@ -247,7 +248,8 @@ sap.ui.define([
 			oController.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
 			oController.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
 			oController.getCodeList(oCopyRow);
-			oController.onBeforeOpenDetailDialog();
+			oController.onBeforeOpenDetailDialog("app");
+			oController.getAttTable(oCopyRow, "1");
 			oController._ApplyModel.open();
 		},
 
@@ -266,16 +268,114 @@ sap.ui.define([
 			this.setTimeCombo1(this);
 			this.setTimeCombo2(this);
 			this.getCodeList();
-			this.onBeforeOpenDetailDialog();
+			this.onBeforeOpenDetailDialog("app");
 			this._ApplyModel.open();
 		},
 
 		onPressRepBtn: function() { // 결과보고
+			var oView = $.app.byId("ZUI5_HR_OutCompEdu.OutCompEdu");
+			var oController = this;
+			var oTableData = this.TableModel.getProperty("/Data");
+			var oCopyRow = {};
 
+			if(oTableData.every(function(e) {return e.Pchk !== true})){
+				MessageBox.error(oController.getBundleText("MSG_40031"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			var oList = [];
+
+			oTableData.forEach(function(e){
+				if(e.Pchk) {
+					oList.push(e);
+					oCopyRow = e;
+				}	
+			});
+
+			if(oList.length > 1){
+				MessageBox.error(oController.getBundleText("MSG_40030"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			oCopyRow = $.extend(true, {}, oCopyRow);
+			this.ApplyModel.setData({FormData: oCopyRow});
+
+			if (!this._ReportModel) {
+				this._ReportModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ResultReport", this);
+				oView.addDependent(this._ReportModel);
+			}
+
+			this.setTimeCombo1(this);
+			this.setTimeCombo2(this);
+			this.getCodeList();
+			this.getCodeList2();
+			this.ApplyModel.setProperty("/FormData/Trnfb", "Null");
+			this.ApplyModel.setProperty("/FormData/Evtfb", "Null");
+			this.getAttTable(oCopyRow, "2");
+			this.onBeforeOpenDetailDialog();
+			this._ReportModel.open();
 		},
 
 		onPressReqBtn: function() { // 결재요청
 
+		},
+
+		getAttTable: function(oRowData, Gubun) { // 참석자 정보 받아옴
+			var oController = $.app.getController();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var vZyear1 = oController.SearchModel.getProperty("/Data/Zyear1");
+			var vMonth1 = oController.SearchModel.getProperty("/Data/Zmonth1");
+			var vGubun = oController.SearchModel.getProperty("/Data/Gubun");
+			var vStatus = oController.SearchModel.getProperty("/Data/Status");
+			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
+			var oAttTable = "";
+
+			oController.AttModel.setData({Data: []});
+
+			var vBDate = vZyear1 === "ALL" ? "" : new Date(vZyear1, vMonth1 - 1, 1);
+			var vEDate = vMonth1 === "ALL" ? "" : new Date(vZyear1, vMonth1, 0);
+
+			var sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.IEmpid = vPernr;
+			sendObject.IBukrs = vBukrs2;
+			sendObject.IConType = "1";
+			sendObject.IBegda = Common.adjustGMTOdataFormat(vBDate);
+			sendObject.IEndda = Common.adjustGMTOdataFormat(vEDate);
+			sendObject.IEdoty = vGubun === "ALL" ? "" : vGubun;
+			sendObject.IEdsta = vStatus === "ALL" ? "" : vStatus;
+			sendObject.IRepst = vIsReport === "ALL" ? "" : vIsReport;
+			// Navigation property
+			sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oRowData)];
+			sendObject.TrainingOutApplyTableIn2 = [];
+			
+			oModel.create("/TrainingOutApplySet", sendObject, {
+				success: function(oData, oResponse) {
+					if (oData && oData.TrainingOutApplyTableIn2) { 
+						Common.log(oData);
+						var vLength = 5;
+						var rDatas1 = oData.TrainingOutApplyTableIn2.results;
+						oController.AttModel.setData({Data: rDatas1});
+						vLength = rDatas1.length;
+
+						if(Gubun === "1")
+							oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
+						else 
+							oAttTable = $.app.byId(oController.PAGEID + "_AttTable2");
+						
+						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});			
 		},
 
 		onPressDelBtn: function() { // 삭제
@@ -519,6 +619,39 @@ sap.ui.define([
 			});
 		},
 
+		getCodeList2: function() { // 만족도combo
+			var oController = $.app.getController();
+			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+
+			var sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "004";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZHRD_ESCAL";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 만족도
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
+						oController.ApplyModel.setProperty("/SatisCombo", oData.NavCommonCodeList.results);
+						oController.ApplyModel.setProperty("/EduEffectCombo", oData.NavCommonCodeList.results);
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
+
+		},
+
 		getOrgOfIndividualHandler: function() {
 
 			return OrgOfIndividualHandler;
@@ -553,8 +686,13 @@ sap.ui.define([
 						MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
 						return ;
 					}
-					oAtt.push(o);
 					
+					o.Stext1 = o.PupStext;
+					o.PGradeTxt = o.ZpGradeTxt;
+					o.Ename = o.Stext;
+
+					oAtt.push(o);
+
 					oController.AttModel.setProperty("/Data", oAtt);
 					vLength = oAtt.length;
 
@@ -587,6 +725,7 @@ sap.ui.define([
 			oController.AttModel.setData({Data: oAttList});
 			vLength = this.AttModel.getProperty("/Data").length;
 			oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
+			oAttTable.clearSelection();
 		},
 
 		onChangeRadio: function(oEvent) {
@@ -627,7 +766,7 @@ sap.ui.define([
 				return true;
 			}
 
-			if(oController.AttModel.getProperty("/Data").length <= 1){ // 참석자
+			if(oController.AttModel.getProperty("/Data").length === 0){ // 참석자
 				MessageBox.error(oController.getBundleText("MSG_40018"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
@@ -682,10 +821,8 @@ sap.ui.define([
 			
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
-				oAttList1.Ename = e.Stext;
 				oAttList1.Pernr = e.Objid;
-				oAttList1.PGradeTxt = e.ZpGradeTxt;
-				oAttList2.push(oAttList1);
+				oAttList2.push(Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList1));
 			});
 
 			BusyIndicator.show(0);
@@ -710,7 +847,7 @@ sap.ui.define([
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
 					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
-					sendObject.TrainingOutApplyTableIn2 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList2)];
+					sendObject.TrainingOutApplyTableIn2 = oAttList2;
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
@@ -752,10 +889,8 @@ sap.ui.define([
 
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
-				oAttList1.Ename = e.Stext;
 				oAttList1.Pernr = e.Objid;
-				oAttList1.PGradeTxt = e.ZpGradeTxt;
-				oAttList2.push(oAttList1);
+				oAttList2.push(Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList1));
 			});
 			
 			BusyIndicator.show(0);
@@ -780,7 +915,7 @@ sap.ui.define([
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
 					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
-					sendObject.TrainingOutApplyTableIn2 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList2)];
+					sendObject.TrainingOutApplyTableIn2 = oAttList2;
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
@@ -861,20 +996,45 @@ sap.ui.define([
 			});
 		},
 
-		onBeforeOpenDetailDialog: function() {
+		onBeforeOpenDetailDialog: function(AppType) {
 			var oController = $.app.getController();
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
 				vInfoMessage = oController.getBundleText("MSG_40025");
-			
-			AttachFileAction.setAttachFile(oController, {
-				Appnm: vAppnm,
-				Required: true,
-				Mode: "M",
-				Max: "10",
-				InfoMessage: vInfoMessage,
-				Editable: (!vStatus || vStatus === "AA") ? true : false,
-			});
+			if(AppType === "app") {
+				AttachFileAction.setAttachFile(oController, {
+					Appnm: vAppnm,
+					Required: true,
+					Mode: "M",
+					Max: "10",
+					InfoMessage: vInfoMessage,
+					Editable: (!vStatus || vStatus === "AA") ? true : false,
+				});
+			}else {
+				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 내용요약
+					Label: "",
+					Appnm: vAppnm,
+					Mode: "S",
+					UseMultiCategories: true,
+					Editable: (!vStatus || vStatus === "AA") ? true : false,
+				},"001");
+				
+				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
+					Label: "",
+					Appnm: vAppnm,
+					Mode: "S",
+					UseMultiCategories: true,
+					Editable: (!vStatus || vStatus === "AA") ? true : false,
+				},"002");
+	
+				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
+					Label: "",
+					Appnm: vAppnm,
+					Mode: "S",
+					UseMultiCategories: true,
+					Editable: (!vStatus || vStatus === "AA") ? true : false,
+				},"003");
+			}
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {

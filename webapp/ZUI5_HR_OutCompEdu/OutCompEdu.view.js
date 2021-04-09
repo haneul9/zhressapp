@@ -1,3 +1,4 @@
+$.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define([
 	"../common/PageHelper",
     "../common/ZHR_TABLES",
