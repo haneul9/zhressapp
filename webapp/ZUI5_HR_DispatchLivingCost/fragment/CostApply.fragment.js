@@ -533,7 +533,7 @@
 				height: "280px",
 				fitContainer: true,
 				items: [
-					ViewTemplates.getLabel("header", "{i18n>LABEL_59021}").addStyleClass("sub-title"), // 첨부파일
+					ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Left").addStyleClass("sub-title mt-10px"), // 첨부파일
 					new sap.m.VBox({
 						fitContainer: true,
 						items: [
@@ -543,10 +543,10 @@
 							fragment.COMMON_ATTACH_FILES.renderer(oController,"004")						
 						]
 						
-					}).addStyleClass("custom-attach-file")
+					}).addStyleClass("custom-multiAttach-file")
 				]
 			})
-			.addStyleClass("mt-8px");
+			.addStyleClass("/*search-field-group*/");
 
 			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
 				fitContainer: true,

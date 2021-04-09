@@ -526,9 +526,6 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .sapUiCalMonthView .sapUiCalWH, .sapUiCalMonthView .sapUiCalItem {width:14%}
 /* Calendar 주차표시 삭제 */
 
-/* 첨부파일 UI수정 */
-.custom-attach-file .sub-title {}
-
 /* SAPUI5 Common */
 .sapMITH {border-bottom:1px solid #d9d9d9; box-shadow:none}
 .sapUiTableContentRow.sapUiTableTr.sapUiTableRowHvr {background-color:rgba(200, 220, 243, 0.3)}
@@ -650,5 +647,3 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .sapMGrowingListTriggerText>.sapMSLITitle {margin:.75rem 0 .25rem;font-size:.875rem;}
 .app-content-container-mobile .sapMGrowingListTriggerText {padding:0;} 
 .app-content-container-mobile .sapMIBar.sapMTB .sapMBarChild {margin-left:.25rem}   
-
-/**/
