@@ -221,7 +221,7 @@
 		"prefer-spread": 0,
 		"prefer-template": 0,
 		"quote-props": 0,
-		"quotes": [2, "double", { "avoidEscape": false }],
+		"quotes": [0, "double", { "avoidEscape": true }],
 		"radix": 0,
 		"require-jsdoc": 0,
 		"require-yield": 0,
