@@ -1,5 +1,5 @@
 /* global FavoriteMenuPortlet */
-function MegaDropdownMenu(_gateway, parentSelector) {
+function MenuMegaDropdown(_gateway, parentSelector) {
 
 	this.parentSelector = parentSelector;
 	this.menuFavorites = null;
@@ -12,7 +12,7 @@ function MegaDropdownMenu(_gateway, parentSelector) {
 	this.init();
 }
 
-$.extend(MegaDropdownMenu.prototype, {
+$.extend(MenuMegaDropdown.prototype, {
 
 init: function() {
 
@@ -86,14 +86,14 @@ redirect: function(menuUrl) {
 		this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join('해당 메뉴의 ID를 찾을 수 없어 이동할 수 없습니다.') });
 		return;
 	}
-	$('.ehr-gnb a[data-menu-id="${menu-id}"]'.interpolate(menuId)).click();
+	$(this.parentSelector + ' a[data-menu-id="${menu-id}"]'.interpolate(menuId)).click();
 },
 
 changeState: function(toggle, restore) {
 
 	setTimeout(function() {
 		if (restore) {
-			$('.ehr-gnb .active').toggleClass('active', false);
+			$(this.parentSelector + ' .active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
 			var iframe = $('iframe[name="content-iframe"]');
@@ -106,7 +106,7 @@ changeState: function(toggle, restore) {
 		if (toggle) {
 			this.toggleMenu(restore);
 		}
-	}.bind(this) ,0);
+	}.bind(this), 0);
 
 	this.spinner(false);
 },
@@ -119,7 +119,7 @@ changeLocale: function() {
 	setTimeout(function() {
 		this.generate(true).then(function() {
 			setTimeout(function() {
-				$('.ehr-gnb a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
+				$(this.parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
 					.parents('.mega-menu').toggleClass('d-block', false) // mega dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
@@ -137,14 +137,14 @@ toggleMenu: function(show) {
 
 	$('.header-toggle-up')[show ? 'show' : 'hide'](0);
 	$('.header-toggle-down')[show ? 'hide' : 'show'](0);
-	$('.ehr-gnb')[show ? 'slideDown' : 'slideUp'](200, function() {
+	$(this.parentSelector)[show ? 'slideDown' : 'slideUp'](200, function() {
 		$(window).resize(); // .ehr-body resizing --> scrollbar resizing
 	});
 },
 
 setupFavorites: function() {
 
-	$(document).on('click', '.ehr-gnb .fa-star', function(e) {
+	$(document).on('click', this.parentSelector + ' .fa-star', function(e) {
 		var t = $(e.currentTarget),
 		toBeFavorite = t.hasClass('far'),
 		menuAnchor = t.siblings('a[data-menu-id]');
@@ -198,14 +198,14 @@ saveFavorites: function(menuId, toBeFavorite) {
 			Export: []
 		},
 		success: function() {
-			this._gateway.prepareLog('MegaDropdownMenu.saveFavorites ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('MenuMegaDropdown.saveFavorites ${url} success'.interpolate(url), arguments).log();
 
 			this._gateway.updatePortlet(FavoriteMenuPortlet);
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MegaDropdownMenu.saveFavorites ' + url);
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MenuMegaDropdown.saveFavorites ' + url);
 
-			$('.ehr-gnb a[data-menu-id="${menuId}"]'.interpolate(menuId)).siblings('i').toggleClass('far', toBeFavorite).toggleClass('fas', !toBeFavorite);
+			$(this.parentSelector + ' a[data-menu-id="${menuId}"]'.interpolate(menuId)).siblings('i').toggleClass('far', toBeFavorite).toggleClass('fas', !toBeFavorite);
 		}.bind(this)
 	});
 },
@@ -224,8 +224,11 @@ goToLink: function(menuId, url) {
 
 	var iframe = $('iframe[name="content-iframe"]');
 	if (!iframe.length) {
-		$('.ehr-body .container-fluid').data('jsp').destroy();
-		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
+		var container = $('.ehr-body .container-fluid');
+		if (container.data('jsp')) {
+			container.data('jsp').destroy();
+		}
+		container.append('<iframe name="content-iframe"></iframe>');
 	}
 
 	var form = $('form#menu-form');
@@ -287,7 +290,7 @@ handleUrl: function(e) {
 		this.goToLink(menuId, url);
 
 		setTimeout(function() {
-			$('.ehr-gnb .active').toggleClass('active', false);
+			$(this.parentSelector + ' .active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', true);
 
 			anchor.toggleClass('active', true) // 선택된 메뉴 표시
@@ -509,7 +512,7 @@ generate: function(reload) {
 			TableIn4: []
 		},
 		success: function(data) {
-			this._gateway.prepareLog('MegaDropdownMenu.generate ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('MenuMegaDropdown.generate ${url} success'.interpolate(url), arguments).log();
 
 			this.items = this.getMenuTree(data);
 
@@ -527,11 +530,11 @@ generate: function(reload) {
 				return;
 			}
 
-			$(document).on('click', '.ehr-gnb .dropdown-menu', function(e) {
+			$(document).on('click', this.parentSelector + ' .dropdown-menu', function(e) {
 				e.stopImmediatePropagation();
 			});
-			$(document).on('click', '.ehr-gnb a[data-url]', this.handleUrl.bind(this));
-			$(document).on('mouseover', '.ehr-gnb .has-mega-menu', function(e) {
+			$(document).on('click', this.parentSelector + ' a[data-url]', this.handleUrl.bind(this));
+			$(document).on('mouseover', this.parentSelector + ' .has-mega-menu', function(e) {
 				var li = $(e.currentTarget), offsetTop = li.offset().top - li.parent().offset().top;
 				li.find('.mega-menu')
 					.toggleClass('d-block', true)
@@ -540,12 +543,12 @@ generate: function(reload) {
 						maxHeight: 'calc(100vh - ' + $('.ehr-header').height() + 'px - 1rem)'
 					});
 			});
-			$(document).on('mouseout', '.ehr-gnb .has-mega-menu', function(e) {
+			$(document).on('mouseout', this.parentSelector + ' .has-mega-menu', function(e) {
 				$(e.currentTarget).find('.mega-menu').toggleClass('d-block', false);
 			});
 		}.bind(this),
 		error: function(jqXHR) {
-			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MegaDropdownMenu.generate ' + url).message;
+			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MenuMegaDropdown.generate ' + url).message;
 
 			this.items = [{ title: '조회된 메뉴 목록이 없습니다.' }];
 			$(this.parentSelector).html(
