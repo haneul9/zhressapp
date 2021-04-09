@@ -27,7 +27,7 @@ sap.ui.jsview($.app.APP_ID, {
 
 		return new PageHelper({
 			contentItems: [
-				new EmpBasicInfoBox(oController.EmployeeModel).addStyleClass("ml-10px mt-15px"),
+				new EmpBasicInfoBox(oController.EmployeeModel),
 				sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), oController)]
 		});
 	}

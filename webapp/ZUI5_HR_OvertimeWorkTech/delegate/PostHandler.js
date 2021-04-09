@@ -737,7 +737,7 @@ sap.ui.define(
                             results.OtWorkTab2.map(function(elem) {
                                 return $.extend(true, elem, {
                                     AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(elem.Aprsq)  // ${v}차 결재자
-                                })
+                                });
                             }.bind(this))
                         );
                         this.oModel.setProperty(
@@ -807,7 +807,7 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: "",
+                            Mssty: ""
                         };
         
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);

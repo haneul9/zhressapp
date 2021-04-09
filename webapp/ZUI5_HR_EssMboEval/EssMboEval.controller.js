@@ -15,6 +15,7 @@ sap.ui.define([
 		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
 		_Docid : "",
 		_Bukrs : "",
+		_Zhgrade : "",
 		EmployeeModel: new EmployeeModel(),
 		_SheetData :{TableIn2:{results:[]},
 					 TableIn4:{results:[]}},
@@ -111,7 +112,7 @@ sap.ui.define([
 			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
-			var oSel;
+			var oSel,sData=new Array();
 			var vData={
 				IOdkey:"",
 				IConType:"1",
@@ -156,6 +157,7 @@ sap.ui.define([
 						}
 					}else{
 						if(data&&data.TableIn1.results.length){
+							oController._Zhgrade=data.TableIn1.results[0].ZzhgradeP1;
 							if(data.TableIn1.results[0].Apstu=="40"){
 								$.app.byId(oController.PAGEID+"_TextA1").setEditable(true)
 								$.app.byId(oController.PAGEID+"_TextA2").setEditable(true)
@@ -172,10 +174,7 @@ sap.ui.define([
 							oController._Docid=data.TableIn1.results[0].Docid;					
 						}
 						if(data&&data.TableIn2.results.length){						
-							var sData=data.TableIn2.results;
-							sData.forEach(function(e){
-								oSel.addItem(new sap.ui.core.Item({key:e.Code,text:e.Text}));
-							});							
+							sData=data.TableIn2.results;						
 						}
 					}
 				},
@@ -191,6 +190,17 @@ sap.ui.define([
 					}
 				}
 			);
+			sData.forEach(function(e){
+				if(oController._Zhgrade=="13"){
+					if(e.Code=="0006"||e.Code=="0007"||e.Code=="0008"){
+						oSel.addItem(new sap.ui.core.Item({key:e.Code,text:e.Text}));
+					}
+				}else{
+					if(e.Code=="0001"||e.Code=="0002"||e.Code=="0003"||e.Code=="0004"||e.Code=="0005"){
+						oSel.addItem(new sap.ui.core.Item({key:e.Code,text:e.Text}));
+					}
+				}				
+			});	
 		},
 
 		bindData1 : function(oController){

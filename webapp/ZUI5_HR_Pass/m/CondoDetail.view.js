@@ -60,7 +60,7 @@ sap.ui.define([
                                     else return false;
                                 }
                             }
-                        }).addStyleClass("button-light ml-14px"),
+                        }).addStyleClass("button-light ml-14px")
                     ]
                 }),
                 contentStyleClass: "sub-app-content",

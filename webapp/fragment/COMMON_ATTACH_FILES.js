@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 $.sap.declare("fragment.COMMON_ATTACH_FILES");
 $.sap.require("control.ODataFileUploader");
 jQuery.sap.require("sap.ui.core.util.File");
@@ -17,11 +18,11 @@ fragment.COMMON_ATTACH_FILES = {
 			buttonText: "{i18n>LABEL_00134}", // 업로드
 			buttonOnly: true,
 			//uploadUrl : "/sap/opu/odata/sap/ZL2P01GW0001_SRV/FileSet/",
-			uploadComplete: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.uploadComplete(oEvent, vPage)}, oController),
-			uploadAborted: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.uploadAborted(oEvent, vPage)}, oController),
-			fileSizeExceed: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.fileSizeExceed(oEvent, vPage)}, oController),
-			typeMissmatch: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.typeMissmatch.bind(oController, oEvent)}, oController),
-			change: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onFileChange(oEvent,oController, vPage)}, oController),
+			uploadComplete: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.uploadComplete(oEvent, vPage);}, oController),
+			uploadAborted: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.uploadAborted(oEvent, vPage);}, oController),
+			fileSizeExceed: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.fileSizeExceed(oEvent, vPage);}, oController),
+			typeMissmatch: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.typeMissmatch.bind(oController, oEvent);}, oController),
+			change: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onFileChange(oEvent,oController, vPage);}, oController),
 			visible: {
 				parts: [
 					{path: "/Settings/Editable"},
@@ -58,7 +59,7 @@ fragment.COMMON_ATTACH_FILES = {
 					items: [
 						new sap.m.Label({
 							text: "{/Settings/Label}",
-							required: "{/Settings/Required}", 
+							required: "{/Settings/Required}"
 						//	design: "Bold"
 						}).addStyleClass("sub-title pt-9px"), // 첨부파일
 						new sap.m.MessageStrip({
@@ -79,7 +80,7 @@ fragment.COMMON_ATTACH_FILES = {
 				new sap.m.FlexBox({
 					items: [
 						new sap.m.Button({
-							press: $.proxy(function(oEvent){this.onPressHelpBtn.bind(oController,vPage)}, oController),
+							press: $.proxy(function(){this.onPressHelpBtn.bind(oController,vPage);}, oController),
 							text: "{i18n>LABEL_00149}", // 안내
 							visible: {
 								path: "/Settings/HelpButton",
@@ -127,7 +128,7 @@ fragment.COMMON_ATTACH_FILES = {
 				}),
 				new sap.m.Button({
 					icon: "sap-icon://sys-cancel",
-					press: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onDeleteAttachFileRow(oEvent,oController,vPage)}, oController),
+					press: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onDeleteAttachFileRow(oEvent,oController,vPage);}, oController),
 					visible: {
 						path: "/Settings/Editable",
 						formatter: function(v) {
@@ -205,7 +206,9 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
 
 		this.refreshAttachFileList(oController,null,vPage);
-		this.hideLine(oAttachbox);
+		if(oController.PAGEID=="MedApply"){
+			this.hideLine(oAttachbox);
+		}
 	},
 
 	hideLine : function(oAttachbox){
@@ -331,7 +334,7 @@ fragment.COMMON_ATTACH_FILES = {
 					oTextFlexBox.addItem(
 						new sap.m.Text({
 							text: oHelpTextList[i].Text,
-							textAlign: "Begin",
+							textAlign: "Begin"
 						}).addStyleClass("ml-4px mr-4px")
 					);
 				}
@@ -359,7 +362,7 @@ fragment.COMMON_ATTACH_FILES = {
 	/*
 	 * 첨부파의 크기가 Max Size를 넘었을 경우의 처리내역
 	 */
-	fileSizeExceed: function (oEvent, vPage) {
+	fileSizeExceed: function (oEvent) {
 		var sName = oEvent.getParameter("name"),
 			fSize = oEvent.getParameter("size"),
 			fLimit = oEvent.getSource().getMaximumFileSize(),
@@ -397,7 +400,7 @@ fragment.COMMON_ATTACH_FILES = {
 	/*
 	 * 첨부파일의 Upload가 실패하였을때 처리 내역
 	 */
-	uploadAborted: function (oEvent,vPage) {
+	uploadAborted: function () {
 		sap.m.MessageBox.alert(this.getBundleText("MSG_00031"));
 	},
 
@@ -408,13 +411,14 @@ fragment.COMMON_ATTACH_FILES = {
 		var oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"+vPage),
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"+vPage),
 			f1 = document.getElementById(oController.PAGEID + "_ATTACHFILE_BTN"+vPage+"-fu_input-inner"),
-			oTable=sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
+			// oTable=sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
 			JSonModel = oAttachbox.getModel(),
 			vFileData = JSonModel.getProperty("/Data"),
 			aFileList = [],
 			vMode = JSonModel.getProperty("/Settings/Mode"),
 			vMax = JSonModel.getProperty("/Settings/Max"),
 			files = jQuery.sap.domById(oController.PAGEID + "_ATTACHFILE_BTN"+vPage+ "-fu").files;
+
 		if (files) {
 			vFileData.forEach(function(elem) {
 				aFileList.push(elem);
@@ -445,8 +449,9 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.clear();
 		oFileUploader.setValue("");
 		if (f1) f1.setAttribute("value", "");
-
-		fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
+		if(oController.PAGEID=="MedApply"){
+			fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
+		}		
 	},
 
 	callDeleteFileService: function(fileInfo) {
@@ -519,7 +524,7 @@ fragment.COMMON_ATTACH_FILES = {
 			} catch (ex) {
 				common.Common.log(ex);
 			}
-		}
+		};
 
 		sap.m.MessageBox.show(oController.getBundleText("MSG_00033"), {
 			title: oController.getBundleText("LABEL_00150"),
@@ -662,9 +667,9 @@ fragment.COMMON_ATTACH_FILES = {
 
 	//싱글 파일일때만 쓸 것
 	uploadFiles: function (vPages) {
-		var vFiles=new Array();
-		var dFiles=new Array();
-		var vAppnm="";
+		var vFiles = [];
+		var dFiles = [];
+		var vAppnm = "";
 		var _handleSuccess = function (data) {
 			if(!vAppnm) vAppnm = $(data).find("content").next().children().eq(7).text();
 
@@ -683,24 +688,26 @@ fragment.COMMON_ATTACH_FILES = {
 				oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"+vPages[i]),
 				vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [],
 				aDeleteFiles = oAttachbox.getModel().getProperty("/DelelteDatas") || [],
-				vAppnm = oAttachbox.getModel().getProperty("/Settings/Appnm") || "",
 				oController = this.oView.getController(),
 				vPernr = oController.getSessionInfoByKey("Pernr");
 				vFiles.push(vAttachDatas);
-				// 파일 삭제
-				if(aDeleteFiles.length) {
-					var bDeleteFlag = true;
-					aDeleteFiles.some(function(elem) {
-						bDeleteFlag = fragment.COMMON_ATTACH_FILES.callDeleteFileService(elem);
-						dFiles.push(elem);
-						return !bDeleteFlag;
-					});
+				
+			vAppnm = oAttachbox.getModel().getProperty("/Settings/Appnm") || "";
 
-					if(!bDeleteFlag) {
-						sap.m.MessageToast.show(this.getBundleText("MSG_00031"), { my: "center center", at: "center center"});
-						return;
-					}
-				}			
+			// 파일 삭제
+			if(aDeleteFiles.length) {
+				var bDeleteFlag = true;
+				aDeleteFiles.some(function(elem) {
+					bDeleteFlag = fragment.COMMON_ATTACH_FILES.callDeleteFileService(elem);
+					dFiles.push(elem);
+					return !bDeleteFlag;
+				});
+
+				if(!bDeleteFlag) {
+					sap.m.MessageToast.show(this.getBundleText("MSG_00031"), { my: "center center", at: "center center"});
+					return;
+				}
+			}			
 		}
 
 		// 신규 등록된 파일만 업로드
@@ -734,4 +741,4 @@ fragment.COMMON_ATTACH_FILES = {
 
 		return vAppnm;
 	}
-}
+};

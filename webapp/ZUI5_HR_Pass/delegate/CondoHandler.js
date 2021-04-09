@@ -147,10 +147,10 @@ sap.ui.define(
 
 				if(this.oModel.getProperty("/Detail/Data/Compcd") === "T") {
 					// 첨단, 7일 후부터 선택가능
-					if(moment(startDate).isAfter(moment().add(7, 'days'))) {
+					if(moment(startDate).isAfter(moment().add(7, "days"))) {
 						this.oModel.setProperty("/Detail/Data/minDate", moment(startDate).toDate());
 					} else {
-						this.oModel.setProperty("/Detail/Data/minDate", moment().add(7, 'days').toDate());
+						this.oModel.setProperty("/Detail/Data/minDate", moment().add(7, "days").toDate());
 					}
 				} else {
 					// 기초 현재일부터  선택가능

@@ -1,3 +1,4 @@
+/* eslint-disable no-native-reassign */
 /* eslint-disable no-global-assign */
 sap.ui.define(
 	[

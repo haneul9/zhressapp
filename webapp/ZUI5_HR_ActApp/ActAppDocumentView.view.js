@@ -29,7 +29,7 @@ sap.ui.define([
 					design: sap.m.ToolbarDesign.Auto,
 					content: [
 						new sap.m.Label(oController.PAGEID + "_StatusPanel_Title", {
-							text: "{i18n>LABEL_02189}",
+							text: "{i18n>LABEL_02189}"
 						//	design: "Bold"
 						}).addStyleClass("L2PFontFamily act-sub-title") 
 					]

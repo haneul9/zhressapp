@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Lotte Chemical e-HR</title>
 <link rel="shortcut icon" href="favicon.ico" />
-<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-regular.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-500.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-700.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/noto-sans-kr-v12-latin_korean-900.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=xaDCzJYzLbvT5p1gZUwtUSPVCOu09U6bGQSn2N_NOA4" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=c61yamPOfQNkExV5rDd4cKEQDwPGU6I-L06tAAlCvBo" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=3e7W-BZ49bJAhlDl7AiXrmNn05xzjTsO30lii_HnwmA" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=jmpyB3WQzGFAcb5vdct5VSSE_K5pcsi0a15-CPPkX-Y" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=effvCat-1q2-PczgsRxsfGqiRSakCRmiBzjf0HZqT6A" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=NWOXyTJK_vgMLIZExdCcjI0nNJegQxs2GF8PCBZMYck" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=RH-st053oiEuw9gS_Ck05AuUrjhSxamDHdO8Fkf8Jb4" as="font" type="font/woff2" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=WWGDBnpJGE7YBqRoV2obYRY7Ah1yvfznbuCh14PI2vQ" as="font" type="font/woff2" />
 <link rel="stylesheet" href="css/noto-sans-kr.css" />
 <link rel="stylesheet" href="css/fontawesome-all.min.css" />
 <link rel="stylesheet" href="css/utils/box-size.css" />
@@ -52,16 +52,14 @@ function initHome() {
 	}
 
 	setTimeout(function() {
-		var locale = sessionStorage.getItem('ess.sf-user.locale');
-		if (!locale) {
-			return;
-		}
-
+		var locale = window._session.locale();
 		$('#sf-locale')
 			.val(locale)
 			.change(function() {
 				window._session.changeSFUserLocale();
 			});
+
+		$('html').attr('locale', locale).attr('lang', (sessionStorage.getItem('ehr.sf-user.language') || 'ko').toLowerCase());
 	});
 
 	setTimeout(function() {

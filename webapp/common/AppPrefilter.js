@@ -40,6 +40,9 @@ AppPrefilter.prototype.init = function() {
 	try {
 		this.checkMenuId();						// mid parameter 존재 확인
 		var result = this.checkMenuAuthority();	// mid에 해당하는 메뉴 권한 및 비밀번호 재확인 필요 메뉴인지 확인
+		setTimeout(function() {
+			window._use_emp_info_box = result.EPinfo === "X"; // EmpBasicInfoBox 표시 여부
+		}, 0);
 		this.confirmADPW(result);				// 개인정보 노출 메뉴인 경우 비밀번호 재확인(MOIN 비밀번호, 최초 1회만 확인)
 
 	} catch(e) {
@@ -94,7 +97,9 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 			this._gateway.prepareLog("common.AppPrefilter.checkMenuAuthority success.", arguments).log();
 
 			// ERole !== 'X' 이면 권한이 없는 것이지만 권한이 없으면 아래 error function으로 처리됨
-			result.ECheckPw = (((((data || {}).d || {}).Export || {}).results || [])[0] || {}).ECheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
+			var ExportResult = (((((data || {}).d || {}).Export || {}).results || [])[0] || {});
+			result.ECheckPw = ExportResult.ECheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
+			result.EPinfo = ExportResult.EPinfo; // EmpBasicInfoBox 표시 여부
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
@@ -112,7 +117,7 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 
 AppPrefilter.prototype.confirmADPW = function(result) {
 
-	if (result.ECheckPw === "X" && sessionStorage.getItem("ess.ad-pw-confirm.state") !== "ok") {
+	if (result.ECheckPw === "X" && sessionStorage.getItem("ehr.ad-pw-confirm.state") !== "ok") {
 		this._gateway.spinner(false);
 		this._gateway.confirmADPW({
 			message: "개인/민감정보 조회를 위해 MOIN 비밀번호를 입력하시기 바랍니다.",
@@ -132,7 +137,7 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 
 	} else {
 		if (result.ECheckPw !== "X") {
-			sessionStorage.removeItem('ess.ad-pw-confirm.state');
+			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
 		}
 
 		this._gateway.successAppPrefilter(); // 메뉴 iframe 정상 로딩시 Home 화면 후속 처리

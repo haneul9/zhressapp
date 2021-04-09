@@ -1,7 +1,7 @@
 sap.ui.define(
     [
         "common/PageHelper",  //
-        "./delegate/SubstituteWork",
+        "./delegate/SubstituteWork"
     ],
     function (PageHelper, SubstituteWork) {
         "use strict";

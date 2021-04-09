@@ -13,7 +13,7 @@ ZUI5_HR_ActApp.common.Common = {
     oSubjectList: null,
 
     loadCodeData: function (oController, Persa, Actda, Controls, Persa_nc) {
-        if (!Controls || !Controls.length) return;
+        if (!Controls || !Controls.length) {return;}
 
         var mEmpCodeList = sap.ui.getCore().getModel("EmpCodeList"),
             vEmpCodeList = {
@@ -494,9 +494,9 @@ ZUI5_HR_ActApp.common.Common = {
             var Fieldname = common.Common.underscoreToCamelCase(elem.Fieldname),
                 TextFieldname = Fieldname + "_Tx";
 
-            if (index % 2 == 0) oRow = new sap.ui.commons.layout.MatrixLayoutRow({
+            if (index % 2 == 0) {oRow = new sap.ui.commons.layout.MatrixLayoutRow({
                 height: "40px"
-            });
+            });}
 
             var vHeaderText = "";
             if (elem.Label && elem.Label != "") {

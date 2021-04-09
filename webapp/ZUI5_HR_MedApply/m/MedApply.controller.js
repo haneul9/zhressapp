@@ -24,6 +24,7 @@ sap.ui.define([
 		_SelData:{Sel1:[],Sel2:[],Sel3:[],Sel4:[],Sel5:[],Sel6:[]},
 		_onDialog:"",
 		_onClose:"",
+		_MedDate : null,
 		_vArr1:["Mycharge","NsuppAmt","Zmedrl","BaseAmt","Zkiobd","Zkibbm","Zkijbd","Zkijbm","Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
 		_vArr2:["Ptamt","Medsp","Oiamt","Znobcm","Medpp","Insnp","Znobcd","Medmp","Inspp","Zdbcrl","Ziftrl","Framt"],
 		onInit: function () {
@@ -92,6 +93,7 @@ sap.ui.define([
 			var oController=$.app.getController();
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
 			var vData={Pernr:oController._SessionData.Pernr,Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",BukrsExport:[]};
+			oController._MedDate=new Date(vDatum.getValue());
 			function getBukrs(){
 				oModel.create("/BukrsImportSet", vData, null,
 					function(data,res){
@@ -321,14 +323,14 @@ sap.ui.define([
 		},
 
 		initTdata : function(Flag){
-			var oController=$.app.getController();
+			var	oController = $.app.getController();
 			var oSessionData=oController._SessionData;	
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });	
 			oController._tData={
 				MedDate:null,
 				Inpdt:null,
-				Begda:new Date(),
-				Endda:"\/Date("+new Date().getTime()+")\/",
+				Begda:new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),9,0,0),
+				Endda:"\/Date("+new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),9,0,0).getTime()+")\/",
 				HospType:"",
 				Kdsvh:"",
 				Pernr:oSessionData.Pernr,
@@ -361,6 +363,7 @@ sap.ui.define([
 				Mycharge:"0",
 				Npayt:"0",
 				SuppAmt:"0",
+				Zmedrl:"0",
 				NsuppAmt:"0",
 				Zfvcrl:"0",
 				Ziftrl:"0",
@@ -389,6 +392,9 @@ sap.ui.define([
 				Framt:"0",
 				Close:oController._onClose
 			};
+			if(oController._tData.MedDate==null){
+				oController._tData.MedDate=oController._MedDate;
+			}
 		},
 
  

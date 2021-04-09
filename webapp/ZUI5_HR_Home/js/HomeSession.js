@@ -2,15 +2,15 @@ function HomeSession(_gateway, initHome) {
 
 	/*
 	sessionStorage = {
-		ess.sf-user.name
-		ess.sf-user.photo
-		ess.sf-user.locale
-		ess.odata.user
-		ess.odata.user.percod
-		ess.odata.csrf-token
-		ess.odata.destination
-		ess.menu-auth.state
-		ess.ad-pw-confirm.state
+		ehr.sf-user.name
+		ehr.sf-user.photo
+		ehr.sf-user.locale
+		ehr.odata.user
+		ehr.odata.user.percod
+		ehr.odata.csrf-token
+		ehr.odata.destination
+		ehr.menu-auth.state
+		ehr.ad-pw-confirm.state
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -25,7 +25,7 @@ $.extend(HomeSession.prototype, {
 
 init: function(initHome) {
 
-	sessionStorage.setItem('ess.odata.destination', this._gateway.s4hanaDestination());
+	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
 		this.retrieveSFUserName(),		  // 사번 조회
@@ -57,7 +57,7 @@ init: function(initHome) {
 retrieveSFUserName: function() {
 
 	if (!this._gateway.isPRD() && this._gateway.parameter("pernr")) {
-		sessionStorage.setItem('ess.sf-user.name', this._gateway.parameter("pernr"));
+		sessionStorage.setItem('ehr.sf-user.name', this._gateway.parameter("pernr"));
 		return new Promise(function(v) {
 			v();
 		});
@@ -68,12 +68,12 @@ retrieveSFUserName: function() {
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserName success', arguments).log();
 
-			sessionStorage.setItem('ess.sf-user.name', data.name);
+			sessionStorage.setItem('ehr.sf-user.name', data.name);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveSFUserName');
 
-			sessionStorage.removeItem('ess.sf-user.name');
+			sessionStorage.removeItem('ehr.sf-user.name');
 		}.bind(this)
 	}).promise();
 },
@@ -90,15 +90,15 @@ retrieveOdataCsrfToken: function() {
 
 			var token = jqXHR.getResponseHeader('x-csrf-token');
 			if (token) {
-				sessionStorage.setItem('ess.odata.csrf-token', token);
+				sessionStorage.setItem('ehr.odata.csrf-token', token);
 			} else {
-				sessionStorage.removeItem('ess.odata.csrf-token');
+				sessionStorage.removeItem('ehr.odata.csrf-token');
 			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveOdataCsrfToken');
 
-			sessionStorage.removeItem('ess.odata.csrf-token');
+			sessionStorage.removeItem('ehr.odata.csrf-token');
 		}.bind(this)
 	}).promise();
 },
@@ -116,15 +116,15 @@ retrieveSFUserPhoto: function() {
 
 			var result = this._gateway.odataResults(data);
 			if (!$.isEmptyObject(result)) {
-				sessionStorage.setItem('ess.sf-user.photo', "data:${mimeType};base64,${photo}".interpolate(result.mimeType, result.photo));
+				sessionStorage.setItem('ehr.sf-user.photo', "data:${mimeType};base64,${photo}".interpolate(result.mimeType, result.photo));
 			} else {
-				sessionStorage.setItem('ess.sf-user.photo', 'images/photoNotAvailable.gif');
+				sessionStorage.setItem('ehr.sf-user.photo', 'images/photoNotAvailable.gif');
 			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveSFUserPhoto');
 
-			sessionStorage.setItem('ess.sf-user.photo', 'images/photoNotAvailable.gif');
+			sessionStorage.setItem('ehr.sf-user.photo', 'images/photoNotAvailable.gif');
 		}.bind(this)
 	}).promise();
 },
@@ -140,20 +140,20 @@ retrieveSFUserLocale: function() {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserLocale success', arguments).log();
 
 			if (data && data.d) {
-				sessionStorage.setItem('ess.sf-user.locale', data.d.defaultLocale);
-				sessionStorage.setItem('ess.sf-user.language', data.d.defaultLocale.replace(/^([a-zA-Z]{2}).*$/, '$1').toUpperCase());
+				sessionStorage.setItem('ehr.sf-user.locale', data.d.defaultLocale);
+				sessionStorage.setItem('ehr.sf-user.language', data.d.defaultLocale.replace(/^([a-zA-Z]{2}).*$/, '$1').toUpperCase());
 			} else {
 				var sfLocale = $('#sf-locale option:selected');
-				sessionStorage.setItem('ess.sf-user.locale', sfLocale.val());
-				sessionStorage.setItem('ess.sf-user.language', sfLocale.data('lang'));
+				sessionStorage.setItem('ehr.sf-user.locale', sfLocale.val());
+				sessionStorage.setItem('ehr.sf-user.language', sfLocale.data('lang'));
 			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveSFUserLocale');
 
 			var sfLocale = $('#sf-locale option:selected');
-			sessionStorage.setItem('ess.sf-user.locale', sfLocale.val());
-			sessionStorage.setItem('ess.sf-user.language', sfLocale.data('lang'));
+			sessionStorage.setItem('ehr.sf-user.locale', sfLocale.val());
+			sessionStorage.setItem('ehr.sf-user.language', sfLocale.data('lang'));
 		}.bind(this)
 	}).promise();
 },
@@ -182,14 +182,20 @@ changeSFUserLocale: function() {
 
 afterChangeLocale: function() {
 
-	var loginInfo = this.loginInfo();
+	var sfLocale = $('#sf-locale option:selected'),
+	locale = sfLocale.val(),
+	language = sfLocale.data('lang');
 
 	setTimeout(function() {
-		$('html').attr('locale', sessionStorage.getItem('ess.sf-user.locale'));
-		$('html').attr('lang', sessionStorage.getItem('ess.sf-user.language'));
+		sessionStorage.setItem('ehr.sf-user.locale', locale);
+		sessionStorage.setItem('ehr.sf-user.language', language);
+
+		$('html').attr('locale', locale);
+		$('html').attr('lang', language.toLowerCase());
 	}, 0);
 
-	loginInfo.Langu = sessionStorage.getItem('ess.sf-user.language');
+	var loginInfo = this.loginInfo();
+	loginInfo.Langu = language;
 
 	this.loginInfo(loginInfo);
 
@@ -236,7 +242,7 @@ removeLocaleChangeCallbackOwner: function(callbackOwner) {
 
 locale: function() {
 
-	return sessionStorage.getItem('ess.sf-user.locale');
+	return sessionStorage.getItem('ehr.sf-user.locale');
 },
 
 encodePernr: function() {
@@ -254,15 +260,15 @@ encodePernr: function() {
 			this._gateway.prepareLog('HomeSession.encodePernr ${url} success'.interpolate(url), arguments).log();
 
 			if (data && data.d) {
-				sessionStorage.setItem('ess.odata.user.percod', data.d.Percod);
+				sessionStorage.setItem('ehr.odata.user.percod', data.d.Percod);
 			} else {
-				sessionStorage.removeItem('ess.odata.user.percod');
+				sessionStorage.removeItem('ehr.odata.user.percod');
 			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.encodePernr ' + url);
 
-			sessionStorage.removeItem('ess.odata.user.percod');
+			sessionStorage.removeItem('ehr.odata.user.percod');
 		}.bind(this)
 	}).promise();
 },
@@ -272,7 +278,7 @@ retrieveLoginInfo: function() {
 	return $.getJSON({
 		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
 		data: {
-			$filter: "Lpmid eq 'HACTA' and Percod eq '${percod}'".interpolate(sessionStorage.getItem('ess.odata.user.percod'))
+			$filter: "Lpmid eq 'HACTA' and Percod eq '${percod}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'))
 		},
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();
@@ -281,34 +287,34 @@ retrieveLoginInfo: function() {
 			if (result) {
 				delete result.__metadata;
 				result.Dtfmt = result.Dtfmt || 'yyyy-MM-dd';
-				result.Langu = sessionStorage.getItem('ess.sf-user.language') || result.Langu;
+				result.Langu = sessionStorage.getItem('ehr.sf-user.language') || result.Langu;
 				this.loginInfo(result);
 			} else {
-				sessionStorage.removeItem('ess.odata.user');
+				sessionStorage.removeItem('ehr.odata.user');
 			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveLoginInfo');
 
-			sessionStorage.removeItem('ess.odata.user');
+			sessionStorage.removeItem('ehr.odata.user');
 		}.bind(this)
 	}).promise();
 },
 
 pernr: function() {
 
-	return sessionStorage.getItem('ess.sf-user.name');
+	return sessionStorage.getItem('ehr.sf-user.name');
 },
 
 loginInfo: function(loginInfo) {
 
 	if (typeof loginInfo === 'string' || loginInfo instanceof String) {
-		return (JSON.parse(sessionStorage.getItem('ess.odata.user')) || {})[loginInfo];
+		return (JSON.parse(sessionStorage.getItem('ehr.odata.user')) || {})[loginInfo];
 	} else if ($.isPlainObject(loginInfo)) {
-		sessionStorage.setItem('ess.odata.user', JSON.stringify(loginInfo));
+		sessionStorage.setItem('ehr.odata.user', JSON.stringify(loginInfo));
 		return this;
 	} else {
-		return JSON.parse(sessionStorage.getItem('ess.odata.user')) || {};
+		return JSON.parse(sessionStorage.getItem('ehr.odata.user')) || {};
 	}
 },
 
@@ -327,12 +333,12 @@ authenticateADAccount: function(pw) {
 		success: function() {
 			this._gateway.prepareLog('HomeSession.authenticateADAccount ${url} success'.interpolate(url), arguments).log();
 
-			sessionStorage.setItem('ess.ad-pw-confirm.state', 'ok');
+			sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
 		}.bind(this),
-		error: function() {
+		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount ' + url);
 
-			sessionStorage.removeItem('ess.ad-pw-confirm.state');
+			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
 		}.bind(this)
 	});
 },
@@ -373,7 +379,7 @@ confirmADPW: function(o) {
 
 			if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
 				setTimeout(function() {
-					sessionStorage.setItem('ess.ad-pw-confirm.state', 'ok');
+					sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
 					this._gateway.confirm('hide');
 				}.bind(this), 0);
 
@@ -400,10 +406,10 @@ confirmADPW: function(o) {
 registerToken: function(tk) {
 
 	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
-	percod = sessionStorage.getItem('ess.odata.user.percod');
+	percod = sessionStorage.getItem('ehr.odata.user.percod');
 
-	if (tk === null || tk === "") return;
-	if (percod === null || percod === "") return
+	if (tk === null || tk === '') { return; }
+	if (percod === null || percod === '') { return; }
 
 	return this._gateway.post({
 		url: url,

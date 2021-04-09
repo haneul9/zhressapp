@@ -97,8 +97,6 @@ table.search-box.search-bg {table-layout:auto !important}
 .search-box.search-bg td {padding:10px 10px 10px 0}
 .search-box.search-bg td span.sapMLabel{font-weight:500;padding-left:20px;padding-top:5px;}
 
-
-
 .app-title-container + .employee-basic-info-box {margin-top:8px}
 .employee-basic-info-box {position: absolute; z-index: 1; right:40px;top:6px} 
 .employee-basic-info-box .employee-basic-info-photo {border:1px solid #ddd; border-radius:50%}
@@ -112,7 +110,6 @@ table.search-box.search-bg {table-layout:auto !important}
 .tm-employee-basic-info-box .tm-employee-basic-info-nickname {font-size:20px; font-weight:500}
 .tm-employee-basic-info-box .tm-employee-basic-info-title {font-size:16px}
 .tm-employee-basic-info-box .tm-employee-basic-info-department {font-size:14px; color:#666}
-
 
 .info-box {margin-top:10px; align-items:flex-end; align-content:flex-end}
 .info-field-group .sapMFlexBox + .sapMFlexBox {margin-left:30px}
@@ -529,6 +526,9 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .sapUiCalMonthView .sapUiCalWH, .sapUiCalMonthView .sapUiCalItem {width:14%}
 /* Calendar 주차표시 삭제 */
 
+/* 첨부파일 UI수정 */
+.custom-attach-file .sub-title {}
+
 /* SAPUI5 Common */
 .sapMITH {border-bottom:1px solid #d9d9d9; box-shadow:none}
 .sapUiTableContentRow.sapUiTableTr.sapUiTableRowHvr {background-color:rgba(200, 220, 243, 0.3)}
@@ -650,3 +650,5 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .sapMGrowingListTriggerText>.sapMSLITitle {margin:.75rem 0 .25rem;font-size:.875rem;}
 .app-content-container-mobile .sapMGrowingListTriggerText {padding:0;} 
 .app-content-container-mobile .sapMIBar.sapMTB .sapMBarChild {margin-left:.25rem}   
+
+/**/

@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 sap.ui.define(
 	[
 		"common/Common",
@@ -250,14 +251,14 @@ sap.ui.define(
 						if (oSrtf.getSelectedKey() != "0000")
 							updateData_AddInfoSort["Srtf" + j] = oSrtf.getSelectedKey();
 						else 
-							updateData_AddInfoSort["Srtf" + j] = '';
+							updateData_AddInfoSort["Srtf" + j] = "";
 					}
 
 					if (oSrtt) {
 						if (oSrtt.getSelectedKey() != "0000")
 							updateData_AddInfoSort["Srtt" + j] = oSrtt.getSelectedKey();
 						else
-							updateData_AddInfoSort["Srtt" + j] = '';
+							updateData_AddInfoSort["Srtt" + j] = "";
 					}
 				}
 

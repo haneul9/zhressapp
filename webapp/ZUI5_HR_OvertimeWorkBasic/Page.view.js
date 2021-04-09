@@ -3,7 +3,7 @@ sap.ui.define(
         "common/Common", //
         "common/PageHelper",
         "common/ZHR_TABLES",
-        "./delegate/OvertimeWork",
+        "./delegate/OvertimeWork"
     ],
     function (Common, PageHelper, ZHR_TABLES, OvertimeWork) {
         "use strict";

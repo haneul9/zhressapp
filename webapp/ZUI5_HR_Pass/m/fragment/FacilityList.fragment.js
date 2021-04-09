@@ -137,7 +137,7 @@ sap.ui.define([
 						]
 					})
 				}
-			})
+			});
 		},
 
 		getInfoBox: function() {
@@ -234,7 +234,7 @@ sap.ui.define([
 						]
 					})
 				}
-			})
+			});
 		}
 	});
 });

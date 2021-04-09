@@ -261,7 +261,7 @@ sap.ui.define(
                         rowIdx: null,
                         pernr: null,
                         message: null,
-                        context: null,
+                        context: null
                     };
 
                 if(Common.isEmptyArray(detailData)) {
@@ -283,7 +283,7 @@ sap.ui.define(
                             return true;
                         }
                     });
-                }.bind(this));
+                });
 
                 if(errInfo.pernr) {
                     // 해당 index로 scroll
@@ -468,7 +468,7 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: "",
+                            Mssty: ""
                         },
                         callback = function(o) {
                             switch(o.Otype) {

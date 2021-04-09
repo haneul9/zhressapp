@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 sap.ui.jsfragment("ZUI5_HR_ActApp.fragment.ActionOrgDocumentFilter", {
 	createContent: function (oController) {
 		var oDialog = new sap.m.ViewSettingsDialog(oController.PAGEID + "_ADVF_Dialog", {

@@ -40,31 +40,54 @@ sap.ui.define([
 							new sap.m.HBox({
 								direction: sap.m.FlexDirection.Column,
 								items: [
-									new sap.m.Text({									
-										text: {
-											parts: [{ path: "EMessage" }, { path: "EMessage1" }],
-											formatter: function(v1, v2) {
-												if(Common.checkNull(v2)) this.addStyleClass("");
-												
-												return v1;
-											}
-										},										
-										textAlign: "Begin",										
+									new sap.m.HBox({
+										items: [
+											new sap.ui.core.Icon({
+												src: "sap-icon://information"
+											})
+											.addStyleClass("color-icon-blue mt-1px"),
+											new sap.m.Text({									
+												text: {
+													parts: [{ path: "EMessage" }, { path: "EMessage1" }],
+													formatter: function(v1, v2) {
+														if(Common.checkNull(v2)) this.addStyleClass("");
+														
+														return v1;
+													}
+												},										
+												textAlign: "Begin",										
+											})
+											.addStyleClass("color-info-red font-14px")
+										]
+									}),
+									new sap.m.HBox({
+										items: [
+											new sap.ui.core.Icon({
+												src: "sap-icon://information",
+												visible: {
+													path: "EMessage1",
+													formatter: function(v) {
+														if(v) return true;
+														else return false;
+													}
+												}
+											})
+											.addStyleClass("color-icon-blue mt-1px"),
+											new sap.m.Text({
+												text: "{EMessage1}",										
+												textAlign: "Begin",										
+												visible: {
+													path: "EMessage1",
+													formatter: function(v) {
+														if(v) return true;
+														else return false;
+													}
+												}
+											})
+											.addStyleClass("color-info-red font-14px message-strip")
+										]
 									})
-									.addStyleClass("color-info-red font-14px"),
-
-									new sap.m.Text({
-										text: "{EMessage1}",										
-										textAlign: "Begin",										
-										visible: {
-											path: "EMessage1",
-											formatter: function(v) {
-												if(v) return true;
-												else return false;
-											}
-										}
-									})
-									.addStyleClass("color-info-red font-14px message-strip")
+									.addStyleClass("ml-0 mt-5px")
 								]
 							})
 							.addStyleClass("ml-10px")

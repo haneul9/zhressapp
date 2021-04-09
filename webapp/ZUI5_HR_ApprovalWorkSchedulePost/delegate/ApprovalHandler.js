@@ -170,7 +170,7 @@ sap.ui.define(
                         Common.copyByMetadata("ZHR_BATCHAPPROVAL_SRV", "entityType", "OvertimeAppConfirmTableIn", elem), 
                         { Status: actionStatus }
                     );
-                }.bind(this));
+                });
 
                 ODataService.OvertimeAppConfirmSetByProcess.call(
                     this.oController,

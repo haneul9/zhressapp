@@ -74,11 +74,11 @@ sap.ui.define(
                                                 new sap.ui.core.Icon({
                                                     src : "sap-icon://information",
                                                     size : "14px",
-                                                    color : "#0854a0"
+                                                    color : "#da291c"
                                                 }).addStyleClass("mt-5px"),
                                                 new sap.m.Text({ 
                                                     text : "{i18n>MSG_51002}" // B2B 사이트에서 응시한  OPIc 성적은 등록신청 불필요합니다.(응시 익월 자동 반영)
-                                                }).addStyleClass("ml-6px")
+                                                }).addStyleClass("ml-6px color-info-red")
                                             ]
                                         }),
                                         new sap.m.HBox({
@@ -307,7 +307,7 @@ sap.ui.define(
                             }).addStyleClass("search-field-group"),
                             new sap.m.HBox({
                                 items: [
-                                    this.getLabel("{i18n>LABEL_51018}", true),  // S 점수
+                                    this.getLabel("{i18n>LABEL_51018}", true),  // 점수
                                     new sap.m.Input({
                                         required: true,
                                         width: "100px",

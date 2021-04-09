@@ -33,7 +33,7 @@ sap.ui.define([
 					new sap.m.FlexBox({
                         items: [
 							new sap.m.Label({
-                                text: "{i18n>LABEL_09038}",                                
+                                text: "{i18n>LABEL_09038}"                              
                             }).addStyleClass("sub-title") // 나의 예약 현황
 						]
                     })
@@ -85,7 +85,7 @@ sap.ui.define([
 					new sap.m.FlexBox({
                         items: [
 							new sap.m.Label({
-                                text: "{i18n>LABEL_09051}",                                
+                                text: "{i18n>LABEL_09051}"                           
                             }).addStyleClass("sub-title") // 이용신청
 						]
                     })

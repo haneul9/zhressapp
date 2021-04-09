@@ -100,7 +100,7 @@ sap.ui.define(
                                                         change: PriorHandler.changeSchda.bind(PriorHandler)
                                                     }),
                                                     new sap.m.Text({
-                                                        text: "{/Detail/Header/WeekName}",
+                                                        text: "{/Detail/Header/WeekName}"
                                                     }).addStyleClass("ml-10px font-medium font-14px"),
                                                     new sap.m.ObjectStatus({
                                                         layoutData: new sap.m.FlexItemData({ styleClass: "lh-1px" }),
@@ -522,7 +522,7 @@ sap.ui.define(
                     state: {
                         path: "Ligbn",
                         formatter: function(v) {
-                            return v === "2" || v === "3" ? sap.ui.core.ValueState.Error : sap.ui.core.ValueState.None
+                            return v === "2" || v === "3" ? sap.ui.core.ValueState.Error : sap.ui.core.ValueState.None;
                         }
                     }
                 }).addStyleClass("color-black");

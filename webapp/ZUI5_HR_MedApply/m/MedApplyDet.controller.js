@@ -91,16 +91,16 @@ sap.ui.define([
 			this.onAfterOpen();
 		},
 
-		onAfterShow:function(){
-// 			common.EmpBasicInfoBoxCustom.setHeader(this._SessionData.Pernr);
-// 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_ApplyDate");            
-//             oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
-		},
-
 		navBack:function(){
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 				id: [$.app.CONTEXT_PATH, "MedApply"].join($.app.getDeviceSuffix())
 			});
+		},
+
+		onAfterShow:function(){
+//			common.EmpBasicInfoBoxCustom.setHeader(this._SessionData.Pernr);
+// 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_ApplyDate");            
+//             oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 		},
 
 		getBukrs : function(vDatum){
@@ -143,7 +143,7 @@ sap.ui.define([
 			oController._tData.Zfvcgb=="X"?oController._tData.Chk1=true:oController._tData.Chk1=false;
 			oController._tData.Ziftgb=="X"?oController._tData.Chk2=true:oController._tData.Chk2=false;
 			oController._vArr1.forEach(function(e){
-				var oPro=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0];
+				var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0];
 				eval("$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
 			});
 			$.app.byId(oController.PAGEID+"_Mat").bindElement("/Pop1/0");
@@ -172,10 +172,7 @@ sap.ui.define([
 				vEdit=false;
 			}
 
-			setTimeout(function(){	
-				if(oController._onClose!="X"){
-					oController.changeSel();
-				}			
+			setTimeout(function(){			
 				var vProperty1={
 					Appnm: vAppnm,
 					Mode: "S",
@@ -250,6 +247,10 @@ sap.ui.define([
 					UseMultiCategories : true,
 					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
 				},"007");
+				
+				if(oController._onClose!="X"){
+					oController.changeSel();
+				}	
 				if(oController._onDialog!="M"){
 					oController.changeSel2();
 				}
@@ -265,23 +266,23 @@ sap.ui.define([
 			var oSessionData=oController._SessionData;
 			oController._DataModel.setData({Pop1:[],Pop2:[oController._tData]});
 			oController._vArr2.forEach(function(e){
-				var oPro=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0];
+				var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0];
 				eval("$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.setProperty('/Pop2/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
 			});
-			$.app.byId(oController.PAGEID+"_Dialog2").bindElement("/Pop2/0");		
+			$.app.byId(oController.PAGEID+"_Mat2").bindElement("/Pop2/0");		
 			if(oController._onDialog=="M"){
 				oController.getSelData2("B");
-				$.app.byId(oController.PAGEID+"_dSel5").setSelectedKey($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Relation);
+				$.app.byId(oController.PAGEID+"_dSel5").setSelectedKey($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Relation);
 				oController.onChange5("B");				
-				$.app.byId(oController.PAGEID+"_dSel6").setSelectedKey($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].PatiName);
-				$.app.byId(oController.PAGEID+"_dSel3").setSelectedKey($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Gtz51);
-				$.app.byId(oController.PAGEID+"_dSel4").setSelectedKey($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Gtz51s);		
+				$.app.byId(oController.PAGEID+"_dSel6").setSelectedKey($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].PatiName);
+				$.app.byId(oController.PAGEID+"_dSel3").setSelectedKey($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Gtz51);
+				$.app.byId(oController.PAGEID+"_dSel4").setSelectedKey($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Gtz51s);		
 			}else{
 				oController.getSelData2();
 			}
-			$.app.byId(oController.PAGEID+"_Dialog2").bindElement("/Pop2/0");		
+			$.app.byId(oController.PAGEID+"_Mat2").bindElement("/Pop2/0");		
 			var vAppnm="";
-			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Dialog2").getModel().getProperty("/Pop2")[0].Appnm:null;
+			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0].Appnm:null;
 			if (!oController._BusyDialog) {
 				oController._BusyDialog = new sap.m.Dialog({showHeader:false}).addStyleClass("centerAlign busyDialog");
 				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
@@ -321,7 +322,7 @@ sap.ui.define([
 		},
 
 		onSearchMed : function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			if (!oController._miniPop) {
 				oController._miniPop = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.minipop", oController);
 				$.app.getView().addDependent(oController._miniPop);
@@ -331,28 +332,28 @@ sap.ui.define([
 		
 		getTxt:function(vTxt,vNo){
 			var redStar="<span style='color:red;font-weight:bold;font-size:14px;'>*</span>";
-			var oTxt=vNo<=22||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
+			var oTxt=vNo<=23||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
 			vNo==89?"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>"+redStar:
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
 			return new sap.ui.core.HTML({content:oTxt});
 		},
 
 		onClose:function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			if(oController.oDialog.isOpen()){
 				oController.oDialog.close();
 			}			
 		},
 
 		onClose2:function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			if(oController.oDialog2.isOpen()){
 				oController.oDialog2.close();
 			}
 		},
 
 		onClose3:function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			if(oController.oDialog3.isOpen()){
 				oController.oDialog3.close();
 			}
@@ -365,8 +366,8 @@ sap.ui.define([
 			oController._tData={
 				MedDate:null,
 				Inpdt:null,
-				Begda:new Date(),
-				Endda:"\/Date("+new Date().getTime()+")\/",
+				Begda:new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),9,0,0),
+				Endda:"\/Date("+new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),9,0,0).getTime()+")\/",
 				HospType:"",
 				Kdsvh:"",
 				Pernr:oSessionData.Pernr,
@@ -434,7 +435,7 @@ sap.ui.define([
 		},
 
 		changeSel : function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oSel = $.app.byId(oController.PAGEID+"_dSel1");
 			var oPro=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/Pop1")[0];
 			$.app.byId(oController.PAGEID+"_Mat").getModel().setProperty("/Pop1/0/RelationTx",oSel.getSelectedItem().getCustomData()[0].getValue("Data"));
@@ -460,7 +461,7 @@ sap.ui.define([
 		},
 
 		changeSel2 : function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oSel2 = $.app.byId(oController.PAGEID+"_dSel2");
 			if(oSel2.getSelectedKey()=="05"){
 				$.app.byId(oController.PAGEID+"_Inp1").setEditable(true);			
@@ -544,7 +545,7 @@ sap.ui.define([
 		},
 
 		initFile:function(vPage){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();	
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();	
 			var	oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"+vPage),
 			oTable = sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
 			oJSonModel = oAttachbox.getModel(),
@@ -602,10 +603,10 @@ sap.ui.define([
 		},
 
 		onChk1:function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();	
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();	
 			var vAppnm="",vEdit=true;
 			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/Pop1")[0].Appnm:null;
-			if($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk1){
+			if($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk1){
 				var vProperty1={
 					Appnm: vAppnm,
 					Mode: "S",
@@ -619,7 +620,7 @@ sap.ui.define([
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 				oController.onChk2();
 			}else{
 				oController.initFile("001");
@@ -640,10 +641,10 @@ sap.ui.define([
 		},
 
 		onChk2:function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();	
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();	
 			var vAppnm="",vEdit=true;
 			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/Pop1")[0].Appnm:null;
-			if($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk2){
+			if($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk2){
 				var vProperty1={
 					Appnm: vAppnm,
 					Mode: "S",
@@ -657,7 +658,7 @@ sap.ui.define([
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"002");
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
 				oController.onChk1();
 			}else{
 				oController.initFile("002");
@@ -678,7 +679,7 @@ sap.ui.define([
 		},
 
 		getSelData: function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();	
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();	
 			var oSel = $.app.byId(oController.PAGEID+"_dSel1");
 			oSel.removeAllItems();
 			oSel.addItem(
@@ -743,7 +744,7 @@ sap.ui.define([
 		},
 
 		getSelData2: function(vSig){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oSessionData=oController._SessionData;	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[]};				
@@ -844,7 +845,7 @@ sap.ui.define([
 		},
  
 		onDialog : function(New,Flag){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			if(New=="N"){
 				oController.initTdata(Flag);
 			}
@@ -871,7 +872,7 @@ sap.ui.define([
 		},
 
 		oTableInit : function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var c=sap.ui.commons;
 			var oTable=$.app.byId(oController.PAGEID+"_Table");
 			oTable.destroyColumns();
@@ -908,7 +909,7 @@ sap.ui.define([
 		},
 
 		onMiniAdd : function(){
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oTable = sap.ui.getCore().byId(oController.PAGEID+"_dTable");
 			if(oTable.getSelectedIndices().length==0){
 				sap.m.MessageBox.alert(oBundleText.getText("MSG_47008"));
@@ -919,13 +920,13 @@ sap.ui.define([
 					var oData=oTable.getModel().getProperty("/oData")[oTable.getSelectedIndices()[0]];
 					$.app.byId(oController.PAGEID+"_Mat").getModel().setProperty("/Pop1/0/HospName",oData.HospName);
 					$.app.byId(oController.PAGEID+"_Mat").getModel().setProperty("/Pop1/0/Comid",oData.Comid);
-					$.app.byId($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController().PAGEID+"_miniDialog").close();
+					$.app.byId($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController().PAGEID+"_miniDialog").close();
 				}
 			});			
 		},
 
 		clickNotice : function(){
-			var oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var oController =  $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oRow,oCell;
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			function closeDialog(oEvent){
@@ -1026,7 +1027,7 @@ sap.ui.define([
 		},
 
 		onSearch : function(){
-			var oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var oController =  $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var c=sap.ui.commons;
 			oController.initTdata();
 			var oTable=$.app.byId(oController.PAGEID+"_Table");
@@ -1101,7 +1102,7 @@ sap.ui.define([
 		},
 
 		onSelectedRow: function(oEvent) {
-			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var	oController = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var sPath = oEvent.getParameters().rowBindingContext.sPath;			
 			var oTable = sap.ui.getCore().byId(oController.PAGEID +"_Table");
 			var oData = oTable.getModel().getProperty(sPath);
@@ -1114,12 +1115,12 @@ sap.ui.define([
 
 		onCloseDialog : function(){
 			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
-			$.app.byId(oController.PAGEID+"_Dialog").close();
+			$.app.byId(oController.PAGEID+"_Mat").close();
 		},
 
 		onCloseDialog2 : function(){
 			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
-			$.app.byId(oController.PAGEID+"_Dialog2").close();
+			$.app.byId(oController.PAGEID+"_Mat2").close();
 		},
 
 		onChange: function(){
@@ -1177,7 +1178,7 @@ sap.ui.define([
 				);
 			});
 			vSig!="B"?oSel4.setSelectedKey():null;
-			var oPro=$.app.byId(oController.PAGEID+"_Dialog2").getModel().getProperty("/Pop2")[0];			
+			var oPro=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0];			
 			if(oSel3.getSelectedKey()=="A"){
 				oPro.Inspp="250,000";
 			}else if(oSel3.getSelectedKey()=="B"){
@@ -1327,7 +1328,7 @@ sap.ui.define([
 		},
 
 		onCloseMini : function(){
-			$.app.byId($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController().PAGEID+"_miniDialog").close();
+			$.app.byId($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController().PAGEID+"_miniDialog").close();
 		},
 
 		onFocusMini : function(){
@@ -1354,7 +1355,7 @@ sap.ui.define([
 		},
 
 		onValid : function(oController){
-			var oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var oController =  $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oMsg="";
 			if(oController._Bukrs=="1000"){
 				var oPro=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/Pop1")[0];			
@@ -1394,9 +1395,12 @@ sap.ui.define([
 				if(oPro.Chk2&&fragment.COMMON_ATTACH_FILES.getFileLength(oController,"002")===0){
 					oMsg=oBundleText.getText("MSG_47032");
 				}
+				if(oPro.DiseName.trim()==""){
+					oMsg=oBundleText.getText("MSG_47035");
+				}
 
 			}else{
-				var oPro=$.app.byId(oController.PAGEID+"_Dialog2").getModel().getProperty("/Pop2")[0];		
+				var oPro=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0];		
 				if(oPro.MedDate==""||oPro.MedDate==null){
 					oMsg=oBundleText.getText("MSG_47011");				
 				}
@@ -1441,7 +1445,7 @@ sap.ui.define([
 		},
 
 		onCal : function(vSig,vSig2){
-			var oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var oController =  $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
 			var vTmp=false;
@@ -1459,7 +1463,16 @@ sap.ui.define([
 						MedicalApplyTableInH:[]
 						}
 			if(vSig=="1000"){
-				vData.MedicalApplyTableIn.push($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0]);				
+				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""){
+					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
+					return;
+				}
+				vData.MedicalApplyTableIn.push($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0]);				
+				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
+					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
+					return;
+				}
 				oController._vArr1.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
 				});
@@ -1467,7 +1480,7 @@ sap.ui.define([
 				vData.MedicalApplyTableIn[0].Chk2?vData.MedicalApplyTableIn[0].Ziftgb="X":vData.MedicalApplyTableIn[0].Ziftgb="";
 				vData.MedicalApplyTableIn[0].PatiName=$.app.byId(oController.PAGEID+"_dSel1").getSelectedItem().getText();
 			}else{
-				vData.MedicalApplyTableIn.push($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0]);
+				vData.MedicalApplyTableIn.push($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0]);
 				oController._vArr2.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=new String(vData.MedicalApplyTableIn[0]."+e+").replace(/\,/gi,'')");
 				});
@@ -1475,7 +1488,7 @@ sap.ui.define([
 			delete vData.MedicalApplyTableIn[0].Close;
 			delete vData.MedicalApplyTableIn[0].Chk1;
 			delete vData.MedicalApplyTableIn[0].Chk2;
-			vSig=="1000"?vData.IMedDate=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].MedDate;
+			vSig=="1000"?vData.IMedDate=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].MedDate;
 			oModel.create("/MedicalApplySet", vData, null,
 					function(data,res){
 						if(data&&data.MedicalApplyTableIn.results.length){
@@ -1489,41 +1502,39 @@ sap.ui.define([
 								$.app.byId(oController.PAGEID+"_Mat").bindElement("/Pop1/0");
 								vTmp=true;
 							}else{
-								var oJSON = $.app.byId(oController.PAGEID+"_Dialog2").getModel();
+								var oJSON = $.app.byId(oController.PAGEID+"_Mat2").getModel();
 								var aData={Pop1:[],Pop2:[]};
 								data.MedicalApplyTableIn.results.forEach(function(e){							
 									aData.Pop2.push(e);
 								});
 								oJSON.setData(aData);
-								$.app.byId(oController.PAGEID+"_Dialog2").bindElement("/Pop2/0");
+								$.app.byId(oController.PAGEID+"_Mat2").bindElement("/Pop2/0");
 								vTmp=true;
 							}
 						}
 					},
 					function (oError) {
-						if(vSig2!="S"){
-							var Err = {};						
-							if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							} else {
-								sap.m.MessageBox.alert(oError.toString());
-							}
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
 						}
 						vTmp=false;
 					}
 				);
-			vSig=="1000"?$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Close=oController._onClose:
-						 $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Close=oController._onClose;
+			vSig=="1000"?$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Close=oController._onClose:
+						 $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Close=oController._onClose;
 			if(vSig=="1000"){
-				vData.MedicalApplyTableIn[0].Zfvcgb=="X"?$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
-				vData.MedicalApplyTableIn[0].Ziftgb=="X"?$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk2=true:
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+				vData.MedicalApplyTableIn[0].Zfvcgb=="X"?$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				vData.MedicalApplyTableIn[0].Ziftgb=="X"?$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk2=true:
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 				oController._vArr1.forEach(function(e){
-					var oPro=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0];
+					var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0];
 					eval("oPro."+e+"=parseInt(oPro."+e+");");
 					eval("$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
 				});
@@ -1537,7 +1548,7 @@ sap.ui.define([
 		},
 
 		onSaveProcess : function(oController,vSig){
-			var oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var oController =  $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oCal=oController.onCal(vSig,"S");
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
@@ -1556,16 +1567,16 @@ sap.ui.define([
 				MedicalApplyTableInH:[]
 				}
 				oController._onDialog=="M"?vData.IConType="2":vData.IConType="3";
-				vSig=="1000"?vData.IMedDate=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].MedDate;
+				vSig=="1000"?vData.IMedDate=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].MedDate;
 				if(vSig=="1000"){
-					vData.MedicalApplyTableIn.push($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0]);
+					vData.MedicalApplyTableIn.push($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0]);
 					oController._vArr1.forEach(function(e){
 						eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
 					});
 					vData.MedicalApplyTableIn[0].Chk1?vData.MedicalApplyTableIn[0].Zfvcgb="X":vData.MedicalApplyTableIn[0].Zfvcgb="";
 					vData.MedicalApplyTableIn[0].Chk2?vData.MedicalApplyTableIn[0].Ziftgb="X":vData.MedicalApplyTableIn[0].Ziftgb="";
 				}else{
-					vData.MedicalApplyTableIn.push($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0]);
+					vData.MedicalApplyTableIn.push($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0]);
 					oController._vArr2.forEach(function(e){
 						eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
 					});
@@ -1608,17 +1619,17 @@ sap.ui.define([
 						}
 					);
 				if(vSig=="1000"){
-					vData.MedicalApplyTableIn[0].Zfvcgb=="X"?$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
-					vData.MedicalApplyTableIn[0].Ziftgb=="X"?$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk2=true:
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+					vData.MedicalApplyTableIn[0].Zfvcgb=="X"?$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+					vData.MedicalApplyTableIn[0].Ziftgb=="X"?$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk2=true:
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 					oController._vArr1.forEach(function(e){
 						var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0];
 						eval("$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
 					});					
 				}else{
 					oController._vArr2.forEach(function(e){
-						var oPro=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0];
+						var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0];
 						eval("$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.setProperty('/Pop2/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
 					});
 				}
@@ -1626,7 +1637,7 @@ sap.ui.define([
 		},
 
 		onSave : function(Sig){
-			var oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var oController =  $.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController();
 			var oValid = oController.onValid(oController);
 			if(oValid){
 				var oMsg=oBundleText.getText("MSG_44001");			
@@ -1651,71 +1662,71 @@ sap.ui.define([
 			var oId=$.app.byId(oEvent.getSource().getId());
 			vTmp?oId.setValue("0"):oId.setValue(common.Common.numberWithCommas(new String(parseInt(s.replace(/\,/g,"")))).trim());
 			oId.getValue().trim()==""||oId.getValue().trim()=="NaN"?oId.setValue("0"):null;
-			$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController().eqFunc();
+			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController().eqFunc();
 		},
 		
 		eqFunc:function(){
 			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
 			if(oController._Bukrs=="1000"){
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkiobd=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkibbm;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkijbd=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkijbm;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znijcd=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znijcm;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zniiwd=common.Common.numberWithCommas(Math.round(
-					(parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zniiwm.replace(/\,/gi,""))*0.5).toFixed(1)));
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znisdd=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znisdm;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znoctd=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znoctm;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znomrd=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znomrm;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znocud=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znocum;
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znobcd=common.Common.numberWithCommas(Math.round(
-					(parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].BaseAmt=common.Common.numberWithCommas(
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkiobd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkijbd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znijcd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zniiwd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znisdd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znoctd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znocud.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znobcd.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znomrd.replace(/\,/gi,"")));
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].NsuppAmt=common.Common.numberWithCommas(
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].BaseAmt.replace(/\,/gi,""))-
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].SuppAmt.replace(/\,/gi,"")));
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Mycharge=common.Common.numberWithCommas(
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkibbm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zkijbm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znijcm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Zniiwm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znisdm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znoctm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znomrm.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znocum.replace(/\,/gi,""))+
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop1")[0].Znobcm.replace(/\,/gi,"")));
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkiobd=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkibbm;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkijbd=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkijbm;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znijcd=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znijcm;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zniiwd=common.Common.numberWithCommas(Math.round(
+					(parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zniiwm.replace(/\,/gi,""))*0.5).toFixed(1)));
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znisdd=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znisdm;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znoctd=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znoctm;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znomrd=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znomrm;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znocud=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znocum;
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znobcd=common.Common.numberWithCommas(Math.round(
+					(parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].BaseAmt=common.Common.numberWithCommas(
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkiobd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkijbd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znijcd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zniiwd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znisdd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znoctd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znocud.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znobcd.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znomrd.replace(/\,/gi,"")));
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].NsuppAmt=common.Common.numberWithCommas(
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].BaseAmt.replace(/\,/gi,""))-
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].SuppAmt.replace(/\,/gi,"")));
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Mycharge=common.Common.numberWithCommas(
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkibbm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zkijbm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znijcm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Zniiwm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znisdm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znoctm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znomrm.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znocum.replace(/\,/gi,""))+
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop1")[0].Znobcm.replace(/\,/gi,"")));
 			}else{
-				$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Znobcd=common.Common.numberWithCommas(Math.round(
-					(parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
+				$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Znobcd=common.Common.numberWithCommas(Math.round(
+					(parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
 				if($.app.byId(oController.PAGEID+"_dSel3").getSelectedKey()!="C"&&$.app.byId(oController.PAGEID+"_dSel3").getSelectedKey()!="D"){
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medmp=common.Common.numberWithCommas(parseInt(
-					(parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medsp.replace(/\,/gi,""))*0.1
-					+parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medpp.replace(/\,/gi,""))*0.2).toFixed(1)));
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medmp=common.Common.numberWithCommas(parseInt(
+					(parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medsp.replace(/\,/gi,""))*0.1
+					+parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medpp.replace(/\,/gi,""))*0.2).toFixed(1)));
 				}else{
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medmp="0";
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medmp="0";
 				}
-				if($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="D"){
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medpp;
-				}else if($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="C"){
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(
-						parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medpp.replace(/\,/gi,""))+
-						parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Znobcd.replace(/\,/gi,"")));
+				if($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="D"){
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medpp;
+				}else if($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="C"){
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(
+						parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medpp.replace(/\,/gi,""))+
+						parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Znobcd.replace(/\,/gi,"")));
 				}else{
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt=
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Ptamt.replace(/\,/gi,""))
-					-parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Inspp.replace(/\,/gi,""))-
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Medmp.replace(/\,/gi,""))
-					-parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Insnp.replace(/\,/gi,""))-
-					parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Oiamt.replace(/\,/gi,""))
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt<0?$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt=0:
-					$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(parseInt($.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController()._DataModel.getProperty("/Pop2")[0].Framt));
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt=
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Ptamt.replace(/\,/gi,""))
+					-parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Inspp.replace(/\,/gi,""))-
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Medmp.replace(/\,/gi,""))
+					-parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Insnp.replace(/\,/gi,""))-
+					parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Oiamt.replace(/\,/gi,""))
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt<0?$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt=0:
+					$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(parseInt($.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getController()._DataModel.getProperty("/Pop2")[0].Framt));
 				}
 			}			
 		},

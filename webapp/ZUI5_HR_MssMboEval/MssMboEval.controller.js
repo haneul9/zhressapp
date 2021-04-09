@@ -643,7 +643,8 @@ sap.ui.define([
 					}else if(i==2){
 						width1.push("100px");
 					}else{
-						width1.push("");
+//						width1.push("");
+						width1.push("200px");
 					}
 				}
 				width1.push("13px");
@@ -660,7 +661,8 @@ sap.ui.define([
 					}else if(i==2){
 						width1.push("100px");
 					}else{
-						width1.push("");
+//						width1.push("");
+						width1.push("200px");
 					}
 				}
 				mTable.setWidths(width1);
@@ -809,7 +811,7 @@ sap.ui.define([
 							vAlign:"Middle",
 							rowSpan : 2,
 							content : new sap.m.Text({text:e.Gubun})
-						}).addStyleClass("TableDataCell");
+						}).addStyleClass("gTableDataCell");
 						oRow.addCell(oCell);
 					}else if(j==1){
 						oCell=new c.layout.MatrixLayoutCell({
@@ -817,7 +819,7 @@ sap.ui.define([
 							vAlign:"Middle",
 							rowSpan : 2,
 							content : new sap.m.Text({text:e.Total})
-						}).addStyleClass("TableDataCell");
+						}).addStyleClass("gTableDataCell");
 						oRow.addCell(oCell);
 					}else if(j==2){
 						oCell=new c.layout.MatrixLayoutCell({
@@ -825,7 +827,7 @@ sap.ui.define([
 							vAlign:"Middle",
 							rowSpan : 2,
 							content : new sap.m.Text({text:e.Over})
-						}).addStyleClass("TableDataCell");
+						}).addStyleClass("gTableDataCell");
 						oRow.addCell(oCell);
 					}else{
 						var oGrid = new sap.f.GridContainer(oController.PAGEID+"_Grid_"+oController.vPage+"_"+j+"_"+i,{
@@ -836,7 +838,8 @@ sap.ui.define([
 							minHeight : "2rem"
 						}).addStyleClass("PointerCursor");
 						for(var a=0;a<tData[i].Datas.length;a++){							
-							var oTxt=tData[i].Datas[a].EnameP1+" ( "+tData[i].Datas[a].PGradeTxtP1 + " / "+tData[i].Datas[a].TitelP1;
+							var oTxt=tData[i].Datas[a].EnameP1+" ( "+tData[i].Datas[a].PGradeTxtP1;
+							tData[i].Datas[a].TitelP1!=""?oTxt+=" / "+tData[i].Datas[a].TitelP1:null;
 							tData[i].Datas[a].Titl2P1!=""?oTxt+=" / "+tData[i].Datas[a].Titl2P1+ " ) ":oTxt+=" )";
 							if(j==3){					
 								if(oController.vPage=="2a"){
@@ -1005,7 +1008,7 @@ sap.ui.define([
 							hAlign:"Center",
 							vAlign:"Middle",
 							content : oGrid
-						}).addStyleClass("TableDataCell");
+						}).addStyleClass("gTableDataCell");
 						oRow.addCell(oCell);
 					}
 				}					

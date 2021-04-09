@@ -83,7 +83,7 @@ sap.ui.define(
 						success: function (data) {
 							if (data.OtPersonNav)
                                 results = data.OtPersonNav.results;
-						}.bind(this),
+						},
 						error: function (res) {
 							Common.log(res);
 						}

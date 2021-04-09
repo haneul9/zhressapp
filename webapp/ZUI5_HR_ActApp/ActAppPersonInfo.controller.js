@@ -1,3 +1,5 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-loop-func */
 sap.ui.define(
 	[
 		"common/Common",
@@ -1135,7 +1137,7 @@ sap.ui.define(
 
                 BusyIndicator.show(0);
 
-                setTimeout(Process, 300)
+                setTimeout(Process, 300);
             },
 
             getActionSubjectTableHeaderSet: function (oController, Infty) {
@@ -2740,7 +2742,7 @@ sap.ui.define(
 								success: function(oData) {
 									if (oData && oData.results.length) {
 										for(var i=0; i<oData.results.length; i++){
-											oControl.addItem(new sap.ui.core.Item({key : oData.results[i].Ecode, text: oData.results[i].Etext}))
+											oControl.addItem(new sap.ui.core.Item({key : oData.results[i].Ecode, text: oData.results[i].Etext}));
 										}
 									}
 								},
@@ -5359,8 +5361,8 @@ sap.ui.define(
                             });
                         }
                     }
-                } catch (error) {
-                    Common.log(error);
+                } catch(err) {
+                    Common.log(err);
                 }
             },
 
@@ -5402,8 +5404,8 @@ sap.ui.define(
                             });
                         }
                     }
-                } catch (error) {
-                    Common.log(error);
+                } catch (err) {
+                    Common.log(err);
                 }
             },
 

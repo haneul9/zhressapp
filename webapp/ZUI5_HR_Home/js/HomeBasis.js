@@ -179,7 +179,7 @@ s4hanaURL: function(modelAndEntityName) {
 },
 s4hanaDestination: function() {
 
-	var destination = sessionStorage.getItem('ess.odata.destination'); // HomeSession.init 에서 최초 세팅
+	var destination = sessionStorage.getItem('ehr.odata.destination'); // HomeSession.init 에서 최초 세팅
 	if (destination) {
 		return destination;
 	}
@@ -408,7 +408,7 @@ post: function(o) {
 		dataType: 'json',
 		contentType: 'application/json',
 		headers: {
-			'x-csrf-token': sessionStorage.getItem('ess.odata.csrf-token')
+			'x-csrf-token': sessionStorage.getItem('ehr.odata.csrf-token')
 		}
 	};
 

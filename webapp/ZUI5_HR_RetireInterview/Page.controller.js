@@ -152,7 +152,7 @@
             var vStext = oController.getUserStext();
 			
             oController.ApplyModel.setData({FormData: []});
-            oController.ApplyModel.setProperty("/FormData/Reqdt", new Date(new Date().setDate(new Date().getDate() - 1)));
+            oController.ApplyModel.setProperty("/FormData/Reqdt", new Date());
             oController.ApplyModel.setProperty("/FormData/Ename", vEName);
             oController.ApplyModel.setProperty("/FormData/Stext", vStext);
         

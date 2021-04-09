@@ -254,7 +254,7 @@ sap.ui.define(
 						new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(oController._vActda)),
 						new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, oController._vPersa),
 						new sap.ui.model.Filter("Massn", sap.ui.model.FilterOperator.EQ, oController.vMassn),
-						new sap.ui.model.Filter("Massg", sap.ui.model.FilterOperator.EQ, oController._vUpdateData.Massg1),
+						new sap.ui.model.Filter("Massg", sap.ui.model.FilterOperator.EQ, oController._vUpdateData.Massg1)
 					],
                     success: function (oData) {
                         if (oData.results && oData.results.length) {
@@ -650,7 +650,7 @@ sap.ui.define(
                         var idx = 0;
                         for (var i = 0; i < oController._vActiveControl.length; i++) {
                             var Fieldname = Common.underscoreToCamelCase(oController._vActiveControl[i].Fieldname),
-                                TextFieldname = Fieldname + "_Tx",
+                                // TextFieldname = Fieldname + "_Tx",
                                 Fieldtype = oController._vActiveControl[i].Incat;
 
                             if (Fieldname == "Retrs") {
@@ -668,8 +668,10 @@ sap.ui.define(
                             var vUpdateTextValue = "";
 
                             if (ty == "U") {
-                                vUpdateValue = eval("updateData." + Fieldname);
-                                vUpdateTextValue = eval("updateData." + TextFieldname);
+                                // vUpdateValue = updateData[Fieldname];
+                                // vUpdateTextValue = updateData[TextFieldname];
+                                // vUpdateValue = eval("updateData." + Fieldname);
+                                // vUpdateTextValue = eval("updateData." + TextFieldname);
                             } else {
                                 vUpdateValue = oController._vActiveControl[i].Dcode;
                                 vUpdateTextValue = oController._vActiveControl[i].Dvalu;
@@ -1358,7 +1360,8 @@ sap.ui.define(
                                         oControl.removeStyleClass("L2PSelectInvalidBorder");
 
                                         if (oController._vActiveControl[i].id != "Persa") {
-                                            eval("vCreateData." + Fieldname + " = '" + oControl.getSelectedKey() + "';");
+                                            vCreateData[Fieldname] = oControl.getSelectedKey();
+                                            // eval("vCreateData." + Fieldname + " = '" + oControl.getSelectedKey() + "';");
                                         }
                                     }
                                 } else if (Fieldtype == "M2") {
@@ -1389,8 +1392,10 @@ sap.ui.define(
                                                 }
                                             }
                                         }
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
-                                        eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        vCreateData[Fieldname + "_Tx"] = oControl.getValue();
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        // eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
                                     }
                                 } else if (Fieldtype == "M3") {
                                     if (oControl.getValue() == "") {
@@ -1401,7 +1406,8 @@ sap.ui.define(
                                         return;
                                     } else {
                                         oControl.setValueState(sap.ui.core.ValueState.None);
-                                        eval("vCreateData." + Fieldname + " = '" + oControl.getValue() + "';");
+                                        vCreateData[Fieldname] = oControl.getValue();
+                                        // eval("vCreateData." + Fieldname + " = '" + oControl.getValue() + "';");
                                     }
                                 } else if (Fieldtype == "M4") {
                                     if (oControl.getValue() == "") {
@@ -1413,7 +1419,8 @@ sap.ui.define(
                                     } else {
                                         oControl.setValueState(sap.ui.core.ValueState.None);
                                         vVal = "/Date(" + Common.getTime(oControl.getValue()) + ")/";
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
                                     }
                                 } else if (Fieldtype == "M5") {
                                     if (oControl.getValue() == "") {
@@ -1433,8 +1440,10 @@ sap.ui.define(
                                                 }
                                             }
                                         }
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
-                                        eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        vCreateData[Fieldname + "_Tx"] = oControl.getValue();
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        // eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
                                     }
                                 } else if (Fieldtype == "M6") {
                                     if (oControl.getSelected() == false) {
@@ -1444,14 +1453,16 @@ sap.ui.define(
                                         return;
                                     } else {
                                         vVal = "X";
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
                                     }
                                 } else if (Fieldtype == "O1") {
                                     if (oControl.getSelectedKey() !== "0000" && oControl.getSelectedKey() !== "") {
                                         oControl.removeStyleClass("L2PSelectInvalidBorder");
 
                                         if (oController._vActiveControl[i].id != "Persa") {
-                                            eval("vCreateData." + Fieldname + " = '" + oControl.getSelectedKey() + "';");
+                                            vCreateData[Fieldname] = oControl.getSelectedKey();
+                                            // eval("vCreateData." + Fieldname + " = '" + oControl.getSelectedKey() + "';");
                                         }
                                     }
                                 } else if (Fieldtype == "O2") {
@@ -1476,20 +1487,24 @@ sap.ui.define(
                                                 }
                                             }
                                         }
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
-                                        eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        vCreateData[Fieldname + "_Tx"] = oControl.getValue();
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        // eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
                                     }
                                 } else if (Fieldtype == "O3") {
                                     if (oControl.getValue() !== "") {
                                         oControl.setValueState(sap.ui.core.ValueState.None);
-                                        eval("vCreateData." + Fieldname + " = '" + oControl.getValue() + "';");
+                                        vCreateData[Fieldname] = oControl.getValue();
+                                        // eval("vCreateData." + Fieldname + " = '" + oControl.getValue() + "';");
                                     }
                                 } else if (Fieldtype == "O4") {
                                     if (oControl.getValue() !== "") {
                                         oControl.setValueState(sap.ui.core.ValueState.None);
 
                                         vVal = "/Date(" + Common.getTime(oControl.getValue()) + ")/";
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
                                     }
                                 } else if (Fieldtype == "O5") {
                                     if (oControl.getValue() !== "") {
@@ -1503,15 +1518,18 @@ sap.ui.define(
                                                 }
                                             }
                                         }
-                                        eval("vCreateData." + Fieldname + " = '" + vVal + "';");
-                                        eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
+                                        vCreateData[Fieldname] = vVal;
+                                        vCreateData[Fieldname + "_Tx"] = oControl.getValue();
+                                        // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                        // eval("vCreateData." + Fieldname + "_Tx = '" + oControl.getValue() + "';");
                                     }
                                 } else if (Fieldtype == "O6") {
                                     vVal = "";
                                     if (oControl.getSelected() == true) {
                                         vVal = "X";
                                     }
-                                    eval("vCreateData." + Fieldname + " = '" + vVal + "';");
+                                    vCreateData[Fieldname] = vVal;
+                                    // eval("vCreateData." + Fieldname + " = '" + vVal + "';");
                                 }
                             }
                         }

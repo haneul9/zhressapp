@@ -72,7 +72,7 @@ sap.ui.define(
                                             }
                                         })
                                     ]
-                                }).addStyleClass("custom-search-checkbox ml-77px"),
+                                }).addStyleClass("custom-search-checkbox ml-77px")
                             ]
                         }),
                         new sap.m.VBox({
