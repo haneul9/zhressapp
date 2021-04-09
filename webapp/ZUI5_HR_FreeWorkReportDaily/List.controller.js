@@ -114,7 +114,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FreeWorkRptNav : []};
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;

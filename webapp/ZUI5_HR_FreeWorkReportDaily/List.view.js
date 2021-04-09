@@ -11,7 +11,7 @@ sap.ui.jsview("ZUI5_HR_FreeWorkReportDaily.List", {
 
 	createContent: function(oController) {
 		$.app.setModel("ZHR_COMMON_SRV");
-		$.app.setModel("ZHR_DASHBOARD_SRV");
+		$.app.setModel("ZHR_FLEX_TIME_SRV");
 		
 		var oFilter = new sap.m.FlexBox({
             fitContainer: true,
