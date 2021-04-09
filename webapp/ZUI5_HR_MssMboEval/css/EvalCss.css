@@ -18,6 +18,14 @@
     border-right : 1px solid #d8dadf;
     padding : 2px !important;
 }
+.gTableDataCell{
+    border-bottom : 1px solid #d8dadf;
+    border-left : 1px solid #d8dadf;
+    border-right : 1px solid #d8dadf;
+    padding : 8px !important;
+    padding-top : 15px !important;
+    padding-bottom : 15px !important;
+}
 .Bold{
     font-weight:bold !important;
 }

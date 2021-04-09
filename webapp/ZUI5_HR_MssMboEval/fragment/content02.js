@@ -156,10 +156,10 @@ ZUI5_HR_MssMboEval.fragment.content02={
 			expanded:true,
 			expandable:false,
 			content:[new sap.ui.core.Icon({size:"14px",src:"sap-icon://message-information",color:"green"}),
-			new sap.ui.core.HTML({content:"<span style='line-height:33px;font-size:14px;color:red;'>&nbsp;"+oBundleText.getText("LABEL_36069")+"</span>"}),gTable,new sap.ui.core.HTML({content:"<div style='height:5px;' />"}),bMat]
+			new sap.ui.core.HTML({content:"<span style='line-height:33px;font-size:14px;color:red;'>&nbsp;"+oBundleText.getText("LABEL_36069")+"</span>"}),gTable,new sap.ui.core.HTML({content:"<div style='height:5px;' />"})]
 		});
 		
-		var oContents3=[oPanel,oPanel2];
+		var oContents3=[oPanel,oPanel2,bMat];
 		var oFinalMat=new c.layout.MatrixLayout();
 		oContents3.forEach(function(e){
 			oRow=new c.layout.MatrixLayoutRow();
