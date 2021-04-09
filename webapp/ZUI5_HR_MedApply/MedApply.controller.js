@@ -450,15 +450,22 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/RelationTx",oSel.getSelectedItem().getCustomData()[0].getValue("Data"));
 			oPro.Relation=oSel.getSelectedKey();
 			if(oPro.Status==""){
-				if(oPro.Relation!="01"&&oPro.Relation!="02"){
+				if(oPro.HospType!="05"){
+					if(oPro.Relation!="01"&&oPro.Relation!="02"){
+						$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/Chk1",false);
+						$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/Chk2",false);
+						$.app.byId(oController.PAGEID+"_Chk1").setEditable(false);
+						$.app.byId(oController.PAGEID+"_Chk2").setEditable(false);
+					}else{
+						$.app.byId(oController.PAGEID+"_Chk1").setEditable(true);
+						$.app.byId(oController.PAGEID+"_Chk2").setEditable(true);
+					}		
+				}else{
 					$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/Chk1",false);
 					$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/Chk2",false);
 					$.app.byId(oController.PAGEID+"_Chk1").setEditable(false);
 					$.app.byId(oController.PAGEID+"_Chk2").setEditable(false);
-				}else{
-					$.app.byId(oController.PAGEID+"_Chk1").setEditable(true);
-					$.app.byId(oController.PAGEID+"_Chk2").setEditable(true);
-				}		
+				}
 			}else{
 				$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/Chk1",false);
 				$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/Chk2",false);
@@ -500,6 +507,9 @@ sap.ui.define([
 				}else{
 					vEdits=[false,false,false,false,false];
 				}
+				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+
 				for(var i=3;i<=7;i++){
 					var vProperty={
 						Appnm: vAppnm,
@@ -1686,8 +1696,7 @@ sap.ui.define([
 				}
 				var uFiles=new Array();
 				if(vSig=="1000"){
-					var oPro=$.app.getController()._DataModel.getProperty("/Pop2")[0];
-					vData.MedicalApplyTableIn.push(oPro);
+					var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
 					if(oPro.Begda!=""&&oPro.Begda!=null&&oPro.Begda!="Invalid Date"){
 						vData.MedicalApplyTableIn[0].Begda=dateFormat.format(vData.MedicalApplyTableIn[0].Begda);
 						vData.MedicalApplyTableIn[0].Begda=new Date(vData.MedicalApplyTableIn[0].Begda+"T09:00:00");

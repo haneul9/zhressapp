@@ -259,8 +259,10 @@ var Handler = {
 								o.ExptTotAmt = Common.toNumber(o.ExptTotAmt);
 							});
 							this.oModel.setProperty("/TableIn03", TableIn03);
+							this.renderAdded.call(this,$.app.getController(),TableIn03);
 						} else {
 							this.oModel.setProperty("/TableIn03", [{}]);
+							this.initAdded.call(this,$.app.getController(),TableIn03);
 						}
 						Common.adjustVisibleRowCount($.app.byId("TableIn03"), 5, TableIn03.length);
 
@@ -549,6 +551,115 @@ var Handler = {
 				}
 			);
 		}.bind(this));
+	},
+
+	
+	//대근자 지정 관련
+	sizingAdded : function(oController,oMat,dLength,vCell){
+		var c=sap.ui.commons;
+			var oRow,oCell;
+			var oCnt1=11;
+			var oCnt2=10;
+			if(dLength>8){
+				var width1=new Array();
+				for(var i=0;i<11;i++){
+					width1.push("");
+				}
+				width1.push("13px");
+				oMat.setWidths(width1);
+				oMat.setColumns(oCnt1);
+				vCell.setColSpan(oCnt1);
+			}else{
+				var width1=new Array();
+				for(var i=0;i<11;i++){
+					width1.push("");
+				}
+				oMat.setWidths(width1);
+				oMat.setColumns(oCnt2);
+				vCell.setColSpan(oCnt2);
+			}
+	},
+
+	initAdded : function(oController){
+		var oRow,oCell;
+		var c=sap.ui.commons,oCol=$.app.byId(oController.PAGEID+"_Col");
+		oCol.removeAllRows();
+		oRow=new c.layout.MatrixLayoutRow();
+		oCell=new c.layout.MatrixLayoutCell({
+			colSpan:10,
+			hAlign:"Center",
+			content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
+			new sap.m.Text({text:oController.getBundleText("MSG_05001")}),
+			new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
+		}).addStyleClass("UnderBar");
+		oRow.addCell(oCell);
+		oCol.addRow(oRow);
+	},
+
+	renderAdded : function(oController,pData){
+		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons,
+		oRow,oCell,oMat=$.app.byId(oController.PAGEID+"_Col"),oFields=["Ename","Datum","Awtxt","Beguzenduz","Ovtim","Wt40","Wt12","Wtsum","LigbnTx","Cntgb"];
+		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
+		oMat.removeAllRows();
+		var dArr=new Array();
+		for(var v=0;v<pData.length;v++){
+			var vData={	IConType: "1",
+					IBegda: pData[v].BtStartdat,
+					IEndda: pData[v].BtEnddat,
+					IPernr: this.oController.getSessionInfoByKey("Pernr"),
+					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
+					ILangu: this.oController.getSessionInfoByKey("Langu"),
+					TableIn: []};
+			oModel.create("/VacationCoverSet", vData, null,
+				function(data,res){
+					if(data&&data.TableIn.results.length){
+						for(var i=0;i<data.TableIn.results.length;i++){
+							dArr.push(dArr.TableIn.results[i]); 
+						}					
+					}				
+				},
+				function (oError) {
+					var Err = {};						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+					} else {
+						sap.m.MessageBox.alert(oError.toString());
+					}
+				}
+			);
+		}
+		
+		for(var j=0;j<dArr.length;j++){
+			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_Row_"+j);	
+			for(var i=0;i<10;i++){
+				oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i);
+				oRow.addCell(oCell);
+				if(i==1){
+					oCell.addContent(
+						new sap.m.Text({
+							type: new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"}),
+							text: dArr[j].Datum
+						})						
+					);
+				}else if(i==2){
+					oCell.addContent();
+				}else if(i==3){
+					oCell.addContent();
+				}else if(i==(oFields.length-1)){
+					oCell.addContent();
+				}else{
+					eval("oCell.addContent(new sap.m.Text({text:dArr[j].oFields["+i+"]}))");
+				}
+			}
+			oMat.addRow(oRow);
+		}
+		this.sizingAdded(oController,oMat,dArr.length,$.app.byId(oController.PAGEID+"_Cell"));
+		if(dArr.length==0){
+			this.initAdded(oController);
+		}
 	}
 
 };

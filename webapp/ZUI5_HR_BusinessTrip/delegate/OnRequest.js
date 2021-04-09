@@ -32,6 +32,7 @@ sap.ui.define([
 
 var OnRequest = { // 출장 event handler
 
+	_addRequiredData:null,
 	// 출장 신청 목록 조회
 	pressSearch: function(oEvent) {
 		Common.log("OnRequest.pressSearch", oEvent);
@@ -52,13 +53,15 @@ var OnRequest = { // 출장 event handler
 					IEndda: Common.adjustGMTOdataFormat(this.RequestSearchModel.getProperty("/IEndda")),
 					IZzok: this.RequestSearchModel.getProperty("/IZzok"),
 					IZzdocno: IZzdocno,
-					TableIn01: []
+					TableIn01: [],
+					TableIn03: []
 				},
 				{
 					async: false,
 					success: function(oData) {
 						this.RequestListModel.setProperty("/", Common.getTableInResults(oData, "TableIn01"));
 						Common.adjustAutoVisibleRowCount.call($.app.byId("RequestListTable"));
+						this._addRequiredData=oData;
 						BusyIndicator.hide();
 					}.bind(this),
 					error: function(oResponse) {
@@ -1020,7 +1023,7 @@ var OnRequest = { // 출장 event handler
 			}
 		);
 	}
-
+	
 };
 
 return OnRequest;
