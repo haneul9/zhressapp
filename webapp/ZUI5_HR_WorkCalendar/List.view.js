@@ -11,7 +11,7 @@ sap.ui.jsview("ZUI5_HR_WorkCalendar.List", {
 
 	createContent: function(oController) {
 		$.app.setModel("ZHR_COMMON_SRV");
-		$.app.setModel("ZHR_DASHBOARD_SRV");
+		$.app.setModel("ZHR_FLEX_TIME_SRV");
 		
 		var oFilter = new sap.m.FlexBox({
             fitContainer: true,
@@ -152,13 +152,12 @@ sap.ui.jsview("ZUI5_HR_WorkCalendar.List", {
 		        	})]
         });
         
-        var oLegend = new sap.ui.layout.HorizontalLayout({
+        var oLegend = new sap.m.Toolbar({
+        	height : "40px",
         	content : [new sap.m.Text({text : oBundleText.getText("LABEL_63011"), width : "100px", textAlign : "Center"}).addStyleClass("bg-signature-darkgreen p-5px"), // 승인데이터
-        			   new sap.ui.core.HTML({content : "<div style='width:5px' />"}),
         			   new sap.m.Text({text : oBundleText.getText("LABEL_63012"), width : "100px", textAlign : "Center"}).addStyleClass("bg-signature-orange p-5px"), // 이상데이터
-        			   new sap.ui.core.HTML({content : "<div style='width:5px' />"}),
         			   new sap.m.Text({text : oBundleText.getText("LABEL_63013"), width : "100px", textAlign : "Center"}).addStyleClass("background-color-lightorange p-5px")] // 소명신청
-        }).addStyleClass("pt-10px");
+        }).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0");
         
     	var oCalendar = new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar").addStyleClass("pt-10px");
     	

@@ -14,9 +14,9 @@ sap.ui.define([
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
-	return CommonController.extend("ZUI5_HR_WorkCalendar.List", {
+	return CommonController.extend("ZUI5_HR_WorkCalendarBasic.List", {
 
-		PAGEID: "ZUI5_HR_WorkCalendarList",
+		PAGEID: "ZUI5_HR_WorkCalendarBasicList",
 		_BusyDialog : new sap.m.BusyDialog(),
 		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
 		_Columns : [],
@@ -66,20 +66,20 @@ sap.ui.define([
 		},
 		
 		onBack : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 		
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : oController._ListCondJSonModel.getProperty("/Data/FromPageId"),
 			      data : {
-			    	  FromPageId : "ZUI5_HR_WorkCalendar.List",
+			    	  FromPageId : "ZUI5_HR_WorkCalendarBasic.List",
 			    	  Data : {}
 			      }
 			});
 		},
 		
 		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 		
 		},
@@ -93,7 +93,7 @@ sap.ui.define([
 		},
 		
 		onPressSearch : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 			
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
@@ -105,13 +105,7 @@ sap.ui.define([
 			
 			var oCalendar = sap.ui.getCore().byId(oController.PAGEID + "_Calendar");
 				oCalendar.destroyContent();
-				oCalendar.addContent(sap.ui.jsfragment("ZUI5_HR_WorkCalendar.fragment.Calendar", oController));
-			
-			// summary 초기화
-			var field = ["Dutyt", "Workt", "Overt", "Holit", "Sumoh", "Sumtm", "Workt2", "Dutyc", "DutycT"];    
-			for(var i=0; i<field.length; i++){
-				eval("oController._ListCondJSonModel.setProperty('/Data/" + field[i] + "', '-');");
-			}
+				oCalendar.addContent(sap.ui.jsfragment("ZUI5_HR_WorkCalendarBasic.fragment.Calendar", oController));
 			
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
@@ -119,14 +113,14 @@ sap.ui.define([
 				var dateFormat3 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {WorkCalendarNav1 : [], WorkCalendarNav2 : [], WorkCalendarNav3 : []};
+				var createData = {WorkCalendarNav1 : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.IMolga = oData.Molga;
 					createData.ILangu = oData.Langu;
 					createData.IYear = oData.Zyymm.substring(0,4);
 					createData.IMonth = oData.Zyymm.substring(4,6);
-					createData.IWtype = "W";
+					createData.IWtype = "";
 
 				oModel.create("/WorkCalendarSet", createData, null,
 					function(data, res){
@@ -135,12 +129,12 @@ sap.ui.define([
 								var data1 = data.WorkCalendarNav1.results;
 								var total = 0;
 								var day = [oBundleText.getText("LABEL_63055"), // 일요일
-										   oBundleText.getText("LABEL_63056"), // 월
-										   oBundleText.getText("LABEL_63057"), // 화
-										   oBundleText.getText("LABEL_63058"), // 수
-										   oBundleText.getText("LABEL_63059"), // 목
-										   oBundleText.getText("LABEL_63060"), // 금
-										   oBundleText.getText("LABEL_63061")] // 토
+										   oBundleText.getText("LABEL_63056"), // 월요일
+										   oBundleText.getText("LABEL_63057"), // 화요일
+										   oBundleText.getText("LABEL_63058"), // 수요일
+										   oBundleText.getText("LABEL_63059"), // 목요일
+										   oBundleText.getText("LABEL_63060"), // 금요일
+										   oBundleText.getText("LABEL_63061")] // 토요일
 								
 								var makeData = function(title, time){
 									time = (time && time != "") ? time.substring(0,2) + ":" + time.substring(2,4) : "";
@@ -156,168 +150,95 @@ sap.ui.define([
 								}
 								
 								for(var i=0; i<data1.length; i++){
-									if(data1[i].Wtype == "W"){
-										var oControl = sap.ui.getCore().byId(oController.PAGEID + "_0" + total);
+									var oBegda = new Date(common.Common.getTime(data1[i].Begda));
+									var oControl = sap.ui.getCore().byId(oController.PAGEID + "_" + dateFormat.format(oBegda));
+									
+									if(oControl){
+										var title = new sap.m.Text({text : dateFormat2.format(oBegda)}).addStyleClass("font-bold");
+										if(data1[i].Tagty == "1"){
+											title.addStyleClass("color-info-red");
+										}
+										
+										// 일자에 범례 색상 표시
+										var titlestyle = "calendar-datum";
+										if(data1[i].Error == "Q"){ // 승인데이터
+											titlestyle = "bg-signature-darkgreen";
+										} else if(data1[i].Error == "X"){ // 이상데이터
+											titlestyle = "bg-signature-orange";
+										} else if(data1[i].Error == "A"){ // 소명신청
+											titlestyle = "background-color-lightorange";
+										}
+										
 										var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-															  columns : 1,
-															  width : "100%",
-															  rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-																	  	  height : "30px",
-																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63023") + " " + data1[i].Workt3W})], // 근무시간
-																			  	  	   hAlign : "Center",
-																			  	  	   vAlign : "Middle"
-																			  	   })] 
-																	  }).addStyleClass("calendar-datum"),
-																	  new sap.ui.commons.layout.MatrixLayoutRow({
-																	  	  height : "30px",
-																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63020") + " " + data1[i].NorwkW})], // 평일재근
-																			  	  	   hAlign : "Center",
-																			  	  	   vAlign : "Middle"
-																			  	   })] 
-																	  }),
-																	  new sap.ui.commons.layout.MatrixLayoutRow({
-																	  	  height : "30px",
-																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63021") + " " + data1[i].ComtmW})], // 근태인정
-																			  	  	   hAlign : "Center",
-																			  	  	   vAlign : "Middle"
-																			  	   })] 
-																	  }),
-																	  new sap.ui.commons.layout.MatrixLayoutRow({
-																	  	  height : "30px",
-																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63022") + " " + data1[i].BrktmW})], // 휴게시간
-																			  	  	   hAlign : "Center",
-																			  	  	   vAlign : "Middle"
-																			  	   })] 
-																	  })]
-														  });
+														  columns : 1,
+														  width : "100%",
+														  rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+																  	  height : "30px",
+																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																		  	  	   content : [title],
+																		  	  	   hAlign : "Center",
+																		  	  	   vAlign : "Middle"
+																		  	   })] 
+																  }).addStyleClass(titlestyle)]
+													  });
+										
+										// 입문
+										if(data1[i].Entbg != "" && data1[i].Entbg != "0000"){
+											oMatrix.addRow(makeData(oBundleText.getText("LABEL_63015"), data1[i].Entbg));
+										} else {
+											oMatrix.addRow(makeData("", ""));
+										}
+										
+										// 출문
+										if(data1[i].Enten != "" && data1[i].Enten != "0000"){
+											oMatrix.addRow(makeData(oBundleText.getText("LABEL_63016"), data1[i].Enten));
+										} else {
+											oMatrix.addRow(makeData("", ""));
+										}
+										
+										// 재근
+										if(data1[i].Norwk != "" && data1[i].Norwk != "0000"){
+											oMatrix.addRow(makeData(oBundleText.getText("LABEL_63017"), data1[i].Norwk));
+										} else {
+											oMatrix.addRow(makeData("", ""));
+										}
+										
+										// 근태여부
+										if(data1[i].Absence != ""){
+											oMatrix.addRow(makeData(oBundleText.getText("LABEL_63063"), "")); // 근태있음
+										} else {
+											oMatrix.addRow(makeData("", ""));
+										}	  
 										
 										oControl.addContent(oMatrix);
-										total++;
-									} else {
-										var oBegda = new Date(common.Common.getTime(data1[i].Begda));
-										var oControl = sap.ui.getCore().byId(oController.PAGEID + "_" + dateFormat.format(oBegda));
 										
-										if(oControl){
-											var title = new sap.m.Text({text : dateFormat2.format(oBegda)}).addStyleClass("font-bold");
-											if(data1[i].Tagty == "1"){
-												title.addStyleClass("color-info-red");
-											}
-											
-											// 일자에 범례 색상 표시
-											var titlestyle = "calendar-datum";
-											if(data1[i].Error == "Q"){ // 승인데이터
-												titlestyle = "bg-signature-darkgreen";
-											} else if(data1[i].Error == "X"){ // 이상데이터
-												titlestyle = "bg-signature-orange";
-											} else if(data1[i].Error == "A"){ // 소명신청
-												titlestyle = "background-color-lightorange";
-											}
-											
-											var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-															  columns : 1,
-															  width : "100%",
-															  rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-																	  	  height : "30px",
-																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [title],
-																			  	  	   hAlign : "Center",
-																			  	  	   vAlign : "Middle"
-																			  	   })] 
-																	  }).addStyleClass(titlestyle)]
-														  });
-											
-											// 입문
-											if(data1[i].Entbg != "" && data1[i].Entbg != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63015"), data1[i].Entbg));
-											} else {
-												oMatrix.addRow(makeData("", ""));
-											}
-											
-											// 출문
-											if(data1[i].Enten != "" && data1[i].Enten != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63016"), data1[i].Enten));
-											} else {
-												oMatrix.addRow(makeData("", ""));
-											}
-											
-											// 재근
-											if(data1[i].Norwk != "" && data1[i].Norwk != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63017"), data1[i].Norwk));
-											} else {
-												oMatrix.addRow(makeData("", ""));
-											}
-											
-											// 근무
-											if(data1[i].Workt != "" && data1[i].Workt != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63018"), data1[i].Workt));
-											} else {
-												oMatrix.addRow(makeData("", ""));
-											}	  
-											
-											oControl.addContent(oMatrix);
-											
-											// 데이터 format 변경
-											data1[i].Gendt = data1[i].Gendt ? dateFormat3.format(new Date(common.Common.getTime(data1[i].Gendt))) : ""; // 연차계산일
-											data1[i].Datum = data1[i].Begda;
-											data1[i].Begda = data1[i].Begda ? dateFormat3.format(new Date(common.Common.getTime(data1[i].Begda))) : ""; // 일자
-											data1[i].Entbg = data1[i].Entbg == "" || data1[i].Entbg == "0000" ? "" : data1[i].Entbg.substring(0,2) + ":" + data1[i].Entbg.substring(2,4); // 입문시간
-											data1[i].Enten = data1[i].Enten == "" || data1[i].Enten == "0000" ? "" : data1[i].Enten.substring(0,2) + ":" + data1[i].Enten.substring(2,4); // 출문시간
-											data1[i].Norwk = data1[i].Norwk == "" || data1[i].Norwk == "0000" ? "" : data1[i].Norwk.substring(0,2) + ":" + data1[i].Norwk.substring(2,4); // 평일재근
-											data1[i].Brktm = data1[i].Brktm == "" || data1[i].Brktm == "0000" ? "" : data1[i].Brktm.substring(0,2) + ":" + data1[i].Brktm.substring(2,4); // 평일재근
-											data1[i].Otbet = data1[i].Otbet == "" || data1[i].Otbet == "0000" ? "" : data1[i].Otbet.substring(0,2) + ":" + data1[i].Otbet.substring(2,4); // 연장신청 시작시간
-											data1[i].Otent = data1[i].Otent == "" || data1[i].Otent == "0000" ? "" : data1[i].Otent.substring(0,2) + ":" + data1[i].Otent.substring(2,4); // 연장신청 종료시간
-											data1[i].Workt2 = data1[i].Workt2 == "" || data1[i].Workt2 == "0000" ? "" : data1[i].Workt2.substring(0,2) + ":" + data1[i].Workt2.substring(2,4); // 제근시간기준
-											data1[i].Workt3 = data1[i].Workt3 == "" || data1[i].Workt3 == "0000" ? "" : data1[i].Workt3.substring(0,2) + ":" + data1[i].Workt3.substring(2,4); // 근태인정시간
-											data1[i].Mealb = data1[i].Mealb == true ? "Y" : "N"; // 조
-											data1[i].Meall = data1[i].Meall == true ? "Y" : "N"; // 중
-											data1[i].Meald = data1[i].Meald == true ? "Y" : "N"; // 석
-											data1[i].Mealn = data1[i].Mealn == true ? "Y" : "N"; // 야
-											data1[i].Welld = data1[i].Welld == true ? "Y" : "N"; // 팰리스
-											data1[i].Day = day[oBegda.getDay()]; // 요일
-											// 적용출근시간
-											if(data1[i].Enfbg == "" || data1[i].Enfbg == "0000"){
-												data1[i].Enfbg1 = "";
-												data1[i].Enfbg2 = "";
-											} else {
-												data1[i].Enfbg1 = data1[i].Enfbg.substring(0,2);
-												data1[i].Enfbg2 = data1[i].Enfbg.substring(2,4);
-											}
-											// 적용퇴근시간
-											if(data1[i].Enfen == "" || data1[i].Enfen == "0000"){
-												data1[i].Enfen1 = "";
-												data1[i].Enfen2 = "";
-											} else {
-												data1[i].Enfen1 = data1[i].Enfen.substring(0,2);
-												data1[i].Enfen2 = data1[i].Enfen.substring(2,4);
-											}
-											 
-											var oJSONModel = new sap.ui.model.json.JSONModel();
-												oJSONModel.setData({Data : data1[i]});
-											
-											oControl.setModel(oJSONModel);
-											oControl.addStyleClass("cursor-pointer");
-											oControl.attachBrowserEvent("click", oController.onSelectDate);
-										}
-									}
-								}
-							}
-							
-							if(data.WorkCalendarNav3 && data.WorkCalendarNav3.results && data.WorkCalendarNav3.results.length){
-								var data3 = data.WorkCalendarNav3.results[0];
-								
-								for(var i=0; i<field.length; i++){
-									var tmp = eval("data3." + field[i]);
-									if(field[i] == "Dutyc" || field[i] == "DutycT"){ // 비고 제외
+										// 데이터 format 변경
+										data1[i].Gendt = data1[i].Gendt ? dateFormat3.format(new Date(common.Common.getTime(data1[i].Gendt))) : ""; // 연차계산일
+										data1[i].Datum = data1[i].Begda;
+										data1[i].Begda = data1[i].Begda ? dateFormat3.format(new Date(common.Common.getTime(data1[i].Begda))) : ""; // 일자
+										data1[i].Entbg = data1[i].Entbg == "" || data1[i].Entbg == "0000" ? "" : data1[i].Entbg.substring(0,2) + ":" + data1[i].Entbg.substring(2,4); // 입문시간
+										data1[i].Enten = data1[i].Enten == "" || data1[i].Enten == "0000" ? "" : data1[i].Enten.substring(0,2) + ":" + data1[i].Enten.substring(2,4); // 출문시간
+										data1[i].Norwk = data1[i].Norwk == "" || data1[i].Norwk == "0000" ? "" : data1[i].Norwk.substring(0,2) + ":" + data1[i].Norwk.substring(2,4); // 평일재근
+										data1[i].Brktm = data1[i].Brktm == "" || data1[i].Brktm == "0000" ? "" : data1[i].Brktm.substring(0,2) + ":" + data1[i].Brktm.substring(2,4); // 평일재근
+										data1[i].Otbet = data1[i].Otbet == "" || data1[i].Otbet == "0000" ? "" : data1[i].Otbet.substring(0,2) + ":" + data1[i].Otbet.substring(2,4); // 연장신청 시작시간
+										data1[i].Otent = data1[i].Otent == "" || data1[i].Otent == "0000" ? "" : data1[i].Otent.substring(0,2) + ":" + data1[i].Otent.substring(2,4); // 연장신청 종료시간
+										data1[i].Workt2 = data1[i].Workt2 == "" || data1[i].Workt2 == "0000" ? "" : data1[i].Workt2.substring(0,2) + ":" + data1[i].Workt2.substring(2,4); // 제근시간기준
+										data1[i].Workt3 = data1[i].Workt3 == "" || data1[i].Workt3 == "0000" ? "" : data1[i].Workt3.substring(0,2) + ":" + data1[i].Workt3.substring(2,4); // 근태인정시간
+										data1[i].Mealb = data1[i].Mealb == true ? "Y" : "N"; // 조
+										data1[i].Meall = data1[i].Meall == true ? "Y" : "N"; // 중
+										data1[i].Meald = data1[i].Meald == true ? "Y" : "N"; // 석
+										data1[i].Mealn = data1[i].Mealn == true ? "Y" : "N"; // 야
+										data1[i].Welld = data1[i].Welld == true ? "Y" : "N"; // 팰리스
+										data1[i].Day = day[oBegda.getDay()]; // 요일
 										
-									} else {
-										tmp = tmp == "00000" ? "-" : tmp.substring(0,3) + ":" + tmp.substring(3,5);
+										var oJSONModel = new sap.ui.model.json.JSONModel();
+											oJSONModel.setData({Data : data1[i]});
+										
+										oControl.setModel(oJSONModel);
+										oControl.addStyleClass("cursor-pointer");
+										oControl.attachBrowserEvent("click", oController.onSelectDate);
 									}
 									
-									eval("oController._ListCondJSonModel.setProperty('/Data/" + field[i] + "', tmp);");
 								}
 							}
 						}
@@ -350,7 +271,7 @@ sap.ui.define([
 		},
 		
 		onSelectDate : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 			
 			var oControl = sap.ui.getCore().byId(oEvent.currentTarget.id);
@@ -359,10 +280,10 @@ sap.ui.define([
 			var oData = oControl.getModel().getProperty("/Data");
 			
 			if(!oController._DetailDialog){
-				oController._DetailDialog = sap.ui.jsfragment("ZUI5_HR_WorkCalendar.fragment.Detail", oController);
+				oController._DetailDialog = sap.ui.jsfragment("ZUI5_HR_WorkCalendarBasic.fragment.Detail", oController);
 				oView.addDependent(oController._DetailDialog);
 			}
-																				// 이상데이터 승인 클릭여부
+																				// 이상데이터 승인 클릭 여부
 			oController._DetailDialog.getModel().setData({Data : (Object.assign({Confirm : ""}, oData, $.app.getModel("session").getData()))});
 			
 			// 근태 table
@@ -385,7 +306,6 @@ sap.ui.define([
 				createData.ILangu = oFilter.Langu;
 				createData.IYear = oFilter.Zyymm.substring(0,4);
 				createData.IMonth = oFilter.Zyymm.substring(4,6);
-				// createData.IReqdt = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
 				createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
 				createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
 				createData.IWtype = "";
@@ -441,11 +361,11 @@ sap.ui.define([
 		
 		 // Frety : 1 이상데이터 승인요청, 2 비근무시간 저장, 3 철야근무
 		 onPressSave : function(oEvent, Frety){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 			
 			if(!Frety) return;
-		
+			
 			var oData = oController._DetailDialog.getModel().getProperty("/Data");
 			
 			// validation check
@@ -545,7 +465,7 @@ sap.ui.define([
 		 },
 		
 		searchOrgehPernr : function(oController){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 			
 			var initData = {
@@ -592,7 +512,7 @@ sap.ui.define([
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			// return new JSONModelHelper({name: "20180126"});
 			// return new JSONModelHelper({name: "35110749"});
-			return new JSONModelHelper({name: "35128158"});
+			return new JSONModelHelper({name: "35124378"});
 		} : null
 		
 	});
