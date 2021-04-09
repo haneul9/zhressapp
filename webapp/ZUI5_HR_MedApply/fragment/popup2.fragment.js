@@ -19,14 +19,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
             path : "MedDate", 
             type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
         },
-        valueFormat: "yyyy-MM-dd",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
+        valueFormat: "yyyy-MM-dd",editable:false})}).addStyleClass("DataCell");
         oRow.addCell(oCell);
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel3}).addStyleClass("LabelCell");
         oRow.addCell(oCell);

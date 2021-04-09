@@ -31,8 +31,81 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		var oModel = oController.RequestDetailDialogHandler.getModel();
 		return [
 			this.getHeaderPanel(oController).setModel(oModel),
-			this.getSchedulePanel(oController).setModel(oModel)
+			this.getSchedulePanel(oController).setModel(oModel),
+			this.getAddedPanel(oController).setModel(oModel)
 		];
+	},
+
+	getAddedPanel : function(oController){
+		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons,
+		oRow,oCell,oMat=new sap.ui.commons.layout.MatrixLayout({
+			columns:10
+		});
+		oRow=new c.layout.MatrixLayoutRow();
+		oCell=new c.layout.MatrixLayoutCell({
+			hAlign:"Right",
+			colSpan:10,
+			content:[
+			new sap.ui.core.HTML({
+				preferDOM:false,
+				content:"<span style='font-weight:bold;font-size:13px;color:blue;line-height:33px;'>"+oController.getBundleText("LABEL_19813")+"&nbsp;</span>"
+			}),				
+			new sap.m.Button({
+				enabled: "{/Header/Btact}",
+				text: "{i18n>LABEL_19802}" // 대근자체크
+			})
+			.addStyleClass("button-light-sm"),new sap.m.Button({
+				enabled: "{/Header/Btact}",
+				text: "{i18n>LABEL_19811}" // 한도체크
+			})
+			.addStyleClass("button-light-sm")]
+		}).addStyleClass("button-group");
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
+
+		oRow=new c.layout.MatrixLayoutRow();
+		for(var i=3;i<13;i++){
+			i<10?i="0"+i:null;
+			oCell=new c.layout.MatrixLayoutCell({
+				hAlign:"Center",
+				content:new sap.m.Label({
+					text:oController.getBundleText("LABEL_198"+i)
+				}).addStyleClass("sapUiTv")
+			}).addStyleClass("headercell");
+			oRow.addCell(oCell);
+		}
+		oMat.addRow(oRow);
+
+		var oCol=new c.layout.MatrixLayout(oController.PAGEID+"_Col",{
+			columns : 10,
+		});
+		var oScrCon=new sap.m.ScrollContainer({
+			content : [oCol],
+			width:"100%",
+			vertical : true,
+			height:"350px"
+		});
+		oRow=new c.layout.MatrixLayoutRow();
+		var vCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell",{
+			colSpan:10,
+			content:oScrCon
+		});
+		oRow.addCell(vCell);
+		oMat.addRow(oRow);
+
+		return new sap.m.Panel({
+			expanded: true,
+			expandable: true,
+			headerText: "{i18n>LABEL_19801}", // 대근자
+			content: new sap.m.VBox({
+				width: "100%",
+				items: [
+					oMat
+				]
+			})
+			.addStyleClass("panel-inner-box")
+		})
+		.addStyleClass("custom-panel mt-15px mnw-1188px");
 	},
 
 	getHeaderPanel: function(oController) {
