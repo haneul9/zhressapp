@@ -1,5 +1,4 @@
-﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
-sap.ui.define([
+﻿sap.ui.define([
     "../../common/Common",
     "../delegate/ViewTemplates",
 	"../../common/ZHR_TABLES",
@@ -12,7 +11,7 @@ sap.ui.define([
 		createContent: function (oController) {
 			
             var oEduCombo = new sap.m.ComboBox(oController.PAGEID + "_EduCombo", { // 교육구분
-				width: "150px",
+				width: "250px",
 				editable: {
 					path: "Status",
 					formatter: function(v1) {
@@ -22,11 +21,11 @@ sap.ui.define([
 				items: {
 					path: "/EduCombo",
 					template: new sap.ui.core.ListItem({
-						key: "{Subcd}",
-						text: "{Subtx1}"
+						key: "{Code}",
+						text: "{Text}"
 					})
 				},
-				selectedKey: "{Zfwkps}"
+				selectedKey: "{Zgtype}"
 			});
 			
 			// 키보드 입력 방지
@@ -37,7 +36,7 @@ sap.ui.define([
             }, oEduCombo);
 
             var oTypeCombo = new sap.m.ComboBox(oController.PAGEID + "_TypeCombo", { // 교육유형
-				width: "150px",
+				width: "250px",
 				editable: {
 					path: "Status",
 					formatter: function(v1) {
@@ -47,11 +46,11 @@ sap.ui.define([
 				items: {
 					path: "/TypeCombo",
 					template: new sap.ui.core.ListItem({
-						key: "{Subcd}",
-						text: "{Subtx1}"
+						key: "{Code}",
+						text: "{Text}"
 					})
 				},
-				selectedKey: "{Zfwkps}"
+				selectedKey: "{Edgub}"
 			});
 			
 			// 키보드 입력 방지
@@ -62,7 +61,7 @@ sap.ui.define([
             }, oTypeCombo);
 
             var oSelectCombo = new sap.m.ComboBox(oController.PAGEID + "_SelectCombo", { // 필수/선택
-				width: "150px",
+				width: "250px",
 				editable: {
 					path: "Status",
 					formatter: function(v1) {
@@ -72,11 +71,11 @@ sap.ui.define([
 				items: {
 					path: "/SelectCombo",
 					template: new sap.ui.core.ListItem({
-						key: "{Subcd}",
-						text: "{Subtx1}"
+						key: "{Code}",
+						text: "{Text}"
 					})
 				},
-				selectedKey: "{Zfwkps}"
+				selectedKey: "{Optin}"
 			});
 			
 			// 키보드 입력 방지
@@ -87,7 +86,7 @@ sap.ui.define([
             }, oSelectCombo);
             
             var oNomalCombo = new sap.m.ComboBox(oController.PAGEID + "_NomalCombo", { // 법정/일반
-				width: "150px",
+				width: "250px",
 				editable: {
 					path: "Status",
 					formatter: function(v1) {
@@ -97,11 +96,11 @@ sap.ui.define([
 				items: {
 					path: "/NomalCombo",
 					template: new sap.ui.core.ListItem({
-						key: "{Subcd}",
-						text: "{Subtx1}"
+						key: "{Code}",
+						text: "{Text}"
 					})
 				},
-				selectedKey: "{Zfwkps}"
+				selectedKey: "{Rules}"
 			});
 			
 			// 키보드 입력 방지
@@ -122,11 +121,11 @@ sap.ui.define([
 				items: {
 					path: "/TimeCombo",
 					template: new sap.ui.core.ListItem({
-						key: "{Subcd}",
-						text: "{Subtx1}"
+						key: "{Code}",
+						text: "{Text}"
 					})
 				},
-				selectedKey: "{Zfwkps}"
+				selectedKey: "{hTime}"
 			});
 			
 			// 키보드 입력 방지
@@ -147,11 +146,11 @@ sap.ui.define([
 				items: {
 					path: "/TimeCombo2",
 					template: new sap.ui.core.ListItem({
-						key: "{Subcd}",
-						text: "{Subtx1}"
+						key: "{Code}",
+						text: "{Text}"
 					})
 				},
-				selectedKey: "{Zfwkps}"
+				selectedKey: "{mTime}"
 			});
 			
 			// 키보드 입력 방지
@@ -179,10 +178,10 @@ sap.ui.define([
 			.bindRows("/Data");
 			
 			ZHR_TABLES.makeColumn(oController, oAttTable, [
-				{id: "Pchk", 	label: ""				   /* CheckBox */,	plabel: "", resize: true, span: 0, type: "Checkbox",  sort: true,  filter: true, width: "auto"},
-				{id: "Zssamt",  label: "{i18n>LABEL_40030}" /* 부서명 */,  	plabel: "",  resize: true, span: 0, type: "currency",  sort: true,  filter: true,  width: "auto"},
-				{id: "Ztramt",  label: "{i18n>LABEL_40031}" /* 직급 */,     plabel: "",  resize: true, span: 0, type: "currency", sort: true,  filter: true,  width: "auto"},
-				{id: "Zcoamt", 	label: "{i18n>LABEL_40032}" /* 성명 */,		plabel: "" , resize: true, span: 0, type: "currency", sort: true,  filter: true,  width: "auto"}
+				{id: "Pchk", 		label: ""				   /* CheckBox */,	plabel: "", resize: true, span: 0, type: "Checkbox",  sort: true,  filter: true, width: "auto"},
+				{id: "PupStext",	label: "{i18n>LABEL_40030}" /* 부서명 */,  	plabel: "",  resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
+				{id: "ZpGradeTxt",  label: "{i18n>LABEL_40031}" /* 직급 */,     plabel: "",  resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto"},
+				{id: "Stext", 		label: "{i18n>LABEL_40032}" /* 성명 */,		plabel: "" , resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto"}
 			]);
             
             var oApplyBox = new sap.m.VBox({
@@ -195,15 +194,15 @@ sap.ui.define([
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40024}", "150px", "Right", true ), // 교육과정
                                     new sap.m.Input({
                                         textAlign: "Begin",
-                                        width: "715px",
-                                        maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Zadres", false),
+                                        width: "704px",
+                                        maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edkaj", false),
                                         editable: {
                                             path: "Status",
                                             formatter: function(v1) {
                                                 return !v1 || v1 === "AA";
                                             }
                                         },
-                                        value: "{Zadres}"
+                                        value: "{Edkaj}"
                                     })
 								]
 							})
@@ -219,11 +218,29 @@ sap.ui.define([
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_40025}", "150px", "Right", true ),  // 교육구분
                                     oEduCombo
 								]
-							}).addStyleClass("search-field-group"),
+							}).addStyleClass("search-field-group mr-30px"),
                             new sap.m.HBox({
                                 items: [
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_40058}", "150px", "Right", true ),  // 교육유형
                                     oTypeCombo
+								]
+							}).addStyleClass("search-field-group")
+                        ]
+                    })
+					.addStyleClass("search-field-group"),
+                    new sap.m.HBox({
+                        width: "100%",
+                        items: [
+                            new sap.m.HBox({
+                                items: [
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_40026}", "150px", "Right", true ),  // 필수/선택
+                                    oSelectCombo
+								]
+							}).addStyleClass("search-field-group mr-30px"),
+                            new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40027}", "150px", "Right", true ),  // 법정/일반
+									oNomalCombo
 								]
 							}).addStyleClass("search-field-group")
                         ]
@@ -241,7 +258,7 @@ sap.ui.define([
 										items: [
 											new sap.m.Button({
 												icon: "sap-icon://add",
-												press: oController.onPressAddRow,
+												press: oController.onPressAddRow.bind(oController),
 												text: "{i18n>LABEL_40034}", // 추가
 												visible: {
 													path: "Status",
@@ -249,10 +266,10 @@ sap.ui.define([
 														return !v1 || v1 === "AA";
 													}
 												}
-											}).addStyleClass("button-light-sm"),
+											}).addStyleClass("button-light-sm mr-5px"),
 											new sap.m.Button({
 												icon: "sap-icon://less",
-												press: oController.onPressDelRow,
+												press: oController.onPressDelRow.bind(oController),
 												text: "{i18n>LABEL_40011}", // 삭제
 												visible: {
 													path: "Status",
@@ -262,46 +279,59 @@ sap.ui.define([
 												}
 											}).addStyleClass("button-light-sm")
 										]
-									}),
+									})
+									.addStyleClass("mt-6px"),
 									oAttTable
 								]
 							})
                         ]
                     })
-                    .addStyleClass("search-field-group"),
+                    .addStyleClass("search-field-group h-auto"),
                     new sap.m.HBox({
                         width: "100%",
                         items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_40035}", "150px", "Right", true), // 학습기간
-							new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
-								width: "250px",
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								delimiter: "~",
-								dateValue: "{Begdhb}",
-								secondDateValue: "{Enddhe}"
-							}),
-							ViewTemplates.getLabel("header", "{i18n>LABEL_40036}", "150px", "Right", true), // 학습시간
-							oTimeCombo,
-							new sap.m.Text({ text: " : " }),
-							oTimeCombo2
+							new sap.m.HBox({
+								width: "100%",
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40035}", "150px", "Right", true), // 학습기간
+									new PickOnlyDateRangeSelection({
+										width: "250px",
+										displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
+										delimiter: "~",
+										dateValue: "{Begdhb}",
+										secondDateValue: "{Enddhe}"
+									})
+								]
+							})
+							.addStyleClass("search-field-group"),
+							new sap.m.HBox({
+								width: "100%",
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40036}", "150px", "Right", true), // 학습시간
+									oTimeCombo,
+									new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
+									oTimeCombo2
+								]
+							})
+							.addStyleClass("search-field-group")
                         ]
                     })
                     .addStyleClass("search-field-group"),
                     new sap.m.HBox({
                         width: "100%",
                         items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_59016}", "150px", "Right" ), // 학습장소
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40061}", "150px", "Right" ), // 비고
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "715px",
-								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
+								width: "443px",
+								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Comment", false),
 								editable: {
 									path: "Status",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
 								},
-								value: "{Remark}"
+								value: "{Comment}"
 							}),
 							new sap.m.RadioButtonGroup(oController.PAGEID + "_RadioGroup", {
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
@@ -320,7 +350,7 @@ sap.ui.define([
 										text: "{i18n>LABEL_40038}", // 국내교육
 										width: "auto",
 										selected: {
-											path: "Zmuflg",
+											path: "Natio",
 											formatter: function(v) {
 												return v === "1";
 											}
@@ -330,7 +360,7 @@ sap.ui.define([
 										text: "{i18n>LABEL_40039}", // 해외교육
 										width: "auto",
 										selected: {
-											path: "Zmuflg",
+											path: "Natio",
 											formatter: function(v) {
 												return v === "2";
 											}
@@ -347,15 +377,15 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_40040}", "150px", "Right", true ), // 교육기관
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "715px",
-								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
+								width: "704px",
+								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "EdstaObjid", false),
 								editable: {
 									path: "Status",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
 								},
-								value: "{Remark}"
+								value: "{Edsta}"
 							})
 						]
 					})
@@ -367,129 +397,137 @@ sap.ui.define([
                                 items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40041}", "150px", "Right", true ), // 인당교육비
 									new sap.m.Input({
-										textAlign: "Begin",
+										textAlign: "End",
 										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
+										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzpretun", false),
+										liveChange: oController.getMoneyComma1.bind(oController),
 										editable: {
 											path: "Status",
 											formatter: function(v1) {
 												return !v1 || v1 === "AA";
 											}
 										},
-										value: "{Remark}"
+										value: {
+											path: "Costp",
+											formatter: function(v) {
+												if(v) return Common.numberWithCommas(v);
+												else return "0";
+											}
+										},
 									})
 								]
 							})
-							.addStyleClass("search-field-group"),
+							.addStyleClass("search-field-group mr-30px"),
 							new sap.m.HBox({
                                 items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40042}", "150px", "Right", true ), // 부가세
 									new sap.m.Input({
-										textAlign: "Begin",
+										textAlign: "End",
 										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
+										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzvalbt", false),
+										liveChange: oController.getMoneyComma2.bind(oController),
 										editable: {
 											path: "Status",
 											formatter: function(v1) {
 												return !v1 || v1 === "AA";
 											}
 										},
-										value: "{Remark}"
-									})
-								]
-							})
-							.addStyleClass("search-field-group"),
-							new sap.m.HBox({
-                                items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_40044}", "150px", "Right", true ), // 전달교육 실시계획
-									new sap.m.TextArea({
-										rows: 3,
-										width: "715px",
-										value:"{Detail}",
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
-											}
-										}
-									})
-								]
-							})
-							.addStyleClass("search-field-group"),
-							new sap.m.HBox({
-                                items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_59009}", "150px", "Right", true ), // 이수기준
-									new sap.m.Input({
-										textAlign: "Begin",
-										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
+										value: {
+											path: "Vatax",
+											formatter: function(v) {
+												if(v) return Common.numberWithCommas(v);
+												else return "0";
 											}
 										},
-										value: "{Remark}"
-									})
-								]
-							})
-							.addStyleClass("search-field-group"),
-							new sap.m.HBox({
-                                items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_59009}", "150px", "Right", true ), // 이수점수
-									new sap.m.Input({
-										textAlign: "Begin",
-										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
-											}
-										},
-										value: "{Remark}"
-									})
-								]
-							})
-							.addStyleClass("search-field-group"),
-							new sap.m.HBox({
-                                items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_59009}", "150px", "Right", true ), // 보고서필수
-									new sap.m.Input({
-										textAlign: "Begin",
-										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "DispatchApplyTableIn1", "Remark", false),
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
-											}
-										},
-										value: "{Remark}"
-									})
-								]
-							})
-							.addStyleClass("search-field-group"),
-							new sap.m.HBox({
-                                items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_40056}", "150px", "Right"), // 기타사항
-									new sap.m.TextArea({
-										rows: 3,
-										width: "715px",
-										value:"{Detail}",
-										editable: {
-											path: "Status",
-											formatter: function(v1) {
-												return !v1 || v1 === "AA";
-											}
-										}
 									})
 								]
 							})
 							.addStyleClass("search-field-group")
 						]
 					})
-					.addStyleClass("search-field-group")
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40044}", "150px", "Right", true ), // 전담교육 실시계획
+							new sap.m.TextArea({
+								rows: 3,
+								width: "704px",
+								value:"{Planx}",
+								editable: {
+									path: "Status",
+									formatter: function(v1) {
+										return !v1 || v1 === "AA";
+									}
+								}
+							})
+						]
+					})
+					.addStyleClass("search-field-group h-auto"),
+					new sap.m.HBox({
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40048}", "150px", "Right"), // 이수기준
+							new sap.m.Text({
+								text: "{Descr}",
+								width: "250px",
+								textAlign: "Begin"
+							})
+						]
+					})
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						items: [
+							new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 이수시간
+									new sap.m.Text({
+										text: "",
+										width: "250px",
+										textAlign: "Begin"
+									})
+								]
+							})
+							.addStyleClass("search-field-group mr-30px"),
+							new sap.m.HBox({
+								items: [
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40050}", "150px", "Right"), // 이수점수
+									new sap.m.Text({
+										text: "{Totel}",
+										width: "250px",
+										textAlign: "Begin"
+									})
+								]
+							})
+							.addStyleClass("search-field-group")
+						]
+					})
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40055}", "150px", "Right"), // 보고서필수
+							new sap.m.Text({
+								text: "{Rptyn}",
+								textAlign: "Begin"
+							})
+						]
+					})
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_40056}", "150px", "Right"), // 기타사항
+							new sap.m.TextArea({
+								rows: 3,
+								width: "704px",
+								value:"{Othtx}",
+								editable: {
+									path: "Status",
+									formatter: function(v1) {
+										return !v1 || v1 === "AA";
+									}
+								}
+							})
+						]
+					})
+					.addStyleClass("search-field-group h-auto")
                 ]
             })
 			.addStyleClass("search-inner-vbox");
@@ -498,18 +536,44 @@ sap.ui.define([
 				width: "100%",
 				fitContainer: true,
 				items: [
-					new sap.m.Text({
-						text: "{i18n>MSG_40001}",
-						textAlign: "Begin"
+					new sap.m.HBox({
+						items: [
+							new sap.ui.core.Icon({
+								src: "sap-icon://information"
+							})
+							.addStyleClass("color-icon-blue mr-5px pt-5px"),
+							new sap.m.Text({
+								text: "{i18n>MSG_40001}",
+								textAlign: "Begin"
+							})
+						]
 					}),
-					new sap.m.Text({
-						text: "{i18n>MSG_40002}",
-						textAlign: "Begin"
-					}),
-					new sap.m.Text({
-						text: "{i18n>MSG_40003}",
-						textAlign: "Begin"
+					new sap.m.HBox({
+						items: [
+							new sap.ui.core.Icon({
+								src: "sap-icon://information"
+							})
+							.addStyleClass("color-icon-blue mr-5px pt-5px"),
+							new sap.m.Text({
+								text: "{i18n>MSG_40002}",
+								textAlign: "Begin"
+							})
+						]
 					})
+					.addStyleClass("mt-3px"),
+					new sap.m.HBox({
+						items: [
+							new sap.ui.core.Icon({
+								src: "sap-icon://information"
+							})
+							.addStyleClass("color-icon-blue mr-5px pt-5px"),
+							new sap.m.Text({
+								text: "{i18n>MSG_40003}",
+								textAlign: "Begin"
+							})
+						]
+					})
+					.addStyleClass("mt-3px")
 				]
 			})
 			.addStyleClass("mt-5px");
@@ -517,7 +581,7 @@ sap.ui.define([
 			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
 				fitContainer: true,
 				items: [
-					fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+					sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 				]
 			});
 				

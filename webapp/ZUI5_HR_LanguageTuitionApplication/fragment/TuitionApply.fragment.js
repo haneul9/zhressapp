@@ -1,7 +1,8 @@
 sap.ui.define([
 	"../../common/Common",
-	"../../common/PickOnlyDateRangeSelection"
-], function (Common, PickOnlyDateRangeSelection) {
+	"../../common/PickOnlyDateRangeSelection",
+	"../delegate/ViewTemplates",
+], function (Common, PickOnlyDateRangeSelection, ViewTemplates) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_LanguageTuitionApplication.fragment.TuitionApply", {
@@ -380,9 +381,24 @@ sap.ui.define([
 				.setModel(oController.DetailModel)
 				.bindElement("/FormData")
 				.addStyleClass("mb-10px"),
-				new sap.m.FlexBox(oController.PAGEID + "_FileUpload", {
+				new sap.m.HBox({
 					items: [
-						sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+						ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Right"), // 첨부파일
+						new sap.m.VBox({
+							items: [
+								new sap.m.HBox({
+									items: [
+										new sap.ui.core.Icon({
+											src: "sap-icon://information"
+										})
+										.addStyleClass("color-icon-blue mr-5px pt-5px"),
+										new sap.m.Text({ text: "{i18n>MSG_29020}", textAlign: "Begin" })
+									]
+								}),
+								fragment.COMMON_ATTACH_FILES.renderer(oController,"001"),
+								fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+							]
+						})
 					]
 				}).addStyleClass("pl-10px pr-10px")
 			]

@@ -372,9 +372,19 @@
 		},
 		
 		fileUpload: function(oController) {
-			return new sap.m.FlexBox({
+			return new sap.m.VBox({
 				items: [
-					sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+					new sap.m.HBox({
+						items: [
+							new sap.ui.core.Icon({
+								src: "sap-icon://information"
+							})
+							.addStyleClass("color-icon-blue mr-5px pt-5px"),
+							new sap.m.Text({ text: "{i18n>MSG_29020}", textAlign: "Begin" })
+						]
+					}),
+					fragment.COMMON_ATTACH_FILES.renderer(oController,"001"),
+					fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
 				]
 			})
 		}

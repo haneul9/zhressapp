@@ -1,7 +1,6 @@
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
 	"../common/PageHelper",
 	"../common/EmployeeModel",
@@ -9,7 +8,7 @@ sap.ui.define([
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/core/util/File",
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, EmployeeModel, MessageBox, BusyIndicator, File) {
+	function (Common, CommonController, JSONModelHelper, PageHelper, EmployeeModel, MessageBox, BusyIndicator, File) {
 	"use strict";
 
 	
@@ -507,8 +506,13 @@ sap.ui.define([
 				return true;
 			}
 
-			if(AttachFileAction.getFileLength(oController) <= 1) {
-				MessageBox.error(oController.getBundleText("MSG_29012"), { title: oController.getBundleText("MSG_08107")});
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0) {
+				MessageBox.error(oController.getBundleText("MSG_29017"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0) {
+				MessageBox.error(oController.getBundleText("MSG_29021"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
@@ -770,7 +774,10 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_29044")) { //신청
 					
 					// 첨부파일 저장
-					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					var uFiles = [];
+					for(var i=1; i<3; i++)	uFiles.push("00" + i);
+
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
 
 					var sendObject = {};
 					// Header
@@ -830,7 +837,10 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_29026")) { //저장
 					
 					// 첨부파일 저장
-					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					var uFiles = [];
+					for(var i=1; i<3; i++)	uFiles.push("00" + i);
+
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
 
 					var sendObject = {};
 					// Header
@@ -924,17 +934,25 @@ sap.ui.define([
 		onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
 			var vStatus = oController.DetailModel.getProperty("/FormData/Status"),
-				vAppnm = oController.DetailModel.getProperty("/FormData/Appnm") || "",
-				vInfoMessage = oController.getBundleText("MSG_29017");
+				vAppnm = oController.DetailModel.getProperty("/FormData/Appnm") || "";
 			
-			AttachFileAction.setAttachFile(oController, {
+			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 영수증
+				Label: oController.getBundleText("LABEL_29020"),
+				Required : true,
 				Appnm: vAppnm,
-				Required: true,
-				Mode: "M",
-				Max: "10",
-				InfoMessage: vInfoMessage,
+				Mode: "S",
+				UseMultiCategories: true,
 				Editable: (!vStatus || vStatus === "AA") ? true : false,
-			});
+			},"001");
+			
+			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수강학원증
+				Label: oController.getBundleText("LABEL_29021"),
+				Required : true,
+				Appnm: vAppnm,
+				Mode: "S",
+				UseMultiCategories: true,
+				Editable: (!vStatus || vStatus === "AA") ? true : false,
+			},"002");
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {

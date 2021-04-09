@@ -1,15 +1,15 @@
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
-	"../common/PageHelper",
 	"../common/EmployeeModel",
+	"../common/AttachFileAction",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"sap/ui/core/util/File",
+	"../common/DialogHandler",
+	"../common/OrgOfIndividualHandler"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, EmployeeModel, MessageBox, BusyIndicator, File) {
+	function (Common, CommonController, JSONModelHelper, EmployeeModel, AttachFileAction, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler) {
 	"use strict";
 
 	
@@ -123,6 +123,54 @@ sap.ui.define([
             oController.SearchModel.setProperty("/Data/Zmonth1", "ALL");
 			oController.SearchModel.setProperty("/Zmonths1", aMonths);
         },
+
+        setTimeCombo1: function(oController) {
+            var vTime = "",
+                oTimes = [];
+
+			oTimes.push({ Code: "Null", Text: "hh" });
+
+            Common.makeNumbersArray({length: 24, isZeroStart: false}).forEach(function(idx) {
+                vTime = String(idx);
+				var hTime = Common.lpad(vTime, 2);
+                oTimes.push({ Code: vTime, Text: hTime});
+            });
+
+            oController.ApplyModel.setProperty("/FormData/hTime", "Null");
+			oController.ApplyModel.setProperty("/TimeCombo", oTimes);
+        },
+
+        setTimeCombo2: function(oController) {
+            var vTime = "",
+                oTimes = [];
+
+			oTimes.push({ Code: "Null", Text: "mm" });
+
+            Common.makeNumbersArray({length: 60}).forEach(function(idx) {
+                vTime = String(idx);
+				var mTime = Common.lpad(vTime, 2);
+                oTimes.push({ Code: vTime, Text: mTime});
+            });
+
+            oController.ApplyModel.setProperty("/FormData/mTime", "Null");
+			oController.ApplyModel.setProperty("/TimeCombo2", oTimes);
+        },
+
+		getMoneyComma1: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
+
+			this.ApplyModel.setProperty("/FormData/Costp", Common.checkNull(convertValue) ? "0" : convertValue);
+			oEvent.getSource().setValue(Common.numberWithCommas(Common.checkNull(convertValue) ? "0" : convertValue));	
+		},
+
+		getMoneyComma2: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
+
+			this.ApplyModel.setProperty("/FormData/Vatax", Common.checkNull(convertValue) ? "0" : convertValue);
+			oEvent.getSource().setValue(Common.numberWithCommas(Common.checkNull(convertValue) ? "0" : convertValue));	
+		},
 		
 		onTableSearch: function() {
 			var oController = $.app.getController();
@@ -187,29 +235,110 @@ sap.ui.define([
 			
 			var oCopyRow = $.extend(true, {}, oRowData);
 
+			oController.ApplyModel.setData({FormData: oCopyRow});
+			oController.AttModel.setData({Data: []});
+			
 			if (!oController._ApplyModel) {
 				oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", oController);
 				oView.addDependent(oController._ApplyModel);
 			}
-
+			oController.setTimeCombo1(oController);
+			oController.setTimeCombo2(oController);
+			oController.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
+			oController.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
+			oController.getCodeList(oCopyRow);
 			oController.onBeforeOpenDetailDialog();
 			oController._ApplyModel.open();
 		},
 
-		onPressAppBtn: function() {
+		onPressAppBtn: function() { // 신청서 작성
+			var oView = $.app.byId("ZUI5_HR_OutCompEdu.OutCompEdu");
+
+			this.ApplyModel.setData({FormData: []});
+			this.AttModel.setData({Data: []});
+
+			if (!this._ApplyModel) {
+				this._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", this);
+				oView.addDependent(this._ApplyModel);
+			}
+
+			this.ApplyModel.setProperty("/FormData/Planx", this.getBundleText("MSG_40004"));
+			this.setTimeCombo1(this);
+			this.setTimeCombo2(this);
+			this.getCodeList();
+			this.onBeforeOpenDetailDialog();
+			this._ApplyModel.open();
+		},
+
+		onPressRepBtn: function() { // 결과보고
 
 		},
 
-		onPressRepBtn: function() {
+		onPressReqBtn: function() { // 결재요청
 
 		},
 
-		onPressReqBtn: function() {
+		onPressDelBtn: function() { // 삭제
+			var oController = this;
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oTable = $.app.byId(this.PAGEID + "_Table");
+			var oData = this.TableModel.getProperty("/Data");
 
-		},
+			if(oData.every(function(e) {return e.Pchk !== true})){
+				MessageBox.error(oController.getBundleText("MSG_40026"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+						
+			BusyIndicator.show(0);
+			var onProcessDelete = function (fVal) {
+				if (fVal && fVal == oController.getBundleText("LABEL_40011")) { // 삭제
+					oData.forEach(function(ele) {
+						if(ele.Pchk){
+							var sendObject = {};
+							// Header
+							sendObject.IPernr = vPernr;
+							sendObject.IEmpid = vPernr;
+							sendObject.IConType = "4";
+							sendObject.IEdoty = "1";
+							sendObject.IBukrs = vBukrs2;
+							// Navigation property
+							sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", ele)];
+							
+							oModel.create("/TrainingOutApplySet", sendObject, {
+								success: function(oData, oResponse) {
+									var dataLength = 10;
 
-		onPressDelBtn: function() {
+									if (oData && oData.TrainingOutApplyTableIn1) { 
+										Common.log(oData);
+										// sap.m.MessageBox.alert(oController.getBundleText("MSG_40012"), { title: oController.getBundleText("MSG_08107")});
+										var rDatas1 = oData.TrainingOutApplyTableIn1.results;
+										dataLength = rDatas1.length;
+										oController.TableModel.setData({Data: rDatas1});
+									}
+									oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); 
+								},
+								error: function(oResponse) {
+									Common.log(oResponse);
+									sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+										title: oController.getBundleText("LABEL_09030")
+									});
+									BusyIndicator.hide();
+								}
+							});
+						}
+					});
+				}
+				BusyIndicator.hide();
+			};
 
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29005"), {
+				title: oController.getBundleText("LABEL_40001"),
+				actions: [oController.getBundleText("LABEL_40011"), oController.getBundleText("LABEL_00119")],
+				onClose: onProcessDelete
+			});
+				
 		},
 
 		getComboData: function() {
@@ -288,54 +417,253 @@ sap.ui.define([
 			});
 		},
 
-		onPressAddRow: function(oEvent) { // 참석자 추가
+		getCodeList: function(oRowData) { // Dialog 공통코드호출
+			var oController = $.app.getController();
+			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
 
+			var sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "036";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZGTYPE";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 교육구분
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
+						oController.ApplyModel.setProperty("/EduCombo", oData.NavCommonCodeList.results);
+
+						if(!oRowData) oController.ApplyModel.setProperty("/FormData/Zgtype", "Null");
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
+
+			sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "004";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZEDGUB";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 교육유형
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
+						oController.ApplyModel.setProperty("/TypeCombo", oData.NavCommonCodeList.results);
+						
+						if(!oRowData) oController.ApplyModel.setProperty("/FormData/Edgub", "Null");
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+				}
+			});
+
+			sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "004";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZOPTIN";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 필수/선택
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
+						oController.ApplyModel.setProperty("/SelectCombo", oData.NavCommonCodeList.results);
+
+						if(!oRowData) oController.ApplyModel.setProperty("/FormData/Optin", "Null");
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+				}
+			});
+
+			sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "004";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZRULES";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 법정/일반
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
+						oController.ApplyModel.setProperty("/NomalCombo", oData.NavCommonCodeList.results);
+
+						if(!oRowData) oController.ApplyModel.setProperty("/FormData/Rules", "Null");
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+				}
+			});
+		},
+
+		getOrgOfIndividualHandler: function() {
+
+			return OrgOfIndividualHandler;
+		},
+
+		onESSelectPerson: function(data) {
+                return OrgOfIndividualHandler.setSelectionTagets(data);
+            },
+
+		displayMultiOrgSearchDialog: function(oEvent) {
+			return $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent);
+		},
+
+		onPressAddRow: function(oEvent) { // 참석자 추가
+			var oController = this;
+			setTimeout(function() {
+				var oLoadData = {
+					Percod: this.getSessionInfoByKey("Percod"),
+					Bukrs: this.getSessionInfoByKey("Bukrs2"),
+					Langu: this.getSessionInfoByKey("Langu"),
+					Molga: this.getSessionInfoByKey("Molga"),
+					Datum: new Date(),
+					Mssty: ""
+				};
+	
+				var callback = function(o) {
+					var oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
+					var oAtt = oController.AttModel.getProperty("/Data");
+					var vLength = 5;
+
+					if(oAtt.some(function(e) {return e === o})) {
+						MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
+						return ;
+					}
+					oAtt.push(o);
+					
+					oController.AttModel.setProperty("/Data", oAtt);
+					vLength = oAtt.length;
+
+					oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
+				};
+	
+				OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, oLoadData, callback);
+				DialogHandler.open(OrgOfIndividualHandler);
+			}.bind(this), 0);
 		},
 
 		onPressDelRow: function(oEvent) { // 참석자 삭제
+			var oController = this;
+			var oAttTable = $.app.byId(this.PAGEID + "_AttTable");
+			var oAttData = this.AttModel.getProperty("/Data");
+			var oAttList = [];
+			var vLength = 5;
 
+			if(oAttData.every(function(e) {return e.Pchk !== true})){
+				MessageBox.error(oController.getBundleText("MSG_40005"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+			
+			oAttData.forEach(function(ele) {
+				if(Common.checkNull(ele.Pchk)){
+					oAttList.push(ele);
+				}
+			});
+			
+			oController.AttModel.setData({Data: oAttList});
+			vLength = this.AttModel.getProperty("/Data").length;
+			oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
 		},
 
 		onChangeRadio: function(oEvent) {
+			var vPath = oEvent.getSource().getBindingContext().getPath();
 
+			if(oEvent.mParameters.selectedIndex === 0){
+				this.ApplyModel.setProperty(vPath + "/Natio", "1");
+			}else{
+				this.ApplyModel.setProperty(vPath + "/Natio", "2");
+			}
 		},
 
 		ErrorCheck: function() {
 			var oController = $.app.getController();
-			var oCostCombo = $.app.byId(oController.PAGEID + "_CostCombo");
 
-			if(Common.checkNull(oCostCombo.getSelectedKey())){
-				MessageBox.error(oController.getBundleText("MSG_29007"), { title: oController.getBundleText("MSG_08107")});
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edkaj"))){ // 교육과정
+				MessageBox.error(oController.getBundleText("MSG_40013"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Lecen"))){
-				MessageBox.error(oController.getBundleText("MSG_29008"), { title: oController.getBundleText("MSG_08107")});
+			if(oController.ApplyModel.getProperty("/FormData/Zgtype") === "Null"){ // 교육구분
+				MessageBox.error(oController.getBundleText("MSG_40014"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zlaorg"))){
-				MessageBox.error(oController.getBundleText("MSG_29010"), { title: oController.getBundleText("MSG_08107")});
+			if(oController.ApplyModel.getProperty("/FormData/Edgub") === "Null"){ // 교육유형
+				MessageBox.error(oController.getBundleText("MSG_40015"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Latell"))){
-				MessageBox.error(oController.getBundleText("MSG_29011"), { title: oController.getBundleText("MSG_08107")});
+			if(oController.ApplyModel.getProperty("/FormData/Optin") === "Null"){ // 필수/선택
+				MessageBox.error(oController.getBundleText("MSG_40016"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Caldt"))){
-				MessageBox.error(oController.getBundleText("MSG_29013"), { title: oController.getBundleText("MSG_08107")});
+			if(oController.ApplyModel.getProperty("/FormData/Rules") === "Null"){ // 법정/일반
+				MessageBox.error(oController.getBundleText("MSG_40017"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Lecbet"))){
-				MessageBox.error(oController.getBundleText("MSG_29015"), { title: oController.getBundleText("MSG_08107")});
+			if(oController.AttModel.getProperty("/Data").length <= 1){ // 참석자
+				MessageBox.error(oController.getBundleText("MSG_40018"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
-			if(AttachFileAction.getFileLength(oController) <= 1) {
-				MessageBox.error(oController.getBundleText("MSG_29012"), { title: oController.getBundleText("MSG_08107")});
+			if(oController.ApplyModel.getProperty("/FormData/Begdhb") === "Null"){ // 학습기간
+				MessageBox.error(oController.getBundleText("MSG_40019"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(oController.ApplyModel.getProperty("/FormData/hTime") === "Null" || oController.ApplyModel.getProperty("/FormData/mTime") === "Null"){ // 학습시간
+				MessageBox.error(oController.getBundleText("MSG_40020"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edsta"))){ // 교육기관
+				MessageBox.error(oController.getBundleText("MSG_40021"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Costp"))){ // 인당교육비
+				MessageBox.error(oController.getBundleText("MSG_40022"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Vatax"))){ // 부가세
+				MessageBox.error(oController.getBundleText("MSG_40023"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Planx"))){ // 전담교육
+				MessageBox.error(oController.getBundleText("MSG_40024"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(AttachFileAction.getFileLength(oController) === 0) {
+				MessageBox.error(oController.getBundleText("MSG_40025"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
 
@@ -348,38 +676,47 @@ sap.ui.define([
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var oSendData = oController.ApplyModel.getProperty("/FormData");
+			var oAttList2 = [];
 
 			if(oController.ErrorCheck()) return;
 			
-			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
-			oSendData.Waers = "KRW";
-			
+			oController.AttModel.getProperty("/Data").forEach(function(e) {
+				var oAttList1 = {};
+				oAttList1.Ename = e.Stext;
+				oAttList1.Pernr = e.Objid;
+				oAttList1.PGradeTxt = e.ZpGradeTxt;
+				oAttList2.push(oAttList1);
+			});
+
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
 				//신청 클릭시 발생하는 이벤트
-				if (fVal && fVal == oController.getBundleText("LABEL_29044")) { //신청
+				if (fVal && fVal == oController.getBundleText("LABEL_40060")) { //신청
+					var vTimeH = oController.ApplyModel.getProperty("/FormData/hTime");
+					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
 					
 					// 첨부파일 저장
 					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oSendData.Edoty = "1";
+					oSendData.Pernr = vPernr;
+					oSendData.Trtim = vTimeH + "." + vTimeM;
 
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
 					sendObject.IEmpid = vPernr;
+					sendObject.IEdoty = "1";
 					sendObject.IConType = "3";
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
-					sendObject.LanguPayApplyTableIn = [
-						$.extend(true, Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData), {
-							Lecen: new Date(oController.ApplyModel.getProperty("/FormData/Lecen"))
-						})
-					];
+					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
+					sendObject.TrainingOutApplyTableIn2 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList2)];
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
 						success: function(oData, oResponse) {
 							Common.log(oData);
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_29019"), { title: oController.getBundleText("MSG_08107")});
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40008"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
 							BusyIndicator.hide();
 							oController._ApplyModel.close();
@@ -396,9 +733,9 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29018"), {
-				title: oController.getBundleText("LABEL_29001"),
-				actions: [oController.getBundleText("LABEL_29044"), oController.getBundleText("LABEL_00119")],
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40007"), {
+				title: oController.getBundleText("LABEL_40001"),
+				actions: [oController.getBundleText("LABEL_40060"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessApply
 			});
 		},
@@ -409,29 +746,41 @@ sap.ui.define([
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var oSendData = oController.ApplyModel.getProperty("/FormData");
+			var oAttList2 = [];
 
 			if(oController.ErrorCheck()) return;
-			
-			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
+
+			oController.AttModel.getProperty("/Data").forEach(function(e) {
+				var oAttList1 = {};
+				oAttList1.Ename = e.Stext;
+				oAttList1.Pernr = e.Objid;
+				oAttList1.PGradeTxt = e.ZpGradeTxt;
+				oAttList2.push(oAttList1);
+			});
 			
 			BusyIndicator.show(0);
 			var onProcessSave = function (fVal) {
 				//저장 클릭시 발생하는 이벤트
-				if (fVal && fVal == oController.getBundleText("LABEL_29026")) { //저장
+				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //저장
+					
+					var vTimeH = oController.ApplyModel.getProperty("/FormData/hTime");
+					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
 					
 					// 첨부파일 저장
 					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oSendData.Pernr = vPernr;
+					oSendData.Trtim = vTimeH + "." + vTimeM;
 
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
 					sendObject.IEmpid = vPernr;
+					sendObject.IEdoty = "1";
 					sendObject.IConType = "2";
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
-					sendObject.LanguPayApplyExport = [];
-					sendObject.LanguPayApplyTableIn = [Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData)];
-					sendObject.LanguPayApplyTableIn3 = [];
+					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
+					sendObject.TrainingOutApplyTableIn2 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList2)];
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
@@ -439,7 +788,7 @@ sap.ui.define([
 							Common.log(oData);
 							oController.onTableSearch();
 							BusyIndicator.hide();
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_29004"), { title: oController.getBundleText("MSG_08107")});
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40010"), { title: oController.getBundleText("MSG_08107")});
 							oController._ApplyModel.close();
 						},
 						error: function(oResponse) {
@@ -454,9 +803,9 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29003"), {
-				title: oController.getBundleText("LABEL_29001"),
-				actions: [oController.getBundleText("LABEL_29026"), oController.getBundleText("LABEL_00119")],
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40009"), {
+				title: oController.getBundleText("LABEL_40001"),
+				actions: [oController.getBundleText("LABEL_40022"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessSave
 			});
 		},
@@ -468,28 +817,29 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var oSendData = oController.ApplyModel.getProperty("/FormData");
 			
-			oSendData.Lecbet = oSendData.Lecbet.replace(/,/g, "");
-			
 			BusyIndicator.show(0);
 			var onProcessDelete = function (fVal) {
 				//삭제 클릭시 발생하는 이벤트
-				if (fVal && fVal == oController.getBundleText("LABEL_29027")) { // 삭제
+				if (fVal && fVal == oController.getBundleText("LABEL_40011")) { // 삭제
 					
+					oSendData.Edoty = "1";
+
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
 					sendObject.IEmpid = vPernr;
 					sendObject.IConType = "4";
+					sendObject.IEdoty = "1";
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
-					sendObject.LanguPayApplyTableIn = [Common.copyByMetadata(oModel, "LanguPayApplyTableIn", oSendData)];
+					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						success: function(oData, oResponse) {
 							Common.log(oData);
 							oController.onTableSearch();
 							BusyIndicator.hide();
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_29006"), { title: oController.getBundleText("MSG_08107")});
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40012"), { title: oController.getBundleText("MSG_08107")});
 							oController._ApplyModel.close();
 						},
 						error: function(oResponse) {
@@ -505,8 +855,8 @@ sap.ui.define([
 			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29005"), {
-				title: oController.getBundleText("LABEL_29001"),
-				actions: [oController.getBundleText("LABEL_29027"), oController.getBundleText("LABEL_00119")],
+				title: oController.getBundleText("LABEL_40001"),
+				actions: [oController.getBundleText("LABEL_40011"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessDelete
 			});
 		},
@@ -514,15 +864,17 @@ sap.ui.define([
 		onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
-				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
+				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
+				vInfoMessage = oController.getBundleText("MSG_40025");
 			
-			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
-				Label: oController.getBundleText("LABEL_40043"),
-				Required : true,
+			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
-				Mode: "S",
+				Required: true,
+				Mode: "M",
+				Max: "10",
+				InfoMessage: vInfoMessage,
 				Editable: (!vStatus || vStatus === "AA") ? true : false,
-			},"001");
+			});
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {
