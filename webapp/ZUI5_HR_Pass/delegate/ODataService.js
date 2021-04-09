@@ -16,7 +16,7 @@ sap.ui.define(
 					"/CommonCodeListHeaderSet",
 					{
 						IPernr: this.getSessionInfoByKey("name"),
-						IBukrs: "1000",
+						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						ICodeT: "003",
 						ICodty: "9911",
 						NavCommonCodeList: []
@@ -65,7 +65,7 @@ sap.ui.define(
 					{
 						IPernr: this.getSessionInfoByKey("name"),
 						IEmpid: this.getSessionInfoByKey("name"),
-						IBukrs: "1000",
+						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						IFacty: searchConditions.Facty,
 						IBegda: Common.adjustGMTOdataFormat(new Date(parseInt(searchConditions.Zyear, 10), 0, 1)),
 						IEndda: Common.adjustGMTOdataFormat(new Date(parseInt(searchConditions.Zyear, 10), 11, 31)),
@@ -91,7 +91,7 @@ sap.ui.define(
 						IConType: contype,
 						IPernr: this.getSessionInfoByKey("name"),
 						IEmpid: this.getSessionInfoByKey("name"),
-						IBukrs: "1000",
+						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						TableIn: [sendData]
 					},
 					{
@@ -112,7 +112,7 @@ sap.ui.define(
 					"/FacilityListSet",
 					{
 						IPernr: this.getSessionInfoByKey("name"),
-						IBukrs: "1000",
+						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						IFacty: searchConditions.Facty,
 						TableIn: []
 					},
@@ -213,7 +213,7 @@ sap.ui.define(
 					{
 						IOdkey: "",
 						ILangu: "3",
-						IBukrs: "1000",
+						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						IPernr: this.getSessionInfoByKey("name"),
 						ICondo: pData.Condo === "ALL" ? "" : pData.Condo,
 						ILocat: pData.Locat === "ALL" ? "" : pData.Locat,
