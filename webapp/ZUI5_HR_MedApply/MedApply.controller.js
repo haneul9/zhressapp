@@ -1416,6 +1416,10 @@ sap.ui.define([
 				if(oPro.HospName.trim()==""){
 					oMsg=oBundleText.getText("MSG_47012");
 				}
+				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
+					$.app.getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
+					oMsg=oBundleText.getText("MSG_47034");
+				}
 				if(oPro.Zkibbm.trim()!="0"&&fragment.COMMON_ATTACH_FILES.getFileLength(oController,"003")===0){
 					oMsg=oBundleText.getText("MSG_47021");
 				}
@@ -1538,11 +1542,11 @@ sap.ui.define([
 				}else{
 					vData.MedicalApplyTableIn[0].MedDate=null;
 				}		
-				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
-					$.app.getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
-					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
-					return;
-				}
+				// if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
+				// 	$.app.getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
+				// 	sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
+				// 	return;
+				// }
 				oController._vArr1.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
 				});
