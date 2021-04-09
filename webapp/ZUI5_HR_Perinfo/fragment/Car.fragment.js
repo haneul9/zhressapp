@@ -48,7 +48,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Car", {
 												 			   new sap.m.ToolbarSpacer(),
 												 			   new sap.m.Button({text : "{i18n>LABEL_37042}", // 신규
 												 								visible: {
-																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actmode"}],
+																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actMode"}],
 																						formatter : function(v1, v2, v3) {
 																						if(v1 == "E" && v2 === "2" && v3 === "3" ) return true;
 																						else return false;
@@ -59,7 +59,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Car", {
 												 								}}).addStyleClass("button-light"),
 												 			   new sap.m.Button({text : "{i18n>LABEL_00102}", // 수정
 												 							    visible: {
-																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actmode"}],
+																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actMode"}],
 																						formatter : function(v1, v2, v3) {
 																						if(v1 == "E" && v2 === "2" && v3 === "2") return true;
 																						else return false;
@@ -70,7 +70,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Car", {
 												 								}}).addStyleClass("button-light"),
 								 								new sap.m.Button({text : "{i18n>LABEL_08003}", // 삭제   	
 								 												visible: {
-																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actmode"}],
+																				    parts : [{path: "Auth"}, {path: "disyn"}, {path : "actMode"}],
 																						formatter : function(v1, v2, v3) {
 																						if(v1 == "E" && v2 === "2" && v3 === "2") return true;
 																						else return false;

@@ -31,6 +31,7 @@ sap.ui.define([
 		_CareerJSonModel : new sap.ui.model.json.JSONModel(), // 경력사항 Popup Dialog
 		_AwardJSonModel : new sap.ui.model.json.JSONModel(), // 경력사항 Popup Dialog
 		_HandicapJSonModel : new sap.ui.model.json.JSONModel(),
+		EmpSearchResult  : new sap.ui.model.json.JSONModel(),
 		_Bukrs : "",
 		EmployeeModel: new common.EmployeeModel(),
 		
@@ -469,7 +470,6 @@ sap.ui.define([
 				new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, $.app.APP_ID == "ZUI5_HR_HRDoc.Page" ? "A" : common.SearchUser1.searchAuth ? common.SearchUser1.searchAuth : $.app.getAuth()),
 				new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(new Date().setHours(9))),
 				new sap.ui.model.Filter("Ename", sap.ui.model.FilterOperator.EQ, vPernr),
-				// new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, oController._ListCondJSonModel.getProperty("/Data/Auth") == "M" ? oView.getModel("session").getData().Persa :  oView.getModel("session").getData().Persa)
 			];
 		    var oAddressTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
 			oAddressJSONModel = oAddressTable.getModel(),
@@ -479,12 +479,8 @@ sap.ui.define([
 			oSchoolJSONModel = oSchoolTable.getModel(),
 			oLicenseTable = sap.ui.getCore().byId(oController.PAGEID + "_LicenseTable"),
 			oLicenseJSONModel = oLicenseTable.getModel(),
-			// oGuaranteeTable = sap.ui.getCore().byId(oController.PAGEID + "_GuaranteeTable"),
-			// oGuaranteeJSONModel = oGuaranteeTable.getModel(),	
 			oCareerTable = sap.ui.getCore().byId(oController.PAGEID + "_CareerTable"),
 			oCareerJSONModel = oCareerTable.getModel(),
-			// oPromotionTable = sap.ui.getCore().byId(oController.PAGEID + "_PromotionTable"),
-			// oPromotionJSONModel = oPromotionTable.getModel(),	
 			oAwardTable = sap.ui.getCore().byId(oController.PAGEID + "_AwardTable"),
 			oAwardJSONModel = oAwardTable.getModel(),
 			oPunishTable = sap.ui.getCore().byId(oController.PAGEID + "_PunishTable"),
@@ -493,8 +489,6 @@ sap.ui.define([
 			oAnnouncementJSONModel = oAnnouncementTable.getModel();
 			
 			var search = function(){
-				// oController.EmployeeModel.retrieve(vPernr);
-				
 	        	Promise.all([
     				Common.getPromise(true, function(resolve) {
 					 new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
@@ -644,8 +638,8 @@ sap.ui.define([
 											vData.Data = data.TableIn.results[0];
 										}
 									}
-									if(vData.Data.Cartype == undefined ) vData.Data.actmode = "3"; //신규
-									else vData.Data.actmode = "2"; //수정
+									if(vData.Data.Cartype == undefined ) vData.Data.actMode = "3"; //신규
+									else vData.Data.actMode = "2"; //수정
 									
 									vData.Data.disyn = "2";
 									vData.Data.Odsupport = vData.Data.Odsupport == "X" ? true : null ;
@@ -770,7 +764,7 @@ sap.ui.define([
 									}
 									vData.Data.disyn = "2";
 									vData.Data.Zrotc = vData.Data.Zrotc == "X" ? true : null ;
-									vData.Data.actmode = vData.Data.Begda == undefined ? vData.Data.actmode = "3" : vData.Data.actmode = "2" ; // 신규 / 수정
+									vData.Data.actMode = vData.Data.Begda == undefined ? vData.Data.actMode = "3" : vData.Data.actMode = "2" ; // 신규 / 수정
 									vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
 									oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
 									resolve();
@@ -910,46 +904,6 @@ sap.ui.define([
 							}
 						);
 					}.bind(this)),
-					// Common.getPromise(true, function(resolve) {
-					// 	$.app.getModel("ZHR_PERS_RECORD_SRV").create( // 승급 및 급여인상
-					// 		"/PerRecordPromotionSet",
-					// 		{
-					// 			IPernr: vPernr,
-					// 			IBukrs: vBurks,
-					// 			ILangu: oController.getView().getModel("session").getData().Langu,
-					// 			TableIn : []
-					// 		},
-					// 		{
-					// 			async : true,
-					// 			success: function(data) {
-					// 				var vData = { Data : []};
-					// 				if(data){
-					// 					if(data.TableIn && data.TableIn.results){
-					// 						for(var i=0; i<data.TableIn.results.length; i++){
-					// 							data.TableIn.results[i].Idx = (i+1);
-					// 							data.TableIn.results[i].ZhobongAmt = data.TableIn.results[i].ZhobongAmt * 100 ;
-					// 							data.TableIn.results[i].ZhobongAmt = data.TableIn.results[i].ZhobongAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-					// 							data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? 
-					// 									dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null ;
-					// 							vData.Data.push(data.TableIn.results[i]);
-					// 						}
-					// 					}
-					// 				}
-					// 				oPromotionJSONModel.setData(vData);
-					// 				oPromotionTable.bindRows("/Data");
-					// 				oPromotionTable.setVisibleRowCount(vData.Data.length);
-					// 				resolve();
-					// 			}.bind(this),
-			  //                  error: function (oError) {
-			  //                  	var vData = {Data : []};
-					// 				oPromotionJSONModel.setData(vData);
-					// 				oPromotionTable.bindRows("/Data");
-					// 				oPromotionTable.setVisibleRowCount(vData.Data.length);
-			  //                      resolve();
-	    //             		    }
-					// 		}
-					// 	);
-					// }.bind(this)),
 					Common.getPromise(true, function(resolve) {
 						$.app.getModel("ZHR_PERS_RECORD_SRV").create( // 포상
 							"/PerRecordAwardSet",
@@ -1091,7 +1045,7 @@ sap.ui.define([
 										}
 									}
 									vData.Data.disyn = "2";
-									vData.Data.actmode = vData.Data.Begda == undefined ? vData.Data.actmode = "3" : vData.Data.actmode = "2" ; // 신규 / 수정
+									vData.Data.actMode = vData.Data.Begda == undefined ? vData.Data.actMode = "3" : vData.Data.actMode = "2" ; // 신규 / 수정
 									vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
 									oController._HandicapJSonModel.setProperty("/Data",vData.Data);
 									resolve();
@@ -1137,8 +1091,7 @@ sap.ui.define([
 				createData.IPernr =   vPernr; 
 				createData.IConType = "1";
 				createData.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
-				// createData.ILangu = oController.getView().getModel("session").getData().Langu;
-					
+
 				var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
 				oModel.create(oPath, createData, null,
 					function(data, res){
@@ -1291,8 +1244,8 @@ sap.ui.define([
 						}
 					}
 				);
-				if(vData.Data.Cartype == undefined ) vData.Data.actmode = "3"; //신규
-				else vData.Data.actmode = "2"; //수정
+				if(vData.Data.Cartype == undefined ) vData.Data.actMode = "3"; //신규
+				else vData.Data.actMode = "2"; //수정
 				
 				vData.Data.disyn = "2";
 				vData.Data.Odsupport = vData.Data.Odsupport == "X" ? true : null ;
@@ -1489,8 +1442,8 @@ sap.ui.define([
 						}
 					}
 				);
-				if(vData.Data.Begda == undefined ) vData.Data.actmode = "3"; //신규
-				else vData.Data.actmode = "2"; //수정
+				if(vData.Data.Begda == undefined ) vData.Data.actMode = "3"; //신규
+				else vData.Data.actMode = "2"; //수정
 				
 				vData.Data.disyn = "2";
 				vData.Data.Zrotc = vData.Data.Zrotc == "X" ? true : null ;
@@ -1761,8 +1714,8 @@ sap.ui.define([
 						}
 					}
 				);
-				if(vData.Data.Begda == undefined ) vData.Data.actmode = "3"; //신규
-				else vData.Data.actmode = "2"; //수정
+				if(vData.Data.Begda == undefined ) vData.Data.actMode = "3"; //신규
+				else vData.Data.actMode = "2"; //수정
 				
 				vData.Data.disyn = "2";
 				vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Begda))) : null;
@@ -1785,7 +1738,7 @@ sap.ui.define([
 			setTimeout(search, 100);
 		},
 		
-		onAddressDblClick : function(actmode) {
+		onAddressDblClick : function(actMode) {
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
 				oController = oView.getController(),
 				oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
@@ -1807,9 +1760,9 @@ sap.ui.define([
 			} catch (e) {
 				console.log(e);
 			}
-			selectRowObject.actmode = actmode;
-			if(actmode == "2"){
-				selectRowObject.actmode = selectRowObject.Pstlz == "" ? "3" : "2" ;
+			selectRowObject.actMode = actMode;
+			if(actMode == "2"){
+				selectRowObject.actMode = selectRowObject.Pstlz == "" ? "3" : "2" ;
 			}
 			
 			selectRowObject.Begda = selectRowObject.Begda ? dateFormat.format(new Date(common.Common.setTime(selectRowObject.Begda))) : null;
@@ -1819,7 +1772,7 @@ sap.ui.define([
 				oView.addDependent(oController._AddressDialog);
 			}	
 			// 신규일 경우 한국을 기본
-			if(selectRowObject.actmode == "3"){
+			if(selectRowObject.actMode == "3"){
 				selectRowObject.Land1 = "KR";
 			}
 			// Data setting
@@ -1866,7 +1819,7 @@ sap.ui.define([
 				selectRowObject.Begda = selectRowObject.Begda ? dateFormat.format(new Date(common.Common.setTime(selectRowObject.Begda))) : null;
 				selectRowObject.Endda = selectRowObject.Endda ? dateFormat.format(new Date(common.Common.setTime(selectRowObject.Endda))) : null;
 			}
-			selectRowObject.actmode = actMode;
+			selectRowObject.actMode = actMode;
 			
 			if (!oController._PassportDialog) {
 				oController._PassportDialog = sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.PassportInfo", oController);
@@ -1907,7 +1860,7 @@ sap.ui.define([
 					console.log(e);
 				}
 			}
-			selectRowObject.actmode = actMode;
+			selectRowObject.actMode = actMode;
 			
 			// Dialog 가 오픈 될 때는 PAGE ID 변경
 			if(actMode != "4"){
@@ -1923,6 +1876,14 @@ sap.ui.define([
 			if(actMode == "4"){
 				oController.onSaveSchool(actMode);	
 			}else if(actMode == "3"){ // 신규
+				AttachFileAction.setAttachFile(oController, {
+					Appnm: (selectRowObject.Appnm ? selectRowObject.Appnm : ""),
+					Required: false,
+					Mode: "M",
+					Max: "1",
+					Editable: (actMode == "2" || actMode == "3") ? true : false,
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"], 
+				});	
 				oController._SchoolDialog.open();
 			}else{
 				oController.refreshAttachFileList(oController); // 첨부파일 Clear
@@ -1965,7 +1926,7 @@ sap.ui.define([
 					console.log(e);
 				}
 			}
-			selectRowObject.actmode = actMode;
+			selectRowObject.actMode = actMode;
 			
 			// Dialog 가 오픈 될 때는 PAGE ID 변경
 			if(actMode != "4"){
@@ -2019,7 +1980,7 @@ sap.ui.define([
 			}
 			
 			if(actMode == "3"){
-				selectRowObject.Sland = "KR"; // 신규생성 시 Default 국가는 한국
+				selectRowObject.Land1 = "KR"; // 신규생성 시 Default 국가는 한국
 			}else{
 				if(vIDXs.length < 1 ){
 					sap.m.MessageBox.alert(oController.getBundleText("MSG_00066"));	// 대상 항목을 선택하세요.
@@ -2031,7 +1992,7 @@ sap.ui.define([
 					console.log(e);
 				}
 			}
-			selectRowObject.actmode = actMode;
+			selectRowObject.actMode = actMode;
 			// Dialog 가 오픈 될 때는 PAGE ID 변경
 			if(actMode != "4"){
 				oController.PAGEID = "Perinfo_Career";  // PAGE ID 변경 - 첨부파일 공통 사용 위함
@@ -2087,7 +2048,7 @@ sap.ui.define([
 					console.log(e);
 				}
 			}
-			selectRowObject.actmode = actMode;
+			selectRowObject.actMode = actMode;
 			// Dialog 가 오픈 될 때는 PAGE ID 변경
 			if(actMode != "4"){
 				oController.PAGEID = "Perinfo_Award";  // PAGE ID 변경 - 첨부파일 공통 사용 위함
@@ -2127,8 +2088,7 @@ sap.ui.define([
 				var oPath = "";
 				var createData = {PinfoBasicNav : []};
 				var detailData = {};
-				// var saveData = oController._BasicJSonModel.getProperty("/Data");
-				// Address
+				// 인적
 				oPath = "/PerinfoBasicSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
 				createData.IConType = "2";
@@ -2136,7 +2096,7 @@ sap.ui.define([
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Regno;
 				delete detailData.Dat01;
@@ -2222,7 +2182,7 @@ sap.ui.define([
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2291,13 +2251,13 @@ sap.ui.define([
 				oPath = "/PerinfoCarmanagerSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
 				if(appType =="D") createData.IConType = "4";
-				else createData.IConType = saveData.actmode ; //"2 : 수정, 3 : 신규 , 5 : 삭제"
+				else createData.IConType = saveData.actMode ; //"2 : 수정, 3 : 신규 , 5 : 삭제"
 				createData.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2 ;
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2379,7 +2339,7 @@ sap.ui.define([
 			});	
 		},
 		
-		onSavePassport  : function(actmode){
+		onSavePassport  : function(actMode){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
 			oController = oView.getController();
 			var Message ;
@@ -2392,11 +2352,11 @@ sap.ui.define([
 				// Address
 				oPath = "/PerinfoPassportSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
-				createData.IConType = actmode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
+				createData.IConType = actMode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2438,7 +2398,7 @@ sap.ui.define([
 					return;
 				}
 				
-				if(actmode == "4"){
+				if(actMode == "4"){
 					Message = oController.getBundleText("MSG_02039");	
 				}else{
 					Message = oController.getBundleText("MSG_02020");
@@ -2464,7 +2424,7 @@ sap.ui.define([
 				}
 			}	
 			
-			if(actmode == "4"){
+			if(actMode == "4"){
 				Message = oController.getBundleText("MSG_02040"); 	// 삭제하시겠습니까?
 			}else{
 				Message = oController.getBundleText("MSG_00058"); 	// 저장하시겠습니까?
@@ -2476,7 +2436,7 @@ sap.ui.define([
 			});	
 		},
 		
-		onSaveSchool  : function(actmode){
+		onSaveSchool  : function(actMode){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
 			oController = oView.getController();
 			var Message ;
@@ -2491,13 +2451,13 @@ sap.ui.define([
 				
 				oPath = "/PerRecordScholarshipSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
-				createData.IConType = actmode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
+				createData.IConType = actMode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 				createData.IPrevApply = "X";
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2541,7 +2501,7 @@ sap.ui.define([
 					return;
 				}
 				
-				if(actmode == "4"){
+				if(actMode == "4"){
 					Message = oController.getBundleText("MSG_37036") ;	// 삭제 요청하였습니다.
 				}else{
 					Message = oController.getBundleText("MSG_37034") ;  // 수정/등록 요청하였습니다.
@@ -2567,7 +2527,7 @@ sap.ui.define([
 				}
 			}	
 			
-			if(actmode == "4"){
+			if(actMode == "4"){
 				Message = oController.getBundleText("MSG_37033"); 	// 삭제 신청하시겠습니까?
 			}else{
 				Message = oController.getBundleText("MSG_37035"); 	// 수정/등록 신청하시겠습니까?
@@ -2595,14 +2555,14 @@ sap.ui.define([
 				oPath = "/PerRecordMilitarySet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
 				if(appType =="D") createData.IConType = "4";
-				else createData.IConType = saveData.actmode ; //"2 : 수정, 3 : 신규 , 5 : 삭제"
+				else createData.IConType = saveData.actMode ; //"2 : 수정, 3 : 신규 , 5 : 삭제"
 				createData.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2 ;
 				createData.IPrevApply = "X";
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2683,7 +2643,7 @@ sap.ui.define([
 			});	
 		},
 		
-		onSaveLicense  : function(actmode){
+		onSaveLicense  : function(actMode){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
 				oController = oView.getController();
 			var Message ;
@@ -2698,13 +2658,13 @@ sap.ui.define([
 				
 				oPath = "/PerRecordLicenseSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
-				createData.IConType = actmode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
+				createData.IConType = actMode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 				createData.IPrevApply = "X";
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2715,7 +2675,7 @@ sap.ui.define([
 				detailData.Endda = detailData.Endda ? "\/Date(" + common.Common.getTime(new Date(detailData.Endda)) + ")\/" : null ; // 등록일
 				detailData.GetDate = detailData.GetDate ? "\/Date(" + common.Common.getTime(new Date(detailData.GetDate)) + ")\/" : null; //취득일
 				
-				if(actmode != "4"){
+				if(actMode != "4"){
 					if(AttachFileAction.getFileLength(oController) > 0){
 						// 첨부파일 저장
 						detailData.Appnm = AttachFileAction.uploadFile.call(oController);
@@ -2757,7 +2717,7 @@ sap.ui.define([
 					return;
 				}
 				
-				if(actmode == "4"){
+				if(actMode == "4"){
 					Message = oController.getBundleText("MSG_37036") ;	// 삭제 요청하였습니다.
 				}else{
 					Message = oController.getBundleText("MSG_37034") ;  // 수정/등록 요청하였습니다.
@@ -2783,7 +2743,7 @@ sap.ui.define([
 				}
 			}	
 			
-			if(actmode == "4"){
+			if(actMode == "4"){
 				Message = oController.getBundleText("MSG_37033"); 	// 삭제 신청하시겠습니까?
 			}else{
 				Message = oController.getBundleText("MSG_37035"); 	// 수정/등록 신청하시겠습니까?
@@ -2795,7 +2755,7 @@ sap.ui.define([
 			});	
 		},
 		
-		onSaveCareer  : function(actmode){
+		onSaveCareer  : function(actMode){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
 			oController = oView.getController();
 			var Message ;
@@ -2810,13 +2770,13 @@ sap.ui.define([
 				
 				oPath = "/PerRecordCareerSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
-				createData.IConType = actmode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
+				createData.IConType = actMode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 				createData.IPrevApply = "X";
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2856,7 +2816,7 @@ sap.ui.define([
 					return;
 				}
 				
-				if(actmode == "4"){
+				if(actMode == "4"){
 					Message = oController.getBundleText("MSG_37036") ;	// 삭제 요청하였습니다.
 				}else{
 					Message = oController.getBundleText("MSG_37034") ;  // 수정/등록 요청하였습니다.
@@ -2882,7 +2842,7 @@ sap.ui.define([
 				}
 			}	
 			
-			if(actmode == "4"){
+			if(actMode == "4"){
 				Message = oController.getBundleText("MSG_37033"); 	// 삭제 신청하시겠습니까?
 			}else{
 				Message = oController.getBundleText("MSG_37035"); 	// 수정/등록 신청하시겠습니까?
@@ -2894,7 +2854,7 @@ sap.ui.define([
 			});	
 		},
 		
-		onSaveAward  : function(actmode){
+		onSaveAward  : function(actMode){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
 			oController = oView.getController();
 			var Message ;
@@ -2907,13 +2867,13 @@ sap.ui.define([
 				
 				oPath = "/PerRecordAwardSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
-				createData.IConType = actmode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
+				createData.IConType = actMode ; //"2 : 수정, 3 : 신규 , 4 : 삭제"
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 				createData.IPrevApply = "X";
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -2953,7 +2913,7 @@ sap.ui.define([
 					return;
 				}
 				
-				if(actmode == "4"){
+				if(actMode == "4"){
 					Message = oController.getBundleText("MSG_37036") ;	// 삭제 요청하였습니다.
 				}else{
 					Message = oController.getBundleText("MSG_37034") ;  // 수정/등록 요청하였습니다.
@@ -2978,7 +2938,7 @@ sap.ui.define([
 				}
 			}	
 			
-			if(actmode == "4"){
+			if(actMode == "4"){
 				Message = oController.getBundleText("MSG_37033"); 	// 삭제 신청하시겠습니까?
 			}else{
 				Message = oController.getBundleText("MSG_37035"); 	// 수정/등록 신청하시겠습니까?
@@ -3005,14 +2965,14 @@ sap.ui.define([
 				oPath = "/PerRecordHandicapSet";
 				createData.IPernr = oController.getView().getModel("session").getData().Pernr;
 				if(appType =="D") createData.IConType = "4";
-				else createData.IConType = saveData.actmode ; //"2 : 수정, 3 : 신규 , 5 : 삭제"
+				else createData.IConType = saveData.actMode ; //"2 : 수정, 3 : 신규 , 5 : 삭제"
 				createData.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
 				createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2 ;
 				createData.IPrevApply = "X";
 				
 				Object.assign(detailData, saveData);
 				delete detailData.disyn;
-				delete detailData.actmode;
+				delete detailData.actMode;
 				delete detailData.Auth;
 				delete detailData.Idx;
 				delete detailData.Openf;
@@ -3356,11 +3316,11 @@ sap.ui.define([
 						sap.m.MessageBox.error(oController.getBundleText("MSG_37014"));
 						return ;
 					}
-					if(checkData.actmode != "4" && (checkData.Subty == "H4" || checkData.Subty == "H5" || checkData.Subty == "H6" ) && (!checkData.Zzmajor || checkData.Zzmajor == "" )){
+					if(checkData.actMode != "4" && (checkData.Subty == "H4" || checkData.Subty == "H5" || checkData.Subty == "H6" ) && (!checkData.Sltp1 || checkData.Sltp1 == "" )){
 						sap.m.MessageBox.error(oController.getBundleText("MSG_37015"));
 						return ;
 					}
-					if(checkData.actmode != "4" && (checkData.Subty == "H4" || checkData.Subty == "H5" || checkData.Subty == "H6" ) && AttachFileAction.getFileLength(oController) < 1 ){
+					if(checkData.actMode != "4" && (checkData.Subty == "H4" || checkData.Subty == "H5" || checkData.Subty == "H6" ) && AttachFileAction.getFileLength(oController) < 1 ){
 						sap.m.MessageBox.error(oController.getBundleText("MSG_42027"));
 						return ;
 					}
@@ -3396,7 +3356,7 @@ sap.ui.define([
 						sap.m.MessageBox.error(oController.getBundleText("MSG_37023"));
 						return ;
 					}
-					if(checkData.actmode != "4" && AttachFileAction.getFileLength(oController) < 1 ){
+					if(checkData.actMode != "4" && AttachFileAction.getFileLength(oController) < 1 ){
 						sap.m.MessageBox.error(oController.getBundleText("MSG_42027"));
 						return ;
 					}
@@ -3467,9 +3427,9 @@ sap.ui.define([
 			oFileUploader.clear();
 			oFileUploader.setValue("");
 			oAttachFileList.removeSelections(true);
-	},
+		},
 	
-		ESSelectPerson: function(data) {
+		onESSelectPerson: function(data) {
             return !this.EmployeeSearchCallOwner 
                     ? this.OrgOfIndividualHandler.setSelectionTagets(data)
                     : this.EmployeeSearchCallOwner.setSelectionTagets(data);
@@ -3484,8 +3444,8 @@ sap.ui.define([
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			// return new JSONModelHelper({name: "20001003"});
-			return new JSONModelHelper({name: "20200317"});
-			// return new JSONModelHelper({name: "35132012"});
+			// return new JSONModelHelper({name: "20200317"});
+			return new JSONModelHelper({name: "20140099"});
 			// return new JSONModelHelper({name: "35132261"});
 		} : null
 		

@@ -8,7 +8,7 @@ sap.ui.jsfragment("ZUI5_HR_CertiApply.fragment.DetailDialog", {
         var oDialog = new sap.m.Dialog("ZUI5_HR_CertiApply_DetailDialog",{
             contentWidth: "1400px",
             contentHeight: "75vh",
-            title: "{i18n>LABEL_64025}",    // 신청문서 출력
+            title: "{i18n>LABEL_65025}",    // 신청문서 출력
             content: [
                 new sap.ui.layout.VerticalLayout(oController.PAGEID + "_PDF"),
             ],

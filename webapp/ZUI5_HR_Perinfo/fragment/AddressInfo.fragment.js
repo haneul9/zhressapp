@@ -9,7 +9,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 		var oCountry  = new sap.m.ComboBox({
 			selectedKey : "{Land1}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -21,7 +21,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 		var oState  = new sap.m.ComboBox({
 			selectedKey : "{State}",
             editable: {
-			    path: "actmode",
+			    path: "actMode",
 				formatter: function(v) {
 					if(v === "2" || v === "3" ) return true;
 					else return false;
@@ -136,7 +136,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 															displayFormat: gDtfmt,
 															width: "150px",
 															editable: {
-													    	    path: "actmode",
+													    	    path: "actMode",
 																formatter: function(v) {
 																	if(v === "2" || v === "3") return true;
 																	else return false;
@@ -183,7 +183,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Pstlz}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -195,7 +195,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 											    	new sap.m.Button({
 														text : "{i18n>LABEL_00104}", // 검색
 														visible : {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -230,7 +230,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 				new sap.m.Input({
 														value : "{Ort01}",
 														editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -242,7 +242,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 				new sap.m.Input({
 														value : "{Ort02}",
 													    editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -272,7 +272,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Stras}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -302,7 +302,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{UsridLong}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -328,7 +328,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Usrid}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -358,7 +358,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 									 	content : [ new sap.m.Input({
 														value : "{Telnr}",
 											            editable: {
-														    path: "actmode",
+														    path: "actMode",
 															formatter: function(v) {
 																if(v === "2" || v === "3" ) return true;
 																else return false;
@@ -395,14 +395,14 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 						new sap.m.Button({
 							text : "{i18n>LABEL_00101}", // 저장
 							visible : {
-							    path: "actmode",
+							    path: "actMode",
 								formatter: function(v) {
 									if(v === "2" || v === "3" ) return true;
 									else return false;
 								}
 				    	    },
 							press : function(){
-								oController.onSaveAddress(oController._AddressJSonModel.getProperty("/Data/actmode"));
+								oController.onSaveAddress(oController._AddressJSonModel.getProperty("/Data/actMode"));
 							}
 						}), 
 						new sap.m.Button({

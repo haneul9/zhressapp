@@ -145,7 +145,7 @@ sap.ui.define([
 			}
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38001"), {
-				title: oController.getBundleText("LABEL_64001"),
+				title: oController.getBundleText("LABEL_65001"),
 				actions: [oController.getBundleText("LABEL_38044"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressApply
 			});
