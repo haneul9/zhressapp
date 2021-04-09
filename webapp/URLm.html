@@ -29,10 +29,21 @@
     <script>
     
         function getParameterByName(name) {
+            console.log(location.search);
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
             var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
                     results = regex.exec(location.search);
             return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        function initHome() {
+            setTimeout(function() {
+                var _token = getParameterByName("token");
+                if(_token.length) {
+                    console.log(_token);
+                    window._session.registerToken(_token);
+                }
+            }, 0);
         }
 
         var menus = [
@@ -57,7 +68,7 @@
         $(function() {
             window._gateway = new HomeGateway();
             window._basis = new HomeBasis(window._gateway);
-            window._session = new HomeSession(window._gateway);
+            window._session = new HomeSession(window._gateway, initHome);
             
             $('.list-group-item').each(function() {
                 $(this).append(menus.map(function(menu) {
@@ -85,11 +96,6 @@
                 location.href = url;
             });
             
-            var _token = getParameterByName("token");
-            if(_token.length) {
-                console.log(_token);
-                window._session.registerToken(_token);
-            }
         });
 
     </script>
