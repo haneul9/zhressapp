@@ -137,7 +137,7 @@ if (!popupUrl) {
 	$('.ehr-body').height('calc(100% - 46px)');
 } else {
 	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
-	$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+	$('.ehr-body').height('100%').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
 	new MenuMegaDropdown(_gateway).goToLink(_gateway.parameter('mid'), popupUrl);
 }
 
