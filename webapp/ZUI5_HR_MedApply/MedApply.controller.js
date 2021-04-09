@@ -1234,12 +1234,14 @@ sap.ui.define([
 			if(oSel3.getSelectedKey()=="C"||oSel3.getSelectedKey()=="D"){
 				oPro.Inpdt=null;				
 			}
-			oPro.Ptamt="0";
-			oPro.Medsp="0";
-			oPro.Oiamt="0";
-			oPro.Znobcm="0";
-			oPro.Insnp="0";
-			oPro.Medpp="0";
+			if(vSig!="B"){
+				oPro.Ptamt="0";
+				oPro.Medsp="0";
+				oPro.Oiamt="0";
+				oPro.Znobcm="0";
+				oPro.Insnp="0";
+				oPro.Medpp="0";
+			}
 			if(oController._onDialog!="M"){
 				oController.onCal(oController._Bukrs);
 			}
@@ -1780,65 +1782,67 @@ sap.ui.define([
 		eqFunc:function(){
 			var oController=$.app.getController();
 			if(oController._Bukrs=="1000"){
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Zkiobd=$.app.getController()._DataModel.getProperty("/Pop1")[0].Zkibbm;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Zkijbd=$.app.getController()._DataModel.getProperty("/Pop1")[0].Zkijbm;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Znijcd=$.app.getController()._DataModel.getProperty("/Pop1")[0].Znijcm;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Zniiwd=common.Common.numberWithCommas(Math.round(
-					(parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zniiwm.replace(/\,/gi,""))*0.5).toFixed(1)));
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Znisdd=$.app.getController()._DataModel.getProperty("/Pop1")[0].Znisdm;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Znoctd=$.app.getController()._DataModel.getProperty("/Pop1")[0].Znoctm;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Znomrd=$.app.getController()._DataModel.getProperty("/Pop1")[0].Znomrm;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Znocud=$.app.getController()._DataModel.getProperty("/Pop1")[0].Znocum;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Znobcd=common.Common.numberWithCommas(Math.round(
-					(parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].BaseAmt=common.Common.numberWithCommas(
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zkiobd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zkijbd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znijcd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zniiwd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znisdd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znoctd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znocud.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znobcd.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znomrd.replace(/\,/gi,"")));
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].NsuppAmt=common.Common.numberWithCommas(
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].BaseAmt.replace(/\,/gi,""))-
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].SuppAmt.replace(/\,/gi,"")));
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Mycharge=common.Common.numberWithCommas(
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zkibbm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zkijbm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znijcm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Zniiwm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znisdm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znoctm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znomrm.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znocum.replace(/\,/gi,""))+
-					parseInt($.app.getController()._DataModel.getProperty("/Pop1")[0].Znobcm.replace(/\,/gi,"")));
+				var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
+				oPro.Zkiobd=oPro.Zkibbm;
+				oPro.Zkijbd=oPro.Zkijbm;
+				oPro.Znijcd=oPro.Znijcm;
+				oPro.Zniiwd=common.Common.numberWithCommas(Math.round(
+					(parseInt(oPro.Zniiwm.replace(/\,/gi,""))*0.5).toFixed(1)));
+				oPro.Znisdd=oPro.Znisdm;
+				oPro.Znoctd=oPro.Znoctm;
+				oPro.Znomrd=oPro.Znomrm;
+				oPro.Znocud=oPro.Znocum;
+				oPro.Znobcd=common.Common.numberWithCommas(Math.round(
+					(parseInt(oPro.Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
+				oPro.BaseAmt=common.Common.numberWithCommas(
+					parseInt(oPro.Zkiobd.replace(/\,/gi,""))+
+					parseInt(oPro.Zkijbd.replace(/\,/gi,""))+
+					parseInt(oPro.Znijcd.replace(/\,/gi,""))+
+					parseInt(oPro.Zniiwd.replace(/\,/gi,""))+
+					parseInt(oPro.Znisdd.replace(/\,/gi,""))+
+					parseInt(oPro.Znoctd.replace(/\,/gi,""))+
+					parseInt(oPro.Znocud.replace(/\,/gi,""))+
+					parseInt(oPro.Znobcd.replace(/\,/gi,""))+
+					parseInt(oPro.Znomrd.replace(/\,/gi,"")));
+				oPro.NsuppAmt=common.Common.numberWithCommas(
+					parseInt(oPro.BaseAmt.replace(/\,/gi,""))-
+					parseInt(oPro.SuppAmt.replace(/\,/gi,"")));
+				oPro.Mycharge=common.Common.numberWithCommas(
+					parseInt(oPro.Zkibbm.replace(/\,/gi,""))+
+					parseInt(oPro.Zkijbm.replace(/\,/gi,""))+
+					parseInt(oPro.Znijcm.replace(/\,/gi,""))+
+					parseInt(oPro.Zniiwm.replace(/\,/gi,""))+
+					parseInt(oPro.Znisdm.replace(/\,/gi,""))+
+					parseInt(oPro.Znoctm.replace(/\,/gi,""))+
+					parseInt(oPro.Znomrm.replace(/\,/gi,""))+
+					parseInt(oPro.Znocum.replace(/\,/gi,""))+
+					parseInt(oPro.Znobcm.replace(/\,/gi,"")));
 			}else{
-				$.app.getController()._DataModel.getProperty("/Pop2")[0].Znobcd=common.Common.numberWithCommas(Math.round(
-					(parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
+				var oPro=$.app.getController()._DataModel.getProperty("/Pop2")[0];
+				oPro.Znobcd=common.Common.numberWithCommas(Math.round(
+					(parseInt(oPro.Znobcm.replace(/\,/gi,""))*0.5).toFixed(1)));
 				if($.app.byId(oController.PAGEID+"_dSel3").getSelectedKey()!="C"&&$.app.byId(oController.PAGEID+"_dSel3").getSelectedKey()!="D"){
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Medmp=common.Common.numberWithCommas(parseInt(
-					(parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medsp.replace(/\,/gi,""))*0.1
-					+parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medpp.replace(/\,/gi,""))*0.2).toFixed(1)));
+					oPro.Medmp=common.Common.numberWithCommas(parseInt(
+					(parseInt(oPro.Medsp.replace(/\,/gi,""))*0.1
+					+parseInt(oPro.Medpp.replace(/\,/gi,""))*0.2).toFixed(1)));
 				}else{
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Medmp="0";
+					oPro.Medmp="0";
 				}
-				if($.app.getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="D"){
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=$.app.getController()._DataModel.getProperty("/Pop2")[0].Medpp;
-				}else if($.app.getController()._DataModel.getProperty("/Pop2")[0].Gtz51=="C"){
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(
-						parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medsp.replace(/\,/gi,""))+
-						parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Znobcd.replace(/\,/gi,"")));
+				if(oPro.Gtz51=="D"){
+					oPro.Framt=oPro.Medpp;
+				}else if(oPro.Gtz51=="C"){
+					oPro.Framt=common.Common.numberWithCommas(
+						parseInt(oPro.Medsp.replace(/\,/gi,""))+
+						parseInt(oPro.Znobcd.replace(/\,/gi,"")));
 				}else{
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=
-					parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Ptamt.replace(/\,/gi,""))
-					-parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Inspp.replace(/\,/gi,""))-
-					parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Medmp.replace(/\,/gi,""))
-					-parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Insnp.replace(/\,/gi,""))-
-					parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Oiamt.replace(/\,/gi,""));
-					parseFloat($.app.getController()._DataModel.getProperty("/Pop2")[0].Framt)<0?$.app.getController()._DataModel.setProperty("/Pop2/0/Framt","0"):
-					$.app.getController()._DataModel.getProperty("/Pop2")[0].Framt=common.Common.numberWithCommas(parseInt($.app.getController()._DataModel.getProperty("/Pop2")[0].Framt));
+					oPro.Framt=
+					parseInt(oPro.Ptamt.replace(/\,/gi,""))
+					-parseInt(oPro.Inspp.replace(/\,/gi,""))-
+					parseInt(oPro.Medmp.replace(/\,/gi,""))
+					-parseInt(oPro.Insnp.replace(/\,/gi,""))-
+					parseInt(oPro.Oiamt.replace(/\,/gi,""));
+					parseFloat(oPro.Framt)<0?$.app.getController()._DataModel.setProperty("/Pop2/0/Framt","0"):
+					oPro.Framt=common.Common.numberWithCommas(parseInt(oPro.Framt));
 				}
 			}			
 		},
