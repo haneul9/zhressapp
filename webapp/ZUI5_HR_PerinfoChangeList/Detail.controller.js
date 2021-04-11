@@ -8,11 +8,11 @@ sap.ui.define([
 	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
-	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Apply"].join($.app.getDeviceSuffix());
+	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
 
 	return CommonController.extend(SUB_APP_ID, {
 		
-		PAGEID: "Apply",
+		PAGEID: "Detail",
 		
 		ApplyModel: new JSONModelHelper(),
 		
@@ -42,13 +42,12 @@ sap.ui.define([
 		},
 		
 		onAfterShow: function() {
-			// var oController = $.app.getController();
-            this.ApplyModel.setData({Data:{ ZformType : 0, Aptyp : 0  }});
+	        this.ApplyModel.setData({Data:{ ZformType : 0, Aptyp : 0  }});
         },
 
         navBack: function() {
             sap.ui.getCore().getEventBus().publish("nav", "to", {
-                id: [$.app.CONTEXT_PATH, "Page"].join($.app.getDeviceSuffix())
+                id: [$.app.CONTEXT_PATH, "Tabs"].join($.app.getDeviceSuffix())
             });
         },
 

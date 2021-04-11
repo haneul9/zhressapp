@@ -128,9 +128,11 @@ sap.ui.define([
 				oModel.create("/CertiPdfSet", sendObject, {
 					success: function(oData, oResponse) {
 							if(oData, oData.Export && oData.Export.results.length > 0){
-								var vZpdf =  "data:application/pdf;base64," + oData.Export.results[0].EPdf;
-								var newWindow=window.open(vZpdf, '다운로드');
-								
+								 var a = document.createElement("a");
+							    a.href = "data:application/pdf;base64," + oData.Export.results[0].EPdf;
+							    a.download = "다운로드"; 
+							    a.click(); //Downloaded file
+    			
 								oController.onTableSearch();
 							}
 							BusyIndicator.hide();
