@@ -83,7 +83,7 @@ changeLocale: function() {
 	setTimeout(function() {
 		var container = $('.ehr-body .container-fluid');
 		if (container.data('jsp')) {
-			container.data('jsp').destroy();
+			container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
 		}
 
 		this.generate()

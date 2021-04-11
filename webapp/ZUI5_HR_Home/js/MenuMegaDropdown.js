@@ -227,9 +227,9 @@ goToLink: function(menuId, url) {
 	if (!iframe.length) {
 		var container = $('.ehr-body .container-fluid');
 		if (container.data('jsp')) {
-			container.data('jsp').destroy();
+			container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
 		}
-		container.append('<iframe name="content-iframe"></iframe>');
+		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
 	}
 
 	var form = $('form#menu-form');
@@ -553,7 +553,7 @@ generate: function(reload) {
 
 			this.items = [{ title: '조회된 메뉴 목록이 없습니다.' }];
 			$(this.parentSelector).html(
-				this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function (top) {
+				this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function(top) {
 					return this.topMenuItem(top);
 				}.bind(this)).join(''))
 			);
