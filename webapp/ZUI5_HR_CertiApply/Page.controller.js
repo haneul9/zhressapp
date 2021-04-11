@@ -78,7 +78,6 @@ sap.ui.define([
             sendObject.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
             sendObject.IEmpid = vPernr;
 			// Navigation property
-			sendObject.Export = [];
 			sendObject.TableIn = [];
 			sendObject.Export = [];
 			
