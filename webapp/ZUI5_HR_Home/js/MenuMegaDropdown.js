@@ -117,9 +117,10 @@ changeLocale: function() {
 		$('.ehr-header .menu-spinner-wrapper').toggleClass('d-none', false);
 	}, 0);
 	setTimeout(function() {
+		var parentSelector = this.parentSelector;
 		this.generate(true).then(function() {
 			setTimeout(function() {
-				$(this.parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
+				$(parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
 					.parents('.mega-menu').toggleClass('d-block', false) // mega dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
@@ -296,7 +297,7 @@ handleUrl: function(e) {
 			anchor.toggleClass('active', true) // 선택된 메뉴 표시
 				.parents('.mega-menu').toggleClass('d-block', false) // mega dropdown 닫기
 				.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
-		}, 0);
+		}.bind(this), 0);
 
 	}
 },
@@ -569,7 +570,7 @@ generate: function(reload) {
 			setTimeout(function() {
 				$('.ehr-header .menu-spinner-wrapper').toggleClass('d-none', true);
 			}, 0);
-		}.bind(this)
+		}
 	});
 }
 

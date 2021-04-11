@@ -434,7 +434,7 @@ generate: function() {
 			}).end()
 			.find('a[data-url]').on('click', this.handleUrl.bind(this));
 
-			$('.navbar .dropdown').on('hidden.bs.dropdown', function () {
+			$('.navbar .dropdown').on('hidden.bs.dropdown', function() {
 				$(this).find('li.dropdown,ul.dropdown-menu').removeClass('show open');
 			});
 		}.bind(this),
@@ -443,7 +443,7 @@ generate: function() {
 
 			this.items = [{ title: '조회된 메뉴 목록이 없습니다.' }];
 			$(this.parentSelector).html(
-				this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function (top) {
+				this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function(top) {
 					return this.topMenuItem(top);
 				}.bind(this)).join(''))
 			);
@@ -459,6 +459,6 @@ generate: function() {
 	});
 },
 
-toggleMenu: function() {}
+toggleMenu: function() {}/* HomeGateway undefined 방지 */
 
 });
