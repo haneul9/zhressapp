@@ -1,35 +1,31 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper",
+	"../common/Common",
+	"../common/CommonController",
+	"../common/JSONModelHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
 	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
-	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
-
-	return CommonController.extend(SUB_APP_ID, {
+	return CommonController.extend("ZUI5_HR_PerinfoChangeList.Detail", {
 		
 		PAGEID: "Detail",
 		
 		ApplyModel: new JSONModelHelper(),
 		
-		getUserId: function() {
-
-			return $.app.getController().getUserId();
-		},
-		
-		getUserGubun  : function() {
-
-			return $.app.getController().getUserGubun();
-        },
-		
 		onInit: function () {
-
-			this.setupView();
-
+			// this.setupView()
+			// 	.getView()
+			// 	.addEventDelegate({
+			// 		onBeforeShow : this.onBeforeShow
+			// 	}, this);
+				
+			// this.getView()
+			// 	.addEventDelegate({
+			// 		onAfterShow: this.onAfterShow
+			// 	}, this)
+				
 			this.getView()
 				.addEventDelegate({
 					onBeforeShow: this.onBeforeShow,
@@ -37,115 +33,123 @@ sap.ui.define([
 				}, this);
 		},
 		
+		getUserId: function() {
+			return $.app.getModel("session").getData().name;
+		},
+	
+		
 		onBeforeShow: function(oEvent) {
+			if(oEvent) {
+				console.log(oEvent.data.selData);
+				this.ApplyModel.setData({Data : oEvent.data.selData});
+			}
+		
 			Common.log("onBeforeShow");
 		},
 		
 		onAfterShow: function() {
-	        this.ApplyModel.setData({Data:{ ZformType : 0, Aptyp : 0  }});
+	      var oController = $.app.getController();
+	      oController.onPressSearch();
         },
+        
+  //  	onPressSearch : function(){
+		// 	var oController = $.app.getController();
+		// 	var oModel = $.app.sgetModel("ZHR_PERS_INFO_SRV");
+			
+		// 	var vCondiData = oController._ListCondJSonModel.getProperty("/Data");
+		// 	// var	dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oController.getView().getModel("session").getData().Dtfmt});
+		// 	var vData = {Data : []}; 
+			
+		// 	var search = function(){
+		// 		var oPath = "";
+		// 		var createData = {TempPayDeductionTableIn1 : []};
+				
+		// 		oPath = "/TempPayDeductionSet";
+		// 		createData.IMode =   "L"; 
+		// 		createData.IBurks =  vCondiData.Burks && vCondiData.Burks != "" ? vCondiData.Burks : oController.getView().getModel("session").getData().Burks2 ;
+		// 		createData.IPernr =  vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "" ;
+		// 		createData.IOrgeh =  vCondiData.Orgeh && vCondiData.Orgeh != "" ? vCondiData.Orgeh : "" ;
+		// 		createData.ILgart =  vCondiData.Lgart && vCondiData.Lgart != "" ? vCondiData.Lgart : "" ;
+		// 		createData.ILangu =  oController.getView().getModel("session").getData().Langu;
+		// 		createData.IStatus = vCondiData.Status && vCondiData.Status != "" ? vCondiData.Status : "" ;
+		// 		createData.IBegda =  vCondiData.Begda && vCondiData.Begda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Begda)) + ")\/" : null;
+		// 		createData.IEndda =  vCondiData.Endda && vCondiData.Endda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Endda)) + ")\/" : null;
+				
+		// 		oModel.create(oPath, createData, null,
+		// 			function(data, res){
+		// 				if(data){
+		// 					if(data.TempPayDeductionTableIn1 && data.TempPayDeductionTableIn1.results.length > 0){
+		// 						for(var i=0; i<data.TempPayDeductionTableIn1.results.length; i++){
+		// 							data.TempPayDeductionTableIn1.results[i].Idx = (i+1);
+									
+		// 							vData.Data.push(data.TempPayDeductionTableIn1.results[i]);
+		// 						}
+		// 					}
+		// 				}
+		// 			},
+		// 			function (oError) {
+		// 		    	var Err = {};
+		// 		    	oController.Error = "E";
+							
+		// 				if (oError.response) {
+		// 					Err = window.JSON.parse(oError.response.body);
+		// 					var msg1 = Err.error.innererror.errordetails;
+		// 					if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+		// 					else oController.ErrorMessage = Err.error.message.value;
+		// 				} else {
+		// 					oController.ErrorMessage = oError.toString();
+		// 				}
+		// 			}
+		// 		);
+		
+		// 		oController._ListJSonModel.setProperty("/Data",vData.Data);
+		// 		Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
+		// 		oController._BusyDialog.close();
+				
+		// 		if(oController.Error == "E"){
+		// 			oController.Error = "";
+		// 			sap.m.MessageBox.error(oController.ErrorMessage);
+		// 			return;
+		// 		}
+				
+		// 		$.app.byId(oController.PAGEID + "_Table").clearSelection();
+		// 	}
+		
+		// 	oController._BusyDialog.open();
+		// 	setTimeout(search, 100);
+		// },
+		
+		onPressSearch : function(){
+			var oController = $.app.getController();
+			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+			
+			
+			var search = function(){
+				var vData = {Data : [ { Idx : "1" , AppDate : "2021.04.09 15:50:13",  AppType : "수정" , Status : "승인", ReqDate : "2021.04.09 15:50:13", ReqName : "학력사항",  Admin : "강미소" }]};
+				$.app.byId(oController.PAGEID + "_DetailTable").getModel().setData(vData);
+				Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_DetailTable"));
+				oController._BusyDialog.close();
+				
+				$.app.byId(oController.PAGEID + "_DetailTable").clearSelection();
+			}
+		
+			oController._BusyDialog.open();
+			setTimeout(search, 100);
+		},
+	
 
         navBack: function() {
             sap.ui.getCore().getEventBus().publish("nav", "to", {
-                id: [$.app.CONTEXT_PATH, "Tabs"].join($.app.getDeviceSuffix())
+                id: "ZUI5_HR_PerinfoChangeList.Tabs"
             });
         },
-
-        
-        checkError: function() {
-			var oController = this.getView().getController();
-			
-			// 구분
-			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/ZformType"))){
-				MessageBox.error(oController.getBundleText("MSG_64009"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			};
-			
-			// 수령방법
-			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/Aptyp"))){
-				MessageBox.error(oController.getBundleText("MSG_64015"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			};
-			
-			// 경력증명서는 인사팀 발행 또는 메일발송을 선택하여 주십시오.
-			if(oController.ApplyModel.getProperty("/Data/ZformType") == "02" && oController.ApplyModel.getProperty("/Data/Aptyp") == "1"){
-				MessageBox.error(oController.getBundleText("MSG_64016"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			};
-
-			// 언어
-			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/Zlang"))){
-				MessageBox.error(oController.getBundleText("MSG_64010"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			};
-
-			// 기준년도 , 미입력 시 올해 년도 세팅
-			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/Zyear"))){
-				oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear());
-			};
-
-			// 수량 , 미입력 시 1 기본 세팅
-			if(Common.checkNull(oController.ApplyModel.getProperty("/Data/Zcount"))){
-				oController.ApplyModel.setProperty("/Data/Zcount", "1");
-			};
-
-			return false;
-		},
 		
-        onDialogApplyBtn: function() { // 신청
-			var oController = this;
-			var oModel = $.app.getModel("ZHR_CERTI_SRV");
-			var vPernr = this.getUserId();
-			var vBukrs = this.getUserGubun();
-			var oRowData = oController.ApplyModel.getProperty("/Data");
-
-			oRowData.Pernr = vPernr;
-
-			if(this.checkError(this)) return;
-
-			BusyIndicator.show(0);
-			var onPressApply = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
-					var sendObject = {};
-					// Header
-					sendObject.IPernr = vPernr;
-					sendObject.IBukrs = vBukrs;
-		            sendObject.IConType = "2";
-		            sendObject.ILangu = oController.getView().getModel("session").getData().Langu;
-		            sendObject.IMolga = oController.getView().getModel("session").getData().Molga;
-		            sendObject.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
-		            sendObject.IEmpid = vPernr;
-					// Navigation property
-                    sendObject.TableIn = [Common.copyByMetadata(oModel, "CertiAppTableIn", oRowData)];
-					
-					oModel.create("/CertiAppSet", sendObject, {
-						success: function(oData, oResponse) {
-								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_38002"), { title: oController.getBundleText("MSG_08107")});
-								BusyIndicator.hide();
-								oController.navBack();
-						},
-						error: function(oResponse) {
-							Common.log(oResponse);
-							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-								title: oController.getBundleText("LABEL_09030")
-							});
-							BusyIndicator.hide();
-						}
-					});
-				}
-				BusyIndicator.hide();
-			}
-
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38001"), {
-				title: oController.getBundleText("LABEL_65001"),
-				actions: [oController.getBundleText("LABEL_38044"), oController.getBundleText("LABEL_00119")],
-				onClose: onPressApply
-			});
-        },
-
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			return new JSONModelHelper({name: $.app.getController().getUserId()}); // 20001008 20190204
+			var oView = sap.ui.getCore().byId("ZUI5_HR_PerinfoChangeList.Detail");
+			var oController = oView.getController();
+		
+			
+			return new JSONModelHelper({name: oController.getUserId()}); // 20001008 20190204
 		} : null
 	});
 });

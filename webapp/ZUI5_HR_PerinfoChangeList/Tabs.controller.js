@@ -133,15 +133,17 @@ return CommonController.extend($.app.APP_ID, { // 출장
 	onPressDetail : function(){
 		var oView = $.app.getView();
 		var oController = $.app.getController(),
-		vSelectedIndex = $.app.byId(oController.PAGEID + "_Table").getSelectedIndices();
-		console.log(vSelectedIndex);
-		
-        // sap.ui.getCore().getEventBus().publish("nav", "to", {
-        //     id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
-        //     data: { 
-        //     	selData : 
-        //     }
-        // });
+		vSelectedIndex = $.app.byId(oController.PAGEID + "_Table").getSelectedIndices(),
+		vSelectedData = $.app.byId(oController.PAGEID + "_Table").getModel().getProperty("/Data/" + vSelectedIndex);
+		console.log(vSelectedData);
+        
+		sap.ui.getCore().getEventBus().publish("nav", "to", {
+		      id : "ZUI5_HR_PerinfoChangeList.Detail",
+		      data : {
+		    	  FromPageId : "ZUI5_HR_PerinfoChangeList.Tabs",
+		    	  selData :  vSelectedData
+		      }
+		});
 	},
     
 	getLocalSessionModel: Common.isLOCAL() ? function() {

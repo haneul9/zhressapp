@@ -1,29 +1,36 @@
 sap.ui.define([
 	"../../common/Common"
-], function(Common) {
+], function (Common) {
 "use strict";
 
-return { // view templates
+	var ViewTemplates = {
 
-	getCustomInput: function(id, inputSettings, clear) {
+		// Header 영역 label
+		getLabel: function(type, labelText, wid, align, isReq) {
 
-		var oInput = new sap.m.Input(id, inputSettings).addStyleClass("custom-clearable-input");
-
-		oInput.addEventDelegate({
-			onAfterRendering: function() {
-				this.$().find(".sapMInputBaseIconContainer").prepend(
-					$(["<span data-sap-ui=\"clear-icon-" + String(Math.random()).replace(/\./, "") + "-vhi\"",
-						"data-sap-ui-icon-content=\"\"",
-						"class=\"sapUiIcon sapUiIconMirrorInRTL sapUiIconPointer sapMInputBaseIcon\"",
-						"style=\"font-family:'SAP\\2dicons'\"></span>"
-					].join(" ")).click(clear)
-				);
+			if (type === "header") {
+				return new sap.m.Label({
+					layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
+					textAlign: Common.checkNull(align) ? "Center" : align, 
+					required: Common.checkNull(isReq) ? false : isReq,
+					text: labelText,
+					width: Common.checkNull(wid) ? "100%" : wid
+				})
+				.addStyleClass("flexbox-table-header");
+			} else { // type === "cell"
+				return new sap.m.Label({
+					layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
+					textAlign: Common.checkNull(align) ? "Center" : align, 
+					required: Common.checkNull(isReq) ? false : isReq,
+					text: labelText,
+					width: Common.checkNull(wid) ? "auto" : wid
+				})
+				.addStyleClass("flexbox-table-cell");
 			}
-		}, oInput);
+		}
+		
+	};
 
-		return oInput;
-	},
-
-};
+	return ViewTemplates;
 
 });
