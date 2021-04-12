@@ -736,7 +736,7 @@ sap.ui.define([
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"004",
 					   IPernr:oSessionData.Pernr,
-					   IBukrs:oSessionData.Bukrs2,
+					   IBukrs:oSessionData.Bukrs3,
 					   NavCommonCodeList:[],
 					   ICodty:"ZHOSP_TYPE"};
 			oModel.create("/CommonCodeListHeaderSet", vData, null,
