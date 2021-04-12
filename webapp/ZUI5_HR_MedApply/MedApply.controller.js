@@ -560,7 +560,7 @@ sap.ui.define([
 					fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty,"00"+i);
 				}
 			}
-			oController.eqFunc();
+			oController._onDialog!="M"?oController.eqFunc():null;
 		},
 
 		initFile:function(vPage){
@@ -1254,8 +1254,8 @@ sap.ui.define([
 			}
 			if(oController._onDialog!="M"){
 				oController.onCal(oController._Bukrs);
-			}
-			oController.eqFunc();
+				oController.eqFunc();
+			}		
 		},
 
 		
