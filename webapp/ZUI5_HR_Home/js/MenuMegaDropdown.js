@@ -221,6 +221,30 @@ menuUrl: function(menuId) {
 	return (this.menuDataMap[menuId] || {}).url || '';
 },
 
+menuParam: function() {
+
+	var args = [].slice.call(arguments);
+	if (!args.legnth) {
+		return '';
+	}
+
+	var paramMap = {};
+	$.map(args, function(o) {
+		var map = {};
+		if (typeof o === 'string' || o instanceof String) {
+			$.map(o.replace(/[^?]*\?/, '').split(/&/), function(v) {
+				var pair = v.split(/=/);
+				map[pair[0]] = pair[1];
+			});
+		} else if ($.isPlainObject(o)) {
+			map = o;
+		}
+		$.extend(true, paramMap, map);
+	});
+
+	return paramMap;
+},
+
 goToLink: function(menuId, url) {
 
 	var iframe = $('iframe[name="content-iframe"]');

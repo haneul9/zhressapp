@@ -17,56 +17,56 @@ init: function() {
 		'P101': EmployeePortlet,	// 개인정보
 		'P105': CalendarPortlet		// 팀 달력
 	};
-/*
-	$(document)
-		.off('click', '.portlet-masonry [data-url]')
-		.on('click', '.portlet-masonry [data-url]', this._gateway.handleUrl);
 
-	$(document)
-		.off('click', '.portlet-masonry [data-popup-menu-url]')
-		.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
-			var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
-			if (popupMenuUrl) {
-				var params = {
-					popup: popupMenuUrl,
-					mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
-				};
-				if (!this._gateway.isPRD()) {
-					params.pernr = this._gateway.parameter('pernr');
-				}
-				this._gateway.openWindow({ // openPopup openWindow
-					url: 'index.html?' + $.param(params),
-					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
-					width: 1280,
-					height: 800
-				});
-			} else {
-				this._gateway.alert({
-					title: '오류', html: ['<p>', '</p>'].join('이동할 URL 정보가 없습니다.')
-				});
-			}
-		}.bind(this));
+	// $(document)
+	// 	.off('click', '.portlet-masonry [data-url]')
+	// 	.on('click', '.portlet-masonry [data-url]', this._gateway.handleUrl);
 
-	$(document)
-		.off('mouseover', '.portlet .card-header')
-		.on('mouseover', '.portlet .card-header', function(e) {
-			$(e.currentTarget).find('[data-dismiss="portlet"]').toggleClass('d-none', false);
-		});
+	// $(document)
+	// 	.off('click', '.portlet-masonry [data-popup-menu-url]')
+	// 	.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
+	// 		var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
+	// 		if (popupMenuUrl) {
+	// 			var paramMap = this._gateway.menuParam(popupMenuUrl, {
+	// 				popup: popupMenuUrl.replace(/([^?]*)\?.*/, ''),
+	// 				mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
+	// 			});
+	// 			if (!this._gateway.isPRD()) {
+	// 				paramMap.pernr = this._gateway.parameter('pernr');
+	// 			}
+	// 			this._gateway.openWindow({ // openPopup openWindow
+	// 				url: 'index.html?' + $.param(paramMap),
+	// 				name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
+	// 				width: 1280,
+	// 				height: 800
+	// 			});
+	// 		} else {
+	// 			this._gateway.alert({
+	// 				title: '오류', html: ['<p>', '</p>'].join('이동할 URL 정보가 없습니다.')
+	// 			});
+	// 		}
+	// 	}.bind(this));
 
-	$(document)
-		.off('mouseout', '.portlet .card-header')
-		.on('mouseout', '.portlet .card-header', function(e) {
-			$(e.currentTarget).find('[data-dismiss="portlet"]').toggleClass('d-none', true);
-		});
+	// $(document)
+	// 	.off('mouseover', '.portlet .card-header')
+	// 	.on('mouseover', '.portlet .card-header', function(e) {
+	// 		$(e.currentTarget).find('[data-dismiss="portlet"]').toggleClass('d-none', false);
+	// 	});
 
-	$(document)
-		.off('click', '[data-dismiss="portlet"]')
-		.on('click', '[data-dismiss="portlet"]', function(e) {
-			e.stopImmediatePropagation();
+	// $(document)
+	// 	.off('mouseout', '.portlet .card-header')
+	// 	.on('mouseout', '.portlet .card-header', function(e) {
+	// 		$(e.currentTarget).find('[data-dismiss="portlet"]').toggleClass('d-none', true);
+	// 	});
 
-			this.dismiss($(e.currentTarget).toggleClass('d-none', true));
-		}.bind(this));
-*/
+	// $(document)
+	// 	.off('click', '[data-dismiss="portlet"]')
+	// 	.on('click', '[data-dismiss="portlet"]', function(e) {
+	// 		e.stopImmediatePropagation();
+
+	// 		this.dismiss($(e.currentTarget).toggleClass('d-none', true));
+	// 	}.bind(this));
+
 	this._gateway.addLocaleChangeCallbackOwner(this);
 },
 

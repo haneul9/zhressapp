@@ -89,18 +89,18 @@ function initHome() {
 			});
 	}, 0);
 
-	$(document).on('click', 'a[data-popup-menu-url]', function() {
+	$(document).on('click', '.ehr-header [data-popup-menu-url]', function() {
 		var anchor = $(this), popupMenuUrl = anchor.data('popupMenuUrl');
 		if (popupMenuUrl) {
-			var params = {
-				popup: popupMenuUrl,
+			var paramMap = _gateway.menuParam(popupMenuUrl, {
+				popup: popupMenuUrl.replace(/([^?]*)\?.*/, ''),
 				mid: _gateway.mid(popupMenuUrl)
-			};
+			});
 			if (!_gateway.isPRD()) {
-				params.pernr = _gateway.parameter('pernr');
+				paramMap.pernr = _gateway.parameter('pernr');
 			}
 			_gateway.openWindow({ // openPopup openWindow
-				url: 'index.html?' + $.param(params),
+				url: 'index.html?' + $.param(paramMap),
 				name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
 				width: 1280,
 				height: 800

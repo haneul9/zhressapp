@@ -120,7 +120,7 @@ render: function(list) {
 		this.urlMap[o.Seqnr] = o.Url;
 		return [
 			'<div>',
-				'<button type="button" class="btn btn-light" data-quick-link-seqnr="${seqnr}">'.interpolate(o.Seqnr),
+				'<button type="button" class="btn btn-light" data-quick-link-seqnr="${seqnr}" title="${url}">'.interpolate(o.Seqnr, o.Url),
 					'<span>', o.Title, '</span>',
 				'</button>',
 				'<button type="button" class="btn btn-remove">',
@@ -147,7 +147,7 @@ render: function(list) {
 goToLink: function(url) {
 
 	this._gateway.openWindow({
-		url: url,
+		url: (/^http/.test(url) ? '' : 'https://') + url,
 		name: url.replace(/[^a-zA-Z0-9]/g, '')
 	});
 },

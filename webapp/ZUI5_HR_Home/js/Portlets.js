@@ -35,15 +35,15 @@ init: function() {
 		.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
 			var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
 			if (popupMenuUrl) {
-				var params = {
-					popup: popupMenuUrl,
+				var paramMap = this._gateway.menuParam(popupMenuUrl, {
+					popup: popupMenuUrl.replace(/([^?]*)\?.*/, ''),
 					mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
-				};
+				});
 				if (!this._gateway.isPRD()) {
-					params.pernr = this._gateway.parameter('pernr');
+					paramMap.pernr = this._gateway.parameter('pernr');
 				}
 				this._gateway.openWindow({ // openPopup openWindow
-					url: 'index.html?' + $.param(params),
+					url: 'index.html?' + $.param(paramMap),
 					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
 					width: 1280,
 					height: 800

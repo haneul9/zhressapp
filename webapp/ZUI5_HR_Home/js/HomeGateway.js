@@ -52,6 +52,7 @@ homeMenu: function(_menu) {
 		mid: _menu.mid.bind(_menu),
 		urlData: _menu.urlData.bind(_menu),
 		menuUrl: _menu.menuUrl.bind(_menu),
+		menuParam: _menu.menuParam.bind(_menu),
 		handleUrl: _menu.handleUrl.bind(_menu),
 		handleMissingMenuId: _menu.handleMissingMenuId.bind(_menu),
 		handleUnauthorized: _menu.handleUnauthorized.bind(_menu),
