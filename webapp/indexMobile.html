@@ -80,7 +80,7 @@ function initHome() {
 	// 	var anchor = $(this), popupMenuUrl = anchor.data('popupMenuUrl');
 	// 	if (popupMenuUrl) {
 	// 		var paramMap = this._gateway.menuParam(popupMenuUrl, {
-	// 			popup: popupMenuUrl.replace(/([^?]*)\?.*/, ''),
+	// 			popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
 	// 			mid: _gateway.mid(popupMenuUrl)
 	// 		});
 	// 		if (!_gateway.isPRD()) {
