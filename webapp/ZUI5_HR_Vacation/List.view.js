@@ -131,7 +131,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.List", {
 		oTable.bindRows("/Data");
 		
 						// 구분, 사번, 성명, 근태, 근태기간, 일수, 행선지, 연락처, 근태사유, 결재상태
-		var col_info = [{id: "111", label: oBundleText.getText("LABEL_48047"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+		var col_info = [/*{id: "111", label: oBundleText.getText("LABEL_48047"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},*/
 						{id: "Pernr", label: oBundleText.getText("LABEL_48004"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Ename", label: oBundleText.getText("LABEL_48005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Atext", label: oBundleText.getText("LABEL_48006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},

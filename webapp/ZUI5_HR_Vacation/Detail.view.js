@@ -225,7 +225,17 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            minutesStep : 10,
 										            width : "100px",
 										            textAlign : "Begin",
-										            editable : false
+										            change : oController.onChangeTime,
+										            editable : {
+										            	parts : [{path : "Status1"}, {path : "Awart"}],
+										            	formatter : function(fVal1, fVal2){
+										            		if(fVal1 == "" || fVal1 == "AA"){
+										            			return (fVal2 && fVal2 == "1A2") ? true : false; // 반차
+										            		} else {
+										            			return false;
+										            		}
+										            	}
+										            }
 											    }),
 											    new sap.m.TimePicker({
 													valueFormat : "HHmm",
@@ -234,7 +244,17 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            minutesStep : 10,
 										            width : "100px",
 										            textAlign : "Begin",
-										            editable : false
+										            change : oController.onChangeTime,
+										            editable : {
+										            	parts : [{path : "Status1"}, {path : "Awart"}],
+										            	formatter : function(fVal1, fVal2){
+										            		if(fVal1 == "" || fVal1 == "AA"){
+										            			return (fVal2 && fVal2 == "1A2") ? true : false; // 반차
+										            		} else {
+										            			return false;
+										            		}
+										            	}
+										            }
 											    }).addStyleClass("pl-5px")],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"

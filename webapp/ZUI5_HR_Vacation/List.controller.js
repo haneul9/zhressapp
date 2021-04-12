@@ -301,6 +301,7 @@ sap.ui.define([
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
+			return new JSONModelHelper({name: "35110335"});
 			return new JSONModelHelper({name: "20180126"});
 			return new JSONModelHelper({name: "20130126"});
 			return new JSONModelHelper({name: "20090028"});
