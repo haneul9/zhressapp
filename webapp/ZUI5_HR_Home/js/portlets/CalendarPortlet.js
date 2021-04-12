@@ -26,7 +26,12 @@ ui: function() {
 			'</div>',
 			'<div class="card-body">',
 				'<div class="portlet-calendar-inline"></div>',
-				'<h6 class="portlet-calendar-date">Today</h6>',
+				'<div class="d-flex">',
+					'<h6 class="portlet-calendar-date">Today</h6>',
+					'<button type="button" class="btn btn-sm btn-outline-dark button-today">',
+						'<span aria-hidden="true">Today</span>',
+					'</button>',
+				'</div>',
 				'<div class="portlet-calendar-daily-report list-group list-group-horizontal flex-wrap">',
 					'<li class="list-group-item" data-type="vacation">',
 						'<h6>휴가</h6>',
@@ -181,12 +186,14 @@ setAbsence: function(o) {
 	dateTextArray = this.toDateTextArray(o.Begda, o.Endda),
 	length = dateTextArray.length;
 	$.map(dateTextArray, function(dateText, i) {
-		if (!calendarMap[dateText]) {
+		var dayData = calendarMap[dateText];
+		if (!dayData) {
 			return;
 		}
-		calendarMap[dateText].absence = true;
+		dayData.absenceName = o.AwartTxt || '';
+		dayData.absence = true;
 		if (i > 0 && i < length - 1) {
-			calendarMap[dateText].absenceBetween = true;
+			dayData.absenceBetween = true;
 		}
 	});
 
@@ -278,7 +285,7 @@ initCalendar: function() {
 				classes.push('absence-end');
 			}
 
-			return [true, classes.join(' '), ''];
+			return [true, classes.join(' '), dayData.absenceName || ''];
 		}.bind(this),
 		onSelect: function(dateText) {
 
@@ -290,6 +297,10 @@ initCalendar: function() {
 			this.fill();
 		}.bind(this)
 	}));
+
+	$(document).on('click', '.button-today', function() {
+		this.calendar().datepicker('setDate', moment().format(this.pattern.moment));
+	}.bind(this));
 },
 initPopover: function() {
 

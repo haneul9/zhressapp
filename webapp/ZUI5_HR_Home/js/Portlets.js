@@ -102,6 +102,11 @@ changeState: function(restore) {
 	setTimeout(function() {
 		if (restore) {
 			if ($('.portlet-masonry-wrapper').length) {
+				$('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
+					resizeSensor: true,
+					verticalGutter: 0,
+					horizontalGutter: 0
+				});
 				return;
 			}
 
@@ -157,13 +162,17 @@ dismiss: function($button) {
 switch: function(toBeUsed, key) {
 
 	if (toBeUsed) {
-		this.toBeUsedItemKeys.push(key);
+		if (!this.itemMap[key].rendered()) { // 이미 선택되어 있던 portlet을 switch off 했다가 다시 switch on 한 경우
+			this.toBeUsedItemKeys.push(key);
+		}
 		var i = $.inArray(key, this.toBeUnusedItemKeys);
 		if (i > -1) {
 			this.toBeUnusedItemKeys.splice(i, 1);
 		}
 	} else {
-		this.toBeUnusedItemKeys.push(key);
+		if (this.itemMap[key].rendered()) { // 이미 선택되어 있던 portlet을 switch on 했다가 다시 switch off 한 경우
+			this.toBeUnusedItemKeys.push(key);
+		}
 		var j = $.inArray(key, this.toBeUsedItemKeys);
 		if (j > -1) {
 			this.toBeUsedItemKeys.splice(j, 1);
@@ -250,8 +259,8 @@ initSwitchModal: function() {
 
 	var t = $('#portlet-personalization');
 	if (t.length) {
-		$(document).off('click', '.portlet-switch');
-		$(document).off('click', '.portlet-switch [type="checkbox"]');
+		// $(document).off('click', '.portlet-switch');
+		// $(document).off('click', '.portlet-switch [type="checkbox"]');
 		$(document).off('click', '.portlet-switch:not(.disabled)');
 		$(document).off('click', '.portlet-switch [type="checkbox"]:not([disabled])');
 		t.off('click', '.btn-primary');
@@ -556,7 +565,7 @@ generate: function() {
 				cursor: 'move',
 				cursorAt: { top: 5 },
 				tolerance: 'pointer',
-				receive: this.save.bind(this) // event, ui
+				update: this.save.bind(this) // event, ui
 			});
 
 			$('.card-header').disableSelection();

@@ -154,7 +154,8 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; border-top-right-radius:0; border-bottom-right-radius:0; padding-right:5px}
 .portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%; border-radius:0}
 .portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-top-left-radius:0; border-bottom-left-radius:0; padding-left:5px}
-.portlet-calendar-date {margin-top:2rem; font-weight:700}
+.portlet-calendar-inline + .d-flex {margin-top: 2rem; justify-content:space-between; align-items:center}
+.portlet-calendar-date {margin:0; font-weight:700}
 .portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:0; text-align:center}
 .portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
 .portlet-calendar-inline .ui-widget-header {background-color:transparent}
@@ -170,7 +171,7 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar .tooltip .arrow:before {border-bottom-color:#064975; border-top-color:#064975}
 .portlet-calendar .tooltip .tooltip-inner {max-width:none; background-color:#064975; border:1px solid #064975; box-shadow:rgba(23,25,29,0.3) 0 2px 10px; color:rgba(255,255,255,0.8); font-size:.875rem}
 .portlet-calendar .tooltip .tooltip-inner th {font-weight:500}
-.portlet-calendar .tooltip .tooltip-inner td {padding:.125rem .375rem}  
+.portlet-calendar .tooltip .tooltip-inner td {padding:.125rem .375rem}
 
 .portlet-switch {margin-top:.75rem; cursor:pointer}
 .portlet-switch.active {border-color:rgba(0,112,189,.7); background-color:#ebf5fe}
