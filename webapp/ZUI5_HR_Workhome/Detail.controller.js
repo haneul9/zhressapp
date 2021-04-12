@@ -45,7 +45,8 @@ sap.ui.define([
 			var oData = {
 				Data : {
 					FromPageId : oEvent.data.FromPageId,
-					Status : oEvent.data.Status
+					Status : oEvent.data.Status,
+					Werks : $.app.getModel("session").getData().Persa
 				}
 			};
 			
@@ -132,6 +133,7 @@ sap.ui.define([
 								data.results[0].Stext = data.results[0].Fulln;
 	                        	data.results[0].PGradeTxt = data.results[0].ZpGradetx;
 	                        	data.results[0].ZtitleT = data.results[0].Ztitletx;
+	                        	data.results[0].Werks = data.results[0].Persa;
 	                        	
 								Object.assign(vData, data.results[0]);
 							}
@@ -158,6 +160,7 @@ sap.ui.define([
 			// oController._DetailJSonModel.setProperty("/Data/ZtitleT", vData.ZtitleT);
 			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs);
 			oController._DetailJSonModel.setProperty("/Data/Molga", vData.Molga);
+			oController._DetailJSonModel.setProperty("/Data/Werks", vData.Persa);
 			
 			if(oController.Error == "E"){
 				oController.Error = "";
@@ -185,7 +188,8 @@ sap.ui.define([
 						Status : oController._DetailJSonModel.getProperty("/Data/Status"),
 						Bukrs : oController._DetailJSonModel.getProperty("/Data/Bukrs"),
 						Molga : oController._DetailJSonModel.getProperty("/Data/Molga"),
-						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr)
+						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr),
+						Werks : oController._DetailJSonModel.getProperty("/Data/Werks")
 					};
 					
 					oController._DetailJSonModel.setProperty("/Data", vData);

@@ -27,9 +27,17 @@ sap.ui.jsview("ZUI5_HR_Workhome.Detail", {
 						 	 	    text : oBundleText.getText("LABEL_48040"), // 대상자 변경
 						 	 	    press : oController.searchOrgehPernr,
 						 	 	    visible : {
-						 	 	    	path : "Status",
-						 	 	    	formatter : function(fVal){
-						 	 	    		return fVal == "" ? true : false;
+						 	 	    	// path : "Status",
+						 	 	    	// formatter : function(fVal){
+						 	 	    	// 	return fVal == "" ? true : false;
+						 	 	    	// }
+						 	 	    	parts : [{path : "Status"}, {path : "Werks"}],
+						 	 	    	formatter : function(fVal1, fVal2){
+						 	 	    		if(fVal2 && fVal2.substring(0,1) == "D"){
+						 	 	    			return false;
+						 	 	    		} else {
+						 	 	    			return fVal1 == "" ? true : false;
+						 	 	    		}
 						 	 	    	}
 						 	 	    }
 						 	    }).addStyleClass("button-light"),
