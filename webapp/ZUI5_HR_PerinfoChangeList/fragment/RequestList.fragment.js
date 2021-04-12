@@ -104,6 +104,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
 
 		var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
 			layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+			selectionBehavior : sap.ui.table.SelectionBehavior.RowOnly,
 			selectionMode: sap.ui.table.SelectionMode.Single,
 			enableColumnReordering: false,
 			enableColumnFreeze: false,
