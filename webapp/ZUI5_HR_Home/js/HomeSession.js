@@ -39,7 +39,10 @@ init: function(initHome) {
 		]);
 	}.bind(this))
 	.then(function() {
-		return this.retrieveLoginInfo();	// 인사정보 조회
+		return Promise.all([
+			this.retrieveLoginInfo(),	// 인사정보 조회
+			this.registerToken()		// Mobile token 등록
+		]);
 	}.bind(this))
 	.catch(function(jqXHR) {
 		var message = this._gateway.handleError(this._gateway.ODataDestination.ETC, jqXHR, 'HomeSession.init').message;
@@ -301,6 +304,29 @@ retrieveLoginInfo: function() {
 	}).promise();
 },
 
+registerToken: function() {
+	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
+		token = this._gateway.parameter("token"),
+		percod = sessionStorage.getItem('ehr.odata.user.percod');
+
+	if (token === null || token === '') { return; }
+	if (percod === null || percod === '') { return; }
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			Percod: percod,
+			Token: token
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeSession.registerToken ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);
+		}.bind(this)
+	}).promise();
+},
+
 pernr: function() {
 
 	return sessionStorage.getItem('ehr.sf-user.name');
@@ -401,29 +427,6 @@ confirmADPW: function(o) {
 	};
 
 	this._gateway.confirm(options);
-},
-
-registerToken: function(tk) {
-
-	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
-	percod = sessionStorage.getItem('ehr.odata.user.percod');
-
-	if (tk === null || tk === '') { return; }
-	if (percod === null || percod === '') { return; }
-
-	return this._gateway.post({
-		url: url,
-		data: {
-			Percod: percod,
-			Token: tk
-		},
-		success: function() {
-			this._gateway.prepareLog('HomeSession.registerToken ${url} success'.interpolate(url), arguments).log();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);
-		}.bind(this)
-	}).promise();
 }
 
 });
