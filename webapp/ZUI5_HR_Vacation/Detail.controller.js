@@ -104,6 +104,14 @@ sap.ui.define([
 			oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
 		},
 		
+		onChangeTime : function(oEvent){
+			if(oEvent && oEvent.getParameters().valid == false){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				oEvent.getSource().setValue("");
+				return;
+			}
+		},
+		
 		onSetInfo : function(Pernr){
 			if(!Pernr) return;
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
@@ -1516,6 +1524,7 @@ sap.ui.define([
         },
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
+			return new JSONModelHelper({name: "35110335"});
 			return new JSONModelHelper({name: "20180126"});
 			return new JSONModelHelper({name: "20130126"});
 			return new JSONModelHelper({name: "20090028"});
