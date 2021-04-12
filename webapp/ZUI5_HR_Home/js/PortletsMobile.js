@@ -28,7 +28,7 @@ init: function() {
 	// 		var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
 	// 		if (popupMenuUrl) {
 	// 			var paramMap = this._gateway.menuParam(popupMenuUrl, {
-	// 				popup: popupMenuUrl.replace(/([^?]*)\?.*/, ''),
+	// 				popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
 	// 				mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
 	// 			});
 	// 			if (!this._gateway.isPRD()) {

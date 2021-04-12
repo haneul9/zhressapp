@@ -224,7 +224,7 @@ menuUrl: function(menuId) {
 menuParam: function() {
 
 	var args = [].slice.call(arguments);
-	if (!args.legnth) {
+	if (!args.length) {
 		return '';
 	}
 
