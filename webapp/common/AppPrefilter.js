@@ -105,7 +105,7 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
 
 			result.hasMenuAuthority = false;
-		}
+		}.bind(this)
 	});
 
 	if (!result.hasMenuAuthority) {
