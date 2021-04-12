@@ -736,7 +736,7 @@ sap.ui.define([
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"004",
 					   IPernr:oSessionData.Pernr,
-					   IBukrs:oSessionData.Bukrs2,
+					   IBukrs:oSessionData.Bukrs3,
 					   NavCommonCodeList:[],
 					   ICodty:"ZHOSP_TYPE"};
 			oModel.create("/CommonCodeListHeaderSet", vData, null,
@@ -1845,11 +1845,15 @@ sap.ui.define([
 					oPro.Medmp="0";
 				}
 				if(oPro.Gtz51=="D"){
-					oPro.Framt=oPro.Medpp;
+					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;					
 				}else if(oPro.Gtz51=="C"){
-					oPro.Framt=common.Common.numberWithCommas(
-						parseInt(oPro.Medsp.replace(/\,/gi,""))+
-						parseInt(oPro.Znobcd.replace(/\,/gi,"")));
+					if(parseInt(oPro.Zdbcrl.replace(/\,/gi,""))<parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Znobcd.replace(/\,/gi,""))){
+						oPro.Framt=oPro.Zdbcrl;
+					}else{
+						oPro.Framt=common.Common.numberWithCommas(
+							parseInt(oPro.Medsp.replace(/\,/gi,""))+
+							parseInt(oPro.Znobcd.replace(/\,/gi,"")));
+					}					
 				}else{
 					oPro.Framt=
 					parseInt(oPro.Ptamt.replace(/\,/gi,""))

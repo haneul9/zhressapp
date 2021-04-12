@@ -43,7 +43,7 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
