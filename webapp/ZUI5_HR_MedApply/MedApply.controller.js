@@ -148,9 +148,9 @@ sap.ui.define([
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._SessionData;
 			oController.getSelData();
-			oController._DataModel.setData({Pop1:[oController._tData],Pop2:[]});
 			oController._tData.Zfvcgb=="X"?oController._tData.Chk1=true:oController._tData.Chk1=false;
 			oController._tData.Ziftgb=="X"?oController._tData.Chk2=true:oController._tData.Chk2=false;
+			oController._DataModel.setData({Pop1:[oController._tData],Pop2:[]});
 			oController._vArr1.forEach(function(e){
 				var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
 				eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
@@ -257,7 +257,7 @@ sap.ui.define([
 					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
 				},"007");
 				
-				if(oController._onClose!="X"){
+				if(oController._onDialog!="M"){
 					oController.changeSel();
 				}	
 				if(oController._onDialog!="M"){
@@ -640,6 +640,7 @@ sap.ui.define([
 				vProperty1.Editable=true;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
 				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+				fragment.COMMON_ATTACH_FILES.availLine.call(oController,"001");
 				oController.onChk2();
 			}else{
 				oController.initFile("001");
@@ -678,6 +679,7 @@ sap.ui.define([
 				vProperty1.Editable=true;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"002");
 				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				fragment.COMMON_ATTACH_FILES.availLine.call(oController,"002");
 				oController.onChk1();
 			}else{
 				oController.initFile("002");
@@ -1745,7 +1747,8 @@ sap.ui.define([
 						}
 					);
 				if(vSig=="1000"){
-					vData.MedicalApplyTableIn[0].Zfvcgb=="X"?$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:
+					vData.MedicalApplyTableIn[0].Zfvcgb=="X"?
+					$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:
 					$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
 					vData.MedicalApplyTableIn[0].Ziftgb=="X"?$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=true:
 					$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;

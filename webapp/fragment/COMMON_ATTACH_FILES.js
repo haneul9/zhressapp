@@ -219,6 +219,12 @@ fragment.COMMON_ATTACH_FILES = {
 		}
 	},
 
+	availLine : function(vPage){
+		if($.app.byId(this.PAGEID + "_ATTACHBOX"+vPage).getModel().getProperty("/Settings/Mode")=="S"){
+			$("#"+this.PAGEID + "_ATTACHBOX"+vPage).children()[0].style.display="";			
+		}
+	},
+
 	/*
 	 * @param {key : {string}, value : {any}}
 	 *
