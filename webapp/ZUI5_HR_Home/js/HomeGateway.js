@@ -81,6 +81,7 @@ restorePreviousMenu: function() {
 restoreHome: function() {
 
 	if (this.isPopup()) {
+		location.href = "Error.html";
 		return;
 	}
 

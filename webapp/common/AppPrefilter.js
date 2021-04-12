@@ -58,7 +58,7 @@ AppPrefilter.prototype.init = function() {
 
 		}
 
-		this._gateway.restoreHome();
+		this._gateway.restoreHome('error');
 	}
 };
 
