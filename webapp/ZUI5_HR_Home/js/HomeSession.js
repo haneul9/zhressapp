@@ -309,8 +309,9 @@ registerToken: function() {
 		token = this._gateway.parameter("token"),
 		percod = sessionStorage.getItem('ehr.odata.user.percod');
 
-	if (token === null || token === '') { return; }
-	if (percod === null || percod === '') { return; }
+	if (token === undefined || token === null || token === '') {
+		throw new Error("Token is blank.");
+	}
 
 	return this._gateway.post({
 		url: url,
