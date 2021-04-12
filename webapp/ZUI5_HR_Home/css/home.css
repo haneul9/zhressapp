@@ -166,9 +166,9 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {top:5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev {left:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-next {right:14px}
-.portlet-calendar .tooltip.show {opacity:1;}
-.portlet-calendar .tooltip .arrow:before {border-bottom-color:#064975;border-top-color:#064975;}
-.portlet-calendar .tooltip .tooltip-inner {background-color:#064975;border:1px solid #064975; box-shadow:rgba(23,25,29,0.3) 0 2px 10px;color:rgba(255,255,255,0.8);font-size:.875rem}
+.portlet-calendar .tooltip.show {opacity:1}
+.portlet-calendar .tooltip .arrow:before {border-bottom-color:#064975; border-top-color:#064975}
+.portlet-calendar .tooltip .tooltip-inner {max-width:none; background-color:#064975; border:1px solid #064975; box-shadow:rgba(23,25,29,0.3) 0 2px 10px; color:rgba(255,255,255,0.8); font-size:.875rem}
 .portlet-calendar .tooltip .tooltip-inner th {font-weight:500}
 .portlet-calendar .tooltip .tooltip-inner td {padding:.125rem .375rem}  
 
