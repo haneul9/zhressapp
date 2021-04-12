@@ -77,7 +77,55 @@ sap.ui.define([
 		},
 
 		getUrl: function() {
-			return "";
+			var oController = $.app.getController();
+			
+			return 	new sap.m.FlexBox({
+					justifyContent: "Center",
+					items: [
+						new sap.ui.commons.TextView({
+							text : {
+								path: "Status1",
+								formatter: function(v) {
+									var vText = "";
+									switch(v){
+										// 결재중
+										case "00" : vText = oController.getBundleText("LABEL_40070"); break;
+										// 미결재
+										case "AA" : vText = oController.getBundleText("LABEL_40071"); break;
+										// 결재완료
+										case "99" : vText = oController.getBundleText("LABEL_40069"); break;
+									}
+									return vText;
+								} 
+							}, 
+							textAlign : "Center",
+							visible: {
+								path: "Url1",
+								formatter: function(v) {
+									if(!v) return true;
+									else return false;
+								}
+							}
+						})
+						.addStyleClass("font-14px font-regular mt-8px "),
+						new sap.m.FormattedText({
+							htmlText: {
+								parts: [{ path: "Url1" }, { path: "Status1" }],
+								formatter: function(v1, v2) {
+									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
+									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
+								}
+							}, 
+							visible: {
+								path: "Url1",
+								formatter: function(v) {
+									if(v) return true;
+									else return false;
+								}
+							}
+						})
+					]
+				});
 		},
         
         initDateCreate: function(oController) { // 년과 월로 따로 셋팅하는곳
@@ -150,7 +198,7 @@ sap.ui.define([
             Common.makeNumbersArray({length: 60}).forEach(function(idx) {
                 vTime = String(idx);
 				var mTime = Common.lpad(vTime, 2);
-                oTimes.push({ Code: vTime, Text: mTime});
+                oTimes.push({ Code: mTime, Text: mTime});
             });
 
             oController.ApplyModel.setProperty("/FormData/mTime", "Null");
@@ -236,6 +284,8 @@ sap.ui.define([
 			
 			var oCopyRow = $.extend(true, {}, oRowData);
 
+			if(oEvent.mParameters.columnIndex === "8" && Common.checkNull(!oRowData.UrlA1)) return;
+
 			oController.ApplyModel.setData({FormData: oCopyRow});
 			oController.AttModel.setData({Data: []});
 			
@@ -297,6 +347,11 @@ sap.ui.define([
 				return ;
 			}
 
+			if(Common.checkNull(!oCopyRow.RepstT) || oCopyRow.Status1 !== "99" || oCopyRow.Edoty !== "1"){
+				MessageBox.error(oController.getBundleText("MSG_40037"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
 			oCopyRow = $.extend(true, {}, oCopyRow);
 			this.ApplyModel.setData({FormData: oCopyRow});
 
@@ -317,7 +372,82 @@ sap.ui.define([
 		},
 
 		onPressReqBtn: function() { // 결재요청
+			var oController = $.app.getController();
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oTableData = this.TableModel.getProperty("/Data");
+			var oCopyRow = {};
 
+			if(oTableData.every(function(e) {return e.Pchk !== true})){
+				MessageBox.error(oController.getBundleText("MSG_40035"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			var oList = [];
+
+			oTableData.forEach(function(e){
+				if(e.Pchk) {
+					oList.push(e);
+					oCopyRow = e;
+				}	
+			});
+
+			if(oList.length > 1){
+				MessageBox.error(oController.getBundleText("MSG_40034"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			if(oCopyRow.Status1 !== "AA") {
+				MessageBox.error(oController.getBundleText("MSG_40036"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			BusyIndicator.show(0);
+			var onProcessApply = function (fVal) {
+				//신청 클릭시 발생하는 이벤트
+				if (fVal && fVal == oController.getBundleText("LABEL_40010")) { // 결재요청
+
+					var sendObject = {};
+					// Header
+					sendObject.IPernr = vPernr;
+					sendObject.IEmpid = vPernr;
+					sendObject.IConType = "P";
+					sendObject.IBukrs = vBukrs2;
+					// Navigation property
+					sendObject.TrainingOutApplyExport = [];
+					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oCopyRow)];
+					
+					oModel.create("/TrainingOutApplySet", sendObject, {
+						async: true,
+						success: function(oData, oResponse) {
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40033"), { title: oController.getBundleText("MSG_08107")});
+							oController.onTableSearch();
+							BusyIndicator.hide();
+							window.open(
+								oData.TrainingOutApplyExport.results[0].EUrl,
+								"_blank",
+								"height = 600, width = 900"
+							);
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
+						}
+					});
+				}
+				BusyIndicator.hide();
+			};
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40032"), {
+				title: oController.getBundleText("LABEL_40001"),
+				actions: [oController.getBundleText("LABEL_40010"), oController.getBundleText("LABEL_00119")],
+				onClose: onProcessApply
+			});
 		},
 
 		getAttTable: function(oRowData, Gubun) { // 참석자 정보 받아옴
@@ -383,7 +513,6 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
-			var oTable = $.app.byId(this.PAGEID + "_Table");
 			var oData = this.TableModel.getProperty("/Data");
 
 			if(oData.every(function(e) {return e.Pchk !== true})){
@@ -394,9 +523,14 @@ sap.ui.define([
 			BusyIndicator.show(0);
 			var onProcessDelete = function (fVal) {
 				if (fVal && fVal == oController.getBundleText("LABEL_40011")) { // 삭제
+					var sendObject = {};
+					var vMsg = "N";
+
 					oData.forEach(function(ele) {
 						if(ele.Pchk){
-							var sendObject = {};
+							ele.Edoty = "1";
+
+							sendObject = {};
 							// Header
 							sendObject.IPernr = vPernr;
 							sendObject.IEmpid = vPernr;
@@ -408,16 +542,8 @@ sap.ui.define([
 							
 							oModel.create("/TrainingOutApplySet", sendObject, {
 								success: function(oData, oResponse) {
-									var dataLength = 10;
-
-									if (oData && oData.TrainingOutApplyTableIn1) { 
-										Common.log(oData);
-										// sap.m.MessageBox.alert(oController.getBundleText("MSG_40012"), { title: oController.getBundleText("MSG_08107")});
-										var rDatas1 = oData.TrainingOutApplyTableIn1.results;
-										dataLength = rDatas1.length;
-										oController.TableModel.setData({Data: rDatas1});
-									}
-									oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); 
+									Common.log(oData);
+									vMsg = "Y";
 								},
 								error: function(oResponse) {
 									Common.log(oResponse);
@@ -429,6 +555,9 @@ sap.ui.define([
 							});
 						}
 					});
+
+					if(vMsg = "Y") sap.m.MessageBox.alert(oController.getBundleText("MSG_40012"), { title: oController.getBundleText("MSG_08107")});
+					oController.onTableSearch();
 				}
 				BusyIndicator.hide();
 			};
@@ -996,9 +1125,84 @@ sap.ui.define([
 			});
 		},
 
+		onDialogResultBtn: function() { // Dialog 결과보고 저장
+			var oController = $.app.getController();
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oSendData = oController.ApplyModel.getProperty("/FormData");
+			var oAttList2 = [];
+
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Pltgt"))){ // 전달교육 내용요약
+				MessageBox.error(oController.getBundleText("MSG_40038"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Plimp"))){ // 직무개선 방안요약
+				MessageBox.error(oController.getBundleText("MSG_40039"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+			
+			oController.AttModel.getProperty("/Data").forEach(function(e) {
+				var oAttList1 = {};
+				oAttList1.Pernr = e.Objid;
+				oAttList2.push(Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList1));
+			});
+
+			BusyIndicator.show(0);
+			var onProcessSave = function (fVal) {
+				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //신청
+					var vTimeH = oController.ApplyModel.getProperty("/FormData/hTime");
+					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
+					
+					// 첨부파일 저장
+					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oSendData.Edoty = "1";
+					oSendData.Pernr = vPernr;
+					oSendData.Trtim = vTimeH + "." + vTimeM;
+
+					var sendObject = {};
+					// Header
+					sendObject.IPernr = vPernr;
+					sendObject.IEmpid = vPernr;
+					sendObject.IEdoty = "1";
+					sendObject.IConType = "3";
+					sendObject.IBukrs = vBukrs2;
+					// Navigation property
+					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
+					sendObject.TrainingOutApplyTableIn2 = oAttList2;
+					
+					oModel.create("/TrainingOutApplySet", sendObject, {
+						async: true,
+						success: function(oData, oResponse) {
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40010"), { title: oController.getBundleText("MSG_08107")});
+							oController.onTableSearch();
+							BusyIndicator.hide();
+							oController._ApplyModel.close();
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
+						}
+					});
+				}
+				BusyIndicator.hide();
+			};
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40009"), {
+				title: oController.getBundleText("LABEL_40001"),
+				actions: [oController.getBundleText("LABEL_40022"), oController.getBundleText("LABEL_00119")],
+				onClose: onProcessSave
+			});
+		},
+
 		onBeforeOpenDetailDialog: function(AppType) {
 			var oController = $.app.getController();
-			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
+			var vStatus = oController.ApplyModel.getProperty("/FormData/Status1"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
 				vInfoMessage = oController.getBundleText("MSG_40025");
 			if(AppType === "app") {

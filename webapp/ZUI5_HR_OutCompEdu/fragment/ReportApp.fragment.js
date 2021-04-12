@@ -13,7 +13,7 @@
             var oEduCombo = new sap.m.ComboBox(oController.PAGEID + "_EduCombo", { // 교육구분
 				width: "250px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -38,7 +38,7 @@
             var oTypeCombo = new sap.m.ComboBox(oController.PAGEID + "_TypeCombo", { // 교육유형
 				width: "250px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -63,7 +63,7 @@
             var oSelectCombo = new sap.m.ComboBox(oController.PAGEID + "_SelectCombo", { // 필수/선택
 				width: "250px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -88,7 +88,7 @@
             var oNomalCombo = new sap.m.ComboBox(oController.PAGEID + "_NomalCombo", { // 법정/일반
 				width: "250px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -113,7 +113,7 @@
             var oTimeCombo = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo", { // 학습시간 (시)
 				width: "70px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -138,7 +138,7 @@
             var oTimeCombo2 = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo2", { // 학습시간 (분)
 				width: "70px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -197,7 +197,7 @@
                                         width: "704px",
                                         maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edkaj", false),
                                         editable: {
-                                            path: "Status",
+                                            path: "Status1",
                                             formatter: function(v1) {
                                                 return !v1 || v1 === "AA";
                                             }
@@ -261,7 +261,7 @@
 												press: oController.onPressAddRow.bind(oController),
 												text: "{i18n>LABEL_40034}", // 추가
 												visible: {
-													path: "Status",
+													path: "Status1",
 													formatter: function(v1) {
 														return !v1 || v1 === "AA";
 													}
@@ -272,7 +272,7 @@
 												press: oController.onPressDelRow.bind(oController),
 												text: "{i18n>LABEL_40011}", // 삭제
 												visible: {
-													path: "Status",
+													path: "Status1",
 													formatter: function(v1) {
 														return !v1 || v1 === "AA";
 													}
@@ -326,7 +326,7 @@
 								width: "443px",
 								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edrom", false),
 								editable: {
-									path: "Status",
+									path: "Status1",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
@@ -337,7 +337,7 @@
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
 								width: "250px",
 								editable: {
-									path: "Status",
+									path: "Status1",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
@@ -380,7 +380,7 @@
 								width: "704px",
 								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "EdstaObjid", false),
 								editable: {
-									path: "Status",
+									path: "Status1",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
@@ -402,7 +402,7 @@
 										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzpretun", false),
 										liveChange: oController.getMoneyComma1.bind(oController),
 										editable: {
-											path: "Status",
+											path: "Status1",
 											formatter: function(v1) {
 												return !v1 || v1 === "AA";
 											}
@@ -427,7 +427,7 @@
 										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzvalbt", false),
 										liveChange: oController.getMoneyComma2.bind(oController),
 										editable: {
-											path: "Status",
+											path: "Status1",
 											formatter: function(v1) {
 												return !v1 || v1 === "AA";
 											}
@@ -454,7 +454,7 @@
 								width: "704px",
 								value:"{Planx}",
 								editable: {
-									path: "Status",
+									path: "Status1",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
@@ -519,7 +519,7 @@
 								width: "704px",
 								value:"{Othtx}",
 								editable: {
-									path: "Status",
+									path: "Status1",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
@@ -594,7 +594,7 @@
 						press: oController.onDialogApplyBtn.bind(oController),
 						text: "{i18n>LABEL_40060}", // 신청,
 						visible: {
-							path: "Status",
+							path: "Status1",
 							formatter: function(v) {
 								return !v;
 							}
@@ -604,7 +604,7 @@
 						press: oController.onDialogSaveBtn.bind(oController),
 						text: "{i18n>LABEL_40022}", // 저장,
 						visible: {
-							path: "Status",
+							path: "Status1",
 							formatter: function (v) {
 								return v === "AA";
 							}
@@ -614,7 +614,7 @@
 						press: oController.onDialogDelBtn.bind(oController),
 						text: "{i18n>LABEL_40011}", // 삭제
 						visible: {
-							path: "Status",
+							path: "Status1",
 							formatter: function (v) {
 								return v === "AA";
 							}

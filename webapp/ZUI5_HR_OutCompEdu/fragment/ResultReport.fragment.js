@@ -135,7 +135,7 @@ sap.ui.define([
             var oSatisCombo = new sap.m.ComboBox({ // 학습자만족도
 				width: "250px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -160,7 +160,7 @@ sap.ui.define([
             var oEduEffectCombo = new sap.m.ComboBox({ // 교육효과평가
 				width: "250px",
 				editable: {
-					path: "Status",
+					path: "Status1",
 					formatter: function(v1) {
 						return !v1 || v1 === "AA";
 					}
@@ -396,7 +396,7 @@ sap.ui.define([
                                                 width: "250px",
                                                 maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Pltgt", false),
                                                 editable: {
-                                                    path: "Status",
+                                                    path: "Status1",
                                                     formatter: function(v1) {
                                                         return !v1 || v1 === "AA";
                                                     }
@@ -416,7 +416,7 @@ sap.ui.define([
                                                 valueFormat: "yyyy-MM-dd",
                                                 placeholder: "yyyy-mm-dd",
                                                 editable: {
-                                                    path: "Status",
+                                                    path: "Status1",
                                                     formatter: function(v1) {
                                                         return !v1 || v1 === "AA";
                                                     }
@@ -433,7 +433,7 @@ sap.ui.define([
                                                 width: "250px",
                                                 maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Plloc", false),
                                                 editable: {
-                                                    path: "Status",
+                                                    path: "Status1",
                                                     formatter: function(v1) {
                                                         return !v1 || v1 === "AA";
                                                     }
@@ -458,7 +458,7 @@ sap.ui.define([
                                         width: "704px",
                                         value:"{Plcon}",
                                         editable: {
-                                            path: "Status",
+                                            path: "Status1",
                                             formatter: function(v1) {
                                                 return !v1 || v1 === "AA";
                                             }
@@ -480,7 +480,7 @@ sap.ui.define([
                                         width: "704px",
                                         value:"{Plimp}",
                                         editable: {
-                                            path: "Status",
+                                            path: "Status1",
                                             formatter: function(v1) {
                                                 return !v1 || v1 === "AA";
                                             }
@@ -625,7 +625,7 @@ sap.ui.define([
 								width: "704px",
 								value:"{Othtx}",
 								editable: {
-									path: "Status",
+									path: "Status1",
 									formatter: function(v1) {
 										return !v1 || v1 === "AA";
 									}
@@ -690,30 +690,20 @@ sap.ui.define([
 				contentHeight: "650px",
 				buttons: [
 					new sap.m.Button({
-						press: oController.onDialogApplyBtn.bind(oController),
+						press: oController.onDialogResultBtn.bind(oController),
 						text: "{i18n>LABEL_40060}", // 신청,
 						visible: {
-							path: "Status",
+							path: "Status1",
 							formatter: function(v) {
 								return !v;
 							}
 						}
 					}).addStyleClass("button-dark"),
 					new sap.m.Button({
-						press: oController.onDialogSaveBtn.bind(oController),
-						text: "{i18n>LABEL_40022}", // 저장,
-						visible: {
-							path: "Status",
-							formatter: function (v) {
-								return v === "AA";
-							}
-						}
-					}).addStyleClass("button-light"),
-					new sap.m.Button({
 						press: oController.onDialogDelBtn.bind(oController),
 						text: "{i18n>LABEL_40011}", // 삭제
 						visible: {
-							path: "Status",
+							path: "Status1",
 							formatter: function (v) {
 								return v === "AA";
 							}
