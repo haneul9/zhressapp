@@ -54,7 +54,7 @@ init: function() {
 spinner: function(on) {
 
 	setTimeout(function() {
-		$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', !on);
+		$('.ehr-header .menu-spinner-wrapper,.ehr-body .menu-spinner-wrapper').toggleClass('d-none', !on);
 	}, 0);
 },
 

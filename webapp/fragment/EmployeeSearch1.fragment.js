@@ -125,7 +125,7 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 					new sap.ui.table.Column({
 						label: new sap.ui.commons.Label({ text: vColumns[i].label }).addStyleClass("L2PFontFamily"),
 						template: new sap.ui.commons.TextView({
-							text: { path: vColumns[i].id, type: new sap.ui.model.type.Date({ pattern: "yyyy.MM.dd" }) }
+							text: { path: vColumns[i].id, type: new sap.ui.model.type.Date({ pattern: "yyyy.MM.dd" }), tooltip: new sap.ui.core.TooltipBase() }
 						}).addStyleClass("L2PFontFamily"),
 						width: vColumns[i].width,
 						sortProperty: vColumns[i].id,

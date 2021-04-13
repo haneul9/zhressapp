@@ -152,7 +152,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), { /
 
 	getColorTextTemplate: function(columnInfo) {
 
-		return new sap.ui.commons.TextView({
+		return new sap.m.Text({
 			textAlign: sap.ui.core.HorizontalAlign.Center,
 			text: {
 				parts: [

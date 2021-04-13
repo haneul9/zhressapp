@@ -87,13 +87,8 @@ fill: function() {
 			ILangu: loginInfo.Langu,
 			IMonth: this.yearMonth,
 			IDatum: Date.toODataString(),
-			TableIn1: [], // 달력 : 일자/요일키/휴일flag(근무 일정상 휴일)/휴무(2001)정보 여부 flag
-			TableIn2: [], // 본인 근태 : 휴무유형명, 시작일, 종료일
-			TableIn3: [], // 부서 휴가 인원 : 이름/직위명/휴가명/기간
-			TableIn4: [], // 부서 교육 인원 : 이름/직위명/기간
-			TableIn5: [], // 부서 출장 인원 : 이름/직위명/기간
-			TableIn6: [], // 부서 재택 인원 : 이름/직위명/기간
-			TableIn7: []  // 부서 생일 인원 : 이름/직위명/양음력 표기
+			TableIn1: [],	// 달력 : 일자/요일키/휴일flag(근무 일정상 휴일)/휴무(2001)정보 여부 flag
+			TableIn2: []	// 본인 근태 : 휴무유형명, 시작일, 종료일
 		},
 		success: function(data) {
 			this._gateway.prepareLog('CalendarPortlet.fill ${url} success'.interpolate(url), arguments).log();
@@ -149,27 +144,12 @@ fill: function() {
 			$.map(results.TableIn2, function(o) { // 본인 근태
 				this.setAbsence(o);
 			}.bind(this));
-			$.map(results.TableIn3, function(o) { // 휴가
-				this.addDailyReport(o, 'vacation');
-			}.bind(this));
-			$.map(results.TableIn4, function(o) { // 교육
-				this.addDailyReport(o, 'education');
-			}.bind(this));
-			$.map(results.TableIn5, function(o) { // 출장
-				this.addDailyReport(o, 'biztrip');
-			}.bind(this));
-			$.map(results.TableIn6, function(o) { // 재택
-				this.addDailyReport(o, 'telecommuting');
-			}.bind(this));
-			$.map(results.TableIn7, function(o) { // 생일
-				this.addDailyReport(o, 'birthday');
-			}.bind(this));
 
 			this.calendar().datepicker('refresh');
 
 			var today = moment();
 			if (this.yearMonth === today.format('YYYYMM')) {
-				this.renderDailyReport(today.format(pattern));
+				this.retrieveDailyReport(today.format(pattern));
 			}
 		}.bind(this),
 		error: function(jqXHR) {
@@ -202,13 +182,6 @@ setAbsence: function(o) {
 		(calendarMap[dateTextArray[length - 1]] || {}).absenceEnd = true;
 	}
 },
-addDailyReport: function(o, type) {
-
-	var calendarMap = this.calendarMap;
-	$.map(this.toDateTextArray(o.Begda, o.Endda), function(dateText) {
-		((calendarMap[dateText] || {})[type] || []).push(o);
-	});
-},
 toDateTextArray: function(begda, endda) {
 
 	begda = !begda ? moment() : moment(Number.fromODataDate(begda));
@@ -217,6 +190,47 @@ toDateTextArray: function(begda, endda) {
 	var pattern = this.pattern.moment;
 	return $.map(new Array(moment.duration(endda.diff(begda)).days() + 1), function(n, i) {
 		return begda.clone().add(i, 'days').format(pattern);
+	});
+},
+retrieveDailyReport: function(dateText) {
+
+	var url = this.odataUrl(), // ZHR_COMMON_SRV/MainContentsCalSet
+	loginInfo = this._gateway.loginInfo(),
+	calendarMap = this.calendarMap[dateText];
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			IPernr: this._gateway.pernr(),
+			IBukrs: loginInfo.Bukrs,
+			ILangu: loginInfo.Langu,
+			IMonth: this.yearMonth,
+			IDatum: Date.toODataString(dateText),
+			TableIn3: [], // 부서 휴가 인원 : 이름/직위명/휴가명/기간
+			TableIn4: [], // 부서 교육 인원 : 이름/직위명/기간
+			TableIn5: [], // 부서 출장 인원 : 이름/직위명/기간
+			TableIn6: [], // 부서 재택 인원 : 이름/직위명/기간
+			TableIn7: []  // 부서 생일 인원 : 이름/직위명/양음력 표기
+		},
+		success: function(data) {
+			this._gateway.prepareLog('CalendarPortlet.retrieveDailyReport ${url} success'.interpolate(url), arguments).log();
+
+			var results = this._gateway.odataResults(data);
+
+			calendarMap.vacation = results.TableIn3;		// 휴가
+			calendarMap.education = results.TableIn4;		// 교육
+			calendarMap.biztrip = results.TableIn5;			// 출장
+			calendarMap.telecommuting = results.TableIn6;	// 재택
+			calendarMap.birthday = results.TableIn7;		// 생일
+
+			this.renderDailyReport(dateText);
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.retrieveDailyReport ' + url);
+		}.bind(this),
+		complete: function() {
+			this.spinner(false);
+		}.bind(this)
 	});
 },
 renderDailyReport: function(dateText) {
@@ -234,21 +248,6 @@ renderDailyReport: function(dateText) {
 			.find('.count').text((dayData[type] || []).length).end()
 			.find('.unit').text(unit);
 	});
-},
-period: function(o) {
-
-	if (!o.Begda && !o.Endda) {
-		return '';
-	}
-
-	var result = [];
-	if (o.Begda) {
-		result.push(moment(Number.fromODataDate(o.Begda)).format(this.pattern.period));
-	}
-	if (o.Endda && o.Endda !== o.Begda) {
-		result.push(moment(Number.fromODataDate(o.Endda)).format(this.pattern.period));
-	}
-	return result.join(' ~ ');
 },
 calendar: function() {
 
@@ -289,7 +288,7 @@ initCalendar: function() {
 		}.bind(this),
 		onSelect: function(dateText) {
 
-			this.renderDailyReport(dateText);
+			this.retrieveDailyReport(dateText);
 		}.bind(this),
 		onChangeMonthYear: function(year, month) {
 
@@ -438,6 +437,21 @@ tooltipBody: function(dateText, type) {
 		}).join('');
 	}
 	return '';
+},
+period: function(o) {
+
+	if (!o.Begda && !o.Endda) {
+		return '';
+	}
+
+	var result = [];
+	if (o.Begda) {
+		result.push(moment(Number.fromODataDate(o.Begda)).format(this.pattern.period));
+	}
+	if (o.Endda && o.Endda !== o.Begda) {
+		result.push(moment(Number.fromODataDate(o.Endda)).format(this.pattern.period));
+	}
+	return result.join(' ~ ');
 },
 i18n: function(defaults) {
 

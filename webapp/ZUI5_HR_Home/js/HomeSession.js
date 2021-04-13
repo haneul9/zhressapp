@@ -28,20 +28,20 @@ init: function(initHome) {
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
-		this.retrieveSFUserName(),		  // 사번 조회
-		this.retrieveOdataCsrfToken()	   // Odata CSRF token 조회
+		this.retrieveSFUserName(),			// 사번 조회
+		this.retrieveOdataCsrfToken()		// Odata CSRF token 조회
 	])
 	.then(function() {
 		return Promise.all([
-			this.retrieveSFUserPhoto(),	 // SF 사진 조회
+			this.retrieveSFUserPhoto(),		// SF 사진 조회
 			this.retrieveSFUserLocale(),	// SF 언어 조회
-			this.encodePernr()			  // 암호화 사번 조회
+			this.encodePernr()				// 암호화 사번 조회
 		]);
 	}.bind(this))
 	.then(function() {
 		return Promise.all([
-			this.retrieveLoginInfo(),	// 인사정보 조회
-			this.registerToken()		// Mobile token 등록
+			this.retrieveLoginInfo(),		// 인사정보 조회
+			this.registerToken()			// Mobile token 등록
 		]);
 	}.bind(this))
 	.catch(function(jqXHR) {
@@ -163,6 +163,8 @@ retrieveSFUserLocale: function() {
 
 changeSFUserLocale: function() {
 
+	this._gateway.spinner(true);
+
 	return $.post({
 		url: "/odata/v2/User('${pernr}')".interpolate(this.pernr()),
 		data: JSON.stringify({
@@ -189,23 +191,30 @@ afterChangeLocale: function() {
 	locale = sfLocale.val(),
 	language = sfLocale.data('lang');
 
-	setTimeout(function() {
-		sessionStorage.setItem('ehr.sf-user.locale', locale);
-		sessionStorage.setItem('ehr.sf-user.language', language);
+	sessionStorage.setItem('ehr.sf-user.locale', locale);
+	sessionStorage.setItem('ehr.sf-user.language', language);
 
-		$('html').attr('locale', locale);
-		$('html').attr('lang', language.toLowerCase());
+	setTimeout(function() {
+		$('html').attr({
+			locale: locale,
+			lang: language.toLowerCase()
+		});
 	}, 0);
 
-	var loginInfo = this.loginInfo();
-	loginInfo.Langu = language;
+	this.retrieveLoginInfo()
+		.then(function() {
+			var loginInfo = this.loginInfo();
+			loginInfo.Langu = language;
 
-	this.loginInfo(loginInfo);
+			this.loginInfo(loginInfo);
 
-	$.map(this.localeChangeCallbackOwners || [], function(callbackOwner) {
-		this._gateway.prepareLog('HomeSession.afterChangeLocale', callbackOwner).log();
-		callbackOwner.changeLocale();
-	});
+			this._gateway.spinner(false);
+
+			$.map(this.localeChangeCallbackOwners || [], function(callbackOwner) {
+				this._gateway.prepareLog('HomeSession.afterChangeLocale', callbackOwner).log();
+				callbackOwner.changeLocale();
+			}.bind(this));
+		}.bind(this));
 },
 
 /*
@@ -278,10 +287,13 @@ encodePernr: function() {
 
 retrieveLoginInfo: function() {
 
+	var Percod = sessionStorage.getItem('ehr.odata.user.percod'),
+	Langu = sessionStorage.getItem('ehr.sf-user.language');
+
 	return $.getJSON({
 		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
 		data: {
-			$filter: "Lpmid eq 'HACTA' and Percod eq '${percod}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'))
+			$filter: "Lpmid eq 'HACTA' and Percod eq '${Percod}' and Langu eq '${Langu}'".interpolate(Percod, Langu)
 		},
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();

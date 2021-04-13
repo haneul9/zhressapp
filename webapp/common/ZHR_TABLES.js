@@ -40,6 +40,7 @@ common.ZHR_TABLES = {
 					alignItems: sap.m.FlexAlignItems.Center,
 					items: [
 						new sap.ui.commons.TextView({
+							tooltip: new sap.ui.core.TooltipBase(),
 							text: vColumnInfo[i].label,
 							textAlign: vColumnInfo[i].plabel ? sap.ui.core.HorizontalAlign.Center : (vColumnInfo[i].headerAlign || vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 							width: "100%"
@@ -64,6 +65,7 @@ common.ZHR_TABLES = {
 			} else {
 				oColumn.addMultiLabel(
 					new sap.ui.commons.TextView({
+						tooltip: new sap.ui.core.TooltipBase(),
 						text: vColumnInfo[i].label,
 						textAlign: vColumnInfo[i].plabel ? sap.ui.core.HorizontalAlign.Center : (vColumnInfo[i].headerAlign || vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 						width: "100%"
@@ -77,6 +79,7 @@ common.ZHR_TABLES = {
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
 							new sap.ui.commons.TextView({
+								tooltip: new sap.ui.core.TooltipBase(),
 								text: vColumnInfo[i].plabel,
 								textAlign: oTable.hasStyleClass("multi-header") ? (vColumnInfo[i].headerAlign || sap.ui.core.HorizontalAlign.Center) : (vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 								width: "100%"
@@ -101,6 +104,7 @@ common.ZHR_TABLES = {
 				} else {
 					oColumn.addMultiLabel(
 						new sap.ui.commons.TextView({
+							tooltip: new sap.ui.core.TooltipBase(),
 							text: vColumnInfo[i].plabel,
 							textAlign: oTable.hasStyleClass("multi-header") ? (vColumnInfo[i].headerAlign || sap.ui.core.HorizontalAlign.Center) : (vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 							width: "100%"
@@ -133,7 +137,8 @@ common.ZHR_TABLES = {
 									}
 								}
 							},
-							textAlign: "Center"
+							textAlign: "Center",
+							tooltip: new sap.ui.core.TooltipBase()
 						}).addStyleClass("FontFamily")
 					);
 
@@ -151,7 +156,8 @@ common.ZHR_TABLES = {
 				case "string" :
 					oColumn.setTemplate(new sap.ui.commons.TextView({
 						text : "{" + oColumnId + "}",
-						textAlign : common.Common.checkNull(vColumnInfo[i].align) ? "Center" :  vColumnInfo[i].align
+						textAlign : common.Common.checkNull(vColumnInfo[i].align) ? "Center" :  vColumnInfo[i].align,
+						tooltip: new sap.ui.core.TooltipBase()
 					}).addStyleClass("FontFamily"));
 
 					break;
@@ -169,7 +175,9 @@ common.ZHR_TABLES = {
 								}
 							}
 						},
-						textAlign : "Center"}).addStyleClass("FontFamily"));
+						textAlign : "Center",
+						tooltip: new sap.ui.core.TooltipBase()
+					}).addStyleClass("FontFamily"));
 
 					break;
 				case "currency" :
@@ -195,7 +203,8 @@ common.ZHR_TABLES = {
 									if (x == null || x == "") return "";
 									return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 								}
-							}
+							},
+							tooltip: new sap.ui.core.TooltipBase()
 						}).addStyleClass("FontFamily")
 					);
 
@@ -203,7 +212,9 @@ common.ZHR_TABLES = {
 				case "number" :
 					oColumn.setTemplate(new sap.ui.commons.TextView({
 						text : "{" + oColumnId + "}",
-						textAlign : "Right"}).addStyleClass("FontFamily"));
+						textAlign : "Right",
+						tooltip: new sap.ui.core.TooltipBase()
+					}).addStyleClass("FontFamily"));
 
 					break;
 				case "Checkbox" :
@@ -223,13 +234,16 @@ common.ZHR_TABLES = {
 								return common.Common.DateFormatter(fVal);
 							}
 						},
-						textAlign : "Center"}).addStyleClass("FontFamily"));
+						textAlign : "Center",
+						tooltip: new sap.ui.core.TooltipBase()
+					}).addStyleClass("FontFamily"));
 
 					break;
 				default :
 					oColumn.setTemplate(new sap.ui.commons.TextView({
 						text : "{" + oColumnId + "}",
-						textAlign : "Center"
+						textAlign : "Center",
+						tooltip: new sap.ui.core.TooltipBase()
 					}).addStyleClass("FontFamily"));
 
 					break;

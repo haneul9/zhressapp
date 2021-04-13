@@ -165,7 +165,7 @@ parameterMap: function(locationSearch) {
 	var paramMap = {};
 	$.map(locationSearch.replace(/\?/, '').split(/&/), function(v) {
 		var pair = v.split(/=/);
-		paramMap[pair[0]] = pair[1];
+		paramMap[pair[0]] = decodeURIComponent(pair[1]);
 	});
 	return paramMap;
 },
