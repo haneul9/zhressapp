@@ -175,7 +175,7 @@ table.search-box.search-bg {table-layout:auto !important}
 .button-group .sapMFlexItem:first-child .sapMBtn {margin-left:0}
 .button-group .text-field-group .sapMText {font-size:16px; font-weight:500; color:#333}
 .button-group-popup {align-items:flex-end; margin-top:auto; padding-bottom:9px}
-.button-group-notice {position:absolute; right:40px; top:16px}
+.button-group-notice {position:absolute; left:200px; top:12px}
 
 .button-light.sapMBtn {padding:0}  
 .button-light.sapMBtn,

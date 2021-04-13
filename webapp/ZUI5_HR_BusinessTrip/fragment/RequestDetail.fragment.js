@@ -52,11 +52,13 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 			}),				
 			new sap.m.Button({
 				enabled: "{/Header/Btact}",
-				text: "{i18n>LABEL_19802}" // 대근자체크
+				text: "{i18n>LABEL_19802}",
+				press : function(){oController.RequestDetailDialogHandler.onShow.bind(oController.RequestDetailDialogHandler);} // 대근자체크
 			})
 			.addStyleClass("button-light-sm"),new sap.m.Button({
 				enabled: "{/Header/Btact}",
-				text: "{i18n>LABEL_19811}" // 한도체크
+				text: "{i18n>LABEL_19811}",
+				press : function(){oController.RequestDetailDialogHandler.onLimit.bind(oController);}  // 한도체크
 			})
 			.addStyleClass("button-light-sm")]
 		}).addStyleClass("button-group");

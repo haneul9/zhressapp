@@ -19,6 +19,9 @@ var Handler = {
 	oController: null,
 	oRowData: null,
 	oDialog: null,
+	//대근자
+	dArr: new Array(),
+	//
 	oModel: new JSONModel({
 		Header: null,
 		BtPurpose1SelectList: null, // 출장구분 코드 목록
@@ -259,10 +262,10 @@ var Handler = {
 								o.ExptTotAmt = Common.toNumber(o.ExptTotAmt);
 							});
 							this.oModel.setProperty("/TableIn03", TableIn03);
-							this.renderAdded.call(this,$.app.getController(),TableIn03);
+							this.onShow.call(this);
 						} else {
 							this.oModel.setProperty("/TableIn03", [{}]);
-							this.initAdded.call(this,$.app.getController(),TableIn03);
+							this.initAdded.call(this.oController);
 						}
 						Common.adjustVisibleRowCount($.app.byId("TableIn03"), 5, TableIn03.length);
 
@@ -577,19 +580,19 @@ var Handler = {
 				oMat.setWidths(width1);
 				oMat.setColumns(oCnt2);
 				vCell.setColSpan(oCnt2);
-			}
+			}   
 	},
 
-	initAdded : function(oController){
+	initAdded : function(){ 
 		var oRow,oCell;
-		var c=sap.ui.commons,oCol=$.app.byId(oController.PAGEID+"_Col");
+		var c=sap.ui.commons,oCol=$.app.byId(this.PAGEID+"_Col");
 		oCol.removeAllRows();
 		oRow=new c.layout.MatrixLayoutRow();
 		oCell=new c.layout.MatrixLayoutCell({
 			colSpan:10,
 			hAlign:"Center",
 			content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
-			new sap.m.Text({text:oController.getBundleText("MSG_05001")}),
+			new sap.m.Text({text:this.getBundleText("MSG_05001")}),
 			new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
 		}).addStyleClass("UnderBar");
 		oRow.addCell(oCell);
@@ -597,24 +600,125 @@ var Handler = {
 	},
 
 	renderAdded : function(oController,pData){
+		console.log(pData);
 		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons,
 		oRow,oCell,oMat=$.app.byId(oController.PAGEID+"_Col"),oFields=["Ename","Datum","Awtxt","Beguzenduz","Ovtim","Wt40","Wt12","Wtsum","LigbnTx","Cntgb"];
+		oMat.removeAllRows();	
+		for(var j=0;j<pData.length;j++){
+			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_Row_"+j);	
+			for(var i=0;i<10;i++){
+				oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i,{hAlign:"Center"});
+				oRow.addCell(oCell);
+				if(i==1){
+					oCell.addContent(
+						new sap.m.Text({
+							type: new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"}),
+							text: pData[j].Datum
+						})						
+					);
+				}else if(i==2){
+					oCell.addContent();
+				}else if(i==3){
+					oCell.addContent();
+				}else if(i==(oFields.length-1)){
+					oCell.addContent();
+				}else{
+					eval("oCell.addContent(new sap.m.Text({text:pData["+j+"].oFields["+i+"]}))");
+				}
+			}
+			oMat.addRow(oRow);
+		}
+		this.sizingAdded(oController,oMat,pData.length,$.app.byId(oController.PAGEID+"_Cell"));
+		if(pData.length==0){
+			this.initAdded.call(oController);
+		}
+	},
+
+	onShow : function(){
+		var jModel=this.oModel;
 		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
-		oMat.removeAllRows();
+		var oData3=this.oModel.getProperty("/TableIn03");
+		var oData4=this.oModel.getProperty("/TableIn04");
+		var tArr=new Array();
 		var dArr=new Array();
-		for(var v=0;v<pData.length;v++){
-			var vData={	IConType: "1",
-					IBegda: pData[v].BtStartdat,
-					IEndda: pData[v].BtEnddat,
-					IPernr: this.oController.getSessionInfoByKey("Pernr"),
+		function chkCover(vStrs){
+			for(var i=0;i<vStrs.length;i++){
+				var _Awchk="";
+				var vData={
+					IBegda: vStrs[i].IBegda,
+					IEndda: vStrs[i].IEndda,
+					IPernr: vStrs[i].IPernr,
+					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
+					Export: []
+				};
+				oModel.create("/VacationCoverTargetSet", vData, null,
+					function(data,res){
+						if(data&&data.Export.results.length){
+							_Awchk=data.Export.results[0].Awchk;
+						}				
+						if(_Awchk!=""){
+							dArr.push(vStrs[i]);
+						}
+					},
+					function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
+					}
+				);
+			}
+		}
+		if(oData3&&oData3.length){
+			if(oData3.length>0){
+				for(var i=0;i<oData3.length;i++){
+					tArr.push({IPernr:this.oController.getSessionInfoByKey("Pernr"),IBegda:oData3[i].BtStartdat,IEndda:oData3[i].BtEnddat});
+					if(oData4&&oData4.length){
+						for(var j=0;j<oData4.length;j++){
+							tArr.push({IPernr:oData4[j].Pernr,IBegda:oData3[i].BtStartdat,IEndda: oData3[i].BtEnddat});
+						}
+					}
+				}				
+			}
+		}
+		var oArray=new Array();
+		if(tArr&&tArr.length){
+			for(var i=0;i<tArr.length;i++){
+				oArray.push(tArr[i].IPernr);
+			}
+		}
+		var fArray=new Array();
+		oArray=Array.from(new Set(oArray));
+		for(var i=0;i<oArray.length;i++){
+			for(var j=0;j<tArr.length;j++){
+				if(oArray[i]==tArr[j].IPernr){
+					fArray.push(tArr[i]);
+				}
+			}
+		}
+		chkCover.call(this,fArray);
+		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
+		var oDatas=new Array();
+		for(var i=0;i<dArr.length;i++){
+			var vData={IConType: "1",
+					IAwart: this.oModel.getProperty("/Header").BtPurpose1,
+					IProType : "1",
+					IBegda: dArr[i].IBegda,
+					IEndda: dArr[i].IEndda,
+					IPernr: dArr[i].IPernr,
 					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
 					ILangu: this.oController.getSessionInfoByKey("Langu"),
 					TableIn: []};
 			oModel.create("/VacationCoverSet", vData, null,
 				function(data,res){
 					if(data&&data.TableIn.results.length){
-						for(var i=0;i<data.TableIn.results.length;i++){
-							dArr.push(dArr.TableIn.results[i]); 
+						for(var j=0;j<data.TableIn.results.length;j++){
+							oDatas.push(data.TableIn.results[j]); 
 						}					
 					}				
 				},
@@ -631,35 +735,11 @@ var Handler = {
 				}
 			);
 		}
+		this.renderAdded.call(this,this.oController,oDatas);
+	},
+
+	onLimit : function(){
 		
-		for(var j=0;j<dArr.length;j++){
-			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_Row_"+j);	
-			for(var i=0;i<10;i++){
-				oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i);
-				oRow.addCell(oCell);
-				if(i==1){
-					oCell.addContent(
-						new sap.m.Text({
-							type: new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"}),
-							text: dArr[j].Datum
-						})						
-					);
-				}else if(i==2){
-					oCell.addContent();
-				}else if(i==3){
-					oCell.addContent();
-				}else if(i==(oFields.length-1)){
-					oCell.addContent();
-				}else{
-					eval("oCell.addContent(new sap.m.Text({text:dArr[j].oFields["+i+"]}))");
-				}
-			}
-			oMat.addRow(oRow);
-		}
-		this.sizingAdded(oController,oMat,dArr.length,$.app.byId(oController.PAGEID+"_Cell"));
-		if(dArr.length==0){
-			this.initAdded(oController);
-		}
 	}
 
 };

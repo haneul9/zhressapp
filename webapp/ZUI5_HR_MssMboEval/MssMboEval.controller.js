@@ -187,7 +187,7 @@ sap.ui.define([
 			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
-			var oSel1,oSel2,oRow,oCell;
+			var oSel1,oSel2,oRow,oCell,oSel3;
 			var c=sap.ui.commons;
 			if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 				oController._BusyDialog.close();
@@ -217,6 +217,7 @@ sap.ui.define([
 				if(oController.vPage!="2a"&&oController.vPage!="3a"){
 					oSel1=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel1");
 					oSel2=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel2");
+					oSel3=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel3");
 					if(Signal==null){						
 						oSel1.removeAllItems();
 						oSel1.addItem(new sap.ui.core.Item({key:"",text:oBundleText.getText("LABEL_00181")}));
@@ -224,6 +225,9 @@ sap.ui.define([
 						oSel2.removeAllItems();
 						oSel2.addItem(new sap.ui.core.Item({key:"",text:oBundleText.getText("LABEL_00181")}));
 						oSel2.setSelectedKey('');
+						oSel3.removeAllItems();
+						oSel3.addItem(new sap.ui.core.Item({key:"",text:oBundleText.getText("LABEL_00181")}));
+						oSel3.setSelectedKey('');
 					}
 					oSelPage2.removeAllItems();
 					oSelPage2.addItem(new sap.ui.core.Item({key:"",text:oBundleText.getText("LABEL_00181")}));
@@ -1329,7 +1333,7 @@ sap.ui.define([
 			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
-			var oSel1,oSel2,oRow,oCell;
+			var oSel1,oSel2,oRow,oCell,oSel3;
 			var c=sap.ui.commons;
 //INIT MTABLE////////////////////////////////////////////////////////////////////////////////
 			var mTable=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_mTable1");
@@ -1342,6 +1346,7 @@ sap.ui.define([
 			}			
 			oSel1=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel1");
 			oSel2=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel2");
+			oSel3=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel3");
 			oController.oTableInit(oController);
 			var vData={
 				IOdkey:"",

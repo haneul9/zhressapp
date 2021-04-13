@@ -48,7 +48,11 @@ ZUI5_HR_MssMboEval.fragment.content01={
 							}),							
 							new sap.m.Select(oController.PAGEID+"_"+vPage+"_Sel1",{width:"180px"}),
 							new sap.m.Label({
-								text: "{i18n>LABEL_36010}", // 신청자 성명							
+								text: "{i18n>LABEL_36070}", // 평가직군				
+							}),
+                            new sap.m.Select(oController.PAGEID+"_"+vPage+"_Sel3",{width:"180px"}),
+							new sap.m.Label({
+								text: "{i18n>LABEL_36071}", // 직급			
 							}),
                             new sap.m.Select(oController.PAGEID+"_"+vPage+"_Sel2",{width:"180px"})
 						]

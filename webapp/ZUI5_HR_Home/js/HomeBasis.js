@@ -105,20 +105,25 @@ init: function() {
 	});
 
 	$.extend(Date, {
-		toODataString: function(v) {
-			if (!v) {
-				return '/Date(${time})/'.interpolate(new Date().getTime());
+		toODataString: function(v, utcTime) {
+			if (typeof v === 'undefined' || v === null || typeof v === 'boolean') {
+				utcTime = typeof utcTime === 'boolean' ? utcTime : (typeof v === 'boolean' ? v : false);
+				var now = new Date();
+				return '/Date(${time})/'.interpolate(now.getTime() - (utcTime === true ? (now.getTimezoneOffset() * 60 * 1000) : 0));
 			}
 			if (v instanceof Date) {
-				return '/Date(${time})/'.interpolate(v.getTime());
+				return '/Date(${time})/'.interpolate(v.getTime() - (utcTime === true ? (v.getTimezoneOffset() * 60 * 1000) : 0));
 			}
-			if (typeof v === 'number' && new Date(0).getTime() <= v && v < new Date(10000, 0, 1, 0, 0, 0).getTime()) {
-				return '/Date(${time})/'.interpolate(v);
+			if (typeof v === 'number') {
+				v = v - (utcTime === true ? (new Date().getTimezoneOffset() * 60 * 1000) : 0);
+				if (new Date(0).getTime() <= v && v < new Date(10000, 0, 1, 0, 0, 0).getTime()) {
+					return '/Date(${time})/'.interpolate(v);
+				}
 			}
 			if (typeof v === 'string' || v instanceof String) {
 				v = $.trim(v).replace(/\D/g, '');
 				if (v.length >= 8) {
-					return moment(v, 'YYYYMMDD').toDate().toODataString();
+					return moment(v, 'YYYYMMDD').toDate().toODataString(utcTime);
 				}
 			}
 			return null;
@@ -128,8 +133,8 @@ init: function() {
 		}
 	});
 	$.extend(Date.prototype, {
-		toODataString: function() {
-			return Date.toODataString(this);
+		toODataString: function(utcTime) {
+			return Date.toODataString(this, utcTime);
 		}
 	});
 },

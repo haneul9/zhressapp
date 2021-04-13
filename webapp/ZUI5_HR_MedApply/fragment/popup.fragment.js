@@ -6,7 +6,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
             window["oLabel"+(i-17)] = oController.getTxt("LABEL_470"+i,i);
         }
         var oLabel39=oController.getTxt("LABEL_47087",56);
-        var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{Relation}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
+        var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{Fname}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
             if(fVal2==""){
                 return fVal=="X"?false:true;
@@ -496,7 +496,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
 		});
 
         var oVert=new sap.ui.commons.layout.VerticalLayout({
-            content:[oPanel1,oPanel2]
+            content:[oPanel1,oPanel2,new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:12px;'>"+oController.getBundleText("MSG_47038")+"</span>"})]
         });
 
         var oContent = new sap.m.FlexBox({

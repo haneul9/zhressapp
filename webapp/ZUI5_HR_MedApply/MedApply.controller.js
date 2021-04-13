@@ -190,7 +190,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				}
 				var vProperty2={
 					Appnm: vAppnm,
@@ -200,7 +200,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				}
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty2,"002");
@@ -214,7 +214,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				},"003");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
@@ -224,7 +224,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				},"004");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
@@ -234,7 +234,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				},"005");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
@@ -244,7 +244,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				},"006");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
@@ -254,7 +254,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				},"007");
 				
 				if(oController._onDialog!="M"){
@@ -318,7 +318,7 @@ sap.ui.define([
 					Mode: "M",
 					Max: "15",
 					Editable: vEdit,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				},"008");
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
@@ -448,7 +448,7 @@ sap.ui.define([
 			var oSel = $.app.byId(oController.PAGEID+"_dSel1");
 			var oPro=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/Pop1")[0];
 			$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/Pop1/0/RelationTx",oSel.getSelectedItem().getCustomData()[0].getValue("Data"));
-			oPro.Relation=oSel.getSelectedKey();
+			oPro.Relation=oSel.getSelectedItem().getCustomData()[1].getValue("Data");
 			if(oPro.Status==""){
 				if(oPro.HospType!="05"){
 					if(oPro.Relation!="01"&&oPro.Relation!="02"){
@@ -519,7 +519,7 @@ sap.ui.define([
 						Label : "",
 						Editable: vEdits[i-3],
 						UseMultiCategories : true,
-						FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+						FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 					}					
 					fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty,"00"+i);
 				}
@@ -555,7 +555,7 @@ sap.ui.define([
 						Label : "",
 						Editable: vEdits[i-3],
 						UseMultiCategories : true,
-						FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+						FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 					}					
 					fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty,"00"+i);
 				}
@@ -634,7 +634,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				}
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
@@ -652,7 +652,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				}
 				vProperty1.Appnm='';
 				vProperty1.Editable=false;
@@ -673,7 +673,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				}
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
@@ -691,7 +691,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
 				}
 				vProperty1.Appnm='';
 				vProperty1.Editable=false;
@@ -708,6 +708,9 @@ sap.ui.define([
 					text:oController.getBundleText("LABEL_00181"),
 					key:''
 				}).addCustomData(new sap.ui.core.CustomData({
+					key:"Data",
+					value:''
+				})).addCustomData(new sap.ui.core.CustomData({
 					key:"Data",
 					value:''
 				}))
@@ -727,10 +730,13 @@ sap.ui.define([
 			oController._SelData.Sel1.forEach(function(e){
 				oSel.addItem(new sap.ui.core.Item({
 					text:e.Fname,
-					key:e.Relation
+					key:e.Fname
 				}).addCustomData(new sap.ui.core.CustomData({
 					key:"Data",
 					value:e.RelationTxt
+				})).addCustomData(new sap.ui.core.CustomData({
+					key:"Data",
+					value:e.Relation
 				})))
 			});
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
@@ -1297,7 +1303,7 @@ sap.ui.define([
 					key:''
 				})
 			);
-			if(oSel5.getSelectedKey()=="03"){
+			if(oSel5.getSelectedKey()=="20"||oSel5.getSelectedKey()=="21"){
 				oController._SelData.Sel3.forEach(function(e){
 					if(e.Code=="C"){
 						oSel3.addItem(
