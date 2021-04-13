@@ -20,7 +20,7 @@ init: function() {
 	this.items = null;
 	this.templates = {
 		topMenuItem: [
-			'<li class="nav-item text-nowrap${has-mega-menu}${menu-mss}${menu-hass}">',
+			'<li class="nav-item text-nowrap${has-mega-menu}${style-classes}">',
 				'<a class="nav-link" href="${href}"${url}${menu-id}>${title}</a>',
 				'${mega-menu-layer}',
 			'</li>'
@@ -387,8 +387,7 @@ topMenuItem: function(top) {
 		.replace(/\$\{menu-id\}/, !top.menuId ? '' : ' data-menu-id="${menu-id}"'.replace(/\$\{menu-id\}/, top.menuId))
 		.replace(/\$\{title\}/, top.title)
 		.replace(/\$\{has-mega-menu\}/, layer ? ' has-mega-menu' : '')
-		.replace(/\$\{menu-mss\}/, top.Mnid1 === '10000' ? ' menu-mss' : '')
-		.replace(/\$\{menu-hass\}/, top.Mnid1 === '20000' ? ' menu-hass' : '')
+		.replace(/\$\{style-classes\}/, top.styleClasses ? top.styleClasses : '')
 		.replace(/\$\{mega-menu-layer\}/, layer);
 },
 
@@ -515,7 +514,8 @@ getMenuTree: function(data) {
 			menuId: o.Menid,
 			title: o.Mnnm1,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
-			children: level1SubMenuMap[o.Mnid1]
+			children: level1SubMenuMap[o.Mnid1],
+			styleClasses: o.Mnid1 === '10000' ? 'menu-mss' : (o.Mnid1 === '20000' ? 'menu-hass' : '')
 		};
 	});
 },
