@@ -44,6 +44,11 @@ init: function() {
 		EN: 'Trip',
 		ZH: 'Trip'
 	});
+	this.set('home.text.portlets.calendar.telecommuting', {
+		KO: '재택근무',
+		EN: 'Telecommuting',
+		ZH: 'Telecommuting'
+	});
 	this.set('home.text.portlets.calendar.birthday', {
 		KO: '생일',
 		EN: 'Birthday',
