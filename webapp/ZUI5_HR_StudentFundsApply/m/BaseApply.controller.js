@@ -43,7 +43,7 @@
             if(oEvent.data){
                 this.ApplyModel.setData({ FormData: oEvent.data.RowData ? oEvent.data.RowData : [] });
                 this.ApplyModel.setProperty("/NameCombo", oEvent.data.Child );
-                if(!oEvent.data.RowDta){
+                if(!oEvent.data.RowData && Common.checkNull(!this.ApplyModel.getProperty("/NameCombo")[0])){
                     this.ApplyModel.setProperty("/FormData/NameKor", this.ApplyModel.getProperty("/NameCombo")[0].Fname)
                     this.ApplyModel.setProperty("/FormData/RelationTx", this.ApplyModel.getProperty("/NameCombo")[0].KdsvhT)
                 }
