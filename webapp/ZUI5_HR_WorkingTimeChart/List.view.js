@@ -49,7 +49,9 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
 											 new sap.ui.core.Item({key : "2", text : oBundleText.getText("LABEL_46004")})], // 고정근로
 									change : function(oEvent){
 										if(oEvent.getSource().getSelectedItem()){
-											oController.onTimeDatePeriod(oController._ListCondJSonModel.getProperty("/Data/Begda"));
+											var dates = oController.onTimeDatePeriod(oController._ListCondJSonModel.getProperty("/Data/Begda"));
+											oController._ListCondJSonModel.setProperty("/Data/Begda", dates[0]);
+											oController._ListCondJSonModel.setProperty("/Data/Endda", dates[1]);
 										}
 									}
 							    }),
