@@ -176,7 +176,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.ApplyModel.getProperty("/Data");
-
+			var vPrintData = {};
 			oRowData.Pernr = vPernr;
 
 			if(oController.checkError()) return;
@@ -202,11 +202,18 @@ sap.ui.define([
 					
 					oModel.create("/CertiAppSet", sendObject, {
 						success: function(oData, oResponse) {
-								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_38002"), { title: oController.getBundleText("MSG_08107")});
-								oController.onTableSearch();
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_38002"), { title: oController.getBundleText("MSG_08107")});
+							if(oData && oData.TableIn.results && oData.TableIn.results.length > 0){
+								Object.assign(vPrintData, oData.TableIn.results[0]);
 								BusyIndicator.hide();
 								oController._ApplyDialog.close();
+								if(vPrintData.Aptyp == "1" ){ // ESS 본인 출력 시에만 Print
+									oController.onPressPrint(vPrintData);
+								}else{
+									oController.onTableSearch();
+								}
+							}
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -301,6 +308,71 @@ sap.ui.define([
 				BusyIndicator.show(0);
 				onPrintPDF(oCopiedRow);
 			}
+        },
+        
+         onPressPrint : function(oRow){ // ESS 신청 성공 시 Print 호출
+    		var oController = $.app.getController();
+			var oModel = $.app.getModel("ZHR_CERTI_SRV");
+			var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_PDF"),
+				vWidth = "1330px",
+				vHeight = "100%";
+				oLayout.destroyContent();
+				
+				
+			var onPrintPDF = function () {
+				var sendObject = {};
+				var tableIn = {};
+				tableIn.Pernr = oRow.Pernr;
+				tableIn.Subty = oRow.Subty;
+				tableIn.Objps = oRow.Objps;
+				tableIn.Sprps = oRow.Sprps;
+				tableIn.Seqnr = oRow.Seqnr;
+				tableIn.Begda = "\/Date(" + common.Common.getTime(new Date(oRow.Begda)) + ")\/";
+				tableIn.Endda = "\/Date(" + common.Common.getTime(new Date(oRow.Endda)) + ")\/";
+				
+				// Header
+				sendObject.IUrlck = "X";
+				// Navigation property
+                sendObject.TableIn = [];
+                sendObject.TableIn.push(tableIn);
+                sendObject.Export = [];
+				
+				oModel.create("/CertiPdfSet", sendObject, {
+					success: function(oData, oResponse) {
+							if(oData, oData.Export && oData.Export.results.length > 0){
+								var vZpdf =  "data:application/pdf;base64," + oData.Export.results[0].EPdf;
+								oLayout.addContent(
+									new sap.ui.core.HTML({
+										content : ["<iframe id='iWorkerPDF' name='iWorkerPDF' src='" + vZpdf + "' width='" + vWidth + "' height='"+ vHeight + "' frameborder='0' border='0' scrolling='no'></>"],
+										preferDOM : false
+									})	
+								);
+								oLayout.addDelegate({
+									onAfterRendering: function () {
+										var vHeight = ( document.getElementById("ZUI5_HR_CertiApply_DetailDialog").offsetHeight * 1 ) - 135 + "px"; 
+										$("#iWorkerPDF").height(vHeight);
+									}
+								});
+								oController._DetailDialog.open();
+								oController.onTableSearch();
+							}
+							BusyIndicator.hide();
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
+						oController.onTableSearch();
+						BusyIndicator.hide();
+					}
+				});
+
+				BusyIndicator.hide();
+			};
+			
+			BusyIndicator.show(0);
+			onPrintPDF();
         },
         
         
