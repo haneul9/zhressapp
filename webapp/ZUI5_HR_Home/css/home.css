@@ -38,8 +38,8 @@ body {min-width:576px; font-size:14px}
 .navbar-light .navbar-nav .active>.nav-link {color:#064975}
 .ehr-gnb > ul > li.active a.active {color:#064975}
 /*MSS & HASS */
-.navbar-light .navbar-nav .nav-link.menu-mss {color:#80694a}
-.navbar-light .navbar-nav .nav-link.menu-hass {color:#429e98}
+.navbar-light .navbar-nav .nav-link.menu-mss {color:#8A4144}
+.navbar-light .navbar-nav .nav-link.menu-hass {color:#137826}
 
 .ehr-snb {max-width:1440px}
 .ehr-snb.col-count-1 {width:calc(240px * 1)}
@@ -56,6 +56,7 @@ body {min-width:576px; font-size:14px}
 /*.navbar-light .navbar-nav .nav-link:hover {color:#064975}*/
 .col-mega-menu .list-unstyled {padding-left:10px}
 .col-mega-menu > a {padding:1rem .5rem; font-size:1rem; font-weight:700; white-space:normal}
+.col-mega-menu > a:hover{color:#064975 !important}
 .col-mega-menu li {display:flex; align-items:center; margin-top:.5rem; font-size:.875rem; font-weight:400}
 .col-mega-menu li + li {margin-top:1rem}
 .col-mega-menu li a {margin-left:5px; color:#666; white-space:normal}
