@@ -20,7 +20,7 @@ init: function() {
 	this.items = null;
 	this.templates = {
 		topMenuItem: [
-			'<li class="nav-item text-nowrap${has-mega-menu}">',
+			'<li class="nav-item text-nowrap${has-mega-menu}${menu-mss}${menu-hass}">',
 				'<a class="nav-link" href="${href}"${url}${menu-id}>${title}</a>',
 				'${mega-menu-layer}',
 			'</li>'
@@ -120,7 +120,7 @@ changeLocale: function() {
 		var parentSelector = this.parentSelector;
 		this.generate(true).then(function() {
 			setTimeout(function() {
-				$(parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
+				$(parentSelector + ' a[data-menu-id="${menu-id}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
 					.parents('.mega-menu').toggleClass('d-block', false) // mega dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
@@ -206,7 +206,7 @@ saveFavorites: function(menuId, toBeFavorite) {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MenuMegaDropdown.saveFavorites ' + url);
 
-			$(this.parentSelector + ' a[data-menu-id="${menuId}"]'.interpolate(menuId)).siblings('i').toggleClass('far', toBeFavorite).toggleClass('fas', !toBeFavorite);
+			$(this.parentSelector + ' a[data-menu-id="${menu-id}"]'.interpolate(menuId)).siblings('i').toggleClass('far', toBeFavorite).toggleClass('fas', !toBeFavorite);
 		}.bind(this)
 	});
 },
@@ -387,6 +387,8 @@ topMenuItem: function(top) {
 		.replace(/\$\{menu-id\}/, !top.menuId ? '' : ' data-menu-id="${menu-id}"'.replace(/\$\{menu-id\}/, top.menuId))
 		.replace(/\$\{title\}/, top.title)
 		.replace(/\$\{has-mega-menu\}/, layer ? ' has-mega-menu' : '')
+		.replace(/\$\{menu-mss\}/, top.Mnid1 === '10000' ? ' menu-mss' : '')
+		.replace(/\$\{menu-hass\}/, top.Mnid1 === '20000' ? ' menu-hass' : '')
 		.replace(/\$\{mega-menu-layer\}/, layer);
 },
 
