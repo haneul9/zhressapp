@@ -55,17 +55,10 @@ body {min-width:576px; font-size:14px}
 .navbar-light .navbar-nav .nav-link {color:#333}
 /*.navbar-light .navbar-nav .nav-link:hover {color:#064975}*/
 .col-mega-menu .list-unstyled {padding-left:10px}
-<<<<<<< HEAD
 .col-mega-menu > a {padding:1rem .5rem; font-size:1rem; font-weight:700; white-space:normal}
 .col-mega-menu li {display:flex; align-items:center; margin-top:.5rem; font-size:.875rem; font-weight:400}
 .col-mega-menu li + li {margin-top:1rem}
 .col-mega-menu li a {margin-left:5px; color:#666; white-space:normal}
-=======
-.col-mega-menu > a {font-size:1rem; font-weight:700; padding:1rem .5rem}
-.col-mega-menu > a:hover {color:#064975 !important}
-.col-mega-menu li {font-size:.875rem; font-weight:400; line-height:2.3rem}
-.col-mega-menu li a {color:#666}
->>>>>>> pub-overall_0413
 .col-mega-menu .navbar .nav-link {padding:1rem 0rem}
 .col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none; font-weight:500}
 /* .col-mega-menu li a.active {font-weight:500} */
