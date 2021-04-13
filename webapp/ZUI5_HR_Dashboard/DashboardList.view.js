@@ -25,15 +25,16 @@ sap.ui.jsview("ZUI5_HR_Dashboard.DashboardList", {
 									 vAlign : "Middle"
 								 })]
 					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({height : "1.5rem"}),
+					new sap.ui.commons.layout.MatrixLayoutRow({height : "2rem"}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.ui.layout.HorizontalLayout({
 													content : [new sap.m.Text({text : oBundleText.getText("LABEL_05102"), textAlign : "Begin"}).addStyleClass("dashboard_title_text paddingRight10 paddingTop3"), // 평가연도
-															   new sap.m.ComboBox({
+															   new sap.m.Select(oController.PAGEID + "_Year", {
 															   	   selectedKey : "{Year}",
-															   	   items : [new sap.ui.core.Item({key : "2020", text : "2020"})],
-												 			   	   width : "130px"
+															   	   items : [],
+												 			   	   width : "130px",
+												 			   	   change : oController.onSearchUserList
 															   })]
 												})],
 									 hAlign : "Begin",

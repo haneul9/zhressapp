@@ -1189,7 +1189,7 @@ sap.ui.define([
 					// Header
 					sendObject.IPernr = vPernr;
 					sendObject.IEmpid = vPernr;
-					sendObject.IEdoty = "1";
+					sendObject.IEdoty = "2";
 					sendObject.IConType = "3";
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
