@@ -86,7 +86,7 @@ sap.ui.define([
 				
 				var vData = {
 					Data : {
-						Werks : oLoginData.Bukrs,
+						Werks : oLoginData.Persa,
 						Zyymm : oZyymm,
 						Key : "1",
 						Disty : "1"
