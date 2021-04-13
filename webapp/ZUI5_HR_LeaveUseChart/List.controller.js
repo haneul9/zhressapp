@@ -412,9 +412,9 @@ sap.ui.define([
 					case "Cum03":
 						createData.IZhgrade = "05";
 						break;
-					case "Cur04": // 지원직
+					case "Cur04": // 전문직
 					case "Cum04":
-						createData.IZhgrade = "09";
+						createData.IZhgrade = "06";
 						break;
 					case "Cur05": // 기타
 					case "Cum05":
@@ -734,7 +734,7 @@ sap.ui.define([
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			// return new JSONModelHelper({name: "20120220"});
+			return new JSONModelHelper({name: "20125009"});
 			return new JSONModelHelper({name: "20090028"});
 		} : null
 		

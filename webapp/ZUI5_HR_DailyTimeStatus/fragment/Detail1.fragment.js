@@ -33,7 +33,7 @@ sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail1", {
 		oTable.bindRows("/Data");
 		
 						// 직군, 인원수, 출근
-		var col_info = [{id: "HgradeT", label: oBundleText.getText("LABEL_43006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "15%"},
+		var col_info = [{id: "HgradeT", label: oBundleText.getText("LABEL_43006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "12%"},
 						{id: "Empcnt", label: oBundleText.getText("LABEL_43007"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Attcnt", label: oBundleText.getText("LABEL_43008"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						// 휴가(연차휴가, 저축휴가, 기타휴가)

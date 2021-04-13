@@ -84,8 +84,8 @@ sap.ui.jsview("ZUI5_HR_ChangeWorkList.List", {
 						{id: "Ename", label: oBundleText.getText("LABEL_60013"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Begda", label: oBundleText.getText("LABEL_60014"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 						{id: "Endda", label: oBundleText.getText("LABEL_60015"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
-						{id: "Tprog", label: oBundleText.getText("LABEL_60016"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Tprog1", label: oBundleText.getText("LABEL_60017"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
+						{id: "Tprog1", label: oBundleText.getText("LABEL_60016"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Tprog", label: oBundleText.getText("LABEL_60017"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 		
 		common.makeTable.makeColumn(oController, oTable, col_info);
 		
