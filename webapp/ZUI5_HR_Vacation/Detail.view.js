@@ -186,7 +186,16 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
 				                               	   		}
 				                               	   },
-				                               	   press : oController.onPressOvertimePe
+				                               	   press : function(oEvent){
+				                               	   		var persa = $.app.getModel("session").getData().Persa;
+				                               	   			persa = persa.substring(0,1);
+				                               	   			
+				                               	   		if(persa == "D"){
+				                               	   			oController.onPressCheckAbsence(oEvent);
+				                               	   		} else {
+				                               	   			oController.onPressOvertimePe(oEvent);
+				                               	   		}
+				                               	   }
 				                               }).addStyleClass("button-default pt-3px pl-5px")],
 				                    hAlign : "Begin",
 				                    vAlign : "Middle"
@@ -222,10 +231,10 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 													valueFormat : "HHmm",
 													displayFormat : "HH:mm",
 										            value : "{Beguz}",
-										            minutesStep : 10,
+										            minutesStep : 5,
 										            width : "100px",
 										            textAlign : "Begin",
-										            change : oController.onChangeTime,
+										            change : oController.onChangeTime2,
 										            editable : {
 										            	parts : [{path : "Status1"}, {path : "Awart"}],
 										            	formatter : function(fVal1, fVal2){
@@ -241,10 +250,10 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 													valueFormat : "HHmm",
 													displayFormat : "HH:mm",
 										            value : "{Enduz}",
-										            minutesStep : 10,
+										            minutesStep : 5,
 										            width : "100px",
 										            textAlign : "Begin",
-										            change : oController.onChangeTime,
+										            change : oController.onChangeTime2,
 										            editable : {
 										            	parts : [{path : "Status1"}, {path : "Awart"}],
 										            	formatter : function(fVal1, fVal2){
@@ -255,7 +264,16 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            		}
 										            	}
 										            }
-											    }).addStyleClass("pl-5px")],
+											    }).addStyleClass("pl-5px pr-5px"),
+											    new sap.m.Text({
+											    	text : "({EAbshr}:{EAbsmm})",
+											    	visible : {
+											    		parts : [{path : "EAbshr"}, {path : "EAbsmm"}],
+											    		formatter : function(fVal1, fVal2){
+											    			return (fVal1 && fVal2 && fVal1 != "" && fVal2 != "") ? true : false;
+											    		}
+											    	}
+											    }).addStyleClass("pt-10px")],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data")]

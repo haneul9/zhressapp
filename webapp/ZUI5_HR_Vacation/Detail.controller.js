@@ -104,7 +104,7 @@ sap.ui.define([
 			oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
 		},
 		
-		onChangeTime : function(oEvent){
+		onChangeTime2 : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
@@ -600,7 +600,7 @@ sap.ui.define([
 			}
 		},
 		
-		// 휴일계산
+		// 휴일계산 - 기초
 		onPressOvertimePe : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
 			var oController = oView.getController();
@@ -641,10 +641,10 @@ sap.ui.define([
 					function(data, res){
 						if(data){
 							// 근태일수
-							oController._DetailJSonModel.setProperty("/Data/Kaltg", parseFloat(data.EKaltg));
+							oController._DetailJSonModel.setProperty("/Data/Kaltg", (parseFloat(data.EKaltg) + ""));
 							
 							// 휴일일수
-							oController._DetailJSonModel.setProperty("/Data/Hldtg", parseFloat(data.EAbwtg));
+							oController._DetailJSonModel.setProperty("/Data/Hldtg", (parseFloat(data.EAbwtg) + ""));
 							
 							if(data.OvertimePe1Nav && data.OvertimePe1Nav.results){
 								var data1 = data.OvertimePe1Nav.results;
@@ -730,6 +730,133 @@ sap.ui.define([
 				
 			}
 			          
+			oController._BusyDialog.open();
+			setTimeout(search, 100);
+		},
+		
+		// 휴일계산 - 첨단
+		onPressCheckAbsence : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
+			var oController = oView.getController();
+			
+			var oData = oController._DetailJSonModel.getProperty("/Data");
+			
+			// validation check
+			if(!oData.Awart || oData.Awart == ""){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48005")); // 근태코드를 선택하여 주십시오.
+				return;
+			} else if(!oData.Begda || !oData.Endda){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
+				return;
+			} else if(oData.Begda > oData.Endda){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48018")); // 시작일이 종료일 이후입니다. 일자를 확인하여 주십시오.
+				return;
+			} 
+				
+			var search = function(){
+				// 근태일수, 휴일일수 초기화
+				oController._DetailJSonModel.setProperty("/Data/Kaltg", "");
+				oController._DetailJSonModel.setProperty("/Data/Hldtg", "");
+				oController._DetailJSonModel.setProperty("/Data/Holyt", "");
+				// 대근신청 비활성화
+				oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
+				// 근태시간계산 초기화
+				oController._DetailJSonModel.setProperty("/Data/EAbshr", "");
+				oController._DetailJSonModel.setProperty("/Data/EAbsmm", "");
+				
+				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var createData = {ChkAbsenceNav : []};
+					createData.IPernr = oData.Pernr;
+					createData.IBukrs = oData.Bukrs;
+					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.IMolga = oData.Molga;
+					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
+					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
+					createData.IAwart = oData.Awart;
+					createData.IBeguz = oData.Beguz;
+					createData.IEnduz = oData.Enduz;
+					createData.IVtken = oData.Vtken ? oData.Vtken : false;
+				
+				oModel.create("/CheckAbsenceSet", createData, null,
+					function(data, res){
+						if(data){
+							// 근태일수
+							oController._DetailJSonModel.setProperty("/Data/Kaltg", (parseFloat(data.EKaltg) + ""));
+							
+							// 휴일일수
+							oController._DetailJSonModel.setProperty("/Data/Hldtg", (parseFloat(data.EAbwtg) + ""));
+							
+							// 근태시간계산결과
+							if(data.EAbshr == "00" && data.EAbsmm == "00"){
+								
+							} else {
+								oController._DetailJSonModel.setProperty("/Data/EAbshr", data.EAbshr);
+								oController._DetailJSonModel.setProperty("/Data/EAbsmm", data.EAbsmm);
+							}
+							
+							if(data.ChkAbsenceNav && data.ChkAbsenceNav.results){
+								var data2 = data.ChkAbsenceNav.results;
+								if(data2.length > 0){ // 대근신청 활성화
+									oController._DetailJSonModel.setProperty("/Data/Panel2Visible", true);
+									
+									var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table2");
+									var oJSONModel = oTable.getModel();
+									var vData = {Data : []};
+									
+									for(var i=0; i<data2.length; i++){
+										data2[i].Idx = i;
+										data2[i].Datum = new Date(common.Common.getTime(data2[i].Datum));
+										data2[i].Flag = "A";
+										
+										data2[i].Awper = parseFloat(data2[i].Awper) == 0 ? "" : data2[i].Awper;
+										
+										data2[i].Ovtim = parseFloat(data2[i].Ovtim) == 0 ? "-" : data2[i].Ovtim;
+										data2[i].Wt40 = parseFloat(data2[i].Wt40) == 0 ? "-" : data2[i].Wt40;
+										data2[i].Wt12 = parseFloat(data2[i].Wt12) == 0 ? "-" : data2[i].Wt12;
+										data2[i].Wtsum = parseFloat(data2[i].Wtsum) == 0 ? "-" : data2[i].Wtsum;
+										
+										if(data2[i].Offck == "X"){
+											data2[i].Status1 = "ZZ";
+										} else {
+											data2[i].Status1 = oController._DetailJSonModel.getProperty("/Data/Status1");
+										}
+										
+										vData.Data.push(data2[i]);
+									}
+									
+									oJSONModel.setData(vData);
+									oTable.bindRows("/Data");
+									oTable.setVisibleRowCount(vData.Data.length);
+									
+								}
+							}
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				oController._BusyDialog.close();
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
+				
+			}	
+				
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
 		},
