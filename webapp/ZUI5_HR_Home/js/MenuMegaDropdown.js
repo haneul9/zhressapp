@@ -515,7 +515,7 @@ getMenuTree: function(data) {
 			title: o.Mnnm1,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
 			children: level1SubMenuMap[o.Mnid1],
-			styleClasses: o.Mnid1 === '10000' ? 'menu-mss' : (o.Mnid1 === '20000' ? 'menu-hass' : '')
+			styleClasses: o.Mnid1 === '10000' ? ' menu-mss' : (o.Mnid1 === '20000' ? ' menu-hass' : '')
 		};
 	});
 },
