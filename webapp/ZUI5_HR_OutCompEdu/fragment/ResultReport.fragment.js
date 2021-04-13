@@ -135,9 +135,9 @@ sap.ui.define([
             var oSatisCombo = new sap.m.ComboBox({ // 학습자만족도
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+					formatter: function(v1, v2, v3) {
+						return Common.checkNull(v3) || v1 === "99" || v2 === "1";
 					}
 				},
 				items: {
@@ -160,9 +160,9 @@ sap.ui.define([
             var oEduEffectCombo = new sap.m.ComboBox({ // 교육효과평가
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+					formatter: function(v1, v2, v3) {
+						return Common.checkNull(v3) || v1 === "99" || v2 === "1";
 					}
 				},
 				items: {
@@ -396,10 +396,10 @@ sap.ui.define([
                                                 width: "250px",
                                                 maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Pltgt", false),
                                                 editable: {
-                                                    path: "Status1",
-                                                    formatter: function(v1) {
-                                                        return !v1 || v1 === "AA";
-                                                    }
+                                                    parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+													formatter: function(v1, v2, v3) {
+														return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+													}
                                                 },
                                                 value: "{Pltgt}"
                                             })
@@ -416,10 +416,10 @@ sap.ui.define([
                                                 valueFormat: "yyyy-MM-dd",
                                                 placeholder: "yyyy-mm-dd",
                                                 editable: {
-                                                    path: "Status1",
-                                                    formatter: function(v1) {
-                                                        return !v1 || v1 === "AA";
-                                                    }
+                                                    parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+													formatter: function(v1, v2, v3) {
+														return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+													}
                                                 }
                                             })
                                         ]
@@ -433,10 +433,10 @@ sap.ui.define([
                                                 width: "250px",
                                                 maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Plloc", false),
                                                 editable: {
-                                                    path: "Status1",
-                                                    formatter: function(v1) {
-                                                        return !v1 || v1 === "AA";
-                                                    }
+                                                    parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+													formatter: function(v1, v2, v3) {
+														return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+													}
                                                 },
                                                 value: "{Plloc}"
                                             })
@@ -458,10 +458,10 @@ sap.ui.define([
                                         width: "704px",
                                         value:"{Plcon}",
                                         editable: {
-                                            path: "Status1",
-                                            formatter: function(v1) {
-                                                return !v1 || v1 === "AA";
-                                            }
+                                            parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+											formatter: function(v1, v2, v3) {
+												return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+											}
                                         }
                                     }),
                                     fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
@@ -480,10 +480,10 @@ sap.ui.define([
                                         width: "704px",
                                         value:"{Plimp}",
                                         editable: {
-                                            path: "Status1",
-                                            formatter: function(v1) {
-                                                return !v1 || v1 === "AA";
-                                            }
+                                            parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+											formatter: function(v1, v2, v3) {
+												return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+											}
                                         }
                                     }),
                                     fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
@@ -494,7 +494,7 @@ sap.ui.define([
 					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox({
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 수료증
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 이수시간
                             new sap.m.VBox({
                                 items: [
                                     new sap.m.Text({text: "{i18n>MSG_40027}", width: "auto", textAlign: "Begin"}),
@@ -625,9 +625,9 @@ sap.ui.define([
 								width: "704px",
 								value:"{Othtx}",
 								editable: {
-									path: "Status1",
-									formatter: function(v1) {
-										return !v1 || v1 === "AA";
+									parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+									formatter: function(v1, v2, v3) {
+										return Common.checkNull(v3) || v1 === "99" || v2 === "1";
 									}
 								}
 							})
@@ -691,24 +691,14 @@ sap.ui.define([
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogResultBtn.bind(oController),
-						text: "{i18n>LABEL_40060}", // 신청,
+						text: "{i18n>LABEL_40060}", // 신청
 						visible: {
-							path: "Status1",
-							formatter: function(v) {
-								return !v;
+							parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+							formatter: function(v1, v2, v3) {
+								return Common.checkNull(v3) || v1 === "99" || v2 === "1";
 							}
 						}
 					}).addStyleClass("button-dark"),
-					new sap.m.Button({
-						press: oController.onDialogDelBtn.bind(oController),
-						text: "{i18n>LABEL_40011}", // 삭제
-						visible: {
-							path: "Status1",
-							formatter: function (v) {
-								return v === "AA";
-							}
-						}
-					}).addStyleClass("button-delete"),
 					new sap.m.Button({
 						press: function () {
 							oDialog.close();

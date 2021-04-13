@@ -3,9 +3,8 @@ sap.ui.define([
 	"../common/Common",
 	"../common/Formatter",
 	"../common/PageHelper",
-    "../common/ZHR_TABLES",
-    "../common/EmpBasicInfoBox"
-], function (Common, Formatter, PageHelper, ZHR_TABLES, EmpBasicInfoBox) {
+    "../common/ZHR_TABLES"
+], function (Common, Formatter, PageHelper, ZHR_TABLES) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -27,9 +26,7 @@ sap.ui.define([
 		
 		createContent: function(oController) {
             this.loadModel();
-            
-            var oEmpBasicInfoBox = new EmpBasicInfoBox(oController.EmployeeModel);
-            
+                        
 			var oApplyCombo1 = new sap.m.ComboBox(oController.PAGEID + "_YearCombo1", {
                 selectedKey: "{Zyear1}",
                 width: "100px",
@@ -184,8 +181,7 @@ sap.ui.define([
 			ZHR_TABLES.makeColumn(oController, oTable, this._colModel); 
 	
 			return new PageHelper({
-				contentItems: [
-					oEmpBasicInfoBox,                    
+				contentItems: [                    
                     oApplyDateBox,
 					infoBox,
 					oTable

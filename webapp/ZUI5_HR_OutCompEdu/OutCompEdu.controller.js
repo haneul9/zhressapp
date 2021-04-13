@@ -3,14 +3,13 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-	"../common/EmployeeModel",
 	"../common/AttachFileAction",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"../common/DialogHandler",
 	"../common/OrgOfIndividualHandler"
 	], 
-	function (Common, CommonController, JSONModelHelper, EmployeeModel, AttachFileAction, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler) {
 	"use strict";
 
 	
@@ -22,7 +21,6 @@ sap.ui.define([
 		ApplyModel: new JSONModelHelper(),
 		SearchModel: new JSONModelHelper(),
 		AttModel: new JSONModelHelper(),
-		EmployeeModel: new EmployeeModel(),
 		
 		getUserId: function() {
 
@@ -54,7 +52,6 @@ sap.ui.define([
 		
 		onAfterShow: function() {
             
-			this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
             this.initDateCreate(this);
 			this.onTableSearch();
 			this.getComboData();
@@ -227,16 +224,28 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
-			var vZyear1 = oController.SearchModel.getProperty("/Data/Zyear1");
-			var vMonth1 = oController.SearchModel.getProperty("/Data/Zmonth1");
+			var vZyear1 = Common.checkNull(oController.SearchModel.getProperty("/Data/Zyear1")) || oController.SearchModel.getProperty("/Data/Zyear1") === "ALL" ? "" : oController.SearchModel.getProperty("/Data/Zyear1");
+			var vMonth1 = Common.checkNull(oController.SearchModel.getProperty("/Data/Zmonth1")) || oController.SearchModel.getProperty("/Data/Zmonth1") === "ALL" ? "" : oController.SearchModel.getProperty("/Data/Zmonth1");
+			var vMonth2 = Common.checkNull(oController.SearchModel.getProperty("/Data/Zmonth1")) || oController.SearchModel.getProperty("/Data/Zmonth1") === "ALL" ? "" : oController.SearchModel.getProperty("/Data/Zmonth1");
 			var vGubun = oController.SearchModel.getProperty("/Data/Gubun");
 			var vStatus = oController.SearchModel.getProperty("/Data/Status");
 			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
 
+			
+			if(oController.SearchModel.getProperty("/Data/Zyear1") === "ALL" && oController.SearchModel.getProperty("/Data/Zmonth1") !== "ALL"){
+				MessageBox.error(oController.getBundleText("MSG_40042"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+			
+			if(oController.SearchModel.getProperty("/Data/Zyear1") !== "ALL" && oController.SearchModel.getProperty("/Data/Zmonth1") === "ALL"){
+				vMonth1 = "1";
+				vMonth2 = "12";
+			}
+			
 			oController.TableModel.setData({Data: []}); //직접적으로 화면 테이블에 셋팅하는 작업
-
-			var vBDate = vZyear1 === "ALL" ? "" : new Date(vZyear1, vMonth1 - 1, 1);
-			var vEDate = vMonth1 === "ALL" ? "" : new Date(vZyear1, vMonth1, 0);
+			
+			var vBDate = new Date(vZyear1, vMonth1 - 1, 1);
+			var vEDate = new Date(vZyear1, vMonth2, 0);
 
 			var sendObject = {};
 			// Header
@@ -244,11 +253,11 @@ sap.ui.define([
 			sendObject.IEmpid = vPernr;
 			sendObject.IBukrs = vBukrs2;
 			sendObject.IConType = "1";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(vBDate);
-			sendObject.IEndda = Common.adjustGMTOdataFormat(vEDate);
+			sendObject.IBegda = Common.checkNull(vZyear1) || Common.checkNull(vMonth1) ? undefined : Common.adjustGMTOdataFormat(vBDate);
+			sendObject.IEndda = Common.checkNull(vZyear1) || Common.checkNull(vMonth1) ? undefined : Common.adjustGMTOdataFormat(vEDate);
 			sendObject.IEdoty = vGubun === "ALL" ? "" : vGubun;
-			sendObject.IEdsta = vStatus === "ALL" ? "" : vStatus;
-			sendObject.IRepst = vIsReport === "ALL" ? "" : vIsReport;
+			sendObject.IRepst = vStatus === "ALL" ? "" : vStatus;
+			sendObject.IEdsta = vIsReport === "ALL" ? "" : vIsReport;
 			// Navigation property
 			sendObject.TrainingOutApplyExport = [];
 			sendObject.TrainingOutApplyTableIn1 = [];
@@ -353,19 +362,19 @@ sap.ui.define([
 			}
 
 			oCopyRow = $.extend(true, {}, oCopyRow);
-			this.ApplyModel.setData({FormData: oCopyRow});
-
+			
 			if (!this._ReportModel) {
 				this._ReportModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ResultReport", this);
 				oView.addDependent(this._ReportModel);
 			}
-
+			
+			this.ApplyModel.setData({FormData: oCopyRow});
 			this.setTimeCombo1(this);
 			this.setTimeCombo2(this);
-			this.getCodeList();
+			this.getCodeList(oCopyRow);
 			this.getCodeList2();
-			this.ApplyModel.setProperty("/FormData/Trnfb", "Null");
-			this.ApplyModel.setProperty("/FormData/Evtfb", "Null");
+			this.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
+			this.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
 			this.getAttTable(oCopyRow, "2");
 			this.onBeforeOpenDetailDialog();
 			this._ReportModel.open();
@@ -748,7 +757,7 @@ sap.ui.define([
 			});
 		},
 
-		getCodeList2: function() { // 만족도combo
+		getCodeList2: function(oRowData) { // 만족도combo
 			var oController = $.app.getController();
 			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vPernr = oController.getUserId();
@@ -769,6 +778,11 @@ sap.ui.define([
 						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
 						oController.ApplyModel.setProperty("/SatisCombo", oData.NavCommonCodeList.results);
 						oController.ApplyModel.setProperty("/EduEffectCombo", oData.NavCommonCodeList.results);
+
+						if(!oRowData) {
+							oController.ApplyModel.setProperty("/FormData/Trnfb", "Null");
+							oController.ApplyModel.setProperty("/FormData/Evtfb", "Null");
+						}
 					}
 				},
 				error: function(oResponse) {
@@ -1125,7 +1139,7 @@ sap.ui.define([
 			});
 		},
 
-		onDialogResultBtn: function() { // Dialog 결과보고 저장
+		onDialogResultBtn: function() { // Dialog 결과보고 신청
 			var oController = $.app.getController();
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
@@ -1142,6 +1156,16 @@ sap.ui.define([
 				MessageBox.error(oController.getBundleText("MSG_40039"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
+
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0){
+				MessageBox.error(oController.getBundleText("MSG_40040"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0){
+				MessageBox.error(oController.getBundleText("MSG_40041"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
 			
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
@@ -1151,15 +1175,15 @@ sap.ui.define([
 
 			BusyIndicator.show(0);
 			var onProcessSave = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //신청
-					var vTimeH = oController.ApplyModel.getProperty("/FormData/hTime");
-					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
+				if (fVal && fVal == oController.getBundleText("LABEL_40060")) { // 신청
 					
 					// 첨부파일 저장
-					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
-					oSendData.Edoty = "1";
-					oSendData.Pernr = vPernr;
-					oSendData.Trtim = vTimeH + "." + vTimeM;
+					var uFiles = [];
+					for(var i=1; i<3; i++)	uFiles.push("00" + i);
+
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+
+					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") !== 0) uFiles.push("003");
 
 					var sendObject = {};
 					// Header
@@ -1176,10 +1200,10 @@ sap.ui.define([
 						async: true,
 						success: function(oData, oResponse) {
 							Common.log(oData);
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_40010"), { title: oController.getBundleText("MSG_08107")});
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40008"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
 							BusyIndicator.hide();
-							oController._ApplyModel.close();
+							oController._ReportModel.close();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -1193,9 +1217,9 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40009"), {
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40007"), {
 				title: oController.getBundleText("LABEL_40001"),
-				actions: [oController.getBundleText("LABEL_40022"), oController.getBundleText("LABEL_00119")],
+				actions: [oController.getBundleText("LABEL_40060"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessSave
 			});
 		},
@@ -1203,8 +1227,11 @@ sap.ui.define([
 		onBeforeOpenDetailDialog: function(AppType) {
 			var oController = $.app.getController();
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status1"),
+				vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty"),
+				vRepstT = oController.ApplyModel.getProperty("/FormData/RepstT"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
 				vInfoMessage = oController.getBundleText("MSG_40025");
+
 			if(AppType === "app") {
 				AttachFileAction.setAttachFile(oController, {
 					Appnm: vAppnm,
@@ -1220,7 +1247,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (Common.checkNull(vRepstT) || vStatus === "99" || vEdoty === "1") ? true : false,
 				},"001");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
@@ -1228,7 +1255,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (Common.checkNull(vRepstT) || vStatus === "99" || vEdoty === "1") ? true : false,
 				},"002");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
@@ -1236,7 +1263,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (Common.checkNull(vRepstT) || vStatus === "99" || vEdoty === "1") ? true : false,
 				},"003");
 			}
 		},

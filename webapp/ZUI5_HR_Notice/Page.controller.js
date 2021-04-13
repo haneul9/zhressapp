@@ -48,7 +48,17 @@
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
+
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr")))
+				this.onSelectDetail(false);
         },
+
+		getParameterByName: function(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+			return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		},
 
         getChangeDate: function() {
 			return new sap.ui.commons.TextView({
@@ -177,11 +187,17 @@
         },
 		
 		onSelectedRow: function(oEvent) {
-            var oController = $.app.getController();
-			var oView = $.app.byId("ZUI5_HR_Notice.Page");
+			var oController = $.app.getController();
 			var vPath = oEvent.getParameters().rowBindingContext.getPath();
-			var vSdate = oController.TableModel.getProperty(vPath).Sdate;
-			var vSeqnr = oController.TableModel.getProperty(vPath).Seqnr;
+
+			oController.onSelectDetail(true, vPath);
+		},
+
+		onSelectDetail: function(Gubun, Path){
+			var oController = $.app.getController();
+			var oView = $.app.byId("ZUI5_HR_Notice.Page");
+			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
+			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Seqnr");
 			
 			if (!oController._RegistModel) {
 				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Notice.fragment.Regist", oController);

@@ -1,9 +1,8 @@
 $.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define([
 	"../common/PageHelper",
-    "../common/ZHR_TABLES",
-    "../common/EmpBasicInfoBox"
-], function (PageHelper, ZHR_TABLES, EmpBasicInfoBox) {
+    "../common/ZHR_TABLES"
+], function (PageHelper, ZHR_TABLES) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -27,8 +26,6 @@ sap.ui.define([
 		
 		createContent: function(oController) {
             this.loadModel();
-            
-            var oEmpBasicInfoBox = new EmpBasicInfoBox(oController.EmployeeModel);
             
 			var oGubunCombo = new sap.m.ComboBox({ // 구분
 				selectedKey: "{Gubun}",
@@ -157,9 +154,9 @@ sap.ui.define([
 							oDateYearCombo.addStyleClass("mr-5px"),
 							oDateMonthCombo,							
 							new sap.m.Label({ text: "{i18n>LABEL_40005}" }), // 결재상태
-                            oStatusCombo,
+							oIsReportCombo,
 							new sap.m.Label({ text: "{i18n>LABEL_40006}" }), // 보고서 제출여부
-                            oIsReportCombo
+							oStatusCombo
 						]
 					}).addStyleClass("search-field-group"),
 					new sap.m.HBox({
@@ -198,8 +195,7 @@ sap.ui.define([
 			ZHR_TABLES.makeColumn(oController, oTable, this._colModel); 
 	
 			return new PageHelper({
-				contentItems: [
-					oEmpBasicInfoBox,                    
+				contentItems: [               
                     oApplyDateBox,
 					infoBox,
 					oTable

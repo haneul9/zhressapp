@@ -12,7 +12,7 @@
             {id: "Sdate",    label: "{i18n>LABEL_57004}" /* 등록일 */,        plabel: "", resize: true, span: 0, type: "date",    sort: true,  filter: true,  width: "15%"},
             {id: "Aedtm",    label: "{i18n>LABEL_57010}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "22%", templateGetter: "getChangeDate"},
             {id: "ApernTxt", label: "{i18n>LABEL_57011}" /* 등록자 */,        plabel: "", resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "15%"},
-            {id: "Impor",    label: "{i18n>LABEL_57012}" /* 중요항목 */,      plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "15%", templateGetter: "getImport"},
+            {id: "Impor",    label: "{i18n>LABEL_57012}" /* 중요항목 */,      plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "15%", templateGetter: "getImport"}
         ],
 		
 		getControllerName: function () {
@@ -53,11 +53,11 @@
 						items: [
 							new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
-								text: "{i18n>LABEL_57005}", // 조회
+								text: "{i18n>LABEL_57005}" // 조회
 							}).addStyleClass("button-search"),
 							new sap.m.Button({
 								press: oController.onPressRegi.bind(oController),
-								text: "{i18n>LABEL_57009}", // 등록
+								text: "{i18n>LABEL_57009}" // 등록
 							}).addStyleClass("button-search")
 						]
 					})

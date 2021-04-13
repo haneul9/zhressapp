@@ -2,9 +2,8 @@ sap.ui.define([
 	"../common/Common",
 	"../common/Formatter",
 	"../common/PageHelper",
-	"../common/ZHR_TABLES",
-	"../common/EmpBasicInfoBox"
-], function (Common, Formatter, PageHelper, ZHR_TABLES, EmpBasicInfoBox) {
+	"../common/ZHR_TABLES"
+], function (Common, Formatter, PageHelper, ZHR_TABLES) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
