@@ -179,7 +179,8 @@ common.makeTable = {
 										path : col_info[i].id, 
 										type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 									},
-									textAlign : "Center"
+									textAlign : "Center",
+									tooltip : " "
 								}).addStyleClass("FontFamily");
 					break;
 				case "mtext":
@@ -249,7 +250,8 @@ common.makeTable = {
 										formatter : function(fVal){
 											return fVal.substring(0,2) + ":" + fVal.substring(2,4);
 										}
-									}
+									},
+									tooltip : " "
 								});
 					break;
 				case "money":
@@ -262,11 +264,13 @@ common.makeTable = {
 														}
 									},
 									textAlign : "End",
+									tooltip : " "
 								}).addStyleClass("FontFamily");
 				case "period":
 					oTemplate = new sap.ui.commons.TextView({
 									text : col_info[i].id,
-									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+									tooltip : " "
 								});
 					break;
 				case "cancle":
@@ -285,7 +289,8 @@ common.makeTable = {
 											return fVal2;
 										}
 									},
-									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+									tooltip : " "
 								}).addStyleClass("font-bold");
 					break;
 				case "process":
@@ -347,7 +352,8 @@ common.makeTable = {
 											return fVal1;
 										}
 									},
-									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+									tooltip : " "
 								});
 					break;
 				case "formatter":
@@ -366,15 +372,68 @@ common.makeTable = {
 										return fVal1;
 									}
 								},
-								textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+								textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+								tooltip : " "
 							});
-						break;
+							break;
+						case "Status":
+							oTemplate = new sap.m.ComboBox({
+											selectedKey : "{" + col_info[i].id + "}",
+											width : "100%",
+											change : oController.onChangeStatus,
+											customData : [new sap.ui.core.CustomData({key : "", value : "{}"})]
+										});
+										
+							var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+							var createData = {NavCommonCodeList : []};
+								createData.ICodeT = "022";
+								createData.IPernr = $.app.getModel("session").getData().Pernr;
+								createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+								createData.IBukrs = $.app.getModel("session").getData().Bukrs;
+								createData.IMolga = $.app.getModel("session").getData().Molga;
+								createData.ICodty = "CC";
+								createData.ILangu = $.app.getModel("session").getData().Langu;
+							
+							oModel.create("/CommonCodeListHeaderSet", createData, null,
+								function(data, res){
+									if(data){
+										if(data.NavCommonCodeList && data.NavCommonCodeList.results){
+											var data1 = data.NavCommonCodeList.results;
+											
+											for(var i=0; i<data1.length; i++){
+												oTemplate.addItem(new sap.ui.core.Item({key : data1[i].Code, text : data1[i].Text}));
+											}
+										}
+									}
+								},
+								function (oError) {
+							    	var Err = {};
+							    	oController.Error = "E";
+											
+									if (oError.response) {
+										Err = window.JSON.parse(oError.response.body);
+										var msg1 = Err.error.innererror.errordetails;
+										if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+										else oController.ErrorMessage = Err.error.message.value;
+									} else {
+										oController.ErrorMessage = oError.toString();
+									}
+								}
+							);	
+							
+							if(oController.Error == "E"){
+								oController.Error = "";
+								sap.m.MessageBox.error(oController.ErrorMessage);
+							}
+							
+							break;
 					}
 					break;
 				default:
 					oTemplate = new sap.ui.commons.TextView({
 									text : "{" + col_info[i].id + "}",
-									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+									tooltip : " "
 								}).addStyleClass("FontFamily");
 			}
 			

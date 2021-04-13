@@ -89,6 +89,16 @@ sap.ui.define([
 				oEvent.getSource().setValue("");
 				return;
 			}
+			
+			// 현재일 이전 일자 선택 시 에러 처리
+            var value = oEvent.getParameters().value, today = new Date();
+			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
+
+            if(parseFloat(dateFormat.format(new Date(value))) < parseFloat(dateFormat.format(today))){
+            	sap.m.MessageBox.error(oBundleText.getText("MSG_53011")); // 현재일 이전 일자는 선택할 수 없습니다.
+            	oEvent.getSource().setValue("");
+            	return;
+            }
 		},
 		
 		onSetInfo : function(Pernr){
