@@ -39,6 +39,15 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		var oController = this;
 		
 		if(!oController._ListCondJSonModel.getProperty("/Data")){
+			var oYear = sap.ui.getCore().byId(oController.PAGEID + "_Year");
+				oYear.destroyItems();
+			
+			var year = new Date().getMonth() < 3 ? new Date().getFullYear() - 1 : new Date().getFullYear();	
+				
+			for(var i=year; i>=2020; i--){
+				oYear.addItem(new sap.ui.core.Item({key : (i+""), text : (i+"")}));
+			}
+			
 			var vData = {
 				Data : {
 					Year : (new Date().getFullYear() + ""),
@@ -70,18 +79,20 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		
 		var width = window.innerWidth;
 		var oGridContainer = sap.ui.getCore().byId(oController.PAGEID + "_GridContainer");
+		var oScrollContainer = sap.ui.getCore().byId(oController.PAGEID + "_ScrollContainer");
 		
 		var isIE = (navigator.userAgent.toLowerCase().indexOf("trident") != -1) ? true : false;
+			// oScrollContainer.setHorizontal(isIE);
 		
 		if(width > 1505){
 			oGridContainer.setWidth("1505px");
 			
 			if(isIE == true){
-				sap.ui.getCore().byId(oController.PAGEID + "_ScrollContainer").setWidth("100%");
+				oScrollContainer.setWidth("100%");
 			}
 		} else {
 			if(isIE == true){
-				sap.ui.getCore().byId(oController.PAGEID + "_ScrollContainer").setWidth((width + "px"));
+				oScrollContainer.setWidth((width + "px"));
 				oGridContainer.setWidth("1505px");
 			} else {
 				oGridContainer.setWidth("");
@@ -92,9 +103,6 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 	onPressSearch : function(oEvent){
 		var oView = sap.ui.getCore().byId("ZUI5_HR_Dashboard.DashboardList");
 		var oController = oView.getController();
-		
-		// 목표, 다면평가 template id 설정
-		oController.onSetTemplateId(oController);
 		
 		// 목표 데이터 조회
 		oController.onSearchGoalData();
@@ -110,21 +118,44 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		//  목표			  다면평가
 		var oTemplateId1 = "", oTemplateId2 = "";
 		
-		if(common.Common.getOperationMode() == "DEV"){ // 개발
-			oTemplateId1 = "703";
-			oTemplateId2 = "719";
-		} else if(common.Common.getOperationMode() == "QAS"){ // QA
-			oTemplateId1 = "500";
-			oTemplateId2 = "502";
-		} else if(common.Common.getOperationMode() == "PRD"){ // 운영
-			oTemplateId1 = "500";
-			oTemplateId2 = "502";
+		var oYear = oController._ListCondJSonModel.getProperty("/Data/Year");
+	
+		if(oYear == "2020"){
+			switch(common.Common.getOperationMode()){
+				case "DEV":
+					oTemplateId1 = "703";
+					oTemplateId2 = "719";
+					break;
+				case "QAS":
+					oTemplateId1 = "500";
+					oTemplateId2 = "502";
+					break;
+				case "PRD":
+					oTemplateId1 = "500";
+					oTemplateId2 = "502";
+					break;
+			}
+		} else if(oYear == "2021") {
+			switch(common.Common.getOperationMode()){
+				case "DEV":
+					oTemplateId1 = "779";
+					oTemplateId2 = "";
+					break;
+				case "QAS":
+					oTemplateId1 = "520";
+					oTemplateId2 = "";
+					break;
+				case "PRD":
+					oTemplateId1 = "520";
+					oTemplateId2 = "";
+					break;
+			}
 		}
 		
-		if(oTemplateId1 == "" || oTemplateId2 == ""){
-			sap.m.MessageBox.error(oBundleText.getText("MSG_05004")); // 목표/다면평가 template id 조회 시 오류가 발생하였습니다.
-			return;
-		}
+		// if(oTemplateId1 == "" || oTemplateId2 == ""){
+		// 	sap.m.MessageBox.error(oBundleText.getText("MSG_05004")); // 목표/다면평가 template id 조회 시 오류가 발생하였습니다.
+		// 	return;
+		// }
 		
 		oController._ListCondJSonModel.setProperty("/Data/TemplateId1", oTemplateId1);
 		oController._ListCondJSonModel.setProperty("/Data/TemplateId2", oTemplateId2);
@@ -1061,6 +1092,9 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		var oView = sap.ui.getCore().byId("ZUI5_HR_Dashboard.DashboardList");
 		var oController = oView.getController();
 		
+		// 목표, 다면평가 template id 설정
+		oController.onSetTemplateId(oController);
+		
 		// scrollcontainer busy state 변경
 		sap.ui.getCore().byId(oController.PAGEID + "_Content3").setBusy(true);
 		sap.ui.getCore().byId(oController.PAGEID + "_Content5").setBusy(true);
@@ -1164,7 +1198,9 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		
 		// 다면평가 점수 조회
 		var vData4 = [];
-		new JSONModelHelper().url("/odata/v2/FormHeader")
+		// 2021-04-12 다면평가 template 이 존재하지 않는 경우 skip
+		if(oController._ListCondJSonModel.getProperty("/Data/TemplateId2") != ""){
+			new JSONModelHelper().url("/odata/v2/FormHeader")
 							 .filter("formTemplateId eq " + oController._ListCondJSonModel.getProperty("/Data/TemplateId2") + " and formDataStatus ne 4 and formSubjectId in " + oController._UserList)
 							 .select("currentStep")
 							 .select("formDataId")
@@ -1203,6 +1239,7 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 								 }
 							 })
 							 .load();
+		}
 		
 		var vData5 = [];
 		for(var i=0; i<vData4.length; i++){
