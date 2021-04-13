@@ -316,34 +316,64 @@ sap.ui.define([
 							textAlign: "Begin",
 							width: "100%",
 							text: "{i18n>MSG_65001}"
-						}).addStyleClass("lineHeight30"),
+						}).addStyleClass("lineHeight30 font-14px"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
 							text: "{i18n>MSG_65002}"
-						}).addStyleClass("px-20px lineHeight30"),
+						}).addStyleClass("px-20px lineHeight30 font-14px"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
 							text: "{i18n>MSG_65003}"
-						}).addStyleClass("lineHeight30"),
+						}).addStyleClass("lineHeight30 font-14px"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
 							text: "{i18n>MSG_65004}"
-						}).addStyleClass("lineHeight30"),
+						}).addStyleClass("lineHeight30 font-14px"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
 							text: "{i18n>MSG_65005}"
-						}).addStyleClass("px-20px lineHeight30"),
+						}).addStyleClass("px-20px lineHeight30 font-14px"),
 						new sap.m.Text({
 							textAlign: "Begin",
 							width: "100%",
 							text: "{i18n>MSG_65006}"
-						}).addStyleClass("px-20px lineHeight30"),
+						}).addStyleClass("px-20px lineHeight30 font-14px"),
 					
-					]
+					],
+				visible: {  // 재신청일 경우 보이지 않음
+					path: "actmode",
+					formatter: function(v) {
+						if (v && v === "X") return false;
+						return true;
+					}
+				}
+			}).addStyleClass("tableMargin5 px-20px");
+			
+			var oInfoBox2 = new sap.m.VBox({
+				fitContainer: true,
+				items: [ 
+						new sap.m.Text({
+							textAlign: "Begin",
+							width: "100%",
+							text: "{i18n>MSG_65017}"
+						}).addStyleClass("lineHeight30 font-14px"),
+						new sap.m.Text({
+							textAlign: "Begin",
+							width: "100%",
+							text: "{i18n>MSG_65018}"
+						}).addStyleClass("px-20px lineHeight30 font-14px"),
+					],
+				visible: {  // 재신청일 경우 보임
+					path: "actmode",
+					formatter: function(v) {
+						if (v && v === "X") return true;
+						return false;
+					}
+				}
 			}).addStyleClass("tableMargin5 px-20px");
 				
 			var oDialog = new sap.m.Dialog({
@@ -364,7 +394,8 @@ sap.ui.define([
 				],   
 				content: [
 					oApplyBox,
-					oInfoBox
+					oInfoBox,
+					oInfoBox2
                 ]
 			})
 			.addStyleClass("custom-dialog-popup")
