@@ -182,7 +182,7 @@ ZUI5_HR_ActApp.common.Common = {
                     },
                     textAlign: sap.ui.core.TextAlign.Center,
                     design: sap.ui.commons.TextViewDesign.Bold,
-                    tooltip: new sap.ui.core.TooltipBase(),
+                    tooltip: " ",
                     semanticColor: {
                         path: "Batyp",
                         formatter: function (fVal) {

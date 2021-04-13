@@ -40,7 +40,7 @@ common.ZHR_TABLES = {
 					alignItems: sap.m.FlexAlignItems.Center,
 					items: [
 						new sap.ui.commons.TextView({
-							tooltip: new sap.ui.core.TooltipBase(),
+							tooltip: " ",
 							text: vColumnInfo[i].label,
 							textAlign: vColumnInfo[i].plabel ? sap.ui.core.HorizontalAlign.Center : (vColumnInfo[i].headerAlign || vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 							width: "100%"
@@ -65,7 +65,7 @@ common.ZHR_TABLES = {
 			} else {
 				oColumn.addMultiLabel(
 					new sap.ui.commons.TextView({
-						tooltip: new sap.ui.core.TooltipBase(),
+						tooltip: " ",
 						text: vColumnInfo[i].label,
 						textAlign: vColumnInfo[i].plabel ? sap.ui.core.HorizontalAlign.Center : (vColumnInfo[i].headerAlign || vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 						width: "100%"
@@ -79,7 +79,7 @@ common.ZHR_TABLES = {
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
 							new sap.ui.commons.TextView({
-								tooltip: new sap.ui.core.TooltipBase(),
+								tooltip: " ",
 								text: vColumnInfo[i].plabel,
 								textAlign: oTable.hasStyleClass("multi-header") ? (vColumnInfo[i].headerAlign || sap.ui.core.HorizontalAlign.Center) : (vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 								width: "100%"
@@ -104,7 +104,7 @@ common.ZHR_TABLES = {
 				} else {
 					oColumn.addMultiLabel(
 						new sap.ui.commons.TextView({
-							tooltip: new sap.ui.core.TooltipBase(),
+							tooltip: " ",
 							text: vColumnInfo[i].plabel,
 							textAlign: oTable.hasStyleClass("multi-header") ? (vColumnInfo[i].headerAlign || sap.ui.core.HorizontalAlign.Center) : (vColumnInfo[i].align || sap.ui.core.HorizontalAlign.Center),
 							width: "100%"
@@ -138,7 +138,7 @@ common.ZHR_TABLES = {
 								}
 							},
 							textAlign: "Center",
-							tooltip: new sap.ui.core.TooltipBase()
+							tooltip: " "
 						}).addStyleClass("FontFamily")
 					);
 
@@ -157,7 +157,7 @@ common.ZHR_TABLES = {
 					oColumn.setTemplate(new sap.ui.commons.TextView({
 						text : "{" + oColumnId + "}",
 						textAlign : common.Common.checkNull(vColumnInfo[i].align) ? "Center" :  vColumnInfo[i].align,
-						tooltip: new sap.ui.core.TooltipBase()
+						tooltip: " "
 					}).addStyleClass("FontFamily"));
 
 					break;
@@ -176,7 +176,7 @@ common.ZHR_TABLES = {
 							}
 						},
 						textAlign : "Center",
-						tooltip: new sap.ui.core.TooltipBase()
+						tooltip: " "
 					}).addStyleClass("FontFamily"));
 
 					break;
@@ -204,7 +204,7 @@ common.ZHR_TABLES = {
 									return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 								}
 							},
-							tooltip: new sap.ui.core.TooltipBase()
+							tooltip: " "
 						}).addStyleClass("FontFamily")
 					);
 
@@ -213,7 +213,7 @@ common.ZHR_TABLES = {
 					oColumn.setTemplate(new sap.ui.commons.TextView({
 						text : "{" + oColumnId + "}",
 						textAlign : "Right",
-						tooltip: new sap.ui.core.TooltipBase()
+						tooltip: " "
 					}).addStyleClass("FontFamily"));
 
 					break;
@@ -235,7 +235,7 @@ common.ZHR_TABLES = {
 							}
 						},
 						textAlign : "Center",
-						tooltip: new sap.ui.core.TooltipBase()
+						tooltip: " "
 					}).addStyleClass("FontFamily"));
 
 					break;
@@ -243,7 +243,7 @@ common.ZHR_TABLES = {
 					oColumn.setTemplate(new sap.ui.commons.TextView({
 						text : "{" + oColumnId + "}",
 						textAlign : "Center",
-						tooltip: new sap.ui.core.TooltipBase()
+						tooltip: " "
 					}).addStyleClass("FontFamily"));
 
 					break;
