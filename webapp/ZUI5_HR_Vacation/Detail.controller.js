@@ -120,7 +120,7 @@ sap.ui.define([
 			var oPhoto = "";
 			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + Pernr + "' and photoType eq '1'")
 				 .select("photo")
-				 .setAsync(true)
+				 .setAsync(false)
 				 .attachRequestCompleted(function(){
 						var data = this.getData().d;
 						
