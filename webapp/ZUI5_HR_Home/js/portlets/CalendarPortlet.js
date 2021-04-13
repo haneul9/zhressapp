@@ -459,6 +459,14 @@ i18n: function(defaults) {
 },
 initI18n: function() {
 
+	setTimeout(function () {
+		$('.portlet-calendar .list-group-item[data-type="vacation"] h6').text(this.get('home.text.calendar.vacation'));
+		$('.portlet-calendar .list-group-item[data-type="education"] h6').text(this.get('home.text.calendar.education'));
+		$('.portlet-calendar .list-group-item[data-type="biztrip"] h6').text(this.get('home.text.calendar.biztrip'));
+		$('.portlet-calendar .list-group-item[data-type="telecommuting"] h6').text(this.get('home.text.calendar.telecommuting'));
+		$('.portlet-calendar .list-group-item[data-type="birthday"] h6').text(this.get('home.text.calendar.birthday'));
+	}, 0);
+
 	var ko = this._gateway.locale() === 'ko_KR';
 
 	this.locale = ko ? 'ko_KR' : 'en_US';
