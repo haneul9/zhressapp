@@ -7,9 +7,9 @@ sap.ui.define([
 ], function(
 	PickOnlyDateRangeSelection,
 	ZHR_TABLES,
-	// OnRequest,
 	ODataFileUploader,
-	ViewTemplates
+	ViewTemplates,
+	Common
 ) {
 "use strict";
 

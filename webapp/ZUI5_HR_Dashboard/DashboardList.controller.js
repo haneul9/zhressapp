@@ -173,7 +173,7 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		
 		var vData = {Data : []}, vData2 = {Data : []};
 		
-		new JSONModelHelper().url("/odata/v2/User('" + (vEmpLoginInfo[0].name == "sfdev1" ? "20001003" : vEmpLoginInfo[0].name) + "')/directReports")
+		new JSONModelHelper().url("/odata/v2/User('" + (vEmpLoginInfo[0].name == "sfdev1" ? "9702574" : vEmpLoginInfo[0].name) + "')/directReports")
 							 .select("userId")
 							 .select("nickname")
 							 .select("title")
@@ -293,9 +293,12 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		 	var oTimeline = sap.ui.getCore().byId(oController.PAGEID + "_Timeline");
 		 		oTimeline.getModel().setData(null);
 		 	
+		 	var year = oController._ListCondJSonModel.getProperty("/Data/Year");
+		 	
 			var promise = [
 				new Promise(function(resolve, reject){
-					new JSONModelHelper().url("/odata/v2/Activity?$filter=subjectUserId in " + oController._UserList)
+					new JSONModelHelper().url("/odata/v2/Activity?$filter=subjectUserId in " + oController._UserList
+											  + " and createdDateTime ge '" + year + "-01-01'")
 										 .attachRequestCompleted(function(){
 											 var data = this.getData().d;
 											 
@@ -328,7 +331,8 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 										 .load();
 			 	}),
 			 	new Promise(function(resolve, reject){
-					new JSONModelHelper().url("/odata/v2/Achievement?$filter=subjectUserId in " + oController._UserList)
+					new JSONModelHelper().url("/odata/v2/Achievement?$filter=subjectUserId in " + oController._UserList
+											  + " and createdDateTime ge '" + year + "-01-01'")
 										 .attachRequestCompleted(function(){
 											 var data = this.getData().d;
 											 
@@ -356,10 +360,22 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 				})
 			];
 			
+			/** 목표 조회
+				개발(g110bc197) : 2019년 데이터가 없어서 2020년부터 1로 계산하여 Entity명 생성
+				QA, 운영 : 2019년부터 1로 계산하여 Entity명 생성 **/
+			var Idx = "", tmp = oController._ListCondJSonModel.getProperty("/Data/Year") * 1;
+			if(document.domain.indexOf("g110bc197") != -1){
+				Idx = (tmp == 2020 ? "1" : (tmp-2020) + 1);
+			} else {
+				Idx = (tmp == 2019 ? "1" : (tmp-2019) + 1);
+			}
+			
+			var entity = "Goal_" + Idx;
+			
 			for(var i=0; i<vData.length; i++){
 				promise.push(
 					new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/v2/GoalPlanTemplate?$select=id,goals,planStates&$expand=goals,planStates&userId=" + vData[i].userId)
+						new JSONModelHelper().url("/odata/v2/" + entity + "?$filter=userId eq '" + vData[i].userId + "'")
 											 .attachRequestCompleted(function(){
 												 var data = this.getData().d;
 												 
@@ -384,9 +400,37 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 					})
 				);
 				
+				// promise.push(
+				// 	new Promise(function(resolve, reject){
+				// 		new JSONModelHelper().url("/odata/v2/GoalPlanTemplate?$select=id,goals,planStates&$expand=goals,planStates&userId=" + vData[i].userId)
+				// 							 .attachRequestCompleted(function(){
+				// 								 var data = this.getData().d;
+												 
+				// 								 if(data && data.results.length){
+				// 								 	for(var i=0; i<data.results.length; i++){
+				// 							 			goal.push(data.results[i]);
+				// 								 	}
+				// 								 }
+				// 								 resolve();
+				// 							 })
+				// 							 .attachRequestFailed(function(error) {
+				// 								 if(error.getParameters() && error.getParameters().message == "error"){
+				// 								 	 var message = JSON.parse(error.getParameters().responseText).error.message.value;
+				// 								 	 sap.m.MessageBox.error(message);
+				// 	 								 reject();
+				// 								 } else {
+				// 								 	 sap.m.MessageBox.error(error);
+				// 	 								 reject();
+				// 								 }
+				// 							 })
+				// 							 .load();
+				// 	})
+				// );
+				
 				promise.push(
 					new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/v2/ContinuousFeedback?$filter=subjectUserId eq '" + vData[i].userId + "'")
+						new JSONModelHelper().url("/odata/fix/ContinuousFeedback?$filter=subjectUserId eq '" + vData[i].userId + "'"
+												  + " and visibleToManager eq 'true'")
 											 .attachRequestCompleted(function(){
 												 var data = this.getData().d;
 												 
@@ -418,7 +462,8 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 			Promise.all(promise).then(function(){
 		 		setTimeout(function(){
 		 			if(activityId != ""){
-						new JSONModelHelper().url("/odata/v2/ActivityFeedback?$filter=Activity_activityId in " + activityId)
+						new JSONModelHelper().url("/odata/v2/ActivityFeedback?$filter=Activity_activityId in " + activityId
+												  + " and createdDateTime ge '" + year + "-01-01'")
 											 .setAsync(false)
 											 .attachRequestCompleted(function(){
 												 var data = this.getData().d;
@@ -462,11 +507,14 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		 				}
 		 				
 		 				for(var j=0; j<goal.length; j++){
-		 					if(goal[j].goals && goal[j].goals.results.length){
-		 						if(vData[i].userId == goal[j].goals.results[0].userId){
-		 							vData[i].Count1 = goal[j].goals.results.length;
+		 					// if(goal[j].goals && goal[j].goals.results.length){
+		 						if(vData[i].userId == goal[j].userId){
+		 							vData[i].Count1 = vData[i].Count1 + 1;
 		 						}
-		 					}
+		 						// if(vData[i].userId == goal[j].goals.results[0].userId){
+		 						// 	vData[i].Count1 = goal[j].goals.results.length;
+		 						// }
+		 					// }
 		 				}
 		 			}
 		 			
@@ -513,7 +561,12 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		 			}
 		 			
 		 			for(var i=0; i<feedback.length; i++){
+		 				// 피드백 데이터는 dateReceived 필드 값으로 현재연도 이상만 구분하여 세팅
 		 				feedback[i].dateReceived = setTime(feedback[i].dateReceived);
+		 				
+		 				if(feedback[i].dateReceived.getFullYear() < parseInt(year)){
+		 					continue;
+		 				}
 		 				
 		 				// activityId 가 존재: 3 활동-피드백
 		 				// achievementId 가 존재: 4 실적-피드백
@@ -637,6 +690,8 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 	makeContent2 : function(vData){
 		var oView = sap.ui.getCore().byId("ZUI5_HR_Dashboard.DashboardList");
 		var oController = oView.getController();
+		
+		var year = oController._ListCondJSonModel.getProperty("/Data/Year");
 		
 		var oContent = sap.ui.getCore().byId(oController.PAGEID + "_Content2");
 			oContent.destroyContent();
@@ -834,7 +889,8 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 										 .load();
 			 	}),
 			 	new Promise(function(resolve, reject){
-					new JSONModelHelper().url("/odata/v2/Achievement?$filter=subjectUserId in " + oController._UserList)
+					new JSONModelHelper().url("/odata/v2/Achievement?$filter=subjectUserId in " + oController._UserList
+												+ " and createdDateTime ge '" + year + "-01-01'")
 										 .attachRequestCompleted(function(){
 											 var data = this.getData().d;
 											 

@@ -77,31 +77,6 @@ sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.Main", {
 				})
 			}
 		});
-
-		// // 키보드 입력 방지
-		// oStatusCombo1.addDelegate({
-		// 	onAfterRendering: function () {
-		// 		oStatusCombo1.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-		// 	}
-		// }, oStatusCombo1);
-		
-		// oStatusCombo2.addDelegate({
-		// 	onAfterRendering: function () {
-		// 		oStatusCombo2.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-		// 	}
-		// }, oStatusCombo2);
-		
-		// oStatusCombo3.addDelegate({
-		// 	onAfterRendering: function () {
-		// 		oStatusCombo3.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-		// 	}
-		// }, oStatusCombo3);
-
-		// oStatusCombo4.addDelegate({
-		// 	onAfterRendering: function () {
-		// 		oStatusCombo4.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-		// 	}
-		// }, oStatusCombo4);
 			
 		var oSearchConditionBox = new sap.m.FlexBox({
 			fitContainer: true,
