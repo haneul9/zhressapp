@@ -431,20 +431,6 @@
 						width: "100%",
 						fitContainer: true,
 						items: [
-							new sap.m.Input({
-								textAlign: "End",
-								width: "180px",
-								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "ReqAmt1", false),
-								liveChange: oController.getCost8.bind(oController),
-								visible: false,
-								value: {
-									path: "ReqAmt1",
-									formatter: function(v) {
-										if(v) return Common.numberWithCommas(v);
-										else return "0";
-									}
-								}
-							}),
                             ViewTemplates.getLabel("header", "{i18n>LABEL_38009}", "150px", "Right", true).addStyleClass("mr-8px"), // 신청금액
                             new sap.m.Input({
 								textAlign: "End",
