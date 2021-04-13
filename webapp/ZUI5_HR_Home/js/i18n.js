@@ -24,27 +24,27 @@ init: function() {
 		EN: 'Hi Alimee',
 		ZH: 'Hi Alimee'
 	});
-	this.set('home.text.personalization', {
+	this.set('home.text.portlets.personalization', {
 		KO: '설정',
 		EN: 'Portlets',
 		ZH: 'Portlets'
 	});
-	this.set('home.text.calendar.vacation', {
+	this.set('home.text.portlets.calendar.vacation', {
 		KO: '휴가',
 		EN: 'Vacation',
 		ZH: 'Vacation'
 	});
-	this.set('home.text.calendar.education', {
+	this.set('home.text.portlets.calendar.education', {
 		KO: '교육',
 		EN: 'Education',
 		ZH: 'Education'
 	});
-	this.set('home.text.calendar.biztrip', {
+	this.set('home.text.portlets.calendar.biztrip', {
 		KO: '출장',
 		EN: 'Trip',
 		ZH: 'Trip'
 	});
-	this.set('home.text.calendar.birthday', {
+	this.set('home.text.portlets.calendar.birthday', {
 		KO: '생일',
 		EN: 'Birthday',
 		ZH: 'Birthday'
@@ -97,7 +97,7 @@ changeLocale: function() {
 		$('#text-hi-alimee').text(this.get('home.text.hialimee'));
 	}.bind(this), 0);
 	setTimeout(function() {
-		$('#text-portlet-personalization').text(this.get('home.text.portlets'));
+		$('#text-portlet-personalization').text(this.get('home.text.portlets.personalization'));
 	}.bind(this), 0);
 }
 
