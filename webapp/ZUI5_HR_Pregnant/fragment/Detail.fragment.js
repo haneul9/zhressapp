@@ -191,8 +191,8 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																   		oController.onChangeDate(oEvent, "Begsh");
 																   },
 																   editable : {
-																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}],
-																   		formatter : function(fVal1, fVal2, fVal3){
+																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}, {path : "Begshp"}, {path : "Endshp"}],
+																   		formatter : function(fVal1, fVal2, fVal3, fVal4, fVal5){
 																   			if(fVal1 == "" || fVal1 == "AA"){
 																				if(fVal3 && fVal3 == "X"){
 																					return false;
@@ -200,7 +200,11 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																					if(!fVal2 || fVal2 == "" || fVal2 == "9"){
 																						return false;
 																					} else {
-																						return true;
+																						if(fVal4 && fVal5){
+																							return true;
+																						} else {
+																							return false;
+																						}
 																					}
 																				}
 																   			} else {
@@ -220,8 +224,8 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																   		oController.onChangeDate(oEvent, "Endsh");
 																   },
 																   editable : {
-																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}],
-																   		formatter : function(fVal1, fVal2, fVal3){
+																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}, {path : "Begshp"}, {path : "Endshp"}],
+																   		formatter : function(fVal1, fVal2, fVal3, fVal4, fVal5){
 																   			if(fVal1 == "" || fVal1 == "AA"){
 																				if(fVal3 && fVal3 == "X"){
 																					return false;
@@ -229,7 +233,11 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																					if(!fVal2 || fVal2 == "" || fVal2 == "9"){
 																						return false;
 																					} else {
-																						return true;
+																						if(fVal4 && fVal5){
+																							return true;
+																						} else {
+																							return false;
+																						}
 																					}
 																				}
 																   			} else {
@@ -277,8 +285,8 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																   		oController.onChangeDate(oEvent, "Begsh2");
 																   },
 																   editable : {
-																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}],
-																   		formatter : function(fVal1, fVal2, fVal3){
+																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}, {path : "Begsh2p"}, {path : "Endsh2p"}],
+																   		formatter : function(fVal1, fVal2, fVal3, fVal4, fVal5){
 																   			if(fVal1 == "" || fVal1 == "AA"){
 																				if(fVal3 && fVal3 == "X"){
 																					return false;
@@ -286,7 +294,11 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																					if(!fVal2 || fVal2 == "" || fVal2 == "9"){
 																						return false;
 																					} else {
-																						return true;
+																						if(fVal4 && fVal5){
+																							return true;
+																						} else {
+																							return false;
+																						}
 																					}
 																				}
 																   			} else {
@@ -306,8 +318,8 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																   		oController.onChangeDate(oEvent, "Endsh2");
 																   },
 																   editable : {
-																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}],
-																   		formatter : function(fVal1, fVal2, fVal3){
+																   		parts : [{path : "Status1"}, {path : "Pampm"}, {path : "EditFalse"}, {path : "Begsh2p"}, {path : "Endsh2p"}],
+																   		formatter : function(fVal1, fVal2, fVal3, fVal4, fVal5){
 																   			if(fVal1 == "" || fVal1 == "AA"){
 																				if(fVal3 && fVal3 == "X"){
 																					return false;
@@ -315,7 +327,11 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Detail", {
 																					if(!fVal2 || fVal2 == "" || fVal2 == "9"){
 																						return false;
 																					} else {
-																						return true;
+																						if(fVal4 && fVal5){
+																							return true;
+																						} else {
+																							return false;
+																						}
 																					}
 																				}
 																   			} else {
