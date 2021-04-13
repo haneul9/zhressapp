@@ -430,21 +430,13 @@
                     new sap.m.HBox({
 						width: "100%",
 						fitContainer: true,
-						visible: false,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_38025}", "150px", "Right"), // 기타1
 							new sap.m.Input({
 								textAlign: "End",
 								width: "180px",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "ReqAmt1", false),
 								liveChange: oController.getCost8.bind(oController),
-								editable: {
-									path: "Status",
-									formatter: function(v) {
-										if (!v || v === "AA") return true;
-										return false;
-									}
-								},
+								visible: false,
 								value: {
 									path: "ReqAmt1",
 									formatter: function(v) {
