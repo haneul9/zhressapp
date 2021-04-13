@@ -35,7 +35,7 @@ sap.ui.define([
 		
 		onBeforeShow: function() {
 			var oController = $.app.getController();
-			oController._ListCondJSonModel.setProperty("/Ltype",[]);
+			oController._ListCondJSonModel.setProperty("/Ltype",[{Code : "0" , Text: oController.getBundleText("LABEL_68012")}]);
 			oController._ListCondJSonModel.setProperty("/Data",{});
 			
 			Promise.all([
@@ -53,11 +53,12 @@ sap.ui.define([
 					 {
 	                    async: true,
 	                    success: function (data) {
-	                       var vData = [];
-	                	   if(data.NavCommonCodeList && data.NavCommonCodeList.results){
+	                        var vData = [];
+	                        if(data.NavCommonCodeList && data.NavCommonCodeList.results){
 								Object.assign(vData, data.NavCommonCodeList.results);
-							}
-							oController._ListCondJSonModel.setProperty("/Langu",vData);
+						    }
+						    vData.unshift({Code : "0" , Text: oController.getBundleText("LABEL_68012") });
+	                	    oController._ListCondJSonModel.setProperty("/Langu",vData);
 						},
 	                    error: function (oResponse) {
 	                        common.Common.log(oResponse);
@@ -79,11 +80,12 @@ sap.ui.define([
 					 {
 	                    async: true,
 	                    success: function (data) {
-	                       var vData = [];
-	                	   if(data.NavCommonCodeList && data.NavCommonCodeList.results){
+	                        var vData = [];
+	                        if(data.NavCommonCodeList && data.NavCommonCodeList.results){
 								Object.assign(vData, data.NavCommonCodeList.results);
 							}
-							oController._ListCondJSonModel.setProperty("/Tepas",vData);
+							vData.unshift({Code : "0" , Text: oController.getBundleText("LABEL_68012") });
+	                	    oController._ListCondJSonModel.setProperty("/Tepas",vData);
 						},
 	                    error: function (oResponse) {
 	                        common.Common.log(oResponse);
@@ -97,10 +99,13 @@ sap.ui.define([
 			var oController = $.app.getController();
 			if(gAuth == "E"){
 				this.EmployeeModel.retrieve(oController.getView().getModel("session").getData().Pernr);
-				oController._ListCondJSonModel.setProperty("/Data",{Pernr : oController.getView().getModel("session").getData().Pernr});
+				oController._ListCondJSonModel.setProperty("/Data",{Pernr : oController.getView().getModel("session").getData().Pernr, Langu : "0", Tepas : "0", Ltype : "0"});
 				oController.onPressSearch();
 			}
 			if( gAuth == "M"){
+				oController._ListCondJSonModel.setProperty("/Data",{Langu : "0", Tepas : "0", Ltype : "0", Orgeh : oController.getView().getModel("session").getData().Orgeh,
+																    EnameOrOrgehTxt : oController.getView().getModel("session").getData().Stext
+				});
 				var OrgOfIndividualHandler = oController.getOrgOfIndividualHandler();
 				OrgOfIndividualHandler.autoClose = false;
 				OrgOfIndividualHandler.onBeforeOpen();
@@ -124,11 +129,11 @@ sap.ui.define([
 				oPath = "/LanguScoreImportSet";
 				sendObject.IDatum = "\/Date("+ common.Common.getTime(new Date())+")\/";
 				sendObject.IBukrs = vData.Bukrs;
-				sendObject.IZlangu = vData.Langu;
-				sendObject.IZltype = vData.Ltype;
+				sendObject.IZlangu = vData.Langu == "0" ? "" : vData.Langu;
+				sendObject.IZltype = vData.Ltype == "0" ? "" : vData.Ltype;
 				sendObject.IOrgeh = vData.Orgeh;
 				sendObject.IPernr = vData.Pernr;
-				sendObject.ITepas = vData.Tepas;
+				sendObject.ITepas = vData.Tepas == "0" ? "" : vData.Tepas;
 				
 				// Navigation property
 				sendObject.LanguScoreTableIn = [];
@@ -203,6 +208,7 @@ sap.ui.define([
 					}
 				});
 			}
+			vData.unshift({Code : "0" , Text: oController.getBundleText("LABEL_68012") });
 			oController._ListCondJSonModel.setProperty("/Ltype",vData);
 		},
 		

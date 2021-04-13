@@ -3,7 +3,7 @@
 	<head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>제증명 신청</title>
+	<title>증명서 재발급 내역</title>
 	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=NWOXyTJK_vgMLIZExdCcjI0nNJegQxs2GF8PCBZMYck" as="font" type="font/woff2" crossorigin="anonymous" />
 	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=RH-st053oiEuw9gS_Ck05AuUrjhSxamDHdO8Fkf8Jb4" as="font" type="font/woff2" crossorigin="anonymous" />
 	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=WWGDBnpJGE7YBqRoV2obYRY7Ah1yvfznbuCh14PI2vQ" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -28,13 +28,13 @@
 	<script>
 	function startAppInit() {
 
-		var contextPath = "ZUI5_HR_CertiApply";
+		var contextPath = "ZUI5_HR_ReCertiApply";
 		$.extend(true, $.app, {
 			CONTEXT_PATH: contextPath,
 			APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 			APP_ID: [contextPath, "Page"].join("."),
 			APP_TYPE: "M",
-			APP_TILE: $.app.geti18nResource().getText("LABEL_65001"), // 제증명 신청
+			APP_TILE: $.app.geti18nResource().getText("LABEL_68001"), // 증명서 재발급 내역
 			LOG: {
 				ENABLE_SUCCESS: true
 			}
