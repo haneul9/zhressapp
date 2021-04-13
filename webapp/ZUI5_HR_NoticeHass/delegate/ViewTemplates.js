@@ -9,7 +9,7 @@ sap.ui.define([
 
 			if (type === "header") {
 				return new sap.m.Label({
-					layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
+					layoutData: new sap.m.FlexItemData({ alignSelf: sap.m.FlexAlignSelf.Stretch }),
 					textAlign: Common.checkNull(align) ? "Center" : align, 
 					required: Common.checkNull(isReq) ? false : isReq,
 					text: labelText,

@@ -3,12 +3,11 @@ sap.ui.define([
 	"../common/CommonController",
 	"../common/JSONModelHelper",
 	"../common/PageHelper",
-	"../common/EmployeeModel",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/core/util/File",
 	], 
-	function (Common, CommonController, JSONModelHelper, PageHelper, EmployeeModel, MessageBox, BusyIndicator, File) {
+	function (Common, CommonController, JSONModelHelper, PageHelper, MessageBox, BusyIndicator, File) {
 	"use strict";
 
 	
@@ -21,7 +20,6 @@ sap.ui.define([
 		GradeModel: new JSONModelHelper(),
 		UploadFileModel: new JSONModelHelper(),
 		TuitionSearchModel: new JSONModelHelper(),
-		EmployeeModel: new EmployeeModel(),
 		
 		getUserId: function() {
 
@@ -53,7 +51,6 @@ sap.ui.define([
 		
 		onAfterShow: function() {
             
-			this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
             this.initDateCreate(this);
 			this.onTableSearch();
 		},

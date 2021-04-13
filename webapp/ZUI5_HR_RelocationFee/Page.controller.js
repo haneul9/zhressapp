@@ -3,12 +3,11 @@ sap.ui.define([
 	"../common/CommonController",
 	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
-	"../common/EmployeeModel",
 	"../common/ZHR_TABLES",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, EmployeeModel, ZHR_TABLES, MessageBox, BusyIndicator) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, ZHR_TABLES, MessageBox, BusyIndicator) {
 	"use strict";
 
 	
@@ -20,7 +19,6 @@ sap.ui.define([
 		CostModel: new JSONModelHelper(),
 		DetailModel: new JSONModelHelper(),
 		LogModel: new JSONModelHelper(),
-        EmployeeModel: new EmployeeModel(),
 		
 		getUserId: function() {
 
@@ -51,7 +49,6 @@ sap.ui.define([
 		},
 		
 		onAfterShow: function() {
-            this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
 			this.onTableSearch();
 			this.onInitData(this);
         },

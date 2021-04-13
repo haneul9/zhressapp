@@ -151,7 +151,7 @@ setupFavorites: function() {
 		menuAnchor = t.siblings('a[data-menu-id]');
 
 		if (toBeFavorite && this.menuFavorites.length >= 10) {
-			this._gateway.alert({ title: '오류', html: '<p>최대 10개까지만 등록 가능합니다.<br />등록된 항목을 해제하고 재선택 하시기 바랍니다</p>' });
+			this._gateway.alert({ title: '안내', html: '<p>최대 10개까지만 등록 가능합니다.<br />등록된 항목을 해제하고 재선택 하시기 바랍니다</p>' });
 			return;
 		}
 

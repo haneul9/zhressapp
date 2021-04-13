@@ -2,11 +2,10 @@
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-	"../common/EmployeeModel",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, JSONModelHelper, EmployeeModel, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
 	
@@ -21,7 +20,6 @@
 		ChildrenModel: new JSONModelHelper(),
 		HighApplyModel: new JSONModelHelper(),
 		SupportModel: new JSONModelHelper(),
-        EmployeeModel: new EmployeeModel(),
 
 		g_ClickRow: "",
 		
@@ -32,7 +30,7 @@
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs");
+			return this.getSessionInfoByKey("Bukrs3");
         },
 		
 		onInit: function () {
@@ -61,7 +59,6 @@
 		onAfterShow: function() {
             var vBukrs = this.getUserGubun();
 
-            this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
             this.LogModel.setData({Bukrs: vBukrs});
 			this.onChildrenData();
 			this.onTableSearch();

@@ -342,6 +342,10 @@ dto: function() {
 		Zhide: this.use() ? '' : 'X'
 	};
 },
+rendered: function() {
+
+	return !!$('[data-key="${key}"].portlet'.interpolate(this.key())).length;
+},
 // Portlet이 제거될 때 호출되는 function
 destroy: function() {
 

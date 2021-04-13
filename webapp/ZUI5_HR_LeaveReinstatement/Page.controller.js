@@ -4,11 +4,10 @@
 	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
 	"../common/PageHelper",
-	"../common/EmployeeModel",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, EmployeeModel, MessageBox, BusyIndicator) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
 	
@@ -20,7 +19,6 @@
 		TableModel: new JSONModelHelper(),
 		ApplyModel: new JSONModelHelper(),
 		HistoryModel: new JSONModelHelper(),
-        EmployeeModel: new EmployeeModel(),
 		IsFileRequired: "",
 
 		getUserId: function() {
@@ -53,7 +51,6 @@
 		
 		onAfterShow: function() {
 
-            this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
 			this.onTableSearch();
         },
 		

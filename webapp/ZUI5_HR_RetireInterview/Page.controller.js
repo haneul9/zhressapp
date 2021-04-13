@@ -2,11 +2,10 @@
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-	"../common/EmployeeModel",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, JSONModelHelper, EmployeeModel, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
 	
@@ -16,7 +15,6 @@
 		
 		TableModel: new JSONModelHelper(),
 		ApplyModel: new JSONModelHelper(),
-        EmployeeModel: new EmployeeModel(),
 
 		getUserId: function() {
 
@@ -58,7 +56,6 @@
 		
 		onAfterShow: function() {
 
-            this.EmployeeModel.retrieve(this.getUserId());
 			this.onTableSearch();
         },
 		

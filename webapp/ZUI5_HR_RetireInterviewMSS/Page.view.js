@@ -1,9 +1,8 @@
 ﻿sap.ui.define([
 	"../common/PageHelper",
 	"../common/ZHR_TABLES",
-	"../common/EmpBasicInfoBox",
 	"../common/PickOnlyDateRangeSelection"
-], function (PageHelper, ZHR_TABLES, EmpBasicInfoBox, PickOnlyDateRangeSelection) {
+], function (PageHelper, ZHR_TABLES, PickOnlyDateRangeSelection) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -28,8 +27,6 @@
 
 		createContent: function (oController) {
 			this.loadModel();
-
-			var oEmpBasicInfoBox = new EmpBasicInfoBox(oController.EmployeeModel);
 
 			var vYear = new Date().getFullYear();
 			var vMonth = new Date().getMonth()+1;
@@ -104,7 +101,6 @@
 			
 			return new PageHelper({
 				contentItems: [
-					oEmpBasicInfoBox,
 					infoBox,
 					oApplyDateBox,
 					oTable

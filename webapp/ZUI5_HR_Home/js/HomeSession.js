@@ -321,7 +321,7 @@ registerToken: function() {
 			Token: token
 		},
 		success: function() {
-			this._gateway.prepareLog('HomeSession.registerToken ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('HomeSession.registerToken ${token} success'.interpolate(token), arguments).log();
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);

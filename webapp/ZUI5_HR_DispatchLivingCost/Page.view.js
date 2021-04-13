@@ -1,9 +1,8 @@
 ﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define([
 	"../common/PageHelper",
-	"../common/ZHR_TABLES",
-	"../common/EmpBasicInfoBox"
-], function (PageHelper, ZHR_TABLES, EmpBasicInfoBox) {
+	"../common/ZHR_TABLES"
+], function (PageHelper, ZHR_TABLES) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -27,8 +26,6 @@ sap.ui.define([
 
 		createContent: function (oController) {
 			this.loadModel();
-
-			var oEmpBasicInfoBox = new EmpBasicInfoBox(oController.EmployeeModel);
             
 			var infoBox = new sap.m.FlexBox({
 				justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
@@ -97,7 +94,6 @@ sap.ui.define([
 			
 			return new PageHelper({
 				contentItems: [
-					oEmpBasicInfoBox,
 					infoBox,
 					oTable
 				]
