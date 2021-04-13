@@ -32,7 +32,7 @@ sap.ui.jsfragment("ZUI5_HR_LeaveUseChart.fragment.PersDetail", {
 						{id: "Atext", label: oBundleText.getText("LABEL_41048"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Beguz", label: oBundleText.getText("LABEL_41049"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Enduz", label: oBundleText.getText("LABEL_41050"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Stdaz", label: oBundleText.getText("LABEL_41051"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Stdaz", label: oBundleText.getText("LABEL_41052"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						// {id: "Abrtg", label: oBundleText.getText("LABEL_41052"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Dtrsn", label: oBundleText.getText("LABEL_41053"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 						

@@ -83,6 +83,7 @@ body {min-width:576px; font-size:14px}
 .portlet .card-header button {border:0; padding:0; line-height:1; font-size:1.5rem; font-weight:700; text-shadow:0 1px 0 #fff; color:#000; opacity:.5; background-color:transparent; -webkit-appearance:none; -moz-appearance:none; appearance:none; padding-left:5px}
 .portlet .card-header button + button {margin-left:1rem}
 .portlet .card-header button span {font-size:1.125rem; color:#333}
+.portlet .list-group .jspVerticalBar {width:8px}
 .portlet-1h {height:206px}
 .portlet-2h {height:calc((206px * 2) + (1.5rem * 1))}
 .portlet-3h {height:calc((206px * 3) + (1.5rem * 2))}
@@ -142,7 +143,6 @@ body {min-width:576px; font-size:14px}
 .portlet-favorite-menu .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
 .portlet-favorite-menu .list-group-item:hover {color:#0070bd; background:transparent}
 .portlet-favorite-menu .list-group-item > div {display:inline-block; max-width:315px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.portlet-favorite-menu .list-group .jspVerticalBar {width:8px}
 
 .portlet-calendar-inline .ui-datepicker-inline {width:100%}
 .portlet-calendar-inline .ui-datepicker-calendar {margin:0 auto; width:322px; border:0; border-spacing:0; table-layout:fixed}
