@@ -2,11 +2,10 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-	"../common/EmployeeModel",
 	"sap/ui/core/BusyIndicator",
 	"sap/m/MessageBox",
 	"sap/ui/model/json/JSONModel"
-], function (Common, CommonController, JSONModelHelper, EmployeeModel, BusyIndicator, MessageBox, JSONModel) {
+], function (Common, CommonController, JSONModelHelper, BusyIndicator, MessageBox, JSONModel) {
 	"use strict";
 
 	return CommonController.extend($.app.APP_ID, { // 미취학
@@ -14,7 +13,6 @@ sap.ui.define([
 		PageModel: new JSONModelHelper(),
 		TableModel: new JSONModelHelper(),
 		DetailModel: new JSONModelHelper(),
-		EmployeeModel: new EmployeeModel(),
 		
 		__selectedItem: null,
 
@@ -33,7 +31,6 @@ sap.ui.define([
 		},
 
 		onAfterShow: function() {
-			this.EmployeeModel.retrieve(this.getSessionInfoByKey("name"));
 
 			this.retrieveTable.call(this);
 		},

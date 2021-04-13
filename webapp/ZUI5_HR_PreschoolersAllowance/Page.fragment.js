@@ -1,8 +1,6 @@
 sap.ui.define([
-	"../common/Common",
-	"../common/EmpBasicInfoBox",
 	"../common/ZHR_TABLES"
-], function (Common, EmpBasicInfoBox, ZHR_TABLES) {
+], function (ZHR_TABLES) {
 	"use strict";
 
 	sap.ui.jsfragment("ZUI5_HR_PreschoolersAllowance.Page", { // 미취학
@@ -19,8 +17,6 @@ sap.ui.define([
 		],
 
 		createContent: function(oController) {
-
-			var oEmpBasicInfoBox = new EmpBasicInfoBox(oController.EmployeeModel);
 
 			var infoBox = new sap.m.FlexBox({
 				justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
@@ -95,7 +91,6 @@ sap.ui.define([
 			ZHR_TABLES.makeColumn(oController, oTable, this._colModel);
 
 			return [
-				oEmpBasicInfoBox,
 				infoBox,
 				oTable
 			];
