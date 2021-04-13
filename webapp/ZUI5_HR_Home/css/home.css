@@ -33,8 +33,14 @@ body {min-width:576px; font-size:14px}
 .ehr-gnb > ul {font-size:1.25rem; font-weight:700}
 [locale="en_US"] .ehr-gnb > ul {font-size:1.15rem}
 .ehr-gnb > ul > li {border-bottom:4px solid transparent; padding:0 20px;margin:0 1px}
-.ehr-gnb > ul > li:hover, .ehr-gnb > ul > li.active {border-bottom:4px solid #064975}
+.ehr-gnb > ul > li:hover {border-bottom:4px solid #6e6e6e}
+.ehr-gnb > ul > li.active {border-bottom:4px solid #064975;}
+.navbar-light .navbar-nav .active>.nav-link {color:#064975}
 .ehr-gnb > ul > li.active a.active {color:#064975}
+/*MSS & HASS */
+.navbar-light .navbar-nav .nav-link.menu-mss {color:#80694a}
+.navbar-light .navbar-nav .nav-link.menu-hass {color:#429e98}
+
 .ehr-snb {max-width:1440px}
 .ehr-snb.col-count-1 {width:calc(240px * 1)}
 .ehr-snb.col-count-2 {width:calc(240px * 2)}
@@ -47,15 +53,24 @@ body {min-width:576px; font-size:14px}
 .navbar-light .navbar-nav.ehr-popup-menu .nav-link {color:#777}
 .navbar-light .navbar-nav.ehr-popup-menu .nav-link:hover {color:#333}
 .navbar-light .navbar-nav .nav-link {color:#333}
-.navbar-light .navbar-nav .nav-link:hover {color:#064975}
+/*.navbar-light .navbar-nav .nav-link:hover {color:#064975}*/
 .col-mega-menu .list-unstyled {padding-left:10px}
+<<<<<<< HEAD
 .col-mega-menu > a {padding:1rem .5rem; font-size:1rem; font-weight:700; white-space:normal}
 .col-mega-menu li {display:flex; align-items:center; margin-top:.5rem; font-size:.875rem; font-weight:400}
 .col-mega-menu li + li {margin-top:1rem}
 .col-mega-menu li a {margin-left:5px; color:#666; white-space:normal}
+=======
+.col-mega-menu > a {font-size:1rem; font-weight:700; padding:1rem .5rem}
+.col-mega-menu > a:hover {color:#064975 !important}
+.col-mega-menu li {font-size:.875rem; font-weight:400; line-height:2.3rem}
+.col-mega-menu li a {color:#666}
+>>>>>>> pub-overall_0413
 .col-mega-menu .navbar .nav-link {padding:1rem 0rem}
-.col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none}
-.col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}
+.col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none; font-weight:500}
+/* .col-mega-menu li a.active {font-weight:500} */
+.col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}  
+.col-mega-menu i.far.fa-star {color:#b2b2b2}  
 
 .ehr-body {position:relative; overflow-y:hidden}
 .ehr-body .container-fluid {height:100%}
