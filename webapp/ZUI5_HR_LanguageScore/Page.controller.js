@@ -227,6 +227,82 @@ sap.ui.define([
             
             oController.oChartDialog.open();
         },
+        
+        onPressSearchUser : function(vPernr){
+        	var oView = $.app.getView();
+        	var oController = $.app.getController();
+			var vConType = "1",
+				vDatum = "\/Date("+ common.Common.getTime(new Date())+")\/",
+				vBurks = oController.getView().getModel("session").getData().Bukrs2,
+				oPhoto ;
+			var vPercod = common.Common.encryptPernr(vPernr);
+			var	dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oView.getModel("session").getData().Dtfmt});
+		    var oFilters = [
+				new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
+				new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, vBurks),
+				new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, $.app.APP_ID == "ZUI5_HR_HRDoc.Page" ? "A" : common.SearchUser1.searchAuth ? common.SearchUser1.searchAuth : $.app.getAuth()),
+				new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(new Date().setHours(9))),
+				new sap.ui.model.Filter("Ename", sap.ui.model.FilterOperator.EQ, vPernr),
+			];
+			
+			var search = function(){
+	        	Promise.all([
+    				Common.getPromise(true, function(resolve) {
+					 new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
+									 .select("photo")
+									 .setAsync(true)
+									 .attachRequestCompleted(function(){
+											var data = this.getData().d;
+											
+											if(data && data.results.length){
+												oPhoto = "data:text/plain;base64," + data.results[0].photo;
+											} else {
+												oPhoto = "images/male.jpg";
+											}
+											
+											oController.EmployeeModel.setData({User: {"photo": oPhoto} }, true);
+											resolve();
+									 })
+									 .attachRequestFailed(function() {
+											oPhoto = "images/male.jpg";
+											oController.EmployeeModel.setData({User: {"photo": oPhoto} }, true);
+											resolve();
+									 })
+									 .load();
+					}.bind(this)),
+        			Common.getPromise(true, function(resolve) {
+						$.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
+		                    async: true,
+		                    filters: oFilters,
+		                    success: function (data) {
+	                    		var vData = {User:{}};
+		                        if (data && data.results.length > 0) {
+		                        	data.results[0].nickname = data.results[0].Ename;
+		                        	data.results[0].Stext = data.results[0].Gbdat;
+		                        	data.results[0].PGradeTxt = data.results[0].ZpGradetx;
+		                        	data.results[0].ZtitleT = data.results[0].Ztitletx;
+		                        	
+									vData.User = data.results[0];
+								}
+								oController.EmployeeModel.setData(vData, true);
+								resolve();
+		                    },
+		                    error: function (oError) {
+		                    	var vData = {User:{}};
+								oController.EmployeeModel.setData(vData, true);
+		                        common.Common.displaylog(oError);
+		                        resolve();
+		                    }
+		                })
+					}.bind(this)),
+				]).then(function() {
+					oController._BusyDialog.close();
+				});
+			};
+			
+			oController._BusyDialog.open();
+			setTimeout(search, 100);
+        },
 		
 		 /**
          * @brief [공통]부서/사원 조직도호출
@@ -246,6 +322,11 @@ sap.ui.define([
 				   oModel.setProperty("/Data/Pernr", o.Otype === "P" ? o.Objid : "");
 				   oModel.setProperty("/Data/Orgeh", o.Otype === "O" ? o.Objid : "");
 				   oModel.setProperty("/Data/EnameOrOrgehTxt", o.Stext || "");
+				   
+				   //사원 조회 OData 호출
+                    if(o.Otype ==="P"){
+        				oController.onPressSearchUser(o.Objid);
+                    }
 			   };
    
 			   this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);

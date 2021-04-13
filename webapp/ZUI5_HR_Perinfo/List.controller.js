@@ -486,7 +486,9 @@ sap.ui.define([
 			oPunishTable = sap.ui.getCore().byId(oController.PAGEID + "_PunishTable"),
 			oPunishJSONModel = oPunishTable.getModel(),
 			oAnnouncementTable = sap.ui.getCore().byId(oController.PAGEID + "_AnnouncementTable"),
-			oAnnouncementJSONModel = oAnnouncementTable.getModel();
+			oAnnouncementJSONModel = oAnnouncementTable.getModel(),
+			oFamilyTable = sap.ui.getCore().byId(oController.PAGEID + "_FamilyTable"),
+			oFamilyTableJSONModel = oFamilyTable.getModel();
 			
 			var search = function(){
 	        	Promise.all([
@@ -821,47 +823,46 @@ sap.ui.define([
 							}
 						);
 					}.bind(this)),
-					// Common.getPromise(true, function(resolve) {
-					// 	$.app.getModel("ZHR_PERS_RECORD_SRV").create( // 신원보증
-					// 		"/PerRecordGuaranteeSet",
-					// 		{
-					// 			IPernr: vPernr,
-					// 			IBukrs: vBurks,
-					// 			ILangu: oController.getView().getModel("session").getData().Langu,
-					// 			TableIn : []
-					// 		},
-					// 		{
-					// 			async : true,
-					// 			success: function(data) {
-					// 				var vData = { Data : []};
-					// 				if(data){
-					// 					if(data.TableIn && data.TableIn.results){
-					// 						for(var i=0; i<data.TableIn.results.length; i++){
-					// 							data.TableIn.results[i].Idx = (i+1);
-					// 							data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? 
-					// 									dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null ;
-					// 							data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? 
-					// 									dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null ;
-					// 							data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
-					// 							vData.Data.push(data.TableIn.results[i]);
-					// 						}
-					// 					}
-					// 				}
-					// 				oGuaranteeJSONModel.setData(vData);
-					// 				oGuaranteeTable.bindRows("/Data");
-					// 				oGuaranteeTable.setVisibleRowCount(vData.Data.length);
-					// 				resolve();
-					// 			}.bind(this),
-			  //                  error: function (oError) {
-			  //                  	var vData = {Data : []};
-					// 				oGuaranteeJSONModel.setData(vData);
-					// 				oGuaranteeTable.bindRows("/Data");
-					// 				oGuaranteeTable.setVisibleRowCount(vData.Data.length);
-			  //                      resolve();
-	    //             		    }
-					// 		}
-					// 	);
-					// }.bind(this)),
+					Common.getPromise(true, function(resolve) {
+						$.app.getModel("ZHR_PERS_INFO_SRV").create( // 가족사항
+							"/PerinfoFamilySet",
+							{
+								IPernr: vPernr,
+								IBukrs: vBurks,
+								IConType: vConType,
+								ILangu: oController.getView().getModel("session").getData().Langu,
+								PinfoFamilyNav : []
+							},
+							{
+								async : true,
+								success: function(data) {
+									var vData = { Data : []};
+									if(data){
+										if(data.PinfoFamilyNav && data.PinfoFamilyNav.results){
+											for(var i=0; i<data.PinfoFamilyNav.results.length; i++){
+												data.PinfoFamilyNav.results[i].Idx = (i+1);
+												data.PinfoFamilyNav.results[i].Zzbdate = data.PinfoFamilyNav.results[i].Zzbdate ? 
+														dateFormat.format(new Date(common.Common.setTime(data.PinfoFamilyNav.results[i].Zzbdate))) + 
+														" (" + data.PinfoFamilyNav.results[i].ZzclassT + ")": null ;
+												vData.Data.push(data.TableIn.results[i]);
+											}
+										}
+									}
+									oFamilyTableJSONModel.setData(vData);
+									oFamilyTable.bindRows("/Data");
+									oFamilyTable.setVisibleRowCount(vData.Data.length);
+									resolve();
+								}.bind(this),
+			                    error: function (oError) {
+			                    	var vData = {Data : []};
+									oFamilyTableJSONModel.setData(vData);
+									oFamilyTable.bindRows("/Data");
+									oFamilyTable.setVisibleRowCount(vData.Data.length);
+			                        resolve();
+	                		    }
+							}
+						);
+					}.bind(this)),
 					Common.getPromise(true, function(resolve) {
 						$.app.getModel("ZHR_PERS_RECORD_SRV").create( // 경력사항
 							"/PerRecordCareerSet",

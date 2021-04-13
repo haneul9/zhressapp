@@ -27,9 +27,6 @@ sap.ui.define([
 				showTitleInHeaderContent : false,
 				showHeaderContent : false,
 				alwaysShowContentHeader : false,
-				// headerContent : new sap.uxap.ObjectPageHeaderContent({
-				// 					 content : sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Header", oController)
-				// 				}),
 				sections : [
 					        new sap.uxap.ObjectPageSection({
 								title : "{i18n>LABEL_37008}" , // 기본인적사항
@@ -101,14 +98,6 @@ sap.ui.define([
 												   blocks : [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.License", oController)]
 											   })]
 							}),
-							// new sap.uxap.ObjectPageSection({
-							// 	title : "{i18n>LABEL_37072}" , // 신용보증
-							// 	showTitle : false,
-							// 	subSections : [new sap.uxap.ObjectPageSubSection({
-							// 					   title : "",	
-							// 					   blocks : [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Guarantee", oController)]
-							// 				   })]
-							// }),
 							new sap.uxap.ObjectPageSection({
 								title : "{i18n>LABEL_02195}" , // 경력사항
 								showTitle : false,
@@ -117,14 +106,6 @@ sap.ui.define([
 												   blocks : [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Career", oController)]
 											   })]
 							}),
-							// new sap.uxap.ObjectPageSection({
-							// 	title : "{i18n>LABEL_37077}" , // 승급 및 급여인상
-							// 	showTitle : false,
-							// 	subSections : [new sap.uxap.ObjectPageSubSection({
-							// 					   title : "",	
-							// 					   blocks : [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Promotion", oController)]
-							// 				   })]
-							// }),
 							new sap.uxap.ObjectPageSection({
 								title : "{i18n>LABEL_18010}" , // 포상
 								showTitle : false,
@@ -164,6 +145,21 @@ sap.ui.define([
 										}
 					    	        }, 
 							}),
+							new sap.uxap.ObjectPageSection({
+								title : "{i18n>LABEL_37106}" , // 가족사항
+								showTitle : false,
+								subSections : [new sap.uxap.ObjectPageSubSection({
+												   title : "",	
+												   blocks : [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Family", oController)]
+											   })],
+							   visible: {
+								    path: "Auth",
+									formatter: function(v) {
+										if(v == "M" ) return true;
+										else return false;
+									}
+				    	        }, 
+							})
 							]
 			});
 			
