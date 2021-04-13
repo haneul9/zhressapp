@@ -20,44 +20,26 @@ sap.ui.define([
 
 			var oScrollContainer = new sap.m.ScrollContainer({
 				vertical : true,
-				content : [ ]	
+				content : [ sap.ui.jsfragment("fragment.OrgOfIndividualForEP", oController) ]	
 			});
-
-			if(gAuth == "M"){
-				oScrollContainer = new sap.m.ScrollContainer({
-					vertical : true,
-					content : [ sap.ui.jsfragment("fragment.OrgOfIndividualForEP", oController) ]	
-				});
-			}
 		
 			var oSplitContainer = new sap.m.SplitContainer(oController.PAGEID + "_SplitContainer", {
-				mode : gAuth == "M" ? "ShowHideMode" : "HideMode" ,
-				detailPages : [sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.Main", oController)],
+				mode : "ShowHideMode" , //: "HideMode" ,
+				detailPages : [sap.ui.jsfragment("ZUI5_HR_ReCertiApply.fragment.Main", oController)],
 				masterPages : [oScrollContainer]
 			});
 		
-			if(gAuth == "E"){
-				return new PageHelper({
-					contentItems: [
-						// new EmpBasicInfoBox(oController.EmployeeModel),
-						oSplitContainer,
-					]
-				});
-			}else if(gAuth == "M"){
-				return new PageHelper({
-					contentContainerStyleClass: "app-content-container-wide",
-					contentItems: [
-						oSplitContainer,
-					]
-				});
-			}
-			
-			
+			return new PageHelper({
+				contentContainerStyleClass: "app-content-container-wide",
+				contentItems: [
+					oSplitContainer,
+				]
+			});
 		},
 
 		loadModel: function () {
 			// Model 선언
-			$.app.setModel("ZHR_BENEFIT_SRV");
+			$.app.setModel("ZHR_CERTI_SRV");
 			$.app.setModel("ZHR_COMMON_SRV");
 		}
 	});
