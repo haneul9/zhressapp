@@ -63,7 +63,7 @@ ui: function() {
 },
 fill: function() {
 
-	var url = this.odataUrl(), // ZHR_COMMON_SRV/MainContentsSet
+	var url = 'ZHR_COMMON_SRV/MainContentsSet',
 	loginInfo = this._gateway.loginInfo();
 
 	loginInfo = $.isEmptyObject(loginInfo) ? { Pernr: '20209999', Ename: '---', Stext: '---', PGradeTxt: '---', ZtitleT: '---', Langu: 'KO' } : loginInfo;

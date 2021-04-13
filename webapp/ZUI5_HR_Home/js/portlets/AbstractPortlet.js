@@ -29,7 +29,6 @@ function AbstractPortlet(_gateway, o) {
 		.url2(o.LinkUrl2 || null)
 		.mid1(o.LinkMenid1 || null)
 		.mid2(o.LinkMenid2 || null)
-		.odataUrl(o.Odataid || null)
 		.use(o.Zhide !== 'X')
 		.popup(o.Mepop === 'X')
 		.switchable(o.Fixed !== 'X')
@@ -116,14 +115,6 @@ mid2: function(mid) {
 		return this;
 	}
 	return this._mid2; // || this._gateway.mid(this._url2);
-},
-odataUrl: function(entityId) {
-
-	if (typeof entityId !== 'undefined') {
-		this._entityId = !entityId ? '' : 'ZHR_COMMON_SRV/${}Set'.interpolate(entityId);
-		return this;
-	}
-	return this._entityId;
 },
 use: function(use) {
 

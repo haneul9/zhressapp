@@ -36,7 +36,7 @@ fill: function() {
 		resolve();
 	}.bind(this));
 /*
-	var url = this.odataUrl();
+	var url = '';
 
 	return this._gateway.post({
 		url: url,

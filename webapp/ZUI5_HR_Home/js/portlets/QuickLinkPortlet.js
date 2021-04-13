@@ -78,7 +78,7 @@ onceBefore: function() {
 },
 fill: function() {
 
-	var url = this.odataUrl(); // ZHR_COMMON_SRV/MainContentsSet
+	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
 	return this._gateway.post({
 		url: url,
@@ -216,7 +216,7 @@ save: function() {
 		return o;
 	});
 
-	var url = this.odataUrl(); // ZHR_COMMON_SRV/MainContentsSet
+	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
 	this._gateway.post({
 		url: url,

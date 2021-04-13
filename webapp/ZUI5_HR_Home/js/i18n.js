@@ -18,15 +18,7 @@ function Internationalization(_gateway) {
 $.extend(Internationalization.prototype, {
 
 init: function() {
-/*
-				hialimee: {},
-				portlets: {
-					personalization: {},
-					calendar: {
-						vacation
-					},
-				}
-*/
+
 	this.set('home.text.hialimee', {
 		KO: '열린도움방',
 		EN: 'Hi Alimee',
@@ -103,10 +95,10 @@ changeLocale: function() {
 
 	setTimeout(function() {
 		$('#text-hi-alimee').text(this.get('home.text.hialimee'));
-	}, 0);
+	}.bind(this), 0);
 	setTimeout(function() {
 		$('#text-portlet-personalization').text(this.get('home.text.portlets'));
-	}, 0);
+	}.bind(this), 0);
 }
 
 });

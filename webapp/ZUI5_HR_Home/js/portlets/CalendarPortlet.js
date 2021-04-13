@@ -76,7 +76,7 @@ onceBefore: function() {
 },
 fill: function() {
 
-	var url = this.odataUrl(), // ZHR_COMMON_SRV/MainContentsCalSet
+	var url = 'ZHR_COMMON_SRV/MainContentsCalSet',
 	loginInfo = this._gateway.loginInfo();
 
 	return this._gateway.post({
@@ -194,7 +194,7 @@ toDateTextArray: function(begda, endda) {
 },
 retrieveDailyReport: function(dateText) {
 
-	var url = this.odataUrl(), // ZHR_COMMON_SRV/MainContentsCalSet
+	var url = 'ZHR_COMMON_SRV/MainContentsCalSet',
 	loginInfo = this._gateway.loginInfo(),
 	calendarMap = this.calendarMap[dateText];
 
