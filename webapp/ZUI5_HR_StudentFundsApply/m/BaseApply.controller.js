@@ -289,6 +289,7 @@
 			var vSum = Cost1 + Cost2 + Cost3 + Cost4 + Cost5 + Cost6 + Cost7 + Cost8;
 
 			this.ApplyModel.setProperty("/FormData/ReqSum", String(vSum));
+			this.ApplyModel.setProperty("/FormData/AdmSum", String(vSum));
 		},
 
         checkError: function(oController) {

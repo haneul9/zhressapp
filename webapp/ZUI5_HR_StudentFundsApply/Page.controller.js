@@ -304,10 +304,10 @@
 				success: function(oData, oResponse) {
 					Common.log(oData);
 					oController.ApplyModel.setProperty("/NameCombo", oController.ChildrenModel.getProperty("/Data"));
-					if(!oRowData){
-						oController.ApplyModel.setProperty("/FormData/NameKor", oData.EducationFundApplyTableIn0.results[0].Fname)
-						oController.ApplyModel.setProperty("/FormData/RelationTx", oData.EducationFundApplyTableIn0.results[0].KdsvhT)
-						oController.ApplyModel.setProperty("/FormData/Relation", oData.EducationFundApplyTableIn0.results[0].Relation)
+					if(!oRowData && Common.checkNull(!oData.EducationFundApplyTableIn0.results[0])){
+						oController.ApplyModel.setProperty("/FormData/NameKor", oData.EducationFundApplyTableIn0.results[0].Fname);
+						oController.ApplyModel.setProperty("/FormData/RelationTx", oData.EducationFundApplyTableIn0.results[0].KdsvhT);
+						oController.ApplyModel.setProperty("/FormData/Relation", oData.EducationFundApplyTableIn0.results[0].Relation);
 					}
 				},
 				error: function(oResponse) {
@@ -901,6 +901,7 @@
 			var vSum = Cost1 + Cost2 + Cost3 + Cost4 + Cost5 + Cost6 + Cost7 + Cost8;
 
 			oController.ApplyModel.setProperty("/FormData/ReqSum", String(vSum));
+			oController.ApplyModel.setProperty("/FormData/AdmSum", String(vSum));
 		},
 
 		getHighCost1: function(oEvent) { // 입학금(첨단)

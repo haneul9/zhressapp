@@ -430,6 +430,7 @@
                     new sap.m.HBox({
 						width: "100%",
 						fitContainer: true,
+						visible: false,
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38025}", "150px", "Right"), // 기타1
 							new sap.m.Input({

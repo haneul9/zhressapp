@@ -541,6 +541,7 @@ sap.ui.define([
 					new sap.m.HBox({
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
+						visible: false,
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38025}", "105px", "Left"), // 기타1
 							new sap.m.Input({
