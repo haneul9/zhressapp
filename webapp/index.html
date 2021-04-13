@@ -42,6 +42,7 @@
 <script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--		P105 팀 달력 -->
 <script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/Portlets.js"></script>
+<script src="ZUI5_HR_Home/js/i18n.js"></script>
 <script>
 function initHome() {
 
@@ -52,6 +53,11 @@ function initHome() {
 	}
 
 	setTimeout(function() {
+		window._i18n = new Internationalization(_gateway);
+		window._i18n.changeLocale();
+	}, 0);
+
+	setTimeout(function() {
 		var locale = window._session.locale();
 		$('#sf-locale')
 			.val(locale)
@@ -59,7 +65,10 @@ function initHome() {
 				window._session.changeSFUserLocale();
 			});
 
-		$('html').attr('locale', locale).attr('lang', (sessionStorage.getItem('ehr.sf-user.language') || 'ko').toLowerCase());
+		$('html').attr({
+			locale: locale,
+			lang: (_gateway.loginInfo('Langu') || 'KO').toLowerCase()
+		});
 	});
 
 	setTimeout(function() {
@@ -159,7 +168,10 @@ if (!popupUrl) {
 			<a class="navbar-brand ehr-logo" href="javascript:;"></a>
 			<ul class="navbar-nav ehr-popup-menu ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-popup-menu-url="OpenHelpRoomESS.html"><i class="fas fa-info-circle"></i> 열린도움방</a>
+					<a class="nav-link" href="javascript:;" data-popup-menu-url="OpenHelpRoomESS.html">
+						<i class="fas fa-info-circle"></i>
+						<span id="text-hi-alimee">열린도움방</span>
+					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="javascript:;">
@@ -171,7 +183,10 @@ if (!popupUrl) {
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-toggle="modal" data-target="#portlet-personalization"><i class="fas fa-user-cog"></i> 설정</a>
+					<a class="nav-link" href="javascript:;" data-toggle="modal" data-target="#portlet-personalization">
+						<i class="fas fa-user-cog"></i>
+						<span id="text-portlet-personalization">설정</span>
+					</a>
 				</li>
 			</ul>
 		</nav>

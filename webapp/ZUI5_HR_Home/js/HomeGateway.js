@@ -2,6 +2,14 @@ function HomeGateway() {}
 
 $.extend(HomeGateway.prototype, {
 
+homeI18n: function(_i18n) {
+
+	this._i18n = _i18n;
+
+	$.extend(HomeGateway.prototype, {
+		i18n: _i18n.get.bind(_i18n)
+	});
+},
 homeBasis: function(_basis) {
 
 	this._basis = _basis;
