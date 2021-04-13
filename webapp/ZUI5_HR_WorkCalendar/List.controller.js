@@ -245,8 +245,8 @@ sap.ui.define([
 											}
 											
 											// 재근
-											if(data1[i].Norwk != "" && data1[i].Norwk != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63017"), data1[i].Norwk));
+											if(data1[i].Workt2 != "" && data1[i].Workt2 != "0000"){
+												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63017"), data1[i].Workt2));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}
@@ -270,7 +270,7 @@ sap.ui.define([
 											data1[i].Brktm = data1[i].Brktm == "" || data1[i].Brktm == "0000" ? "" : data1[i].Brktm.substring(0,2) + ":" + data1[i].Brktm.substring(2,4); // 평일재근
 											data1[i].Otbet = data1[i].Otbet == "" || data1[i].Otbet == "0000" ? "" : data1[i].Otbet.substring(0,2) + ":" + data1[i].Otbet.substring(2,4); // 연장신청 시작시간
 											data1[i].Otent = data1[i].Otent == "" || data1[i].Otent == "0000" ? "" : data1[i].Otent.substring(0,2) + ":" + data1[i].Otent.substring(2,4); // 연장신청 종료시간
-											data1[i].Workt2 = data1[i].Workt2 == "" || data1[i].Workt2 == "0000" ? "" : data1[i].Workt2.substring(0,2) + ":" + data1[i].Workt2.substring(2,4); // 제근시간기준
+											data1[i].Workt2 = data1[i].Workt2 == "" || data1[i].Workt2 == "0000" ? "" : data1[i].Workt2.substring(0,2) + ":" + data1[i].Workt2.substring(2,4); // 재근시간기준
 											data1[i].Workt3 = data1[i].Workt3 == "" || data1[i].Workt3 == "0000" ? "" : data1[i].Workt3.substring(0,2) + ":" + data1[i].Workt3.substring(2,4); // 근태인정시간
 											data1[i].Mealb = data1[i].Mealb == true ? "Y" : "N"; // 조
 											data1[i].Meall = data1[i].Meall == true ? "Y" : "N"; // 중
@@ -449,7 +449,12 @@ sap.ui.define([
 			var oData = oController._DetailDialog.getModel().getProperty("/Data");
 			
 			// validation check
-			if(Frety == "2"){
+			if(Frety == "1"){
+				if(!oData.Reqrn || oData.Reqrn.trim() == ""){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_63007")); // 요청사유를 입력하시기 바랍니다.
+					return;
+				}
+			} else if(Frety == "2"){
 				if(!oData.Brkbg || !oData.Brken){
 					sap.m.MessageBox.error(oBundleText.getText("MSG_63008")); // 비근무시간을 입력하시기 바랍니다.
 					return;
@@ -486,8 +491,8 @@ sap.ui.define([
 					detail.Begda = "\/Date(" + common.Common.getTime(oData.Datum) + ")\/";
 					detail.Brkbg = oData.Brkbg; // 비근무시간-시
 					detail.Brken = oData.Brken; // 비근무시간-분
-					detail.Enfbg = oData.Enfbg1 + oData.Enfbg2; // 적용출근시간
-					detail.Enfen = oData.Enfen1 + oData.Enfen2; // 적용퇴근시간
+					detail.Enfbg = (oData.Enfbg1 ? oData.Enfbg1 : "00") + (oData.Enfbg2 ? oData.Enfbg2 : "00"); // 적용출근시간
+					detail.Enfen = (oData.Enfen1 ? oData.Enfen1 : "00") + (oData.Enfen2 ? oData.Enfen2 : "00"); // 적용퇴근시간
 					detail.Frety = Frety;
 					detail.Pernr = oData.Pernr;
 					detail.Reqrn = oData.Reqrn;
