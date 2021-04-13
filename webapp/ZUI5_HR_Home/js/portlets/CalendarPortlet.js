@@ -86,7 +86,7 @@ fill: function() {
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
 			IMonth: this.yearMonth,
-			IDatum: Date.toODataString(),
+			IDatum: Date.toODataString(true),
 			TableIn1: [],	// 달력 : 일자/요일키/휴일flag(근무 일정상 휴일)/휴무(2001)정보 여부 flag
 			TableIn2: []	// 본인 근태 : 휴무유형명, 시작일, 종료일
 		},
@@ -205,7 +205,7 @@ retrieveDailyReport: function(dateText) {
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
 			IMonth: this.yearMonth,
-			IDatum: Date.toODataString(dateText),
+			IDatum: Date.toODataString(dateText, true),
 			TableIn3: [], // 부서 휴가 인원 : 이름/직위명/휴가명/기간
 			TableIn4: [], // 부서 교육 인원 : 이름/직위명/기간
 			TableIn5: [], // 부서 출장 인원 : 이름/직위명/기간
