@@ -18,7 +18,7 @@ var ViewTemplates = { // 종합평가 : 수행 view templates
 	// 부서별 평가등급 현황 Table 인원수/평가점수 column template
 	getCountText: function(columnInfo) {
 
-		return new sap.ui.commons.TextView({
+		return new sap.m.Text({
 			textAlign: sap.ui.core.TextAlign.Center,
 			text: {
 				path: columnInfo.id,

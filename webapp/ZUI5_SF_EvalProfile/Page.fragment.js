@@ -155,7 +155,7 @@ sap.ui.jsfragment("ZUI5_SF_EvalProfile.Page", { // 평가이력
 
 	getGradeText: function(columnInfo) {
 
-		return new sap.ui.commons.TextView({
+		return new sap.m.Text({
 			textAlign: sap.ui.core.HorizontalAlign.Center,
 			text: {
 				path: "grade",
