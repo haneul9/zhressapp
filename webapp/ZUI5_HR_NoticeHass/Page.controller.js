@@ -152,29 +152,29 @@
             var oController = $.app.getController();
 			var oView = $.app.byId("ZUI5_HR_NoticeHass.Page");
 			var vPath = oEvent.getParameters().rowBindingContext.getPath();
-			var vSdate = oController.TableModel.getProperty(vPath).Sdate;
-			var vSeqnr = oController.TableModel.getProperty(vPath).Seqnr;
 			
 			if (!oController._RegistModel) {
 				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_NoticeHass.fragment.Regist", oController);
 				oView.addDependent(oController._RegistModel);
-			};
-			
-			oController.getDetailData(vSdate, vSeqnr);
+			}
+
+			oController.getDetailData(vPath);
             oController.onBeforeOpenDetailDialog();
 			oController._RegistModel.open();
 		},
 
-		getDetailData: function(Sdate, Seqnr) { // 상세정보
+		getDetailData: function(Path) { // 상세정보
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vSdate = oController.TableModel.getProperty(Path).Sdate;
+			var vSeqnr = oController.TableModel.getProperty(Path).Seqnr;
 			var vBukrs = oController.getUserGubun();
             var vPernr = oController.getUserId();
 			
 			var sendObject = {};
 			// Header
-			sendObject.ISdate = Sdate;
-			sendObject.ISeqnr = Seqnr;
+			sendObject.ISdate = vSdate;
+			sendObject.ISeqnr = vSeqnr;
             sendObject.IPernr = vPernr;
 			sendObject.IBukrs = vBukrs;
             sendObject.IConType = "1";
@@ -187,7 +187,17 @@
 						Common.log(oData);
 						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
 						oController.RegistModel.setData({FormData: oCopiedRow});
-						oController.RegistModel.setProperty("/Gubun", Common.checkNull(oCopiedRow.Hide) ? oCopiedRow.Hide : "X");
+						
+						if(Common.checkNull(oCopiedRow.Hide)){
+							if(vPernr === oController.TableModel.getProperty(Path).Apern){
+								oController.RegistModel.setProperty("/Gubun", "Y");
+							}else {
+								oController.RegistModel.setProperty("/Gubun", "");
+							}
+						}else {
+							oController.RegistModel.setProperty("/Gubun", Common.checkNull(oCopiedRow.Hide) ? oCopiedRow.Hide : "X");
+						}
+
 					}
 				},
 				error: function(oResponse) {
@@ -222,6 +232,11 @@
 			}
 
 			return false;
+		},
+
+		onDialogReBtn: function() { // 수정
+			this.RegistModel.setProperty("/Gubun", "X");
+			this.onBeforeOpenDetailDialog();
 		},
 
         onDialogRegistBtn: function() { // 등록
@@ -385,7 +400,7 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: vGubun === "X" ? true : false,
+				Editable: vGubun === "X" ? true : false
 			});
 		},
 		

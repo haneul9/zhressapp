@@ -91,8 +91,6 @@ sap.ui.define([
 								]
 							})
 							.addStyleClass("ml-10px")
-							.setModel(oController.DetailModel)
-							.bindElement("/LogData")
 						]
 					}).addStyleClass("info-field-group"),
 					new sap.m.FlexBox({
@@ -100,12 +98,20 @@ sap.ui.define([
 							new sap.m.Button(oController.PAGEID + "_onPressReqBtn", {
 								press: oController.onPressReqBtn,
 								text: "{i18n>LABEL_21009}", // 신청
+								visible: {
+									path: "EButton",
+									formatter: function(v) {
+										return v === "X";
+									}
+								}
 							}).addStyleClass("button-light")
 						]
 					})
 					.addStyleClass("button-group")
 				]
 			})
+			.setModel(oController.DetailModel)
+			.bindElement("/LogData")
 			.addStyleClass("info-box");			
 			
 			var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {

@@ -92,13 +92,13 @@ sap.ui.define([
 					var rDatas3 = oData.CultureTableIn3.results;
 					oController.TextViewModel.setData({Data: rDatas3});
 					
-					if(Common.checkNull(!oController.TableModel.getData().Data) || oController.TableModel.getData().Data !== undefined){
-						if(oController.TableModel.getData().Data.some(function(e){ return e.Spmon === oController.DetailModel.getData().LogData.ESpmon})){
-							oReqBtn.setVisible(false);
+					if(oController.TableModel.getData().Data.every(function(e){ return e.Spmon !== oController.DetailModel.getData().LogData.ESpmon})){
+						if(oController.DetailModel.getProperty("/LogData/EButton") === "X"){
+							oReqBtn.setVisible(true);
 							return;
 						}
-						else oReqBtn.setVisible(true);
 					}
+					oReqBtn.setVisible(false);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
