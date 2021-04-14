@@ -1135,6 +1135,7 @@ sap.ui.define([
 					function(data,res){
 						if(data&&data.MedicalBukrsExport.results){
 							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
+							oController.oTableInit();
 						}					
 					},
 					function (oError) {
@@ -1149,7 +1150,6 @@ sap.ui.define([
 						}
 					}
 				);
-				oController.oTableInit();
 				var vData={ IConType:"1",
 							IBukrs:oController._Bukrs,
 							IPernr:oSessionData.Pernr,
