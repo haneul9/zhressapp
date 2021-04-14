@@ -50,21 +50,27 @@ sap.ui.define([
 									.addStyleClass("color-info-red font-12px")
 								]
 							})
-							.setModel(oController.DetailModel)
-							.bindElement("/LogData")
 						]
 					}),
 					new sap.m.FlexBox({
 						items: [
 							new sap.m.Button(oController.PAGEID + "_onPressReqBtn", {
 								press: oController.onPressReqBtn,
-								text: "{i18n>LABEL_21009}" // 신청
+								text: "{i18n>LABEL_21009}", // 신청
+								visible: {
+									path: "EButton",
+									formatter: function(v) {
+										return v === "X";
+									}
+								}
 							})
 						]
 					})
 					.addStyleClass("button-group")
 				]
 			})
+			.setModel(oController.DetailModel)
+			.bindElement("/LogData")
 			.addStyleClass("info-box"); 
 			
 			var oTable = new sap.m.Table(oController.PAGEID + "_Table", {

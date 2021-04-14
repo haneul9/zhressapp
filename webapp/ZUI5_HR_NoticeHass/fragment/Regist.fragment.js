@@ -183,12 +183,22 @@
 						}
 					}).addStyleClass("button-dark"),
 					new sap.m.Button({
+						press: oController.onDialogReBtn.bind(oController),
+						text: "{i18n>LABEL_57018}", // 수정
+						visible: {
+							path: "/Gubun",
+							formatter: function(v) {
+								return v === "Y";
+							}
+						}
+					}).addStyleClass("button-light"),
+					new sap.m.Button({
 						press: oController.onDialogDeleteBtn.bind(oController),
 						text: "{i18n>LABEL_57017}", // 삭제
 						visible: {
 							path: "/Gubun",
 							formatter: function(v) {
-								return v === "X";
+								return v === "X" || v === "Y";
 							}
 						}
 					}).addStyleClass("button-delete"),

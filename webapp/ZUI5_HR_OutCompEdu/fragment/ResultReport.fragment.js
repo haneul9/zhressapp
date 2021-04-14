@@ -137,7 +137,7 @@ sap.ui.define([
 				editable: {
 					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 					formatter: function(v1, v2, v3) {
-						return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+						return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 					}
 				},
 				items: {
@@ -162,7 +162,7 @@ sap.ui.define([
 				editable: {
 					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 					formatter: function(v1, v2, v3) {
-						return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+						return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 					}
 				},
 				items: {
@@ -398,7 +398,7 @@ sap.ui.define([
                                                 editable: {
                                                     parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 													formatter: function(v1, v2, v3) {
-														return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+														return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 													}
                                                 },
                                                 value: "{Pltgt}"
@@ -418,7 +418,7 @@ sap.ui.define([
                                                 editable: {
                                                     parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 													formatter: function(v1, v2, v3) {
-														return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+														return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 													}
                                                 }
                                             })
@@ -435,7 +435,7 @@ sap.ui.define([
                                                 editable: {
                                                     parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 													formatter: function(v1, v2, v3) {
-														return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+														return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 													}
                                                 },
                                                 value: "{Plloc}"
@@ -460,7 +460,7 @@ sap.ui.define([
                                         editable: {
                                             parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 											formatter: function(v1, v2, v3) {
-												return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+												return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 											}
                                         }
                                     }),
@@ -482,7 +482,7 @@ sap.ui.define([
                                         editable: {
                                             parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 											formatter: function(v1, v2, v3) {
-												return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+												return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 											}
                                         }
                                     }),
@@ -627,7 +627,7 @@ sap.ui.define([
 								editable: {
 									parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 									formatter: function(v1, v2, v3) {
-										return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+										return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 									}
 								}
 							})
@@ -695,7 +695,7 @@ sap.ui.define([
 						visible: {
 							parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 							formatter: function(v1, v2, v3) {
-								return Common.checkNull(v3) || v1 === "99" || v2 === "1";
+								return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 							}
 						}
 					}).addStyleClass("button-dark"),
