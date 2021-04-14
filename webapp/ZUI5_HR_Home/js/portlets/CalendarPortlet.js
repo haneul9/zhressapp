@@ -298,7 +298,9 @@ initCalendar: function() {
 	}));
 
 	$(document).on('click', '.button-today', function() {
-		this.calendar().datepicker('setDate', moment().format(this.pattern.moment));
+		var dateText = moment().format(this.pattern.moment);
+		this.calendar().datepicker('setDate', dateText);
+		this.retrieveDailyReport(dateText);
 	}.bind(this));
 },
 initPopover: function() {
