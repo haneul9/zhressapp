@@ -42,17 +42,13 @@ sap.ui.jsview("ZUI5_HR_LeaveUseChart.List", {
 									valueHelpRequest : oController.onSearchUser
 							    }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_41003")}), // 조회연월
-                                new sap.m.Input({
-						         	value : "{Zyymm}",
-						         	placeholder : "YYYY.MM",
-						         	maxLength : 7,
-                                	width : "200px",
-                                	submit : oController.onPressSearch,
-						         	liveChange : function(oEvent){
-						         		if(oEvent.getParameters().value.length == 6 && oEvent.getParameters().value.indexOf(".") == -1){
-						         			oEvent.getSource().setValue(oEvent.getParameters().value.substring(0,4) + "." + oEvent.getParameters().value.substring(4,6));
-						         		}
-						         	}
+                                new sap.m.DatePicker({
+									valueFormat : "yyyyMM",
+						            displayFormat : "yyyy.MM",
+						            value : "{Zyymm}",
+									width : "200px",
+									textAlign : "Begin",
+									change : oController.onChangeDate
 								})
                             ]
                         }).addStyleClass("search-field-group"),
@@ -324,9 +320,14 @@ sap.ui.jsview("ZUI5_HR_LeaveUseChart.List", {
 			}
 		});
 		
+		var oDetail = new sap.ui.layout.VerticalLayout({
+			width : "100%",
+			content : [oContent1, oLayout]
+		});
+		
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,
-			            contentItems: [oFilter, oContent1, oLayout]
+			            contentItems: [oFilter, oDetail]
 			        });
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");

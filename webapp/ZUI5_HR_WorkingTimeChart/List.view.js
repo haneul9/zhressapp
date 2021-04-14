@@ -369,8 +369,9 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
 								  }).addStyleClass("app-title-container"),
 								  oFilter,
 								  //new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
-								  oContent1,
-								  oLayout,
+								  new sap.ui.layout.VerticalLayout({
+									  content : [oContent1, oLayout]
+								  }),
 								  new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
 					  }).addStyleClass("app-content-container-wide")]
 		}).addStyleClass("app-content-body");
