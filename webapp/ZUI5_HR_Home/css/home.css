@@ -39,7 +39,7 @@ body {min-width:576px; font-size:14px}
 .ehr-gnb > ul > li.active a.active {color:#064975}
 
 .ehr-snb {max-width:1440px}
-.ehr-snb.col-count-1 {width:calc(240px * 1)}
+.ehr-snb.col-count-1 {width:calc(240px * 1)}   
 .ehr-snb.col-count-2 {width:calc(240px * 2)}
 .ehr-snb.col-count-3 {width:calc(240px * 3)}
 .ehr-snb.col-count-4 {width:calc(240px * 4)}
@@ -98,17 +98,20 @@ body {min-width:576px; font-size:14px}
 .portlet-employee .portlet-spinner {top:11rem}
 
 .portlet-employee {position:relative; background:#fff url('../../images/employee-information-bg.png') no-repeat right bottom; cursor:pointer}
-.portlet-employee .employee-information {display:flex; flex-direction:column; min-width:128px; height:128px; padding-top:1.75rem; padding-left:2rem; border-top-right-radius:.5rem; border-top-left-radius:.5rem; background-color:#064975}
+.portlet-employee .employee-information {display:flex; flex-direction:column; min-width:128px; height:128px; padding:1.25rem 1rem 0 2rem; border-top-right-radius:.5rem; border-top-left-radius:.5rem; background-color:#064975}
 .portlet-employee .employee-information * {color:rgba(255, 255, 255, 0.8)}
 .portlet-employee .employee-information .employee-name {font-size:1.125rem; color:#fff; font-weight:500; letter-spacing:0.5px; padding-bottom:.25rem}
-.portlet-employee .employee-photo {position:absolute; top:72px; right:21px; width:112px; height:112px; overflow:hidden; background-color:#fff}
+.portlet-employee .employee-information div:nth-of-type(2) {line-height:1.2;}
+.portlet-employee .employee-information div:nth-of-type(3) {width:225px;line-height:1.2;padding-top:.25rem}
+.portlet-employee .employee-photo {position:absolute; top:76px; right:18px; width:106px; height:106px; overflow:hidden; background-color:#fff}
 .portlet-employee .employee-photo img {position:absolute; top:0; left:0; z-index:1; width:100%}
 .portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
 .portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:70%}
 .portlet-employee .employee-photo svg {position:absolute; top:-1px; left:-1px; z-index:2; width:calc(100% + 2px); height:calc(100% + 2px)}
-.portlet-employee .employee-d-day {display:flex; flex-direction:column; padding:2rem 1.25rem 1.25rem}
+.portlet-employee .employee-d-day {display:flex; flex-direction:column; padding:1.5rem 1.25rem 1.25rem}
 .portlet-employee .employee-d-day .title {font-size:1rem; font-weight:700}
-.portlet-employee .employee-d-day h6 {margin-top:2rem; margin-bottom:0; font-size:.875rem; font-weight:400; padding-left:.75rem}
+.portlet-employee .employee-d-day h6 {margin-top:1rem; margin-bottom:0; font-size:.875rem; font-weight:400; padding-left:.75rem}
+.portlet-employee .employee-d-day h6:nth-of-type(2) {padding-top:.5rem;width:280px}
 .portlet-employee .employee-d-day .d-day {font-size:2.25rem; font-weight:400; padding-left:.75rem}
 .portlet-employee .employee-d-day .d-day.color-lcc-signature-green {font-size:2.875rem; font-weight:700; padding-left:.75rem}
 .portlet-employee .employee-d-day span + span {margin-left:.5rem}
@@ -117,7 +120,7 @@ body {min-width:576px; font-size:14px}
 .portlet-notice .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
 .portlet-notice .list-group-item:hover {color:#0070bd; background:transparent}
 .portlet-notice-item {display:flex; justify-content:space-between; align-items:center; width:100%}
-.portlet-notice-item .portlet-notice-date {font-size:100%;color:#888}
+.portlet-notice-item .portlet-notice-date {font-size:100%;color:#888;padding-right:.5rem}
 .portlet-notice-title {display:flex; align-items:center; width:239px}
 .portlet-notice-title .portlet-notice-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .portlet-notice-title span + span, .portlet-notice-title span + i {margin-left:3px}
