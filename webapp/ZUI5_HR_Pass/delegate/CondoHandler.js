@@ -145,20 +145,11 @@ sap.ui.define(
 				var startDate = this.oModel.getProperty("/Detail/Data/Appbg"),
 					endDate = this.oModel.getProperty("/Detail/Data/Appen");
 
-				if(this.oModel.getProperty("/Detail/Data/Compcd") === "T") {
-					// 첨단, 7일 후부터 선택가능
-					if(moment(startDate).isAfter(moment().add(7, "days"))) {
-						this.oModel.setProperty("/Detail/Data/minDate", moment(startDate).toDate());
-					} else {
-						this.oModel.setProperty("/Detail/Data/minDate", moment().add(7, "days").toDate());
-					}
+				// 기초,첨단 현재일부터  선택가능
+				if(moment(startDate).isAfter(moment())) {
+					this.oModel.setProperty("/Detail/Data/minDate", moment(startDate).toDate());
 				} else {
-					// 기초 현재일부터  선택가능
-					if(moment(startDate).isAfter(moment())) {
-						this.oModel.setProperty("/Detail/Data/minDate", moment(startDate).toDate());
-					} else {
-						this.oModel.setProperty("/Detail/Data/minDate", moment().toDate());
-					}
+					this.oModel.setProperty("/Detail/Data/minDate", moment().toDate());
 				}
 				this.oModel.setProperty("/Detail/Data/maxDate", moment(endDate).toDate());
 			},
