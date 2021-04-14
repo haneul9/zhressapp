@@ -33,6 +33,7 @@
 <script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
+<script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
 <script src="ZUI5_HR_Home/js/MenuMegaDropdown.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
@@ -42,7 +43,6 @@
 <script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--		P105 팀 달력 -->
 <script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/Portlets.js"></script>
-<script src="ZUI5_HR_Home/js/i18n.js"></script>
 <script>
 function initHome() {
 
@@ -53,7 +53,7 @@ function initHome() {
 	}
 
 	setTimeout(function() {
-		window._i18n = new Internationalization(_gateway);
+		window._i18n = new HomeI18n(_gateway);
 		window._i18n.changeLocale();
 	}, 0);
 
