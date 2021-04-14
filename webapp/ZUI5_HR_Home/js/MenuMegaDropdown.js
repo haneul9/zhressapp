@@ -58,24 +58,33 @@ spinner: function(on) {
 	}, 0);
 },
 
-handleMissingMenuId: function(message) {
+handleMissingMenuId: function(message, hidden) {
+
+	message = typeof message === 'function' ? '메뉴 ID 누락\nMissing menu ID.' : message;
+	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
-	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message || '메뉴 ID 누락\nMissing menu ID.') });
+	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
 
-handleUnauthorized: function(message) {
+handleUnauthorized: function(message, hidden) {
+
+	message = typeof message === 'function' ? '접근 권한이 없습니다.' : message;
+	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
-	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message || '접근 권한이 없습니다.') });
+	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
 
-handleAuthCancel: function(message) {
+handleAuthCancel: function(message, hidden) {
+
+	message = typeof message === 'function' ? '비밀번호 입력이 취소되었습니다.' : message;
+	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
-	this._gateway.alert({ title: '알림', html: ['<p>', '</p>'].join(message || '비밀번호 입력이 취소되었습니다.') });
+	this._gateway.alert({ title: '알림', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
 
