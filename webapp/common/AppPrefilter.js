@@ -127,11 +127,13 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
 
 			result.hasMenuAuthority = false;
+			result.jqXHR = jqXHR;
 		}.bind(this)
 	});
 
 	if (!result.hasMenuAuthority) {
-		throw new Error("error.unauthorized");
+		result.jqXHR.message = "error.unauthorized";
+		throw new Error(result.jqXHR);
 	}
 
 	return result;

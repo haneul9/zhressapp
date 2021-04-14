@@ -45,7 +45,7 @@ init: function(initHome) {
 		]);
 	}.bind(this))
 	.catch(function(jqXHR) {
-		var message = this._gateway.handleError(this._gateway.ODataDestination.ETC, jqXHR, 'HomeSession.init').message;
+		var message = this._gateway.handleError(this._gateway.ODataDestination.ETC, jqXHR, 'HomeSession.init').message || '알 수 없는 오류가 발생하였습니다.';
 
 		$(function() {
 			this._gateway.alert({

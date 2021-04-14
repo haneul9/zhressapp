@@ -60,7 +60,7 @@ spinner: function(on) {
 
 handleMissingMenuId: function(message, hidden) {
 
-	message = typeof message === 'function' ? '메뉴 ID 누락\nMissing menu ID.' : message;
+	message = typeof message === 'function' ? '메뉴 ID 누락\nMissing menu ID.' : (message || '알 수 없는 오류가 발생하였습니다.');
 	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
@@ -70,7 +70,7 @@ handleMissingMenuId: function(message, hidden) {
 
 handleUnauthorized: function(message, hidden) {
 
-	message = typeof message === 'function' ? '접근 권한이 없습니다.' : message;
+	message = typeof message === 'function' ? '접근 권한이 없습니다.' : (message || '알 수 없는 오류가 발생하였습니다.');
 	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
@@ -80,7 +80,7 @@ handleUnauthorized: function(message, hidden) {
 
 handleAuthCancel: function(message, hidden) {
 
-	message = typeof message === 'function' ? '비밀번호 입력이 취소되었습니다.' : message;
+	message = typeof message === 'function' ? '비밀번호 입력이 취소되었습니다.' : (message || '알 수 없는 오류가 발생하였습니다.');
 	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
