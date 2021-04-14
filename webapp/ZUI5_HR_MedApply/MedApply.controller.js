@@ -1190,7 +1190,7 @@ sap.ui.define([
 			var oSessionData=oController._SessionData;		
 			oController._tData=oData;				
 			oController._tData.Close=oController._onClose;	
-			oController._Bukrs==""?oController._Bukrs=oData.Bukrs:null;
+			oController._Bukrs=oData.Bukrs;
 			oController.onDialog("M",oController._Bukrs);
 		},
 
