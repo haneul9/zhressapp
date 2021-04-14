@@ -13,7 +13,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Career", {
 					{id: "Period", label: "{i18n>LABEL_37073}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Arbgb", label: "{i18n>LABEL_00166}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Ort01", label: "{i18n>LABEL_02214}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-					{id: "Land1", label: "{i18n>LABEL_19334}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+					{id: "Landx", label: "{i18n>LABEL_19334}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Zztitle", label: "{i18n>LABEL_02219}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Zzjob", label: "{i18n>LABEL_18050}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 		

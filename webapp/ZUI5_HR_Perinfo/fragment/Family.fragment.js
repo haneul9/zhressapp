@@ -14,7 +14,7 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Family", {
 					{id: "Regno", label: "{i18n>LABEL_37102}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Fgbdt", label: "{i18n>LABEL_37015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "FasexT", label: "{i18n>LABEL_37016}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-					{id: "Fasin", label: "{i18n>LABEL_37103}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+					{id: "Fastx", label: "{i18n>LABEL_37103}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 					{id: "Helid", label: "{i18n>LABEL_37104}", plabel: "", resize: true, span: 0, type: "select", sort: true, filter: true},
 					{id: "Livid", label: "{i18n>LABEL_37105}", plabel: "", resize: true, span: 0, type: "select", sort: true, filter: true}
 					];
