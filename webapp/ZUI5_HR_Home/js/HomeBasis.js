@@ -142,7 +142,7 @@ log: function() {
 
 	var args = arguments;
 	setTimeout(function() {
-		if (typeof window.console !== 'undefined' && typeof window.console.log === "function") {
+		if (typeof window.console !== 'undefined' && typeof window.console.log === 'function') {
 			window.console.log.apply(null, [].slice.call(args));
 		}
 	}, 0);
