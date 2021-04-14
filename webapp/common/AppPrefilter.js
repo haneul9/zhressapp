@@ -1,8 +1,12 @@
 function AppPrefilter() {
 
 	if (/^webide/i.test(location.host) || (location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
-		if (parent && parent._gateway) {
-			parent._gateway.successAppPrefilter();
+		try {
+			if (parent && parent._gateway) {
+				parent._gateway.successAppPrefilter();
+			}
+		} catch(e) {
+			// SF에서 평가 메뉴 접속시
 		}
 		window._menu_prefilter = this;
 		this._menu_authorized = true;
@@ -14,14 +18,26 @@ function AppPrefilter() {
 		return this;
 	}
 
-	if (!parent || !parent._gateway) {
-		alert("잘못된 메뉴 접속입니다.\nHome 화면에서 접속해주시기 바랍니다.");
-
-		if (/^webide/i.test(location.host)) {
-			location.href = "/webapp/index.html?hc_orionpath=%2FDI_webide_di_workspaceiwil0nuxhaqnmtpv%2Fzhressapp";
-		} else {
-			location.href = "/index.html";
+	try {
+		if (!parent || !parent._gateway) {
+			alert("잘못된 메뉴 접속입니다.\nHome 화면에서 접속해주시기 바랍니다.");
+	
+			if (/^webide/i.test(location.host)) {
+				location.href = "/webapp/index.html?hc_orionpath=%2FDI_webide_di_workspaceiwil0nuxhaqnmtpv%2Fzhressapp";
+			} else {
+				location.href = "/index.html";
+			}
 		}
+	} catch(e) {
+		// SF에서 평가 메뉴 접속시
+		window._menu_prefilter = this;
+		this._menu_authorized = true;
+
+		document.addEventListener("DOMContentLoaded", function () {
+			window.startAppInit();
+		});
+
+		return this;
 	}
 
 	window._menu_prefilter = this;
