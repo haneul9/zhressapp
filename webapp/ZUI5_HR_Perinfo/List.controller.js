@@ -841,10 +841,12 @@ sap.ui.define([
 										if(data.PinfoFamilyNav && data.PinfoFamilyNav.results){
 											for(var i=0; i<data.PinfoFamilyNav.results.length; i++){
 												data.PinfoFamilyNav.results[i].Idx = (i+1);
-												data.PinfoFamilyNav.results[i].Zzbdate = data.PinfoFamilyNav.results[i].Zzbdate ? 
-														dateFormat.format(new Date(common.Common.setTime(data.PinfoFamilyNav.results[i].Zzbdate))) + 
+												data.PinfoFamilyNav.results[i].Fgbdt = data.PinfoFamilyNav.results[i].Fgbdt ? 
+														dateFormat.format(new Date(common.Common.setTime(data.PinfoFamilyNav.results[i].Fgbdt))) + 
 														" (" + data.PinfoFamilyNav.results[i].ZzclassT + ")": null ;
-												vData.Data.push(data.TableIn.results[i]);
+												data.PinfoFamilyNav.results[i].Livid = data.PinfoFamilyNav.results[i].Livid == "X" ? true : false ;
+												data.PinfoFamilyNav.results[i].Helid = data.PinfoFamilyNav.results[i].Helid == "X" ? true : false ;
+												vData.Data.push(data.PinfoFamilyNav.results[i]);
 											}
 										}
 									}
