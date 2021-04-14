@@ -94,7 +94,7 @@ restoreHome: function() {
 
 	// TODO : 메뉴 이탈 하시겠습니까?
 
-	$(document).attr('title', 'Lotte Chemical e-HR');
+	$(document).attr('title', 'Hi HR');
 	this._menu.changeState(false, true);
 	this._portlet.changeState(true);
 	this.addLocaleChangeCallbackOwner(this._portlet);

@@ -71,7 +71,7 @@ init: function() {
 		$(document).attr("title", $.app.APP_TILE);
 		try {
 			if (parent) {
-				parent.$(document).attr("title", $.app.APP_TILE);
+				$(parent.document).attr("title", $.app.APP_TILE);
 			}
 		} catch(e) {
 			// SF 평가 메뉴 접속시 parent 객체 참조시 cross-origin 오류 발생
