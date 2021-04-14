@@ -6,10 +6,8 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Family", {
 
 	createContent : function(oController) {
 		
-		var col_info;
-		var vIndex = -1;
 		// 번호, 구성원, 관계, 성명, 주민번호, 실제생일, 성별, 학력 , 건강보험 여부, 동거여부
-		col_info = [{id: "Idx", label: "{i18n>LABEL_13005}" , plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "80px"},
+		var col_info = [{id: "Idx", label: "{i18n>LABEL_13005}" , plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "80px"},
 					{id: "Stext", label: "{i18n>LABEL_37099}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
 					{id: "Atext", label: "{i18n>LABEL_37100}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
 					{id: "Fname", label: "{i18n>LABEL_37101}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},

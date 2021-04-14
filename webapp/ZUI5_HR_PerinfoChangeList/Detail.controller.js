@@ -15,17 +15,6 @@ sap.ui.define([
 		ApplyModel: new JSONModelHelper(),
 		
 		onInit: function () {
-			// this.setupView()
-			// 	.getView()
-			// 	.addEventDelegate({
-			// 		onBeforeShow : this.onBeforeShow
-			// 	}, this);
-				
-			// this.getView()
-			// 	.addEventDelegate({
-			// 		onAfterShow: this.onAfterShow
-			// 	}, this)
-				
 			this.getView()
 				.addEventDelegate({
 					onBeforeShow: this.onBeforeShow,

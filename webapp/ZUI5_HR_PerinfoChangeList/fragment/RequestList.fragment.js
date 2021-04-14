@@ -44,7 +44,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
 						new sap.m.Label({text: "{i18n>LABEL_50005}"}), // 진행상태
 						new sap.m.ComboBox({
 							width: "150px",
-							selectedKey: "{Status}",
+							selectedKey: "{Apsta}",
 							items: [
 				    			new sap.ui.core.ListItem({key: "0", text: "{i18n>LABEL_66002}"}),
 				    			new sap.ui.core.ListItem({key: "1", text: "{i18n>LABEL_66003}"}),
@@ -120,16 +120,16 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
 			cellClick: oController.onPressDetail.bind(oController)
 		})
 		.addStyleClass("mt-10px")
-		.setModel(oController._ApplyJSonModel)
+		.setModel(oController._ListJSonModel)
 		.bindRows("/Data");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [
 			{ id: "Idx",      label: "{i18n>LABEL_66008}"/* 번호     */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "8%" },
-			{ id: "ReqName",  label: "{i18n>LABEL_66009}"/* 신청내용 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "15%" },
-			{ id: "AppDate",    label: "{i18n>LABEL_66010}"/* 신청일 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "18%" },
-			{ id: "AppType",       label: "{i18n>LABEL_66011}"/* 신청구분     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "15%" },
-			{ id: "Status", label: "{i18n>LABEL_66012}"/* 진행상태   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "15%" },
-			{ id: "ReqDate",       label: "{i18n>LABEL_66013}"/* 반영일   */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "18%"},
+			{ id: "AppsqT",  label: "{i18n>LABEL_66009}"/* 신청내용 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "15%" },
+			{ id: "ApplyDt",    label: "{i18n>LABEL_66010}"/* 신청일 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width:  "18%" },
+			{ id: "ContyT",       label: "{i18n>LABEL_66011}"/* 신청구분     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "15%" },
+			{ id: "ApstaT", label: "{i18n>LABEL_66012}"/* 진행상태   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "15%" },
+			{ id: "AppDate",       label: "{i18n>LABEL_66013}"/* 반영일   */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width:  "18%"},
 			{ id: "Admin",     label: "{i18n>LABEL_66014}"/* 담당자   */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "16%" },
 		]);
 

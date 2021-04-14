@@ -17,8 +17,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 	PAGEID: "",
 	_ListCondJSonModel : new JSONModel(),
 	_ListJSonModel : new JSONModel(),
-	_ApplyJSonModel : new JSONModel(),
-	_UploadTableJSonModel : new JSONModel(),
+	_DetailJSonModel : new JSONModel(),
+	_DetailTableJSonModel : new JSONModel(),
 	_BusyDialog : new sap.m.BusyDialog(),
 	
 	onInit: function() {
@@ -36,8 +36,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		IBegda = new Date(curDate.getFullYear(), curDate.getMonth(), 1),
 		IEndda = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate());
 		
-		oController._ListCondJSonModel.setProperty("/Data",{Begda : IBegda, Endda : IEndda, Status : "0" });
-		oController._ApplyJSonModel.setProperty("/Data",[]);
+		oController._ListCondJSonModel.setProperty("/Data",{Begda : IBegda, Endda : IEndda, Apsta : "0" });
+		oController._ListJSonModel.setProperty("/Data",[]);
 		oController.onPressSearch();
 	},
 	
@@ -54,27 +54,31 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		
 		var search = function(){
 			var oPath = "";
-			var createData = {TempPayDeductionTableIn1 : []};
+			var createData = {TableIn : [],
+							  TableIn2 : []};
 			
-			oPath = "/TempPayDeductionSet";
-			createData.IMode =   "L"; 
-			createData.IBurks =  vCondiData.Burks && vCondiData.Burks != "" ? vCondiData.Burks : oController.getView().getModel("session").getData().Burks2 ;
-			createData.IPernr =  vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "" ;
-			createData.IOrgeh =  vCondiData.Orgeh && vCondiData.Orgeh != "" ? vCondiData.Orgeh : "" ;
-			createData.ILgart =  vCondiData.Lgart && vCondiData.Lgart != "" ? vCondiData.Lgart : "" ;
+			oPath = "/PerinfoHistorySet";
+			createData.IBukrs =  vCondiData.Burks && vCondiData.Burks != "" ? vCondiData.Burks : oController.getView().getModel("session").getData().Burks2 ;
+			createData.IPernr =  oController.getView().getModel("session").getData().Pernr;
 			createData.ILangu =  oController.getView().getModel("session").getData().Langu;
-			createData.IStatus = vCondiData.Status && vCondiData.Status != "" ? vCondiData.Status : "" ;
+			createData.IConType =  "1";
+			createData.IApsta =  vCondiData.Apsta == "0" ? "" : vCondiData.Apsta;
 			createData.IBegda =  vCondiData.Begda && vCondiData.Begda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Begda)) + ")\/" : null;
 			createData.IEndda =  vCondiData.Endda && vCondiData.Endda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Endda)) + ")\/" : null;
 			
 			oModel.create(oPath, createData, null,
 				function(data, res){
 					if(data){
-						if(data.TempPayDeductionTableIn1 && data.TempPayDeductionTableIn1.results.length > 0){
-							for(var i=0; i<data.TempPayDeductionTableIn1.results.length; i++){
-								data.TempPayDeductionTableIn1.results[i].Idx = (i+1);
-								
-								vData.Data.push(data.TempPayDeductionTableIn1.results[i]);
+						if(data.TableIn && data.TableIn.results.length > 0){
+							for(var i=0; i<data.TableIn.results.length; i++){
+								data.TableIn.results[i].Idx = (i+1);
+								vData.Data.push(data.TableIn.results[i]);
+							}
+						}
+						if(data.TableIn2 && data.TableIn2.results.length > 0){
+							for(var i=0; i<data.TableIn2.results.length; i++){
+								data.TableIn2.results[i].Idx = (i+1);
+								vData.Data2.push(data.TableIn2.results[i]);
 							}
 						}
 					}
@@ -95,6 +99,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			);
 
 			oController._ListJSonModel.setProperty("/Data",vData.Data);
+			oController._ListJSonModel.setProperty("/Data2",vData.Data2);
 			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
 			oController._BusyDialog.close();
 			
@@ -111,41 +116,92 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		setTimeout(search, 100);
 	},
 	
-	// onPressSearch : function(){
-	// 	var oController = $.app.getController();
-	// 	var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
-		
-		
-	// 	var search = function(){
-	// 		var vData = {Data : [ { Idx : "1" , AppDate : "2021.04.09 15:50:13",  AppType : "수정" , Status : "승인", ReqDate : "2021.04.09 15:50:13", ReqName : "학력사항",  Admin : "강미소" }]};
-	// 		$.app.byId(oController.PAGEID + "_Table").getModel().setData(vData);
-	// 		Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
-	// 		oController._BusyDialog.close();
-			
-	// 		$.app.byId(oController.PAGEID + "_Table").clearSelection();
-	// 	}
-	
-	// 	oController._BusyDialog.open();
-	// 	setTimeout(search, 100);
-	// },
-	
-	
-	onPressDetail : function(){
+    onPressDetail : function(){
 		var oView = $.app.getView();
 		var oController = $.app.getController(),
 		vSelectedIndex = $.app.byId(oController.PAGEID + "_Table").getSelectedIndices(),
 		vSelectedData = $.app.byId(oController.PAGEID + "_Table").getModel().getProperty("/Data/" + vSelectedIndex);
-		console.log(vSelectedData);
-        
-		sap.ui.getCore().getEventBus().publish("nav", "to", {
-		      id : "ZUI5_HR_PerinfoChangeList.Detail",
-		      data : {
-		    	  FromPageId : "ZUI5_HR_PerinfoChangeList.Tabs",
-		    	  selData :  vSelectedData
-		      }
-		});
+		
+		if (!oController._DetailDialog) {
+			oController._DetailDialog = sap.ui.jsfragment("ZUI5_HR_PerinfoChangeList.fragment.DetailDialog", oController);
+			oView.addDependent(oController._DetailDialog);
+		}	
+		oController._DetailJSonModel.setProperty("/Data", vSelectedData);
+		oController.onSearchDetail(vSelectedData);
+		oController._DetailDialog.open();
+   	},
+   	
+   	onSearchDetail : function(vSelectedData){
+		var oController = $.app.getController();
+		var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+		
+		var vCondiData = oController._ListCondJSonModel.getProperty("/Data");
+		var vData = {Data : []}; 
+		
+		var search = function(){
+			var oPath = "";
+			var createData = {TableIn2 : []};
+			
+			oPath = "/PerinfoHistorySet";
+			createData.IBukrs =  vCondiData.Burks && vCondiData.Burks != "" ? vCondiData.Burks : oController.getView().getModel("session").getData().Burks2 ;
+			createData.IPernr =  oController.getView().getModel("session").getData().Pernr;
+			createData.ILangu =  oController.getView().getModel("session").getData().Langu;
+			createData.IConType =  "1";
+			createData.IApsta =  vCondiData.Apsta == "0" ? "" : vCondiData.Apsta;
+			createData.IBegda =  vCondiData.Begda && vCondiData.Begda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Begda)) + ")\/" : null;
+			createData.IEndda =  vCondiData.Endda && vCondiData.Endda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Endda)) + ")\/" : null;
+			
+			oModel.create(oPath, createData, null,
+				function(data, res){
+					if(data){
+						if(data.TableIn && data.TableIn.results.length > 0){
+							for(var i=0; i<data.TableIn.results.length; i++){
+								data.TableIn.results[i].Idx = (i+1);
+								vData.Data.push(data.TableIn.results[i]);
+							}
+						}
+						if(data.TableIn2 && data.TableIn2.results.length > 0){
+							for(var i=0; i<data.TableIn2.results.length; i++){
+								data.TableIn2.results[i].Idx = (i+1);
+								vData.Data2.push(data.TableIn2.results[i]);
+							}
+						}
+					}
+				},
+				function (oError) {
+			    	var Err = {};
+			    	oController.Error = "E";
+						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			);
+
+			oController._ListJSonModel.setProperty("/Data",vData.Data);
+			oController._ListJSonModel.setProperty("/Data2",vData.Data2);
+			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
+			oController._BusyDialog.close();
+			
+			if(oController.Error == "E"){
+				oController.Error = "";
+				sap.m.MessageBox.error(oController.ErrorMessage);
+				return;
+			}
+			
+			$.app.byId(oController.PAGEID + "_Table").clearSelection();
+		}
+	
+		oController._BusyDialog.open();
+		setTimeout(search, 100);
 	},
-    
+	
+	
 	getLocalSessionModel: Common.isLOCAL() ? function() {
 		return new JSONModel({name: "20140099"}); // 
 		// return new JSONModel({name: "35132258"}); // 첨단
