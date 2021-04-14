@@ -527,6 +527,7 @@ fragment.COMMON_ATTACH_FILES = {
 				});
 
 				sap.m.MessageToast.show(oController.getBundleText("MSG_00032"), { my: "center center", at: "center center"}); // 파일 삭제가 완료되었습니다.
+
 			} catch (ex) {
 				common.Common.log(ex);
 			}
@@ -570,6 +571,9 @@ fragment.COMMON_ATTACH_FILES = {
 				oJSonModel.setProperty("/Settings/Length", oJSonModel.getProperty("/Data").length);
 
 				sap.m.MessageToast.show(oController.getBundleText("MSG_00032"), { my: "center center", at: "center center"}); // 파일 삭제가 완료되었습니다.
+				if(oController.PAGEID=="MedApply"){
+					fragment.COMMON_ATTACH_FILES.availLine.call(oController,vPage);
+				}
 			} catch (ex) {
 				common.Common.log(ex);
 			}

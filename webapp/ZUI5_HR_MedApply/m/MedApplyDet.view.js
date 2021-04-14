@@ -21,7 +21,7 @@ sap.ui.define([
 				window["oLabel"+(i-17)] = oController.getTxt("LABEL_470"+i,i);
 			}
 			var oLabel39=oController.getTxt("LABEL_47087",56);
-			var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{Relation}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
+			var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{PatiName}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
 							formatter:function(fVal,fVal2){
 								if(fVal2==""){
 									return fVal=="X"?false:true;

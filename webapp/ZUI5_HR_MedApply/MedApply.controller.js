@@ -48,9 +48,27 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID + "_HeadSel").addItem();
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
-			oController._Bukrs=oSessionData.Bukrs3;
+			oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,Datum:new Date(),MedicalBukrsExport:[]}, null,
+					function(data,res){
+						if(data&&data.MedicalBukrsExport.results){
+							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
+						}					
+					},
+					function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
+					}
+				);
+//			oController._Bukrs=oSessionData.Bukrs3;
 			var vData={ IConType:"0",
-						IBukrs:oSessionData.Bukrs3,
+						IBukrs:oController._Bukrs,
 						IPernr:oSessionData.Pernr,
 						ILangu:oSessionData.Langu,
 						IDatum:"\/Date("+new Date().getTime()+")\/",
@@ -507,8 +525,8 @@ sap.ui.define([
 				}else{
 					vEdits=[false,false,false,false,false];
 				}
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+				// $.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				// $.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 
 				for(var i=3;i<=7;i++){
 					var vProperty={
@@ -742,7 +760,7 @@ sap.ui.define([
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"004",
 					   IPernr:oSessionData.Pernr,
-					   IBukrs:oSessionData.Bukrs3,
+					   IBukrs:oController._Bukrs,
 					   NavCommonCodeList:[],
 					   ICodty:"ZHOSP_TYPE"};
 			oModel.create("/CommonCodeListHeaderSet", vData, null,
@@ -1100,7 +1118,7 @@ sap.ui.define([
             var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
 			oController.oTableInit();
 			var vData={ IConType:"1",
-						IBukrs:oSessionData.Bukrs3,
+						IBukrs:oController._Bukrs,
 						IPernr:oSessionData.Pernr,
 						ILangu:oSessionData.Langu,
 						IMolga:oSessionData.Molga,
@@ -1172,7 +1190,7 @@ sap.ui.define([
 			var oSessionData=oController._SessionData;		
 			oController._tData=oData;				
 			oController._tData.Close=oController._onClose;	
-			oController._Bukrs==""?oController._Bukrs=oData.Bukrs:null;
+			oController._Bukrs=oData.Bukrs;
 			oController.onDialog("M",oController._Bukrs);
 		},
 

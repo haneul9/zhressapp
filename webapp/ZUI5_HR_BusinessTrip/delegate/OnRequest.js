@@ -150,7 +150,7 @@ var OnRequest = { // 출장 event handler
 	changeBtPurpose: function() {
 
 		this.RequestDetailDialogHandler.calculateAmount();
-		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
+//		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
 	},
 
 	searchAccompanier: function(oEvent) {
@@ -212,7 +212,7 @@ var OnRequest = { // 출장 event handler
 		oModel.setProperty(oTargetPaths.ename, o.Ename || "");
 
 		this.RequestDetailDialogHandler.calculateAmount();
-		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
+//		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
 		SearchUser1.onClose();
 	},
 
@@ -412,7 +412,7 @@ var OnRequest = { // 출장 event handler
 						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn03.length);
 
 						this.RequestDetailDialogHandler.calculateAmount();
-						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
+//						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
 					}
 				}.bind(this)
 			});
@@ -469,7 +469,7 @@ var OnRequest = { // 출장 event handler
 						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn04.length);
 
 						this.RequestDetailDialogHandler.calculateAmount();
-						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
+//						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
 					}
 				}.bind(this)
 			});
@@ -526,7 +526,7 @@ var OnRequest = { // 출장 event handler
 			} else {
 				this.RequestDetailDialogHandler.calculateAmount();
 				//대근자 신청 추가
-				this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
+//				this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler);
 			}
 		}.bind(this), 0);
 	},

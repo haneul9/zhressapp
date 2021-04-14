@@ -82,7 +82,7 @@ sap.ui.define([
 			sap.ui.getCore().byId(oController.PAGEID + "_Ename").destroyTokens();
 			
 			if(!oController._ListCondJSonModel.getProperty("/Data")){
-				var oZyymm = new Date().getFullYear() + "." + ((new Date().getMonth() + 1) < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1));
+				var oZyymm = new Date().getFullYear() + ((new Date().getMonth() + 1) < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1));
 				
 				var vData = {
 					Data : {
@@ -110,6 +110,14 @@ sap.ui.define([
 			var oController = this;
 			
 			oController.onPressSearch(oEvent);
+		},
+		
+		onChangeDate : function(oEvent){
+			if(oEvent && oEvent.getParameters().valid == false){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				oEvent.getSource().setValue("");
+				return;
+			}
 		},
 		
 		SmartSizing : function(oEvent){
@@ -204,7 +212,7 @@ sap.ui.define([
 					createData.IEmpid = $.app.getModel("session").getData().Pernr;
 					createData.IActty = gAuth;
 					createData.IWerks = oData.Werks;
-					createData.IZyymm = oData.Zyymm.replace(".", "");
+					createData.IZyymm = oData.Zyymm;
 					createData.IBukrs = oData.Werks;
 					
 				var oEname = sap.ui.getCore().byId(oController.PAGEID + "_Ename");
@@ -275,7 +283,7 @@ sap.ui.define([
 			// 데이터 조회
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
-			if(oData.Zyymm.replace(".", "").length != 6){
+			if(oData.Zyymm.length != 6){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_41001")); // 조회연월을 입력하여 주십시오.
 				return "";
 			}
@@ -288,7 +296,7 @@ sap.ui.define([
 				createData.IEmpid = $.app.getModel("session").getData().Pernr;
 				createData.IActty = gAuth;
 				createData.IWerks = oData.Werks;
-				createData.IZyymm = oData.Zyymm.replace(".", "");
+				createData.IZyymm = oData.Zyymm;
 				createData.IBukrs = oData.Werks;
 				createData.IDisty = oData.Disty;
 			
@@ -394,7 +402,7 @@ sap.ui.define([
 			var createData = {LeaveuseBoardNav : []};
 				createData.IWerks = oData.Werks;
 				createData.IOrgeh = oData.Orgeh;
-				createData.IZyymm = oController._ListCondJSonModel.getProperty("/Data/Zyymm").replace(".", "");
+				createData.IZyymm = oController._ListCondJSonModel.getProperty("/Data/Zyymm");
 				createData.IEmpid = $.app.getModel("session").getData().Pernr;
 				createData.IDisty = "3";
 				createData.IActty = gAuth;

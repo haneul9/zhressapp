@@ -3,13 +3,12 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-	"../common/AttachFileAction",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"../common/DialogHandler",
 	"../common/OrgOfIndividualHandler"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler) {
 	"use strict";
 
 	
@@ -29,7 +28,7 @@ sap.ui.define([
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs2");
+			return this.getSessionInfoByKey("Bukrs3");
 		},
 		
 		onInit: function () {
@@ -43,7 +42,7 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -55,6 +54,30 @@ sap.ui.define([
             this.initDateCreate(this);
 			this.onTableSearch();
 			this.getComboData();
+		},
+
+		getCheckBox: function() {
+			return new sap.m.CheckBox({ 
+                visible: {
+					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+					formatter: function(v1, v2, v3) {
+						return (Common.checkNull(v3) && v1 === "99" && v2 === "1") || v1 === "AA";
+					}
+				},
+                selected: "{Pchk}"
+            });
+		},
+
+		getDCheckBox: function() {
+			return new sap.m.CheckBox({
+                visible: {
+					path: "/Status",
+					formatter: function(v) {
+						return !v || v === "AA";
+					}
+				},
+                selected: "{Pchk}"
+            });
 		},
 		
 		getDateFormatter1: function() {
@@ -302,14 +325,29 @@ sap.ui.define([
 				oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", oController);
 				oView.addDependent(oController._ApplyModel);
 			}
+
+			if (!oController._ReportModel) {
+				oController._ReportModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ResultReport", oController);
+				oView.addDependent(oController._ReportModel);
+			}
+
 			oController.setTimeCombo1(oController);
 			oController.setTimeCombo2(oController);
 			oController.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
 			oController.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
-			oController.getCodeList(oCopyRow);
-			oController.onBeforeOpenDetailDialog("app");
-			oController.getAttTable(oCopyRow, "1");
-			oController._ApplyModel.open();
+
+			if(oCopyRow.Edoty === "1"){
+				oController.getAttTable(oCopyRow, "1");
+				oController.getCodeList(oCopyRow);
+				oController.onBeforeOpenDetailDialog("app");
+				oController._ApplyModel.open();
+			}else {
+				oController.getAttTable(oCopyRow, "2");
+				oController.getCodeList(oCopyRow);
+				oController.getCodeList2();
+				oController.onBeforeOpenDetailDialog();
+				oController._ReportModel.open();
+			}
 		},
 
 		onPressAppBtn: function() { // 신청서 작성
@@ -371,11 +409,11 @@ sap.ui.define([
 			this.ApplyModel.setData({FormData: oCopyRow});
 			this.setTimeCombo1(this);
 			this.setTimeCombo2(this);
+			this.getAttTable(oCopyRow, "2");
 			this.getCodeList(oCopyRow);
 			this.getCodeList2();
 			this.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
 			this.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
-			this.getAttTable(oCopyRow, "2");
 			this.onBeforeOpenDetailDialog();
 			this._ReportModel.open();
 		},
@@ -500,9 +538,10 @@ sap.ui.define([
 						oController.AttModel.setData({Data: rDatas1});
 						vLength = rDatas1.length;
 
-						if(Gubun === "1")
+						if(Gubun === "1"){
 							oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
-						else 
+							oController.AttModel.setProperty("/Status", oRowData.Status1);
+						}else 
 							oAttTable = $.app.byId(oController.PAGEID + "_AttTable2");
 						
 						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
@@ -565,7 +604,7 @@ sap.ui.define([
 						}
 					});
 
-					if(vMsg = "Y") sap.m.MessageBox.alert(oController.getBundleText("MSG_40012"), { title: oController.getBundleText("MSG_08107")});
+					if(vMsg === "Y") sap.m.MessageBox.alert(oController.getBundleText("MSG_40012"), { title: oController.getBundleText("MSG_08107")});
 					oController.onTableSearch();
 				}
 				BusyIndicator.hide();
@@ -944,7 +983,7 @@ sap.ui.define([
 				return true;
 			}
 
-			if(AttachFileAction.getFileLength(oController) === 0) {
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") === 0){
 				MessageBox.error(oController.getBundleText("MSG_40025"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
@@ -976,10 +1015,12 @@ sap.ui.define([
 					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
 					
 					// 첨부파일 저장
-					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
 					oSendData.Edoty = "1";
 					oSendData.Pernr = vPernr;
 					oSendData.Trtim = vTimeH + "." + vTimeM;
+					oSendData.Waers = "KRW";
+					oSendData.Enddhe = Common.getUTCDateTime(oSendData.Enddhe);
 
 					var sendObject = {};
 					// Header
@@ -1045,9 +1086,10 @@ sap.ui.define([
 					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
 					
 					// 첨부파일 저장
-					oSendData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
 					oSendData.Pernr = vPernr;
 					oSendData.Trtim = vTimeH + "." + vTimeM;
+					oSendData.Enddhe = Common.getUTCDateTime(oSendData.Enddhe);
 
 					var sendObject = {};
 					// Header
@@ -1147,7 +1189,7 @@ sap.ui.define([
 			var oSendData = oController.ApplyModel.getProperty("/FormData");
 			var oAttList2 = [];
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Pltgt"))){ // 전달교육 내용요약
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Plcon"))){ // 전달교육 내용요약
 				MessageBox.error(oController.getBundleText("MSG_40038"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
@@ -1181,9 +1223,9 @@ sap.ui.define([
 					var uFiles = [];
 					for(var i=1; i<3; i++)	uFiles.push("00" + i);
 
-					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
-
 					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") !== 0) uFiles.push("003");
+					
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
 
 					var sendObject = {};
 					// Header
@@ -1233,21 +1275,20 @@ sap.ui.define([
 				vInfoMessage = oController.getBundleText("MSG_40025");
 
 			if(AppType === "app") {
-				AttachFileAction.setAttachFile(oController, {
-					Appnm: vAppnm,
+				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 교육안내문
 					Required: true,
-					Mode: "M",
-					Max: "10",
+					Appnm: vAppnm,
+					Mode: "S",
 					InfoMessage: vInfoMessage,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
-				});
+					Editable: (!vStatus || vStatus === "AA") ? true : false
+				},"004");
 			}else {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 내용요약
 					Label: "",
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) || vStatus === "99" || vEdoty === "1") ? true : false,
+					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
 				},"001");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
@@ -1255,7 +1296,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) || vStatus === "99" || vEdoty === "1") ? true : false,
+					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
 				},"002");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
@@ -1263,7 +1304,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) || vStatus === "99" || vEdoty === "1") ? true : false,
+					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
 				},"003");
 			}
 		},
