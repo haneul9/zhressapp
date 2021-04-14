@@ -62,21 +62,15 @@ AppPrefilter.prototype.init = function() {
 		this.confirmADPW(result);				// 개인정보 노출 메뉴인 경우 비밀번호 재확인(MOIN 비밀번호, 최초 1회만 확인)
 
 	} catch(e) {
-		var errorHandler = function() {
-			if (this._gateway.isPopup()) {
-				location.href = "Error.html";
-			}
-		}.bind(this);
-
 		if (e.message === "error.missing.mid") {
-			this._gateway.handleMissingMenuId(errorHandler);
+			this._gateway.handleMissingMenuId(this.errorHandler.bind(this));
 
 		} else if (e.message === "error.unauthorized") {
 			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, e, "common.AppPrefilter.checkMenuAuthority").message;
-			this._gateway.handleUnauthorized(message, errorHandler);
+			this._gateway.handleUnauthorized(message, this.errorHandler.bind(this));
 
 		} else {
-			this._gateway.alert({ title: "오류", html: ["<p>", "</p>"].join(e), hidden: errorHandler });
+			this._gateway.alert({ title: "오류", html: ["<p>", "</p>"].join(e), hidden: this.errorHandler.bind(this) });
 
 		}
 
@@ -133,7 +127,7 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 
 	if (!result.hasMenuAuthority) {
 		result.jqXHR.message = "error.unauthorized";
-		throw new Error(result.jqXHR);
+		throw result.jqXHR;
 	}
 
 	return result;
@@ -154,7 +148,7 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 				window.startAppInit();
 			}.bind(this),
 			cancel: function() {
-				this._gateway.handleAuthCancel();
+				this._gateway.handleAuthCancel(this.errorHandler.bind(this));
 				this._gateway.restoreHome();
 			}.bind(this)
 		});
@@ -171,6 +165,13 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 			window.startAppInit();
 		});
 
+	}
+};
+
+AppPrefilter.prototype.errorHandler = function() {
+
+	if (this._gateway.isPopup()) {
+		location.href = "Error.html";
 	}
 };
 
