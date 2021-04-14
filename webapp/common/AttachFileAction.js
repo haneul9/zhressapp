@@ -45,6 +45,7 @@ common.AttachFileAction = {
 
 		options.ListMode = options.Editable ? sap.m.ListMode.MultiSelect : sap.m.ListMode.None;
 		// if (!common.Common.isEmptyArray(opt.FileTypes)) options.FileTypes = opt.FileTypes;
+		options.FileTypes = ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip"];
 		if(typeof options.fnChange === "function") common.AttachFileAction.fnChange = options.fnChange;
 
 		oAttachbox.getModel().setProperty("/Settings", options);
