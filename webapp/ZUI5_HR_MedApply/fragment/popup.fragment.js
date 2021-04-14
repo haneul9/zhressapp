@@ -503,7 +503,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
 		});
 
         var oVert=new sap.ui.commons.layout.VerticalLayout({
-            content:[oPanel1,oPanel2,new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:12px;'>"+oController.getBundleText("MSG_47038")+"</span>"})]
+            content:[oPanel1,oPanel2]
         });
 
         var oContent = new sap.m.FlexBox({
