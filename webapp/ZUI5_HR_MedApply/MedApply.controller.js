@@ -1118,7 +1118,6 @@ sap.ui.define([
 			var oSel=$.app.byId(oController.PAGEID + "_HeadSel");
 			var vFirstDate = $.app.byId(oController.PAGEID + "_ApplyDate").getDateValue();
             var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
-			oController.oTableInit();
 			var aData={oData:new Array()};
 			var oJSON=new sap.ui.model.json.JSONModel();
 			if (!oController._BusyDialog) {
@@ -1150,7 +1149,7 @@ sap.ui.define([
 						}
 					}
 				);
-
+				oController.oTableInit();
 				var vData={ IConType:"1",
 							IBukrs:oController._Bukrs,
 							IPernr:oSessionData.Pernr,
