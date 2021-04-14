@@ -26,7 +26,7 @@ common.AttachFileAction = {
 				true,
 				{ 
 					Editable: false, 
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"], 
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip"], 
 					InfoMessage: "", 
 					Appnm: "",
 					Mode: "S",	// S: single file, M: multi file
@@ -44,7 +44,7 @@ common.AttachFileAction = {
 		oFileUploader.setValue("");
 
 		options.ListMode = options.Editable ? sap.m.ListMode.MultiSelect : sap.m.ListMode.None;
-		if (!common.Common.isEmptyArray(opt.FileTypes)) options.FileTypes = opt.FileTypes;
+		// if (!common.Common.isEmptyArray(opt.FileTypes)) options.FileTypes = opt.FileTypes;
 		if(typeof options.fnChange === "function") common.AttachFileAction.fnChange = options.fnChange;
 
 		oAttachbox.getModel().setProperty("/Settings", options);
@@ -189,20 +189,20 @@ common.AttachFileAction = {
 	 * 첨부파의 크기가 Max Size를 넘었을 경우의 처리내역
 	 */
 	fileSizeExceed: function (oEvent) {
-		var sName = oEvent.getParameter("name"),
-			fSize = oEvent.getParameter("size"),
+		var sName = oEvent.getParameter("fileName"),
+			fSize = oEvent.getParameter("fileSize"),
 			fLimit = oEvent.getSource().getMaximumFileSize(),
 			sMsg = this.getBundleText("MSG_00030");
 
-		sap.m.MessageBox.alert(sMsg.interpolate(sName, fSize, fLimit));
+		sap.m.MessageBox.alert(sMsg.interpolate(sName, parseInt(fSize), fLimit));
 	},
 
 	/*
 	 * 첨부파일의 유형이 허용된 파일유형이 아닌 경우의 처리내역
 	 */
 	typeMissmatch: function (oEvent) {
-		var sName = oEvent.getParameter("name"),
-			sType = oEvent.getParameter("type"),
+		var sName = oEvent.getParameter("fileName"),
+			sType = oEvent.getParameter("fileType"),
 			sMsg = this.getBundleText("MSG_00029"); // ${name} 파일의 ${type} 은 허용된 파일 확장자가 아닙니다.
 
 		sap.m.MessageBox.alert(sMsg.interpolate(sName, sType));
@@ -243,6 +243,7 @@ common.AttachFileAction = {
 			vMode = JSonModel.getProperty("/Settings/Mode"),
 			vMax = JSonModel.getProperty("/Settings/Max"),
 			files = jQuery.sap.domById(this.PAGEID + "_ATTACHFILE_BTN" + "-fu").files;
+
 		if (files) {
 			vFileData.forEach(function(elem) {
 				aFileList.push(elem);
