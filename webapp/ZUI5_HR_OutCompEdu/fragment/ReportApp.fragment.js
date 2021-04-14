@@ -1,4 +1,5 @@
-﻿sap.ui.define([
+﻿/* eslint-disable no-undef */
+sap.ui.define([
     "../../common/Common",
     "../delegate/ViewTemplates",
 	"../../common/ZHR_TABLES",
@@ -178,7 +179,7 @@
 			.bindRows("/Data");
 			
 			ZHR_TABLES.makeColumn(oController, oAttTable, [
-				{id: "Pchk", 		label: ""				   /* CheckBox */,	plabel: "", resize: true, span: 0, type: "Checkbox",  sort: true,  filter: true, width: "auto"},
+				{id: "Pchk", 		label: ""				   /* CheckBox */,	plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "50px", templateGetter:"getDCheckBox"},
 				{id: "Stext1",		label: "{i18n>LABEL_40030}" /* 부서명 */,  	plabel: "",  resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 				{id: "PGradeTxt",   label: "{i18n>LABEL_40031}" /* 직급 */,     plabel: "",  resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto"},
 				{id: "Ename", 		label: "{i18n>LABEL_40032}" /* 성명 */,		plabel: "" , resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto"}
@@ -298,6 +299,12 @@
 										width: "250px",
 										displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
 										delimiter: "~",
+										editable: {
+											path: "Status1",
+											formatter: function(v1) {
+												return !v1 || v1 === "AA";
+											}
+										},
 										dateValue: "{Begdhb}",
 										secondDateValue: "{Enddhe}"
 									})
@@ -581,7 +588,7 @@
 			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
 				fitContainer: true,
 				items: [
-					sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+					fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
 				]
 			});
 				

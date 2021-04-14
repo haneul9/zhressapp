@@ -154,7 +154,7 @@ dismiss: function($button) {
 				$button.toggleClass('d-none', false);
 				item.restore();
 			}, 0);
-			this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message) });
+			this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message || '알 수 없는 오류가 발생하였습니다.') });
 		}.bind(this)
 	});
 },
@@ -362,7 +362,7 @@ initSwitchModal: function() {
 							}.bind(this));
 						}
 					}.bind(this), 0);
-					this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message) });
+					this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message || '알 수 없는 오류가 발생하였습니다.') });
 				}.bind(this)
 			});
 		} else {
@@ -467,7 +467,7 @@ save: function(o) {
 			}
 		}.bind(this),
 		error: function(jqXHR) {
-			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Portlets.save ' + url).message;
+			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Portlets.save ' + url).message || '알 수 없는 오류가 발생하였습니다.';
 			if (typeof error === 'function') {
 				error(message);
 			} else {

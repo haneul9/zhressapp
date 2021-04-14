@@ -32,13 +32,14 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		return [
 			this.getHeaderPanel(oController).setModel(oModel),
 			this.getSchedulePanel(oController).setModel(oModel),
-			this.getAddedPanel(oController).setModel(oModel)
+//			this.getAddedPanel(oController).setModel(oModel)
 		];
 	},
 
 	getAddedPanel : function(oController){
 		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons,
-		oRow,oCell,oMat=new sap.ui.commons.layout.MatrixLayout({
+		oRow,oCell,oMat=new sap.ui.commons.layout.MatrixLayout(oController.PAGEID+"_Mat",{
+			width:"100%",
 			columns:10
 		});
 		oRow=new c.layout.MatrixLayoutRow();
@@ -79,6 +80,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		oMat.addRow(oRow);
 
 		var oCol=new c.layout.MatrixLayout(oController.PAGEID+"_Col",{
+			width:"100%",
 			columns : 10,
 		});
 		var oScrCon=new sap.m.ScrollContainer({

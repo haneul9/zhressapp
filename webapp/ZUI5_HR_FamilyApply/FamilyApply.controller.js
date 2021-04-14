@@ -84,6 +84,7 @@ sap.ui.define([
 				Status:"",
 				Reqrs:"",
 				Emetl:"",
+				Notes:"",
 				Famsa:"",
 				Kdsvh:"",
 				Fanat:"KR",
@@ -559,7 +560,7 @@ sap.ui.define([
 			var c=sap.ui.commons;
 			var oTable=$.app.byId(oController.PAGEID+"_Table");
 			oTable.destroyColumns();
-			var oFields=["Famsat","Kdsvht","Fcnam","Regnot","Zzbdatet","Fasext","Fasart","Dptid","Livid","Helid","Apdat","StatusText","Emetl"];			
+			var oFields=["Famsat","Kdsvht","Fcnam","Regnot","Zzbdatet","Fasext","Fasart","Dptid","Livid","Helid","Apdat","StatusText","Notes"];			
 			var oWidths=['','120px','140px','120px','120px','160px','90px','120px','120px','90px','120px','120px','120px',''];			
 			var oLabels=new Array();
 			for(var i=2;i<15;i++){
@@ -710,6 +711,12 @@ sap.ui.define([
 			var oPro=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0];
 			var s = oEvent.getParameter("value");
 			var oId=oEvent.getSource().getId();
+			if(s.length>0&&s.length<7&&isNaN(s)){
+				$.app.byId(oId).setValue();
+			}
+			if($.app.byId(oId).getValue().search("-")==-1){
+				isNaN(s)?$.app.byId(oId).setValue():null;
+			}
 			if(s.length==13){
 				if($.app.byId(oId).getValue().search("-")==-1){
 					$.app.byId(oId).setValue($.app.byId(oId).getValue().substring(0,6)+"-"+$.app.byId(oId).getValue().substring(6));
@@ -741,7 +748,7 @@ sap.ui.define([
 			if(oPro.Famsa==""){
 				oMsg=oBundleText.getText("MSG_44005");				
 			}
-			if(oController._onDialog!="M"&&vStatus!=""){
+			if(oController._onDialog!="M"&&vStatus==""){
 				if(oPro.Kdsvh==""){
 					oMsg=oBundleText.getText("MSG_44006");				
 				}
@@ -754,6 +761,9 @@ sap.ui.define([
 			}
 			if(oPro.Regno.trim()==""){
 				oMsg=oBundleText.getText("MSG_44008");
+			}
+			if(oPro.Regno.length!=14){
+				oMsg=oBundleText.getText("MSG_44019");
 			}
 
 			if($.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0].Opener=="X"&&oController._onDialog=="N"){

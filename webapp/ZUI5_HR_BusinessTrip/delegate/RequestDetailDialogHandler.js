@@ -262,10 +262,10 @@ var Handler = {
 								o.ExptTotAmt = Common.toNumber(o.ExptTotAmt);
 							});
 							this.oModel.setProperty("/TableIn03", TableIn03);
-							this.onShow.call(this);
+	//						this.onShow.call(this);
 						} else {
 							this.oModel.setProperty("/TableIn03", [{}]);
-							this.initAdded.call(this.oController);
+	//						this.initAdded.call(this.oController);
 						}
 						Common.adjustVisibleRowCount($.app.byId("TableIn03"), 5, TableIn03.length);
 
@@ -558,29 +558,29 @@ var Handler = {
 
 	
 	//대근자 지정 관련
-	sizingAdded : function(oController,oMat,dLength,vCell){
+	sizingAdded : function(oController,oMat,dLength){
 		var c=sap.ui.commons;
-			var oRow,oCell;
-			var oCnt1=11;
-			var oCnt2=10;
-			if(dLength>8){
-				var width1=new Array();
-				for(var i=0;i<11;i++){
-					width1.push("");
-				}
-				width1.push("13px");
-				oMat.setWidths(width1);
-				oMat.setColumns(oCnt1);
-				vCell.setColSpan(oCnt1);
-			}else{
-				var width1=new Array();
-				for(var i=0;i<11;i++){
-					width1.push("");
-				}
-				oMat.setWidths(width1);
-				oMat.setColumns(oCnt2);
-				vCell.setColSpan(oCnt2);
-			}   
+		var oRow,oCell;
+		var oCnt1=11;
+		var oCnt2=10;
+		if(dLength>8){
+			var width1=new Array();
+			for(var i=0;i<10;i++){
+				width1.push("");
+			}
+			width1.push("13px");
+			oMat.setWidths(width1);
+			oMat.setColumns(oCnt1);
+			$.app.byId(oController.PAGEID+"_Cell").setColSpan(oCnt1);
+		}else{
+			var width1=new Array();
+			for(var i=0;i<10;i++){
+				width1.push("");
+			}
+			oMat.setWidths(width1);
+			oMat.setColumns(oCnt2);
+			$.app.byId(oController.PAGEID+"_Cell").setColSpan(oCnt2);
+		}
 	},
 
 	initAdded : function(){ 
@@ -600,35 +600,71 @@ var Handler = {
 	},
 
 	renderAdded : function(oController,pData){
-		console.log(pData);
 		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons,
 		oRow,oCell,oMat=$.app.byId(oController.PAGEID+"_Col"),oFields=["Ename","Datum","Awtxt","Beguzenduz","Ovtim","Wt40","Wt12","Wtsum","LigbnTx","Cntgb"];
 		oMat.removeAllRows();	
+		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
+		for(var i=0;i<100;i++){
+			var oId=$.app.byId(oController.PAGEID+"_Row_"+i);
+			for(var j=0;j<100;j++){
+				var oId2=$.app.byId(oController.PAGEID+"_Cell_"+j+"_"+i);
+				if(oId2){
+					oId2.destroy();
+				}
+			}
+			if(oId){
+				oId.destroy();
+			}
+		}
+
 		for(var j=0;j<pData.length;j++){
 			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_Row_"+j);	
 			for(var i=0;i<10;i++){
-				oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i,{hAlign:"Center"});
-				oRow.addCell(oCell);
-				if(i==1){
-					oCell.addContent(
-						new sap.m.Text({
-							type: new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"}),
-							text: pData[j].Datum
-						})						
-					);
-				}else if(i==2){
-					oCell.addContent();
-				}else if(i==3){
-					oCell.addContent();
-				}else if(i==(oFields.length-1)){
-					oCell.addContent();
+				if(pData[j].Awtxt=="휴일"){
+					oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i,{hAlign:"Center"}).addStyleClass("datacell");
+					oRow.addCell(oCell);
+					switch (i) {
+						case 0:
+							oCell.addContent(new sap.m.Text({text:pData[j].Ename}));
+							break;
+						case 1:
+							oCell.addContent(new sap.ui.core.HTML({preferDOM:false,content:"<span style='font-weight:bold;color:red;font-size:14px;'>"+dateFormat.format(pData[j].Datum)+"</span>"}));
+							break;
+						case 2:
+							oCell.addContent(new sap.ui.core.HTML({preferDOM:false,content:"<span style='font-weight:bold;color:red;font-size:14px;'>"+pData[j].Awtxt+"</span>"}));
+							break;
+						default:
+							break;
+					}
 				}else{
-					eval("oCell.addContent(new sap.m.Text({text:pData["+j+"].oFields["+i+"]}))");
+					oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i,{hAlign:"Center"}).addStyleClass("datacell");
+					oRow.addCell(oCell);
+					switch (i) {
+						case 1:
+							oCell.addContent(
+								new sap.m.Text({
+									text: dateFormat.format(pData[j].Datum)
+								})						
+							);
+						break;
+						case 2:
+							oCell.addContent();
+							break;
+						case 3:
+							oCell.addContent();
+						break;
+						case oFields.length-1:
+							oCell.addContent();
+						break;
+						default:
+							eval("oCell.addContent(new sap.m.Text({text:pData[j]."+oFields[i]+"}))");
+						break;
+					}
 				}
 			}
 			oMat.addRow(oRow);
 		}
-		this.sizingAdded(oController,oMat,pData.length,$.app.byId(oController.PAGEID+"_Cell"));
+		this.sizingAdded(oController,$.app.byId(oController.PAGEID+"_Mat"),pData.length,$.app.byId(oController.PAGEID+"_Cell"),$.app.byId(oController.PAGEID+"_Col"));
 		if(pData.length==0){
 			this.initAdded.call(oController);
 		}
@@ -641,12 +677,13 @@ var Handler = {
 		var oData4=this.oModel.getProperty("/TableIn04");
 		var tArr=new Array();
 		var dArr=new Array();
+		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
 		function chkCover(vStrs){
 			for(var i=0;i<vStrs.length;i++){
 				var _Awchk="";
 				var vData={
-					IBegda: vStrs[i].IBegda,
-					IEndda: vStrs[i].IEndda,
+					IBegda: new Date(dateFormat.format(vStrs[i].IBegda)+"T09:00:00"),
+					IEndda: new Date(dateFormat.format(vStrs[i].IEndda)+"T09:00:00"),
 					IPernr: vStrs[i].IPernr,
 					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
 					Export: []
@@ -697,7 +734,7 @@ var Handler = {
 		for(var i=0;i<oArray.length;i++){
 			for(var j=0;j<tArr.length;j++){
 				if(oArray[i]==tArr[j].IPernr){
-					fArray.push(tArr[i]);
+					fArray.push(tArr[j]);
 				}
 			}
 		}
@@ -708,8 +745,8 @@ var Handler = {
 			var vData={IConType: "1",
 					IAwart: this.oModel.getProperty("/Header").BtPurpose1,
 					IProType : "1",
-					IBegda: dArr[i].IBegda,
-					IEndda: dArr[i].IEndda,
+					IBegda: new Date(dateFormat.format(dArr[i].IBegda)+"T09:00:00"),
+					IEndda: new Date(dateFormat.format(dArr[i].IEndda)+"T09:00:00"),
 					IPernr: dArr[i].IPernr,
 					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
 					ILangu: this.oController.getSessionInfoByKey("Langu"),

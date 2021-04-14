@@ -350,7 +350,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
         oMat2.addRow(oRow);
 
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:12px;'>"+oController.getBundleText("MSG_47039")+"</span>"})});
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47039")+"</span>"})});
         oRow.addCell(oCell);
         oMat2.addRow(oRow);
 

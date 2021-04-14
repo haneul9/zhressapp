@@ -50,7 +50,6 @@ body {min-width:576px; font-size:14px}
 .navbar-light .navbar-nav.ehr-popup-menu .nav-link {color:#777}
 .navbar-light .navbar-nav.ehr-popup-menu .nav-link:hover {color:#333}
 .navbar-light .navbar-nav .nav-link {color:#333}
-/*.navbar-light .navbar-nav .nav-link:hover {color:#064975}*/
 .col-mega-menu .list-unstyled {padding-left:10px}
 .col-mega-menu > a {padding:1rem .5rem; font-size:1rem; font-weight:700; white-space:normal}
 .col-mega-menu > a:hover{color:#064975 !important}
@@ -59,11 +58,10 @@ body {min-width:576px; font-size:14px}
 .col-mega-menu li a {margin-left:5px; color:#666; white-space:normal}
 .col-mega-menu .navbar .nav-link {padding:1rem 0rem}
 .col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none; font-weight:500}
-/* .col-mega-menu li a.active {font-weight:500} */
 .col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}
 .col-mega-menu i.far.fa-star {color:#b2b2b2}
-.menu-mss .col-mega-menu li a {color:#8A4144}
-.menu-hass .col-mega-menu li a {color:#137826}
+.menu-mss > .nav-link, .menu-mss .col-mega-menu li a {color:#8a4144 !important}
+.menu-hass > .nav-link, .menu-hass .col-mega-menu li a {color:#137826 !important}
 
 .ehr-body {position:relative; overflow-y:hidden}
 .ehr-body .container-fluid {height:100%}
@@ -164,19 +162,18 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; border-top-right-radius:0; border-bottom-right-radius:0; padding-right:5px}
 .portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%; border-radius:0}
 .portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-top-left-radius:0; border-bottom-left-radius:0; padding-left:5px}
-.portlet-calendar-inline + .d-flex {margin-top: 2rem; justify-content:space-between; align-items:center}
-.portlet-calendar-date {margin:0; font-weight:700}
-.portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:0; text-align:center}
-.portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
-.portlet-calendar-inline .ui-widget-header {background-color:transparent}
-.portlet .portlet-calendar-daily-report .list-group-item {padding:.5rem 0rem .25rem}
-.portlet-calendar-daily-report .list-group-item h6 {font-weight:400; font-size:15px;margin-bottom:0;padding-top:.25rem}
-.portlet-calendar-daily-report .list-group-item span {font-size:2.25rem; font-weight:700; color:#064975; letter-spacing:-2px}
-.portlet-calendar-daily-report .list-group-item span.unit {font-weight:400; font-size:14px; display: inline-block; padding-left:4px}
 .portlet-calendar-inline .ui-datepicker td a {margin:6px 5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {top:5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev {left:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-next {right:14px}
+.portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
+.portlet-calendar-inline .ui-widget-header {background-color:transparent}
+.portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto 0; width:295px}
+.portlet-calendar-date {margin:0; font-weight:700}
+.portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:.5rem 0rem .25rem; text-align:center}
+.portlet-calendar-daily-report .list-group-item h6 {font-weight:400; font-size:15px; margin-bottom:0; padding-top:.25rem}
+.portlet-calendar-daily-report .list-group-item span {font-size:2.25rem; font-weight:700; color:#064975; letter-spacing:-2px}
+.portlet-calendar-daily-report .list-group-item span.unit {font-weight:400; font-size:14px; display:inline-block; padding-left:4px}
 .portlet-calendar .tooltip.show {opacity:1}
 .portlet-calendar .tooltip .arrow:before {border-bottom-color:#064975; border-top-color:#064975}
 .portlet-calendar .tooltip .tooltip-inner {max-width:none; background-color:#064975; border:1px solid #064975; box-shadow:rgba(23,25,29,0.3) 0 2px 10px; color:rgba(255,255,255,0.8); font-size:.875rem}

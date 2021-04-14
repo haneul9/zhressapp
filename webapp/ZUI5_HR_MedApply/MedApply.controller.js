@@ -48,9 +48,27 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID + "_HeadSel").addItem();
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
-			oController._Bukrs=oSessionData.Bukrs3;
+			oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,Datum:new Date(),MedicalBukrsExport:[]}, null,
+					function(data,res){
+						if(data&&data.MedicalBukrsExport.results){
+							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
+						}					
+					},
+					function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
+					}
+				);
+//			oController._Bukrs=oSessionData.Bukrs3;
 			var vData={ IConType:"0",
-						IBukrs:oSessionData.Bukrs3,
+						IBukrs:oController._Bukrs,
 						IPernr:oSessionData.Pernr,
 						ILangu:oSessionData.Langu,
 						IDatum:"\/Date("+new Date().getTime()+")\/",
@@ -115,13 +133,15 @@ sap.ui.define([
 		getBukrs : function(vDatum){
 			var oController=$.app.getController();
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
-			var vData={Pernr:oController._SessionData.Pernr,Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",BukrsExport:[]};
 			oController._MedDate=new Date(vDatum.getValue());
+			var oSessionData=oController._SessionData;
 			function getBukrs(){
-				oModel.create("/BukrsImportSet", vData, null,
+				oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,
+														 Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",
+														 MedicalBukrsExport:[]}, null,
 					function(data,res){
-						if(data){
-							oController._Bukrs=data.BukrsExport.results[0].Bukrs;
+						if(data&&data.MedicalBukrsExport.results){
+							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
 							oController.onClose3();
 							oController.onDialog("N",oController._Bukrs);
 						}					
@@ -507,8 +527,8 @@ sap.ui.define([
 				}else{
 					vEdits=[false,false,false,false,false];
 				}
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
-				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+				// $.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				// $.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 
 				for(var i=3;i<=7;i++){
 					var vProperty={
@@ -742,7 +762,7 @@ sap.ui.define([
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"004",
 					   IPernr:oSessionData.Pernr,
-					   IBukrs:oSessionData.Bukrs3,
+					   IBukrs:oController._Bukrs,
 					   NavCommonCodeList:[],
 					   ICodty:"ZHOSP_TYPE"};
 			oModel.create("/CommonCodeListHeaderSet", vData, null,
@@ -1098,24 +1118,6 @@ sap.ui.define([
 			var oSel=$.app.byId(oController.PAGEID + "_HeadSel");
 			var vFirstDate = $.app.byId(oController.PAGEID + "_ApplyDate").getDateValue();
             var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
-			oController.oTableInit();
-			var vData={ IConType:"1",
-						IBukrs:oSessionData.Bukrs3,
-						IPernr:oSessionData.Pernr,
-						ILangu:oSessionData.Langu,
-						IMolga:oSessionData.Molga,
-						IBegda:Common.adjustGMTOdataFormat(vFirstDate),
-						IEndda:vSecondDate,
-						IStatus:oSel.getSelectedKey(),
-						IDatum:"\/Date("+new Date().getTime()+")\/",
-						MedicalApplyExport:[],
-						MedicalApplyTableIn:[],
-						MedicalApplyTableIn0:[],
-						MedicalApplyTableIn3:[],
-						MedicalApplyTableIn4:[],
-						MedicalApplyTableIn5:[],
-						MedicalApplyTableInH:[]
-						};
 			var aData={oData:new Array()};
 			var oJSON=new sap.ui.model.json.JSONModel();
 			if (!oController._BusyDialog) {
@@ -1129,6 +1131,43 @@ sap.ui.define([
 				oController._BusyDialog.open();
 			}
 			setTimeout(function(){
+				oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,Datum:new Date(),MedicalBukrsExport:[]}, null,
+					function(data,res){
+						if(data&&data.MedicalBukrsExport.results){
+							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
+							oController.oTableInit();
+						}					
+					},
+					function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
+					}
+				);
+				var vData={ IConType:"1",
+							IBukrs:oController._Bukrs,
+							IPernr:oSessionData.Pernr,
+							ILangu:oSessionData.Langu,
+							IMolga:oSessionData.Molga,
+							IBegda:Common.adjustGMTOdataFormat(vFirstDate),
+							IEndda:vSecondDate,
+							IStatus:oSel.getSelectedKey(),
+							IDatum:"\/Date("+new Date().getTime()+")\/",
+							MedicalApplyExport:[],
+							MedicalApplyTableIn:[],
+							MedicalApplyTableIn0:[],
+							MedicalApplyTableIn3:[],
+							MedicalApplyTableIn4:[],
+							MedicalApplyTableIn5:[],
+							MedicalApplyTableInH:[]
+							};
+
 				oModel.create("/MedicalApplySet", vData, null,
 						function(data,res){
 							if(data&&data.MedicalApplyTableIn.results.length){
@@ -1172,7 +1211,7 @@ sap.ui.define([
 			var oSessionData=oController._SessionData;		
 			oController._tData=oData;				
 			oController._tData.Close=oController._onClose;	
-			oController._Bukrs==""?oController._Bukrs=oData.Bukrs:null;
+			oController._Bukrs=oData.Bukrs;
 			oController.onDialog("M",oController._Bukrs);
 		},
 
