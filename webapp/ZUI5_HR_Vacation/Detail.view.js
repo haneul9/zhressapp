@@ -527,67 +527,81 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 			content : [oTable3]
 		});
 		
+		var titleitem = [
+			new sap.m.FlexBox({
+			  	 justifyContent : "Start",
+				 alignItems: "End",
+				 fitContainer: true,
+			  	 items : [
+			  	  	new sap.m.Button({
+					  	  icon : "sap-icon://nav-back",
+					  	  type : "Default",
+					  	  press : oController.onBack,
+					  	  visible : {
+						  	  	path : "FromPageId",
+						  	  	formatter : function(fVal){
+						  	  		return (fVal && fVal != "") ? true : false;
+						  	  	}
+					  	  }
+					  }),
+					  new sap.ui.core.HTML({
+					  	  content : "<div style='width:10px' />",
+					  	  visible : {
+					  	  		path : "FromPageId",
+					  	  		formatter : function(fVal){
+					  	  			return (fVal && fVal != "") ? true : false;
+					  	  		}
+					  	  }
+					  }),
+					  new sap.m.FormattedText({
+					  	  htmlText : {
+					  	  		parts : [{path : "Status1"}],
+					  	  		formatter : function(fVal1){
+					  	  			if(fVal1 == "" || fVal1 == "AA"){
+					  	  						// 근태신청 신규등록
+					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
+					  	  			} else {
+					  	  						// 근태 신규신청 조회
+					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
+					  	  					   "<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" +
+					  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
+					  	  			}
+					  	  		}
+					  	  }
+					  })
+			  	  ]
+			  })
+		];
+			  
+		if(parent && window._use_emp_info_box === true) {
+			window._CommonEmployeeModel = new common.EmployeeModel();
+			window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
+
+			titleitem.push(new common.EmpBasicInfoBox(window._CommonEmployeeModel));
+		};
+		
+		var title = new sap.m.FlexBox({
+			justifyContent : "SpaceBetween",
+			alignContent : "Start",
+			alignItems : "Center",
+			fitContainer: true,
+			items : titleitem
+		}).addStyleClass("app-title-container");
+			
 		var oContent = new sap.m.FlexBox({
 			  justifyContent: "Center",
 			  fitContainer: true,
 			  items: [new sap.m.FlexBox({
-						  direction: sap.m.FlexDirection.Column,
-						  items: [new sap.m.FlexBox({
-									  alignItems: "End",
-									  fitContainer: true,
-									  items: [new sap.m.Button({
-											  	  icon : "sap-icon://nav-back",
-											  	  type : "Default",
-											  	  press : oController.onBack,
-											  	  visible : {
-												  	  	path : "FromPageId",
-												  	  	formatter : function(fVal){
-												  	  		return (fVal && fVal != "") ? true : false;
-												  	  	}
-											  	  }
-											  }),
-											  new sap.ui.core.HTML({
-											  	  content : "<div style='width:10px' />",
-											  	  visible : {
-											  	  		path : "FromPageId",
-											  	  		formatter : function(fVal){
-											  	  			return (fVal && fVal != "") ? true : false;
-											  	  		}
-											  	  }
-											  }),
-											  /*new sap.m.Text({
-												  text : {
-												  		path : "Status1",
-												  		formatter : function(fVal){ 			  // 근태신청 신규등록				  근태신청
-												  			return (fVal == "" || fVal == "AA") ? oBundleText.getText("LABEL_48013") : oBundleText.getText("LABEL_48041")
-												  		}
-												  }
-											  }).addStyleClass("app-title")*/
-											  new sap.m.FormattedText({
-											  	  htmlText : {
-											  	  		parts : [{path : "Status1"}],
-											  	  		formatter : function(fVal1){
-											  	  			if(fVal1 == "" || fVal1 == "AA"){
-											  	  						// 근태신청 신규등록
-											  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
-											  	  			} else {
-											  	  						// 근태 신규신청 조회
-											  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
-											  	  					   "<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" +
-											  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
-											  	  			}
-											  	  		}
-											  	  }
-											  })] 
-								  }).addStyleClass("app-title-container"),
-								//  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),    
-								  oHeader,
-								//  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
-								  oPanel1, oPanel2, oPanel3,
-								  new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
-					  }).addStyleClass("app-content-container-wide")]
+						  justifyContent : "Center",
+						  fitContainer: true,
+						  items: [
+						  	new sap.m.FlexBox(oController.PAGEID + "app-content-container", {
+								direction: "Column",
+								items: [title, oHeader, oPanel1, oPanel2, oPanel3, new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
+							}).addStyleClass("app-content-container-wide")]
+					  })]
 		}).addStyleClass("app-content-body");
-				
+			
 		/////////////////////////////////////////////////////////
 
 		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {

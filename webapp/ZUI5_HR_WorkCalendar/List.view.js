@@ -29,7 +29,19 @@ sap.ui.jsview("ZUI5_HR_WorkCalendar.List", {
 									width : "200px",
 									textAlign : "Begin",
 									change : oController.onChangeDate
-								})
+								}),
+								new sap.m.Label({
+									text: oBundleText.getText("LABEL_41002"), // 대상자
+									visible : (gAuth == "M" ? true : false)
+								}),
+                                new sap.m.Input({
+                                    width: "140px",
+                                    value: "{Ename}",
+                                    showValueHelp: true,
+                                    valueHelpOnly: true,
+                                    valueHelpRequest: oController.searchOrgehPernr,
+                                	visible : (gAuth == "M" ? true : false)
+                                })
                             ]
                         }).addStyleClass("search-field-group"),
                         new sap.m.FlexBox({

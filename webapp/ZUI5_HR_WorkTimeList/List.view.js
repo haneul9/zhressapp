@@ -38,13 +38,43 @@ sap.ui.jsview("ZUI5_HR_WorkTimeList.List", {
 									textAlign : "Begin",
 									change : oController.onChangeDate
 							    }).addStyleClass("pl-5px"),
-							    new sap.m.Label({text: oBundleText.getText("LABEL_48002")}), // 부서/사원
+							    new sap.m.Label({
+							    	text: oBundleText.getText("LABEL_48002"), // 부서/사원
+							    	visible : {
+                                    	path : "Werks",
+                                    	formatter : function(fVal){
+                                    		if(gAuth == "M"){
+                                    			return true;	
+                                    		} else {
+                                    			if(fVal && fVal.substring(0,1) != "D"){
+	                                    			return true;
+	                                    		} else {
+	                                    			return false;
+	                                    		}
+                                    		}
+                                    	}
+                                    }
+							    }),
                                 new sap.m.Input({
                                     width: "200px",
                                     value: "{Ename}",
                                     showValueHelp: true,
                                     valueHelpOnly: true,
-                                    valueHelpRequest: oController.searchOrgehPernr
+                                    valueHelpRequest: oController.searchOrgehPernr,
+                                    visible : {
+                                    	path : "Werks",
+                                    	formatter : function(fVal){
+                                    		if(gAuth == "M"){
+                                    			return true;	
+                                    		} else {
+                                    			if(fVal && fVal.substring(0,1) != "D"){
+	                                    			return true;
+	                                    		} else {
+	                                    			return false;
+	                                    		}
+                                    		}
+                                    	}
+                                    }
                                 }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_60029")}), // 조회구분
                                 new sap.m.ComboBox({

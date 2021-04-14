@@ -13,9 +13,9 @@ sap.ui.define([
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
-	return CommonController.extend("ZUI5_HR_DayWorkSchedule.List", {
+	return CommonController.extend("ZUI5_HR_RationaleApproval.List", {
 
-		PAGEID: "ZUI5_HR_DayWorkScheduleList",
+		PAGEID: "ZUI5_HR_RationaleApprovalList",
 		_BusyDialog : new sap.m.BusyDialog(),
 		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
 		_Columns : [],
@@ -46,13 +46,12 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Bukrs : $.app.getModel("session").getData().Bukrs2,
-						Werks : $.app.getModel("session").getData().Persa,
-						Pernr : "",
+						Bukrs : $.app.getModel("session").getData().Bukrs,
+						Pernr : $.app.getModel("session").getData().Pernr,
 						Orgeh : $.app.getModel("session").getData().Orgeh,
-						Ename : $.app.getModel("session").getData().Stext,
-						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
-						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
+						Langu : $.app.getModel("session").getData().Langu,
+						Begda : dateFormat.format(new Date(1800, 0, 1)),
+						Endda : dateFormat.format(new Date(9999, 11, 31)),
 					}
 				};
 				
@@ -67,20 +66,20 @@ sap.ui.define([
 		},
 		
 		onBack : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 			var oController = oView.getController();
 		
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : oController._ListCondJSonModel.getProperty("/Data/FromPageId"),
 			      data : {
-			    	  FromPageId : "ZUI5_HR_DayWorkSchedule.List",
+			    	  FromPageId : "ZUI5_HR_RationaleApproval.List",
 			    	  Data : {}
 			      }
 			});
 		},
 		
 		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 			var oController = oView.getController();
 		
 		},
@@ -94,7 +93,7 @@ sap.ui.define([
 		},
 		
 		onPressSearch : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 			var oController = oView.getController();
 			
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
@@ -107,34 +106,36 @@ sap.ui.define([
 			var oJSONModel = oTable.getModel();
 			var vData = {Data : []};
 			
-			var column = oTable.getColumns();
-			for(var i=0; i<column.length; i++){
-				column[i].setSorted(false);
-				column[i].setFiltered(false);
+			oJSONModel.setData({Data : [{Idx : 0}]});
+			oTable.bindRows("/Data");
+			return;
+			
+			// filter, sort 제거
+			var oColumn = oTable.getColumns();
+			for(var i=0; i<oColumn.length; i++){
+				oColumn[i].setFiltered(false);
+				oColumn[i].setSorted(false);
 			}
 			
 			var search = function(){
 				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
-				var createData = {DWorkScheduleNav : []};
+				var createData = {ChangeWorkNav : []};
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = oData.Langu;
-					createData.IMolga = oData.Molga;
-					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
-					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/";
+					createData.IPernr = oData.Pernr;
 					createData.IOrgeh = oData.Orgeh;
-					createData.IEmpid = oData.Pernr;
-				
-				oModel.create("/DayWorkScheduleSet", createData, null,
+					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
+					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
+					createData.ILangu = oData.Langu;
+
+				oModel.create("/ChangeWorkListSet", createData, null,
 					function(data, res){
 						if(data){
-							if(data.DWorkScheduleNav && data.DWorkScheduleNav.results){
-								var data1 = data.DWorkScheduleNav.results;
+							if(data.ChangeWorkNav && data.ChangeWorkNav.results){
+								var data1 = data.ChangeWorkNav.results;
 								
 								for(var i=0; i<data1.length; i++){
-									data1[i].Datum = new Date(common.Common.getTime(data1[i].Datum));
-									
-									data1[i].Beguz = data1[i].Beguz != "" ? (data1[i].Beguz.substring(0,2) + ":" + data1[i].Beguz.substring(2,4)) : "";
-									data1[i].Enduz = data1[i].Enduz != "" ? (data1[i].Enduz.substring(0,2) + ":" + data1[i].Enduz.substring(2,4)) : "";
+									data1[i].Begda = new Date(common.Common.getTime(data1[i].Begda));
+									data1[i].Endda = new Date(common.Common.getTime(data1[i].Endda));
 									
 									vData.Data.push(data1[i]);
 								}
@@ -159,12 +160,12 @@ sap.ui.define([
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
 				
-				var height = parseInt(window.innerHeight - 190);
+				var height = parseInt(window.innerHeight - 130);
 				var count = parseInt((height - 35) / 38);
 				
 				oTable.setVisibleRowCount(vData.Data.length < count ? vData.Data.length : count);
 				
-				oController._BusyDialog.close();	
+				oController._BusyDialog.close();
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -172,13 +173,24 @@ sap.ui.define([
 					return;
 				}
 			};
-			
+				
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
 		},
 		
+		onChangeStatus : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
+			var oController = oView.getController();
+			
+			var oData = oEvent.getSource().getCustomData()[0].getValue();
+			console.log(oData);
+			
+			var oJSONModel = sap.ui.getCore().byId(oController.PAGEID + "_Table").getModel();
+			
+		},
+		
 		searchOrgehPernr : function(oController){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 			var oController = oView.getController();
 			
 			var initData = {
@@ -190,7 +202,7 @@ sap.ui.define([
                 Mssty: "",
             },
             callback = function(o) {
-            	var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
+            	var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 				var oController = oView.getController();
 			
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

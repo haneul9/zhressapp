@@ -1140,10 +1140,10 @@ sap.ui.define([
 						detail.Awper = oData2[i].Awper;
 						detail.Beguz = oData2[i].Beguz;
 						detail.Enduz = oData2[i].Enduz;
-						detail.Ovtim = oData2[i].Ovtim == "-" ? "0" : oData2[i].Ovtim;
-						detail.Wt40 = oData2[i].Wt40 == "-" ? "0" : oData2[i].Wt40;
-						detail.Wt12 = oData2[i].Wt12 == "-" ? "0" : oData2[i].Wt12;
-						detail.Wtsum = oData2[i].Wtsum == "-" ? "0" : oData2[i].Wtsum;
+						detail.Ovtim = oData2[i].Ovtim == "" || oData2[i].Ovtim == "-" ? "0" : oData2[i].Ovtim;
+						detail.Wt40 = oData2[i].Wt40 == "" || oData2[i].Wt40 == "-" ? "0" : oData2[i].Wt40;
+						detail.Wt12 = oData2[i].Wt12 == "" || oData2[i].Wt12 == "-" ? "0" : oData2[i].Wt12;
+						detail.Wtsum = oData2[i].Wtsum == "" || oData2[i].Wtsum == "-" ? "0" : oData2[i].Wtsum;
 						detail.Ligbn = oData2[i].Ligbn;
 						detail.Cntgb = oData2[i].Cntgb;
 						detail.Flag = oData2[i].Flag;
