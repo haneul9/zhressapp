@@ -49,6 +49,7 @@ sap.ui.define([
 					Data : {
 						Zyymm : today.getFullYear() + (today.getMonth()+1 > 10 ? today.getMonth()+1 : "0" + (today.getMonth()+1)),
 						Pernr : oLoginData.Pernr,
+						Ename : oLoginData.Ename,
 						Bukrs : oLoginData.Bukrs,
 						Langu : oLoginData.Langu,
 						Molga : oLoginData.Molga
@@ -562,19 +563,12 @@ sap.ui.define([
                 Mssty: "",
             },
             callback = function(o) {
-                // oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");
-                // oModel.setProperty("/SearchConditions/Orgeh", o.Otype === "O" ? o.Objid : "");
-                // oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", o.Stext || "");
-               
-                oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
-				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
-               
-                if(o.Otype == "P"){
-                	oController._ListCondJSonModel.setProperty("/Data/Pernr", o.Objid);
-                } else if(o.Otype == "O"){
-                	oController._ListCondJSonModel.setProperty("/Data/Orgeh", o.Objid);
-                }
-                
+            	if(o.Otype != "P"){
+            		sap.m.MessageBox.error(oBundleText.getText("MSG_48016")); // 대상자를 선택하여 주십시오.
+            		return;
+            	}
+            	
+                oController._ListCondJSonModel.setProperty("/Data/Pernr", o.Objid);
                 oController._ListCondJSonModel.setProperty("/Data/Ename", o.Stext);
             };
     

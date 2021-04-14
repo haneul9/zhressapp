@@ -253,7 +253,7 @@ sap.ui.define([
 								else return true;
 							}
 						}
-					}).addStyleClass("search-field-group mt-20px")
+					}).addStyleClass("mt-20px")
 				]
 			}).addStyleClass("search-box mb-40px");
 		}

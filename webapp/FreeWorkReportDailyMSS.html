@@ -36,20 +36,20 @@
 		        gPernr = "",
 				gBukrs = "";
 				
-			var gAuth = "E";
+			var gAuth = "M";
 
 			var oBundleText = $.app.geti18nResource();
 			
-			document.title = oBundleText.getText("LABEL_64001"); // 월별출근현황
+			document.title = oBundleText.getText("LABEL_64002"); // 일별출근현황
 			
 			function startAppInit() {
-				var contextPath = "ZUI5_HR_FreeWorkReportMonthly";
+				var contextPath = "ZUI5_HR_FreeWorkReportDaily";
 				$.extend(true, $.app, {
 					CONTEXT_PATH: contextPath,
 					APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 					APP_ID: [contextPath, "List"].join("."),
 					APP_AUTH: gAuth,
-					APP_TILE: oBundleText.getText("LABEL_64001"), // 월별출근현황
+					APP_TILE: oBundleText.getText("LABEL_64002"), // 일별출근현황
 					LOG: {
 						ENABLE_SUCCESS: true
 					}

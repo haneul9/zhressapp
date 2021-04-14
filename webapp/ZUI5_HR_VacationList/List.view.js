@@ -2,10 +2,10 @@ $.sap.require("common.Common");
 $.sap.require("common.Formatter");
 $.sap.require("common.makeTable");
 
-sap.ui.jsview("ZUI5_HR_Vacation.List", {
+sap.ui.jsview("ZUI5_HR_VacationList.List", {
 	
 	getControllerName: function() {
-		return "ZUI5_HR_Vacation.List";
+		return "ZUI5_HR_VacationList.List";
 	},
 
 	createContent: function(oController) {
@@ -62,17 +62,6 @@ sap.ui.jsview("ZUI5_HR_Vacation.List", {
 			noData: oBundleText.getText("LABEL_00901"), // No data found
 			rowHeight: 37,
 			columnHeaderHeight: 38,
-			cellClick : oController.onPressTable,
-			rowActionCount : 1,
-			rowActionTemplate : [new sap.ui.table.RowAction({
-									 items : [new sap.ui.table.RowActionItem({
-											 	  type : "Navigation",
-											 	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
-											 	  press : function(oEvent){
-											 	  		oController.onPressTable(oEvent, "X");
-											 	  }
-											  })]
-								 })],
 			rowSettingsTemplate : [new sap.ui.table.RowSettings({
 									   highlight : {
 									   		path : "Status1",
@@ -113,14 +102,6 @@ sap.ui.jsview("ZUI5_HR_Vacation.List", {
 				                                new sap.m.Button({
 				                                    text: oBundleText.getText("LABEL_00129"), // Excel
 				                                    press: oController.onExport
-				                                }).addStyleClass("button-light"),
-				                                new sap.m.Button({
-				                                    text: oBundleText.getText("LABEL_48045"), // 신규신청
-				                                    press : oController.onPressNew
-				                                }).addStyleClass("button-light"),
-				                                new sap.m.Button({
-				                                    text: oBundleText.getText("LABEL_48046"), // 삭제신청
-				                                    // press : oController.onPressNew
 				                                }).addStyleClass("button-light")
 				                            ]
 				                        }).addStyleClass("button-group")]
@@ -130,16 +111,17 @@ sap.ui.jsview("ZUI5_HR_Vacation.List", {
 		oTable.setModel(new sap.ui.model.json.JSONModel());
 		oTable.bindRows("/Data");
 		
-						// 구분, 사번, 성명, 근태, 근태기간, 일수, 행선지, 연락처, 근태사유, 결재상태
+						// 구분, 사번, 성명, 근태, 근태기간, 일수, 근태시간, 행선지, 연락처, 근태사유, 결재상태
 		var col_info = [/*{id: "111", label: oBundleText.getText("LABEL_48047"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},*/
 						{id: "Pernr", label: oBundleText.getText("LABEL_48004"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Ename", label: oBundleText.getText("LABEL_48005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Atext", label: oBundleText.getText("LABEL_48006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Period", label: oBundleText.getText("LABEL_48007"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "15%"},
 						{id: "Kaltg", label: oBundleText.getText("LABEL_48008"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Time", label: oBundleText.getText("LABEL_48050"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Desti", label: oBundleText.getText("LABEL_48009"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Telnum", label: oBundleText.getText("LABEL_48010"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Bigo", label: oBundleText.getText("LABEL_48011"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "25%", align : "Begin"},
+						{id: "Bigo", label: oBundleText.getText("LABEL_48011"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "20%", align : "Begin"},
 						{id: "Stext1", label: oBundleText.getText("LABEL_48012"), plabel: "", resize: true, span: 0, type: "link", sort: true, filter: true}];
 		
 		common.makeTable.makeColumn(oController, oTable, col_info);

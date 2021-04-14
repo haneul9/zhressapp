@@ -26,21 +26,16 @@ sap.ui.jsview("ZUI5_HR_LeaveUseChart.List", {
                                     selectedKey: "{Werks}",
                                     editable : (gAuth == "H" ? true : false)
                                 }),
-                                new sap.m.Label({text: oBundleText.getText("LABEL_00122")}), // 소속부서
-                                new sap.m.MultiInput(oController.PAGEID + "_Orgeh",{
-                                	width : "200px",
-									showValueHelp : true,
-									valueHelpOnly: true,
-									valueHelpRequest : oController.displayMultiOrgSearchDialog
+                                new sap.m.Label({
+							    	text: oBundleText.getText("LABEL_48002"), // 부서/사원
 							    }),
-							    new sap.m.Label({text: oBundleText.getText("LABEL_41002")}), // 대상자
-                                new sap.m.MultiInput(oController.PAGEID + "_Ename", {
-                                	width : "200px",
-									showValueHelp: true,
-					        	    valueHelpOnly: true,
-					        	    enableMultiLineMode : true,
-									valueHelpRequest : oController.onSearchUser
-							    }),
+                                new sap.m.Input({
+                                    width: "200px",
+                                    value: "{Ename}",
+                                    showValueHelp: true,
+                                    valueHelpOnly: true,
+                                    valueHelpRequest: oController.searchOrgehPernr
+                                }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_41003")}), // 조회연월
                                 new sap.m.DatePicker({
 									valueFormat : "yyyyMM",

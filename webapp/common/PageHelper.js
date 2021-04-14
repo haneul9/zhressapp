@@ -78,11 +78,15 @@ new common.PageHelper({
 				titleItems.push(o.headerButton);
 			}
 
-			if (parent && window._use_emp_info_box === true) {
-				window._CommonEmployeeModel = new EmployeeModel();
-				window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
+			try {
+				if (parent && window._use_emp_info_box === true) {
+					window._CommonEmployeeModel = new EmployeeModel();
+					window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
 
-				titleItems.push(new EmpBasicInfoBox(window._CommonEmployeeModel));
+					titleItems.push(new EmpBasicInfoBox(window._CommonEmployeeModel));
+				}
+			} catch(e) {
+				// SF 평가 메뉴 접속시 parent 객체 참조시 cross-origin 오류 발생
 			}
 
 			items = [

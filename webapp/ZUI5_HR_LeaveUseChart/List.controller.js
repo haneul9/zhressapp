@@ -8,8 +8,10 @@ sap.ui.define([
 	"../common/PageHelper",
 	"../common/AttachFileAction",
     "../common/SearchOrg",
-    "../common/SearchUser1"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1) {
+    "../common/SearchUser1",
+    "../common/OrgOfIndividualHandler",
+    "../common/DialogHandler"], 
+	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_LeaveUseChart.List", {
@@ -76,10 +78,10 @@ sap.ui.define([
 				sap.m.MessageBox.error(oController.ErrorMessage);
 			}
 			
-			// 소속부서
-			sap.ui.getCore().byId(oController.PAGEID + "_Orgeh").destroyTokens();
-			// 대상자
-			sap.ui.getCore().byId(oController.PAGEID + "_Ename").destroyTokens();
+			// // 소속부서
+			// sap.ui.getCore().byId(oController.PAGEID + "_Orgeh").destroyTokens();
+			// // 대상자
+			// sap.ui.getCore().byId(oController.PAGEID + "_Ename").destroyTokens();
 			
 			if(!oController._ListCondJSonModel.getProperty("/Data")){
 				var oZyymm = new Date().getFullYear() + ((new Date().getMonth() + 1) < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1));
@@ -89,17 +91,20 @@ sap.ui.define([
 						Werks : oLoginData.Persa,
 						Zyymm : oZyymm,
 						Key : "1",
-						Disty : "1"
+						Disty : "1",
+						Pernr : ""
 					}
 				};
 				
 				if(gAuth == "M"){
-					sap.ui.getCore().byId(oController.PAGEID + "_Orgeh").addToken(
-						new sap.m.Token({
-							key : $.app.getModel("session").getData().Orgeh,
-							text : $.app.getModel("session").getData().Stext
-						})	
-					);
+					// sap.ui.getCore().byId(oController.PAGEID + "_Orgeh").addToken(
+					// 	new sap.m.Token({
+					// 		key : $.app.getModel("session").getData().Orgeh,
+					// 		text : $.app.getModel("session").getData().Stext
+					// 	})	
+					// );
+					vData.Data.Orgeh = $.app.getModel("session").getData().Orgeh;
+					vData.Data.Ename = $.app.getModel("session").getData().Stext;
 				}
 				
 				oController._ListCondJSonModel.setData(vData);
@@ -214,17 +219,9 @@ sap.ui.define([
 					createData.IWerks = oData.Werks;
 					createData.IZyymm = oData.Zyymm;
 					createData.IBukrs = oData.Werks;
+					createData.IPernr = oData.Pernr;
+					createData.IOrgeh = oData.Orgeh;
 					
-				var oEname = sap.ui.getCore().byId(oController.PAGEID + "_Ename");
-				if(oEname.getTokens().length > 0){
-					createData.IPernr = oEname.getTokens()[0].getKey();
-				}
-				
-				var oOrgeh = sap.ui.getCore().byId(oController.PAGEID + "_Orgeh");
-				if(oOrgeh.getTokens().length > 0){
-					createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
-				}
-				
 				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
 				oModel.create("/LeaveUseHistorySet", createData, null,
 					function(data, res){
@@ -299,16 +296,18 @@ sap.ui.define([
 				createData.IZyymm = oData.Zyymm;
 				createData.IBukrs = oData.Werks;
 				createData.IDisty = oData.Disty;
+				createData.IPernr = oData.Pernr;
+				createData.IOrgeh = oData.Orgeh;
 			
-			var oEname = sap.ui.getCore().byId(oController.PAGEID + "_Ename");
-			if(oEname.getTokens().length > 0){
-				createData.IPernr = oEname.getTokens()[0].getKey();
-			}
+			// var oEname = sap.ui.getCore().byId(oController.PAGEID + "_Ename");
+			// if(oEname.getTokens().length > 0){
+			// 	createData.IPernr = oEname.getTokens()[0].getKey();
+			// }
 			
-			var oOrgeh = sap.ui.getCore().byId(oController.PAGEID + "_Orgeh");
-			if(oOrgeh.getTokens().length > 0){
-				createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
-			}
+			// var oOrgeh = sap.ui.getCore().byId(oController.PAGEID + "_Orgeh");
+			// if(oOrgeh.getTokens().length > 0){
+			// 	createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
+			// }
 			
 			var field = ["Cur01", "Cur02", "Cur03", "Cur04", "Cur05", "Cur06", "Cum01", "Cum02", "Cum03", "Cum04", "Cum05", "Cum06",
 						 "Usecnt01", "Usecnt02", "Usecnt03", "Usecnt04", "Usecnt05", "Usecnt06", "Usecnt07", "Usecnt08", "Usecnt09", "Usecnt10", "Usecnt11", "Usecnt12",
@@ -740,6 +739,39 @@ sap.ui.define([
 			oTable.getModel().setData({Data : newData});
 			oTable.bindRows("/Data");
 		},
+		
+		searchOrgehPernr : function(oController){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_LeaveUseChart.List");
+			var oController = oView.getController();
+			
+			var initData = {
+                Percod: $.app.getModel("session").getData().Percod,
+                Bukrs: $.app.getModel("session").getData().Bukrs2,
+                Langu: $.app.getModel("session").getData().Langu,
+                Molga: $.app.getModel("session").getData().Molga,
+                Datum: new Date(),
+                Mssty: "",
+            },
+            callback = function(o) {
+                oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
+				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
+               
+                if(o.Otype == "P"){
+                	oController._ListCondJSonModel.setProperty("/Data/Pernr", o.Objid);
+                } else if(o.Otype == "O"){
+                	oController._ListCondJSonModel.setProperty("/Data/Orgeh", o.Objid);
+                }
+                
+                oController._ListCondJSonModel.setProperty("/Data/Ename", o.Stext);
+            };
+    
+            oController.OrgOfIndividualHandler = OrgOfIndividualHandler.get(oController, initData, callback);	
+            DialogHandler.open(oController.OrgOfIndividualHandler);
+		},
+		
+		getOrgOfIndividualHandler: function() {
+            return this.OrgOfIndividualHandler;
+        },
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			return new JSONModelHelper({name: "20125009"});

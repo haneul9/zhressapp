@@ -49,12 +49,16 @@ ConType: {
 log: function() {
 	var args = arguments;
 	setTimeout(function() {
-		if (parent && parent._basis) {
-			parent._basis.log.apply(null, [].slice.call(args));
-		} else {
-			if (typeof window.console !== "undefined" && typeof window.console.log === "function") {
-				window.console.log.apply(null, [].slice.call(args));
+		try {
+			if (parent && parent._basis) {
+				parent._basis.log.apply(null, [].slice.call(args));
+			} else {
+				if (typeof window.console !== "undefined" && typeof window.console.log === "function") {
+					window.console.log.apply(null, [].slice.call(args));
+				}
 			}
+		} catch(e) {
+			// SF 평가 메뉴 접속시 parent 객체 참조시 cross-origin 오류 발생
 		}
 	}, 0);
 },
@@ -65,8 +69,12 @@ init: function() {
 
 	if ($.app.APP_TILE) {
 		$(document).attr("title", $.app.APP_TILE);
-		if (parent) {
-			parent.$(document).attr("title", $.app.APP_TILE);
+		try {
+			if (parent) {
+				$(parent.document).attr("title", $.app.APP_TILE);
+			}
+		} catch(e) {
+			// SF 평가 메뉴 접속시 parent 객체 참조시 cross-origin 오류 발생
 		}
 	}
 
@@ -213,12 +221,17 @@ function checkAppPrefilter() {
 
 	if (typeof AppPrefilter !== "function" || typeof window._menu_prefilter === "undefined") {
 		$.app.log("common.AppBasis.init - AppPrefilter.js <script> 선언이 필요합니다.");
-		if (parent && parent._gateway) {
-			parent._gateway.alert({ title: "오류", html: "<p>개발 오류입니다.\n해당 프로그램 개발자에게 AppPrefilter script 추가를 요청하세요.</p>" });
-			setTimeout(function () {
-				parent.$('.ess-body .menu-spinner-wrapper').toggleClass('d-none', true);
-			}, 0);
-		} else {
+		try {
+			if (parent && parent._gateway) {
+				parent._gateway.alert({ title: "오류", html: "<p>개발 오류입니다.\n해당 프로그램 개발자에게 AppPrefilter script 추가를 요청하세요.</p>" });
+				setTimeout(function () {
+					parent.$('.ess-body .menu-spinner-wrapper').toggleClass('d-none', true);
+				}, 0);
+			} else {
+				alert("개발 오류입니다.\n해당 프로그램 개발자에게 AppPrefilter script 추가를 요청하세요.");
+			}
+		} catch(e) {
+			// SF 평가 메뉴 접속시 parent 객체 참조시 cross-origin 오류 발생
 			alert("개발 오류입니다.\n해당 프로그램 개발자에게 AppPrefilter script 추가를 요청하세요.");
 		}
 		location.href = "Error.html";

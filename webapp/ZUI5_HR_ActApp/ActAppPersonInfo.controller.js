@@ -3037,6 +3037,11 @@ sap.ui.define(
                     }).addStyleClass("L2PFontFamily");
 
                     oControl.setValue(vUpdateTextValue);
+
+                    if (Fieldname == "Persg") {
+                        //사원그룹
+                        oController._vSelectedPersg = vUpdateValue;
+                    }
                 }
 
                 if (oControl) oControl.setTooltip(vLabelText);

@@ -12,7 +12,7 @@ sap.ui.define([
 				name: oController.PAGEID + "UploadFile",
 				modelName: "ZHR_COMMON_SRV",
 				slug: "",
-				maximumFileSize: 20,
+				maximumFileSize: 10,
 				multiple: true,
 				uploadOnChange: false,
 				mimeType: [], //["image","text","application"],

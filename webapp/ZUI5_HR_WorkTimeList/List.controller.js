@@ -54,7 +54,8 @@ sap.ui.define([
 						Langu : $.app.getModel("session").getData().Langu,
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Type : "1"
+						Type : "1",
+						Werks : $.app.getModel("session").getData().Persa
 					}
 				};
 				
@@ -629,6 +630,9 @@ sap.ui.define([
 		},
 		
 		searchOrgehPernr : function(oController){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkTimeList.List");
+			var oController = oView.getController();
+			
 			var initData = {
                 Percod: $.app.getModel("session").getData().Percod,
                 Bukrs: $.app.getModel("session").getData().Bukrs2,

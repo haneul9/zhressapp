@@ -64,7 +64,7 @@ common.makeTable = {
 														  new sap.ui.core.CustomData({key : "", value : col_info[i].id})]
 										});
 						}
-					} else if(oController.PAGEID == "ZUI5_HR_VacationList" || oController.PAGEID == "ZUI5_HR_WorkhomeList"){
+					} else if(oController.PAGEID == "ZUI5_HR_VacationList" || oController.PAGEID == "ZUI5_HR_WorkhomeList" || oController.PAGEID == "ZUI5_HR_VacationList2"){
 						oTemplate = new sap.m.Link({
 										text : "{" + col_info[i].id + "}",
 										press : oController.onPressStext,
@@ -375,6 +375,19 @@ common.makeTable = {
 								textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
 								tooltip : " "
 							});
+							break;
+						case "Retrn":
+							oTemplate = new sap.m.Input({
+											value : "{" + col_info[i].id + "}",
+											width : "100%",
+											editable : {
+												path : "Status",
+												formatter : function(fVal){
+													return fVal == "88" ? true : false;
+												}
+											},
+											// maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "WorkCalendarPopupTab", col_info[i].id)
+										});
 							break;
 						case "Status":
 							oTemplate = new sap.m.ComboBox({

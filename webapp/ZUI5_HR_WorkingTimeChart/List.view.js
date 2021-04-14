@@ -365,7 +365,7 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
 											  	  		}
 											  	  }
 											  }),
-											  new sap.m.Text({text: oBundleText.getText("LABEL_46001")}).addStyleClass("app-title")] // 근무시간현황
+											  new sap.m.Text({text: oBundleText.getText("LABEL_46001")}).addStyleClass("app-title")] // 근로시간현황
 								  }).addStyleClass("app-title-container"),
 								  oFilter,
 								  //new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
