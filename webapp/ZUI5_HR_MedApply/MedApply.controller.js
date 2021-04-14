@@ -133,13 +133,14 @@ sap.ui.define([
 		getBukrs : function(vDatum){
 			var oController=$.app.getController();
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
-			var vData={Pernr:oController._SessionData.Pernr,Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",BukrsExport:[]};
 			oController._MedDate=new Date(vDatum.getValue());
 			function getBukrs(){
-				oModel.create("/BukrsImportSet", vData, null,
+				oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,
+														 Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",
+														 MedicalBukrsExport:[]}, null,
 					function(data,res){
-						if(data){
-							oController._Bukrs=data.BukrsExport.results[0].Bukrs;
+						if(data&&data.MedicalBukrsExport.results){
+							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
 							oController.onClose3();
 							oController.onDialog("N",oController._Bukrs);
 						}					
