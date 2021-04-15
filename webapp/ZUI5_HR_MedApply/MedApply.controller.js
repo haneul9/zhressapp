@@ -503,8 +503,8 @@ sap.ui.define([
 				}else{
 					vEdits=[false,false,false,false,false];
 				}
-				// $.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
-				// $.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
+				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
+				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 
 				// for(var i=3;i<=7;i++){
 				// 	var vProperty={
@@ -557,6 +557,7 @@ sap.ui.define([
 				// }
 			}
 			oController._onDialog!="M"?oController.eqFunc():null;
+			oController.changeSel();
 		},
 
 		initFile:function(vPage){
