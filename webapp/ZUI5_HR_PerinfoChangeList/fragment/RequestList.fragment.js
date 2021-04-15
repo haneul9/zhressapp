@@ -117,7 +117,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
 			rowHeight: 37,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}",
-			cellClick: oController.onPressDetail.bind(oController)
+			// cellClick: oController.onPressDetail.bind(oController)
 		})
 		.addStyleClass("mt-10px")
 		.setModel(oController._ListJSonModel)

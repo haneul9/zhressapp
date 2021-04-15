@@ -18,7 +18,8 @@ sap.ui.define(
                     contentWidth: "1400px",
                     contentHeight: "70vh",
                     title: "{i18n>LABEL_66018}",    // 상세내용
-                    content: this.buildInfoBox(oController),
+                    content: [ this.buildInfoBox(oController),
+                              this.getTable(oController)],
                     buttons: [
                         new sap.m.Button({
                             text: oController.getBundleText("LABEL_00133"), // 닫기
@@ -93,7 +94,6 @@ sap.ui.define(
                             }).addStyleClass("search-inner-vbox"),
                            ]
 					}).addStyleClass("search-box h-auto p-0"),
-					this.getTable(oController),
 					]
                 }).addStyleClass("custom-panel");
             },
@@ -143,12 +143,36 @@ sap.ui.define(
 		
 				ZHR_TABLES.makeColumn(oController, oTable, [
 					{ id: "Idx",      label: oController.getBundleText("LABEL_66008") /* 번호     */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "7%" },
-					{ id: "ApfldT",  label: oController.getBundleText("LABEL_66009")/* 컬럼명 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "31%" },
-					{ id: "Ainfo", label: oController.getBundleText("LABEL_66010") /* 신청전 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "31%" },
-					{ id: "Binfo",  label: oController.getBundleText("LABEL_66011")/* 신청후     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "31%" }
+					{ id: "ApfldT",  label: oController.getBundleText("LABEL_66019")/* 컬럼명 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "31%", templateGetter: "getStatusTemplate", templateGetterOwner: this },
+					{ id: "Binfo", label: oController.getBundleText("LABEL_66016") /* 신청전 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "31%", templateGetter: "getStatusTemplate", templateGetterOwner: this },
+					{ id: "Ainfo",  label: oController.getBundleText("LABEL_66017")/* 신청후     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "31%", templateGetter: "getStatusTemplate", templateGetterOwner: this}
 				]);
 		
 				return oTable;
+			},
+			
+			getStatusTemplate: function(columnInfo) {
+				// return new sap.ui.commons.TextView({
+				return new sap.m.Text({
+					text : {
+						parts: [
+							{ path: columnInfo.id },
+							{ path: "Binfo" },
+							{ path: "Ainfo" }
+						],
+						formatter : function(v, v2, v3) {
+							this.removeStyleClass("differ");
+							if(v2 === v3){
+								this.removeStyleClass("differ");
+							}else{
+								this.addStyleClass("differ");	
+							}
+							return v;
+						}
+					},
+					textAlign : "Center",
+					tooltip: " "
+				}).addStyleClass("FontFamily");
 			}
         });
     }

@@ -65,29 +65,6 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
                     }
                 })
 			}.bind(this)),
-			// common.Common.getPromise(function() {
-			// 	$.app.getModel("ZHR_COMMON_SRV").create("/CommonCodeListHeaderSet", 
-			//   	{
-			// 		IBukrs:  oController.getView().getModel("session").getData().Bukrs2,
-			// 		IMolga:  oController.getView().getModel("session").getData().Molga,
-			// 		ILangu:  oController.getView().getModel("session").getData().Langu,
-			// 		ICodeT : "010",
-			// 		NavCommonCodeList : []	
-			// 	 },
-			// 	{
-   //                 async: false,
-   //                 success: function (data) {
-   //             	   if(data.NavCommonCodeList && data.NavCommonCodeList.results){
-			// 				for(var i=0; i<data.NavCommonCodeList.results.length; i++){
-			// 					oState.addItem(new sap.ui.core.Item({key: data.NavCommonCodeList.results[i].Code, text:data.NavCommonCodeList.results[i].Text}));	
-			// 				}
-			// 			}
-			// 		},
-   //                 error: function (oResponse) {
-   //                     common.Common.log(oResponse);
-   //                 }
-   //             })
-			// }.bind(this)),
 		]);
 		
 		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
@@ -201,9 +178,10 @@ sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.AddressInfo", {
 																else return false;
 															}
 											    	    },
-														press : function(){
-															window.open("https://www.epost.go.kr/search.RetrieveIntegrationNewZipCdList.comm", "", 'resizable=yes,height=600,widht=400');
-														}
+											    	    press : oController.onDisplaySearchZipcodeDialog
+														// press : function(){
+														// 	// window.open("https://www.epost.go.kr/search.RetrieveIntegrationNewZipCdList.comm", "", 'resizable=yes,height=600,widht=400');
+														// }
 													}).addStyleClass("button-search"), 
 											    ] 
 										}).addStyleClass("toolbarNoBottomLine")

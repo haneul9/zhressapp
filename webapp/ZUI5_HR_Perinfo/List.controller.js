@@ -3444,6 +3444,24 @@ sap.ui.define([
                     : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
         },
         
+        /////////////////////////////////////////////////////////////////////////////////////////////
+					
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		// 주소 검색을 위한 Functions
+		/////////////////////////////////////////////////////////////////////////////////////////////	
+		_ODialogSearchZipcodeEvent : null,
+		
+		onDisplaySearchZipcodeDialog : function() {
+			window.open("zip_search2.html?CBF=fn_SetAddr", "pop", "width=550,height=550, scrollbars=yes, resizable=yes");
+		},
+		
+		beforeOpenZSDialog : function() {
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
+			oController = oView.getController();
+			var oZipcodeSearchField = sap.ui.getCore().byId(oController.PAGEID + "_ZipcodeSearchField");
+
+			if(oZipcodeSearchField) oZipcodeSearchField.setValue("");
+		},	
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			// return new JSONModelHelper({name: "20001003"});
@@ -3455,3 +3473,48 @@ sap.ui.define([
 	});
 
 });
+
+// eslint-disable-next-line no-unused-vars
+function fn_SetAddr(Zip, fullAddr, sido, sigungu) {
+	var oController = $.app.getController("ZUI5_HR_Perinfo.List");
+	var vData = oController._AddressJSonModel.getProperty("/Data");
+	var oLand1 = $.app.byId(oController.PAGEID + "_Sub01_Land1");	// 국가
+	var oState = $.app.byId(oController.PAGEID + "_Sub01_State");	// 지역
+	var oPstlz = $.app.byId(oController.PAGEID + "_Sub01_Pstlz");	// 우편번호
+	var oOrt01 = $.app.byId(oController.PAGEID + "_Sub01_Ort1k");	// 시/구/군
+	var oOrt02 = $.app.byId(oController.PAGEID + "_Sub01_Ort2k");	// 동/읍/면
+	var statesArr = {
+		"제주특별자치도": {key: "01", text: "제주도"},	// 제주도
+		"전북": {key: "02", text: "전라북도"},	// 전라북도
+		"전남": {key: "03", text: "전라남도"},	// 전라남도
+		"충북": {key: "04", text: "충청북도"},	// 충청북도
+		"충남": {key: "05", text: "충청남도"},	// 충청남도
+		"인천": {key: "06", text: "인천광역시"},	// 인천광역시
+		"강원": {key: "07", text: "강원도"},	// 강원도
+		"광주": {key: "08", text: "광주광역시"},	// 광주광역시
+		"경기": {key: "09", text: "경기도"},	// 경기도
+		"경북": {key: "10", text: "경상북도"},	// 경상북도
+		"경남": {key: "11", text: "경상남도"},	// 경상남도
+		"부산": {key: "12", text: "부산광역시"},	// 부산광역시
+		"서울": {key: "13", text: "서울특별시"},	// 서울특별시
+		"대구": {key: "14", text: "대구광역시"},	// 대구광역시
+		"대전": {key: "15", text: "대전광역시"},	// 대전광역시
+		"울산": {key: "16", text: "울산광역시"},	// 울산광역시
+		"세종특별자치시": {key: "22", text: "세종특별자치시"}	// 세종특별자치시
+	};
+	
+	// {세종특별자치시}는 sigungu가 없음. sido로 대체
+	sigungu = sigungu || sido.substr(0, 2);
+	
+	if(statesArr[sido]) vData.State = statesArr[sido].key;
+	vData.Land1 = "KR";
+    vData.Pstlz = Zip;
+    vData.Ort01 = sigungu;
+	var Ort02 = "",
+		vIdx = fullAddr.indexOf(sigungu);
+	if(vIdx > -1) {
+		Ort02 = fullAddr.substring(vIdx + sigungu.length + 1);
+	}
+	vData.Ort02 = Ort02;
+	oController._AddressJSonModel.setProperty("/Data",vData);
+}
