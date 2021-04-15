@@ -245,7 +245,7 @@ sap.ui.define([
 					Appnm:vAppnm,
 					Required: false,
 					Mode: "M",
-					Max: "15",
+					Max: "7",
 					Cntnm: "009",
 					Editable: vEdit,
 					UseMultiCategories : true,

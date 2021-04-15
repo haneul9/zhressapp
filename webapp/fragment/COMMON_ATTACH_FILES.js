@@ -744,7 +744,7 @@ fragment.COMMON_ATTACH_FILES = {
 					if(vPages[a]=="001"||vPages[a]=="002"){
 						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
 					}else{
-						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, (vPages[a]+b)].join("|");
+						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
 					}
 					common.Common.log(oHeaders.slug);
 					
