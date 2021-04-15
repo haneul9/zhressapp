@@ -28,27 +28,35 @@ spinner: function(on) {
 	}, 0);
 },
 
-handleMissingMenuId: function(message) {
+handleMissingMenuId: function(message, hidden) {
+
+	message = typeof message === 'function' ? '메뉴 ID 누락\nMissing menu ID.' : (message || '알 수 없는 오류가 발생하였습니다.');
+	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
-	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message || '메뉴 ID 누락\nMissing menu ID.') });
+	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
 
-handleUnauthorized: function(message) {
+handleUnauthorized: function(message, hidden) {
+
+	message = typeof message === 'function' ? '접근 권한이 없습니다.' : (message || '알 수 없는 오류가 발생하였습니다.');
+	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
-	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message || '접근 권한이 없습니다.') });
+	this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
 
-handleAuthCancel: function(message) {
+handleAuthCancel: function(message, hidden) {
+
+	message = typeof message === 'function' ? '비밀번호 입력이 취소되었습니다.' : (message || '알 수 없는 오류가 발생하였습니다.');
+	hidden = hidden || (typeof message === 'function' ? message : null);
 
 	this._gateway.restorePreviousMenu();
-	this._gateway.alert({ title: '알림', html: ['<p>', '</p>'].join(message || '비밀번호 입력이 취소되었습니다.') });
+	this._gateway.alert({ title: '알림', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
-
 redirect: function(menuUrl) {
 
 	var menuId = this.menuUrlMap[menuUrl];
@@ -73,7 +81,7 @@ changeState: function(toggle, restore) {
 				});
 			}
 		}
-	}, 0);
+	}.bind(this), 0);
 
 	this.spinner(false);
 },
@@ -81,9 +89,10 @@ changeState: function(toggle, restore) {
 changeLocale: function() {
 
 	setTimeout(function() {
+		var parentSelector = this.parentSelector;
 		this.generate(true).then(function() {
 			setTimeout(function() {
-				$(this.parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
+				$(parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
 					// .parents(this.parentSelector).hide() // dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
@@ -400,7 +409,8 @@ getMenuTree: function(data) {
 			Mnid1: o.Mnid1,
 			title: o.Mnnm1,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
-			children: level1SubMenuMap[o.Mnid1]
+			children: level1SubMenuMap[o.Mnid1],
+			styleClasses: o.Mnid1 === '10000' ? ' menu-mss' : (o.Mnid1 === '20000' ? ' menu-hass' : '')
 		};
 	});
 },
