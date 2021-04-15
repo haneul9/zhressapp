@@ -248,9 +248,10 @@ common.makeTable = {
 									text : {
 										path : col_info[i].id,
 										formatter : function(fVal){
-											return fVal.substring(0,2) + ":" + fVal.substring(2,4);
+											return (fVal && fVal != "") ? fVal.substring(0,2) + ":" + fVal.substring(2,4) : "";
 										}
 									},
+									textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
 									tooltip : " "
 								});
 					break;
@@ -386,7 +387,7 @@ common.makeTable = {
 													return fVal == "88" ? true : false;
 												}
 											},
-											// maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "WorkCalendarPopupTab", col_info[i].id)
+											maxLength : common.Common.getODataPropertyLength("ZHR_BATCHAPPROVAL_SRV", "RationaleApprovalTab", col_info[i].id)
 										});
 							break;
 						case "Status":

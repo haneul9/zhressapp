@@ -4,13 +4,8 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
+	"../common/PageHelper"], 
+	function (Common, CommonController, JSONModelHelper, PageHelper) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_RationaleApproval.List", {
@@ -49,9 +44,7 @@ sap.ui.define([
 						Bukrs : $.app.getModel("session").getData().Bukrs,
 						Pernr : $.app.getModel("session").getData().Pernr,
 						Orgeh : $.app.getModel("session").getData().Orgeh,
-						Langu : $.app.getModel("session").getData().Langu,
-						Begda : dateFormat.format(new Date(1800, 0, 1)),
-						Endda : dateFormat.format(new Date(9999, 11, 31)),
+						Langu : $.app.getModel("session").getData().Langu
 					}
 				};
 				
@@ -96,19 +89,13 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 			var oController = oView.getController();
 			
-			var oData = oController._ListCondJSonModel.getProperty("/Data");
-			if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_60001")); // 대상기간을 입력하여 주십시오.
-				return;
-			}
+			oController._ListCondJSonModel.setProperty("/Data/Count", 0);
 			
+			var oData = oController._ListCondJSonModel.getProperty("/Data");
+
 			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 			var oJSONModel = oTable.getModel();
 			var vData = {Data : []};
-			
-			oJSONModel.setData({Data : [{Idx : 0}]});
-			oTable.bindRows("/Data");
-			return;
 			
 			// filter, sort 제거
 			var oColumn = oTable.getColumns();
@@ -118,24 +105,28 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
-				var createData = {ChangeWorkNav : []};
+				var oModel = sap.ui.getCore().getModel("ZHR_BATCHAPPROVAL_SRV");
+				var createData = {RationaleAppNav : []};
+					createData.IConType = "1";
 					createData.IBukrs = oData.Bukrs;
+					createData.IMolga = oData.Molga;
 					createData.IPernr = oData.Pernr;
-					createData.IOrgeh = oData.Orgeh;
-					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
-					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
+					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(1800, 0, 1)) + ")\/";
+					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(9999, 11, 31)) + ")\/";
 					createData.ILangu = oData.Langu;
+					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
 
-				oModel.create("/ChangeWorkListSet", createData, null,
+				oModel.create("/RationaleApprovalSet", createData, null,
 					function(data, res){
 						if(data){
-							if(data.ChangeWorkNav && data.ChangeWorkNav.results){
-								var data1 = data.ChangeWorkNav.results;
+							if(data.RationaleAppNav && data.RationaleAppNav.results){
+								var data1 = data.RationaleAppNav.results;
 								
 								for(var i=0; i<data1.length; i++){
+									data1[i].Idx = i;
+									data1[i].No = i+1;
+									
 									data1[i].Begda = new Date(common.Common.getTime(data1[i].Begda));
-									data1[i].Endda = new Date(common.Common.getTime(data1[i].Endda));
 									
 									vData.Data.push(data1[i]);
 								}
@@ -160,7 +151,7 @@ sap.ui.define([
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
 				
-				var height = parseInt(window.innerHeight - 130);
+				var height = parseInt(window.innerHeight - 175);
 				var count = parseInt((height - 35) / 38);
 				
 				oTable.setVisibleRowCount(vData.Data.length < count ? vData.Data.length : count);
@@ -183,64 +174,117 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();
-			console.log(oData);
 			
 			var oJSONModel = sap.ui.getCore().byId(oController.PAGEID + "_Table").getModel();
-			
+				oJSONModel.setProperty("/Data/" + oData.Idx + "/Retrn", "");
 		},
 		
-		searchOrgehPernr : function(oController){
+		// 테이블 행 선택 시 결재건수 계산하여 세팅
+		onSelectionChange : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
 			var oController = oView.getController();
 			
-			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
-                Datum: new Date(),
-                Mssty: "",
-            },
-            callback = function(o) {
-            	var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
-				var oController = oView.getController();
+			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
+			var count = oTable.getSelectedIndices().length;
 			
-                oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
-				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
-               
-                if(o.Otype == "P"){
-                	oController._ListCondJSonModel.setProperty("/Data/Pernr", o.Objid);
-                } else if(o.Otype == "O"){
-                	oController._ListCondJSonModel.setProperty("/Data/Orgeh", o.Objid);
-                }
-                
-                oController._ListCondJSonModel.setProperty("/Data/Ename", o.Stext);
-            };
-    
-            oController.OrgOfIndividualHandler = OrgOfIndividualHandler.get(oController, initData, callback);	
-            DialogHandler.open(oController.OrgOfIndividualHandler);
+			oController._ListCondJSonModel.setProperty("/Data/Count", count);
 		},
 		
-		getOrgOfIndividualHandler: function() {
-            return this.OrgOfIndividualHandler;
-        },
+		// 결재
+		onPressSave : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
+			var oController = oView.getController();
+			
+			var oData = oController._ListCondJSonModel.getProperty("/Data");
+			
+			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
+			var oJSONModel = oTable.getModel();
+			
+			var oIndices = oTable.getSelectedIndices();
+			
+			if(oIndices.length == 0){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_67001")); // 일괄결재 대상 데이터를 선택하여 주십시오.
+				return;
+			}
+			
+			var oModel = sap.ui.getCore().getModel("ZHR_BATCHAPPROVAL_SRV");
+			var createData = {RationaleAppNav : []};
+			
+			// validation check
+			for(var i=0; i<oIndices.length; i++){
+				var sPath = oTable.getContextByIndex(oIndices[i]).sPath;
+				
+				var data = oJSONModel.getProperty(sPath);
+				if(!data.Status || data.Status == "" || data.Status == "00"){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_67002")); //상태를 선택하여 주십시오.
+					return;
+				} else if(data.Status == "88" && (!data.Retrn || data.Retrn.trim() == "")){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_67003")); // 반려인 경우 반려사유를 입력하여 주십시오.
+					return;
+				}
+				
+				createData.RationaleAppNav.push(common.Common.copyByMetadata(oModel, "RationaleApprovalTab", data));
+			}
+			
+			var process = function(){
+				createData.IConType = "2";
+				createData.IBukrs = oData.Bukrs;
+				createData.IMolga = oData.Molga;
+				createData.IPernr = oData.Pernr;
+				createData.IBegda = "\/Date(" + common.Common.getTime(new Date(1800, 0, 1)) + ")\/";
+				createData.IEndda = "\/Date(" + common.Common.getTime(new Date(9999, 11, 31)) + ")\/";
+				createData.ILangu = oData.Langu;
+				createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
+				
+				oModel.create("/RationaleApprovalSet", createData, null,
+					function(data, res){
+						if(data){
+							
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				oController._BusyDialog.close();
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
+				
+				sap.m.MessageBox.success(oBundleText.getText("MSG_67005"), { // 일괄결재가 완료되었습니다.
+					onClose : oController.onPressSearch
+				});
+			};
+			
+			sap.m.MessageBox.confirm(oBundleText.getText("MSG_67004"), { // 일괄결재하시겠습니까?
+				actions : ["YES", "NO"],
+				onClose : function(fVal){
+					if(fVal && fVal == "YES"){
+						oController._BusyDialog.open();
+						setTimeout(process, 100);
+					}
+				}
+			});
+		},
         
-        getUserId: function() {
-			return $.app.getModel("session").getData().Pernr;
-		},
-		
-		getLastDate : function(y, m) {
-			var last = [31,28,31,30,31,30,31,31,30,31,30,31];
-			
-			if (y % 4 === 0 && y % 100 !== 0 || y % 400 === 0) last[1] = 29;
-	
-			return last[m];
-		},
-		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			// return new JSONModelHelper({name: "20180126"});
 			// return new JSONModelHelper({name: "20130126"});
-			return new JSONModelHelper({name: "20090028"});
+			return new JSONModelHelper({name: "35122694"});
 		} : null
 		
 	});
