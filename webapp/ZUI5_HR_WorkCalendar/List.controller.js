@@ -211,11 +211,11 @@ sap.ui.define([
 											// 일자에 범례 색상 표시
 											var titlestyle = "calendar-datum";
 											if(data1[i].Error == "Q"){ // 승인데이터
-												titlestyle = "bg-signature-darkgreen";
+												titlestyle = "calendar-background-blue";
 											} else if(data1[i].Error == "X"){ // 이상데이터
-												titlestyle = "bg-signature-orange";
+												titlestyle = "calendar-background-orange";
 											} else if(data1[i].Error == "A"){ // 소명신청
-												titlestyle = "background-color-lightorange";
+												titlestyle = "calendar-background-green";
 											}
 											
 											var oMatrix = new sap.ui.commons.layout.MatrixLayout({

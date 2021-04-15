@@ -16,6 +16,7 @@
 		
 		TableModel: new JSONModelHelper(),
 		RegistModel: new JSONModelHelper(),
+		CommentModel: new JSONModelHelper(),
 
 		getUserId: function() {
 
@@ -151,6 +152,7 @@
 			oDateBox.setVisible(true);
 			oIsHideBox.setVisible(false);
 			
+			oController.CommentModel.setData({Data: {}});
 			oController.getDetailData(vSdate, vSeqnr);
             oController.onBeforeOpenDetailDialog();
 			oController._RegistModel.open();
@@ -169,6 +171,8 @@
             sendObject.IConType = "1";
 			// Navigation property
 			sendObject.TableIn2 = [];
+			sendObject.TableIn3 = [];
+			sendObject.TableIn4 = [];
 			
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
@@ -206,6 +210,12 @@
 			// 내용
 			if(Common.checkNull(oFormData.Detail)){
 				MessageBox.error(oController.getBundleText("MSG_56002"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 비밀번호
+			if(Common.checkNull(oFormData.Pword) || 6 > oFormData.Pword.length || oFormData.Pword.length > 10){
+				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
 
@@ -263,6 +273,103 @@
 			});
         },
 
+		onDialogReBtn: function() { // 수정
+			this.RegistModel.setProperty("/Gubun", "X");
+		},
+
+		onDialogDeleteBtn: function() { // 삭제
+			var oController = this;
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+            var vBukrs = this.getUserGubun();
+			var oRowData = this.RegistModel.getProperty("/FormData");
+
+			if(this.checkError()) return;
+
+			BusyIndicator.show(0);
+			var onPressRegist = function (fVal) {
+				if (fVal && fVal == oController.getBundleText("LABEL_56014")) { // 삭제
+
+					// 첨부파일 저장
+					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
+
+					var sendObject = {};
+					// Header
+					sendObject.IConType = "2";
+					sendObject.IBukrs = vBukrs;
+					// Navigation property
+					sendObject.TableIn2 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn2", oRowData)];
+					
+					oModel.create("/SuggestionBoxSet", sendObject, {
+						success: function(oData, oResponse) {
+								Common.log(oData);
+								sap.m.MessageBox.alert(oController.getBundleText("MSG_56009"), { title: oController.getBundleText("MSG_08107")});
+								oController.onTableSearch();
+								BusyIndicator.hide();
+								oController._RegistModel.close();
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
+						}
+					});
+				}
+				BusyIndicator.hide();
+			}
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_56008"), {
+				title: oController.getBundleText("LABEL_56001"),
+				actions: [oController.getBundleText("LABEL_56014"), oController.getBundleText("LABEL_00119")],
+				onClose: onPressRegist
+			});
+		},
+
+		onDialogSaveBtn: function() { // 댓글 저장
+			var oController = this;
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+            var vBukrs = this.getUserGubun();
+			var oRowData = this.RegistModel.getProperty("/FormData");
+			var oCommData = this.CommentModel.getProperty("/Data");
+
+			// 비밀번호
+			if(Common.checkNull(oCommData.Pword) || 6 > oCommData.Pword.length || oCommData.Pword.length > 10){
+				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
+				return ;
+			}
+
+			// 내용
+			if(Common.checkNull(oCommData.Detail)){
+				MessageBox.error(oController.getBundleText("MSG_56010"), { title: oController.getBundleText("LABEL_00149")});
+				return ;
+			}
+
+			var sendObject = {};
+			// Header
+			sendObject.IConType = "2";
+			sendObject.IBukrs = vBukrs;
+			// Navigation property
+			sendObject.TableIn2 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn2", oRowData)];
+			sendObject.TableIn3 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn3", oCommData)];
+			
+			oModel.create("/SuggestionBoxSet", sendObject, {
+				success: function(oData, oResponse) {
+					Common.log(oData);
+					oController.CommentModel.setData({Data: []});
+					oController.onTableSearch();
+					BusyIndicator.hide();
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+					BusyIndicator.hide();
+				}
+			});
+		},
+
         onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
@@ -272,7 +379,7 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: !vSdate ? true : false,
+				Editable: !vSdate ? true : false
 			});
 		},
 		

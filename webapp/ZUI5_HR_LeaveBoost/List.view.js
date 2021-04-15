@@ -86,7 +86,7 @@ sap.ui.jsview("ZUI5_HR_LeaveBoost.List", {
 				        			 hAlign : "Begin",
 				        			 vAlign : "Middle"
 				        		 }).addStyleClass("p-15px")]
-		        	}).addStyleClass("search-box search-bg")]
+		        	}).addStyleClass("custom-OpenHelp-msgBox")]
         });
         
         // 연차현황

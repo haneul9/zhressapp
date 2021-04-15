@@ -26,8 +26,20 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Message", {
 									  "<span style='color:#0070bd; font-weight:bold;'> " + oBundleText.getText("MSG_39009") + "</span><br/>" +
 									  "<span>" + oBundleText.getText("MSG_39010") + "</span>"
 					   })]	
-		});
+		}).addStyleClass("p-15px");
 		
-		return oMessage;
+		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+			columns : 1,
+			width : "100%",
+			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [oMessage],
+									 hAlign : "Begin",
+									 vAlign : "Middle"
+								 })]
+					}).addStyleClass("custom-OpenHelp-msgBox")]
+		})
+		
+		return oMatrix;
 	}
 });

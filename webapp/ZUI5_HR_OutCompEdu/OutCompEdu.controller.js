@@ -127,7 +127,7 @@ sap.ui.define([
 								}
 							}
 						})
-						.addStyleClass("font-14px font-regular mt-8px "),
+						.addStyleClass("font-14px font-regular mt-4px "),
 						new sap.m.FormattedText({
 							htmlText: {
 								parts: [{ path: "Url1" }, { path: "Status1" }],
@@ -344,7 +344,7 @@ sap.ui.define([
 			}else {
 				oController.getAttTable(oCopyRow, "2");
 				oController.getCodeList(oCopyRow);
-				oController.getCodeList2();
+				oController.getCodeList2(oCopyRow);
 				oController.onBeforeOpenDetailDialog();
 				oController._ReportModel.open();
 			}
@@ -1003,7 +1003,11 @@ sap.ui.define([
 			
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
-				oAttList1.Pernr = e.Objid;
+				if(Common.checkNull(e.__metadata))
+					oAttList1.Pernr = e.Objid;
+				else
+					oAttList1.Pernr = e.Pernr;
+
 				oAttList2.push(Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList1));
 			});
 
@@ -1073,7 +1077,12 @@ sap.ui.define([
 
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
-				oAttList1.Pernr = e.Objid;
+
+				if(Common.checkNull(e.__metadata))
+					oAttList1.Pernr = e.Objid;
+				else
+					oAttList1.Pernr = e.Pernr;
+
 				oAttList2.push(Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList1));
 			});
 			
@@ -1211,7 +1220,12 @@ sap.ui.define([
 			
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
-				oAttList1.Pernr = e.Objid;
+				
+				if(Common.checkNull(e.__metadata))
+					oAttList1.Pernr = e.Objid;
+				else
+					oAttList1.Pernr = e.Pernr;
+					
 				oAttList2.push(Common.copyByMetadata(oModel, "TrainingOutApplyTableIn2", oAttList1));
 			});
 

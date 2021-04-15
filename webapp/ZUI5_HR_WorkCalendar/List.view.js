@@ -48,7 +48,7 @@ sap.ui.jsview("ZUI5_HR_WorkCalendar.List", {
                             items: [
                                 new sap.m.Button({
                                     press: oController.onPressSearch,
-                                    text: oBundleText.getText("LABEL_00104") // 검색
+                                    text: oBundleText.getText("LABEL_00100") // 조회
                                 }).addStyleClass("button-search")
                             ]
                         }).addStyleClass("button-group")
@@ -166,9 +166,9 @@ sap.ui.jsview("ZUI5_HR_WorkCalendar.List", {
         
         var oLegend = new sap.m.Toolbar({
         	height : "40px",
-        	content : [new sap.m.Text({text : oBundleText.getText("LABEL_63011"), width : "100px", textAlign : "Center"}).addStyleClass("bg-signature-darkgreen p-5px"), // 승인데이터
-        			   new sap.m.Text({text : oBundleText.getText("LABEL_63012"), width : "100px", textAlign : "Center"}).addStyleClass("bg-signature-orange p-5px"), // 이상데이터
-        			   new sap.m.Text({text : oBundleText.getText("LABEL_63013"), width : "100px", textAlign : "Center"}).addStyleClass("background-color-lightorange p-5px")] // 소명신청
+        	content : [new sap.m.Text({text : oBundleText.getText("LABEL_63011"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px"), // 승인데이터
+        			   new sap.m.Text({text : oBundleText.getText("LABEL_63012"), width : "100px", textAlign : "Center"}).addStyleClass("legend-orange FontWhite p-5px"), // 이상데이터
+        			   new sap.m.Text({text : oBundleText.getText("LABEL_63013"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px")] // 소명신청
         }).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0");
         
     	var oCalendar = new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar").addStyleClass("pt-10px");
@@ -207,7 +207,7 @@ sap.ui.jsview("ZUI5_HR_WorkCalendar.List", {
 									 hAlign : "Begin",
 									 vAlign : "Middle"
 								 }).addStyleClass("p-15px")]
-					}).addStyleClass("search-box search-bg"),
+					}).addStyleClass("custom-OpenHelp-msgBox"),
 					new sap.ui.commons.layout.MatrixLayoutRow({height : "10px"})]
 		});
         
