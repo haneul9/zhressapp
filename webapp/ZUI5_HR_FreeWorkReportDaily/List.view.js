@@ -64,10 +64,14 @@ sap.ui.jsview("ZUI5_HR_FreeWorkReportDaily.List", {
                                     visible : {
                                     	path : "Werks",
                                     	formatter : function(fVal){
-                                    		if(fVal && fVal.substring(0,1) != "D"){
-                                    			return true;
+                                    		if(gAuth == "M"){
+                                    			return true;	
                                     		} else {
-                                    			return false;
+                                    			if(fVal && fVal.substring(0,1) != "D"){
+	                                    			return true;
+	                                    		} else {
+	                                    			return false;
+	                                    		}
                                     		}
                                     	}
                                     }
