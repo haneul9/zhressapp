@@ -511,7 +511,7 @@ sap.ui.define([
                             new sap.m.HBox({
                                 items: [
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_40067}", "150px", "Right"), // 학습자만족도
-                                    oSatisCombo
+                                    oSatisCombo.addStyleClass("mr-30px")
                                 ]
                             })
                             .addStyleClass("search-field-group"),
