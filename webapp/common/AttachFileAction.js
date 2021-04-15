@@ -161,7 +161,7 @@ common.AttachFileAction = {
 					oTextFlexBox.addItem(
 						new sap.m.Text({
 							text: oHelpTextList[i].Text,
-							textAlign: "Begin",
+							textAlign: "Begin"
 						}).addStyleClass("ml-4px mr-4px")
 					);
 				}
@@ -349,7 +349,7 @@ common.AttachFileAction = {
 			} catch (ex) {
 				common.Common.log(ex);
 			}
-		}
+		};
 
 		sap.m.MessageBox.show(oController.getBundleText("MSG_00033"), {
 			title: oController.getBundleText("LABEL_00150"),
