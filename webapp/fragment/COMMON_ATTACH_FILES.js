@@ -282,10 +282,18 @@ fragment.COMMON_ATTACH_FILES = {
 				if (data && data.results.length) {
 					data.results.forEach(function (elem) {
 						if(vUse){
-							if(vPage==elem.Cntnm){
-								elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
+							if(vPage=="001"||vPage=="002"){
+								if(vPage==elem.Cntnm){
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}
+							}else{
+								if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}
 							}
 						}else{
 							elem.New = false;
@@ -675,19 +683,20 @@ fragment.COMMON_ATTACH_FILES = {
 		return vAppnm;
 	},
 
-	//싱글 파일일때만 쓸 것
+	//싱글 파일일때만 쓸 것, 멀티파일 기능 추가
 	uploadFiles: function (vPages) {
 		var vFiles = [];
 		var dFiles = [];
 		var vAppnm = "";
+		var oController=this;
 		var _handleSuccess = function (data) {
 			if(!vAppnm) vAppnm = $(data).find("content").next().children().eq(7).text();
 
-			common.Common.log(this.getBundleText("MSG_00034") + ", " + data);
+			common.Common.log(oController.getBundleText("MSG_00034") + ", " + data);
 		};
 		var _handleError = function (data) {
 			vAppnm = null;
-			var errorMsg = this.getBundleText("MSG_00031");
+			var errorMsg = oController.getBundleText("MSG_00031");
 
 			common.Common.log("Error: " + data);
 			sap.m.MessageToast.show(errorMsg, { my: "center center", at: "center center"});
@@ -714,7 +723,7 @@ fragment.COMMON_ATTACH_FILES = {
 				});
 
 				if(!bDeleteFlag) {
-					sap.m.MessageToast.show(this.getBundleText("MSG_00031"), { my: "center center", at: "center center"});
+					sap.m.MessageToast.show(oController.getBundleText("MSG_00031"), { my: "center center", at: "center center"});
 					return;
 				}
 			}			
@@ -724,27 +733,33 @@ fragment.COMMON_ATTACH_FILES = {
 		if (common.Common.isEmptyArray(vFiles)) return;
 
 		vFiles.forEach(function (elem,a) {
-			if(elem[0].New === true) {
-				oModel.refreshSecurityToken();
-				var oRequest = oModel._createRequest();
-				var oHeaders = {
-					"x-csrf-token": oRequest.headers["x-csrf-token"],
-					"slug": [vAppnm, vPernr, encodeURI(elem[0].Fname), vPernr, vPages[a]].join("|")
-				};
-
-				common.Common.log(oHeaders.slug);
-				
-				jQuery.ajax({
-					type: "POST",
-					async: false,
-					url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
-					headers: oHeaders,
-					cache: false,
-					contentType: elem[0].type,
-					processData: false,
-					data: elem[0],
-					success: _handleSuccess.bind(this),
-					error: _handleError.bind(this)
+			if(elem[a].New === true) {
+				vFiles[a].forEach(function (elem2,b) {
+					oModel.refreshSecurityToken();
+					var oRequest = oModel._createRequest();
+					var oHeaders = {
+						"x-csrf-token": oRequest.headers["x-csrf-token"],
+						"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
+					};
+					if(vPages[a]=="001"||vPages[a]=="002"){
+						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
+					}else{
+						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, (vPages[a]+b)].join("|");
+					}
+					common.Common.log(oHeaders.slug);
+					
+					jQuery.ajax({
+						type: "POST",
+						async: false,
+						url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
+						headers: oHeaders,
+						cache: false,
+						contentType: elem2.type,
+						processData: false,
+						data: elem2,
+						success: _handleSuccess.bind(this),
+						error: _handleError.bind(this)
+					});
 				});
 			}
 		}.bind(this));
