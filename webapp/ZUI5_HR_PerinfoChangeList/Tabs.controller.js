@@ -14,7 +14,7 @@ sap.ui.define([
 
 return CommonController.extend($.app.APP_ID, { // 출장
 
-	PAGEID: "",
+	PAGEID: "ZUI5_HR_PerinfoChangeList",
 	_ListCondJSonModel : new JSONModel(),
 	_ListJSonModel : new JSONModel(),
 	_DetailJSonModel : new JSONModel(),
@@ -54,8 +54,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		
 		var search = function(){
 			var oPath = "";
-			var createData = {TableIn : [],
-							  TableIn2 : []};
+			var createData = {TableIn : []};
 			
 			oPath = "/PerinfoHistorySet";
 			createData.IBukrs =  vCondiData.Burks && vCondiData.Burks != "" ? vCondiData.Burks : oController.getView().getModel("session").getData().Burks2 ;
@@ -73,12 +72,6 @@ return CommonController.extend($.app.APP_ID, { // 출장
 							for(var i=0; i<data.TableIn.results.length; i++){
 								data.TableIn.results[i].Idx = (i+1);
 								vData.Data.push(data.TableIn.results[i]);
-							}
-						}
-						if(data.TableIn2 && data.TableIn2.results.length > 0){
-							for(var i=0; i<data.TableIn2.results.length; i++){
-								data.TableIn2.results[i].Idx = (i+1);
-								vData.Data2.push(data.TableIn2.results[i]);
 							}
 						}
 					}
@@ -99,7 +92,6 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			);
 
 			oController._ListJSonModel.setProperty("/Data",vData.Data);
-			oController._ListJSonModel.setProperty("/Data2",vData.Data2);
 			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
 			oController._BusyDialog.close();
 			
@@ -150,20 +142,14 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			createData.IApsta =  vCondiData.Apsta == "0" ? "" : vCondiData.Apsta;
 			createData.IBegda =  vCondiData.Begda && vCondiData.Begda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Begda)) + ")\/" : null;
 			createData.IEndda =  vCondiData.Endda && vCondiData.Endda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Endda)) + ")\/" : null;
-			
+			createData.IApppn = vSelectedData.Apppn;
 			oModel.create(oPath, createData, null,
 				function(data, res){
 					if(data){
-						if(data.TableIn && data.TableIn.results.length > 0){
-							for(var i=0; i<data.TableIn.results.length; i++){
-								data.TableIn.results[i].Idx = (i+1);
-								vData.Data.push(data.TableIn.results[i]);
-							}
-						}
 						if(data.TableIn2 && data.TableIn2.results.length > 0){
 							for(var i=0; i<data.TableIn2.results.length; i++){
 								data.TableIn2.results[i].Idx = (i+1);
-								vData.Data2.push(data.TableIn2.results[i]);
+								vData.Data.push(data.TableIn2.results[i]);
 							}
 						}
 					}
@@ -183,9 +169,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				}
 			);
 
-			oController._ListJSonModel.setProperty("/Data",vData.Data);
-			oController._ListJSonModel.setProperty("/Data2",vData.Data2);
-			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
+			oController._DetailTableJSonModel.setData(vData);
+			$.app.byId(oController.PAGEID + "_DetailTable").setVisibleRowCount(vData.Data.length);
 			oController._BusyDialog.close();
 			
 			if(oController.Error == "E"){
@@ -193,8 +178,6 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				sap.m.MessageBox.error(oController.ErrorMessage);
 				return;
 			}
-			
-			$.app.byId(oController.PAGEID + "_Table").clearSelection();
 		}
 	
 		oController._BusyDialog.open();
