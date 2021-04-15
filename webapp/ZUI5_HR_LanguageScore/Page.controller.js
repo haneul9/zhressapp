@@ -103,12 +103,13 @@ sap.ui.define([
 				oController.onPressSearch();
 			}
 			if( gAuth == "M"){
-				oController._ListCondJSonModel.setProperty("/Data",{Langu : "0", Tepas : "0", Ltype : "0", Orgeh : oController.getView().getModel("session").getData().Orgeh,
+				oController._ListCondJSonModel.setProperty("/Data",{Langu : "0", Tepas : "Y", Ltype : "0", Orgeh : oController.getView().getModel("session").getData().Orgeh,
 																    EnameOrOrgehTxt : oController.getView().getModel("session").getData().Stext
 				});
 				var OrgOfIndividualHandler = oController.getOrgOfIndividualHandler();
 				OrgOfIndividualHandler.autoClose = false;
 				OrgOfIndividualHandler.onBeforeOpen();
+				oController.onPressSearch();
 			}
         },
 		

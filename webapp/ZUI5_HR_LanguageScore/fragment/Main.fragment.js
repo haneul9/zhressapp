@@ -18,17 +18,17 @@ sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.Main", {
 	*/
 	// ESS 용
 	_colModel1: [
+		{id: "TargetcT",   label: "{i18n>LABEL_49007}" /* 유효/만료 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 		{id: "ZlanguTxt",  label: "{i18n>LABEL_49002}" /* 어학종류 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 		{id: "ZltypeTxt", 	 label: "{i18n>LABEL_49003}" /* 시험종류 */,    plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "auto"},
 		{id: "Acqpot",  label: "{i18n>LABEL_49004}" /* 취득점수 */,  plabel: "", resize: true, span: 0, type: "string",     sort: true,  filter: true,  width: "auto"},
 		{id: "Appdat", 	 label: "{i18n>LABEL_49005}" /* 응시일자 */,    plabel: "", resize: true, span: 0, type: "date",    sort: true,  filter: true,  width: "auto"},
 		{id: "Endda",   label: "{i18n>LABEL_49006}" /* 유효일자 */,  plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "auto"},
-		{id: "TargetcT",   label: "{i18n>LABEL_49007}" /* 유효/만료 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"}
 	],
 	// MSS 용
 	_colModel2: [
-		{id: "Obj1t",  label: "{i18n>LABEL_49009}" /* 부 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
-		{id: "Obj2t",  label: "{i18n>LABEL_49011}" /* 과 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
+		{id: "Obj1t",  label: "{i18n>LABEL_49009}" /* 팀 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
+		{id: "Obj2t",  label: "{i18n>LABEL_49011}" /* 담당 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 		{id: "Gradet", 	 label: "{i18n>LABEL_49003}" /* 직급 */,    plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "auto"},
 		{id: "Ename",  label: "{i18n>LABEL_49004}" /* 성명 */,  plabel: "", resize: true, span: 0, type: "string",     sort: true,  filter: true,  width: "auto"},
 		{id: "ZlanguTxt",  label: "{i18n>LABEL_49002}" /* 어학종류 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
