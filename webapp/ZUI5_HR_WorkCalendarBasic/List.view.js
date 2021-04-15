@@ -36,7 +36,7 @@ sap.ui.jsview("ZUI5_HR_WorkCalendarBasic.List", {
                             items: [
                                 new sap.m.Button({
                                     press: oController.onPressSearch,
-                                    text: oBundleText.getText("LABEL_00104") // 검색
+                                    text: oBundleText.getText("LABEL_00100") // 조회
                                 }).addStyleClass("button-search")
                             ]
                         }).addStyleClass("button-group")
@@ -47,9 +47,9 @@ sap.ui.jsview("ZUI5_HR_WorkCalendarBasic.List", {
         
         var oLegend = new sap.m.Toolbar({
         	height : "46px",
-        	content : [new sap.m.Text({text : oBundleText.getText("LABEL_63011"), width : "100px", textAlign : "Center"}).addStyleClass("bg-signature-darkgreen p-5px"), // 승인데이터
-        			   new sap.m.Text({text : oBundleText.getText("LABEL_63012"), width : "100px", textAlign : "Center"}).addStyleClass("bg-signature-orange p-5px"), // 이상데이터
-        			   new sap.m.Text({text : oBundleText.getText("LABEL_63013"), width : "100px", textAlign : "Center"}).addStyleClass("background-color-lightorange p-5px"), // 소명신청
+        	content : [new sap.m.Text({text : oBundleText.getText("LABEL_63011"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px"), // 승인데이터
+        			   new sap.m.Text({text : oBundleText.getText("LABEL_63012"), width : "100px", textAlign : "Center"}).addStyleClass("legend-orange FontWhite p-5px"), // 이상데이터
+        			   new sap.m.Text({text : oBundleText.getText("LABEL_63013"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px"), // 소명신청
         			   new sap.m.ToolbarSpacer(),
         			   new sap.m.MessageStrip({
         			   	   type : "Success",

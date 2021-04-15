@@ -127,7 +127,15 @@
 }
 
 .calendar-datum{
-	background-color: #dde2eb;
+	background-color: #ebebeb;
 }
+
+.legend-blue{background-color:#329dfa}
+.legend-orange{background-color:#fa9a5a}
+.legend-green{background-color:#68c70a}
+
+.calendar-background-blue{background-color:#cae6fc}
+.calendar-background-orange{background-color:#fad9c3}
+.calendar-background-green{background-color:#cbf1c4}
 
 #signature-pad {border: 1px solid black}

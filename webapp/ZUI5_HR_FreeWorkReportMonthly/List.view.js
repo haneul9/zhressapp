@@ -82,7 +82,7 @@ sap.ui.jsview("ZUI5_HR_FreeWorkReportMonthly.List", {
                             items: [
                                 new sap.m.Button({
                                     press: oController.onPressSearch,
-                                    text: oBundleText.getText("LABEL_00104") // 검색
+                                    text: oBundleText.getText("LABEL_00100") // 조회
                                 }).addStyleClass("button-search")
                             ]
                         }).addStyleClass("button-group")
