@@ -439,7 +439,7 @@ sap.ui.define([
 			}
 		},
 
-		changeSel : function(){
+		changeSel : function(vSig){
 			var	oController = $.app.getController();
 			var oSel = $.app.byId(oController.PAGEID+"_dSel1");
 			var oPro=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/Pop1")[0];
@@ -468,11 +468,13 @@ sap.ui.define([
 				$.app.byId(oController.PAGEID+"_Chk1").setEditable(false);
 				$.app.byId(oController.PAGEID+"_Chk2").setEditable(false);
 			}
-			oController.onChk1();
-			oController.onChk2();
+			if(vSig!="R"){
+				oController.onChk1();
+				oController.onChk2();
+			}
 		}, 
 
-		changeSel2 : function(){
+		changeSel2 : function(vSig){
 			var	oController = $.app.getController();
 			var oSel2 = $.app.byId(oController.PAGEID+"_dSel2");
 			if(oSel2.getSelectedKey()=="05"){
@@ -557,7 +559,7 @@ sap.ui.define([
 				// }
 			}
 			oController._onDialog!="M"?oController.eqFunc():null;
-			oController.changeSel();
+			oController.changeSel(vSig);			
 		},
 
 		initFile:function(vPage){
@@ -1628,7 +1630,7 @@ sap.ui.define([
 								$.app.byId(oController.PAGEID+"_Dialog").bindElement("/Pop1/0");
 								vTmp=true;
 								setTimeout(function(){
-									oController.changeSel2();
+									oController.changeSel2("R");
 								},100)
 								
 							}else{
