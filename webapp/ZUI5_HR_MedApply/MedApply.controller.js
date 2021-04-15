@@ -1463,9 +1463,6 @@ sap.ui.define([
 				if(oPro.Znoctm.trim()!="0"&&fragment.COMMON_ATTACH_FILES.getFileLength(oController,"009")===0){
 					oMsg=oBundleText.getText("MSG_47021");
 				}
-				if(oPro.Znomrm.trim()!="0"&&fragment.COMMON_ATTACH_FILES.getFileLength(oController,"009")===0){
-					oMsg=oBundleText.getText("MSG_47021");
-				}
 				if(oPro.Znocum.trim()!="0"&&fragment.COMMON_ATTACH_FILES.getFileLength(oController,"009")===0){
 					oMsg=oBundleText.getText("MSG_47021");
 				}
@@ -1629,6 +1626,10 @@ sap.ui.define([
 								oJSON.setData(aData);
 								$.app.byId(oController.PAGEID+"_Dialog").bindElement("/Pop1/0");
 								vTmp=true;
+								setTimeout(function(){
+									oController.changeSel2();
+								},100)
+								
 							}else{
 								var oJSON = $.app.byId(oController.PAGEID+"_Dialog2").getModel();
 								var aData={Pop1:[],Pop2:[]};
