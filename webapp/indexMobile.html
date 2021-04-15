@@ -113,8 +113,14 @@ window._session = new HomeSession(_gateway, initHome);
 
 var popupUrl = _gateway.parameter('popup');
 if (!popupUrl) {
-	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-custom').height()));
+	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
 } else {
+	setTimeout(function() {
+		$('.navbar-mobile .button-logout').click(function() {
+			
+		});
+	}, 0);
+
 	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
 	$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
 	new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), popupUrl);
@@ -123,12 +129,12 @@ if (!popupUrl) {
 </script>
 </head>
 <body>
-<div class="navbar navbar-expand-md navbar-light bg-light navbar-custom" role="navigation">
+<div class="navbar navbar-expand-md navbar-light bg-light navbar-mobile" role="navigation">
 	<button class="navbar-toggler pl-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<a class="navbar-brand ehr-logo" href="#"><img src="images/m-logo.png" style="width:auto; height:28px" alt="" /></a>
-	<button class="navbar-toggler pr-0" type="button">
+	<button class="navbar-toggler pr-0 button-logout" type="button">
 		<svg width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
 			<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
 			<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>

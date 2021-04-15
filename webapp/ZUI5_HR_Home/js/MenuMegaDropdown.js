@@ -498,6 +498,7 @@ getMenuTree: function(data) {
 		}
 		var menu = {
 			menuId: o.Menid,
+			Mnid2: o.Mnid2,
 			title: o.Mnnm2,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
 			children: level2SubMenuMap[o.Mnid2]
@@ -521,6 +522,7 @@ getMenuTree: function(data) {
 		}
 		return {
 			menuId: o.Menid,
+			Mnid1: o.Mnid1,
 			title: o.Mnnm1,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
 			children: level1SubMenuMap[o.Mnid1],

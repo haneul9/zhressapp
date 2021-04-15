@@ -360,11 +360,12 @@ sap.ui.define(
 						oModel.create("/CongratulationApplySet", sendObject, {
 							async: true,
 							success: function (oData, response) {
-								MessageBox.show(oController.getBundleText("MSG_08103"), {
-									title : oController.getBundleText("LABEL_08025"),
-									actions : [MessageBox.Action.YES, MessageBox.Action.NO],
-									onClose : PageMoveFunc
-								});
+								sap.m.MessageBox.alert(oController.getBundleText("MSG_44002"), { title: oController.getBundleText("LABEL_08025")});
+								// MessageBox.show(oController.getBundleText("MSG_08103"), {
+								// 	title : oController.getBundleText("LABEL_08025"),
+								// 	actions : [MessageBox.Action.YES, MessageBox.Action.NO],
+								// 	onClose : PageMoveFunc
+								// });
 								Common.log(oData);
 								BusyIndicator.hide();
 							},
