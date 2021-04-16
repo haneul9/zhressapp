@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet TempPortlet */
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet TempPortlet */
 function PortletsMobile(_gateway) {
 
 	this._gateway = _gateway;
@@ -15,59 +15,39 @@ init: function() {
 	this.itemMap = null;
 	this.portletTypeMap = {
 		'P101': EmployeePortlet,	// 개인정보
-		'P105': CalendarPortlet		// 팀 달력
+		'P102': NoticePortlet,		// 공지사항
+		'P105': CalendarPortlet,	// 팀 달력
+		'P108': HiTalkTalkPortlet	// 하이톡톡
 	};
 
-	// $(document)
-	// 	.off('click', '.portlet-masonry [data-url]')
-	// 	.on('click', '.portlet-masonry [data-url]', this._gateway.handleUrl);
+	$(document)
+		.off('click', '.portlet-masonry [data-url]')
+		.on('click', '.portlet-masonry [data-url]', this._gateway.handleUrl);
 
-	// $(document)
-	// 	.off('click', '.portlet-masonry [data-popup-menu-url]')
-	// 	.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
-	// 		var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
-	// 		if (popupMenuUrl) {
-	// 			var paramMap = this._gateway.menuParam(popupMenuUrl, {
-	// 				popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
-	// 				mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
-	// 			});
-	// 			if (!this._gateway.isPRD()) {
-	// 				paramMap.pernr = this._gateway.parameter('pernr');
-	// 			}
-	// 			this._gateway.openWindow({ // openPopup openWindow
-	// 				url: 'index.html?' + $.param(paramMap),
-	// 				name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
-	// 				width: 1280,
-	// 				height: 800
-	// 			});
-	// 		} else {
-	// 			this._gateway.alert({
-	// 				title: '오류', html: ['<p>', '</p>'].join('이동할 URL 정보가 없습니다.')
-	// 			});
-	// 		}
-	// 	}.bind(this));
-
-	// $(document)
-	// 	.off('mouseover', '.portlet .card-header')
-	// 	.on('mouseover', '.portlet .card-header', function(e) {
-	// 		$(e.currentTarget).find('[data-dismiss="portlet"]').toggleClass('d-none', false);
-	// 	});
-
-	// $(document)
-	// 	.off('mouseout', '.portlet .card-header')
-	// 	.on('mouseout', '.portlet .card-header', function(e) {
-	// 		$(e.currentTarget).find('[data-dismiss="portlet"]').toggleClass('d-none', true);
-	// 	});
-
-	// $(document)
-	// 	.off('click', '[data-dismiss="portlet"]')
-	// 	.on('click', '[data-dismiss="portlet"]', function(e) {
-	// 		e.stopImmediatePropagation();
-
-	// 		this.dismiss($(e.currentTarget).toggleClass('d-none', true));
-	// 	}.bind(this));
-
-	this._gateway.addLocaleChangeCallbackOwner(this);
+	$(document)
+		.off('click', '.portlet-masonry [data-popup-menu-url]')
+		.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
+			var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
+			if (popupMenuUrl) {
+				var paramMap = this._gateway.menuParam(popupMenuUrl, {
+					popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
+					mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
+				});
+				if (!this._gateway.isPRD()) {
+					paramMap.pernr = this._gateway.parameter('pernr');
+				}
+				this._gateway.openWindow({ // openPopup openWindow
+					url: 'index.html?' + $.param(paramMap),
+					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
+					width: 1280,
+					height: 800
+				});
+			} else {
+				this._gateway.alert({
+					title: '오류', html: ['<p>', '</p>'].join('이동할 URL 정보가 없습니다.')
+				});
+			}
+		}.bind(this));
 },
 
 changeLocale: function() {
@@ -97,15 +77,15 @@ changeState: function(restore) {
 				return;
 			}
 
-			// this.generate() // Portlet 설정 조회 및 생성
-			// 	.then(function() {
-			// 		// $('[data-target="#portlet-personalization"]').parent().show();
-			// 		// $('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
-			// 		// 	resizeSensor: true,
-			// 		// 	verticalGutter: 0,
-			// 		// 	horizontalGutter: 0
-			// 		// });
-			// 	});
+			this.generate() // Portlet 설정 조회 및 생성
+				.then(function() {
+					// $('[data-target="#portlet-personalization"]').parent().show();
+					// $('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
+					// 	resizeSensor: true,
+					// 	verticalGutter: 0,
+					// 	horizontalGutter: 0
+					// });
+				});
 
 		} else {
 			this.itemMap = null;
@@ -177,11 +157,15 @@ generate: function() {
 				}
 			}, 0);
 
-			// $.map(this.items, function(item) {
-			// 	if (item.use()) {
-			// 		item.appendTo('[data-position="${column}"].portlet-col'.interpolate(item.column()), true); // Portlet UI rendering
-			// 	}
-			// });
+			this.items.sort(function(item1, item2) {
+				return item1.mobilePosition() - item2.mobilePosition();
+			});
+
+			$.map(this.items, function(item) {
+				if (item.use()) {
+					item.appendTo('.portlet-col', true); // Portlet UI rendering
+				}
+			});
 
 			$(document).on('click', '.portlet [data-url]', this._gateway.handleUrl);
 		}.bind(this),
@@ -197,7 +181,7 @@ generate: function() {
 			this._gateway.alert({ title: '오류', html: [
 				'<p>Protlet 정보를 조회하지 못했습니다.',
 				'화면을 새로고침 해주세요.<br />',
-				'같은 문제가 반복될 경우 eHR 시스템 담당자에게 문의하세요.</p>'
+				'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.</p>'
 			].join('<br />') });
 		}.bind(this),
 		complete: function() {

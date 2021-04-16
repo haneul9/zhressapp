@@ -20,15 +20,15 @@ function AbstractPortlet(_gateway, o) {
 	this._gateway = _gateway;
 	this._o = o;
 	this._key = o.Potid;
-	this.position(Number(o.Colno || 0), Number(o.Seqno || 0))
+	this._mobile = $('html').attr('device') === 'mobile';
+
+	this.position(this._mobile ? Number(o.MSeq || 0) : Number(o.Colno || 0), Number(o.Seqno || 0))
 		.size(Number(o.Htall || 1))
 		.icon(o.Iconid || null)
 		.title(o.Potnm || null)
 		.tooltip(o.TooltipTx || null)
-		.url1(o.LinkUrl1 || null)
-		.url2(o.LinkUrl2 || null)
-		.mid1(o.LinkMenid1 || null)
-		.mid2(o.LinkMenid2 || null)
+		.url(this._mobile ? (o.LinkUrl2 || null) : (o.LinkUrl1 || null))
+		.mid(this._mobile ? (o.LinkMenid2 || null) : (o.LinkMenid1 || null))
 		.use(o.Zhide !== 'X')
 		.popup(o.Mepop === 'X')
 		.switchable(o.Fixed !== 'X')
@@ -41,16 +41,24 @@ key: function() {
 
 	return this._key;
 },
+mobile: function() {
+
+	return this._mobile;
+},
 position: function(column, row) {
 
 	if (typeof column !== 'undefined' && typeof row !== 'undefined') {
-		this._position = {
-			column: Number(column || 0),
-			row: Number(row || 0)
-		};
+		if (this._mobile) {
+			this._position = Number(column || 0);
+		} else {
+			this._position = {
+				column: Number(column || 0),
+				row: Number(row || 0)
+			};
+		}
 		return this;
 	}
-	return $.extend(true, {}, this._position);
+	return this._mobile ? this._position : $.extend(true, {}, this._position);
 },
 size: function(size) {
 
@@ -84,37 +92,21 @@ tooltip: function(tooltip) {
 	}
 	return this._tooltip;
 },
-url1: function(url) {
+url: function(url) {
 
 	if (typeof url !== 'undefined') {
-		this._url1 = url || '';
+		this._url = url || '';
 		return this;
 	}
-	return this._url1;
+	return this._url;
 },
-url2: function(url) {
-
-	if (typeof url !== 'undefined') {
-		this._url2 = url || '';
-		return this;
-	}
-	return this._url2;
-},
-mid1: function(mid) {
+mid: function(mid) {
 
 	if (typeof mid !== 'undefined') {
-		this._mid1 = mid || '';
+		this._mid = mid || '';
 		return this;
 	}
-	return this._mid1; // || this._gateway.mid(this._url1);
-},
-mid2: function(mid) {
-
-	if (typeof mid !== 'undefined') {
-		this._mid2 = mid || '';
-		return this;
-	}
-	return this._mid2; // || this._gateway.mid(this._url2);
+	return this._mid; // || this._gateway.mid(this._url);
 },
 use: function(use) {
 
@@ -169,27 +161,27 @@ link: function(button) {
 	if (this.popup()) {
 		if (button) {
 			attributes = [
-				'<button type="button" data-popup-menu-url="${url}" data-menu-id="${menu-id}" aria-label="Link">'.interpolate(this.url1(), this.mid1()),
+				'<button type="button" data-popup-menu-url="${url}" data-menu-id="${menu-id}" aria-label="Link">'.interpolate(this.url(), this.mid()),
 					'<span aria-hidden="true"><i class="fas fa-chevron-right" title="메뉴로 이동"></i></span>',
 				'</button>'
 			];
 		} else {
 			attributes = [
-				' data-popup-menu-url="${url}"'.interpolate(this.url1()),
-				' data-menu-id="${menu-id}"'.interpolate(this.mid1())
+				' data-popup-menu-url="${url}"'.interpolate(this.url()),
+				' data-menu-id="${menu-id}"'.interpolate(this.mid())
 			]; // index.html에서 event function binding
 		}
 	} else {
 		if (button) {
 			attributes = [
-				'<button type="button" data-url="${url}" data-menu-id="${menu-id}" aria-label="Link">'.interpolate(this.url1(), this.mid1()),
+				'<button type="button" data-url="${url}" data-menu-id="${menu-id}" aria-label="Link">'.interpolate(this.url(), this.mid()),
 					'<span aria-hidden="true"><i class="fas fas fa-chevron-right" title="메뉴로 이동"></i></span>',
 				'</button>'
 			];
 		} else {
 			attributes = [
-				' data-url="${url}"'.interpolate(this.url1()),
-				' data-menu-id="${menu-id}"'.interpolate(this.mid1())
+				' data-url="${url}"'.interpolate(this.url()),
+				' data-menu-id="${menu-id}"'.interpolate(this.mid())
 			];
 		}
 	}

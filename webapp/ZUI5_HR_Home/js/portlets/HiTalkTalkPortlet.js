@@ -102,8 +102,8 @@ changeLocale: function() {
 itemUrl: function(o) {
 
 	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url1(), o.Sdate, o.Skey),
-		' data-menu-id="${url}"'.interpolate(this.mid1())
+		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
+		' data-menu-id="${url}"'.interpolate(this.mid())
 	].join('');
 },
 clearResource: function() {

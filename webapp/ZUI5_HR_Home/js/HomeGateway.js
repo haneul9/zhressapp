@@ -75,17 +75,18 @@ homePortlet: function(_portlet) {
 		updatePortlet: _portlet.updatePortlet.bind(_portlet)
 	});
 },
+isMobile: function() {
 
+	return $('html').attr('device') === 'mobile';
+},
 isPopup: function() {
 
 	return !!this._basis.parameter('popup');
 },
-
 restorePreviousMenu: function() {
 
 
 },
-
 restoreHome: function() {
 
 	if (this.isPopup()) {
@@ -99,7 +100,6 @@ restoreHome: function() {
 	this._portlet.changeState(true);
 	this.addLocaleChangeCallbackOwner(this._portlet);
 },
-
 successAppPrefilter: function() {
 
 	if (this.isPopup()) {

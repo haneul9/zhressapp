@@ -91,7 +91,7 @@ sap.ui.jsfragment("ZUI5_SF_EvalProfile.Page", { // 평가이력
 			justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 			fitContainer: true,
 			items: [
-				new sap.m.Text({text: "{i18n>LABEL_07202}"}).addStyleClass("sub-title"), // 이전 eHR 시스템 평가이력(2019년 이전)
+				new sap.m.Text({text: "{i18n>LABEL_07202}"}).addStyleClass("sub-title"), // 이전 HR 시스템 평가이력(2019년 이전)
 				new sap.m.FlexBox({
 					items: [
 						new sap.m.Button({
