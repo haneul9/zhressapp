@@ -36,6 +36,7 @@
 <script src="ZUI5_HR_Home/js/MenuHamburger.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--	P101 개인정보 -->
+<script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--	P102 공지사항 -->
 <script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--	P105 팀 달력 -->
 <script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/PortletsMobile.js"></script>
@@ -65,15 +66,15 @@ function initHome() {
 
 	setTimeout(function() {
 		window._portlet = new PortletsMobile(_gateway);
-		// window._portlet
-		// 	.generate() // Portlet 설정 조회 및 생성
-		// 	.then(function() {
+		window._portlet
+			.generate() // Portlet 설정 조회 및 생성
+			.then(function() {
 		// 		$('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
 		// 			resizeSensor: true,
 		// 			verticalGutter: 0,
 		// 			horizontalGutter: 0
 		// 		});
-		// 	});
+			});
 	}, 0);
 
 	// $(document).on('click', '.ehr-header [data-popup-menu-url]', function() {
