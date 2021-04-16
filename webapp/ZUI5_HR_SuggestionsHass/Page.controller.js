@@ -148,6 +148,7 @@
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
 			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
 			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Skey");
+			vSeqnr = vSeqnr.slice(-5);
 			
 			if (!oController._RegistModel) {
 				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", oController);
