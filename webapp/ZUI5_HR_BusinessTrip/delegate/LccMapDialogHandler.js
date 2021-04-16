@@ -95,7 +95,7 @@ var Handler = {
 
 		return {
 			id: "LccMapDialog",
-			name: "ZUI5_HR_BusinessTripMap.fragment.LccMapDialog",
+			name: "ZUI5_HR_BusinessTrip.fragment.LccMapDialog",
 			type: "JS",
 			controller: this.oController
 		};
