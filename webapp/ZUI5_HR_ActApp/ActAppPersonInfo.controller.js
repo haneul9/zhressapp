@@ -5365,6 +5365,7 @@ sap.ui.define(
                                 }));
                             });
                         }
+                        oZpGrade.setSelectedKey("0000");
                     }
                 } catch(err) {
                     Common.log(err);
