@@ -127,8 +127,10 @@ sap.ui.define([
 				 		function(data,res){
 				 			if(data && data.PensionPayTableInSet){
 				 				if(data.PensionPayTableInSet.results && data.PensionPayTableInSet.results.length){
-				 					for(var i=0; i<data.PensionPayTableInSet.results.length; i++){
-				 						vData2.Data.push(data.PensionPayTableInSet.results[i]);
+				 					if(oTable2){
+				 						for(var i=0; i<data.PensionPayTableInSet.results.length; i++){
+					 						vData2.Data.push(data.PensionPayTableInSet.results[i]);
+					 					}
 				 					}
 				 				}
 				 			}
@@ -429,6 +431,7 @@ sap.ui.define([
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
+			return new JSONModelHelper({name : "20060040"});
 			return new JSONModelHelper({name: "35132261"}); // 첨단
 			return new JSONModelHelper({name : "981014"}); // 기초
 		} : null
