@@ -33,7 +33,6 @@ return CommonController.extend($.app.APP_ID, { //
 	
 	onAfterShow: function() {
 		var oController = $.app.getController();
-		this.EmployeeModel.retrieve(oController.getView().getModel("session").getData().name);
 		oController.onPressSearch();
 	},
 

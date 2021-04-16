@@ -10,7 +10,6 @@ sap.ui.jsfragment("ZUI5_HR_Payslip.fragment.DetailDialog", {
             contentHeight: "75vh",
             title: "{i18n>LABEL_54001}",    // 급여내역 조회
             content: [
-                new common.EmpBasicInfoBox(oController._HeaderJSonModel).addStyleClass(""),
                 this.getSearchHBox(oController),
                 new sap.ui.layout.VerticalLayout(oController.PAGEID + "_PDF"),
             ],

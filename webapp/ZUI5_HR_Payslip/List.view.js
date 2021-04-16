@@ -27,7 +27,6 @@ sap.ui.jsview($.app.APP_ID, {
 
 		return new PageHelper({
 			contentItems: [
-				sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "Header"].join("."), oController),
 				sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), oController)]
 		});
 	}

@@ -16,7 +16,6 @@ return CommonController.extend($.app.APP_ID, { //
 	PAGEID: "MList",
 	_ListCondJSonModel : new JSONModel(),
 	_ListJSonModel : new JSONModel(),
-	_HeaderJSonModel : new JSONModel(),
 	_DetailJSonModel : new JSONModel(),
 	
 	_BusyDialog : new sap.m.BusyDialog(),
@@ -47,32 +46,6 @@ return CommonController.extend($.app.APP_ID, { //
 															 Pernr : vPernr,
 															 Langu : this.getSessionInfoByKey("Langu"),
 															 Bukrs : this.getSessionInfoByKey("Bukrs")});
-													 
-		oController._HeaderJSonModel.setProperty("/User",oController.getSessionModel().getData());												 
-		oController._HeaderJSonModel.setProperty("/User/nickname",this.getSessionInfoByKey("Ename"));
-		var  oPhoto = "";
-		Promise.all([
-			common.Common.getPromise(function() {
-				new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
-							 .select("photo")
-							 .setAsync(true)
-							 .attachRequestCompleted(function(){
-									var data = this.getData().d;
-									if(data && data.results.length){
-										oPhoto = "data:text/plain;base64," + data.results[0].photo;
-									} else {
-										oPhoto = "images/male.jpg";
-									}
-									oController._HeaderJSonModel.setProperty("/User/phto", oPhoto);
-							 })
-							 .attachRequestFailed(function() {
-									oPhoto = "images/male.jpg";
-									oController._HeaderJSonModel.setProperty("/User/phto", oPhoto);
-							 });
-			}.bind(this))
-		]);
-
-
 	},
 	
 	onAfterShow: function() {

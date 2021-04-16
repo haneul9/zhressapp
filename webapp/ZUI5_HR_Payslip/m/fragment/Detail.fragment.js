@@ -7,7 +7,6 @@ sap.ui.jsfragment("ZUI5_HR_Payslip.m.fragment.Detail", {
 		return new sap.m.VBox({
 			height: "100%",
 			items: [
-                // new common.EmpBasicInfoBox(oController._HeaderJSonModel).addStyleClass("ml-10px mt-15px"),
                 this.getSearchHBox(oController),
 				new sap.m.FlexBox(oController.PAGEID + "_PDF",{ }),
 				this.getInfoHBox(oController),
