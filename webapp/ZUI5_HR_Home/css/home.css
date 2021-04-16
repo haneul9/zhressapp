@@ -21,7 +21,7 @@ body {min-width:576px; font-size:14px}
 .ehr-header .custom-select-locale {margin-top:-2px; height:auto; border:0; font-size:14px; color:#777; background:#fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23777777' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px; cursor:pointer}
 .ehr-header .container-fluid {min-height:46px; padding-left:0; padding-right:0}
 
-.header-toggle {z-index:1; position:absolute; color:#777;font-size: 1.375rem;}
+.header-toggle {z-index:1; position:absolute; color:#777; font-size: 1.375rem}
 .header-toggle.header-toggle-up {right:30px; bottom:0}
 .header-toggle.header-toggle-down {display:none; top:0; right:10px}
 .header-toggle a {padding:0 1rem}
@@ -34,7 +34,7 @@ body {min-width:576px; font-size:14px}
 [locale="en_US"] .ehr-gnb > ul {font-size:1.15rem}
 .ehr-gnb > ul > li {border-bottom:4px solid transparent; padding:0 20px;margin:0 1px}
 .ehr-gnb > ul > li:hover {border-bottom:4px solid #6e6e6e}
-.ehr-gnb > ul > li.active {border-bottom:4px solid #064975;}
+.ehr-gnb > ul > li.active {border-bottom:4px solid #064975}
 .navbar-light .navbar-nav .active>.nav-link {color:#064975}
 .ehr-gnb > ul > li.active a.active {color:#064975}
 
@@ -101,8 +101,8 @@ body {min-width:576px; font-size:14px}
 .portlet-employee .employee-information {display:flex; flex-direction:column; min-width:128px; height:128px; padding:1.25rem 1rem 0 2rem; border-top-right-radius:.5rem; border-top-left-radius:.5rem; background-color:#064975}
 .portlet-employee .employee-information * {color:rgba(255, 255, 255, 0.8)}
 .portlet-employee .employee-information .employee-name {font-size:1.125rem; color:#fff; font-weight:500; letter-spacing:0.5px; padding-bottom:.25rem}
-.portlet-employee .employee-information div:nth-of-type(2) {line-height:1.2;}
-.portlet-employee .employee-information div:nth-of-type(3) {width:225px;line-height:1.2;padding-top:.25rem}
+.portlet-employee .employee-information div:nth-of-type(2) {line-height:1.2}
+.portlet-employee .employee-information div:nth-of-type(3) {width:225px; line-height:1.2; padding-top:.25rem}
 .portlet-employee .employee-photo {position:absolute; top:76px; right:18px; width:106px; height:106px; overflow:hidden; background-color:#fff}
 .portlet-employee .employee-photo img {position:absolute; top:0; left:0; z-index:1; width:100%}
 .portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
@@ -111,27 +111,27 @@ body {min-width:576px; font-size:14px}
 .portlet-employee .employee-d-day {display:flex; flex-direction:column; padding:1.5rem 1.25rem 1.25rem}
 .portlet-employee .employee-d-day .title {font-size:1rem; font-weight:700}
 .portlet-employee .employee-d-day h6 {margin-top:1rem; margin-bottom:0; font-size:.875rem; font-weight:400; padding-left:.75rem}
-.portlet-employee .employee-d-day h6:nth-of-type(2) {padding-top:.5rem;width:280px}
+.portlet-employee .employee-d-day h6:nth-of-type(2) {padding-top:.5rem; width:280px}
 .portlet-employee .employee-d-day .d-day {font-size:2.25rem; font-weight:400; padding-left:.75rem}
 .portlet-employee .employee-d-day .d-day.color-lcc-signature-green {font-size:2.875rem; font-weight:700; padding-left:.75rem}
 .portlet-employee .employee-d-day span + span {margin-left:.5rem}
 
-.portlet-notice .list-group {height:100%; overflow:auto}
-.portlet-notice .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
-.portlet-notice .list-group-item:hover {color:#0070bd; background:transparent}
-.portlet-notice-item {display:flex; justify-content:space-between; align-items:center; width:100%}
-.portlet-notice-item .portlet-notice-date {font-size:100%;color:#888;padding-right:.5rem}
-.portlet-notice-title {display:flex; align-items:center; width:239px}
-.portlet-notice-title .portlet-notice-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.portlet-notice-title span + span, .portlet-notice-title span + i {margin-left:3px}
-.portlet-notice-title i {vertical-align:middle; font-size:15.25px}
-.portlet-notice .badge {font-weight:500;}
-.portlet-notice .badge-pill {padding-left:.25rem;padding-right:.25rem;border-radius:.25rem}
-.portlet-notice .badge.badge-primary {font-weight:500;background-color:#0070BD} 
-.portlet-notice i.fas.fa-exclamation-circle {color:#CC1919}
+.portlet-bbs .list-group {height:100%; overflow:auto}
+.portlet-bbs .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
+.portlet-bbs .list-group-item:hover {color:#0070bd; background:transparent}
+.portlet-bbs-item {display:flex; justify-content:space-between; align-items:center; width:100%}
+.portlet-bbs-item .portlet-notice-date {font-size:100%; color:#888; padding-right:.5rem}
+.portlet-bbs-title {display:flex; align-items:center; width:239px}
+.portlet-bbs-title .portlet-notice-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.portlet-bbs-title span + span, .portlet-notice-title span + i {margin-left:3px}
+.portlet-bbs-title i {vertical-align:middle; font-size:15.25px}
+.portlet-bbs .badge {font-weight:500}
+.portlet-bbs .badge-pill {padding-left:.25rem; padding-right:.25rem; border-radius:.25rem}
+.portlet-bbs .badge.badge-primary {font-weight:500; background-color:#0070BD} 
+.portlet-bbs i.fas.fa-exclamation-circle {color:#cc1919}
 
 .portlet-quick-link button[disabled] {color:#777}
-.portlet-quick-link button[disabled] i{color:rgba(0,0,0,.4);}
+.portlet-quick-link button[disabled] i{color:rgba(0,0,0,.4)}
 .portlet-quick-link-box {display:flex; justify-content:space-between; align-items:center; height:100%}
 .portlet-quick-link-box > div {position:relative; width:25%; margin:0 2px}
 .portlet-quick-link-box .btn {padding:0 .25rem; width:62px; height:62px; border-radius:20px; background-color:#ebf5fe; color:#064975; letter-spacing:-0.5px; line-height:1.2; word-break:keep-all;/*overflow: hidden;*/border-color: transparent}
@@ -171,8 +171,8 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-next {right:14px}
 .portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
 .portlet-calendar-inline .ui-widget-header {background-color:transparent}
-.portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto 0; width:295px;margin-top: 1.5rem; margin-bottom:1rem;}
-.portlet-calendar-inline + .d-flex .btn-outline-dark.button-today {border-radius: 20px;background-color: #8dc63f;border:0;color: #fff;padding: .125rem .5rem;}
+.portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto 0; width:295px;margin-top: 1.5rem; margin-bottom:1rem}
+.portlet-calendar-inline + .d-flex .btn-outline-dark.button-today {border-radius: 20px;background-color: #8dc63f;border:0;color: #fff;padding: .125rem .5rem}
 .portlet-calendar-date {margin:0; font-weight:700}
 .portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:.5rem 0rem .25rem; text-align:center}
 .portlet-calendar-daily-report .list-group-item h6 {font-weight:400; font-size:15px; margin-bottom:0; padding-top:.25rem}
@@ -245,9 +245,9 @@ body {min-width:576px; font-size:14px}
 .flex-item-logo {padding-bottom:2rem; justify-content:center}
 
 /* Mobile Menu */
-.navbar.navbar-mobile .dropdown-toggle, .navbar.navbar-mobile .dropdown-menu a {cursor: pointer}
+.navbar.navbar-mobile .dropdown-toggle, .navbar.navbar-mobile .dropdown-menu a {cursor:pointer}
 .navbar.navbar-mobile .dropdown-item.active, .navbar.navbar-mobile .dropdown-item:active {color:inherit; text-decoration:none; background-color:inherit}
-.navbar.navbar-mobile .dropdown-item:focus, .navbar.navbar-mobile .dropdown-item:hover {color: #16181b; text-decoration:none; background-color:#f8f9fa; background-color:#f8f9fa}
+.navbar.navbar-mobile .dropdown-item:focus, .navbar.navbar-mobile .dropdown-item:hover {color:#16181b; text-decoration:none; background-color:#f8f9fa; background-color:#f8f9fa}
 @media (min-width: 767px) {
 	.navbar.navbar-mobile .dropdown-toggle:not(.nav-link)::after {display:inline-block; width:0; height:0; margin-left:.5em; vertical-align:0; border-bottom:.3em solid transparent; border-top:.3em solid transparent; border-left:.3em solid}
 } 
@@ -269,16 +269,16 @@ body {min-width:576px; font-size:14px}
 .navbar-mobile .dropdown-toggle::after {content:' '; display:block; position:absolute; top:14px; right:0; width:12px; height:12px; border:2px solid #999; border-bottom:none; border-left:none; -webkit-transform:rotate(135deg); -ms-transform:rotate(135deg); transform:rotate(135deg); text-indent:-100000px}
 .navbar-mobile .nav-item .dropdown-menu li {color:#777; font-size:1rem; padding:.5rem 1rem} /*2depth*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown {background-color:#fff} /*2depth 영역*/
-.navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown ul {background-color:#fff; padding:.5rem 0; margin-left: 0; margin-right: 0} /*3depth 영역*/
+.navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown ul {background-color:#fff; padding:.5rem 0; margin-left:0; margin-right:0} /*3depth 영역*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a {color:#777; font-size:1rem; font-weight:400; text-decoration:none} /*3depth*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a::before{content:'ㄴ'; font-size:12px; padding-right:6px}
 .navbar-mobile .button-logout {visibility:hidden}
 
 /* Mobile Download */
-.app-wrap-download {width:100%; height:100%;padding:2rem;}
-.app-wrap-download .flex-item {margin:auto 0; justify-content:center;text-align: center}
-.app-wrap-download .flex-item h1 {font-size:1rem;text-align: center;margin-bottom:2.5rem;letter-spacing: -0.5px;line-height: 1.5;font-weight:400}
-.app-wrap-download .flex-item h1 span.bi {color:#003963;font-size:1.125rem;font-weight:700}
-.app-wrap-download .flex-item .btn {background-color:#f4f5f6;border:1px solid #d9d9d9;min-width:230px;padding:1rem;margin: .5rem;border-radius: .5rem;}
-.app-wrap-download .flex-item .btn .os-title {display:inline-block;text-align: right;width:160px;font-size: .875rem;font-weight:500;}
-.app-wrap-download .flex-item .btn img{width: 30px; height:auto;}
+.app-wrap-download {width:100%; height:100%; padding:2rem}
+.app-wrap-download .flex-item {margin:auto 0; justify-content:center; text-align:center}
+.app-wrap-download .flex-item h1 {font-size:1rem; text-align:center; margin-bottom:2.5rem; letter-spacing:-0.5px; line-height:1.5; font-weight:400}
+.app-wrap-download .flex-item h1 span.bi {color:#003963; font-size:1.125rem; font-weight:700}
+.app-wrap-download .flex-item .btn {background-color:#f4f5f6; border:1px solid #d9d9d9; min-width:230px; padding:1rem; margin: .5rem; border-radius:.5rem}
+.app-wrap-download .flex-item .btn .os-title {display:inline-block; text-align:right; width:160px; font-size:.875rem; font-weight:500}
+.app-wrap-download .flex-item .btn img{width:30px; height:auto}

@@ -263,8 +263,6 @@ initSwitchModal: function() {
 
 	var t = $('#portlet-personalization');
 	if (t.length) {
-		// $(document).off('click', '.portlet-switch');
-		// $(document).off('click', '.portlet-switch [type="checkbox"]');
 		$(document).off('click', '.portlet-switch:not(.disabled)');
 		$(document).off('click', '.portlet-switch [type="checkbox"]:not([disabled])');
 		t.off('click', '.btn-primary');
@@ -489,7 +487,6 @@ generate: function() {
 	loginInfo = this._gateway.loginInfo();
 
 	return this._gateway.post({
-		// url: 'ZUI5_HR_Home/portlets.json',
 		url: url,
 		data: {
 			IMode: 'R',

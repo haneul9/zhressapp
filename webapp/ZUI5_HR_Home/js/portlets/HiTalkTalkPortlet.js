@@ -1,20 +1,20 @@
 /* global AbstractPortlet moment */
-function NoticePortlet() {
+function HiTalkTalkPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
-	this.$selector = '#portlet-notice-list';
+	this.$selector = '#portlet-hitalktalk-list';
 }
 
-NoticePortlet.prototype = Object.create(AbstractPortlet.prototype);
-NoticePortlet.prototype.constructor = NoticePortlet;
+HiTalkTalkPortlet.prototype = Object.create(AbstractPortlet.prototype);
+HiTalkTalkPortlet.prototype.constructor = HiTalkTalkPortlet;
 
-$.extend(NoticePortlet.prototype, {
+$.extend(HiTalkTalkPortlet.prototype, {
 
 ui: function() {
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs portlet-notice" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-bbs portlet-hitalktalk" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			'<div class="card-header">',
 				'<h6>${title}</h6>'.interpolate(this.title()),
 				'<div>',
@@ -23,7 +23,7 @@ ui: function() {
 				'</div>',
 			'</div>',
 			'<div class="card-body">',
-				'<div class="list-group" id="portlet-notice-list"></div>',
+				'<div class="list-group" id="portlet-hitalktalk-list"></div>',
 			'</div>',
 			this.spinner(),
 		'</div>'
@@ -37,22 +37,22 @@ fill: function() {
 		url: url,
 		data: {
 			IMode: 'R',
-			IConType: '2',
+			IConType: '6',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
-			TableIn2: []
+			TableIn6: []
 		},
 		success: function(data) {
-			this._gateway.prepareLog('NoticePortlet.fill ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('HiTalkTalkPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
 			var list = this.$(),
-			TableIn2 = this._gateway.odataResults(data).TableIn2;
-			if (!TableIn2.length) {
+			TableIn6 = this._gateway.odataResults(data).TableIn6;
+			if (!TableIn6.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">공지사항이 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">게시글이 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action text-center">공지사항이 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item list-group-item-action text-center">게시글이 없습니다.</a>');
 				}
 				return;
 			}
@@ -61,7 +61,7 @@ fill: function() {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
-			list.prepend($.map(TableIn2, function(o) {
+			list.prepend($.map(TableIn6, function(o) {
 				var date = moment(Number((o.Edate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 				return [
 					'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
@@ -78,7 +78,7 @@ fill: function() {
 			}.bind(this)).join(''));
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'NoticePortlet.fill ' + url);
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HiTalkTalkPortlet.fill ' + url);
 		}.bind(this),
 		complete: function() {
 			this.spinner(false);
@@ -104,7 +104,7 @@ changeLocale: function() {
 itemUrl: function(o) {
 
 	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url1(), o.Sdate, o.Seqnr),
+		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url1(), o.Sdate, o.Skey),
 		' data-menu-id="${url}"'.interpolate(this.mid1())
 	].join('');
 },
