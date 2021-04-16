@@ -131,6 +131,7 @@ sap.ui.define(
                         IOdkey: "",
                         IConType: OvertimeWork.ProcessType.ACTION,
                         IAftck: payload.Aftck,
+                        IEmpid: this.getSessionInfoByKey("Pernr"),
                         IPernr: this.getSessionInfoByKey("Pernr"),
                         IBukrs: this.getSessionInfoByKey("Bukrs"),
                         IMolga: this.getSessionInfoByKey("Molga"),
