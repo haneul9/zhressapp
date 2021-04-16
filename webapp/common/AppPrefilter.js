@@ -1,22 +1,22 @@
 function AppPrefilter() {
 
-	if (/^webide/i.test(location.host) || (location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
-		try {
-			if (parent && parent._gateway) {
-				parent._gateway.successAppPrefilter();
-			}
-		} catch(e) {
-			// SF에서 평가 메뉴 접속시
-		}
-		window._menu_prefilter = this;
-		this._menu_authorized = true;
+	// if (/^webide/i.test(location.host) || (location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
+	// 	try {
+	// 		if (parent && parent._gateway) {
+	// 			parent._gateway.successAppPrefilter();
+	// 		}
+	// 	} catch(e) {
+	// 		// SF에서 평가 메뉴 접속시
+	// 	}
+	// 	window._menu_prefilter = this;
+	// 	this._menu_authorized = true;
 
-		document.addEventListener("DOMContentLoaded", function() {
-			window.startAppInit();
-		});
+	// 	document.addEventListener("DOMContentLoaded", function() {
+	// 		window.startAppInit();
+	// 	});
 
-		return this;
-	}
+	// 	return this;
+	// }
 
 	try {
 		if (!parent || !parent._gateway) {
@@ -120,8 +120,14 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
 
-			result.hasMenuAuthority = false;
-			result.jqXHR = jqXHR;
+			if (/^webide/i.test(location.host) || (location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
+				result.hasMenuAuthority = true;
+				result.ECheckPw = ""; // 비밀번호 재확인이 필요한 메뉴인지 여부
+				result.EPinfo = "X"; // EmpBasicInfoBox 표시 여부
+			} else {
+				result.hasMenuAuthority = false;
+				result.jqXHR = jqXHR;
+			}
 		}.bind(this)
 	});
 

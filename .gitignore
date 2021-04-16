@@ -1,9 +1,9 @@
 /dist/
 /out/
-.che/
-.vscode/settings.json
-.eslintrc.json
-.eslintrc
+/.che/
+/.vscode/settings.json
+/.eslintrc.json
+/.eslintrc
 /package-lock.json
 sap-ui-cachebuster-info.json
 mergedManifestDescriptor.json
@@ -11,3 +11,6 @@ node_modules
 proxy.js
 /.classpath
 /.project
+webapp/css/fontawesome-all-.min.css
+webapp/webfonts/
+webapp/NaverMap.html
