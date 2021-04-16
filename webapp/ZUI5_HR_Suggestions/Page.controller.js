@@ -74,7 +74,7 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr")))
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey")))
 				this.onSelectDetail(false);
         },
 
@@ -183,7 +183,7 @@
 			var oController = $.app.getController();
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
 			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
-			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Seqnr");
+			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Skey");
 			
 			if (!oController._RegistModel) {
 				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", oController);

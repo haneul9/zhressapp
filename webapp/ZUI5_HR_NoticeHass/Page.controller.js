@@ -55,7 +55,16 @@
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
+
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr")))
+				this.onSelectDetail(false);
         },
+
+		getParameterByName: function(name) {
+			var regex = parent._gateway.parameter(name);
+			
+			return Common.checkNull(regex)? "" : regex;
+		},
 
         getChangeDate: function() {
 			return new sap.ui.commons.TextView({
@@ -151,24 +160,30 @@
 		
 		onSelectedRow: function(oEvent) {
             var oController = $.app.getController();
-			var oView = $.app.byId("ZUI5_HR_NoticeHass.Page");
 			var vPath = oEvent.getParameters().rowBindingContext.getPath();
+
+			oController.onSelectDetail(true, vPath);
+		},
+
+		onSelectDetail: function(Gubun, Path){
+			var oController = $.app.getController();
+			var oView = $.app.byId("ZUI5_HR_Notice.Page");
 			
 			if (!oController._RegistModel) {
-				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_NoticeHass.fragment.Regist", oController);
+				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Notice.fragment.Regist", oController);
 				oView.addDependent(oController._RegistModel);
 			}
-
-			oController.getDetailData(vPath);
+			
+			oController.getDetailData(Path, Gubun);
             oController.onBeforeOpenDetailDialog();
 			oController._RegistModel.open();
 		},
 
-		getDetailData: function(Path) { // 상세정보
+		getDetailData: function(Path, Gubun) { // 상세정보
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-			var vSdate = oController.TableModel.getProperty(Path).Sdate;
-			var vSeqnr = oController.TableModel.getProperty(Path).Seqnr;
+			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
+			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Seqnr");
 			var vBukrs = oController.getUserGubun();
             var vPernr = oController.getUserId();
 			
