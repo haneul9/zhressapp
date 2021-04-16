@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 $.sap.require("common.Common");
 $.sap.require("common.PageHelper");
 $.sap.require("common.Formatter");
@@ -62,7 +63,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 					new sap.m.HBox({
 						items: [
 							new sap.m.Label({
-								text: "{i18n>LABEL_47003}", // 진료일								
+								text: "{i18n>LABEL_47003}" // 진료일								
 							}),							
 							new common.PickOnlyDateRangeSelection(oController.PAGEID + "_ApplyDate", {
 //								displayFormat:$.app.getController().getSessionInfoByKey("Dtfmt"), 
@@ -73,7 +74,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 								secondDateValue: new Date(vYear, vMonth, 0)
 							}),
 							new sap.m.Label({
-								text: "{i18n>LABEL_47004}", // 신청자 성명							
+								text: "{i18n>LABEL_47004}" // 신청자 성명							
 							}),
                             new sap.m.Select(oController.PAGEID + "_HeadSel",{
 								width:"200px"
@@ -84,11 +85,11 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 						items: [
 							new sap.m.Button({	
 								press : oController.onSearch,							
-								text: "{i18n>LABEL_23010}", // 조회
+								text: "{i18n>LABEL_23010}" // 조회
 							}).addStyleClass("button-search"),
 							new sap.m.Button(oController.PAGEID+"_NewBtn",{
-								press: function(){oController.onDialog(null,"N3")},
-								text: "{i18n>LABEL_47006}", // 신청
+								press: function(){oController.onDialog(null,"N3");},
+								text: "{i18n>LABEL_47006}" // 신청
 							}).addStyleClass("button-light")
 						]
 					})
