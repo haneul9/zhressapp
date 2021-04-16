@@ -109,7 +109,6 @@ sap.ui.define([
 		},
 
 		onBeforeShow: function(oEvent){
-			console.log("Controller");
 			var oController = this;
 			this._ListCondJSonModel.setData({Data:oController.getView().getModel("session").getData()});
 			oController._SessionData=oController.getView().getModel("session").getData();
@@ -270,6 +269,7 @@ sap.ui.define([
 			var oController=$.app.getController();
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._SessionData;
+			oController.getSelector("A");
 			oController._DataModel.setData({Pop1:[],Pop2:[oController._tData]});
 			oController._vArr2.forEach(function(e){
 				var oPro=$.app.getController()._DataModel.getProperty("/Pop2")[0];
@@ -508,20 +508,6 @@ sap.ui.define([
 				}
 				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=false;
 				$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
-
-				// for(var i=3;i<=7;i++){
-				// 	var vProperty={
-				// 		Appnm: vAppnm,
-				// 		Mode: "S",
-				// 		Cntnm: "00"+i,
-				// 		Max: "1",
-				// 		Label : "",
-				// 		Editable: vEdits[i-3],
-				// 		UseMultiCategories : true,
-				// 		FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				// 	}					
-				// 	fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty,"00"+i);
-				// }
 			}else{
 				$.app.byId(oController.PAGEID+"_Inp1").setEditable(true);
 				$.app.byId(oController.PAGEID+"_Inp2").setEditable(true);
@@ -545,19 +531,6 @@ sap.ui.define([
 				}else{
 					vEdits=[false,false,false,false,false];
 				}
-				// for(var i=3;i<=7;i++){
-				// 	var vProperty={
-				// 		Appnm: vAppnm,
-				// 		Mode: "S",
-				// 		Cntnm: "00"+i,
-				// 		Max: "1",
-				// 		Label : "",
-				// 		Editable: vEdits[i-3],
-				// 		UseMultiCategories : true,
-				// 		FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				// 	}					
-				// 	fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty,"00"+i);
-				// }
 			}
 			oController._onDialog!="M"?oController.eqFunc():null;
 			oController.changeSel(vSig);			
@@ -595,30 +568,7 @@ sap.ui.define([
 				} catch (ex) {
 					common.Common.log(ex);
 				}
-
-				// var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
-				// bReturnFlag = false,
-				// sPath = oModel.createKey("/FileListSet", {
-				// 	Appnm: oJSonModel.getProperty("/DelelteDatas")[0].Appnm,
-				// 	Docid: oJSonModel.getProperty("/DelelteDatas")[0].Docid,
-				// 	Cntnm: oJSonModel.getProperty("/DelelteDatas")[0].Cntnm
-				// });
-
-				// oModel.remove(sPath, {
-				// 	success: function () {
-
-				// 	},
-				// 	error: function (res) {
-				// 		var errData = common.Common.parseError(res);
-				// 		if(errData.Error && errData.Error === "E") {
-				// 			sap.m.MessageBox.error(errData.ErrorMessage, {
-				// 				title: this.getBundleText("LABEL_09029")
-				// 			});
-				// 		}
-				// 	}
-				// });
 			};
-				//deleteProcess("YES");
 		},
 
 		onChk1:function(){
@@ -1157,7 +1107,6 @@ sap.ui.define([
 								data.MedicalApplyTableIn.results.length>10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(data.MedicalApplyTableIn.results.length);
 							}
 							if(data&&data.MedicalApplyExport.results.length){
-//								oController._onClose="";
 								oController._onClose=data.MedicalApplyExport.results[0].Close;
 							}
 						},
@@ -1578,11 +1527,6 @@ sap.ui.define([
 				}else{
 					vData.MedicalApplyTableIn[0].MedDate=null;
 				}		
-				// if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""||
-				// 	$.app.getController()._DataModel.getProperty("/Pop1")[0].DiseName.trim()==""){
-				// 	sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
-				// 	return;
-				// }
 				oController._vArr1.forEach(function(e){
 					eval("vData.MedicalApplyTableIn[0]."+e+"=vData.MedicalApplyTableIn[0]."+e+".replace(/\,/gi,'')");
 				});
@@ -1747,7 +1691,7 @@ sap.ui.define([
 					vData.MedicalApplyTableIn[0].PatiName=$.app.byId(oController.PAGEID+"_dSel1").getSelectedItem().getText();
 				}else{
 					vData.MedicalApplyTableIn[0].Appnm=fragment.COMMON_ATTACH_FILES.uploadFile.call(oController,"008");
-				}				
+				}
 				delete vData.MedicalApplyTableIn[0].Close;
 				delete vData.MedicalApplyTableIn[0].Chk1;
 				delete vData.MedicalApplyTableIn[0].Chk2;
@@ -1912,8 +1856,6 @@ sap.ui.define([
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			// return new JSONModelHelper({name: "20120220"});
-			// return new JSONModelHelper({name: "931006"});
 			return new JSONModelHelper({name: "991004"});
 		} : null
 		
