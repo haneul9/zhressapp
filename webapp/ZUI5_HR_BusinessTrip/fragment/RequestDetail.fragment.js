@@ -1,12 +1,12 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
-	"../../common/CommaInteger",
-	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/HoverIcon",
-	"../../common/moment-with-locales",
-	"../../common/PickOnlyDatePicker",
-	"../../common/ZHR_TABLES",
+	"common/CommaInteger",
+	"common/Common",
+	"common/Formatter",
+	"common/HoverIcon",
+	"common/moment-with-locales",
+	"common/PickOnlyDatePicker",
+	"common/ZHR_TABLES",
 	"../delegate/OnRequest",
 	"../delegate/ViewTemplates",
 	"sap/m/InputBase"

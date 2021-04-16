@@ -1,13 +1,21 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/moment-with-locales",
+	"common/Common",
+	"common/CommonController",
+	"common/moment-with-locales",
 	"./delegate/OnRequest",
 	"./delegate/OnSettlement",
 	"sap/base/util/UriParameters",
 	"sap/ui/model/json/JSONModel"
-], function(Common, CommonController, momentjs, OnRequest, OnSettlement, UriParameters, JSONModel) {
+], function(
+	Common,
+	CommonController,
+	momentjs,
+	OnRequest,
+	OnSettlement,
+	UriParameters,
+	JSONModel
+) {
 "use strict";
 
 return CommonController.extend($.app.APP_ID, { // 출장

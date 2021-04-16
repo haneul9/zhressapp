@@ -1,8 +1,12 @@
 sap.ui.define([
-	"../common/Common",
-	"../common/PageHelper",
+	"common/Common",
+	"common/PageHelper",
 	"sap/ui/model/json/JSONModel"
-], function(Common, PageHelper, JSONModel) {
+], function(
+	Common,
+	PageHelper,
+	JSONModel
+) {
 "use strict";
 
 sap.ui.jsview($.app.APP_ID, { // 출장 신청/정산

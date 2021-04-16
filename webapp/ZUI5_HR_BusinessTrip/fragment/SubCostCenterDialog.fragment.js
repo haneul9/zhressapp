@@ -1,5 +1,5 @@
 sap.ui.define([
-	"../../common/ZHR_TABLES"
+	"common/ZHR_TABLES"
 ], function(ZHR_TABLES) {
 "use strict";
 

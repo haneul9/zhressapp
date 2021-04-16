@@ -1,6 +1,6 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/DialogHandler",
+	"common/Common",
+	"common/DialogHandler",
 	"./CountryDialogHandler",
 	"sap/ui/model/json/JSONModel"
 ], function(

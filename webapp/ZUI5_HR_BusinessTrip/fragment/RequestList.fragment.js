@@ -1,6 +1,6 @@
 sap.ui.define([
-	"../../common/PickOnlyDateRangeSelection",
-	"../../common/ZHR_TABLES",
+	"common/PickOnlyDateRangeSelection",
+	"common/ZHR_TABLES",
 	"../delegate/OnRequest",
 	"../delegate/ViewTemplates"
 ], function(

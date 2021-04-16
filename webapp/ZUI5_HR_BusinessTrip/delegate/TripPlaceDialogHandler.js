@@ -1,7 +1,10 @@
 sap.ui.define([
-	"../../common/Common",
+	"common/Common",
 	"sap/ui/model/json/JSONModel"
-], function(Common, JSONModel) {
+], function(
+	Common,
+	JSONModel
+) {
 "use strict";
 
 var Handler = {
@@ -11,16 +14,16 @@ var Handler = {
 	oModel: new JSONModel({
 		PlaceName: null,
 		TripPlaceList: [
-			{ PlaceName: "서울본사" },
-			{ PlaceName: "가스공사안전교육원" },
-			{ PlaceName: "대산공장" },
+			{ PlaceName: "롯데케미칼본사" },
+			{ PlaceName: "한국가스안전공사가스안전교육원" },
+			{ PlaceName: "롯데케미칼 대산공장" },
 			{ PlaceName: "대전고용노동청" },
-			{ PlaceName: "대전금강유역환경청" },
-			{ PlaceName: "대전연구소" },
-			{ PlaceName: "여수공장" },
-			{ PlaceName: "울산공장" },
-			{ PlaceName: "첨단의왕" },
-			{ PlaceName: "한국가스안전공사본사" }
+			{ PlaceName: "금강유역환경청" },
+			{ PlaceName: "롯데케미칼연구소" },
+			{ PlaceName: "롯데케미칼제1공장" },
+			{ PlaceName: "롯데케미칼 울산1공장" },
+			{ PlaceName: "롯데케미칼 의왕사업장" },
+			{ PlaceName: "한국가스안전공사 본사" }
 		],
 		DistanceMap: {
 			"가스공사안전교육원,대산공장": 194,

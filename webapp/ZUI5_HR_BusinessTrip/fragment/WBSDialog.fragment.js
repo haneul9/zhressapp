@@ -1,6 +1,8 @@
 sap.ui.define([
-	"../../common/ZHR_TABLES"
-], function(ZHR_TABLES) {
+	"common/ZHR_TABLES"
+], function(
+	ZHR_TABLES
+) {
 "use strict";
 
 sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.WBSDialog", {

@@ -1,10 +1,10 @@
 /* global moment:true */
 sap.ui.define([
-	"../../common/Common",
-	"../../common/DialogHandler",
-	"../../common/moment-with-locales",
-	"../../common/SearchOrg",
-	"../../common/SearchUser1",
+	"common/Common",
+	"common/DialogHandler",
+	"common/moment-with-locales",
+	"common/SearchOrg",
+	"common/SearchUser1",
 	"./RequestDetailDialogHandler",
 	"./EnameDialogHandler",
 	"./MainCostCenterDialogHandler",

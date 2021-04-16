@@ -1,8 +1,8 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
-	"../../common/Common",
-	"../../common/DialogHandler",
-	"../../common/moment-with-locales",
+	"common/Common",
+	"common/DialogHandler",
+	"common/moment-with-locales",
 	"./SettlementTargetAbsenceListDialogHandler",
 	"./SettlementDetailDialogHandler",
 	"./CardExpenseDialogHandler",

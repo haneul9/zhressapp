@@ -1,7 +1,10 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/ZHR_TABLES"
-], function(Common, ZHR_TABLES) {
+	"common/Common",
+	"common/ZHR_TABLES"
+], function(
+	Common,
+	ZHR_TABLES
+) {
 "use strict";
 
 sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.AirportDialog", {

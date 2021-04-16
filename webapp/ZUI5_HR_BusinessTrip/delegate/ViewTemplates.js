@@ -1,6 +1,8 @@
 sap.ui.define([
-	"../../common/Common"
-], function(Common) {
+	"common/Common"
+], function(
+	Common
+) {
 "use strict";
 
 return { // 출장 신청/정산 view templates

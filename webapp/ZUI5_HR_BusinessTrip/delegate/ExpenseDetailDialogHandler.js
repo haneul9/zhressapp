@@ -1,12 +1,12 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
-	"../../common/Common",
-	"../../common/DialogHandler",
-	"../../common/moment-with-locales",
-	"../../common/moment-round",
+	"common/Common",
+	"common/DialogHandler",
+	"common/moment-with-locales",
+	"common/moment-round",
 	"./AirportDialogHandler",
 	"./CurrencyDialogHandler",
-	"./TripPlaceDialogHandler",
+	"./LccMapDialogHandler",
 	"sap/m/MessageBox",
 	"sap/ui/model/json/JSONModel"
 ], function(
@@ -16,7 +16,7 @@ sap.ui.define([
 	momentRoundjs,
 	AirportDialogHandler,
 	CurrencyDialogHandler,
-	TripPlaceDialogHandler,
+	LccMapDialogHandler,
 	MessageBox,
 	JSONModel
 ) {
@@ -758,15 +758,24 @@ var Handler = {
 	// 출장지 선택 dialog
 	searchTripPlace: function(oEvent) {
 
-		var sPath = oEvent.getParameter("id").replace(/(ExpenseDetail)/, "/$1/");
-
 		setTimeout(function() {
-			var callback = function(PlaceName) {
-				this.oModel.setProperty(sPath, PlaceName);
-				this.changeTripPlace();
+			var params = {
+				id: "LccMap",
+				cartype: "",
+				fueltype: this.oModel.getProperty("/ExpenseDetail/Zzgasname"),
+				lang: (this.oController.getSessionInfoByKey("Langu") || "ko").toLowerCase()
+			},
+			callback = function(o) {
+				this.oModel.setProperty("/ExpenseDetail/Startpl", o.departure);
+				this.oModel.setProperty("/ExpenseDetail/Destpl", o.destination);
+				this.oModel.setProperty("/ExpenseDetail/Zzkm", o.distance);
+				this.oModel.setProperty("/ExpenseDetail/TollTr", o.tollFare);
+				this.oModel.setProperty("/ExpenseDetail/GasTr", o.fuelPrice);
+
+				this.calculateCarExpenses();
 			}.bind(this);
 
-			DialogHandler.open(TripPlaceDialogHandler.get(this.oController, this.oModel.getProperty(sPath), callback));
+			DialogHandler.open(LccMapDialogHandler.get(this.oController, params, callback));
 		}.bind(this), 0);
 	},
 
@@ -779,10 +788,6 @@ var Handler = {
 			return;
 		}
 
-		var Startpl = this.oModel.getProperty("/ExpenseDetail/Startpl"),
-		Destpl = this.oModel.getProperty("/ExpenseDetail/Destpl");
-
-		this.oModel.setProperty("/ExpenseDetail/Zzkm", TripPlaceDialogHandler.getDistanceBetween(Startpl, Destpl));
 		this.calculateCarExpenses();
 	},
 
@@ -907,7 +912,7 @@ var Handler = {
 		this.oModel.setProperty("/ExpenseDetail/Gisurl", GisUrl);
 		this.oModel.setProperty("/ExpenseDetail/ParkingTr", p[17]);
 
-		this.calculateCarExpenses.call(this);
+		this.calculateCarExpenses();
 	},
 
 	retrieveFuelList: function() {
@@ -984,7 +989,7 @@ var Handler = {
 				defaultGasType = this.oModel.getProperty("/OwnCarGasTypeDefault") || (GasTypeSelectList[0] || {}).Zzgasgb || "";
 				this.oModel.setProperty("/ExpenseDetail/Zzgasname", defaultGasType);
 
-				this.calculateCarExpenses.call(this);
+				this.calculateCarExpenses();
 			}
 		}.bind(this));
 	},

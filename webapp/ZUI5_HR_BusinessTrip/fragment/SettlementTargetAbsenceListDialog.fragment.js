@@ -1,7 +1,10 @@
 sap.ui.define([
-	"../../common/PickOnlyDateRangeSelection",
-	"../../common/ZHR_TABLES"
-], function(PickOnlyDateRangeSelection, ZHR_TABLES) {
+	"common/PickOnlyDateRangeSelection",
+	"common/ZHR_TABLES"
+], function(
+	PickOnlyDateRangeSelection,
+	ZHR_TABLES
+) {
 "use strict";
 
 sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementTargetAbsenceListDialog", {

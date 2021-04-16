@@ -1,7 +1,10 @@
 sap.ui.define([
-	"../../common/Common",
+	"common/Common",
 	"sap/ui/model/json/JSONModel"
-], function(Common, JSONModel) {
+], function(
+	Common,
+	JSONModel
+) {
 "use strict";
 
 var Handler = {

@@ -1,12 +1,12 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
-	"../../common/CommaInteger",
-	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/moment-with-locales",
-	"../../common/PickOnlyDatePicker",
-	"../../common/PickOnlyDateRangeSelection",
-	"../../common/ZHR_TABLES",
+	"common/CommaInteger",
+	"common/Common",
+	"common/Formatter",
+	"common/moment-with-locales",
+	"common/PickOnlyDatePicker",
+	"common/PickOnlyDateRangeSelection",
+	"common/ZHR_TABLES",
 	"../delegate/TripPlaceDialogHandler",
 	"../delegate/ViewTemplates"
 ], function(
