@@ -101,6 +101,7 @@
 			sendObject.IPernr = vPernr;
 			sendObject.IBukrs = vBukrs;
             sendObject.IConType = "0";
+            sendObject.IHass = "X";
 			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
 			sendObject.IEndda = oSearchDate.getSecondDateValue();
             sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
