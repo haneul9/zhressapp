@@ -1298,7 +1298,7 @@ sap.ui.define([
 				},"004");
 			}else {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 내용요약
-					Label: "",
+					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
@@ -1306,7 +1306,7 @@ sap.ui.define([
 				},"001");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
-					Label: "",
+					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
@@ -1314,7 +1314,7 @@ sap.ui.define([
 				},"002");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
-					Label: "",
+					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
