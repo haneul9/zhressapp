@@ -240,19 +240,23 @@ renderSwitchModal: function() {
 	this.toBeUsedItemKeys = [];
 	this.toBeUnusedItemKeys = [];
 
-	$(document).on('click', '.portlet-switch:not(.disabled)', function(e) { // switch card click event handler
-		e.stopImmediatePropagation();
+	$(document)
+		.off('click', '.portlet-switch:not(.disabled)')
+		.on('click', '.portlet-switch:not(.disabled)', function(e) { // switch card click event handler
+			e.preventDefault();
 
-		var t = $(e.currentTarget), toBeUsed = !t.hasClass('active');
-		this.switch(toBeUsed, t.toggleClass('active').find('[type="checkbox"]').prop('checked', toBeUsed).end().data('key'));
-	}.bind(this));
+			var t = $(e.currentTarget), toBeUsed = !t.hasClass('active');
+			this.switch(toBeUsed, t.toggleClass('active').find('[type="checkbox"]').prop('checked', toBeUsed).end().data('key'));
+		}.bind(this));
 
-	$(document).on('click', '.portlet-switch [type="checkbox"]:not([disabled])', function(e) { // switch click event handler
-		e.stopImmediatePropagation();
+	$(document)
+		.off('click', '.portlet-switch [type="checkbox"]:not([disabled])')
+		.on('click', '.portlet-switch [type="checkbox"]:not([disabled])', function(e) { // switch click event handler
+			e.preventDefault();
 
-		var t = $(e.currentTarget), toBeUsed = !t.prop('checked');
-		this.switch(toBeUsed, t.prop('checked', toBeUsed).parents('.portlet-switch').toggleClass('active', toBeUsed).data('key'));
-	}.bind(this));
+			var t = $(e.currentTarget), toBeUsed = !t.prop('checked');
+			this.switch(toBeUsed, t.prop('checked', toBeUsed).parents('.portlet-switch').toggleClass('active', toBeUsed).data('key'));
+		}.bind(this));
 },
 
 initSwitchModal: function() {
