@@ -1,7 +1,7 @@
 sap.ui.define([], function() {
 "use strict";
 
-sap.ui.jsfragment("ZUI5_HR_BusinessTripMap.fragment.LccMapDialog", {
+sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 
 	createContent: function(oController) {
 
