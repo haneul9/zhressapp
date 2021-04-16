@@ -1,4 +1,5 @@
 $.sap.require("common.Common");
+$.sap.require("common.PageHelper");
 $.sap.require("common.Formatter");
 $.sap.require("common.makeTable");
 $.sap.require("common.EmpBasicInfoBoxCustom");
@@ -26,7 +27,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		var oRow,oCell,oMat;
 		var vYear = new Date().getFullYear();
 		var vMonth = new Date().getMonth()+1;
-
+		console.log("View");
 		oMat=new sap.ui.commons.layout.MatrixLayout();
 
 		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
@@ -123,35 +124,43 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		oRow.addCell(oCell);
 		oMat.addRow(oRow);
 
-		var oContent = new sap.m.FlexBox({
-			  justifyContent: "Center",
-			  fitContainer: true,
-			  items: [new sap.m.FlexBox({
-						  direction: sap.m.FlexDirection.Column,
-						  items: [new sap.m.FlexBox({
-									  alignItems: "End",
-									  fitContainer: true,
-									  items: [new sap.m.Text({text: oBundleText.getText("LABEL_47001")}).addStyleClass("app-title")] // 사외위탁교육 신청
-								  }).addStyleClass("app-title-container"),
-								  common.EmpBasicInfoBoxCustom.renderHeader(),
-								  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
-								  oMat
-								  ]
-					  }).addStyleClass("app-content-container-wide")]
-		}).addStyleClass("app-content-body");
+		// var oContent = new sap.m.FlexBox({
+		// 	  justifyContent: "Center",
+		// 	  fitContainer: true,
+		// 	  items: [new sap.m.FlexBox({
+		// 				  direction: sap.m.FlexDirection.Column,
+		// 				  items: [new sap.m.FlexBox({
+		// 							  alignItems: "End",
+		// 							  fitContainer: true,
+		// 							  items: [new sap.m.Text({text: oBundleText.getText("LABEL_47001")}).addStyleClass("app-title")] // 사외위탁교육 신청
+		// 						  }).addStyleClass("app-title-container"),
+		// 						  common.EmpBasicInfoBoxCustom.renderHeader(),
+		// 						  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
+		// 						  oMat
+		// 						  ]
+		// 			  }).addStyleClass("app-content-container-wide")]
+		// }).addStyleClass("app-content-body");
 				
 		/////////////////////////////////////////////////////////
 
-		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-			customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-			content: [oContent]
-		}).addStyleClass("app-content");
+		// var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+		// 	customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
+		// 	content: [oContent]
+		// }).addStyleClass("app-content");
 		
-		oPage.addStyleClass("WhiteBackground");
+		// oPage.addStyleClass("WhiteBackground");
 		
-		oPage.setModel(oController._ListCondJSonModel);
-		oPage.bindElement("/Data");
-		return oPage;
+		// oPage.setModel(oController._ListCondJSonModel);
+		// oPage.bindElement("/Data");
+
+		oMat.setModel(oController._ListCondJSonModel);
+		oMat.bindElement("/Data");
+
+		return new common.PageHelper({
+			contentItems: [
+				new sap.ui.core.HTML({content : "<div style='height:20px' />"}),oMat
+			]
+		});
 	}
 
 });

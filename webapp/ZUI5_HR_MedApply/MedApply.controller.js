@@ -4,11 +4,10 @@ sap.ui.define([
 	"../common/CommonController",
 	"../common/JSONModelHelper",
 	"../common/PageHelper",
-	"../common/AttachFileAction",
 	"../common/EmployeeModel",
 	"../common/HoverIcon",
 	"sap/m/InputBase"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel,HoverIcon,InputBase) {
+	function (Common, CommonController, JSONModelHelper, PageHelper,EmployeeModel,HoverIcon,InputBase) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_MedApply.MedApply", {
@@ -25,7 +24,8 @@ sap.ui.define([
 		_onDialog:"",
 		_onClose:"",
 		_MedDate:null,
-		_vArr1:["Zdbcrl","Zdsctm","Ziftrl","Zfvcrl","Mycharge","SuppAmt","Zmedrl","NsuppAmt","BaseAmt","Zkiobd","Zkibbm","Zkijbd","Zkijbm","Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
+		_vArr1:["Zdbcrl","Zdsctm","Ziftrl","Zfvcrl","Mycharge","SuppAmt","Zmedrl","NsuppAmt","BaseAmt","Zkiobd","Zkibbm","Zkijbd","Zkijbm",
+		"Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
 		_vArr2:["Ptamt","Medsp","Oiamt","Znobcm","Medpp","Insnp","Znobcd","Medmp","Inspp","Zdbcrl","Ziftrl","Framt"],
 		onInit: function () {
 			this.setupView()
@@ -108,6 +108,7 @@ sap.ui.define([
 		},
 
 		onBeforeShow: function(oEvent){
+			console.log("Controller");
 			var oController = this;
 			this._ListCondJSonModel.setData({Data:oController.getView().getModel("session").getData()});
 			oController._SessionData=oController.getView().getModel("session").getData();
@@ -139,7 +140,7 @@ sap.ui.define([
 		},
 
 		onAfterShow:function(){
-			common.EmpBasicInfoBoxCustom.setHeader(this._SessionData.Pernr);
+//			common.EmpBasicInfoBoxCustom.setHeader(this._SessionData.Pernr);
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_ApplyDate");            
             oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 		},

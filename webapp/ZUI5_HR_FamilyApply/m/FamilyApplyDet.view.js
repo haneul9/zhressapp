@@ -33,7 +33,12 @@ sap.ui.define([
 			var oSelect5=new sap.m.Select(oController.PAGEID+"_Sel5",{width:"100%",selectedKey:"{Fasar}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
-			var oRegNo=new sap.m.Input(oController.PAGEID+"_Regno",{width:"100%",value:"{Regno}",maxLength:14,liveChange:oController.onAutoInputReg,editable:{path:"Opener",formatter:function(fVal){
+			var oRegNo=new sap.m.Input(oController.PAGEID+"_Regno",{width:"80%",value:"{Regnot}",maxLength:14,liveChange:oController.onAutoInputReg,
+			customData:new sap.ui.core.CustomData({
+				key:"Regno",
+				value:"{Regno}"
+			}),
+			editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
 			var oTxt=new sap.m.Text({ text:{path: "Fgbdt",
