@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 jQuery.sap.require("sap.m.MessageBox");
 sap.ui.define([
 	"../common/Common",
@@ -141,8 +142,8 @@ sap.ui.define([
 
 		onAfterShow:function(){
 //			common.EmpBasicInfoBoxCustom.setHeader(this._SessionData.Pernr);
-			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_ApplyDate");            
-            oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_ApplyDate");
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 		},
 
 		getBukrs : function(vDatum){
@@ -226,8 +227,8 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				}
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+				};
 				var vProperty2={
 					Appnm: vAppnm,
 					Mode: "S",
@@ -236,8 +237,8 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				}
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+				};
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty2,"002");
 
@@ -250,7 +251,7 @@ sap.ui.define([
 					Cntnm: "009",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
 				},"009");
 				
 				if(oController._onDialog!="M"){
@@ -314,7 +315,7 @@ sap.ui.define([
 					Mode: "M",
 					Max: "15",
 					Editable: vEdit,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
 				},"008");
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
@@ -397,7 +398,6 @@ sap.ui.define([
 				Zkijbm:"0",
 				Znijcm:"0",
 				Zniiwm:"0",
-				Znijcm:"0",
 				Znisdm:"0",
 				Znoctm:"0",
 				Znomrm:"0",
@@ -634,8 +634,8 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				}
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+				};
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
@@ -652,8 +652,8 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				}
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+				};
 				vProperty1.Appnm='';
 				vProperty1.Editable=false;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
@@ -673,8 +673,8 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				}
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+				};
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"002");
@@ -691,8 +691,8 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"],
-				}
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+				};
 				vProperty1.Appnm='';
 				vProperty1.Editable=false;
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"002");
@@ -737,7 +737,7 @@ sap.ui.define([
 				})).addCustomData(new sap.ui.core.CustomData({
 					key:"Data",
 					value:e.Relation
-				})))
+				})));
 			});
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"004",
@@ -858,7 +858,7 @@ sap.ui.define([
 				}).addCustomData(new sap.ui.core.CustomData({
 					key:"Data",
 					value:e
-				})))
+				})));
 			});
 			var oSel6 = $.app.byId(oController.PAGEID+"_dSel6");
 			oSel6.removeAllItems();
@@ -928,7 +928,7 @@ sap.ui.define([
 						oCol.setTemplate(new sap.ui.commons.TextView({text : {
 							path :oFields[i], 						
 							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
-						},textAlign:oAligns[i]}).addStyleClass("FontFamily"))
+						},textAlign:oAligns[i]}).addStyleClass("FontFamily"));
 					}else{
 						oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));			
 					}					
@@ -959,7 +959,7 @@ sap.ui.define([
 						oCol.setTemplate(new sap.ui.commons.TextView({text : {
 							path :oFields[i], 						
 							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
-						},textAlign:oAligns[i]}).addStyleClass("FontFamily"))
+						},textAlign:oAligns[i]}).addStyleClass("FontFamily"));
 					}else{
 						oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));			
 					}					
@@ -1081,7 +1081,7 @@ sap.ui.define([
 					contentWidth: "480px",
 					afterOpen : onAfterOpen
 				});
-				oController.oDialog4 = mDialog
+				oController.oDialog4 = mDialog;
 				$.app.getView().addDependent(oController.oDialog4);
 			}
 			oController.oDialog4.open();
@@ -1096,8 +1096,8 @@ sap.ui.define([
 			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
 			var oSel=$.app.byId(oController.PAGEID + "_HeadSel");
-			var vFirstDate = $.app.byId(oController.PAGEID + "_ApplyDate").getDateValue();
-            var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
+			var vFirstDate = $.app.byId(oController.PAGEID + "_ApplyDate").getDateValue();
+			var vSecondDate = $.app.byId(oController.PAGEID + "_ApplyDate").getSecondDateValue(); 
 			var aData={oData:new Array()};
 			var oJSON=new sap.ui.model.json.JSONModel();
 			if (!oController._BusyDialog) {
@@ -1558,7 +1558,7 @@ sap.ui.define([
 						MedicalApplyTableIn4:[],
 						MedicalApplyTableIn5:[],
 						MedicalApplyTableInH:[]
-						}
+						};
 			if(vSig=="1000"){
 				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""){
 					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
@@ -1632,7 +1632,7 @@ sap.ui.define([
 								vTmp=true;
 								setTimeout(function(){
 									oController.changeSel2("R");
-								},100)
+								},100);
 								
 							}else{
 								var oJSON = $.app.byId(oController.PAGEID+"_Dialog2").getModel();
@@ -1701,7 +1701,7 @@ sap.ui.define([
 				MedicalApplyTableIn4:[],
 				MedicalApplyTableIn5:[],
 				MedicalApplyTableInH:[]
-				}
+				};
 				oController._onDialog=="M"?vData.IConType="2":vData.IConType="3";
 				vSig=="1000"?vData.IMedDate=$.app.getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.getController()._DataModel.getProperty("/Pop2")[0].MedDate;
 				if(vSig=="1000"){
