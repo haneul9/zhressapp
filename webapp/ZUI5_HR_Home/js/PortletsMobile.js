@@ -158,7 +158,7 @@ generate: function() {
 			}, 0);
 
 			this.items.sort(function(item1, item2) {
-				return item1.mobilePosition() - item2.mobilePosition();
+				return item1.position() - item2.position();
 			});
 
 			$.map(this.items, function(item) {
