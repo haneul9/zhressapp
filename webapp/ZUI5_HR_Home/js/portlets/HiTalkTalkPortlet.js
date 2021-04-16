@@ -62,14 +62,12 @@ fill: function() {
 			}
 
 			list.prepend($.map(TableIn6, function(o) {
-				var date = moment(Number((o.Edate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
+				var date = moment(Number((o.Sdate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 				return [
 					'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 						'<div class="portlet-bbs-item">',
 							'<div class="portlet-bbs-title">',
-								'<span class="portlet-bbs-title-text" title="${title}">${title}</span>'.interpolate(o.Title, o.Title),
-								o.Newitem === 'X' ? '<span class="badge badge-primary badge-pill">N</span>' : '',
-								o.Impor === 'X' ? '<i class="fas fa-exclamation-circle"></i>' : '',
+								'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes, o.Stitle),
 							'</div>',
 							'<small class="portlet-bbs-date">${date}</small>'.interpolate(date),
 						'</div>',
