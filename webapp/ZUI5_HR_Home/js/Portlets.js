@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet TempPortlet */
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet TempPortlet */
 function Portlets(_gateway) {
 
 	this._gateway = _gateway;
@@ -23,7 +23,7 @@ init: function() {
 		'P105': CalendarPortlet,		// 팀 달력
 		'P106': TempPortlet,			// 날씨정보
 		'P107': TempPortlet,			// 세계시간
-		'P108': TempPortlet				// HR건의사항
+		'P108': HiTalkTalkPortlet		// 하이톡톡
 	};
 
 	$(document)

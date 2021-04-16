@@ -120,10 +120,10 @@ body {min-width:576px; font-size:14px}
 .portlet-bbs .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
 .portlet-bbs .list-group-item:hover {color:#0070bd; background:transparent}
 .portlet-bbs-item {display:flex; justify-content:space-between; align-items:center; width:100%}
-.portlet-bbs-item .portlet-notice-date {font-size:100%; color:#888; padding-right:.5rem}
+.portlet-bbs-item .portlet-bbs-date {font-size:100%; color:#888; padding-right:.5rem}
 .portlet-bbs-title {display:flex; align-items:center; width:239px}
-.portlet-bbs-title .portlet-notice-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.portlet-bbs-title span + span, .portlet-notice-title span + i {margin-left:3px}
+.portlet-bbs-title .portlet-bbs-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.portlet-bbs-title span + span, .portlet-bbs-title span + i {margin-left:3px}
 .portlet-bbs-title i {vertical-align:middle; font-size:15.25px}
 .portlet-bbs .badge {font-weight:500}
 .portlet-bbs .badge-pill {padding-left:.25rem; padding-right:.25rem; border-radius:.25rem}
