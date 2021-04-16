@@ -22,7 +22,6 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "List"].join("."), {
             layoutData: new sap.m.FlexItemData({ minWidth: "1000px" }),
             expanded: true,
             expandable: false,
-            // headerText: "{i18n>LABEL_17003}",   // 기본정보
             content: new sap.m.HBox({
 				items: [
 					new sap.m.VBox({

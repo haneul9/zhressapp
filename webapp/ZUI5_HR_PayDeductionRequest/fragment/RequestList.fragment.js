@@ -177,23 +177,6 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
 			rowHeight: 37,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}",
-			// rowSettingsTemplate: new sap.ui.table.RowSettings({
-			// 	highlight: {
-			// 		path: "Status1",
-			// 		formatter: function(Status1) {
-			// 			if (Status1 === "AA") { // 미결재
-			// 				return sap.ui.core.MessageType.None;
-			// 			} else if (Status1 === "99") { // 결재완료
-			// 				return sap.ui.core.MessageType.Success;
-			// 			} else if (Status1 === "88") { // 반려
-			// 				return sap.ui.core.MessageType.Warning;
-			// 			} else {
-			// 				return sap.ui.core.MessageType.Information;
-			// 			}
-			// 		}
-			// 	}
-			// }),
-			// cellClick: OnRequest.clickRequestListCell.bind(oController)
 		})
 		.addStyleClass("mt-10px")
 		.setModel(oController._ListJSonModel)
