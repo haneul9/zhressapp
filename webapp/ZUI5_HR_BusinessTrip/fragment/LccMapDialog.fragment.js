@@ -1,76 +1,49 @@
-/* global naver */
-sap.ui.define([
-	"common/Common"
-], function(
-	Common
-) {
+sap.ui.define([], function() {
 "use strict";
 
-sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
+sap.ui.jsfragment("ZUI5_HR_BusinessTripMap.fragment.LccMapDialog", {
 
 	createContent: function(oController) {
 
-		var oDialog = new sap.m.Dialog({
-			title: oController.getBundleText("LABEL_19801"), // 출장 경로 탐색
+		var LccMapDialogHandler = oController.LccMapDialogHandler,
+		oDialog = new sap.m.Dialog({
+			title: oController.getBundleText("LABEL_19632"), // 출장 경로 탐색
+			stretch: true,
 			contentWidth: "100%",
 			contentHeight: "100%",
 			content: this.getContent(oController),
 			horizontalScrolling: false,
 			verticalScrolling: false,
-			endButton: [
-				new sap.m.Button({
-					type: sap.m.ButtonType.Default,
-					text: oController.getBundleText("LABEL_00133"), // 닫기
-					press: function() {
-						oDialog.close();
-					}
-				})
-				.addStyleClass("button-default")
-			],
-			afterOpen: function() {
-				var varname = '_lccmap';
-				window[varname] = new common.map.LotteChemMap({
-					id: 'LccMap',
-					varname: name,
-					coord: new naver.maps.LatLng(37.5125701, 127.1025624),
-					maxBounds: new common.map.SouthKoreaBounds()
-				});
-
-				$('#button-select-departure').click(function() {
-					window[varname].target = window[varname].PLACE_TARGET.DEPARTURE;
-					alert('지도에서 출발지를 클릭하세요.');
-				});
-				$('#button-select-destination').click(function() {
-					window[varname].target = window[varname].PLACE_TARGET.DESTINATION;
-					alert('지도에서 도착지를 클릭하세요.');
-				});
-				$('#button-search-path').click(function() {
-					window[varname].searchPath();
-				});
-				$('#button-init-path').click(function() {
-					window[varname].initPath();
-				});
-				$('#start,#goal,#LccMapDeparture,#LccMapDestination').on('keydown', function(e) {
-					var keyCode = e.keyCode || e.which;
-					if (keyCode === 13) { // Enter Key
-						e.preventDefault();
-						window[varname].searchLocal($(e.currentTarget).val());
-					}
-				});
-			}
+			beginButton: new sap.m.Button({
+				visible: "{/Header/Edtfg}",
+				text: oController.getBundleText("LABEL_00204"), // 적용
+				press: LccMapDialogHandler.applyResult.bind(LccMapDialogHandler)
+			})
+			.addStyleClass("button-light"),
+			endButton: new sap.m.Button({
+				text: oController.getBundleText("LABEL_00133"), // 닫기
+				press: LccMapDialogHandler.close.bind(LccMapDialogHandler)
+			})
+			.addStyleClass("button-default custom-button-divide"),
+			afterOpen: LccMapDialogHandler.onAfterOpen.bind(LccMapDialogHandler)
 		})
-		.addStyleClass("custom-dialog-popup");
+		.addStyleClass("custom-dialog-popup lcc-map-dialog-popup");
 
 		return oDialog;
 	},
 
 	getContent: function(oController) {
 
-		var oModel = oController.NaverMapDialogHandler.getModel();
+		var LccMapDialogHandler = oController.LccMapDialogHandler;
 		return new sap.m.HBox({
+			width: "100%",
+			height: "100%",
 			items: [
-				this.getSearchVBox(oController).setModel(oModel),
-				this.getMapHBox(oController)
+				this.getSearchVBox(oController).setModel(LccMapDialogHandler.getModel()),
+				new sap.ui.core.HTML({
+					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					content: "<div id=\"${map-id}\" class=\"lcc-map\"></div>".interpolate(LccMapDialogHandler.getMapId())
+				})
 			]
 		});
 	},
@@ -80,50 +53,55 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 		var LccMapDialogHandler = oController.LccMapDialogHandler;
 
 		return new sap.m.VBox({
+			width: "300px",
 			items: [
-				new sap.m.Label({ text: "{i18n>LABEL_19802}" }), // 출발지
+				new sap.m.Label({ text: "{i18n>LABEL_19633}" }), // 출발지
 				new sap.m.Input("LccMapDeparture", {
-					maxLength: 20,
+					maxLength: 30,
 					width: "100%",
 					value: "{/LccMap/Departure}",
-					showSuggestion: true,
-					startSuggestion: 2,
-					suggestionItems: {
-						path: "{/LccMap/DepartureList}",
-						templateShareable: false,
-						template: new sap.ui.core.Item({ text: "title" })
-					},
-					suggest: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler),
-					suggestionItemSelected: LccMapDialogHandler.selectPlace.bind(LccMapDialogHandler)
-				}),
-				new sap.m.Label({ text: "{i18n>LABEL_19803}" }), // 도착지
+					valueHelpOnly: true,
+					showValueHelp: true,
+					valueHelpRequest: LccMapDialogHandler.selectPlace.bind(LccMapDialogHandler),
+					submit: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
+				})
+				.addStyleClass("mb-16px"),
+				new sap.m.Label({ text: "{i18n>LABEL_19634}" }), // 도착지
 				new sap.m.Input("LccMapDestination", {
-					maxLength: 20,
+					maxLength: 30,
 					width: "100%",
 					value: "{/LccMap/Destination}",
-					showSuggestion: true,
-					startSuggestion: 2,
-					suggestionItems: {
-						path: "{/LccMap/DestinationList}",
-						templateShareable: false,
-						template: new sap.ui.core.Item({ text: "title" })
-					},
-					suggest: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler),
-					suggestionItemSelected: LccMapDialogHandler.selectPlace.bind(LccMapDialogHandler)
-				}),
+					valueHelpOnly: true,
+					showValueHelp: true,
+					valueHelpRequest: LccMapDialogHandler.selectPlace.bind(LccMapDialogHandler),
+					submit: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
+				})
+				.addStyleClass("mb-16px"),
+				new sap.m.Label({ text: "{i18n>LABEL_19625}" }), // 이동거리
+				new sap.m.Label({ text: "{/LccMap/Distance}" }).addStyleClass("mb-16px"),
+				new sap.m.Label({ text: "{i18n>LABEL_19629}" }), // 톨게이트요금
+				new sap.m.Label({ text: "{/LccMap/TollFare}" }).addStyleClass("mb-16px"),
 				new sap.m.Button({
-					press: LccMapDialogHandler.onBeforeOpen.bind(LccMapDialogHandler),
-					text: "{i18n>LABEL_19804}" // 경로 탐색 시작
+					press: LccMapDialogHandler.searchPath.bind(LccMapDialogHandler),
+					text: "{i18n>LABEL_19635}", // 경로 탐색 시작
+					width: "100%"
+				})
+				.addStyleClass("button-search mb-16px"),
+				new sap.m.Button({
+					press: LccMapDialogHandler.clear.bind(LccMapDialogHandler),
+					text: "{i18n>LABEL_19636}", // 경로 초기화
+					width: "100%"
+				})
+				.addStyleClass("button-search mb-16px"),
+				new sap.m.Button({
+					press: LccMapDialogHandler.reloadMap.bind(LccMapDialogHandler),
+					text: "{i18n>LABEL_19637}", // 지도 재생성
+					width: "100%"
 				})
 				.addStyleClass("button-search")
 			]
 		})
-		.addStyleClass("search-box search-bg pb-7px");
-	},
-
-	getMapHBox: function() {
-
-		return new sap.m.HBox("LccMap");
+		.addStyleClass("search-box search-bg");
 	}
 
 });
