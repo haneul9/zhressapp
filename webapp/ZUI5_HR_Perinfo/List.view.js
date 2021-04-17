@@ -177,7 +177,6 @@ sap.ui.define([
 				});
 			}
 			
-	
 			
 			var oSplitContainer = new sap.m.SplitContainer(oController.PAGEID + "_SplitContainer", {
 				mode : {
@@ -192,21 +191,6 @@ sap.ui.define([
 			// ;
 			.setModel(oController._ListCondJSonModel)
 			.bindElement("/Data");
-			
-			// var infoBox = new sap.m.FlexBox({
-			// 	justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
-			// 	alignContent: sap.m.FlexAlignContent.End,
-			// 	alignItems: sap.m.FlexAlignItems.End,
-			// 	fitContainer: true,
-			// 	items: [
-   //                 new sap.m.FlexBox({
-			// 			items: [
-			// 				oSplitContainer
-			// 			]
-			// 		}).addStyleClass("info-field-group"),
-			// 	]
-   //         }).addStyleClass("info-box");
-            
 			
 			var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
 				customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
@@ -231,13 +215,6 @@ sap.ui.define([
 			oPage.bindElement("/Data");
 	
 			return oPage;
-			
-			// return new PageHelper({
-			// 	contentItems: [
-			// 		sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Header", oController),
-			// 		infoBox
-			// 	]
-			// });
 		}
 	});
 });
