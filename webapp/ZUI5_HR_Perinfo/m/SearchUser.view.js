@@ -14,7 +14,7 @@ sap.ui.define([
         
         createContent: function(oController) {
             return new PageHelper({
-                idPrefix: SearchUser-",
+                idPrefix: SearchUser-"",
                 title: "{i18n>LABEL_09064}",    // 사원검색
                 showNavButton: false,
                 // navBackFunc: SearchUserMobile.navBack,
