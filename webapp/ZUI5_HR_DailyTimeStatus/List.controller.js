@@ -22,20 +22,14 @@ sap.ui.define(
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
                     {
-                        onBeforeShow: this.onBeforeShow
-                    },
-                    this
-                );
-
-                this.getView().addEventDelegate(
-                    {
+                        onBeforeShow: this.onBeforeShow,
                         onAfterShow: this.onAfterShow
                     },
                     this
                 );
 
-                this.getView().addStyleClass("sapUiSizeCompact");
-                this.getView().setModel($.app.getModel("i18n"), "i18n");
+                // this.getView().addStyleClass("sapUiSizeCompact");
+                // this.getView().setModel($.app.getModel("i18n"), "i18n");
             },
 
             onBeforeShow: function () {
