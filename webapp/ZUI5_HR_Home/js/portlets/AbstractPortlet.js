@@ -169,7 +169,7 @@ link: function(button) {
 			attributes = [
 				' data-popup-menu-url="${url}"'.interpolate(this.url()),
 				' data-menu-id="${menu-id}"'.interpolate(this.mid())
-			]; // index.html에서 event function binding
+			]; // indexMobile.html에서 event function binding
 		}
 	} else {
 		if (button) {

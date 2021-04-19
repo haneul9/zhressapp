@@ -33,6 +33,7 @@
 <script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
+<script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
 <script src="ZUI5_HR_Home/js/MenuHamburger.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
@@ -51,6 +52,11 @@ function initHome() {
 	}
 
 	setTimeout(function() {
+		window._i18n = new HomeI18n(_gateway);
+		window._i18n.changeLocale();
+	}, 0);
+
+	setTimeout(function() {
 		var locale = window._session.locale();
 
 		$('html').attr('locale', locale).attr('lang', (sessionStorage.getItem('ehr.sf-user.language') || 'ko').toLowerCase());
@@ -58,54 +64,18 @@ function initHome() {
 
 	setTimeout(function() {
 		window._menu = new MenuHamburger(_gateway, '#navbarCollapse');
-		window._menu
-			.generate() // 메뉴 목록 조회 및 링크 생성
-			.then(function() {
-				// $(window).resize(); // .ehr-body resizing --> scrollbar resizing
-			});
+		window._menu.generate(); // 메뉴 목록 조회 및 링크 생성
 	}, 0);
 
 	setTimeout(function() {
 		window._portlet = new PortletsMobile(_gateway);
-		window._portlet
-			.generate() // Portlet 설정 조회 및 생성
-			.then(function() {
-		// 		$('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
-		// 			resizeSensor: true,
-		// 			verticalGutter: 0,
-		// 			horizontalGutter: 0
-		// 		});
-			});
+		window._portlet.generate(); // Portlet 설정 조회 및 생성
 	}, 0);
-
-	// $(document).on('click', '.ehr-header [data-popup-menu-url]', function() {
-	// 	var anchor = $(this), popupMenuUrl = anchor.data('popupMenuUrl');
-	// 	if (popupMenuUrl) {
-	// 		var paramMap = this._gateway.menuParam(popupMenuUrl, {
-	// 			popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
-	// 			mid: _gateway.mid(popupMenuUrl)
-	// 		});
-	// 		if (!_gateway.isPRD()) {
-	// 			paramMap.pernr = _gateway.parameter('pernr');
-	// 		}
-	// 		_gateway.openWindow({ // openPopup openWindow
-	// 			url: 'index.html?' + $.param(paramMap),
-	// 			name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
-	// 			width: 1280,
-	// 			height: 800
-	// 		});
-	// 	}
-	// });
 
 	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
 
 	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
 }
-
-// $(window).resize(function() {
-// 	$('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) + 'px)'); // scrollbar resizing
-// 	$('.portlet-col').css('min-height', $('.ehr-body').height() + 'px');
-// });
 
 $(function() {
 
@@ -113,10 +83,9 @@ var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
 window._session = new HomeSession(_gateway, initHome);
 
-var popupUrl = _gateway.parameter('popup');
-if (!popupUrl) {
-	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
-} else {
+$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
+
+if (_gateway.parameter('popup')) {
 	setTimeout(function() {
 		$('.navbar-mobile .button-logout').click(function() {
 			

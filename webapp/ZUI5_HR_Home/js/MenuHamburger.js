@@ -144,10 +144,10 @@ goToLink: function(menuId, url) {
 
 	var iframe = $('iframe[name="content-iframe"]');
 	if (!iframe.length) {
-		var container = $('.ehr-body .container-fluid');
-		if (container.data('jsp')) {
-			container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
-		}
+		// var container = $('.ehr-body .container-fluid');
+		// if (container.data('jsp')) {
+		// 	container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
+		// }
 		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
 	}
 
@@ -197,7 +197,7 @@ handleUrl: function(e) {
 				params.pernr = this._gateway.parameter('pernr');
 			}
 			this._gateway.openWindow({
-				url: 'index.html?' + $.param(params),
+				url: 'indexMobile.html?' + $.param(params),
 				name: url.replace(/[^a-zA-Z0-9]/g, '')
 			});
 		}
