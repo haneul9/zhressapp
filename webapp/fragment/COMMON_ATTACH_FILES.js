@@ -741,7 +741,7 @@ fragment.COMMON_ATTACH_FILES = {
 							"x-csrf-token": oRequest.headers["x-csrf-token"],
 							"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
 						};
-						if(vPages[a]=="001"||vPages[a]=="002"){
+						if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"){
 							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
 						}else{
 							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
