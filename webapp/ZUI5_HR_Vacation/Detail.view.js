@@ -44,11 +44,12 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 		new sap.m.Button({
 						 	 		text : oBundleText.getText("LABEL_00152"), // 신청
 						 	 		visible : {
-						 	 			path : "Status1",
-						 	 			parts : [{path : "Status1"}, {path : "Flag"}],
-						 	 			formatter : function(fVal1, fVal2){
+						 	 			parts : [{path : "Status1"}, {path : "Flag"}, {path : "Delapp"}, {path : "ListStatus"}],
+						 	 			formatter : function(fVal1, fVal2, fVal3, fVal4){
 						 	 				if(fVal2 && fVal2 == "D"){
 						 	 					return true;
+						 	 				} else if(fVal3 != ""){
+						 	 					return (fVal4 == "" || fVal4 == "AA") ? true : false;	
 						 	 				} else {
 						 	 					return (fVal1 == "" || fVal1 == "AA") ? true : false;
 						 	 				}
@@ -62,8 +63,13 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 		text : oBundleText.getText("LABEL_00103"), // 삭제
 						 	 		visible : {
 						 	 			path : "Status1",
-						 	 			formatter : function(fVal){
-						 	 				return fVal == "AA" ? true : false;
+						 	 			parts : [{path : "Status1"}, {path : "Delapp"}, {path : "ListStatus"}],
+						 	 			formatter : function(fVal, fVal2, fVal3){
+						 	 				if(fVal2 && fVal2 != ""){
+						 	 					return fVal3 == "AA" ? true : false;
+						 	 				} else {
+						 	 					return fVal == "AA" ? true : false;
+						 	 				}
 						 	 			}
 						 	 		},
 						 	 		press : function(oEvent){
