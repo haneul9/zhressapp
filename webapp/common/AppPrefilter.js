@@ -1,31 +1,33 @@
 function AppPrefilter() {
 
-	// if (/^webide/i.test(location.host) || (location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
-	// 	try {
-	// 		if (parent && parent._gateway) {
-	// 			parent._gateway.successAppPrefilter();
-	// 		}
-	// 	} catch(e) {
-	// 		// SF에서 평가 메뉴 접속시
-	// 	}
-	// 	window._menu_prefilter = this;
-	// 	this._menu_authorized = true;
+	// 그랜드 오픈 이후 AppPrefilter를 적용하므로 그전까지 운영은 bypass 로직 적용
+	if ((location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
+		try {
+			if (parent && parent._gateway) {
+				parent._gateway.successAppPrefilter();
+			}
+		} catch(e) {
+			// SF에서 평가 메뉴 접속시
+		}
+		window._menu_prefilter = this;
+		this._menu_authorized = true;
 
-	// 	document.addEventListener("DOMContentLoaded", function() {
-	// 		window.startAppInit();
-	// 	});
+		document.addEventListener("DOMContentLoaded", function() {
+			window.startAppInit();
+		});
 
-	// 	return this;
-	// }
+		return this;
+	}
 
 	try {
 		if (!parent || !parent._gateway) {
 			alert("잘못된 메뉴 접속입니다.\nHome 화면에서 접속해주시기 바랍니다.");
 	
+			var indexPage = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 'Mobile' : '';
 			if (/^webide/i.test(location.host)) {
-				location.href = "/webapp/index.html?hc_orionpath=%2FDI_webide_di_workspaceiwil0nuxhaqnmtpv%2Fzhressapp";
+				location.href = "/webapp/index" + indexPage + ".html?hc_orionpath=%2FDI_webide_di_workspaceiwil0nuxhaqnmtpv%2Fzhressapp";
 			} else {
-				location.href = "/index.html";
+				location.href = "/index" + indexPage + ".html";
 			}
 		}
 	} catch(e) {
@@ -115,13 +117,18 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 
 			// ERole !== 'X' 이면 권한이 없는 것이지만 권한이 없으면 아래 error function으로 처리됨
 			var ExportResult = (((((data || {}).d || {}).Export || {}).results || [])[0] || {});
-			result.ECheckPw = ExportResult.ECheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
 			result.EPinfo = ExportResult.EPinfo; // EmpBasicInfoBox 표시 여부
+
+			if (/^webide/i.test(location.host)) {
+				result.ECheckPw = "";
+			} else {
+				result.ECheckPw = ExportResult.ECheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
+			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
 
-			if (/^webide/i.test(location.host) || (location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
+			if (/^webide/i.test(location.host)) {
 				result.hasMenuAuthority = true;
 				result.ECheckPw = ""; // 비밀번호 재확인이 필요한 메뉴인지 여부
 				result.EPinfo = "X"; // EmpBasicInfoBox 표시 여부
