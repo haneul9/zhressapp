@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-jQuery.sap.require("sap.m.MessageBox");
-
 sap.ui.define(
     [
         "common/Common", //
@@ -8,9 +5,10 @@ sap.ui.define(
         "common/JSONModelHelper",
         "common/EmployeeModel",
         "common/OrgOfIndividualHandler",
-        "common/AttachFileAction"
+		"common/AttachFileAction",
+		"sap/m/MessageBox"
     ],
-    function (Common, CommonController, JSONModelHelper, EmployeeModel, OrgOfIndividualHandler, AttachFileAction) {
+    function (Common, CommonController, JSONModelHelper, EmployeeModel, OrgOfIndividualHandler, AttachFileAction, MessageBox) {
         "use strict";
 
         return CommonController.extend("ZUI5_HR_Perinfo.List", {
@@ -60,7 +58,7 @@ sap.ui.define(
 
                 if (!oController._ListCondJSonModel.getProperty("/Data")) {
                     var vData = {
-                        Data: Object.assign({ Auth: gAuth }, oController.getView().getModel("session").getData())
+                        Data: Object.assign({ Auth: $.app.getAuth() }, oController.getView().getModel("session").getData())
                     };
 
                     oController._ListCondJSonModel.setData(vData);
@@ -143,7 +141,7 @@ sap.ui.define(
 
             onAfterShow: function () {
                 var oController = this;
-                if (gAuth == "M") {
+                if ($.app.getAuth() == "M") {
                     var OrgOfIndividualHandler = oController.getOrgOfIndividualHandler();
                     OrgOfIndividualHandler.autoClose = false;
                     OrgOfIndividualHandler.onBeforeOpen();
@@ -834,7 +832,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -902,7 +900,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -971,7 +969,7 @@ sap.ui.define(
                     oController._BusyDialog.close();
 
                     if (vError == "E") {
-                        sap.m.MessageBox.error(vErrorMessage);
+                        MessageBox.error(vErrorMessage);
                         return;
                     }
                 };
@@ -1037,7 +1035,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1109,7 +1107,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1179,7 +1177,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1250,7 +1248,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1320,7 +1318,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1388,7 +1386,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1458,7 +1456,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                 };
@@ -1480,7 +1478,7 @@ sap.ui.define(
                 }
 
                 if (vIDXs.length < 1) {
-                    sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                    MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                     return;
                 }
 
@@ -1534,7 +1532,7 @@ sap.ui.define(
                     selectRowObject.Endda = dateFormat.format(new Date(9999, 11, 31));
                 } else {
                     if (vIDXs.length < 1) {
-                        sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                        MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
                     }
                     try {
@@ -1576,7 +1574,7 @@ sap.ui.define(
                     selectRowObject.Sland = "KR"; // 신규생성 시 Default 국가는 한국
                 } else {
                     if (vIDXs.length < 1) {
-                        sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                        MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
                     }
                     try {
@@ -1640,7 +1638,7 @@ sap.ui.define(
 
                 if (actMode !== "3") {
                     if (vIDXs.length < 1) {
-                        sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                        MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
                     }
                     try {
@@ -1706,7 +1704,7 @@ sap.ui.define(
                     selectRowObject.Land1 = "KR"; // 신규생성 시 Default 국가는 한국
                 } else {
                     if (vIDXs.length < 1) {
-                        sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                        MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
                     }
                     try {
@@ -1759,7 +1757,7 @@ sap.ui.define(
 
                 if (actMode !== "3") {
                     if (vIDXs.length < 1) {
-                        sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                        MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
                     }
                     try {
@@ -1851,11 +1849,11 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
-                    sap.m.MessageBox.alert(oController.getBundleText("MSG_57006"), {
+                    MessageBox.alert(oController.getBundleText("MSG_57006"), {
                         title: oController.getBundleText("LABEL_00149")
                     });
                     // Data setting
@@ -1864,16 +1862,16 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
                 };
 
                 var Message = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -1934,13 +1932,13 @@ sap.ui.define(
                     // Data setting
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
                     oController._AddressDialog.close();
                     oController._AddressJSonModel.setData({ Data: {} });
 
-                    sap.m.MessageBox.alert(oController.getBundleText("MSG_57006"), {
+                    MessageBox.alert(oController.getBundleText("MSG_57006"), {
                         title: oController.getBundleText("LABEL_00149")
                     });
 
@@ -2010,7 +2008,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2020,7 +2018,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_02020");
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             // Data setting
@@ -2031,7 +2029,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2042,9 +2040,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2103,7 +2101,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2113,7 +2111,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_02020");
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             oController._PassportDialog.close();
@@ -2125,7 +2123,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2136,9 +2134,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2203,7 +2201,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2213,7 +2211,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_37034"); // 수정/등록 요청하였습니다.
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             oController._SchoolDialog.close();
@@ -2225,7 +2223,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2236,9 +2234,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_37035"); // 수정/등록 신청하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2303,7 +2301,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2313,7 +2311,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_37034"); // 수정/등록 요청하였습니다.
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             // Data setting
@@ -2324,7 +2322,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2335,9 +2333,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_37035"); // 수정/등록 신청하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2411,7 +2409,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2421,7 +2419,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_37034"); // 수정/등록 요청하였습니다.
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             oController._LicenseDialog.close();
@@ -2433,7 +2431,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2444,9 +2442,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_37035"); // 수정/등록 신청하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2507,7 +2505,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2517,7 +2515,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_37034"); // 수정/등록 요청하였습니다.
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             oController._CareerDialog.close();
@@ -2529,7 +2527,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2540,9 +2538,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_37035"); // 수정/등록 신청하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2601,7 +2599,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2611,7 +2609,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_37034"); // 수정/등록 요청하였습니다.
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             oController._AwardDialog.close();
@@ -2623,7 +2621,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2635,9 +2633,9 @@ sap.ui.define(
                     Message = oController.getBundleText("MSG_37035"); // 수정/등록 신청하시겠습니까?
                 }
 
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2699,7 +2697,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -2709,7 +2707,7 @@ sap.ui.define(
                         Message = oController.getBundleText("MSG_37034"); // 수정/등록 요청하였습니다.
                     }
 
-                    sap.m.MessageBox.alert(Message, {
+                    MessageBox.alert(Message, {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             // Data setting
@@ -2720,7 +2718,7 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
@@ -2731,9 +2729,9 @@ sap.ui.define(
                 } else {
                     Message = oController.getBundleText("MSG_37035"); // 수정/등록 신청하시겠습니까?
                 }
-                sap.m.MessageBox.confirm(Message, {
+                MessageBox.confirm(Message, {
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -2812,143 +2810,143 @@ sap.ui.define(
                 switch (type) {
                     case "A1": //기본인적사항
                         if (!checkData.Zzbdate || checkData.Zzbdate == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37003"));
+                            MessageBox.error(oController.getBundleText("MSG_37003"));
                             return;
                         }
                         if (checkData.Zzclass === "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37004"));
+                            MessageBox.error(oController.getBundleText("MSG_37004"));
                             return;
                         }
                         break;
                     case "A2": //주소정보
                         if (!checkData.Pstlz || checkData.Pstlz == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37006"));
+                            MessageBox.error(oController.getBundleText("MSG_37006"));
                             return;
                         }
                         if (!checkData.State || checkData.State == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37007"));
+                            MessageBox.error(oController.getBundleText("MSG_37007"));
                             return;
                         }
                         if (!checkData.Ort01 || checkData.Ort01 == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37008"));
+                            MessageBox.error(oController.getBundleText("MSG_37008"));
                             return;
                         }
                         if (!checkData.Ort02 || checkData.Ort02 == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37009"));
+                            MessageBox.error(oController.getBundleText("MSG_37009"));
                             return;
                         }
                         if (!checkData.Stras || checkData.Stras == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37010"));
+                            MessageBox.error(oController.getBundleText("MSG_37010"));
                             return;
                         }
                         if (!checkData.Telnr || checkData.Telnr == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37011"));
+                            MessageBox.error(oController.getBundleText("MSG_37011"));
                             return;
                         }
                         if (checkData.Subty == "3" && (!checkData.Usrid || checkData.Usrid == "")) {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37012"));
+                            MessageBox.error(oController.getBundleText("MSG_37012"));
                             return;
                         }
                         break;
                     case "A3": //학력
                         if (!checkData.Begda || checkData.Begda == "" || !checkData.Endda || checkData.Endda == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37018"));
+                            MessageBox.error(oController.getBundleText("MSG_37018"));
                             return;
                         }
                         if (!checkData.Slart || checkData.Slart == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37013"));
+                            MessageBox.error(oController.getBundleText("MSG_37013"));
                             return;
                         }
                         if ((!checkData.Ausbi || checkData.Ausbi == "") && (!checkData.Insti || checkData.Insti == "")) {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37014"));
+                            MessageBox.error(oController.getBundleText("MSG_37014"));
                             return;
                         }
                         if (checkData.actMode != "4" && (checkData.Subty == "H4" || checkData.Subty == "H5" || checkData.Subty == "H6") && (!checkData.Sltp1 || checkData.Sltp1 == "")) {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37015"));
+                            MessageBox.error(oController.getBundleText("MSG_37015"));
                             return;
                         }
                         if (checkData.actMode != "4" && (checkData.Subty == "H4" || checkData.Subty == "H5" || checkData.Subty == "H6") && AttachFileAction.getFileLength(oController) < 1) {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_42027"));
+                            MessageBox.error(oController.getBundleText("MSG_42027"));
                             return;
                         }
                         if (!checkData.Slabs || checkData.Slabs == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37016"));
+                            MessageBox.error(oController.getBundleText("MSG_37016"));
                             return;
                         }
                         if (!checkData.Sland || checkData.Sland == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37017"));
+                            MessageBox.error(oController.getBundleText("MSG_37017"));
                             return;
                         }
                         break;
                     case "A4": //병역
                         if (!checkData.Zzarmy || checkData.Zzarmy == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37019"));
+                            MessageBox.error(oController.getBundleText("MSG_37019"));
                             return;
                         }
                         break;
                     case "A5": //자격사항
                         if (!checkData.Licnn || checkData.Licnn == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37020"));
+                            MessageBox.error(oController.getBundleText("MSG_37020"));
                             return;
                         }
                         if (!checkData.OrgCode || checkData.OrgCode == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37021"));
+                            MessageBox.error(oController.getBundleText("MSG_37021"));
                             return;
                         }
                         if (!checkData.GetDate || checkData.GetDate == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37022"));
+                            MessageBox.error(oController.getBundleText("MSG_37022"));
                             return;
                         }
                         if (!checkData.LicnNum || checkData.LicnNum == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37023"));
+                            MessageBox.error(oController.getBundleText("MSG_37023"));
                             return;
                         }
                         if (checkData.actMode != "4" && AttachFileAction.getFileLength(oController) < 1) {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_42027"));
+                            MessageBox.error(oController.getBundleText("MSG_42027"));
                             return;
                         }
                         break;
                     case "A6": //경력사항
                         if (!checkData.Begda || checkData.Begda == "" || !checkData.Endda || checkData.Endda == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37024"));
+                            MessageBox.error(oController.getBundleText("MSG_37024"));
                             return;
                         }
                         if (!checkData.Arbgb || checkData.Arbgb == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37025"));
+                            MessageBox.error(oController.getBundleText("MSG_37025"));
                             return;
                         }
                         if (!checkData.Ort01 || checkData.Ort01 == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37026"));
+                            MessageBox.error(oController.getBundleText("MSG_37026"));
                             return;
                         }
                         if (!checkData.Zzjob || checkData.Zzjob == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37027"));
+                            MessageBox.error(oController.getBundleText("MSG_37027"));
                             return;
                         }
                         if (!checkData.Land1 || checkData.Land1 == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37017"));
+                            MessageBox.error(oController.getBundleText("MSG_37017"));
                             return;
                         }
                         break;
                     case "A7": //포상
                         if (!checkData.Begda || checkData.Begda == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37028"));
+                            MessageBox.error(oController.getBundleText("MSG_37028"));
                             return;
                         }
                         if (!checkData.Awdtp || checkData.Awdtp == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37029"));
+                            MessageBox.error(oController.getBundleText("MSG_37029"));
                             return;
                         }
                         if (!checkData.Zzcause || checkData.Zzcause == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37030"));
+                            MessageBox.error(oController.getBundleText("MSG_37030"));
                             return;
                         }
                         if (!checkData.Prins || checkData.Prins == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_37031"));
+                            MessageBox.error(oController.getBundleText("MSG_37031"));
                             return;
                         }
                         if (!checkData.Appnm || checkData.Appnm == "") {
-                            sap.m.MessageBox.error(oController.getBundleText("MSG_42027"));
+                            MessageBox.error(oController.getBundleText("MSG_42027"));
                             return;
                         }
                         break;
