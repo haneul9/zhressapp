@@ -7,11 +7,10 @@ sap.ui.define(
         "common/CommonController",
         "common/JSONModelHelper",
         "common/EmployeeModel",
-        "common/PageHelper",
         "common/OrgOfIndividualHandler",
         "common/AttachFileAction"
     ],
-    function (Common, CommonController, JSONModelHelper, EmployeeModel, PageHelper, OrgOfIndividualHandler, AttachFileAction) {
+    function (Common, CommonController, JSONModelHelper, EmployeeModel, OrgOfIndividualHandler, AttachFileAction) {
         "use strict";
 
         return CommonController.extend("ZUI5_HR_Perinfo.List", {
@@ -35,7 +34,7 @@ sap.ui.define(
             _HandicapJSonModel: new sap.ui.model.json.JSONModel(),
             EmpSearchResult: new sap.ui.model.json.JSONModel(),
             _Bukrs: "",
-            EmployeeModel: new common.EmployeeModel(),
+            EmployeeModel: new EmployeeModel(),
 
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
@@ -55,7 +54,7 @@ sap.ui.define(
                 this.getView().addStyleClass("sapUiSizeCompact");
             },
 
-            onBeforeShow: function (oEvent) {
+            onBeforeShow: function () {
                 var oController = this;
                 oController._SchoolJSonModel.setSizeLimit(5000);
 
@@ -70,404 +69,50 @@ sap.ui.define(
                     // oController.EmployeeModel.retrieve(oController.getView().getModel("session").getData().Pernr);
 
                     Promise.all([
-                        // }.bind(this)),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet", //결혼여부
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "007",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._BasicJSonModel.setProperty("/Famst", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet", //FUEL
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "004",
-                                        ICodty: "ZZFUEL",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._CarJSonModel.setProperty("/Fuel", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "17",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._MilitaryJSonModel.setProperty("/Mrank", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    //oFilters2,
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "18",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._MilitaryJSonModel.setProperty("/Serty", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    //oFilters2,
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "19",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._MilitaryJSonModel.setProperty("/Jobcl", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    //oFilters2,
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "20",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._MilitaryJSonModel.setProperty("/Zzarmy", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "21",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._MilitaryJSonModel.setProperty("/Preas", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    //oFilters2,
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "22",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._MilitaryJSonModel.setProperty("/Zznarmy", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "11",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._HandicapJSonModel.setProperty("/Recmd", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "12",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                var vData = [];
-                                                if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                    Object.assign(vData, data.NavCommonCodeList.results);
-                                                }
-                                                oController._HandicapJSonModel.setProperty("/Conty", vData);
-                                            }
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "13",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                var vData = [];
-                                                if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                    Object.assign(vData, data.NavCommonCodeList.results);
-                                                }
-                                                oController._HandicapJSonModel.setProperty("/Relat", vData);
-                                            }
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "14",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._HandicapJSonModel.setProperty("/Zzorg", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet",
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "15",
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = [];
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                Object.assign(vData, data.NavCommonCodeList.results);
-                                            }
-                                            oController._HandicapJSonModel.setProperty("/Chaty", vData);
-                                        },
-                                        error: function (oResponse) {
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        )
-                        // common.Common.getPromise(function() {
-                        // 	$.app.getModel("ZHR_COMMON_SRV").create("/CommonCodeListHeaderSet",
-                        //   	{
-                        // 		IBukrs:  oController.getView().getModel("session").getData().Bukrs2,
-                        // 		IMolga:  oController.getView().getModel("session").getData().Molga,
-                        // 		ILangu:  oController.getView().getModel("session").getData().Langu,
-                        // 		ICodeT : "999",
-                        // 		ICodty : "16",
-                        // 		NavCommonCodeList : []
-                        // 	 },
-                        // 	{
-                        //                 async: true,
-                        //                 success: function (data) {
-                        //             	  	var vData = [];
-                        //             	    if(data.NavCommonCodeList && data.NavCommonCodeList.results){
-                        // 				Object.assign(vData, data.NavCommonCodeList.results);
-                        // 			}
-                        // 			oController._HandicapJSonModel.setProperty("/Hndcd",vData);
-                        // 		},
-                        //                 error: function (oResponse) {
-                        //                     common.Common.log(oResponse);
-                        //                 }
-                        //             })
-                        // }.bind(this)),
+                        this.retrieveCommonCode({ CodeT: "007", Model: this._BasicJSonModel, Path: "/Famst" }),
+                        this.retrieveCommonCode({ CodeT: "004", CodeTy: "ZZFUEL", Model: this._CarJSonModel, Path: "/Fuel" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "17", Model: this._MilitaryJSonModel, Path: "/Mrank" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "18", Model: this._MilitaryJSonModel, Path: "/Serty" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "19", Model: this._MilitaryJSonModel, Path: "/Jobcl" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "20", Model: this._MilitaryJSonModel, Path: "/Zzarmy" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "21", Model: this._MilitaryJSonModel, Path: "/Preas" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "22", Model: this._MilitaryJSonModel, Path: "/Zznarmy" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "11", Model: this._HandicapJSonModel, Path: "/Recmd" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "12", Model: this._HandicapJSonModel, Path: "/Conty" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "13", Model: this._HandicapJSonModel, Path: "/Relat" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "14", Model: this._HandicapJSonModel, Path: "/Zzorg" }),
+                        this.retrieveCommonCode({ CodeT: "999", CodeTy: "15", Model: this._HandicapJSonModel, Path: "/Chaty" })
                     ]);
                 }
+            },
+
+            retrieveCommonCode: function (opt) {
+                return Common.getPromise(function () {
+                    $.app.getModel("ZHR_COMMON_SRV").create(
+                        "/CommonCodeListHeaderSet",
+                        {
+                            IBukrs: this.getSessionInfoByKey("Bukrs2"),
+                            IMolga: this.getSessionInfoByKey("Molga"),
+                            ILangu: this.getSessionInfoByKey("Langu"),
+                            ICodeT: opt.CodeT,
+							ICodty: Common.checkNull(opt.CodeTy) ? "" : opt.CodeTy,
+							ICode: Common.checkNull(opt.Code) ? "" : opt.Code,
+                            NavCommonCodeList: []
+                        },
+                        {
+                            async: true,
+                            success: function (data) {
+                                if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
+                                    opt.Model.setProperty(opt.Path, data.NavCommonCodeList.results);
+                                }
+                            },
+                            error: function (oResponse) {
+                                common.Common.log(oResponse);
+                            }
+                        }
+                    );
+				}.bind(this))
+				.then(typeof opt.After === "function" ? opt.After() : undefined);
             },
 
             /**
@@ -496,7 +141,7 @@ sap.ui.define(
                 this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);
             },
 
-            onAfterShow: function (oEvent) {
+            onAfterShow: function () {
                 var oController = this;
                 if (gAuth == "M") {
                     var OrgOfIndividualHandler = oController.getOrgOfIndividualHandler();
@@ -514,10 +159,10 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
                 var vConType = "1",
-                    vDatum = "/Date(" + common.Common.getTime(new Date()) + ")/",
-                    vBurks = oController.getView().getModel("session").getData().Bukrs2,
+                    // vDatum = "/Date(" + common.Common.getTime(new Date()) + ")/",
                     oPhoto;
-                var vPercod = common.Common.encryptPernr(vPernr);
+                vBurks = oController.getView().getModel("session").getData().Bukrs2;
+                // var vPercod = common.Common.encryptPernr(vPernr);
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var oFilters = [
                     new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
@@ -547,625 +192,580 @@ sap.ui.define(
 
                 var search = function () {
                     Promise.all([
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                new JSONModelHelper()
-                                    .url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
-                                    .select("photo")
-                                    .setAsync(true)
-                                    .attachRequestCompleted(function () {
-                                        var data = this.getData().d;
+                        Common.getPromise(true, function (resolve) {
+                            new JSONModelHelper()
+                                .url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
+                                .select("photo")
+                                .setAsync(true)
+                                .attachRequestCompleted(function () {
+                                    var data = this.getData().d;
 
-                                        if (data && data.results.length) {
-                                            oPhoto = "data:text/plain;base64," + data.results[0].photo;
-                                        } else {
-                                            oPhoto = "images/male.jpg";
-                                        }
-
-                                        oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
-                                        resolve();
-                                    })
-                                    .attachRequestFailed(function () {
+                                    if (data && data.results.length) {
+                                        oPhoto = "data:text/plain;base64," + data.results[0].photo;
+                                    } else {
                                         oPhoto = "images/male.jpg";
-                                        oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
-                                        resolve();
-                                    })
-                                    .load();
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
-                                    async: true,
-                                    filters: oFilters,
-                                    success: function (data) {
-                                        var vData = { User: {} };
-                                        if (data && data.results.length > 0) {
-                                            data.results[0].nickname = data.results[0].Ename;
-                                            data.results[0].Stext = data.results[0].Gbdat;
-                                            data.results[0].PGradeTxt = data.results[0].ZpGradetx;
-                                            data.results[0].ZtitleT = data.results[0].Ztitletx;
+                                    }
 
-                                            vData.User = data.results[0];
+                                    oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
+                                    resolve();
+                                })
+                                .attachRequestFailed(function () {
+                                    oPhoto = "images/male.jpg";
+                                    oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
+                                    resolve();
+                                })
+                                .load();
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
+                                async: true,
+                                filters: oFilters,
+                                success: function (data) {
+                                    var vData = { User: {} };
+                                    if (data && data.results.length > 0) {
+                                        data.results[0].nickname = data.results[0].Ename;
+                                        data.results[0].Stext = data.results[0].Gbdat;
+                                        data.results[0].PGradeTxt = data.results[0].ZpGradetx;
+                                        data.results[0].ZtitleT = data.results[0].Ztitletx;
+
+                                        vData.User = data.results[0];
+                                    }
+                                    vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                    oController._HeaderJSonModel.setData(vData, true);
+                                    resolve();
+                                },
+                                error: function (oError) {
+                                    var vData = { User: {} };
+                                    vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                    oController._HeaderJSonModel.setData(vData, true);
+                                    common.Common.displaylog(oError);
+                                    resolve();
+                                }
+                            });
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                                // 기본인적
+                                "/PerinfoBasicSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    // ILangu: Langu,
+                                    PinfoBasicNav: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: {} };
+                                        if (data) {
+                                            if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
+                                                vData.Data = data.PinfoBasicNav.results[0];
+                                                vData.Data.disyn = "2";
+                                                vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Zzbdate))) : null;
+                                                vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Famdt))) : null;
+                                                vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Dat01))) : null;
+                                                vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Dat02))) : null;
+                                                vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
+                                            }
                                         }
-                                        vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                        oController._HeaderJSonModel.setData(vData, true);
+                                        vData.Data.disyn = "2";
+                                        vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        oController._ListCondJSonModel.setProperty("/Data/Openf", vData.Data.Openf);
+                                        oController._BasicJSonModel.setProperty("/Data", vData.Data);
                                         resolve();
                                     },
                                     error: function (oError) {
-                                        var vData = { User: {} };
+                                        var vData = { Data: {} };
                                         vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                        oController._HeaderJSonModel.setData(vData, true);
+                                        vData.Data.disyn = "2";
+                                        oController._ListCondJSonModel.setProperty("/Data/Openf", "");
+                                        oController._BasicJSonModel.setProperty("/Data", vData.Data);
                                         common.Common.displaylog(oError);
                                         resolve();
                                     }
-                                });
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                                    // 기본인적
-                                    "/PerinfoBasicSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        // ILangu: Langu,
-                                        PinfoBasicNav: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: {} };
-                                            if (data) {
-                                                if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
-                                                    vData.Data = data.PinfoBasicNav.results[0];
-                                                    vData.Data.disyn = "2";
-                                                    vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Zzbdate))) : null;
-                                                    vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Famdt))) : null;
-                                                    vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Dat01))) : null;
-                                                    vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Dat02))) : null;
-                                                    vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                                // Address
+                                "/PerinfoAddressSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    // ILangu: Langu,
+                                    PinfoAddressNav: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.PinfoAddressNav && data.PinfoAddressNav.results) {
+                                                for (var i = 0; i < data.PinfoAddressNav.results.length; i++) {
+                                                    data.PinfoAddressNav.results[i].Idx = i + 1;
+                                                    vData.Data.push(data.PinfoAddressNav.results[i]);
                                                 }
                                             }
-                                            vData.Data.disyn = "2";
-                                            vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            oController._ListCondJSonModel.setProperty("/Data/Openf", vData.Data.Openf);
-                                            oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: {} };
-                                            vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            vData.Data.disyn = "2";
-                                            oController._ListCondJSonModel.setProperty("/Data/Openf", "");
-                                            oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                                            common.Common.displaylog(oError);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                                    // Address
-                                    "/PerinfoAddressSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        // ILangu: Langu,
-                                        PinfoAddressNav: []
+                                        oAddressJSONModel.setData(vData);
+                                        oAddressTable.bindRows("/Data");
+                                        oAddressTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.PinfoAddressNav && data.PinfoAddressNav.results) {
-                                                    for (var i = 0; i < data.PinfoAddressNav.results.length; i++) {
-                                                        data.PinfoAddressNav.results[i].Idx = i + 1;
-                                                        vData.Data.push(data.PinfoAddressNav.results[i]);
-                                                    }
-                                                }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oAddressJSONModel.setData(vData);
+                                        oAddressTable.bindRows("/Data");
+                                        oAddressTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                                // 차량관리
+                                "/PerinfoCarmanagerSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    // ILangu: Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: {} };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results.length > 0) {
+                                                vData.Data = data.TableIn.results[0];
                                             }
-                                            oAddressJSONModel.setData(vData);
-                                            oAddressTable.bindRows("/Data");
-                                            oAddressTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oAddressJSONModel.setData(vData);
-                                            oAddressTable.bindRows("/Data");
-                                            oAddressTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                                    // 차량관리
-                                    "/PerinfoCarmanagerSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        // ILangu: Langu,
-                                        TableIn: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: {} };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results.length > 0) {
-                                                    vData.Data = data.TableIn.results[0];
-                                                }
-                                            }
-                                            if (vData.Data.Cartype == undefined) vData.Data.actMode = "3";
-                                            //신규
-                                            else vData.Data.actMode = "2"; //수정
+                                        if (vData.Data.Cartype == undefined) vData.Data.actMode = "3";
+                                        //신규
+                                        else vData.Data.actMode = "2"; //수정
 
-                                            vData.Data.disyn = "2";
-                                            vData.Data.Odsupport = vData.Data.Odsupport == "X" ? true : null;
-                                            vData.Data.Parkticket = vData.Data.Parkticket == "X" ? true : null;
-                                            vData.Data.Hybrid = vData.Data.Hybrid == "X" ? true : null;
-                                            vData.Data.Hybrid2 = vData.Data.Hybrid2 == "X" ? true : null;
-                                            vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            oController._CarJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: {} };
-                                            vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            vData.Data.disyn = "2";
-                                            oController._CarJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                                    // 여권/비자관리
-                                    "/PerinfoPassportSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        // ILangu: Langu,
-                                        TableIn: []
+                                        vData.Data.disyn = "2";
+                                        vData.Data.Odsupport = vData.Data.Odsupport == "X" ? true : null;
+                                        vData.Data.Parkticket = vData.Data.Parkticket == "X" ? true : null;
+                                        vData.Data.Hybrid = vData.Data.Hybrid == "X" ? true : null;
+                                        vData.Data.Hybrid2 = vData.Data.Hybrid2 == "X" ? true : null;
+                                        vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        oController._CarJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: {} };
+                                        vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        vData.Data.disyn = "2";
+                                        oController._CarJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                                // 여권/비자관리
+                                "/PerinfoPassportSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    // ILangu: Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            oPassportJSONModel.setData(vData);
-                                            oPassportTable.bindRows("/Data");
-                                            oPassportTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oPassportJSONModel.setData(vData);
-                                            oPassportTable.bindRows("/Data");
-                                            oPassportTable.setVisibleRowCount(vData.Data.length);
-                                            // common.Common.displaylog(oError);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 학력사항
-                                    "/PerRecordScholarshipSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oPassportJSONModel.setData(vData);
+                                        oPassportTable.bindRows("/Data");
+                                        oPassportTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
-                                                        data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
-                                                        data.TableIn.results[i].Zzlmark = data.TableIn.results[i].Zzlmark == "X" ? true : false;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oPassportJSONModel.setData(vData);
+                                        oPassportTable.bindRows("/Data");
+                                        oPassportTable.setVisibleRowCount(vData.Data.length);
+                                        // common.Common.displaylog(oError);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 학력사항
+                                "/PerRecordScholarshipSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                                    data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
+                                                    data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
+                                                    data.TableIn.results[i].Zzlmark = data.TableIn.results[i].Zzlmark == "X" ? true : false;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            oSchoolJSONModel.setData(vData);
-                                            oSchoolTable.bindRows("/Data");
-                                            oSchoolTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oSchoolJSONModel.setData(vData);
-                                            oSchoolTable.bindRows("/Data");
-                                            oSchoolTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 병역사항
-                                    "/PerRecordMilitarySet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oSchoolJSONModel.setData(vData);
+                                        oSchoolTable.bindRows("/Data");
+                                        oSchoolTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: {} };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results.length > 0) {
-                                                    vData.Data = data.TableIn.results[0];
-                                                    vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Begda))) : null;
-                                                    vData.Data.Endda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Endda))) : null;
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oSchoolJSONModel.setData(vData);
+                                        oSchoolTable.bindRows("/Data");
+                                        oSchoolTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 병역사항
+                                "/PerRecordMilitarySet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: {} };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results.length > 0) {
+                                                vData.Data = data.TableIn.results[0];
+                                                vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Begda))) : null;
+                                                vData.Data.Endda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Endda))) : null;
+                                            }
+                                        }
+                                        vData.Data.disyn = "2";
+                                        vData.Data.Zrotc = vData.Data.Zrotc == "X" ? true : null;
+                                        vData.Data.actMode = vData.Data.Begda == undefined ? (vData.Data.actMode = "3") : (vData.Data.actMode = "2"); // 신규 / 수정
+                                        vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
+                                    },
+                                    error: function () {
+                                        var vData = { Data: {} };
+                                        vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        vData.Data.Zrotc = null;
+                                        vData.Data.disyn = "2";
+                                        oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 자격면허
+                                "/PerRecordLicenseSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                                    data.TableIn.results[i].GetDate = data.TableIn.results[i].GetDate ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].GetDate))) : null;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            vData.Data.disyn = "2";
-                                            vData.Data.Zrotc = vData.Data.Zrotc == "X" ? true : null;
-                                            vData.Data.actMode = vData.Data.Begda == undefined ? (vData.Data.actMode = "3") : (vData.Data.actMode = "2"); // 신규 / 수정
-                                            vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: {} };
-                                            vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            vData.Data.Zrotc = null;
-                                            vData.Data.disyn = "2";
-                                            oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 자격면허
-                                    "/PerRecordLicenseSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oLicenseJSONModel.setData(vData);
+                                        oLicenseTable.bindRows("/Data");
+                                        oLicenseTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                                        data.TableIn.results[i].GetDate = data.TableIn.results[i].GetDate ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].GetDate))) : null;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oLicenseJSONModel.setData(vData);
+                                        oLicenseTable.bindRows("/Data");
+                                        oLicenseTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                                // 가족사항
+                                "/PerinfoFamilySet",
+                                {
+                                    IPernr: vPernr,
+                                    IBukrs: vBurks,
+                                    IConType: vConType,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    PinfoFamilyNav: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.PinfoFamilyNav && data.PinfoFamilyNav.results) {
+                                                for (var i = 0; i < data.PinfoFamilyNav.results.length; i++) {
+                                                    data.PinfoFamilyNav.results[i].Idx = i + 1;
+                                                    data.PinfoFamilyNav.results[i].Fgbdt = data.PinfoFamilyNav.results[i].Fgbdt ? dateFormat.format(new Date(common.Common.setTime(data.PinfoFamilyNav.results[i].Fgbdt))) + " (" + data.PinfoFamilyNav.results[i].ZzclassT + ")" : null;
+                                                    data.PinfoFamilyNav.results[i].Livid = data.PinfoFamilyNav.results[i].Livid == "X" ? true : false;
+                                                    data.PinfoFamilyNav.results[i].Helid = data.PinfoFamilyNav.results[i].Helid == "X" ? true : false;
+                                                    vData.Data.push(data.PinfoFamilyNav.results[i]);
                                                 }
                                             }
-                                            oLicenseJSONModel.setData(vData);
-                                            oLicenseTable.bindRows("/Data");
-                                            oLicenseTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oLicenseJSONModel.setData(vData);
-                                            oLicenseTable.bindRows("/Data");
-                                            oLicenseTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                                    // 가족사항
-                                    "/PerinfoFamilySet",
-                                    {
-                                        IPernr: vPernr,
-                                        IBukrs: vBurks,
-                                        IConType: vConType,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        PinfoFamilyNav: []
+                                        oFamilyTableJSONModel.setData(vData);
+                                        oFamilyTable.bindRows("/Data");
+                                        oFamilyTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.PinfoFamilyNav && data.PinfoFamilyNav.results) {
-                                                    for (var i = 0; i < data.PinfoFamilyNav.results.length; i++) {
-                                                        data.PinfoFamilyNav.results[i].Idx = i + 1;
-                                                        data.PinfoFamilyNav.results[i].Fgbdt = data.PinfoFamilyNav.results[i].Fgbdt ? dateFormat.format(new Date(common.Common.setTime(data.PinfoFamilyNav.results[i].Fgbdt))) + " (" + data.PinfoFamilyNav.results[i].ZzclassT + ")" : null;
-                                                        data.PinfoFamilyNav.results[i].Livid = data.PinfoFamilyNav.results[i].Livid == "X" ? true : false;
-                                                        data.PinfoFamilyNav.results[i].Helid = data.PinfoFamilyNav.results[i].Helid == "X" ? true : false;
-                                                        vData.Data.push(data.PinfoFamilyNav.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oFamilyTableJSONModel.setData(vData);
+                                        oFamilyTable.bindRows("/Data");
+                                        oFamilyTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 경력사항
+                                "/PerRecordCareerSet",
+                                {
+                                    IPernr: vPernr,
+                                    IBukrs: vBurks,
+                                    IConType: vConType,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                                    data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
+                                                    data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            oFamilyTableJSONModel.setData(vData);
-                                            oFamilyTable.bindRows("/Data");
-                                            oFamilyTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oFamilyTableJSONModel.setData(vData);
-                                            oFamilyTable.bindRows("/Data");
-                                            oFamilyTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 경력사항
-                                    "/PerRecordCareerSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IBukrs: vBurks,
-                                        IConType: vConType,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oCareerJSONModel.setData(vData);
+                                        oCareerTable.bindRows("/Data");
+                                        oCareerTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
-                                                        data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oCareerJSONModel.setData(vData);
+                                        oCareerTable.bindRows("/Data");
+                                        oCareerTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 포상
+                                "/PerRecordAwardSet",
+                                {
+                                    IPernr: vPernr,
+                                    IBukrs: vBurks,
+                                    IConType: vConType,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            oCareerJSONModel.setData(vData);
-                                            oCareerTable.bindRows("/Data");
-                                            oCareerTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oCareerJSONModel.setData(vData);
-                                            oCareerTable.bindRows("/Data");
-                                            oCareerTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 포상
-                                    "/PerRecordAwardSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IBukrs: vBurks,
-                                        IConType: vConType,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oAwardJSONModel.setData(vData);
+                                        oAwardTable.bindRows("/Data");
+                                        oAwardTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oAwardJSONModel.setData(vData);
+                                        oAwardTable.bindRows("/Data");
+                                        oAwardTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 징계
+                                "/PerRecordPunishSet",
+                                {
+                                    IPernr: vPernr,
+                                    IBukrs: vBurks,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                                    data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
+                                                    data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            oAwardJSONModel.setData(vData);
-                                            oAwardTable.bindRows("/Data");
-                                            oAwardTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oAwardJSONModel.setData(vData);
-                                            oAwardTable.bindRows("/Data");
-                                            oAwardTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 징계
-                                    "/PerRecordPunishSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IBukrs: vBurks,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oPunishJSONModel.setData(vData);
+                                        oPunishTable.bindRows("/Data");
+                                        oPunishTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
-                                                        data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oPunishJSONModel.setData(vData);
+                                        oPunishTable.bindRows("/Data");
+                                        oPunishTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
+                                    }
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 발령사항
+                                "/PerRecordAnnouncementSet",
+                                {
+                                    IPernr: vPernr,
+                                    IBukrs: vBurks,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: [] };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results) {
+                                                for (var i = 0; i < data.TableIn.results.length; i++) {
+                                                    data.TableIn.results[i].Idx = i + 1;
+                                                    data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                                    vData.Data.push(data.TableIn.results[i]);
                                                 }
                                             }
-                                            oPunishJSONModel.setData(vData);
-                                            oPunishTable.bindRows("/Data");
-                                            oPunishTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oPunishJSONModel.setData(vData);
-                                            oPunishTable.bindRows("/Data");
-                                            oPunishTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
                                         }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 발령사항
-                                    "/PerRecordAnnouncementSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IBukrs: vBurks,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                        oAnnouncementJSONModel.setData(vData);
+                                        oAnnouncementTable.bindRows("/Data");
+                                        oAnnouncementTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: [] };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results) {
-                                                    for (var i = 0; i < data.TableIn.results.length; i++) {
-                                                        data.TableIn.results[i].Idx = i + 1;
-                                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                                        vData.Data.push(data.TableIn.results[i]);
-                                                    }
-                                                }
-                                            }
-                                            oAnnouncementJSONModel.setData(vData);
-                                            oAnnouncementTable.bindRows("/Data");
-                                            oAnnouncementTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: [] };
-                                            oAnnouncementJSONModel.setData(vData);
-                                            oAnnouncementTable.bindRows("/Data");
-                                            oAnnouncementTable.setVisibleRowCount(vData.Data.length);
-                                            resolve();
-                                        }
+                                    error: function () {
+                                        var vData = { Data: [] };
+                                        oAnnouncementJSONModel.setData(vData);
+                                        oAnnouncementTable.bindRows("/Data");
+                                        oAnnouncementTable.setVisibleRowCount(vData.Data.length);
+                                        resolve();
                                     }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_PERS_RECORD_SRV").create(
-                                    // 보훈 및 장애
-                                    "/PerRecordHandicapSet",
-                                    {
-                                        IPernr: vPernr,
-                                        IConType: vConType,
-                                        IBukrs: vBurks,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        TableIn: []
+                                }
+                            );
+                        }),
+                        Common.getPromise(true, function (resolve) {
+                            $.app.getModel("ZHR_PERS_RECORD_SRV").create(
+                                // 보훈 및 장애
+                                "/PerRecordHandicapSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    IBukrs: vBurks,
+                                    ILangu: oController.getView().getModel("session").getData().Langu,
+                                    TableIn: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: {} };
+                                        if (data) {
+                                            if (data.TableIn && data.TableIn.results.length > 0) {
+                                                vData.Data = data.TableIn.results[0];
+                                                vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Begda))) : null;
+                                                vData.Data.Endda = vData.Data.Endda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Endda))) : null;
+                                                vData.Data.Idate = vData.Data.Idate ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Idate))) : null;
+                                            }
+                                        }
+                                        vData.Data.disyn = "2";
+                                        vData.Data.actMode = vData.Data.Begda == undefined ? (vData.Data.actMode = "3") : (vData.Data.actMode = "2"); // 신규 / 수정
+                                        vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        oController._HandicapJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
                                     },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            var vData = { Data: {} };
-                                            if (data) {
-                                                if (data.TableIn && data.TableIn.results.length > 0) {
-                                                    vData.Data = data.TableIn.results[0];
-                                                    vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Begda))) : null;
-                                                    vData.Data.Endda = vData.Data.Endda ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Endda))) : null;
-                                                    vData.Data.Idate = vData.Data.Idate ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Idate))) : null;
-                                                }
-                                            }
-                                            vData.Data.disyn = "2";
-                                            vData.Data.actMode = vData.Data.Begda == undefined ? (vData.Data.actMode = "3") : (vData.Data.actMode = "2"); // 신규 / 수정
-                                            vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            oController._HandicapJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
-                                        }.bind(this),
-                                        error: function (oError) {
-                                            var vData = { Data: {} };
-                                            vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                                            vData.Data.disyn = "2";
-                                            oController._HandicapJSonModel.setProperty("/Data", vData.Data);
-                                            resolve();
-                                        }
+                                    error: function () {
+                                        var vData = { Data: {} };
+                                        vData.User.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
+                                        vData.Data.disyn = "2";
+                                        oController._HandicapJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
                                     }
-                                );
-                            }.bind(this)
-                        )
+                                }
+                            );
+                        })
                     ]).then(function () {
                         oController._HandicapJSonModel.setProperty("/Data/Openf", oController._ListCondJSonModel.getProperty("/Data/Openf"));
                         oController._MilitaryJSonModel.setProperty("/Data/Openf", oController._ListCondJSonModel.getProperty("/Data/Openf"));
@@ -1182,7 +782,7 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 
-                var oData = oController._ListCondJSonModel.getProperty("/Data");
+                // var oData = oController._ListCondJSonModel.getProperty("/Data");
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: {} };
 
@@ -1201,7 +801,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
                                     vData.Data = data.PinfoBasicNav.results[0];
@@ -1247,8 +847,8 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 
-                var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                    oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
+                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
+                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
                     oJSONModel = oTable.getModel();
                 var vData = { Data: [] };
 
@@ -1269,7 +869,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.PinfoAddressNav && data.PinfoAddressNav.results) {
                                     for (var i = 0; i < data.PinfoAddressNav.results.length; i++) {
@@ -1315,7 +915,7 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 
-                var oData = oController._ListCondJSonModel.getProperty("/Data");
+                // var oData = oController._ListCondJSonModel.getProperty("/Data");
 
                 var vData = { Data: {} },
                     vError = "",
@@ -1336,7 +936,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results.length > 0) {
                                     vData.Data = data.TableIn.results[0];
@@ -1384,8 +984,8 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 
-                var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                    oTable = sap.ui.getCore().byId(oController.PAGEID + "_PassportTable"),
+                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
+                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_PassportTable"),
                     oJSONModel = oTable.getModel();
                 var vData = { Data: [] };
 
@@ -1404,7 +1004,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -1451,8 +1051,8 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
                 oController.PAGEID = "Perinfo";
-                var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                    oTable = sap.ui.getCore().byId(oController.PAGEID + "_SchoolTable"),
+                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
+                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_SchoolTable"),
                     oJSONModel = oTable.getModel();
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: [] };
@@ -1472,7 +1072,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -1523,7 +1123,7 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 
-                var oData = oController._ListCondJSonModel.getProperty("/Data");
+                // var oData = oController._ListCondJSonModel.getProperty("/Data");
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: {} };
 
@@ -1542,7 +1142,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results.length > 0) {
                                     vData.Data = data.TableIn.results[0];
@@ -1593,8 +1193,8 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
                 oController.PAGEID = "Perinfo";
-                var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                    oTable = sap.ui.getCore().byId(oController.PAGEID + "_LicenseTable"),
+                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
+                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_LicenseTable"),
                     oJSONModel = oTable.getModel();
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: [] };
@@ -1614,7 +1214,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -1663,8 +1263,8 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
                 oController.PAGEID = "Perinfo";
-                var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                    oTable = sap.ui.getCore().byId(oController.PAGEID + "_CareerTable"),
+                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
+                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_CareerTable"),
                     oJSONModel = oTable.getModel();
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: [] };
@@ -1684,7 +1284,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -1733,8 +1333,8 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
                 oController.PAGEID = "Perinfo";
-                var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                    oTable = sap.ui.getCore().byId(oController.PAGEID + "_AwardTable"),
+                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
+                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AwardTable"),
                     oJSONModel = oTable.getModel();
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: [] };
@@ -1754,7 +1354,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -1802,7 +1402,7 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 
-                var oData = oController._ListCondJSonModel.getProperty("/Data");
+                // var oData = oController._ListCondJSonModel.getProperty("/Data");
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var vData = { Data: {} };
 
@@ -1821,7 +1421,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
+                        function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results.length > 0) {
                                     vData.Data = data.TableIn.results[0];
@@ -1965,8 +1565,8 @@ sap.ui.define(
                     oTable = sap.ui.getCore().byId(oController.PAGEID + "_SchoolTable"),
                     oModel = oTable.getModel(),
                     vIDXs = oTable.getSelectedIndices(),
-                    selectRowObject = {},
-                    dateFormat;
+                    selectRowObject = {};
+                // dateFormat;
 
                 if (oView.getModel("session")) {
                     // dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oView.getModel("session").getData().Dtfmt});
@@ -2031,15 +1631,14 @@ sap.ui.define(
                     oTable = sap.ui.getCore().byId(oController.PAGEID + "_LicenseTable"),
                     oModel = oTable.getModel(),
                     vIDXs = oTable.getSelectedIndices(),
-                    selectRowObject = {},
-                    dateFormat;
+                    selectRowObject = {};
+                // dateFormat;
 
                 if (oView.getModel("session")) {
                     // dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oView.getModel("session").getData().Dtfmt});
                 }
 
-                if (actMode == "3") {
-                } else {
+                if (actMode !== "3") {
                     if (vIDXs.length < 1) {
                         sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
@@ -2096,8 +1695,8 @@ sap.ui.define(
                     oTable = sap.ui.getCore().byId(oController.PAGEID + "_CareerTable"),
                     oModel = oTable.getModel(),
                     vIDXs = oTable.getSelectedIndices(),
-                    selectRowObject = {},
-                    dateFormat;
+                    selectRowObject = {};
+                // dateFormat;
 
                 if (oView.getModel("session")) {
                     // dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oView.getModel("session").getData().Dtfmt});
@@ -2151,15 +1750,14 @@ sap.ui.define(
                     oTable = sap.ui.getCore().byId(oController.PAGEID + "_AwardTable"),
                     oModel = oTable.getModel(),
                     vIDXs = oTable.getSelectedIndices(),
-                    selectRowObject = {},
-                    dateFormat;
+                    selectRowObject = {};
+                // dateFormat;
 
                 if (oView.getModel("session")) {
                     // dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oView.getModel("session").getData().Dtfmt});
                 }
 
-                if (actMode == "3") {
-                } else {
+                if (actMode !== "3") {
                     if (vIDXs.length < 1) {
                         sap.m.MessageBox.alert(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
                         return;
@@ -2199,7 +1797,7 @@ sap.ui.define(
                 }
             },
 
-            onSaveBasic: function (oEvent) {
+            onSaveBasic: function () {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
                     oController = oView.getController();
                 var saveData = oController._BasicJSonModel.getProperty("/Data");
@@ -2233,10 +1831,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2283,7 +1878,7 @@ sap.ui.define(
                 });
             },
 
-            onSaveAddress: function (oEvent) {
+            onSaveAddress: function () {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
                     oController = oView.getController();
                 var saveData = oController._AddressJSonModel.getProperty("/Data");
@@ -2318,10 +1913,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2398,10 +1990,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2494,10 +2083,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2597,10 +2183,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2700,10 +2283,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2811,10 +2391,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -2910,10 +2487,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -3007,10 +2581,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -3108,10 +2679,7 @@ sap.ui.define(
                         oPath,
                         createData,
                         null,
-                        function (data, res) {
-                            if (data) {
-                            }
-                        },
+                        function () {},
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
@@ -3172,53 +2740,24 @@ sap.ui.define(
 
             onChangeCountry: function () {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
-                    oController = oView.getController();
-                var vData = oController._AddressJSonModel.getData(),
-                    vState = [];
-                Promise.all([
-                    common.Common.getPromise(
-                        function () {
-                            $.app.getModel("ZHR_COMMON_SRV").create(
-                                "/CommonCodeListHeaderSet",
-                                {
-                                    IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                    IMolga: oController.getView().getModel("session").getData().Molga,
-                                    ILangu: oController.getView().getModel("session").getData().Langu,
-                                    ICodeT: "010",
-                                    ICodty: vData.Data.Land1,
-                                    NavCommonCodeList: []
-                                },
-                                {
-                                    async: false,
-                                    success: function (data) {
-                                        if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                            // for(var i=0; i<data.NavCommonCodeList.results.length; i++){
-                                            // 	oState.addItem(new sap.ui.core.Item({key: data.NavCommonCodeList.results[i].Code, text:data.NavCommonCodeList.results[i].Text}));
-                                            // }
-                                            vState = data.NavCommonCodeList.results;
-                                        }
-                                        oController._AddressJSonModel.setProperty("/State", vState);
-                                    },
-                                    error: function (oResponse) {
-                                        common.Common.log(oResponse);
-                                        oController._AddressJSonModel.setProperty("/State", vState);
-                                    }
-                                }
-                            );
-                        }.bind(this)
-                    )
-                ]);
+                    oController = oView.getController(),
+                    vLand1 = oController._AddressJSonModel.getProperty("/Data/Land1");
+
+                oController._AddressJSonModel.setProperty("/State", []);
+
+                oController.retrieveCommonCode({ CodeT: "010", CodeTy: vLand1, Model: oController._AddressJSonModel, Path: "/State" });
             },
 
             onChangeSlart: function (changeBelow) {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
-                    oController = oView.getController();
-                var vData = oController._SchoolJSonModel.getData();
-                vData.Ausbi = [];
+                    oController = oView.getController(),
+                	vData = oController._SchoolJSonModel.getData();
+				
+				vData.Ausbi = [];
                 vData.Slabs = [];
-                vData.Sltp = [];
-                if (changeBelow == "N") {
-                } else {
+				vData.Sltp = [];
+				
+                if (changeBelow !== "N") {
                     // 하위 필드 값 초기화
                     oController._SchoolJSonModel.setProperty("/Data/Ausbi", "");
                     oController._SchoolJSonModel.setProperty("/Data/Slabs", "");
@@ -3227,8 +2766,7 @@ sap.ui.define(
                     oController._SchoolJSonModel.setProperty("/Slabs", []);
                     oController._SchoolJSonModel.setProperty("/Sltp", []);
                     //
-                    if (vData.Data.Slart == "H4" || vData.Data.Slart == "H5" || vData.Data.Slart == "H6") {
-                    } else {
+                    if (vData.Data.Slart !== "H4" && vData.Data.Slart !== "H5" && vData.Data.Slart == "H6") {
                         oController._SchoolJSonModel.setProperty("/Data/Majth", "");
                         oController._SchoolJSonModel.setProperty("/Data/Proff", "");
                         oController._SchoolJSonModel.setProperty("/Data/Degn1", "");
@@ -3241,109 +2779,14 @@ sap.ui.define(
                 }
 
                 if (vData.Data.Slart && vData.Data.Slart != "") {
+					oController._SchoolJSonModel.setProperty("/Ausbi", []);
+					oController._SchoolJSonModel.setProperty("/Slabs", []);
+					oController._SchoolJSonModel.setProperty("/Sltp", []);
+
                     Promise.all([
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet", //학교
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "03",
-                                        ICode: vData.Data.Slart,
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                for (var i = 0; i < data.NavCommonCodeList.results.length; i++) {
-                                                    vData.Ausbi.push(data.NavCommonCodeList.results[i]);
-                                                }
-                                            }
-                                            oController._SchoolJSonModel.setData({ Ausbi: vData.Ausbi }, true);
-                                            resolve();
-                                        },
-                                        error: function (oResponse) {
-                                            oController._SchoolJSonModel.setData({ Ausbi: vData.Ausbi }, true);
-                                            resolve();
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet", //학위
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "04",
-                                        ICode: vData.Data.Slart,
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                for (var i = 0; i < data.NavCommonCodeList.results.length; i++) {
-                                                    vData.Slabs.push(data.NavCommonCodeList.results[i]);
-                                                }
-                                            }
-                                            oController._SchoolJSonModel.setData({ Slabs: vData.Slabs }, true);
-                                            resolve();
-                                        },
-                                        error: function (oResponse) {
-                                            oController._SchoolJSonModel.setData({ Slabs: vData.Slabs }, true);
-                                            resolve();
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        ),
-                        Common.getPromise(
-                            true,
-                            function (resolve) {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet", //전공
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "05",
-                                        ICode: vData.Data.Slart,
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: true,
-                                        success: function (data) {
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                for (var i = 0; i < data.NavCommonCodeList.results.length; i++) {
-                                                    vData.Sltp.push(data.NavCommonCodeList.results[i]);
-                                                }
-                                            }
-                                            oController._SchoolJSonModel.setData({ Sltp: vData.Sltp }, true);
-                                            resolve();
-                                        },
-                                        error: function (oResponse) {
-                                            oController._SchoolJSonModel.setData({ Sltp: vData.Sltp }, true);
-                                            resolve();
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        )
+						oController.retrieveCommonCode({ CodeT: "999", CodeTy: "03", Code: vData.Data.Slart, Model: oController._SchoolJSonModel, Path: "/Ausbi" }),
+						oController.retrieveCommonCode({ CodeT: "999", CodeTy: "04", Code: vData.Data.Slart, Model: oController._SchoolJSonModel, Path: "/Slabs" }),
+						oController.retrieveCommonCode({ CodeT: "999", CodeTy: "05", Code: vData.Data.Slart, Model: oController._SchoolJSonModel, Path: "/Sltp" })
                     ]).then(function () {
                         oController._SchoolDialog.open();
                     });
@@ -3356,46 +2799,12 @@ sap.ui.define(
                 var vData = oController._LicenseJSonModel.getData();
                 vData.Licnl = [];
                 oController._LicenseJSonModel.setProperty("Licnl", []);
-                if (changeBelow == "N") {
-                } else {
+                if (changeBelow !== "N") {
                     // 하위 필드 값 초기화
                     oController._LicenseJSonModel.setProperty("/Data/Licnl", "");
                 }
                 if (vData.Data.Licnn && vData.Data.Licnn != "") {
-                    Promise.all([
-                        common.Common.getPromise(
-                            function () {
-                                $.app.getModel("ZHR_COMMON_SRV").create(
-                                    "/CommonCodeListHeaderSet", //자격등급
-                                    {
-                                        IBukrs: oController.getView().getModel("session").getData().Bukrs2,
-                                        IMolga: oController.getView().getModel("session").getData().Molga,
-                                        ILangu: oController.getView().getModel("session").getData().Langu,
-                                        ICodeT: "999",
-                                        ICodty: "08",
-                                        ICode: vData.Data.Licnn,
-                                        NavCommonCodeList: []
-                                    },
-                                    {
-                                        async: false,
-                                        success: function (data) {
-                                            if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
-                                                for (var i = 0; i < data.NavCommonCodeList.results.length; i++) {
-                                                    vData.Licnl.push(data.NavCommonCodeList.results[i]);
-                                                }
-                                            }
-                                            oController._LicenseJSonModel.setProperty("/Licnl", vData.Licnl);
-                                            oController._LicenseDialog.open();
-                                        },
-                                        error: function (oResponse) {
-                                            oController._LicenseDialog.open();
-                                            common.Common.log(oResponse);
-                                        }
-                                    }
-                                );
-                            }.bind(this)
-                        )
-                    ]);
+					oController.retrieveCommonCode({ CodeT: "999", CodeTy: "08", Code: vData.Data.Licnn, Model: oController._LicenseJSonModel, Path: "/Licnl", After: function() { oController._LicenseDialog.open(); } });
                 }
             },
 
@@ -3552,11 +2961,11 @@ sap.ui.define(
                     oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
                     oAttachFileList = sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"),
                     oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"),
-                    oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
-                    JSonModel = oAttachbox.getModel(),
-                    vAttachFileDatas = JSonModel.getProperty("/Data"),
-                    vAppnm = JSonModel.getProperty("/Settings/Appnm"),
-                    Datas = { Data: [] };
+                    JSonModel = oAttachbox.getModel();
+                // oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
+                // vAttachFileDatas = JSonModel.getProperty("/Data"),
+                // vAppnm = JSonModel.getProperty("/Settings/Appnm"),
+                // Datas = { Data: [] };
 
                 JSonModel.setProperty("/Settings/Length", 0);
                 JSonModel.setProperty("/Data", []);
@@ -3610,11 +3019,11 @@ sap.ui.define(
 function fn_SetAddr(Zip, fullAddr, sido, sigungu) {
     var oController = $.app.getController("ZUI5_HR_Perinfo.List");
     var vData = oController._AddressJSonModel.getProperty("/Data");
-    var oLand1 = $.app.byId(oController.PAGEID + "_Sub01_Land1"); // 국가
-    var oState = $.app.byId(oController.PAGEID + "_Sub01_State"); // 지역
-    var oPstlz = $.app.byId(oController.PAGEID + "_Sub01_Pstlz"); // 우편번호
-    var oOrt01 = $.app.byId(oController.PAGEID + "_Sub01_Ort1k"); // 시/구/군
-    var oOrt02 = $.app.byId(oController.PAGEID + "_Sub01_Ort2k"); // 동/읍/면
+    // var oLand1 = $.app.byId(oController.PAGEID + "_Sub01_Land1"); // 국가
+    // var oState = $.app.byId(oController.PAGEID + "_Sub01_State"); // 지역
+    // var oPstlz = $.app.byId(oController.PAGEID + "_Sub01_Pstlz"); // 우편번호
+    // var oOrt01 = $.app.byId(oController.PAGEID + "_Sub01_Ort1k"); // 시/구/군
+    // var oOrt02 = $.app.byId(oController.PAGEID + "_Sub01_Ort2k"); // 동/읍/면
     var statesArr = {
         제주특별자치도: { key: "01", text: "제주도" }, // 제주도
         전북: { key: "02", text: "전라북도" }, // 전라북도
