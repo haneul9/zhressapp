@@ -478,7 +478,7 @@ sap.ui.define([
 
 			oController.AttModel.setData({Data: []});
 
-			var vBDate = vMonth1 === "" ? new Date(vZyear1, 1, 1) : new Date(vZyear1, vMonth1 - 1, 1);
+			var vBDate = vMonth1 === "" ? new Date(vZyear1, 0, 1) : new Date(vZyear1, vMonth1 - 1, 1);
 			var vEDate = vMonth1 === "" ? new Date(vZyear1, 12, 0) : new Date(vZyear1, vMonth1, 0);
 
 			var sendObject = {};
