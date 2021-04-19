@@ -315,9 +315,28 @@ sap.ui.define([
 								width: "100%",
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40036}", "150px", "Right", true), // 학습시간
-									oTimeCombo,
-									new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
-									oTimeCombo2
+									new sap.m.Input({
+										textAlign: "Begin",
+										width: "250px",
+										maxLength: 5,
+										liveChange: oController.getAttTime.bind(oController),
+										editable: {
+											path: "Status1",
+											formatter: function(v1) {
+												return !v1 || v1 === "AA";
+											}
+										},
+										value: {
+											path: "Trtim",
+											formatter: function(v) {
+												if(v) return v;//Common.numberWithCommas(v);
+												else return "0";
+											}
+										},
+									})
+									// oTimeCombo,
+									// new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
+									// oTimeCombo2
 								]
 							})
 							.addStyleClass("search-field-group")

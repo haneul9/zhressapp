@@ -120,7 +120,7 @@ sap.ui.define([
 							}, 
 							textAlign : "Center",
 							visible: {
-								path: "Url1",
+								path: "UrlA1",
 								formatter: function(v) {
 									if(!v) return true;
 									else return false;
@@ -130,14 +130,14 @@ sap.ui.define([
 						.addStyleClass("font-14px font-regular mt-4px "),
 						new sap.m.FormattedText({
 							htmlText: {
-								parts: [{ path: "Url1" }, { path: "Status1" }],
+								parts: [{ path: "UrlA1" }, { path: "Status1" }],
 								formatter: function(v1, v2) {
 									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
 								}
 							}, 
 							visible: {
-								path: "Url1",
+								path: "UrlA1",
 								formatter: function(v) {
 									if(v) return true;
 									else return false;
@@ -222,6 +222,14 @@ sap.ui.define([
             oController.ApplyModel.setProperty("/FormData/mTime", "Null");
 			oController.ApplyModel.setProperty("/TimeCombo2", oTimes);
         },
+
+		getAttTime: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
+
+			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(convertValue) ? "0" : convertValue);
+			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : convertValue);	
+		},
 
 		getMoneyComma1: function(oEvent) {
 			var inputValue = oEvent.getParameter('value').trim(),
