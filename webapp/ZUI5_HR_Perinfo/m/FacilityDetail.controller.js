@@ -13,13 +13,7 @@ sap.ui.define(
         return CommonController.extend(SUB_APP_ID, {
             PAGEID: "FacilityDetail",
             LoginSession: new sap.ui.model.json.JSONModel(),
-            // getFacilityHandler: function () {
-            // 	if (!this.FacilityHandler)
-            // 		this.FacilityHandler = $.app.getController().FacilityHandler;
-
-            // 	return this.FacilityHandler;
-            // },
-
+            
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
                     {
@@ -39,16 +33,6 @@ sap.ui.define(
                     SearchUserMobile._vPersa = oEvent.data.Session.Persa;
                 }
             },
-
-            // onESSelectPerson: function (oEvent) {
-            // 	var vSpath = oEvent.getSource().getParent().getBindingContext().getPath(),
-            // 		oRowData = $.extend(true, {}, this.oModel.getProperty(vSpath));
-
-            // 	sap.ui.getCore().getEventBus().publish("nav", "to", {
-            // 		id: [$.app.CONTEXT_PATH, "List"].join($.app.getDeviceSuffix()),
-            // 		data : oRowData
-            // 	});
-            // },
 
             getLocalSessionModel: Common.isLOCAL()
                 ? function () {
