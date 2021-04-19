@@ -187,7 +187,8 @@ sap.ui.define([
 			      id : "ZUI5_HR_Vacation.Detail",
 			      data : {
 			    	  FromPageId : "ZUI5_HR_Vacation.List",
-			    	  Status1 : ""
+			    	  Status1 : "",
+			    	  Flag : ""
 			      }
 			});	
 		},
