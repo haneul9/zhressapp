@@ -103,7 +103,7 @@ itemUrl: function(o) {
 
 	return [
 		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
-		' data-menu-id="${url}"'.interpolate(this.mid())
+		' data-menu-id="${menu-id}"'.interpolate(this.mid())
 	].join('');
 },
 clearResource: function() {

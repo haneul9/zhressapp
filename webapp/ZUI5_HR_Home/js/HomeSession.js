@@ -18,6 +18,7 @@ function HomeSession(_gateway, initHome) {
 	this._gateway = _gateway;
 	_gateway.homeSession(this);
 
+
 	this.init(initHome);
 }
 
@@ -57,16 +58,54 @@ init: function(initHome) {
 	.then(initHome || function() {});
 },
 
-retrieveSFUserName: function() {
+dkdlTlqpfmffls: function(resolve) {
 
-	if (!this._gateway.isPRD() && this._gateway.parameter("pernr")) {
-		sessionStorage.setItem('ehr.sf-user.name', this._gateway.parameter("pernr"));
-		return new Promise(function(v) {
-			v();
-		});
-	}
+	var options = {
+		title: 'Mobile : 대상자 사번 입력',
+		html: [
+			'<div class="form-group m-3">',
+				'<label for="dkdlTl-qpfmffls">대상자 사번을 입력하세요.</label>',
+				'<input type="text" maxlength="30" class="form-control" id="dkdlTl-qpfmffls" />',
+				'<div class="invalid-feedback value-required">비밀번호를 입력하세요.</div>',
+			'</div>'
+		].join(''),
+		show: function() {
+			$('#dkdlTl-qpfmffls').keydown(function(e) {
+				var key = e.keyCode || e.which;
+				if (key === 13 && $.trim($(e.currentTarget).val())) {
+					options.confirm();
+				}
+			});
+		},
+		confirm: function(e) {
+			if (e) {
+				e.stopImmediatePropagation();
+			}
 
-	return $.getJSON({
+			var dkdlTlqpfmffls = $('#dkdlTl-qpfmffls'),
+			pernr = dkdlTlqpfmffls.val().replace(/^0+/g, '');
+			if (!pernr) {
+				dkdlTlqpfmffls.siblings('.value-required').show();
+				return;
+			} else {
+				dkdlTlqpfmffls.siblings('.value-required').hide();
+			}
+
+			sessionStorage.setItem('ehr.sf-user.name', pernr);
+			resolve();
+			this._gateway.confirm('hide');
+		}.bind(this),
+		cancel: function() {
+			this._retrieveSFUserName(resolve);
+		}.bind(this)
+	};
+
+	this._gateway.confirm(options);
+},
+
+_retrieveSFUserName: function(resolve) {
+
+	$.getJSON({
 		url: '/services/userapi/currentUser',
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserName success', arguments).log();
@@ -77,8 +116,29 @@ retrieveSFUserName: function() {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveSFUserName');
 
 			sessionStorage.removeItem('ehr.sf-user.name');
-		}.bind(this)
-	}).promise();
+		}.bind(this),
+		complete: function() {
+			resolve();
+		}
+	});
+},
+
+retrieveSFUserName: function() {
+
+	var pernr = this._gateway.parameter('pernr');
+	if (!this._gateway.isPRD() && pernr) {
+		sessionStorage.setItem('ehr.sf-user.name', pernr);
+		return new Promise(function(v) { v(); });
+	}
+
+	return new Promise(function(resolve) {
+
+		if (this._gateway.isMobile()) {
+			this.dkdlTlqpfmffls(resolve);
+		} else {
+			this._retrieveSFUserName(resolve);
+		}
+	}.bind(this));
 },
 
 retrieveOdataCsrfToken: function() {

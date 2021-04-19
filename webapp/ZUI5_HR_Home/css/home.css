@@ -65,6 +65,7 @@ body {min-width:576px; font-size:14px}
 
 .ehr-body {position:relative; overflow-y:hidden}
 .ehr-body .container-fluid {height:100%}
+[device="mobile"] .ehr-body .container-fluid {overflow-y:auto}
 .ehr-body .container-fluid iframe {width:100%; height:100%; border:0}
 .ehr-body .jspPane {width:100% !important; min-height:100%}
 .ehr-body .jspHorizontalBar {display:none; left:0 !important}
@@ -115,6 +116,8 @@ body {min-width:576px; font-size:14px}
 .portlet-employee .employee-d-day .d-day {font-size:2.25rem; font-weight:400; padding-left:.75rem}
 .portlet-employee .employee-d-day .d-day.color-lcc-signature-green {font-size:2.875rem; font-weight:700; padding-left:.75rem}
 .portlet-employee .employee-d-day span + span {margin-left:.5rem}
+[device="mobile"] .portlet-employee .employee-photo {top:11px; right:auto; left:18px}
+[device="mobile"] .portlet-employee .employee-information {width:100%; height:206px; border-radius:.5rem; padding-left:9rem; background:#064975 url('../../images/employee-information-bg.png') no-repeat right bottom}
 
 .portlet-bbs .list-group {height:100%; overflow:auto}
 .portlet-bbs .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
@@ -258,7 +261,7 @@ body {min-width:576px; font-size:14px}
 .navbar.navbar-mobile .navbar-brand  {padding-top:.75rem; padding-bottom:.75rem; margin-right:0}
 .navbar-mobile .navbar-nav .dropdown-menu {border-radius:0; font-size:1rem; background-color:#fff; border:0; margin:0 -1rem; padding:.5rem 1rem}
 .navbar-mobile .navbar-toggler {border:none}
-.navbar-mobile .navbar-collapse {background-color:#f7f7f7; margin:0 -1rem; padding:0 1rem}
+.navbar-mobile .navbar-collapse {position:absolute; z-index:3; top:57px; left:16px; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7}
 .navbar-mobile .nav-item {font-weight:700; color:#333} /*1depth*/
 .navbar-mobile .navbar-nav .nav-link {padding:.75rem 1rem; margin:0 -1rem; font-size:17px; border-bottom:1px solid #d9d9d9}
 .navbar-mobile .navbar-nav li.nav-item:last-child .nav-link {border-bottom:none}

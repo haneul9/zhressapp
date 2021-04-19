@@ -27,13 +27,13 @@ ui: function() {
 	}
 	if (this.mobile()) {
 		return [
-			'<div class="card portlet portlet-2h portlet-employee" data-key="${key}"${link}>'.interpolate(this.key(), this.link()),
+			'<div class="card portlet portlet-1h portlet-employee" data-key="${key}"${link}>'.interpolate(this.key(), this.link()),
 				'<div class="d-flex">',
 					'<div class="employee-photo${nobody}">'.interpolate(photoNotAvailable ? ' nobody': ''),
 						'<img src="${src}" />'.interpolate(photoNotAvailable ? 'images/photoNotAvailable.gif' : photo),
 						'<svg viewBox="0 0 64 64">',
 							'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 0 H64 V32 H63 Q63 28 60 25 L39 4 Q36 1 32 1 Q28 1 25 4 L4 25 Q1 28 1 32 H0 Z" />',
-							'<path stroke="#cccccc" stroke-width=".5" fill="#ffffff" d="M0 64 H64 V32 H63 Q63 36 60 39 L39 60 Q36 63 32 63 Q28 63 25 60 L4 39 Q1 36 1 32 H0 Z" />',
+							'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 64 H64 V32 H63 Q63 36 60 39 L39 60 Q36 63 32 63 Q28 63 25 60 L4 39 Q1 36 1 32 H0 Z" />',
 						'</svg>',
 					'</div>',
 					'<div class="employee-information">',
@@ -114,7 +114,7 @@ fill: function() {
 
 	if (this.mobile()) {
 		this.spinner(false);
-		return;
+		return new Promise(function(v) { v(); });
 	}
 
 	return this._gateway.post({

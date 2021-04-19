@@ -37,10 +37,10 @@ init: function() {
 					paramMap.pernr = this._gateway.parameter('pernr');
 				}
 				this._gateway.openWindow({ // openPopup openWindow
-					url: 'index.html?' + $.param(paramMap),
+					url: 'indexMobile.html?' + $.param(paramMap),
 					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
-					width: 1280,
-					height: 800
+					width: screen.availWidth,
+					height: screen.availHeight
 				});
 			} else {
 				this._gateway.alert({
@@ -53,19 +53,7 @@ init: function() {
 changeLocale: function() {
 
 	setTimeout(function() {
-		// var container = $('.ehr-body .container-fluid');
-		// if (container.data('jsp')) {
-		// 	container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
-		// }
-
-		this.generate()
-			.then(function() {
-				// $('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
-				// 	resizeSensor: true,
-				// 	verticalGutter: 0,
-				// 	horizontalGutter: 0
-				// });
-			});
+		this.generate();
 	}.bind(this), 0);
 },
 
@@ -77,16 +65,7 @@ changeState: function(restore) {
 				return;
 			}
 
-			this.generate() // Portlet 설정 조회 및 생성
-				.then(function() {
-					// $('[data-target="#portlet-personalization"]').parent().show();
-					// $('.ehr-body .container-fluid').jScrollPane({ // Portlet rendering이 완료되어 .ehr-body 높이가 확정되면 scrollbar 생성
-					// 	resizeSensor: true,
-					// 	verticalGutter: 0,
-					// 	horizontalGutter: 0
-					// });
-				});
-
+			this.generate(); // Portlet 설정 조회 및 생성
 		} else {
 			this.itemMap = null;
 			this.items = null;
