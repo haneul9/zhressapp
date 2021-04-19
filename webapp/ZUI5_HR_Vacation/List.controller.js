@@ -136,6 +136,9 @@ sap.ui.define([
 									
 									data.VacationNav.results[i].Kaltg = parseFloat(data.VacationNav.results[i].Kaltg);
 									
+																													  // 신규신청						   // 삭제신청
+									data.VacationNav.results[i].Delapptx = data.VacationNav.results[i].Delapp == "" ? oBundleText.getText("LABEL_48045") : oBundleText.getText("LABEL_48046");
+									
 									vData.Data.push(data.VacationNav.results[i]);
 								}
 							}
@@ -186,6 +189,35 @@ sap.ui.define([
 			    	  FromPageId : "ZUI5_HR_Vacation.List",
 			    	  Status1 : ""
 			      }
+			});	
+		},
+		
+		onPressDelete : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.List");
+			var oController = oView.getController();
+			
+			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
+			var oIndices = oTable.getSelectedIndices();
+			
+			if(oIndices.length != 1){
+				sap.m.MessageBox.error(oBundleTExt.getText("MSG_48021")); // 삭제신청할 데이터를 선택하여 주십시오.
+				return;
+			}
+			
+			var sPath = oTable.getContextByIndex(oIndices[0]).sPath;
+			var oData = oTable.getModel().getProperty(sPath);
+			
+			if(oData.Status1 != "99"){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48022")); // 승인된 데이터만 삭제신청 가능합니다.
+				return;
+			} else if(oData.Delapp != ""){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48023")); // 신규신청 데이터만 삭제신청 가능합니다.
+				return;
+			}
+			
+			sap.ui.getCore().getEventBus().publish("nav", "to", {
+			      id : "ZUI5_HR_Vacation.Detail",
+			      data : Object.assign({FromPageId : "ZUI5_HR_Vacation.List", Flag : "D"}, oData)
 			});	
 		},
 		

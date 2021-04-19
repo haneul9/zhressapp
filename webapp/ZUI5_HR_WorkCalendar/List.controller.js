@@ -245,16 +245,16 @@ sap.ui.define([
 												oMatrix.addRow(makeData("", ""));
 											}
 											
-											// 재근
+											// 재근시간기준
 											if(data1[i].Workt2 != "" && data1[i].Workt2 != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63017"), data1[i].Workt2));
+												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63009"), data1[i].Workt2));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}
 											
-											// 근무
+											// 근무인정시간
 											if(data1[i].Workt != "" && data1[i].Workt != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63018"), data1[i].Workt));
+												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63065"), data1[i].Workt));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}	  

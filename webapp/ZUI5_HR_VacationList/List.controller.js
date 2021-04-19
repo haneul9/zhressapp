@@ -142,6 +142,9 @@ sap.ui.define([
 									
 									data1[i].Period = data1[i].Begda + " ~ " + data1[i].Endda;
 									
+																				// 신규신청						   // 삭제신청
+									data1[i].Delapptx = data1[i].Delapp == "" ? oBundleText.getText("LABEL_48045") : oBundleText.getText("LABEL_48046");
+									
 									data1[i].Kaltg = parseFloat(data1[i].Kaltg);
 									
 									vData.Data.push(data1[i]);
