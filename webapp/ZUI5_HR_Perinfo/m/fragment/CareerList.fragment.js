@@ -32,7 +32,7 @@ sap.ui.define([], function () {
                         cells: [
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Period}" }))]
+                                items: [new sap.m.Text({ text: "{Period}" })]
                             }),
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
