@@ -277,16 +277,6 @@ body {min-width:576px; font-size:14px}
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a::before{content:'ㄴ'; font-size:12px; padding-right:6px}
 .navbar-mobile .button-logout {visibility:hidden}
 
-<<<<<<< HEAD
-/* Mobile Download */
-.app-wrap-download {width:100%; height:100%; padding:2rem}
-.app-wrap-download .flex-item {margin:auto 0; justify-content:center; text-align:center}
-.app-wrap-download .flex-item h1 {font-size:1rem; text-align:center; margin-bottom:2.5rem; letter-spacing:-0.5px; line-height:1.5; font-weight:400}
-.app-wrap-download .flex-item h1 span.bi {color:#003963; font-size:1.125rem; font-weight:700}
-.app-wrap-download .flex-item .btn {background-color:#f4f5f6; border:1px solid #d9d9d9; min-width:230px; padding:1rem; margin: .5rem; border-radius:.5rem}
-.app-wrap-download .flex-item .btn .os-title {display:inline-block; text-align:right; width:160px; font-size:.875rem; font-weight:500}
-.app-wrap-download .flex-item .btn img{width:30px; height:auto}
-=======
 /* Mobile 설치안내 */
 .app-wrap-download {width:100%; height:100%;padding:2rem;}
 .app-wrap-download .flex-item {margin:auto 0; justify-content:center;text-align: center}
@@ -298,4 +288,3 @@ body {min-width:576px; font-size:14px}
 .app-wrap-download .flex-item .android-info {padding-bottom:1rem;}
 .app-wrap-download .flex-item .android-info .des {text-align: left;letter-spacing: -1px;font-size:.875rem}
 .app-wrap-download .flex-item .android-info img {max-width:100%;padding-top:1rem}
->>>>>>> pub-overall_0416
