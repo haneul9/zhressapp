@@ -48,7 +48,16 @@
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
+
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey")))
+				this.onSelectDetail(false);
         },
+
+		getParameterByName: function(name) {
+			var regex = parent._gateway.parameter(name);
+			
+			return Common.checkNull(regex)? "" : regex;
+		},
 
         getChangeDate: function() {
 			return new sap.ui.commons.TextView({
@@ -128,18 +137,30 @@
         },
 		
 		onSelectedRow: function(oEvent) {
-            var oController = $.app.getController();
-			var oView = $.app.byId("ZUI5_HR_SuggestionsHass.Page");
+			var oController = $.app.getController();
 			var vPath = oEvent.getParameters().rowBindingContext.getPath();
-			var vSdate = oController.TableModel.getProperty(vPath).Sdate;
-			var vSeqnr = oController.TableModel.getProperty(vPath).Seqnr;
 			
+			oController.onSelectDetail(true, vPath);
+		},
+
+		onSelectDetail: function(Gubun, Path){
+			var oController = $.app.getController();
+			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
+			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
+			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Skey");
+			vSeqnr = vSeqnr.slice(-5);
 			
 			if (!oController._RegistModel) {
-				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_SuggestionsHass.fragment.Regist", oController);
+				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", oController);
 				oView.addDependent(oController._RegistModel);
-			};
+			}
+
+			var oDateBox = $.app.byId(oController.PAGEID + "_RegistDateBox");
+			var oIsHideBox = $.app.byId(oController.PAGEID + "_IsHideBox");
+			oDateBox.setVisible(true);
+			oIsHideBox.setVisible(false);
 			
+			oController.CommentModel.setData({Data: {}});
 			oController.getDetailData(vSdate, vSeqnr);
             oController.onBeforeOpenDetailDialog();
 			oController._RegistModel.open();

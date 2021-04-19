@@ -22,15 +22,22 @@
 		CommentModel: new JSONModelHelper(),
 		PWordModel: new JSONModelHelper(),
 
-		g_CGubun: "",
-		g_Pword: "",
-		g_Input: "",
-		g_HiInputPword: "",
-		g_HiPword: "",
-		g_HiSeqnr2: "",
-		g_HiBox: "",
-		g_SaveBtn: "",
-		g_ReBtn: "",
+		g_CGubun: "", 			// 댓글상세 수정/삭제 구분
+		g_Pword: "",			// 톡톡 글의 수정/삭제 구분
+		g_Input: "",			// 댓글 내용Input
+		g_HiInputPword: "",		// 댓글 수정시 비밀번호 입력 Input
+		g_HiPword: "",			// 해당 댓글의 비밀번호 Text
+		g_HiSeqnr2: "",			// 해당 댓글의 시퀀스번호 Text
+		g_HiBox: "",			// 해당 댓글의 비밀번호 HBox
+		g_SaveBtn: "",			// 해당 댓글의 저장 Btn 
+		g_ReBtn: "",			// 해당 댓글의 수정 Btn
+		g_CanBtn: "",			// 해당 댓글의 취소 Btn
+		g_ReCommBtn: "",		// 해당 댓글의 대댓글 Btn
+		g_ReDetail: "",			// 해당 대댓글의 신규작성시 내용
+		g_RePwordInput: "",		// 해당 대댓글의 비밀번호 Input
+		g_ReSaveBtn: "",		// 해당 대댓글의 저장 Btn
+		g_ReWritBtn: "",		// 해당 대댓글의 수정 Btn
+		g_ReCanBtn: "",			// 해당 대댓글의 취소 Btn
 
 
 		getUserId: function() {
@@ -67,8 +74,8 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			// if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr")))
-				// this.onSelectDetail(false);
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey")))
+				this.onSelectDetail(false);
         },
 
 		getParameterByName: function(name) {
@@ -149,9 +156,12 @@
 				this._RegistModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", this);
 				oView.addDependent(this._RegistModel);
 			}
+
+			var oCommentBox = $.app.byId(this.PAGEID + "_CommentBox");
 			
 			this.RegistModel.setData({FormData: []});
 			this.CommentModel.setData({Data: {}});
+			oCommentBox.destroyItems();
 
 			var oDateBox = $.app.byId(this.PAGEID + "_RegistDateBox");
 			var oIsHideBox = $.app.byId(this.PAGEID + "_IsHideBox");
@@ -173,7 +183,8 @@
 			var oController = $.app.getController();
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
 			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
-			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Seqnr");
+			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Skey");
+			vSeqnr = vSeqnr.slice(-5);
 			
 			if (!oController._RegistModel) {
 				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", oController);
@@ -213,8 +224,10 @@
 						Common.log(oData);
 						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
 						var oCommentData = oData.TableIn3.results;
+						var oSubCommentData = oData.TableIn4.results;
 						oController.RegistModel.setData({FormData: oCopiedRow});
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
+						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
 						oController.setComments();
 					}
 				},
@@ -241,7 +254,7 @@
 
 			oCommentBox.destroyItems();
 
-			vCommData.forEach(function(e) {
+			vCommData.forEach(function(e, i) {
 				oCommentBox.addItem(
 					new sap.m.VBox({
 						fitContainer: true,
@@ -293,6 +306,11 @@
 											new sap.m.Button({
 												press: oController.onCommentDeBtn.bind(oController),
 												text: "{i18n>LABEL_56014}" // 삭제
+											}),
+											new sap.m.Button({
+												press: oController.onCommentCanBtn.bind(oController),
+												visible: false,
+												text: "{i18n>LABEL_56019}" // 취소
 											})
 										]
 									})
@@ -311,27 +329,248 @@
 										visible: false
 									}),
 									new sap.m.TextArea({ 
-										width: "710px",
+										width: "775px",
 										value: e.Detail,
 										rows: 1,
 										editable: false
+									})
+								]
+							}),
+							new sap.m.VBox({
+								fitContainer: true,
+								visible: false,
+								items: []
+							})
+							.addStyleClass("ml-20px")
+						]
+					})
+				);
+				oController.setSubComments(e, i);
+			});
+		},
+
+		setSubComments: function(oEvent, index) { // SubComment Setting
+			var oController = $.app.getController();
+			var vSubCommentData = oController.RegistModel.getProperty("/SubCommentData");
+			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
+
+			if(Common.checkNull(!index) || index === 0){ // 저장된 대댓글 Setting
+				vSubCommentData.forEach(function(e) {
+					if(e.Seqnr2 === oEvent.Seqnr2) {
+						oCommentBox.getItems()[index].getItems()[2].setVisible(true);
+						oCommentBox.getItems()[index].getItems()[2].addItem(
+							new sap.m.VBox({
+								fitContainer: true,
+								items: [
+									new sap.m.HBox({
+										fitContainer: true,
+										items: [
+											new sap.m.HBox({
+												justifyContent: sap.m.FlexJustifyContent.Start,
+												fitContainer: true,
+												visible: false,
+												items: [
+													ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
+													new sap.m.Input({
+														width: "150px",
+														value: e.Pword,
+														type: sap.m.InputType.Password
+													})
+												]
+											}),
+											new sap.m.HBox({
+												justifyContent: sap.m.FlexJustifyContent.End,
+												alignContent: sap.m.FlexAlignContent.End,
+												alignItems: sap.m.FlexAlignItems.End,
+												fitContainer: true,
+												width: "100%",
+												items: [
+													new sap.m.Text({ 
+														text: Common.DateFormatter(e.Adatl)
+													}),
+													new sap.m.Button({
+														press: oController.onSubCommentReBtn.bind(oController),
+														text: "{i18n>LABEL_56013}" // 수정
+													}),
+													new sap.m.Button({
+														press: oController.onSubCommentSaBtn.bind(oController),
+														visible: false,
+														text: "{i18n>LABEL_56016}" // 저장
+													}),
+													new sap.m.Button({
+														press: oController.onSubCommentDeBtn.bind(oController),
+														text: "{i18n>LABEL_56014}" // 삭제
+													}),
+													new sap.m.Button({
+														press: oController.onSubCommentCanBtn.bind(oController),
+														visible: false,
+														text: "{i18n>LABEL_56019}" // 취소
+													})
+												]
+											})
+											.addStyleClass("button-group")
+										]
+									}),
+									new sap.m.HBox({
+										fitContainer: true,
+										items: [
+											new sap.m.TextArea({ 
+												width: "755px",
+												value: e.Detail,
+												rows: 1,
+												editable: false
+											})
+										]
+									})
+								]
+							})
+						);
+					}
+				});
+			}else { // 신규 대댓글
+				oController.g_ReCommBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[1].getItems()[1];
+				oEvent.getSource().oParent.oParent.oParent.getItems()[2].setVisible(true);
+				oEvent.getSource().oParent.oParent.oParent.getItems()[2].addItem(
+					new sap.m.VBox({
+						fitContainer: true,
+						items: [
+							new sap.m.HBox({
+								fitContainer: true,
+								items: [
+									new sap.m.HBox({
+										justifyContent: sap.m.FlexJustifyContent.Start,
+										fitContainer: true,
+										items: [
+											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
+											new sap.m.Input({
+												width: "150px",
+												type: sap.m.InputType.Password
+											})
+										]
+									}),
+									new sap.m.HBox({
+										justifyContent: sap.m.FlexJustifyContent.End,
+										alignContent: sap.m.FlexAlignContent.End,
+										alignItems: sap.m.FlexAlignItems.End,
+										fitContainer: true,
+										width: "100%",
+										items: [
+											new sap.m.Text({
+												text: ""
+											}),
+											new sap.m.Button({
+												press: oController.onSubCommentReBtn.bind(oController),
+												visible: false,
+												text: "{i18n>LABEL_56013}" // 수정
+											}),
+											new sap.m.Button({
+												press: oController.onSubCommentSaBtn.bind(oController),
+												text: "{i18n>LABEL_56016}" // 저장
+											}),
+											new sap.m.Button({
+												press: oController.onSubCommentDeBtn.bind(oController),
+												visible: false,
+												text: "{i18n>LABEL_56014}" // 삭제
+											}),
+											new sap.m.Button({
+												press: oController.onSubCommentCanBtn.bind(oController),
+												visible: true,
+												text: "{i18n>LABEL_56019}" // 취소
+											})
+										]
+									})
+									.addStyleClass("button-group")
+								]
+							}),
+							new sap.m.HBox({
+								fitContainer: true,
+								items: [
+									new sap.m.TextArea({ 
+										width: "755px",
+										rows: 1
 									})
 								]
 							})
 						]
 					})
 				);
+			}
+		},
+
+		onSubCommentCanBtn: function(oEvent) { // 대댓글 취소
+			oEvent.getSource().oParent.oParent.oParent.destroyItems();
+		},
+
+		onCommentSubBtn: function(oEvent) { // 대댓글
+			this.setSubComments(oEvent);
+		},
+
+		onSubCommentReBtn: function(oEvent) { // 수정
+			// oEvent.getSource().oParent.oParent.oParent.getItems()[0].
+		},
+
+		onSubCommentSaBtn: function(oEvent) { // 저장
+			var oController = this;
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vBukrs = oController.getUserGubun();
+			var oRowData = this.RegistModel.getProperty("/FormData");
+			var oCommData = {};
+
+			this.g_ReDetail = oEvent.getSource().oParent.oParent.oParent.getItems()[1].getItems()[0];
+			this.g_RePwordInput = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[0].getItems()[1];
+			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.oParent.oParent.getItems()[1].getItems()[1];
+
+			// 비밀번호
+			if(Common.checkNull(this.g_RePwordInput.getValue()) || 6 > this.g_RePwordInput.getValue().length || this.g_RePwordInput.getValue().length > 10){
+				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
+				return ;
+			}
+
+			// 대댓글
+			if(Common.checkNull(this.g_ReDetail.getValue())){
+				MessageBox.error(oController.getBundleText("MSG_56010"), { title: oController.getBundleText("LABEL_00149")});
+				return ;
+			}
+
+			oCommData.Sdate = oRowData.Sdate;
+			oCommData.Seqnr = oRowData.Seqnr;
+			oCommData.Detail = this.g_ReDetail.getValue();
+			oCommData.Pword = this.g_RePwordInput.getValue();
+			oCommData.Seqnr2 = this.g_HiSeqnr2.getText();
+
+			var sendObject = {};
+			// Header
+			sendObject.IConType = "2";
+			sendObject.IBukrs = vBukrs;
+			// Navigation property
+			sendObject.TableIn4 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn4", oCommData)];
+			
+			oModel.create("/SuggestionBoxSet", sendObject, {
+				success: function(oData, oResponse) {
+					Common.log(oData);
+					oController.CommentModel.setData({Data: {}});
+					oController.onTableSearch();
+					oController.getDetailData(oRowData.Sdate, oRowData.Seqnr);
+					BusyIndicator.hide();
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+					BusyIndicator.hide();
+				}
 			});
 		},
 
-		onCommentSubBtn: function() {
+		onSubCommentDeBtn: function(oEvent) { // 삭제
 
 		},
-
+		
 		onCommentSaBtn: function() { // 댓글저장
 			var oController = this;
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-            var vBukrs = this.getUserGubun();
+			var vBukrs = oController.getUserGubun();
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			var oCommData = {};
 
@@ -373,15 +612,21 @@
 			});
 		},
 		
+		onCommentCanBtn: function(oEvent) { // 댓글 취소
+			oEvent.getSource().oParent.oParent.oParent.destroyItems();
+		},
+
 		onCommentReBtn: function(oEvent) { // 댓글 수정
-			var oPWord = oEvent.getSource().oParent.oParent.oParent.getItems()[1].mAggregations.items[0];
+			var oPWord = oEvent.getSource().oParent.oParent.oParent.getItems()[1].getItems()[0];
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
-			this.g_Input = oEvent.getSource().oParent.oParent.oParent.getItems()[1].mAggregations.items[2];
-			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.getItems()[1].mAggregations.items[1];
-			this.g_ReBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].mAggregations.items[1].mAggregations.items[2];
-			this.g_SaveBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].mAggregations.items[1].mAggregations.items[3];
-			this.g_HiBox = oEvent.getSource().oParent.oParent.oParent.getItems()[0].mAggregations.items[0];
-			this.g_HiInputPword = oEvent.getSource().oParent.oParent.oParent.getItems()[0].mAggregations.items[0].mAggregations.items[1];
+			this.g_Input = oEvent.getSource().oParent.oParent.oParent.getItems()[1].getItems()[2];
+			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.getItems()[1].getItems()[1];
+			this.g_ReCommBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[1].getItems()[1];
+			this.g_ReBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[1].getItems()[2];
+			this.g_SaveBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[1].getItems()[3];
+			this.g_CanBtn = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[1].getItems()[5];
+			this.g_HiBox = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[0];
+			this.g_HiInputPword = oEvent.getSource().oParent.oParent.oParent.getItems()[0].getItems()[0].getItems()[1];
 			this.g_HiPword = oPWord;
 			this.g_CGubun = "R";
 			
@@ -400,8 +645,8 @@
 		onCommentDeBtn: function(oEvent) {
 			var oController = this;
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
-			this.g_HiPword = oEvent.getSource().oParent.oParent.oParent.getItems()[1].mAggregations.items[0];
-			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.getItems()[1].mAggregations.items[1];
+			this.g_HiPword = oEvent.getSource().oParent.oParent.oParent.getItems()[1].getItems()[0];
+			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.getItems()[1].getItems()[1];
 			this.g_CGubun = "D";
 
 			if (!this._CommentModel) {
@@ -503,7 +748,9 @@
 			if(this.g_CGubun === "R"){
 				this.g_Input.setEditable(true);
 				this.g_ReBtn.setVisible(false);
+				this.g_ReCommBtn.setVisible(false);
 				this.g_SaveBtn.setVisible(true);
+				this.g_CanBtn.setVisible(true);
 				this.g_HiBox.setVisible(true);
 			}else {
 				this.onCommentDelete();

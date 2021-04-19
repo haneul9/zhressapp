@@ -733,35 +733,36 @@ fragment.COMMON_ATTACH_FILES = {
 		if (common.Common.isEmptyArray(vFiles)) return;
 
 		vFiles.forEach(function (elem,a) {
-			if(elem[a].New === true) {
 				vFiles[a].forEach(function (elem2,b) {
-					oModel.refreshSecurityToken();
-					var oRequest = oModel._createRequest();
-					var oHeaders = {
-						"x-csrf-token": oRequest.headers["x-csrf-token"],
-						"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
-					};
-					if(vPages[a]=="001"||vPages[a]=="002"){
-						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
-					}else{
-						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
+					if(elem2.New === true) {
+						oModel.refreshSecurityToken();
+						var oRequest = oModel._createRequest();
+						var oHeaders = {
+							"x-csrf-token": oRequest.headers["x-csrf-token"],
+							"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
+						};
+						if(vPages[a]=="001"||vPages[a]=="002"){
+							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
+						}else{
+							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
+						}
+						common.Common.log(oHeaders.slug);
+						
+						jQuery.ajax({
+							type: "POST",
+							async: false,
+							url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
+							headers: oHeaders,
+							cache: false,
+							contentType: elem2.type,
+							processData: false,
+							data: elem2,
+							success: _handleSuccess.bind(this),
+							error: _handleError.bind(this)
+						});
 					}
-					common.Common.log(oHeaders.slug);
-					
-					jQuery.ajax({
-						type: "POST",
-						async: false,
-						url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
-						headers: oHeaders,
-						cache: false,
-						contentType: elem2.type,
-						processData: false,
-						data: elem2,
-						success: _handleSuccess.bind(this),
-						error: _handleError.bind(this)
-					});
 				});
-			}
+
 		}.bind(this));
 
 		return vAppnm;

@@ -289,7 +289,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.m.Input({maxLength: 100,width:"100%",value:"{Notes}",editable:{path:"Opener",formatter:function(fVal){
+				content:new sap.m.Input({maxLength: 100,width:"100%",value:"{Emrgn}",editable:{path:"Opener",formatter:function(fVal){
 					return fVal=="X"?true:false;
 				}}})
 			});

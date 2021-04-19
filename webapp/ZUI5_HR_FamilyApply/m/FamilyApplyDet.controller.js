@@ -96,6 +96,7 @@ sap.ui.define([
 				Fasar:"",
 				Lnmhg:"",
 				Fnmhg:"",
+				Emrgn:"",
 				Regno:"",
 				Zzclass:"1",
 				Appnm:"",
