@@ -181,7 +181,7 @@ fragment.COMMON_ATTACH_FILES = {
 				true,
 				{ 
 					Editable: false, 
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip"], 
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif"], 
 					InfoMessage: "", 
 					Label:oController.getBundleText("LABEL_00135"),
 					Appnm: "",
