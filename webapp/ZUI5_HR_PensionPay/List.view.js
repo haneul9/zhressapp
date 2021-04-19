@@ -1,4 +1,4 @@
-sap.ui.define([], function () {
+sap.ui.define(["common/PageHelper"], function (PageHelper) {
     "use strict";
 
     sap.ui.jsview("ZUI5_HR_PensionPay.List", {
@@ -11,7 +11,7 @@ sap.ui.define([], function () {
             $.app.setModel("ZHR_BENEFIT_SRV");
             $.app.setModel("ZHR_COMMON_SRV");
 
-            var oPage = new common.PageHelper({
+            var oPage = new PageHelper({
                 idPrefix: oController.PAGEID,
                 contentItems: [new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Content", { content: [] })]
             });
