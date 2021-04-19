@@ -282,14 +282,14 @@ fragment.COMMON_ATTACH_FILES = {
 				if (data && data.results.length) {
 					data.results.forEach(function (elem) {
 						if(vUse){
-							if(vPage=="001"||vPage=="002"){
+							if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"){
 								if(vPage==elem.Cntnm){
 									elem.New = false;
 									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 									Datas.Data.push(elem);
 								}
 							}else{
-								if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+								if(elem.Cntnm =="009"){
 									elem.New = false;
 									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 									Datas.Data.push(elem);
