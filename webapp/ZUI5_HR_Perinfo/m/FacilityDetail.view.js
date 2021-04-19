@@ -1,10 +1,9 @@
 sap.ui.define(
     [
-        "common/Common", //
-        "common/PageHelper",
+        "common/PageHelper",    //
         "common/SearchUserMobile"
     ],
-    function (Common, PageHelper, SearchUserMobile) {
+    function (PageHelper, SearchUserMobile) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix());

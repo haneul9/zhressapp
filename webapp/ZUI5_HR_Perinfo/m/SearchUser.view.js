@@ -1,9 +1,8 @@
 sap.ui.define(
     [
-        "common/Common", //
-        "common/PageHelper"
+        "common/PageHelper" //
     ],
-    function (Common, PageHelper) {
+    function (PageHelper) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "SearchUser"].join($.app.getDeviceSuffix());
