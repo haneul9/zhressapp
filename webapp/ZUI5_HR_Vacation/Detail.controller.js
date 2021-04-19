@@ -57,6 +57,7 @@ sap.ui.define([
 				oData.Data.Subty = oEvent.data.Subty;
 				oData.Data.Pernr = oEvent.data.Pernr;
 				oData.Data.Delapp = oEvent.data.Delapp;
+				oData.Data.Sprps = oEvent.data.Sprps;
 			}
 			
 			oController._DetailJSonModel.setData(oData);
@@ -1169,6 +1170,7 @@ sap.ui.define([
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
 					
 					// 신청구분값에 따라 구분값 변경
+					// 신규신청 3, 삭제 4, 삭제신청 5
 					if(oData.Flag == "D" && Flag == "C"){
 						createData.IConType = "5";
 					} else if(Flag == "C"){
