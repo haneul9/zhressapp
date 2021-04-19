@@ -843,7 +843,7 @@ sap.ui.define([
             },
 
 		displayMultiOrgSearchDialog: function(oEvent) {
-			return $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent);
+			return OrgOfIndividualHandler.openOrgSearchDialog(oEvent);
 		},
 
 		onPressAddRow: function(oEvent) { // 참석자 추가
