@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow-restricted-names */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-undef */
 /* global common:true moment:true Promise:true */
@@ -587,7 +588,7 @@ common.Common = {
             var args = [].slice.call(arguments),
                 modelName = args[0],
                 type = args[1];
-            entityName = args[2],
+            entityName = args[2];
             originalObj = args[3];
             $.map(sap.ui.getCore().getModel("_MetadataModel_").getProperty("/" + modelName)[type][entityName], function (prop, name) {
                 var v = originalObj[name];
@@ -948,17 +949,20 @@ common.Common = {
                     aMessages = [aMessages];
                 }
                 //<br/>태그 줄바꿈 추가
-                var vTmp=null;
-                var vArr=new Array();
-                aMessages.forEach(function(e){
-                    e.search("<br/>")!=-1?vTmp=e.split("<br/>"):null;                    
+                var vTmp = null;
+                var vArr = [];
+                
+                aMessages.forEach(function(el){
+                    if(el.search("<br/>") != -1) vTmp = el.split("<br/>");
                 });
+                
                 if(vTmp!=null){
                     vTmp.forEach(function(e){
                         vArr.push(e);
                     });
-                    vArr.length!=0?aMessages=vArr:null;                
+                    if(vArr.length != 0) aMessages = vArr;
                 }
+                
                 this._oPopover.getModel().setData({
                     messages: aMessages.map(function (elem) {
                         return {
@@ -998,6 +1002,6 @@ common.Common = {
     onChangeMoneyInput : function(oEvent){
 		inputValue = oEvent.getSource().getValue();
 		oEvent.getSource().setValue(common.Common.numberWithCommas(inputValue.replace(/[^\d]/g, '')));
-	},
+	}
  
 };
