@@ -240,7 +240,7 @@ sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
         oCell=new c.layout.MatrixLayoutCell({
             hAlign:"Begin",
             colSpan:5,
-            content:new sap.m.Input({maxLength: 100,width:"894px",value:"{Emrgn}",editable:{path:"Opener",formatter:function(fVal){
+            content:new sap.m.Input({maxLength: 100,width:"894px",value:"{Emetl}",editable:{path:"Opener",formatter:function(fVal){
                 return fVal=="X"?true:false;
             }}})
         }).addStyleClass("DataCell");
