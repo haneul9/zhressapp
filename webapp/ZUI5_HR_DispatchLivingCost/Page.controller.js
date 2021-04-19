@@ -703,7 +703,7 @@ sap.ui.define([
 
 					// 첨부파일 저장
 
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, "005");
+					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["005"]);
 					oRowData.Pernr = vPernr;
 
 					var sendObject = {};
@@ -756,7 +756,7 @@ sap.ui.define([
 
 					// 첨부파일 저장
 					if(oController.ApplyModel.getProperty("/EarlyApp") === "X"){
-						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, "005");
+						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["005"]);
 					}else {
 						var uFiles = [];
 						for(var i=1; i<4; i++)	uFiles.push("00" + i);

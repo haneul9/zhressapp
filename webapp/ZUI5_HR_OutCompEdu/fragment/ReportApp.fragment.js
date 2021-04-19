@@ -427,7 +427,7 @@ sap.ui.define([
 							.addStyleClass("search-field-group mr-30px"),
 							new sap.m.HBox({
                                 items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_40042}", "150px", "Right", true ), // 부가세
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40042}", "150px", "Right" ), // 부가세
 									new sap.m.Input({
 										textAlign: "End",
 										width: "250px",

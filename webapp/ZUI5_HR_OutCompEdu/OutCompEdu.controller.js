@@ -167,14 +167,12 @@ sap.ui.define([
                 vConvertYear = "",
                 aYears = [];
 
-			aYears.push({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
-
             Common.makeNumbersArray({length: 11}).forEach(function(idx) {
                 vConvertYear = String(vZyear - idx);
                 aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
 			});
 
-			oController.SearchModel.setProperty("/Data/Zyear1", "ALL");
+			oController.SearchModel.setProperty("/Data/Zyear1", vZyear);
 			oController.SearchModel.setProperty("/Zyears1", aYears);
         },
 
@@ -362,6 +360,7 @@ sap.ui.define([
 			}
 
 			this.ApplyModel.setProperty("/FormData/Planx", this.getBundleText("MSG_40004"));
+			this.ApplyModel.setProperty("/FormData/Natio", "1");
 			this.setTimeCombo1(this);
 			this.setTimeCombo2(this);
 			this.getCodeList();
