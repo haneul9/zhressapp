@@ -1,4 +1,5 @@
-﻿sap.ui.define([
+﻿/* eslint-disable no-undef */
+sap.ui.define([
     "../../common/Common",
 	"../../common/HoverIcon",
 	"sap/m/InputBase",
