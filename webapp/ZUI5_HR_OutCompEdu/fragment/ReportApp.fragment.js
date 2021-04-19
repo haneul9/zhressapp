@@ -111,56 +111,6 @@ sap.ui.define([
 				}
             }, oNomalCombo);
 
-            var oTimeCombo = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo", { // 학습시간 (시)
-				width: "70px",
-				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
-				items: {
-					path: "/TimeCombo",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{hTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo);
-
-            var oTimeCombo2 = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo2", { // 학습시간 (분)
-				width: "70px",
-				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
-				items: {
-					path: "/TimeCombo2",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{mTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo2.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo2.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo2);
-
 			var oAttTable = new sap.ui.table.Table(oController.PAGEID + "_AttTable", {
 				selectionMode: sap.ui.table.SelectionMode.None,
 				enableColumnReordering: false,
@@ -326,17 +276,8 @@ sap.ui.define([
 												return !v1 || v1 === "AA";
 											}
 										},
-										value: {
-											path: "Trtim",
-											formatter: function(v) {
-												if(v) return v;//Common.numberWithCommas(v);
-												else return "0";
-											}
-										},
+										value: "{Trtim}"
 									})
-									// oTimeCombo,
-									// new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
-									// oTimeCombo2
 								]
 							})
 							.addStyleClass("search-field-group")
