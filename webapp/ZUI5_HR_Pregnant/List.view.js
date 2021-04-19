@@ -1,8 +1,9 @@
 sap.ui.define(
     [
-        "common/makeTable" //
+		"common/makeTable", //
+		"common/PageHelper"
     ],
-    function (MakeTable) {
+    function (MakeTable, PageHelper) {
         "use strict";
 
         sap.ui.jsview("ZUI5_HR_Pregnant.List", {
@@ -95,7 +96,7 @@ sap.ui.define(
                     content: []
                 }).addStyleClass("tab-group mt-16px");
 
-                var oPage = new common.PageHelper({
+                var oPage = new PageHelper({
                     idPrefix: oController.PAGEID,
                     contentItems: [oIcontabbar]
                 });
