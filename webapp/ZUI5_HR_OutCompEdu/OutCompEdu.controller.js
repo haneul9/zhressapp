@@ -225,10 +225,13 @@ sap.ui.define([
 
 		getAttTime: function(oEvent) {
 			var inputValue = oEvent.getParameter('value').trim(),
-				convertValue = inputValue.replace(/[^\d]/g, '');
+				convertValue = inputValue.replace(/[^\d]/g, ''),
+				vTime2 = convertValue.slice(-2),
+				vTime1 = convertValue.split(vTime2),
+				vTime = vTime1 + "." + vTime2;
 
-			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(convertValue) ? "0" : convertValue);
-			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : convertValue);	
+			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "0" : vTime);
+			oEvent.getSource().setValue(Common.checkNull(vTime) ? "0" : vTime);	
 		},
 
 		getMoneyComma1: function(oEvent) {
