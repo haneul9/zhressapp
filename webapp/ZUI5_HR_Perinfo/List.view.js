@@ -1,9 +1,3 @@
-/* eslint-disable no-undef */
-$.sap.require("common.Common");
-$.sap.require("common.Formatter");
-$.sap.require("common.makeTable");
-// $.sap.require("common.PageHelper");
-
 sap.ui.define([], function () {
     "use strict";
 
@@ -193,7 +187,7 @@ sap.ui.define([], function () {
                 content: []
             });
 
-            if (gAuth == "M") {
+            if ($.app.getAuth() === "M") {
                 oScrollContainer = new sap.m.ScrollContainer({
                     vertical: true,
                     content: [sap.ui.jsfragment("fragment.OrgOfIndividualForEP", oController)]
@@ -229,7 +223,6 @@ sap.ui.define([], function () {
                             }).addStyleClass("app-title-container")
                         ]
                     }).addStyleClass("app-content-container-wide"),
-
                     oSplitContainer
                 ]
             }).addStyleClass("app-content");
