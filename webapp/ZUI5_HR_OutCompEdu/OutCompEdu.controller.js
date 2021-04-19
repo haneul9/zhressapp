@@ -863,7 +863,7 @@ sap.ui.define([
 					var oAtt = oController.AttModel.getProperty("/Data");
 					var vLength = 5;
 
-					if(oAtt.some(function(e) {return e === o})) {
+					if(oAtt.some(function(e) {return e.Objid === o.Objid})) {
 						MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
 						return ;
 					}
