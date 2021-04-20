@@ -571,7 +571,11 @@ sap.ui.define(
                 });
                 
                 if(impossibleTargets.length) {
-                    MessageToast.show(this.oController.getBundleText("MSG_31012").interpolate(impossibleTargets.join(",")), {
+                    impossibleTargets = impossibleTargets.map(function(name) {
+                        return this.oController.getBundleText("MSG_31012").interpolate(name);
+                    }.bind(this));
+
+                    MessageToast.show(impossibleTargets.join("\n")), {
                         // ${name}는 신청 대상이 아닙니다.
                         duration: 2000,
                         my: sap.ui.core.Popup.Dock.CenterCenter,
