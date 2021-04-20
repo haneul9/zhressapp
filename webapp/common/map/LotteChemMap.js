@@ -418,25 +418,27 @@ common.map.LotteChemMap.prototype.searchLocal = function(o) {
 			if (data.display) {
 				if (o.target === this.PLACE_TARGET.CHOICE) {
 					var place = data.items[0],
+					title = typeof String.escapeHtml === 'function' ? String.escapeHtml(place.title) : (place.title || ''),
 					coord = naver.maps.TransCoord.fromTM128ToLatLng(new naver.maps.Point(Number(place.mapx), Number(place.mapy)));
 
 					this.oMap.panTo(coord);
 					this.setMarker({
-						title: typeof String.escapeHtml === 'function' ? String.escapeHtml(place.title) : (place.title || ''),
+						title: title,
 						address: {
 							jibunAddress: place.address,
-							roadAddress: place.roadAddress + ' ' + place.title
+							roadAddress: place.roadAddress + ' ' + title
 						},
 						target: o.target,
 						coord: coord
 					});
 				} else {
 					o.callback($.map(data.items, function(place) {
+						var title = typeof String.escapeHtml === 'function' ? String.escapeHtml(place.title) : (place.title || '');
 						return {
-							title: typeof String.escapeHtml === 'function' ? String.escapeHtml(place.title) : (place.title || ''),
+							title: title,
 							address: {
 								jibunAddress: place.address,
-								roadAddress: place.roadAddress + ' ' + place.title
+								roadAddress: place.roadAddress + ' ' + title
 							},
 							target: o.target,
 							coord: naver.maps.TransCoord.fromTM128ToLatLng(new naver.maps.Point(Number(place.mapx), Number(place.mapy)))
@@ -540,8 +542,7 @@ common.map.LotteChemMap.prototype.initPath = function(initPosition) {
 	this.oPathPolyline2.setMap();
 
 	if (initPosition) {
-		this.oMap.setZoom(this.getDefaultZoom());
-		this.oMap.panTo(this.getCoord());
+		this.panTo(this.getCoord());
 	}
 
 	return this;
@@ -574,6 +575,7 @@ common.map.LotteChemMap.prototype.getMarkerPosition = function(target) {
 
 common.map.LotteChemMap.prototype.panTo = function(coord) {
 
+	this.oMap.setZoom(this.getDefaultZoom());
 	this.oMap.panTo(coord);
 
 	return this;

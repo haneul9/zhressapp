@@ -153,14 +153,6 @@ var Handler = {
 					functionProvider: this
 				});
 				this.LccMap.get().setOptions("coord", this.LccMap.getCoord());
-
-				this.LccMap.searchLocal({
-					placeName: this.oModel.getProperty("/LccMap/Departure"),
-					target: this.LccMap.getDepartureId(),
-					callback: function(placeList) {
-						this.oModel.setProperty("/LccMap/PlaceList", placeList);
-					}.bind(this)
-				});
 			}.bind(this), 500);
 
 			$(document)
@@ -283,24 +275,32 @@ var Handler = {
 	// 지역 검색
 	searchPlace: function(oEvent) {
 
-		var oEventSource = oEvent.getSource(),
-		target = oEvent.getParameter("id").replace(/LccMap/, "").toLowerCase(),
-		dialogTitle = this.oController.getBundleText(target === this.getDepartureId() ? "LABEL_19633" : "LABEL_19634"); // 출발지 : 도착지
+		var keyword = oEvent.getParameter("value"),
+		target = oEvent.getParameter("id").replace(/LccMap/, "").toLowerCase();
 
 		setTimeout(function() {
-			var callback = function(o) {
-				setTimeout(function() {
-					oEventSource.setValue(o.title);
-					this.LccMap.panTo(o.coord);
-					this.LccMap.setMarker({
-						target: target,
-						coord: o.coord,
-						address: o.address
-					});
-				}.bind(this), 0);
-			}.bind(this);
+			this.LccMap.searchLocal({
+				keyword: keyword,
+				target: target,
+				callback: function(PlaceList) {
+					this.oModel.setProperty("/LccMap/PlaceList", PlaceList);
+				}.bind(this)
+			});
+		}.bind(this), 0);
+	},
 
-			DialogHandler.open(PlaceSearchDialogHandler.get(this.oController, dialogTitle, this.LccMap.searchLocal.bind(this.LccMap), callback));
+	selectPlace: function(oEvent) {
+
+		var o = oEvent.getParameter("listItem").getBindingContext().getProperty();
+		setTimeout(function() {
+			this.LccMap
+				.panTo(o.coord)
+				.setMarker({
+					target: o.target,
+					coord: o.coord,
+					address: o.address
+				});
+			$.app.byId("LccMapPlaceList").removeSelections(true);
 		}.bind(this), 0);
 	},
 
