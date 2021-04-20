@@ -231,8 +231,7 @@ sap.ui.define([
 							new sap.m.Link({
 								target: "_blank",
 								text: "{UsridLong}",
-								press: CondoHandler.openUri.bind(CondoHandler)
-								// href: "{UsridLong}"
+								href: "{UsridLong}"
 							})
 						],
 						visible: {

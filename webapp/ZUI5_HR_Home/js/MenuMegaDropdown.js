@@ -270,8 +270,8 @@ goToLink: function(menuId, url) {
 		form = $('<form id="menu-form" method="GET" target="content-iframe"><input type="hidden" name="mid" /></form>').appendTo('body');
 	}
 
-	if (!window._basis.isPRD()) {
-		var pernr = window._basis.parameter('pernr');
+	if (!this._gateway.isPRD()) {
+		var pernr = this._gateway.parameter('pernr');
 		if (pernr) {
 			if (!form.find('input[name="pernr"]').val(pernr).length) {
 				$('<input type="hidden" name="pernr" />').val(pernr).appendTo(form);
