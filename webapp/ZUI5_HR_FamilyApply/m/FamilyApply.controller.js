@@ -82,7 +82,6 @@ sap.ui.define([
 				Apdat:null,
 				Status:"",
 				Reqrs:"",
-				Emetl:"",
 				Famsa:"",
 				Kdsvh:"",
 				Emetl:"",
