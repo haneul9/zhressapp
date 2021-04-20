@@ -44,9 +44,15 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 		new sap.m.Button({
 						 	 		text : oBundleText.getText("LABEL_00152"), // 신청
 						 	 		visible : {
-						 	 			path : "Status1",
-						 	 			formatter : function(fVal){
-						 	 				return (fVal == "" || fVal == "AA") ? true : false;
+						 	 			parts : [{path : "Status1"}, {path : "Flag"}, {path : "Delapp"}, {path : "ListStatus"}],
+						 	 			formatter : function(fVal1, fVal2, fVal3, fVal4){
+						 	 				if(fVal2 && fVal2 == "D"){
+						 	 					return true;
+						 	 				} else if(fVal3 != ""){
+						 	 					return (fVal4 == "" || fVal4 == "AA") ? true : false;	
+						 	 				} else {
+						 	 					return (fVal1 == "" || fVal1 == "AA") ? true : false;
+						 	 				}
 						 	 			}
 						 	 		},
 						 	 		press : function(oEvent){
@@ -57,8 +63,13 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 		text : oBundleText.getText("LABEL_00103"), // 삭제
 						 	 		visible : {
 						 	 			path : "Status1",
-						 	 			formatter : function(fVal){
-						 	 				return fVal == "AA" ? true : false;
+						 	 			parts : [{path : "Status1"}, {path : "Delapp"}, {path : "ListStatus"}],
+						 	 			formatter : function(fVal, fVal2, fVal3){
+						 	 				if(fVal2 && fVal2 != ""){
+						 	 					return fVal3 == "AA" ? true : false;
+						 	 				} else {
+						 	 					return fVal == "AA" ? true : false;
+						 	 				}
 						 	 			}
 						 	 		},
 						 	 		press : function(oEvent){
@@ -555,16 +566,28 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 					  }),
 					  new sap.m.FormattedText({
 					  	  htmlText : {
-					  	  		parts : [{path : "Status1"}],
-					  	  		formatter : function(fVal1){
-					  	  			if(fVal1 == "" || fVal1 == "AA"){
-					  	  						// 근태신청 신규등록
-					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
+					  	  		parts : [{path : "Status1"}, {path : "Delapp"}, {path : "Flag"}],
+					  	  		formatter : function(fVal1, fVal2, fVal3){
+					  	  			if(fVal3 && fVal3 == "D"){
+			  	  						// 근태 삭제신청
+					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48064") + "</span>";
 					  	  			} else {
-					  	  						// 근태 신규신청 조회
-					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
-					  	  					   "<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" +
-					  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
+					  	  				if(fVal1 == "" || fVal1 == "AA"){
+						  	  						// 근태신청 신규등록
+						  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
+						  	  			} else {
+						  	  				if(fVal2 == ""){
+				  	  							// 근태 신규신청 조회
+							  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
+							  	  					   "<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" +
+							  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
+						  	  				} else {
+						  	  					// 근태 삭제신청 조회
+							  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
+							  	  					   "<span class='app-title color-red'> " + oBundleText.getText("LABEL_48046") + "</span>" +
+							  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
+						  	  				}
+						  	  			}
 					  	  			}
 					  	  		}
 					  	  }

@@ -51,7 +51,7 @@ sap.ui.define([
                                 visible: {
                                     path: "/Data/EClose",
                                     formatter: function(v) {
-                                        return v !== "X"
+                                        return v !== "X";
                                     }
                                 }
 							}).addStyleClass("button-light mr-10px"),
@@ -61,7 +61,7 @@ sap.ui.define([
                                 visible: {
                                     path: "/Data/EClose",
                                     formatter: function(v) {
-                                        return v !== "X"
+                                        return v !== "X";
                                     }
                                 }
 							}).addStyleClass("button-light")
@@ -69,7 +69,7 @@ sap.ui.define([
 					})
 				]
             })
-            .setModel(oController.TableModel)
+            .setModel(oController.LogModel)
             .addStyleClass("mt-20px");
 
 			var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {

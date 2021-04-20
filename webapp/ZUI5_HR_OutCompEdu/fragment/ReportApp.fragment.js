@@ -111,56 +111,6 @@ sap.ui.define([
 				}
             }, oNomalCombo);
 
-            var oTimeCombo = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo", { // 학습시간 (시)
-				width: "70px",
-				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
-				items: {
-					path: "/TimeCombo",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{hTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo);
-
-            var oTimeCombo2 = new sap.m.ComboBox(oController.PAGEID + "_TimeCombo2", { // 학습시간 (분)
-				width: "70px",
-				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
-					}
-				},
-				items: {
-					path: "/TimeCombo2",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{mTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo2.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo2.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo2);
-
 			var oAttTable = new sap.ui.table.Table(oController.PAGEID + "_AttTable", {
 				selectionMode: sap.ui.table.SelectionMode.None,
 				enableColumnReordering: false,
@@ -315,9 +265,19 @@ sap.ui.define([
 								width: "100%",
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40036}", "150px", "Right", true), // 학습시간
-									oTimeCombo,
-									new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
-									oTimeCombo2
+									new sap.m.Input({
+										textAlign: "Begin",
+										width: "250px",
+										maxLength: 5,
+										liveChange: oController.getAttTime.bind(oController),
+										editable: {
+											path: "Status1",
+											formatter: function(v1) {
+												return !v1 || v1 === "AA";
+											}
+										},
+										value: "{Trtim}"
+									})
 								]
 							})
 							.addStyleClass("search-field-group")
@@ -427,7 +387,7 @@ sap.ui.define([
 							.addStyleClass("search-field-group mr-30px"),
 							new sap.m.HBox({
                                 items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_40042}", "150px", "Right", true ), // 부가세
+									ViewTemplates.getLabel("header", "{i18n>LABEL_40042}", "150px", "Right" ), // 부가세
 									new sap.m.Input({
 										textAlign: "End",
 										width: "250px",

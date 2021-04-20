@@ -85,7 +85,7 @@ sap.ui.define([
 				Emetl:"",
 				Famsa:"",
 				Kdsvh:"",
-				Emrgn:"",
+				Emetl:"",
 				Fanat:"KR",
 				Fgbld:"KR",
 				Fasar:"",

@@ -104,7 +104,7 @@ sap.ui.define(
                     oPath = "/PerinfoBasicSet";
                     createData.IPernr = oData.Pernr;
                     createData.IConType = "1";
-                    createData.IDatum = "/Date(" + common.Common.getTime(new Date()) + ")/";
+                    createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
 
                     var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
                     oModel.create(
@@ -133,9 +133,9 @@ sap.ui.define(
                         }
                     );
                     vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
-                    vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Zzbdate))) : null;
-                    vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Dat01))) : null;
-                    vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(common.Common.setTime(vData.Data.Dat02))) : null;
+                    vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
+                    vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
+                    vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat02))) : null;
                     oController._BasicJSonModel.setProperty("/Data", vData.Data);
                     oController._BusyDialog.close();
 
@@ -163,7 +163,7 @@ sap.ui.define(
                     oPath = "/PerinfoAddressSet";
                     createData.IPernr = oData.Pernr;
                     createData.IConType = "1";
-                    createData.IDatum = "/Date(" + common.Common.getTime(new Date()) + ")/";
+                    createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 
                     var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
@@ -222,7 +222,7 @@ sap.ui.define(
                     oPath = "/PerinfoCarmanagerSet";
                     createData.IPernr = oData.Pernr;
                     createData.IConType = "1";
-                    createData.IDatum = "/Date(" + common.Common.getTime(new Date()) + ")/";
+                    createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 
                     var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
@@ -291,7 +291,7 @@ sap.ui.define(
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
-                                        data.TableIn.results[i].GetDate = data.TableIn.results[i].GetDate ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].GetDate))) : null;
+                                        data.TableIn.results[i].GetDate = data.TableIn.results[i].GetDate ? dateFormat.format(new Date(Common.setTime(data.TableIn.results[i].GetDate))) : null;
                                         vData.Data.push(data.TableIn.results[i]);
                                     }
                                 }
@@ -351,8 +351,8 @@ sap.ui.define(
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
-                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
+                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(Common.setTime(data.TableIn.results[i].Endda))) : null;
                                         data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
                                         vData.Data.push(data.TableIn.results[i]);
                                     }
@@ -412,7 +412,7 @@ sap.ui.define(
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
-                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(Common.setTime(data.TableIn.results[i].Begda))) : null;
                                         vData.Data.push(data.TableIn.results[i]);
                                     }
                                 }
@@ -473,8 +473,8 @@ sap.ui.define(
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
-                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Begda))) : null;
-                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.TableIn.results[i].Endda))) : null;
+                                        data.TableIn.results[i].Begda = data.TableIn.results[i].Begda ? dateFormat.format(new Date(Common.setTime(data.TableIn.results[i].Begda))) : null;
+                                        data.TableIn.results[i].Endda = data.TableIn.results[i].Endda ? dateFormat.format(new Date(Common.setTime(data.TableIn.results[i].Endda))) : null;
                                         data.TableIn.results[i].Period = data.TableIn.results[i].Begda + " ~ " + data.TableIn.results[i].Endda;
                                         data.TableIn.results[i].Zzlmark = data.TableIn.results[i].Zzlmark == "X" ? true : false;
                                         vData.Data.push(data.TableIn.results[i]);

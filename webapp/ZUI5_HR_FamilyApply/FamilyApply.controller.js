@@ -93,7 +93,7 @@ sap.ui.define([
 				Lnmhg:"",
 				Fnmhg:"",
 				Regno:"",
-				Emrgn:"",
+				Emetl:"",
 				Zzclass:"1",
 				Appnm:"",
 				Opener:"X"}	

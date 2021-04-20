@@ -181,7 +181,7 @@ fragment.COMMON_ATTACH_FILES = {
 				true,
 				{ 
 					Editable: false, 
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip"], 
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif"], 
 					InfoMessage: "", 
 					Label:oController.getBundleText("LABEL_00135"),
 					Appnm: "",
@@ -282,14 +282,14 @@ fragment.COMMON_ATTACH_FILES = {
 				if (data && data.results.length) {
 					data.results.forEach(function (elem) {
 						if(vUse){
-							if(vPage=="001"||vPage=="002"){
+							if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
 								if(vPage==elem.Cntnm){
 									elem.New = false;
 									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 									Datas.Data.push(elem);
 								}
 							}else{
-								if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+								if(elem.Cntnm =="009"){
 									elem.New = false;
 									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 									Datas.Data.push(elem);
@@ -741,7 +741,7 @@ fragment.COMMON_ATTACH_FILES = {
 							"x-csrf-token": oRequest.headers["x-csrf-token"],
 							"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
 						};
-						if(vPages[a]=="001"||vPages[a]=="002"){
+						if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"){
 							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
 						}else{
 							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");

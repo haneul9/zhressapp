@@ -120,7 +120,7 @@ sap.ui.define([
 							}, 
 							textAlign : "Center",
 							visible: {
-								path: "Url1",
+								path: "UrlA1",
 								formatter: function(v) {
 									if(!v) return true;
 									else return false;
@@ -130,14 +130,14 @@ sap.ui.define([
 						.addStyleClass("font-14px font-regular mt-4px "),
 						new sap.m.FormattedText({
 							htmlText: {
-								parts: [{ path: "Url1" }, { path: "Status1" }],
+								parts: [{ path: "UrlA1" }, { path: "Status1" }],
 								formatter: function(v1, v2) {
 									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
 								}
 							}, 
 							visible: {
-								path: "Url1",
+								path: "UrlA1",
 								formatter: function(v) {
 									if(v) return true;
 									else return false;
@@ -167,14 +167,12 @@ sap.ui.define([
                 vConvertYear = "",
                 aYears = [];
 
-			aYears.push({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
-
             Common.makeNumbersArray({length: 11}).forEach(function(idx) {
                 vConvertYear = String(vZyear - idx);
                 aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
 			});
 
-			oController.SearchModel.setProperty("/Data/Zyear1", "ALL");
+			oController.SearchModel.setProperty("/Data/Zyear1", vZyear);
 			oController.SearchModel.setProperty("/Zyears1", aYears);
         },
 
@@ -193,37 +191,16 @@ sap.ui.define([
 			oController.SearchModel.setProperty("/Zmonths1", aMonths);
         },
 
-        setTimeCombo1: function(oController) {
-            var vTime = "",
-                oTimes = [];
+		getAttTime: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, ''),
+				vTime2 = convertValue.slice(-2),
+				vTime1 = convertValue.split(vTime2)[0],
+				vTime = convertValue.length > 2 ? vTime1 + "." + vTime2 : vTime2;
 
-			oTimes.push({ Code: "Null", Text: "hh" });
-
-            Common.makeNumbersArray({length: 24, isZeroStart: false}).forEach(function(idx) {
-                vTime = String(idx);
-				var hTime = Common.lpad(vTime, 2);
-                oTimes.push({ Code: vTime, Text: hTime});
-            });
-
-            oController.ApplyModel.setProperty("/FormData/hTime", "Null");
-			oController.ApplyModel.setProperty("/TimeCombo", oTimes);
-        },
-
-        setTimeCombo2: function(oController) {
-            var vTime = "",
-                oTimes = [];
-
-			oTimes.push({ Code: "Null", Text: "mm" });
-
-            Common.makeNumbersArray({length: 60}).forEach(function(idx) {
-                vTime = String(idx);
-				var mTime = Common.lpad(vTime, 2);
-                oTimes.push({ Code: mTime, Text: mTime});
-            });
-
-            oController.ApplyModel.setProperty("/FormData/mTime", "Null");
-			oController.ApplyModel.setProperty("/TimeCombo2", oTimes);
-        },
+			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "" : vTime);
+			oEvent.getSource().setValue(Common.checkNull(vTime) ? "" : vTime);	
+		},
 
 		getMoneyComma1: function(oEvent) {
 			var inputValue = oEvent.getParameter('value').trim(),
@@ -331,11 +308,6 @@ sap.ui.define([
 				oView.addDependent(oController._ReportModel);
 			}
 
-			oController.setTimeCombo1(oController);
-			oController.setTimeCombo2(oController);
-			oController.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
-			oController.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
-
 			if(oCopyRow.Edoty === "1"){
 				oController.getAttTable(oCopyRow, "1");
 				oController.getCodeList(oCopyRow);
@@ -362,8 +334,7 @@ sap.ui.define([
 			}
 
 			this.ApplyModel.setProperty("/FormData/Planx", this.getBundleText("MSG_40004"));
-			this.setTimeCombo1(this);
-			this.setTimeCombo2(this);
+			this.ApplyModel.setProperty("/FormData/Natio", "1");
 			this.getCodeList();
 			this.onBeforeOpenDetailDialog("app");
 			this._ApplyModel.open();
@@ -407,13 +378,9 @@ sap.ui.define([
 			}
 			
 			this.ApplyModel.setData({FormData: oCopyRow});
-			this.setTimeCombo1(this);
-			this.setTimeCombo2(this);
 			this.getAttTable(oCopyRow, "2");
 			this.getCodeList(oCopyRow);
 			this.getCodeList2();
-			this.ApplyModel.setProperty("/FormData/hTime", oCopyRow.Trtim.split(".")[0]);
-			this.ApplyModel.setProperty("/FormData/mTime", oCopyRow.Trtim.split(".")[1]);
 			this.onBeforeOpenDetailDialog();
 			this._ReportModel.open();
 		},
@@ -503,7 +470,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var vZyear1 = oController.SearchModel.getProperty("/Data/Zyear1");
-			var vMonth1 = oController.SearchModel.getProperty("/Data/Zmonth1");
+			var vMonth1 = oController.SearchModel.getProperty("/Data/Zmonth1") === "ALL" ? "" : oController.SearchModel.getProperty("/Data/Zmonth1");
 			var vGubun = oController.SearchModel.getProperty("/Data/Gubun");
 			var vStatus = oController.SearchModel.getProperty("/Data/Status");
 			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
@@ -511,8 +478,8 @@ sap.ui.define([
 
 			oController.AttModel.setData({Data: []});
 
-			var vBDate = vZyear1 === "ALL" ? "" : new Date(vZyear1, vMonth1 - 1, 1);
-			var vEDate = vMonth1 === "ALL" ? "" : new Date(vZyear1, vMonth1, 0);
+			var vBDate = vMonth1 === "" ? new Date(vZyear1, 0, 1) : new Date(vZyear1, vMonth1 - 1, 1);
+			var vEDate = vMonth1 === "" ? new Date(vZyear1, 12, 0) : new Date(vZyear1, vMonth1, 0);
 
 			var sendObject = {};
 			// Header
@@ -844,7 +811,7 @@ sap.ui.define([
             },
 
 		displayMultiOrgSearchDialog: function(oEvent) {
-			return $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent);
+			return OrgOfIndividualHandler.openOrgSearchDialog(oEvent);
 		},
 
 		onPressAddRow: function(oEvent) { // 참석자 추가
@@ -864,7 +831,7 @@ sap.ui.define([
 					var oAtt = oController.AttModel.getProperty("/Data");
 					var vLength = 5;
 
-					if(oAtt.some(function(e) {return e === o})) {
+					if(oAtt.some(function(e) {return e.Objid === o.Objid})) {
 						MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
 						return ;
 					}
@@ -958,7 +925,7 @@ sap.ui.define([
 				return true;
 			}
 
-			if(oController.ApplyModel.getProperty("/FormData/hTime") === "Null" || oController.ApplyModel.getProperty("/FormData/mTime") === "Null"){ // 학습시간
+			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Trtim"))){ // 학습시간
 				MessageBox.error(oController.getBundleText("MSG_40020"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
@@ -1015,14 +982,11 @@ sap.ui.define([
 			var onProcessApply = function (fVal) {
 				//신청 클릭시 발생하는 이벤트
 				if (fVal && fVal == oController.getBundleText("LABEL_40060")) { //신청
-					var vTimeH = oController.ApplyModel.getProperty("/FormData/hTime");
-					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
 					
 					// 첨부파일 저장
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
 					oSendData.Edoty = "1";
 					oSendData.Pernr = vPernr;
-					oSendData.Trtim = vTimeH + "." + vTimeM;
 					oSendData.Waers = "KRW";
 					oSendData.Enddhe = Common.getUTCDateTime(oSendData.Enddhe);
 
@@ -1090,14 +1054,10 @@ sap.ui.define([
 			var onProcessSave = function (fVal) {
 				//저장 클릭시 발생하는 이벤트
 				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //저장
-					
-					var vTimeH = oController.ApplyModel.getProperty("/FormData/hTime");
-					var vTimeM = oController.ApplyModel.getProperty("/FormData/mTime");
-					
+										
 					// 첨부파일 저장
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
 					oSendData.Pernr = vPernr;
-					oSendData.Trtim = vTimeH + "." + vTimeM;
 					oSendData.Enddhe = Common.getUTCDateTime(oSendData.Enddhe);
 
 					var sendObject = {};

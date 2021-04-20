@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
 	<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title></title>
 	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -15,7 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
 	<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
 	<script src="common/AppPrefilter.js"></script>
-	<script id="sap-ui-bootstrap"
+	<script
+		id="sap-ui-bootstrap"
 		src="resources/sap-ui-core.js"
 		data-sap-ui-theme="sap_fiori_3"
 		data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
@@ -26,18 +27,7 @@
 	</script>
 	<script src="common/AppBasis.js"></script>
 	<script>	
-	var gDtfmt = "yyyy-MM-dd",
-	gPercod = "",
-	gPersa = "",
-	gMolga = "",
-	gDcpfm = "",
-	gEeapp = "",
-	gPernr = "",
-	gBukrs = "";
-
-	var gAuth = "M";
-
-	var oBundleText = $.app.geti18nResource();
+	var gDtfmt = "yyyy-MM-dd";
 
 	sap.ui.localResources("ZUI5_HR_WorkingTimeChart");
 
@@ -48,8 +38,9 @@
 			CONTEXT_PATH: contextPath,
 			APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 			APP_ID: [contextPath, "List"].join("."),
-			APP_AUTH: gAuth,
-			APP_TILE: oBundleText.getText("LABEL_43001"), // 일근태현황
+			APP_AUTH: $.app.Auth.MSS,
+			APP_TILE: $.app.geti18nResource().getText("LABEL_43001"), // 일근태현황
+			APP_TYPE: "M",
 			LOG: {
 				ENABLE_SUCCESS: true
 			}

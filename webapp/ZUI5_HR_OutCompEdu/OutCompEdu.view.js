@@ -116,22 +116,18 @@ sap.ui.define([
 						items: [					
 							new sap.m.Button({
 								press: oController.onPressAppBtn.bind(oController),
-								icon: "sap-icon://create",
 								text: "{i18n>LABEL_40008}" // 사외위탁교육신청서작성
 							}).addStyleClass("button-light"),
 							new sap.m.Button({
 								press: oController.onPressRepBtn.bind(oController),
-								icon: "sap-icon://create",
 								text: "{i18n>LABEL_40009}" // 결과보고
 							}).addStyleClass("button-light"),
 							new sap.m.Button({
 								press: oController.onPressReqBtn.bind(oController),
-								icon: "sap-icon://form",
 								text: "{i18n>LABEL_40010}" // 결재요청
 							}).addStyleClass("button-light"),
 							new sap.m.Button({
 								press: oController.onPressDelBtn.bind(oController),
-								icon: "sap-icon://delete",
 								text: "{i18n>LABEL_40011}" // 삭제
 							}).addStyleClass("button-delete")
 						]

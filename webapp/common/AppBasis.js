@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 $.sap.require("sap.ui.model.resource.ResourceModel");
 
 $.extend(String, {
@@ -37,7 +38,7 @@ LOG: {
 Auth: {
 	ESS: "E",
 	MSS: "M",
-	HASS: "H",
+	HASS: "H"
 },
 ConType: {
 	CHECK: "0",
@@ -145,7 +146,7 @@ getDestination: function() {
 			if (pair[0] === "s4hana") { return pair[1]; }
 		})[0];
 
-		$.app.DEST = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt"
+		$.app.DEST = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
 	}
 
 	return $.app.DEST;

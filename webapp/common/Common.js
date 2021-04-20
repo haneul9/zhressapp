@@ -789,7 +789,7 @@ common.Common = {
         if (!input) return false;
         var regExp = /^\d{3}-\d{3,4}-\d{4}$/;
 
-        return regExp.test(input);
+        return regExp.test(input.trim());
     },
     timeFormatter: function (v) {
         if (!v) return "";
@@ -799,7 +799,7 @@ common.Common = {
         if (!input) return false;
         var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
-        return regExp.test(input);
+        return regExp.test(input.trim());
     },
     underscoreToCamelCase: function (input) {
         return input.toLowerCase().replace(/_+(\w|$)/g, function ($$, $1) {

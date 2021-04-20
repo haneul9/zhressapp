@@ -95,10 +95,12 @@ sap.ui.define([
 										var v1Txt = "", v2Txt = "", v3Txt = "", v4Txt = "", vTotal = "";
 										if(Common.checkNull(!oData)){
 											oData.forEach(function(ele) {
-												if(ele.L1id === v1) v1Txt = ele.L1txt;
-												if(ele.L2id === v2) v2Txt = ele.L2txt;
-												if(ele.L3id === v3) v3Txt = ele.L3txt;
-												if(ele.L4id === v4) v4Txt = ele.L4txt;
+												if(ele.L1id === v1 && ele.L2id === v2 && ele.L3id === v3 && ele.L4id === v4){
+													v1Txt = ele.L1txt;
+													v2Txt = ele.L2txt;
+													v3Txt = ele.L3txt;
+													v4Txt = ele.L4txt;
+												}
 											});
 											
 											if(Common.checkNull(!v1Txt)) vTotal = v1Txt;

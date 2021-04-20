@@ -45,7 +45,10 @@ sap.ui.define([
 				Data : {
 					FromPageId : oEvent.data.FromPageId,
 					Status1 : oEvent.data.Status1,
-					Werks : $.app.getModel("session").getData().Persa
+					ListStatus : oEvent.data.Status1,
+					Werks : $.app.getModel("session").getData().Persa,
+					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
+					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : "",
 				}
 			};
 			
@@ -55,6 +58,13 @@ sap.ui.define([
 				oData.Data.Awart = oEvent.data.Awart;
 				oData.Data.Subty = oEvent.data.Subty;
 				oData.Data.Pernr = oEvent.data.Pernr;
+				oData.Data.Delapp = oEvent.data.Delapp;
+				oData.Data.Sprps = oEvent.data.Sprps;
+			}
+			
+			if(oEvent.data.Delapp != ""){
+				oData.Data.ListAppkey = oEvent.data.Appkey;
+				oData.Data.ListAppkey1 = oEvent.data.Appkey1;
 			}
 			
 			oController._DetailJSonModel.setData(oData);
@@ -225,7 +235,9 @@ sap.ui.define([
 						Bukrs : oController._DetailJSonModel.getProperty("/Data/Bukrs"),
 						Werks :	oController._DetailJSonModel.getProperty("/Data/Werks"),
 						Molga : oController._DetailJSonModel.getProperty("/Data/Molga"),
-						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr)
+						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr),
+						Flag : oController._DetailJSonModel.getProperty("/Data/Flag"),
+						Delapp : oController._DetailJSonModel.getProperty("/Data/Delapp")
 					};
 					
 					oController._DetailJSonModel.setProperty("/Data", vData);
@@ -250,6 +262,7 @@ sap.ui.define([
 						detail.Endda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/";
 						detail.Awart = oData.Awart;
 						detail.Subty = oData.Subty; 
+						detail.Sprps = oData.Sprps;
 						
 						createData.VacationApply1Nav.push(detail);
 						
@@ -1096,24 +1109,28 @@ sap.ui.define([
 			var createData = {VacationApply1Nav : [], VacationApply2Nav : []};
 			
 			// validation check
-			if(!oData.Awart || oData.Awart == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48005")); // 근태코드를 선택하여 주십시오.
-				return;
-			} else if(oData.Halfc == "H" && !oData.Half){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48008")); // 오전/오후 구분을 선택하여 주십시오.
-				return;
-			} else if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
-				return;
-			} else if(oData.Kaltg == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48007")); // 먼저 휴일계산을 실행하시기 바랍니다.
-				return;
-			} else if(!oData.Telnum || oData.Telnum.trim() == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48009")); // 연락처를 입력하여 주십시오.
-				return;
-			} else if(!oData.Desti || oData.Desti.trim() == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48010")); // 행선지를 입력하여 주십시오.
-				return;
+			if(Flag == "C" && oData.Flag == ""){
+				if(oData.Delapp == ""){
+					if(!oData.Awart || oData.Awart == ""){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48005")); // 근태코드를 선택하여 주십시오.
+						return;
+					} else if(oData.Halfc == "H" && !oData.Half){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48008")); // 오전/오후 구분을 선택하여 주십시오.
+						return;
+					} else if(!oData.Begda || !oData.Endda){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
+						return;
+					} else if(oData.Kaltg == ""){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48007")); // 먼저 휴일계산을 실행하시기 바랍니다.
+						return;
+					} else if(!oData.Telnum || oData.Telnum.trim() == ""){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48009")); // 연락처를 입력하여 주십시오.
+						return;
+					} else if(!oData.Desti || oData.Desti.trim() == ""){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48010")); // 행선지를 입력하여 주십시오.
+						return;
+					}
+				}
 			}
 			
 			// 대근신청
@@ -1162,7 +1179,10 @@ sap.ui.define([
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
 					
 					// 신청구분값에 따라 구분값 변경
-					if(Flag == "C"){
+					// 신규신청 3, 삭제 4, 삭제신청 5
+					if(oData.Flag == "D" && Flag == "C"){
+						createData.IConType = "5";
+					} else if(Flag == "C"){
 						createData.IConType = "3";
 					} else {
 						createData.IConType = "4";
@@ -1172,7 +1192,7 @@ sap.ui.define([
 					detail.Pernr = oData.Pernr;
 					detail.Awart = oData.Awart;
 					detail.Subty = oData.Subty ? oData.Subty : oData.Awart;
-					detail.Half = oData.Half ? oData.Half : "";
+					detail.Half = oData. Half ? oData.Half : "";
 					detail.Begda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 					detail.Endda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
 					detail.Beguz = oData.Beguz ? oData.Beguz : "";
@@ -1184,6 +1204,14 @@ sap.ui.define([
 					detail.Desti = oData.Desti;
 					detail.Encard = oData.Encard;
 					detail.Bigo = oData.Bigo;
+					
+					if(oData.Delapp != "" && Flag == "D"){
+						detail.Appkey = oData.ListAppkey;
+						detail.Appkey1 = oData.ListAppkey1;
+					} else {
+						detail.Appkey = oData.Appkey ? oData.Appkey : "";
+						detail.Appkey1 = oData.Appkey1 ? oData.Appkey1 : "";
+					}
 				
 					createData.VacationApply1Nav.push(detail);
 				
@@ -1233,7 +1261,7 @@ sap.ui.define([
 					return;
 				}
 				
-				if(Flag == "C"){
+				if(oData.Flag == "" && Flag == "C"){
 					switch(oData.Awart){
 						case "1501": // 본인결혼
 						case "1502": // 자녀결혼
@@ -1289,8 +1317,11 @@ sap.ui.define([
 			};
 			
 			var confirmMessage = "", successMessage = "";
-			if(Flag == "C"){
+			if(oData.Flag == "" && Flag == "C"){
 				confirmMessage = oBundleText.getText("MSG_48012"); // 신규신청 하시겠습니까?
+				successMessage = oBundleText.getText("MSG_48013"); // 신청되었습니다.
+			} else if(oData.Flag == "D" && Flag == "C"){
+				confirmMessage = oBundleText.getText("MSG_48019"); // 삭제신청 하시겠습니까?
 				successMessage = oBundleText.getText("MSG_48013"); // 신청되었습니다.
 			} else {
 				confirmMessage = oBundleText.getText("MSG_00059"); // 삭제하시겠습니까?

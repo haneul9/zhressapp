@@ -1,4 +1,5 @@
-﻿sap.ui.define([
+﻿/* eslint-disable no-undef */
+sap.ui.define([
     "../../common/Common",
 	"../../common/HoverIcon",
 	"sap/m/InputBase",
@@ -567,7 +568,7 @@
 						visible: {
 							parts: [{path: "Status"}, {path: "/EarlyApp"}],
 							formatter: function (v1, v2) {
-								return !v1 || (!v1 && v2 === "X");
+								return !v1 || (v1 === "99" && v2 === "X");
 							}
 						}
 					}).addStyleClass("button-dark"),

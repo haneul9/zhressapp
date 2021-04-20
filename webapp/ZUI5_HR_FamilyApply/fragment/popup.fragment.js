@@ -13,10 +13,10 @@ sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
         var oSelect2=new sap.m.Select(oController.PAGEID+"_Sel2",{width:"80%",selectedKey:"{Kdsvh}",editable:{path:"Opener",formatter:function(fVal){
             return fVal=="X"?true:false;
         }}});
-        var oSelect3=new sap.m.Select(oController.PAGEID+"_Sel3",{width:"80%",selectedKey:"{Fanat}",editable:{path:"Opener",formatter:function(fVal){
+        var oSelect3=new sap.m.Select(oController.PAGEID+"_Sel3",{width:"80%",selectedKey:"{Fgbld}",editable:{path:"Opener",formatter:function(fVal){
             return fVal=="X"?true:false;
         }}});
-        var oSelect4=new sap.m.Select(oController.PAGEID+"_Sel4",{width:"253px",selectedKey:"{Fgbld}",editable:{path:"Opener",formatter:function(fVal){
+        var oSelect4=new sap.m.Select(oController.PAGEID+"_Sel4",{width:"253px",selectedKey:"{Fanat}",editable:{path:"Opener",formatter:function(fVal){
             return fVal=="X"?true:false;
         }}});
         var oSelect5=new sap.m.Select(oController.PAGEID+"_Sel5",{width:"80%",selectedKey:"{Fasar}",editable:{path:"Opener",formatter:function(fVal){
@@ -240,7 +240,7 @@ sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
         oCell=new c.layout.MatrixLayoutCell({
             hAlign:"Begin",
             colSpan:5,
-            content:new sap.m.Input({maxLength: 100,width:"894px",value:"{Emrgn}",editable:{path:"Opener",formatter:function(fVal){
+            content:new sap.m.Input({maxLength: 100,width:"894px",value:"{Emetl}",editable:{path:"Opener",formatter:function(fVal){
                 return fVal=="X"?true:false;
             }}})
         }).addStyleClass("DataCell");

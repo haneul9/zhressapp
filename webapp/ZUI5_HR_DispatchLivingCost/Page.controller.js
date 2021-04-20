@@ -1,4 +1,5 @@
-﻿sap.ui.define([
+﻿/* eslint-disable no-undef */
+sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
@@ -73,7 +74,7 @@
                         return fVal === "X";
                     }
                 }
-            })
+            });
         },
 
         onChecked: function(oEvent) { // Checkbox선택시 다른Checkbox 비활성화
@@ -100,7 +101,7 @@
                         else return "";
                     }
                 }
-            })
+            });
         },
 
         getCostPlace: function() {
@@ -112,7 +113,7 @@
                         else return "";
                     }
                 }
-            })
+            });
         },
 
         getDatepicker: function() {
@@ -148,7 +149,7 @@
 		},
 		
 		getLabel: function() {
-			return ViewTemplates.getLabel("header", "{i18n>LABEL_59013}", "150px") // 파견자 생활경비
+			return ViewTemplates.getLabel("header", "{i18n>LABEL_59013}", "150px"); // 파견자 생활경비
 		},
 
         getStatus: function() {
@@ -271,6 +272,7 @@
 				});
 				return;
 			}
+
 			var oRowData = $.extend(true, {}, this.FinishModel.getProperty("/FormData"));
 			oEarlyYears.setEditable(true);
 			oEarlyMonth.setEditable(true);
@@ -322,7 +324,7 @@
 				oFileB.setVisible(true);
 				oEarlyYears.setEditable(true);
 				oEarlyMonth.setEditable(true);
-			};
+			}
 
 			oController.ApplyModel.setProperty("/FormData/RangYearB", oCopiedRow.Zscsym.slice(0,4));
 			oController.ApplyModel.setProperty("/FormData/RangMonthB", oCopiedRow.Zscsym.slice(4));
@@ -427,7 +429,6 @@
 			// Navigation property
 			sendObject.DispatchApplyTableIn2 = [];
 			sendObject.DispatchApplyTableIn3 = [];
-			sendObject.DispatchApplyTableIn4 = [];
 			
 			oModel.create("/DispatchApplySet", sendObject, {
 				success: function(oData, oResponse) {
@@ -435,7 +436,7 @@
                     oController.ApplyModel.setProperty("/LocationCombo1", oData.DispatchApplyTableIn2.results);
                     oController.ApplyModel.setProperty("/LocationCombo2", oData.DispatchApplyTableIn2.results);
                     oController.ApplyModel.setProperty("/LocationCombo3", oData.DispatchApplyTableIn3.results);
-                    oController.ApplyModel.setProperty("/LocationCombo4", oData.DispatchApplyTableIn4.results);
+                    oController.ApplyModel.setProperty("/LocationCombo4", oData.DispatchApplyTableIn3.results);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -489,7 +490,7 @@
 					title: oController.getBundleText("LABEL_00149")
 				});
 				return;
-			};
+			}
 
 			this.getDispatchCost();
 		},
@@ -513,25 +514,25 @@
             if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zfwkps")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/Ztwkps"))){
                 MessageBox.error(oController.getBundleText("MSG_59017"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 발령일자
             if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zactdt"))){
                 MessageBox.error(oController.getBundleText("MSG_59019"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 거주지
             if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zadres"))){
                 MessageBox.error(oController.getBundleText("MSG_59020"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 교통비 지급 기준지
             if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zwkpls")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zlfpls"))){
                 MessageBox.error(oController.getBundleText("MSG_59021"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 숙소계약기간
             if(	Common.checkNull(oController.ApplyModel.getProperty("/FormData/RangYearB")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/RangMonthB")) ||
@@ -542,7 +543,7 @@
             }else {
 				oController.ApplyModel.setProperty("/FormData/Zscsym", oController.ApplyModel.getProperty("/FormData/RangYearB") + oController.ApplyModel.getProperty("/FormData/RangMonthB"));
 				oController.ApplyModel.setProperty("/FormData/Zsceym", oController.ApplyModel.getProperty("/FormData/RangYearsE") + oController.ApplyModel.getProperty("/FormData/RangMonthE"));
-			};
+			}
 
             // 조기종료월
 			if(oController.ApplyModel.getProperty("/EarlyApp") === "X") {
@@ -558,19 +559,19 @@
 				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_59024"), { title: oController.getBundleText("LABEL_00149")});
 					return true;
-				};
+				}
 	
 				// 계약서
 				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_59025"), { title: oController.getBundleText("LABEL_00149")});
 					return true;
-				};
+				}
 	
 				// 주민등록등본
 				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_59026"), { title: oController.getBundleText("LABEL_00149")});
 					return true;
-				};
+				}
 			}else {
 				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "005") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_59027"), { title: oController.getBundleText("LABEL_00149")});
@@ -614,7 +615,7 @@
 						}
 					});
 				}
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_59014"), {
 				title: oController.getBundleText("LABEL_59001"),
@@ -678,7 +679,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_59010"), {
 				title: oController.getBundleText("LABEL_59001"),
@@ -702,7 +703,7 @@
 
 					// 첨부파일 저장
 
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, "005");
+					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["005"]);
 					oRowData.Pernr = vPernr;
 
 					var sendObject = {};
@@ -731,7 +732,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_59010"), {
 				title: oController.getBundleText("LABEL_59001"),
@@ -755,7 +756,7 @@
 
 					// 첨부파일 저장
 					if(oController.ApplyModel.getProperty("/EarlyApp") === "X"){
-						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, "005");
+						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["005"]);
 					}else {
 						var uFiles = [];
 						for(var i=1; i<4; i++)	uFiles.push("00" + i);
@@ -763,7 +764,7 @@
 						if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
 	
 						oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
-					};
+					}
 
 					oRowData.Pernr = vPernr;
 
@@ -793,7 +794,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_59012"), {
 				title: oController.getBundleText("LABEL_59001"),
@@ -839,7 +840,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_59014"), {
 				title: oController.getBundleText("LABEL_59001"),
@@ -850,7 +851,7 @@
 
 		onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
-			var vStatus = vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
+			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 
 			if(oController.ApplyModel.getProperty("/EarlyApp") === "X") {
@@ -859,7 +860,8 @@
 					Required : true,
 					Appnm: vAppnm,
 					Mode: "S",
-					Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false,
+					UseMultiCategories: true,
+					Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
 				},"005");
 			}else {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 파견 발령지
@@ -868,7 +870,7 @@
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"001");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 계약서
@@ -877,7 +879,7 @@
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"002");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 주민등록등본
@@ -886,7 +888,7 @@
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"003");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 기타
@@ -894,7 +896,7 @@
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false,
+					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"004");
 			}
 		},

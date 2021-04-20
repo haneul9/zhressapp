@@ -36,7 +36,7 @@ sap.ui.define([
 			var oDialog = new sap.m.Dialog({
 				title: "{i18n>LABEL_25003}",
 				contentWidth: "500px",
-				contentHeight: "201px",
+				contentHeight: "275px",
 				buttons: [
 					new sap.m.Button({
 						press: function () {
