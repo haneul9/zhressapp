@@ -293,13 +293,7 @@ sap.ui.define([
 								text: "{i18n>LABEL_09057}",
 								design: "Bold"
 							}), // 콘도정보
-							new sap.m.Link({
-								target: "_blank",
-                                text: "{UsridLong}",
-                                press: CondoHandler.openUri.bind(CondoHandler),
-                                // href: "{UsridLong}",
-                                layoutData: new sap.m.FlexItemData({ growFactor: 1 })
-							})
+							new sap.m.Text({ text: "{UsridLong}" })
                         ],
                         visible: {
                             path: "isNew",
