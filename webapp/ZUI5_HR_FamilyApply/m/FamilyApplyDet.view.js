@@ -50,16 +50,23 @@ sap.ui.define([
 				widths:['40%','60%']
 			});
 
+
+			
+
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Right",
 				colSpan:2,
-				content:[new sap.m.Button(oController.PAGEID+"_Re",{text:oBundleText.getText("LABEL_44035"),press:oController.onRe,visible:{path:"Status",formatter:function(fVal){
-					return fVal=="88"?true:false;
-				}}}).addStyleClass("button-dark"),
-				new sap.m.Button({text:oBundleText.getText("LABEL_44031"),press:oController.onSave,visible:{path:"Opener",formatter:function(fVal){
-					return fVal=="X"?true:false;
-				}}}).addStyleClass("button-dark")]
+				content:[					
+					new sap.m.FlexBox({
+						items: [new sap.m.Button(oController.PAGEID+"_Re",{text:oBundleText.getText("LABEL_44035"),press:oController.onRe,visible:{path:"Status",formatter:function(fVal){
+							return fVal=="88"?true:false;
+						}}}).addStyleClass("button-dark"),
+						new sap.m.Button({text:oBundleText.getText("LABEL_44031"),press:oController.onSave,visible:{path:"Opener",formatter:function(fVal){
+							return fVal=="X"?true:false;
+						}}}).addStyleClass("button-dark")]
+					}).addStyleClass("button-group")				
+					]
 			});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -289,7 +296,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.m.Input({maxLength: 100,width:"100%",value:"{Emrgn}",editable:{path:"Opener",formatter:function(fVal){
+				content:new sap.m.Input({maxLength: 100,width:"100%",value:"{Emetl}",editable:{path:"Opener",formatter:function(fVal){
 					return fVal=="X"?true:false;
 				}}})
 			});
