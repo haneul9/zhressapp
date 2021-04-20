@@ -1,4 +1,4 @@
-/* global naver:true */
+/* global naver */
 window.common = window.common || {};
 common.map = common.map || {};
 
@@ -82,9 +82,6 @@ common.map.LotteChemMap = function(options) {
 		endIconSize: 2
 	});
 
-	// options.target = this.PLACE_TARGET.DEPARTURE;
-	// this.setMarker(options);
-
 	if (options.maxBounds) {
 		this.maxBounds = options.maxBounds;
 		this.oMap.setOptions('maxBounds', options.maxBounds.get()); // new common.map.SouthKoreaBounds().get()
@@ -94,7 +91,7 @@ common.map.LotteChemMap = function(options) {
 common.map.LotteChemMap.prototype.instantiate = function(options) {
 
 	var oMapOptions = {
-		center: new naver.maps.LatLng(options.latitude || 37.5125701, options.longitude || 127.1025624), // default 롯데월드타워
+		center: this.getCoord(options.latitude, options.longitude), // default 롯데케미칼본사
 		useStyleMap: true,
 		logoControl: false,
 		scaleControl: true,
@@ -103,7 +100,7 @@ common.map.LotteChemMap.prototype.instantiate = function(options) {
 		zoomControl: true,
 		maxZoom: 18,
 		minZoom: 8,
-		zoom: 16,
+		zoom: this.getDefaultZoom(),
 		zoomControlOptions: {
 			position: naver.maps.Position.TOP_RIGHT
 		}
@@ -123,6 +120,26 @@ common.map.LotteChemMap.prototype.instantiate = function(options) {
 common.map.LotteChemMap.prototype.get = function() {
 
     return this.oMap;
+};
+
+common.map.LotteChemMap.prototype.getCoord = function(latitude, longitude) {
+
+	return new naver.maps.LatLng(latitude || 37.5125701, longitude || 127.1025624); // 롯데케미칼본사
+};
+
+common.map.LotteChemMap.prototype.getDefaultZoom = function() {
+
+	return 16;
+};
+
+common.map.LotteChemMap.prototype.getDepartureId = function() {
+
+	return this.PLACE_TARGET.DEPARTURE;
+};
+
+common.map.LotteChemMap.prototype.getDestinationId = function() {
+
+	return this.PLACE_TARGET.DESTINATION;
 };
 
 common.map.LotteChemMap.prototype.setMarker = function(o) {
@@ -185,8 +202,8 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 			oAddressOverlay.setMap();
 		}
 
-		this.initPath();
-		this.searchAddress(target);
+		this.initPath()
+			.searchAddress(target);
 /*
 		if (address) {
 			this.setAddressOverlay({
@@ -296,6 +313,34 @@ common.map.LotteChemMap.prototype.replaceMarker = function(target) {
 	return this;
 };
 
+// 주소 -> 좌표
+common.map.LotteChemMap.prototype.searchCoord = function(value) {
+
+	var url = this.functionProvider.getURL('/geocode');
+
+	return $.getJSON({
+		// url: "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode",
+		// url: "https://essproxyyzdueo754l.jp1.hana.ondemand.com/ESSProxy/geocode",
+		url: url,
+		data: {
+			// coordinate: "",
+			// filter: "",
+			// page: "",
+			// count: "",
+			query: value
+		},
+		success: function() {
+			this.functionProvider.log("searchCoord success", arguments);
+		}.bind(this),
+		error: function() {
+			this.functionProvider.log("searchCoord error", arguments);
+		}.bind(this),
+		complete: function() {
+			this.oDialog.setBusy(false);
+		}.bind(this)
+	}).promise();
+};
+
 // 지도에 선택된 지점의 좌표로 주소 조회
 common.map.LotteChemMap.prototype.searchAddress = function(target) {
 
@@ -339,7 +384,7 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 				if (target !== this.PLACE_TARGET.CHOICE) {
 					this.searchPath();
 				} else {
-					// this.functionProvider.spinner(false);
+					this.functionProvider.spinner(false);
 				}
 
 				resolve();
@@ -348,9 +393,10 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 	}.bind(this));
 };
 
-common.map.LotteChemMap.prototype.searchLocal = function(keyword, target) {
+common.map.LotteChemMap.prototype.searchLocal = function(o) {
 
-	if (!keyword) {
+	if (!o.keyword) {
+		o.callback([]);
 		return;
 	}
 
@@ -363,26 +409,44 @@ common.map.LotteChemMap.prototype.searchLocal = function(keyword, target) {
 		// url: 'https://essproxyyzdueo754l.jp1.hana.ondemand.com/ESSProxy/local',
 		url: url,
 		data: {
-			query: keyword
+			query: o.keyword,
+			display: 5
 		},
 		success: function(data) {
 			this.functionProvider.log('searchLocal success', arguments);
 
 			if (data.display) {
-				var place = data.items[0],
-				coord = naver.maps.TransCoord.fromTM128ToLatLng(new naver.maps.Point(Number(place.mapx), Number(place.mapy)));
+				if (o.target === this.PLACE_TARGET.CHOICE) {
+					var place = data.items[0],
+					coord = naver.maps.TransCoord.fromTM128ToLatLng(new naver.maps.Point(Number(place.mapx), Number(place.mapy)));
 
-				this.oMap.panTo(coord);
-				this.setMarker({
-					target: target || this.PLACE_TARGET.CHOICE,
-					coord: coord,
-					address: {
-						jibunAddress: place.address,
-						roadAddress: place.roadAddress + ' ' + place.title
-					}
-				});
+					this.oMap.panTo(coord);
+					this.setMarker({
+						title: typeof String.escapeHtml === 'function' ? String.escapeHtml(place.title) : (place.title || ''),
+						address: {
+							jibunAddress: place.address,
+							roadAddress: place.roadAddress + ' ' + place.title
+						},
+						target: o.target,
+						coord: coord
+					});
+				} else {
+					o.callback($.map(data.items, function(place) {
+						return {
+							title: typeof String.escapeHtml === 'function' ? String.escapeHtml(place.title) : (place.title || ''),
+							address: {
+								jibunAddress: place.address,
+								roadAddress: place.roadAddress + ' ' + place.title
+							},
+							target: o.target,
+							coord: naver.maps.TransCoord.fromTM128ToLatLng(new naver.maps.Point(Number(place.mapx), Number(place.mapy)))
+						};
+					}));
+				}
 			} else {
 				this.functionProvider.alert('검색 결과가 없습니다.');
+				o.callback([]);
+
 			}
 		}.bind(this),
 		error: function() {
@@ -396,8 +460,8 @@ common.map.LotteChemMap.prototype.searchLocal = function(keyword, target) {
 
 common.map.LotteChemMap.prototype.searchPath = function() {
 
-	var departurePosition = this.getMarkerPosition(this.PLACE_TARGET.DEPARTURE),
-	destinationPosition = this.getMarkerPosition(this.PLACE_TARGET.DESTINATION);
+	var departurePosition = this.getMarkerPosition(this.getDepartureId()),
+		destinationPosition = this.getMarkerPosition(this.getDestinationId());
 	
 	if (!departurePosition || !destinationPosition) {
 		this.functionProvider.spinner(false);
@@ -468,20 +532,34 @@ common.map.LotteChemMap.prototype.renderPath = function(path) {
 	return this;
 };
 
-common.map.LotteChemMap.prototype.initPath = function() {
+common.map.LotteChemMap.prototype.initPath = function(initPosition) {
 
 	this.oPathPolyline1.setPath([]);
 	this.oPathPolyline1.setMap();
 	this.oPathPolyline2.setPath([]);
 	this.oPathPolyline2.setMap();
 
+	if (initPosition) {
+		this.oMap.setZoom(this.getDefaultZoom());
+		this.oMap.panTo(this.getCoord());
+	}
+
 	return this;
 };
 
 common.map.LotteChemMap.prototype.removeMarker = function(target) {
 
-	(this.mMarkerMap[target] || { setMap: function() {} }).setMap();
-	(this.mAddressOverlayMap[target] || { setMap: function() {} }).setMap();
+	var oMarker = this.mMarkerMap[target];
+	if (oMarker) {
+		oMarker.setMap();
+		delete this.mMarkerMap[target];
+	}
+
+	var oAddressOverlay = this.mAddressOverlayMap[target];
+	if (oAddressOverlay) {
+		oAddressOverlay.setMap();
+		delete this.mAddressOverlayMap[target];
+	}
 
 	return this;
 };
@@ -492,4 +570,11 @@ common.map.LotteChemMap.prototype.getMarkerPosition = function(target) {
 		return this.mMarkerMap[target].getPosition();
 	}
 	return null;
+};
+
+common.map.LotteChemMap.prototype.panTo = function(coord) {
+
+	this.oMap.panTo(coord);
+
+	return this;
 };

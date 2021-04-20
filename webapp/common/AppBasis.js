@@ -8,6 +8,9 @@ $.extend(String, {
 			template = template.replace(/\$\{[^{}]*\}/, v);
 		});
 		return template;
+	},
+	escapeHtml: function(s) {
+		return (s || '').replace(/\<([^<>]*)\>/g, '');
 	}
 });
 
@@ -18,6 +21,9 @@ $.extend(String.prototype, {
 			template = template.replace(/\$\{[^{}]*\}/, v);
 		});
 		return template;
+	},
+	escapeHtml: function() {
+		return String.escapeHtml(this);
 	},
 	capitalize: function() {
 		return this.charAt(0).toUpperCase() + this.slice(1);

@@ -92,7 +92,6 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTripMap.fragment.ExpenseDetailDialog", {
 										})
 									}
 								})
-								.addStyleClass("mnw-300px")
 							]
 						})
 						.addStyleClass("search-field-group"),

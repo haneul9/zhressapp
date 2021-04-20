@@ -7,7 +7,7 @@ sap.ui.define([
 	"common/map/CustomLayer",
 	"common/map/SouthKoreaBounds",
 	"common/map/LotteChemMap",
-	"./TripPlaceDialogHandler",
+	"./PlaceSearchDialogHandler",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/model/json/JSONModel"
@@ -19,7 +19,7 @@ sap.ui.define([
 	CustomLayer,
 	SouthKoreaBounds,
 	LotteChemMap,
-	TripPlaceDialogHandler,
+	PlaceSearchDialogHandler,
 	MessageBox,
 	BusyIndicator,
 	JSONModel
@@ -67,7 +67,7 @@ var Handler = {
 
 		this.oModel.setProperty("/LccMap", {
 			Id: params.id,
-			Departure: "롯데케미칼본사",
+			Departure: null,
 			Destination: null,
 			Distance: "0km",
 			TollFare: "0" + this.oController.getBundleText("LABEL_19638"), // 원
@@ -127,18 +127,17 @@ var Handler = {
 		return this;
 	},
 
-	onBeforeOpen: function() {
+	// onBeforeOpen: function() {
 
-		return Common.getPromise(function() {
-		}.bind(this));
-	},
+	// 	return Common.getPromise(function() {
+	// 	}.bind(this));
+	// },
 
 	onAfterOpen: function() {
 
 		Common.getPromise(true, function(resolve) {
 			this.LccMap = new LotteChemMap({
 				id: this.getMapId(),
-				coord: new naver.maps.LatLng(37.5125701, 127.1025624), // map center
 				maxBounds: new SouthKoreaBounds(),
 				functionProvider: this
 			});
@@ -150,12 +149,18 @@ var Handler = {
 
 				this.LccMap = new LotteChemMap({
 					id: this.getMapId(),
-					coord: new naver.maps.LatLng(37.5125701, 127.1025624), // map center
 					maxBounds: new SouthKoreaBounds(),
 					functionProvider: this
 				});
+				this.LccMap.get().setOptions("coord", this.LccMap.getCoord());
 
-				this.LccMap.searchLocal(this.oModel.getProperty("/LccMap/Departure"), this.LccMap.PLACE_TARGET.DEPARTURE);
+				this.LccMap.searchLocal({
+					placeName: this.oModel.getProperty("/LccMap/Departure"),
+					target: this.LccMap.getDepartureId(),
+					callback: function(placeList) {
+						this.oModel.setProperty("/LccMap/PlaceList", placeList);
+					}.bind(this)
+				});
 			}.bind(this), 500);
 
 			$(document)
@@ -245,6 +250,16 @@ var Handler = {
 		return this.oModel.getProperty("/LccMap/Id");
 	},
 
+	getDepartureId: function() {
+
+		return this.LccMap.getDepartureId();
+	},
+
+	getDestinationId: function() {
+
+		return this.LccMap.getDestinationId();
+	},
+
 	getFuelTypeMap: function() {
 
 		return {
@@ -265,58 +280,28 @@ var Handler = {
 		};
 	},
 
-	// 출장지 선택
-	selectPlace: function(oEvent) {
-
-		var sId = oEvent.getParameter("id"),
-		sPath = sId.replace(/(LccMap)/, "/$1/");
-
-		setTimeout(function() {
-			var callback = function(PlaceName) {
-				this.oModel.setProperty(sPath, PlaceName);
-
-				var target = sId.replace(/LccMap/, "").toLowerCase();
-				this.LccMap.setPlace(target);
-				this.LccMap.searchLocal(PlaceName, target);
-			}.bind(this);
-
-			DialogHandler.open(TripPlaceDialogHandler.get(this.oController, this.oModel.getProperty(sPath), callback));
-		}.bind(this), 0);
-	},
-
 	// 지역 검색
 	searchPlace: function(oEvent) {
 
-		this.LccMap.searchLocal(oEvent.getSource().getValue(), oEvent.getParameter("id").replace(/LccMap/, "").toLowerCase());
-	},
+		var oEventSource = oEvent.getSource(),
+		target = oEvent.getParameter("id").replace(/LccMap/, "").toLowerCase(),
+		dialogTitle = this.oController.getBundleText(target === this.getDepartureId() ? "LABEL_19633" : "LABEL_19634"); // 출발지 : 도착지
 
-	// 주소 -> 좌표
-	searchCoord: function(oEvent) {
+		setTimeout(function() {
+			var callback = function(o) {
+				setTimeout(function() {
+					oEventSource.setValue(o.title);
+					this.LccMap.panTo(o.coord);
+					this.LccMap.setMarker({
+						target: target,
+						coord: o.coord,
+						address: o.address
+					});
+				}.bind(this), 0);
+			}.bind(this);
 
-		this.oDialog.setBusy(true, 0);
-
-		var value = oEvent.getSource().getValue();
-		return $.getJSON({
-			// url: "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode",
-			// url: "https://essproxyyzdueo754l.jp1.hana.ondemand.com/ESSProxy/geocode",
-			url: Common.getJavaOrigin(this.oController, "/geocode"),
-			data: {
-				// coordinate: "",
-				// filter: "",
-				// page: "",
-				// count: "",
-				query: value
-			},
-			success: function() {
-				Common.log("retrieveCoord success", arguments);
-			}.bind(this),
-			error: function() {
-				Common.log("retrieveCoord error", arguments);
-			}.bind(this),
-			complete: function() {
-				this.oDialog.setBusy(false);
-			}.bind(this)
-		}).promise();
+			DialogHandler.open(PlaceSearchDialogHandler.get(this.oController, dialogTitle, this.LccMap.searchLocal.bind(this.LccMap), callback));
+		}.bind(this), 0);
 	},
 
 	// 경로 탐색
@@ -325,49 +310,62 @@ var Handler = {
 		this.LccMap.searchPath();
 	},
 
-	initPath: function() {
-
-		this.oModel.setProperty("/LccMap/Departure", "");
-		this.oModel.setProperty("/LccMap/Destination", "");
-
-		this.oModel.setProperty("/LccMap/Distance", "0km");
-		this.oModel.setProperty("/LccMap/TollFare", "0" + this.oController.getBundleText("LABEL_19638")); // 원
-
-		this.oModel.setProperty("/LccMap/Results/distance", "0");
-		this.oModel.setProperty("/LccMap/Results/tollFare", "0");
-		this.oModel.setProperty("/LccMap/Results/fuelPrice", "0");
-
-		this.LccMap.initPath();
-	},
-
 	clear: function() {
 
-		this.LccMap
-			.removeMarker(this.LccMap.PLACE_TARGET.CHOICE)
-			.removeMarker(this.LccMap.PLACE_TARGET.DEPARTURE)
-			.removeMarker(this.LccMap.PLACE_TARGET.DESTINATION)
-			.initPath();
+		setTimeout(function() {
+			this.oModel.setProperty("/LccMap/Departure", "");
+			this.oModel.setProperty("/LccMap/Destination", "");
+
+			this.oModel.setProperty("/LccMap/Distance", "0km");
+			this.oModel.setProperty("/LccMap/TollFare", "0" + this.oController.getBundleText("LABEL_19638")); // 원
+
+			this.oModel.setProperty("/LccMap/Results/distance", "0");
+			this.oModel.setProperty("/LccMap/Results/tollFare", "0");
+			this.oModel.setProperty("/LccMap/Results/fuelPrice", "0");
+
+			this.LccMap
+				.removeMarker(this.LccMap.PLACE_TARGET.CHOICE)
+				.removeMarker(this.LccMap.PLACE_TARGET.DEPARTURE)
+				.removeMarker(this.LccMap.PLACE_TARGET.DESTINATION)
+				.initPath(true);
+		}.bind(this), 0);
 	},
 
 	reloadMap: function() {
 
-		this.LccMap.get().destroy();
+		if (this.LccMap) {
+			this.LccMap.get().destroy();
+		}
 
-		this.LccMap = new LotteChemMap({
-			id: this.getMapId(),
-			coord: new naver.maps.LatLng(37.5125701, 127.1025624), // map center
-			maxBounds: new SouthKoreaBounds(),
-			functionProvider: this
-		});
+		setTimeout(function() {
+			this.LccMap = new LotteChemMap({
+				id: this.getMapId(),
+				maxBounds: new SouthKoreaBounds(),
+				functionProvider: this
+			});
+			this.LccMap.get().setOptions("coord", this.LccMap.getCoord());
+		}.bind(this), 300);
 	},
 
 	applyResult: function() {
 
-		var p = this.oModel.getProperty("/LccMap/Results");
+		var departure = this.oModel.getProperty("/LccMap/Departure"),
+		destination = this.oModel.getProperty("/LccMap/Destination");
+
+		if (!departure) {
+			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19633"))); // 출발지를 검색하세요.
+			return;
+		}
+		if (!destination) {
+			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19634"))); // 도착지를 검색하세요.
+			return;
+		}
+
+		var p = $.extend({}, this.oModel.getProperty("/LccMap/Results"));
 		return Common.getPromise(function() {
 			if (this.callback) {
-				p.departure = this.oModel.getProperty("/LccMap/Departure");
-				p.destination = this.oModel.getProperty("/LccMap/Destination");
+				p.departure = departure;
+				p.destination = destination;
 
 				this.callback(p);
 			}
@@ -375,6 +373,7 @@ var Handler = {
 		.then(function() {
 			this.oDialog.close();
 
+			this.clear();
 			this.LccMap.get().destroy();
 		}.bind(this));
 	},
@@ -387,6 +386,7 @@ var Handler = {
 					this.oDialog.setBusy(false);
 					this.oDialog.close();
 
+					this.clear();
 					this.LccMap.get().destroy();
 				}
 			}.bind(this)

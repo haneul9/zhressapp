@@ -50,7 +50,7 @@ common.map.AddressOverlay.prototype.draw = function() {
 	} else {
 		pixelPosition = projection.fromCoordToOffset(position);
 		top = pixelPosition.y;
-		left = pixelPosition.x
+		left = pixelPosition.x;
 	}
 
 	this._element.css('top', top);

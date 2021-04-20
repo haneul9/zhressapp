@@ -49,7 +49,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			.addStyleClass("button-default custom-button-divide")
 		})
 		.setModel(ExpenseDetailDialogHandler.getModel())
-		.addStyleClass("custom-dialog-popup");
+		.addStyleClass("custom-dialog-popup mnw-1188px");
 
 		return oDialog;
 	},
@@ -74,16 +74,16 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 		return new sap.m.HBox({
 			items: [
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19603}", false, "110px"), // 출장일정
 								new sap.m.Select("ExpenseDetailBtCity", {
-									layoutData: new sap.m.FlexItemData({ minWidth: "300px" }),
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.changeBtCity.bind(ExpenseDetailDialogHandler),
-									width: "300px",
+									width: "400px",
 									editable: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/RowIndex} === -1 }",
 									selectedKey: "{/ExpenseDetail/BtCityKey}",
 									items: {
@@ -94,7 +94,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 										})
 									}
 								})
-								.addStyleClass("mnw-300px")
+								.addStyleClass("mnw-400px")
 							]
 						})
 						.addStyleClass("search-field-group"),
@@ -102,9 +102,9 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19601}", false, "110px"), // 비용구분 BtCodeSet ICodeT:005
 								new sap.m.Select("ExpenseDetailCategory", {
-									layoutData: new sap.m.FlexItemData({ minWidth: "300px" }),
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.changeCategory.bind(ExpenseDetailDialogHandler),
-									width: "300px",
+									width: "400px",
 									editable: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/RowIndex} === -1 }",
 									selectedKey: "{/ExpenseDetail/Category}",
 									items: {
@@ -120,9 +120,9 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19604}", false, "110px"), // 거래일자
 								new PickOnlyDatePicker("ExpenseDetailAppDate", {
-									layoutData: new sap.m.FlexItemData({ minWidth: "300px" }),
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.changeAppDate.bind(ExpenseDetailDialogHandler),
-									width: "300px",
+									width: "400px",
 									displayFormat: Dtfmt,
 									placeholder: Dtfmt,
 									editable: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/CardPy} === '1' }",
@@ -145,7 +145,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 				})
 				.addStyleClass("search-inner-vbox"),
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
@@ -181,9 +181,9 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19602}", false, "110px"), // 하위구분 BtCodeSet ICodeT:006, ISubCode:/ExpenseDetail/Category
 								new sap.m.Select("ExpenseDetailSubcategory", {
-									layoutData: new sap.m.FlexItemData({ minWidth: "300px" }),
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.changeSubcategory.bind(ExpenseDetailDialogHandler),
-									width: "300px",
+									width: "400px",
 									editable: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/RowIndex} === -1 }",
 									selectedKey: "{/ExpenseDetail/Subcategory}",
 									items: {
@@ -232,20 +232,20 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			visible: "{= ${/VisibleFactor/Category} === '1' && ${/VisibleFactor/Subcategory} === '01' }",
 			items: [
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19621}", false, "110px"), // 숙박기간
 								new PickOnlyDateRangeSelection("LodgePeriod", {
-									layoutData: new sap.m.FlexItemData({ minWidth: "300px" }),
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									displayFormat: Dtfmt,
 									secondDateValue: "{/ExpenseDetail/LodgeEnddat}",
 									dateValue: "{/ExpenseDetail/LodgeStartdat}",
 									editable: "{/ExpenseDetail/Edtfg}",
 									delimiter: "~",
-									width: "300px"
+									width: "400px"
 								})
 							]
 						})
@@ -253,7 +253,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 					]
 				}),
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
@@ -292,29 +292,29 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			visible: "{= ${/VisibleFactor/Category} === '2' && (" + conditions + ") }",
 			items: [
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19623}", false, "110px"), // 이동구간
 								new sap.m.Input("ExpenseDetailStartpl", {
-									width: "136px",
+									width: "186px",
 									value: "{/ExpenseDetail/Startpl}",
-									editable: "{/ExpenseDetail/Edtfg}",
+									editable: "{= ${/ExpenseDetail/Edtfg} && !(${/ExpenseDetail/Category} === '2' && ${/ExpenseDetail/Subcategory} === '09' && ${/ExpenseDetail/UseGis}) }",
 									maxLength: common.Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtSettlementTableIn05", "Startpl"),
-									showValueHelp: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/Category} === '2' && ${/ExpenseDetail/Subcategory} === '09' }",
-									valueHelpRequest: ExpenseDetailDialogHandler.searchTripPlace.bind(ExpenseDetailDialogHandler),
+									showValueHelp: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/Category} === '2' && ${/ExpenseDetail/Subcategory} === '09' && !${/ExpenseDetail/UseGis} }",
+									valueHelpRequest: ExpenseDetailDialogHandler.selectTripPlace.bind(ExpenseDetailDialogHandler),
 									change: ExpenseDetailDialogHandler.changeTripPlace.bind(ExpenseDetailDialogHandler)
 								}),
 								new sap.m.Text({ text: "~" }).addStyleClass("mx-10px"),
 								new sap.m.Input("ExpenseDetailDestpl", {
-									width: "136px",
+									width: "185px",
 									value: "{/ExpenseDetail/Destpl}",
-									editable: "{/ExpenseDetail/Edtfg}",
+									editable: "{= ${/ExpenseDetail/Edtfg} && !(${/ExpenseDetail/Category} === '2' && ${/ExpenseDetail/Subcategory} === '09' && ${/ExpenseDetail/UseGis}) }",
 									maxLength: common.Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtSettlementTableIn05", "Destpl"),
-									showValueHelp: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/Category} === '2' && ${/ExpenseDetail/Subcategory} === '09' }",
-									valueHelpRequest: ExpenseDetailDialogHandler.searchTripPlace.bind(ExpenseDetailDialogHandler),
+									showValueHelp: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/Category} === '2' && ${/ExpenseDetail/Subcategory} === '09' && !${/ExpenseDetail/UseGis} }",
+									valueHelpRequest: ExpenseDetailDialogHandler.selectTripPlace.bind(ExpenseDetailDialogHandler),
 									change: ExpenseDetailDialogHandler.changeTripPlace.bind(ExpenseDetailDialogHandler)
 								})
 							]
@@ -323,7 +323,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 					]
 				}),
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
@@ -338,7 +338,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 										templateShareable: true,
 										template: new sap.ui.core.ListItem({ key: "{value}", text: "{text}" })
 									},
-									width: "65px"
+									width: "90px"
 								})
 								.addStyleClass("custom-select-time"),
 								new sap.m.Text({ text: ":" }).addStyleClass("mx-2px"),
@@ -351,7 +351,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 										templateShareable: true,
 										template: new sap.ui.core.ListItem({ key: "{value}", text: "{text}" })
 									},
-									width: "65px"
+									width: "90px"
 								})
 								.addStyleClass("custom-select-time"),
 								new sap.m.Text({ text: "~" }).addStyleClass("mx-7px"),
@@ -364,7 +364,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 										templateShareable: true,
 										template: new sap.ui.core.ListItem({ key: "{value}", text: "{text}" })
 									},
-									width: "65px"
+									width: "90px"
 								})
 								.addStyleClass("custom-select-time"),
 								new sap.m.Text({ text: ":" }).addStyleClass("mx-2px"),
@@ -377,7 +377,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 										templateShareable: true,
 										template: new sap.ui.core.ListItem({ key: "{value}", text: "{text}" })
 									},
-									width: "65px"
+									width: "90px"
 								})
 								.addStyleClass("custom-select-time")
 							]
@@ -399,14 +399,14 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			visible: "{= ${/VisibleFactor/Category} === '2' && ${/VisibleFactor/Subcategory} === '09' }",
 			items: [
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox({
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19625}", false, "110px"), // 이동거리
 								new sap.m.Button({
-									press: ExpenseDetailDialogHandler.pressGIS.bind(ExpenseDetailDialogHandler),
+									press: ExpenseDetailDialogHandler.searchTripPlace.bind(ExpenseDetailDialogHandler),
 									visible: "{/ExpenseDetail/UseGis}",
 									icon: "sap-icon://map",
 									width: "65px",
@@ -426,18 +426,18 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 										})
 									},
 									maxLength: 5, // maxNumberLength + (comma 가능 개수)
-									width: "300px",
+									width: "400px",
 									description: "km",
-									fieldWidth: "136px"
+									fieldWidth: "186px"
 								})
 								.addStyleClass("custom-description-input measurement-unit"),
 								new sap.m.Text({
 									visible: "{/ExpenseDetail/UseGis}",
+									textAlign: sap.ui.core.TextAlign.Right,
 									text: {
 										path: "/ExpenseDetail/Zzkm",
 										formatter: Common.toCurrency
-									},
-									textAlign: sap.ui.core.TextAlign.Right
+									}
 								}),
 								new sap.m.Text({
 									visible: "{/ExpenseDetail/UseGis}",
@@ -451,10 +451,10 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19627}", false, "110px"), // 연료종류
 								new sap.m.Select("ExpenseDetailZzgasname", {
-									layoutData: new sap.m.FlexItemData({ minWidth: "300px" }),
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.calculateCarExpenses.bind(ExpenseDetailDialogHandler),
 									editable: "{/ExpenseDetail/Edtfg}",
-									width: "300px",
+									width: "400px",
 									selectedKey: "{/ExpenseDetail/Zzgasname}",
 									items: {
 										path: "/GasTypeSelectList",
@@ -469,6 +469,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19629}", false, "110px"), // 톨게이트요금
 								new sap.m.Input({
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.calculateCarExpenses.bind(ExpenseDetailDialogHandler),
 									editable: "{/ExpenseDetail/Edtfg}",
 									value: {
@@ -480,7 +481,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 									},
 									maxLength: 9, // maxNumberLength + (comma 가능 개수)
 									textAlign: sap.ui.core.TextAlign.Right,
-									width: "300px"
+									width: "400px"
 								})
 							]
 						})
@@ -488,7 +489,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 					]
 				}),
 				new sap.m.VBox({
-					layoutData: new sap.m.FlexItemData({ minWidth: "500px" }),
+					layoutData: new sap.m.FlexItemData({ minWidth: "542px" }),
 					width: "50%",
 					items: [
 						new sap.m.HBox().addStyleClass("search-field-group"), // dummy
@@ -509,6 +510,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 							items: [
 								ViewTemplates.getHeaderLabel("{i18n>LABEL_19630}", false, "110px"), // 주차요금
 								new sap.m.Input({
+									layoutData: new sap.m.FlexItemData({ minWidth: "400px" }),
 									change: ExpenseDetailDialogHandler.calculateCarExpenses.bind(ExpenseDetailDialogHandler),
 									editable: "{/ExpenseDetail/Edtfg}",
 									value: {
@@ -520,7 +522,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 									},
 									maxLength: 9, // maxNumberLength + (comma 가능 개수)
 									textAlign: sap.ui.core.TextAlign.Right,
-									width: "300px"
+									width: "400px"
 								})
 							]
 						})
