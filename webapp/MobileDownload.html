@@ -13,6 +13,14 @@
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
+<script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
+<script>
+	$(function() {
+		$(document).on('click', '.btn.android', function() {
+			location.href = "./MobileDownload-info.html";
+		});
+	});
+</script>
 </head>
 <body>
 
@@ -23,11 +31,11 @@
 				<div><img src="images/bi-hihr.png" /></div>
 				<div>Hi HR을 사용하기 위해 기기에 맞는 OS버전을 <span class="font-medium">다운로드</span>하여 설치해 주세요.</div>
 			</div>	
-			<div class="btn">
+			<div class="btn android">
 				<img src="images/icon-android.png" />
 				<span class="os-title">안드로이드 다운로드</span>				
 			</div>
-			<div class="btn">
+			<div class="btn ios">
 				<img src="images/icon-iOS.png" />
 				<span class="os-title">아이폰 다운로드</span>				
 			</div>
