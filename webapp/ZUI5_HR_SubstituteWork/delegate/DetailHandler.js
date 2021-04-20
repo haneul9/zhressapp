@@ -504,6 +504,18 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
+                // 유연근무제 대상자가 아니거나, 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
+                if(data.Bukrs.charAt(0) === "A" || data.Zflag === "X" || data.Zfxck !== "X") {
+                    MessageToast.show(this.oController.getBundleText("MSG_31012").interpolate(data.Stext), {
+                        // ${name}는 신청 대상이 아닙니다.
+                        duration: 2000,
+                        my: sap.ui.core.Popup.Dock.CenterCenter,
+                        at: sap.ui.core.Popup.Dock.CenterCenter
+                    });
+
+                    return;
+                }
+
                 // 중복 체크
                 if(vListData.some(function(elem) { return elem.Pernr === data.Objid; })) {
                     MessageToast.show(this.oController.getBundleText("MSG_31007"), {
@@ -546,7 +558,28 @@ sap.ui.define(
              */
             addTargetTableByMulti: function(data) {
                 var vListData = this.oModel.getProperty("/List"),
-                    vSelectedDataLength = data.length;
+                    vSelectedDataLength = data.length,
+                    impossibleTargets = [];
+
+                // 유연근무제 대상자가 아니거나, 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
+                vListData = vListData.filter(function(elem) {
+                    if(elem.Bukrs.charAt(0) === "A" || elem.Zflag === "X" || elem.Zfxck !== "X") {
+                        impossibleTargets.push(elem.Stext);
+                        return false;
+                    }
+                    return true;
+                });
+                
+                if(impossibleTargets.length) {
+                    MessageToast.show(this.oController.getBundleText("MSG_31012").interpolate(impossibleTargets.join(",")), {
+                        // ${name}는 신청 대상이 아닙니다.
+                        duration: 2000,
+                        my: sap.ui.core.Popup.Dock.CenterCenter,
+                        at: sap.ui.core.Popup.Dock.CenterCenter
+                    });
+
+                    return;
+                }
 
                 if(vListData.length) {
                     // 중복데이터 제거
