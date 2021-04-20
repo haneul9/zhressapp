@@ -21,23 +21,15 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
                     items: [
                         new sap.m.FlexBox({
                             items: [
-                                new sap.m.Label({text: oBundleText.getText("LABEL_60008")}), // 대상기간
+                                new sap.m.Label({text: oBundleText.getText("LABEL_69013")}), // 대상연월
 							    new sap.m.DatePicker({
-									valueFormat : "yyyy-MM-dd",
-						            displayFormat : gDtfmt,
-						            value : "{Begda}",
+									valueFormat : "yyyyMM",
+						            displayFormat : "yyyy.MM",
+						            value : "{Zyymm}",
 									width : "200px",
 									textAlign : "Begin",
 									change : oController.onChangeDate
-							    }),
-							    new sap.m.DatePicker({
-									valueFormat : "yyyy-MM-dd",
-						            displayFormat : gDtfmt,
-						            value : "{Endda}",
-									width : "200px",
-									textAlign : "Begin",
-									change : oController.onChangeDate
-							    }).addStyleClass("pl-5px"),
+								}),
 								new sap.m.Label({
 									text: oBundleText.getText("LABEL_48002"), // 부서/사원
 									visible : {
@@ -108,26 +100,27 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 		oTable.bindRows("/Data");
 		
 						// 수정, 일자, 요일, 근태
-		var col_info = [{id: "Begda", label: oBundleText.getText("LABEL_69002"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
-						{id: "Pernr", label: oBundleText.getText("LABEL_69003"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true,
-						{id: "Ename", label: oBundleText.getText("LABEL_69004"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Orgtx", label: oBundleText.getText("LABEL_69005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+		var col_info = [{id: "Monyn", label: oBundleText.getText("LABEL_69002"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "50px"},
+						{id: "Datum", label: oBundleText.getText("LABEL_69003"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
+						{id: "Weektx", label: oBundleText.getText("LABEL_69004"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "50px"},
+						{id: "Atext", label: oBundleText.getText("LABEL_69005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						// 시작시간, 종료시간, 점심시간, 추가휴게
-						{id: "Entbg", label: oBundleText.getText("LABEL_69006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Enten", label: oBundleText.getText("LABEL_69007"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Norwk", label: oBundleText.getText("LABEL_69008"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "PrchkW", label: oBundleText.getText("LABEL_69009"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Beguz", label: oBundleText.getText("LABEL_69006"), plabel: "", resize: true, span: 0, type: "timepicker", sort: true, filter: true},
+						{id: "Enduz", label: oBundleText.getText("LABEL_69007"), plabel: "", resize: true, span: 0, type: "timepicker", sort: true, filter: true},
+						{id: "Lnctm", label: oBundleText.getText("LABEL_69008"), plabel: "", resize: true, span: 0, type: "combobox", sort: true, filter: true},
+						{id: "Adbtm", label: oBundleText.getText("LABEL_69009"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						// 소정근로, 연장근로, 휴일근로
-						{id: "Absence", label: oBundleText.getText("LABEL_69010"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Comtm", label: oBundleText.getText("LABEL_69011"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Etctt", label: oBundleText.getText("LABEL_69012"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
+						{id: "Wrktm", label: oBundleText.getText("LABEL_69010"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+						{id: "Exttm", label: oBundleText.getText("LABEL_69011"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+						{id: "Holtm", label: oBundleText.getText("LABEL_69012"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true}];
 		
-		common.makeTable.makeColumn(oController, oTable, col_info);
+		oController.makeTable(oController, oTable, col_info);
 		
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,
 			            contentItems: [oFilter, oTable]
 			        });
+			        
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");
 		

@@ -47,15 +47,10 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
-						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Pernr : oLoginData.Pernr,
-						Orgeh : "",
-						Ename : oLoginData.Ename,
-						Bukrs : oLoginData.Bukrs,
-						Molga : oLoginData.Molga,
-						Langu : oLoginData.Langu,
-						Werks : oLoginData.Persa
+						Werks : $.app.getModel("session").getData().Persa,
+						Bukrs : $.app.getModel("session").getData().Bukrs,
+						Pernr : $.app.getModel("session").getData().Pernr,
+						Zyymm : today.getFullYear() + (today.getMonth() + 1 < 10 ? ("0" + (today.getMonth()+1)) : (today.getMonth()+1))
 					}
 				};
 				
@@ -66,7 +61,7 @@ sap.ui.define([
 		onAfterShow: function(oEvent){
 			var oController = this;
 			
-			// oController.onPressSearch(oEvent);
+			oController.onPressSearch(oEvent);
 		},
 		
 		onBack : function(oEvent){
@@ -96,11 +91,6 @@ sap.ui.define([
 			
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
-			if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_64001")); // 대상기간을 입력하여 주십시오.
-				return;
-			}
-			
 			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 			var oJSONModel = oTable.getModel();
 			var vData = {Data : []};
@@ -115,23 +105,21 @@ sap.ui.define([
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {FreeWorkRptNav : []};
-					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = oData.Langu;
-					createData.IMolga = oData.Molga;
-					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
-					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/";
-					createData.IOrgeh = oData.Orgeh;
-					createData.IPernr = oData.Pernr;
+				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
+					createData.Werks = oData.Werks;
+					createData.Pernr = oData.Pernr;
+					createData.Zyymm = oData.Zyymm;
+					createData.Prcty = "1";
 
-				oModel.create("/FreeWorkReportSet", createData, null,
+				oModel.create("/FlexworktimeSummarySet", createData, null,
 					function(data, res){
 						if(data){
-							if(data.FreeWorkRptNav && data.FreeWorkRptNav.results){
-								var data1 = data.FreeWorkRptNav.results;
+							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results){
+								var data1 = data.FlexWorktime1Nav.results;
 								
 								for(var i=0; i<data1.length; i++){
-									data1[i].Begda = data1[i].Begda ? new Date(common.Common.setTime(data1[i].Begda)) : null;
+									data1[i].Idx = i;
+									data1[i].Datum = data1[i].Datum ? new Date(common.Common.setTime(data1[i].Datum)) : null;
 									
 									vData.Data.push(data1[i]);
 								}
@@ -211,6 +199,104 @@ sap.ui.define([
 			if (y % 4 === 0 && y % 100 !== 0 || y % 400 === 0) last[1] = 29;
 	
 			return last[m];
+		},
+		
+		onChangeTime : function(oEvent){
+			if(oEvent && oEvent.getParameters().valid == false){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				oEvent.getSource().setValue("");
+				return;
+			}
+		},
+		
+		makeTable : function(oController, oTable, col_info){
+			
+			for(var i=0; i<col_info.length; i++){
+				var oColumn = new sap.ui.table.Column({
+					flexible : false,
+		        	autoResizable : true,
+		        	resizable : true,
+					showFilterMenuEntry : true,
+					filtered : false,
+					sorted : false,
+					hAlign : (col_info[i].align && col_info[i].align != "" ? col_info[i].align : "Center"),
+					width : (col_info[i].width && col_info[i].width != "" ? col_info[i].width : ""),
+					multiLabels : [new sap.ui.commons.TextView({text : col_info[i].label, textAlign : "Center", width : "100%"}).addStyleClass("L2PFontFamily")]
+				});
+				
+				if(col_info[i].plabel != ""){
+					oColumn.addMultiLabel(new sap.ui.commons.TextView({text : col_info[i].plabel, textAlign : "Center", width : "100%"}).addStyleClass("L2PFontFamily"));
+					oColumn.setHeaderSpan([col_info[i].span, 1]);
+				}
+				
+				var oTemplate;
+				
+				switch(col_info[i].type){
+					case "date":
+						oTemplate = new sap.ui.commons.TextView({
+										text : {
+											path : col_info[i].id, 
+											type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
+										},
+										textAlign : "Center",
+										tooltip : " "
+									}).addStyleClass("FontFamily");
+						break;
+					case "timepicker":
+						oTemplate = new sap.m.TimePicker({
+										valueFormat : "HHmm",
+										 displayFormat : "HH:mm",
+							        	 value : "{" + col_info[i].id + "}",
+							        	 minutesStep : 10,
+							        	 width : "100%", 
+							        	 textAlign : "Begin",
+	                                	 editable : {
+	                                    	path : "Offyn",
+	                                    	formatter : function(fVal){
+	                                    		return fVal == "" ? true : false;
+	                                    	}
+	                                	 },
+	                                	 customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
+	                                	 change : oController.onChangeTime
+									});
+						break;
+					case "combobox":
+						oTemplate = new sap.m.ComboBox({
+										selectedKey : "{" + col_info[i].id + "}",
+										width : "100%",
+										items : [new sap.ui.core.Item({key : "1", text : "01:00"}),
+												 new sap.ui.core.Item({key : "2", text : "00:30"})],
+										editable : {
+											path : "Offyn",
+											formatter : function(fVal){
+												return fVal == "" ? true : false;
+											}
+										}
+									});
+						break;
+					case "time":
+						oTemplate = new sap.ui.commons.TextView({
+										text : {
+											path : col_info[i].id,
+											formatter : function(fVal){
+												return (!fVal || fVal == "") ? "" : (fVal.substring(0,2) + ":" + fVal.substring(2,4));
+											}
+										},
+										textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+										tooltip : " "
+									});
+						break;
+					default:
+						oTemplate = new sap.ui.commons.TextView({
+										text : "{" + col_info[i].id + "}",
+										textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+										tooltip : " "
+									});
+				}
+				
+				oColumn.setTemplate(oTemplate);
+				oTable.addColumn(oColumn);
+			}	
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
