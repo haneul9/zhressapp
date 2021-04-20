@@ -27,7 +27,7 @@ sap.ui.define(
                         new sap.m.IconTabFilter({
                             key: SubstituteWork.Tab.APPROVAL,
                             text: "{i18n>LABEL_31003}", // 신청내역
-                            visible: "{= ${/Bukrs} === 'A100' || ${/Zflag} === 'X' ? false : true }",
+                            visible: "{= ${/Bukrs} === 'A100' || ${/Zflag} === 'X' || ${/Zfxck} !== 'X' ? false : true }",
                             content: [sap.ui.jsfragment([$.app.CONTEXT_PATH, SubstituteWork.Tab.APPROVAL].join(".fragment."), oController)]
                         })
                     ]
