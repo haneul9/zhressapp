@@ -34,7 +34,7 @@ init: function() {
 					mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
 				});
 				if (!this._gateway.isPRD()) {
-					paramMap.pernr = this._gateway.parameter('pernr');
+					paramMap.pernr = this._gateway.parameter('pernr') || sessionStorage.getItem('ehr.sf-user.name');
 				}
 				this._gateway.openWindow({ // openPopup openWindow
 					url: 'indexMobile.html?' + $.param(paramMap),
