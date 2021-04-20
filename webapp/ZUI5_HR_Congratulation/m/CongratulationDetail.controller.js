@@ -335,14 +335,6 @@ sap.ui.define(
 				var onProcessSave = function (fVal) {
 					//신청 클릭시 발생하는 이벤트
 					if (fVal && fVal == "신청") {
-						var PageMoveFunc = function(fVal){
-							if(fVal && fVal == MessageBox.Action.YES) {
-								setTimeout(oController.onPaidVacation, 100);
-							} else {
-								oController.onTableSearch();
-								oController.navBack();
-							}
-						}; 
 						
 						// 첨부파일 저장
 						oCopiedData.Appnm = AttachFileAction.uploadFile.call(oController);
@@ -360,12 +352,9 @@ sap.ui.define(
 						oModel.create("/CongratulationApplySet", sendObject, {
 							async: true,
 							success: function (oData, response) {
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_44002"), { title: oController.getBundleText("LABEL_08025")});
-								// MessageBox.show(oController.getBundleText("MSG_08103"), {
-								// 	title : oController.getBundleText("LABEL_08025"),
-								// 	actions : [MessageBox.Action.YES, MessageBox.Action.NO],
-								// 	onClose : PageMoveFunc
-								// });
+								sap.m.MessageBox.alert(oController.getBundleText("MSG_44002"), { title: oController.getBundleText("LABEL_08022")});
+								oController.onTableSearch();
+								oController.navBack();
 								Common.log(oData);
 								BusyIndicator.hide();
 							},
@@ -420,12 +409,6 @@ sap.ui.define(
 					MessageBox.error(oController.getBundleText("MSG_08114"), { title: oController.getBundleText("MSG_08107")});
 					return true;
 				}
-			},
-			
-			onPaidVacation: function () {
-				//경조휴가 화면으로 이동하는곳
-				sap.m.MessageBox.alert("경조휴가 화면이동");
-				//window.open("");
 			},
 			
 			onDateType: function () {

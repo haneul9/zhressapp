@@ -21,7 +21,7 @@
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs");
+			return this.getSessionInfoByKey("Bukrs3");
         },
 		
 		onInit: function () {
@@ -35,7 +35,7 @@
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {

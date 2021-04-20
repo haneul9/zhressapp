@@ -27,8 +27,7 @@
                         visible: {
 							path: "ReqBtn",
 							formatter: function(v) {
-								if(v === "X") return true;
-								else return false; 
+								return v === "X";
 							}
 						}
                     }).addStyleClass("button-light-sm")
@@ -89,7 +88,7 @@
                                     })
                                     .addStyleClass("L2P13Font font-14px"),
                                     new sap.m.Text({ // 상태
-                                        text: "{StatusT}",
+                                        text: "{Status1T}",
                                         textAlign: "Begin"
                                     })
                                     .addStyleClass("L2P13Font font-14px")

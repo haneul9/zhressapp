@@ -297,7 +297,7 @@
                                 rows: 3,
 								width: "674px",
 								value:"{Zdtlrs}",
-								maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "OpenhelpTableIn2", "Zdtlrs", false),
+								maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zdtlrs", false),
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: {
 									path: "Status1",
@@ -408,7 +408,7 @@
 									ViewTemplates.getLabel("header", "{i18n>LABEL_42025}", "160px", "Right", true).addStyleClass("mr-8px"), // 배우자 육아휴직 신청여부
 									oPartnerCheckCombo
 								]
-							}).addStyleClass("search-field-group"),
+							}).addStyleClass("search-field-group")
                         ]
                     })
                     .addStyleClass("search-field-group")
