@@ -245,6 +245,28 @@ sap.ui.define(
 				this.setPossibleRoomCount();
 			},
 
+			openUri: function() {
+				var url = this.oModel.getProperty("/Detail/Data/UsridLong");
+				if(!url) return;
+
+                setTimeout(function() {
+                    var width = 1000, height = screen.availHeight * 0.9,
+                    left = (screen.availWidth - width) / 2,
+                    top = (screen.availHeight - height) / 2,
+                    popup = window.open(url, "condo-info-popup", [
+                        "width=" + width,
+                        "height=" + height,
+                        "left=" + left,
+                        "top=" + top,
+                        "status=yes,resizable=yes,scrollbars=yes"
+                    ].join(","));
+
+                    setTimeout(function() {
+                        popup.focus();
+                    }, 500);
+                }, 0);
+			},
+
 			DetailProcessValidation: function (detailData) {
 				if (!detailData.Begda || !detailData.Endda) {
 					MessageBox.error(this.oController.getBundleText("MSG_09010"), { title: this.oController.getBundleText("LABEL_09030") });
