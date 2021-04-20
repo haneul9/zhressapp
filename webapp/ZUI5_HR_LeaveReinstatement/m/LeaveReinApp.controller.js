@@ -181,6 +181,7 @@
 								oController.ApplyModel.setProperty("/FormData/Zexbdt", null);
 								oSickInfoBox.setVisible(true);
 								oFamilyInfoBox.setVisible(false);
+								oRelationCombo.setVisible(false);
 								oController.ApplyModel.setProperty("/FormData/Zfmlnm", "");
 								oController.ApplyModel.setProperty("/FormData/Zfgbdt", null);
 								oController.ApplyModel.setProperty("/FormData/Zelmnm", "");
@@ -207,6 +208,7 @@
 								break;
 					case "14":  oBabyDateBox.setVisible(true);
 								oSickInfoBox.setVisible(false);
+								oRelationCombo.setVisible(false);
 								oController.ApplyModel.setProperty("/FormData/Zdsase", "");
 								oController.ApplyModel.setProperty("/FormData/Zdtopn", "");
 								oFamilyInfoBox.setVisible(false);
@@ -224,6 +226,7 @@
 								oController.ApplyModel.setProperty("/FormData/Zdsase", "");
 								oController.ApplyModel.setProperty("/FormData/Zdtopn", "");
 								oFamilyInfoBox.setVisible(true);
+								oRelationCombo.setVisible(false);
 								oMidBox.setVisible(true);
 								oBotBox.setVisible(false);
 								oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
@@ -257,6 +260,7 @@
 								oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 								oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
 								oController.ApplyModel.setProperty("/FormData/Zspsap", "");
+								oRelationCombo.setVisible(false);
 								oPartner.setVisible(false);
 								oMidBox.setVisible(false);
 								oBotBox.setVisible(false);
@@ -274,6 +278,7 @@
 				oController.ApplyModel.setProperty("/FormData/Zentdt", null);
 				oController.ApplyModel.setProperty("/FormData/Kdsvh", "");
 				oController.ApplyModel.setProperty("/FormData/Zspsap", "");
+				oRelationCombo.setVisible(false);
 				oPartner.setVisible(false);
 				oMidBox.setVisible(false);
 				oBotBox.setVisible(false);
