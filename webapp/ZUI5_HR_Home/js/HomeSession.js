@@ -82,18 +82,20 @@ dkdlTlqpfmffls: function(resolve) {
 				e.stopImmediatePropagation();
 			}
 
-			var dkdlTlqpfmffls = $('#dkdlTl-qpfmffls'),
-			pernr = dkdlTlqpfmffls.val().replace(/^0+/g, '');
-			if (!pernr) {
-				dkdlTlqpfmffls.siblings('.value-required').show();
-				return;
-			} else {
-				dkdlTlqpfmffls.siblings('.value-required').hide();
-			}
+			setTimeout(function() {
+				var dkdlTlqpfmffls = $('#dkdlTl-qpfmffls'),
+				pernr = dkdlTlqpfmffls.val().replace(/^0+/g, '');
+				if (!pernr) {
+					dkdlTlqpfmffls.siblings('.value-required').show();
+					return;
+				} else {
+					dkdlTlqpfmffls.siblings('.value-required').hide();
+				}
 
-			sessionStorage.setItem('ehr.sf-user.name', pernr);
-			resolve();
-			this._gateway.confirm('hide');
+				sessionStorage.setItem('ehr.sf-user.name', pernr);
+				resolve();
+				this._gateway.confirm('hide');
+			}.bind(this), 0);
 		}.bind(this),
 		cancel: function() {
 			this._retrieveSFUserName(resolve);
@@ -468,34 +470,36 @@ confirmADPW: function(o) {
 				e.stopImmediatePropagation();
 			}
 
-			var adpw = $('#adpw'),
-			pw = adpw.val();
-			if (!pw) {
-				adpw.siblings('.value-required').show();
-				return;
-			} else {
-				adpw.siblings('.value-required').hide();
-			}
+			setTimeout(function() {
+				var adpw = $('#adpw'),
+				pw = adpw.val();
+				if (!pw) {
+					adpw.siblings('.value-required').show();
+					return;
+				} else {
+					adpw.siblings('.value-required').hide();
+				}
 
-			if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
-				setTimeout(function() {
-					sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
-					this._gateway.confirm('hide');
-				}.bind(this), 0);
-
-				o.confirm();
-			} else {
-				this.authenticateADAccount(pw)
-					.then(function() {
+				if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
+					setTimeout(function() {
+						sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
 						this._gateway.confirm('hide');
-						o.confirm();
-					}.bind(this))
-					.catch(function(jqXHR) {
-						var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
+					}.bind(this), 0);
 
-						adpw.siblings('.value-invalid').text(errorMessage).show();
-					}.bind(this));
-			}
+					o.confirm();
+				} else {
+					this.authenticateADAccount(pw)
+						.then(function() {
+							this._gateway.confirm('hide');
+							o.confirm();
+						}.bind(this))
+						.catch(function(jqXHR) {
+							var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
+
+							adpw.siblings('.value-invalid').text(errorMessage).show();
+						}.bind(this));
+				}
+			}.bind(this), 0);
 		}.bind(this),
 		cancel: o.cancel
 	};

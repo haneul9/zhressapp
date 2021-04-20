@@ -159,11 +159,15 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 				}.bind(this), 0);
 				this._menu_authorized = true;
 
-				window.startAppInit();
+				setTimeout(function() {
+					window.startAppInit();
+				}, 0);
 			}.bind(this),
 			cancel: function() {
-				this._gateway.handleAuthCancel(this.errorHandler.bind(this));
-				this._gateway.restoreHome();
+				setTimeout(function() {
+					this._gateway.handleAuthCancel(this.errorHandler.bind(this));
+					this._gateway.restoreHome();
+				}.bind(this), 0);
 			}.bind(this)
 		});
 
@@ -172,11 +176,15 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
 		}
 
-		this._gateway.successAppPrefilter(); // 메뉴 iframe 정상 로딩시 Home 화면 후속 처리
+		setTimeout(function() {
+			this._gateway.successAppPrefilter(); // 메뉴 iframe 정상 로딩시 Home 화면 후속 처리
+		}.bind(this), 0);
 		this._menu_authorized = true;
 
 		document.addEventListener("DOMContentLoaded", function() {
-			window.startAppInit();
+			setTimeout(function() {
+				window.startAppInit();
+			}, 0);
 		});
 
 	}

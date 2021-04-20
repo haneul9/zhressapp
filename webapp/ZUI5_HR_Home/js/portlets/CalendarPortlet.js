@@ -323,7 +323,8 @@ initPopover: function() {
 			title: function() {
 				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
 				if (!tooltipBody.length) {
-					return '해당 인원이 없습니다.';
+					return null;
+					// return '해당 인원이 없습니다.';
 				}
 				return [
 					'<table class="portlet-calendar-tooltip">',
@@ -355,7 +356,8 @@ initPopover: function() {
 			title: function() {
 				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
 				if (!tooltipBody.length) {
-					return '해당 인원이 없습니다.';
+					return null;
+					// return '해당 인원이 없습니다.';
 				}
 				return [
 					'<table class="portlet-calendar-tooltip">',
@@ -383,7 +385,8 @@ initPopover: function() {
 			title: function() {
 				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
 				if (!tooltipBody.length) {
-					return '해당 인원이 없습니다.';
+					return null;
+					// return '해당 인원이 없습니다.';
 				}
 				return [
 					'<table class="portlet-calendar-tooltip">',
