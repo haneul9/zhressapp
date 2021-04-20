@@ -259,7 +259,7 @@ sap.ui.define(
                         Trbu1M: "00",
                         Treu1T: "00",
                         Treu1M: "00",
-                        MinDate: moment().add(1, "days").toDate(),
+                        MinDate: moment().toDate(),
                         Schda: moment().add(1, "days").toDate(),
                         WeekName: this.oController.getBundleText(this.oModel.getProperty("/Weeks")[moment().add(1, "days").day()]),
                         List: [{ Tim00: "", Tim01: "", Tim07: "", Tim05: "", Tim02: "", Wt40: "", Wt12: "", Wtsum: "", LigbnTx: "" }]
