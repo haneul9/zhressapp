@@ -32,6 +32,7 @@ sap.ui.define(
                 this.oController = oController;
                 this.oModel.setData({
                     Dtfmt: "yyyy-MM-dd",
+                    Bukrs: null,    // 통합전 회사코드 앞 1자리('A' 첨단으로 판단)
                     Zflag: null,
                     Auth: $.app.getAuth(),
                     IsSearch: false,
@@ -52,6 +53,7 @@ sap.ui.define(
 
             load: function () {
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
+                this.oModel.setProperty("/Bukrs", this.oController.getSessionInfoByKey("Bukrs").charAt(0));
                 this.oModel.setProperty("/Zflag", this.oController.getSessionInfoByKey("Zflag"));
                 this.oModel.setProperty("/SearchConditions/Schkz", "ALL");
                 this.oModel.setProperty("/SearchConditions/OrgDn", false);

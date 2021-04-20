@@ -104,7 +104,7 @@ sap.ui.define(
                                 new sap.m.Button({
                                     press: StatusListHandler.pressChangeApprovalBtn.bind(StatusListHandler),
                                     text: "{i18n>LABEL_30008}", // 변경 신청
-                                    visible: "{= ${/Zflag} === 'X' ? false : true }"
+                                    visible: "{= ${/Bukrs} === 'A' || ${/Zflag} === 'X' ? false : true }"
                                 }).addStyleClass("button-light")
                             ]
                         }).addStyleClass("button-group")
