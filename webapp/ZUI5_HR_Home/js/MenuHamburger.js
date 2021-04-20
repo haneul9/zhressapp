@@ -144,10 +144,6 @@ goToLink: function(menuId, url) {
 
 	var iframe = $('iframe[name="content-iframe"]');
 	if (!iframe.length) {
-		// var container = $('.ehr-body .container-fluid');
-		// if (container.data('jsp')) {
-		// 	container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
-		// }
 		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
 	}
 
@@ -156,8 +152,8 @@ goToLink: function(menuId, url) {
 		form = $('<form id="menu-form" method="GET" target="content-iframe"><input type="hidden" name="mid" /></form>').appendTo('body');
 	}
 
-	if (!window._basis.isPRD()) {
-		var pernr = window._basis.parameter('pernr');
+	if (!this._gateway.isPRD()) {
+		var pernr = this._gateway.parameter('pernr') || sessionStorage.getItem('ehr.sf-user.name');
 		if (pernr) {
 			if (!form.find('input[name="pernr"]').val(pernr).length) {
 				$('<input type="hidden" name="pernr" />').val(pernr).appendTo(form);
@@ -194,7 +190,7 @@ handleUrl: function(e) {
 				mid: menuId
 			};
 			if (!this._gateway.isPRD()) {
-				params.pernr = this._gateway.parameter('pernr');
+				params.pernr = this._gateway.parameter('pernr') || sessionStorage.getItem('ehr.sf-user.name');
 			}
 			this._gateway.openWindow({
 				url: 'indexMobile.html?' + $.param(params),
