@@ -249,6 +249,8 @@ sap.ui.define(
 				var url = this.oModel.getProperty("/Detail/Data/UsridLong");
 				if(!url) return;
 
+				if(url.toLowerCase().indexOf("http") < 0) url = "http://" + url;
+
                 setTimeout(function() {
                     var width = 1000, height = screen.availHeight * 0.9,
                     left = (screen.availWidth - width) / 2,

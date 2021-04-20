@@ -295,8 +295,9 @@ sap.ui.define([
 							}), // 콘도정보
 							new sap.m.Link({
 								target: "_blank",
-								text: "{UsridLong}",
-                                href: "{UsridLong}",
+                                text: "{UsridLong}",
+                                press: CondoHandler.openUri.bind(CondoHandler),
+                                // href: "{UsridLong}",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 })
 							})
                         ],
