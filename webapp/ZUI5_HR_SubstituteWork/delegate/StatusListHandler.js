@@ -33,6 +33,7 @@ sap.ui.define(
                     Dtfmt: "yyyy-MM-dd",
                     Bukrs: null,
                     Zflag: null,
+                    Zfxck: null,
                     Auth: $.app.getAuth(),
                     IsSearch: false,
                     SearchConditions: {
@@ -55,6 +56,7 @@ sap.ui.define(
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/Bukrs", this.oController.getSessionInfoByKey("Bukrs"));
                 this.oModel.setProperty("/Zflag", this.oController.getSessionInfoByKey("Zflag"));
+                this.oModel.setProperty("/Zfxck", this.oController.getSessionInfoByKey("Zfxck"));
                 this.oModel.setProperty("/SearchConditions/Tprog", "ALL");
                 this.oModel.setProperty("/SearchConditions/OrgDn", false);
                 this.oModel.setProperty("/SearchConditions/Begda", new Date());
