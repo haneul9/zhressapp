@@ -61,6 +61,7 @@ sap.ui.define([
 				new sap.m.Button(oController.PAGEID+"_Re",{text:oBundleText.getText("LABEL_44035"),press:oController.onRe,visible:{path:"Status",formatter:function(fVal){
 					return fVal=="88"?true:false;
 				}}}).addStyleClass("button-dark"),
+				new sap.ui.core.HTML({content:"<span>&nbsp;</span>"}),
 				new sap.m.Button({text:oBundleText.getText("LABEL_44031"),press:oController.onSave,visible:{path:"Opener",formatter:function(fVal){
 					return fVal=="X"?true:false;
 				}}}).addStyleClass("button-dark")]
