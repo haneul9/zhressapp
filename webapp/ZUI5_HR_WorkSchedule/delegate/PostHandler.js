@@ -56,7 +56,8 @@ sap.ui.define(
                     ApprStats: [],  // 진행상태
                     List: [],
                     Hours: [{ Code: "", Text: "HH"}].concat(Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; })),
-                    Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
+                    // Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
+                    Minutes: [{ Code: "", Text: "mm"}, { Code: "00", Text: "00"}, { Code: "30", Text: "30"}],
                     Tprogs: [],
                     Faprss: [],
                     Weeks: ["LABEL_55028","LABEL_55029","LABEL_55030","LABEL_55031","LABEL_55032","LABEL_55033","LABEL_55034"],
