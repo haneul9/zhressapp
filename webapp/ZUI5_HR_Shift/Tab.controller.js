@@ -61,6 +61,7 @@ sap.ui.define(
 
             onBeforeShow: function () {
                 this.oModel.setData({
+                    Bukrs: this.getSessionInfoByKey("Bukrs").charAt(0),
                     Zflag: this.getSessionInfoByKey("Zflag")
                 });
 

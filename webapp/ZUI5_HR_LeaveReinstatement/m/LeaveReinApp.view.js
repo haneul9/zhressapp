@@ -30,7 +30,7 @@
                             visible: {
                                 path: "Status1",
                                 formatter: function (v) {
-                                    return v === "AA";
+                                    return !v || v === "AA";
                                 }
                             }
                         }).addStyleClass("button-light"),
@@ -40,7 +40,7 @@
                             visible: {
                                 path: "Status1",
                                 formatter: function (v) {
-                                    return !v;
+                                    return !v || v === "AA";
                                 }
                             }
                         }).addStyleClass("button-dark"),
@@ -180,7 +180,7 @@
                         height: "40px",
                         alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42027}", "105px", "Right", true), // 질병 명
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42027}", "105px", "Left", true), // 질병 명
                             new sap.m.Input({
 								textAlign: "Begin",
 								width: "250px",
@@ -199,7 +199,7 @@
                         height: "40px",
                         alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42028}", "105px", "Right", true), // 의사 소견 (요약)
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42028}", "105px", "Left", true), // 의사 소견 (요약)
                             new sap.m.Input({
 								textAlign: "Begin",
 								width: "250px",
@@ -301,7 +301,8 @@
                                 ]
                             })
                         ]
-                    }),
+                    })
+                    .addStyleClass("mt-5px"),
                     new sap.m.VBox(oController.PAGEID + "_BotBox", {
 						items: [
                             new sap.m.HBox(oController.PAGEID + "_RelationCombo", {
@@ -316,12 +317,19 @@
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42025}", "105px", "Left", true), // 배우자 육아휴직 신청여부
+                                    new sap.m.Label({ // 배우자 육아휴직 신청여부
+                                        text: "{i18n>LABEL_42025}",
+                                        width: "105px",
+                                        textAlign: "Left",
+                                        required: true,
+                                        wrapping: true
+                                    }),
                                     oPartnerCheckCombo
                                 ]
                             })
                         ]
                     })
+                    .addStyleClass("mt-5px")
                 ]
             });
             
@@ -447,7 +455,7 @@
                     FamilyInfoBox,
                     oSickInfoBox,
                     new sap.m.HBox({
-                        height: "40px",
+                        height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left"), // 결재선 안내
@@ -487,7 +495,7 @@
                         ]
                     }),
                     new sap.m.HBox({
-                        height: "40px",
+                        height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left"), // 증빙서류 안내
