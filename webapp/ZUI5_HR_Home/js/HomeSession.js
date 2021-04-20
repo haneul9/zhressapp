@@ -10,7 +10,6 @@ function HomeSession(_gateway, initHome) {
 		ehr.odata.csrf-token
 		ehr.odata.destination
 		ehr.menu-auth.state
-		ehr.ad-pw-confirm.state
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -434,13 +433,9 @@ authenticateADAccount: function(pw) {
 		},
 		success: function() {
 			this._gateway.prepareLog('HomeSession.authenticateADAccount ${url} success'.interpolate(url), arguments).log();
-
-			sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount ' + url);
-
-			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
 		}.bind(this)
 	});
 },
@@ -482,22 +477,26 @@ confirmADPW: function(o) {
 
 				if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
 					setTimeout(function() {
-						sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
 						this._gateway.confirm('hide');
 					}.bind(this), 0);
 
 					o.confirm();
 				} else {
-					this.authenticateADAccount(pw)
-						.then(function() {
-							this._gateway.confirm('hide');
-							o.confirm();
-						}.bind(this))
-						.catch(function(jqXHR) {
-							var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
+					setTimeout(function() {
+						this.authenticateADAccount(pw)
+							.then(function() {
+								setTimeout(function () {
+									this._gateway.confirm('hide');
+								}.bind(this), 0);
 
-							adpw.siblings('.value-invalid').text(errorMessage).show();
-						}.bind(this));
+								o.confirm();
+							}.bind(this))
+							.catch(function(jqXHR) {
+								var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
+
+								adpw.siblings('.value-invalid').text(errorMessage).show();
+							}.bind(this));
+					}.bind(this), 0);
 				}
 			}.bind(this), 0);
 		}.bind(this),
