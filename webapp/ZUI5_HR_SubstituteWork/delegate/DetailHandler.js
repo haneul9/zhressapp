@@ -562,7 +562,7 @@ sap.ui.define(
                     impossibleTargets = [];
 
                 // 유연근무제 대상자가 아니거나, 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
-                vListData = vListData.filter(function(elem) {
+                data = data.filter(function(elem) {
                     if(elem.Bukrs.charAt(0) === "A" || elem.Zflag === "X" || elem.Zfxck !== "X") {
                         impossibleTargets.push(elem.Stext);
                         return false;
