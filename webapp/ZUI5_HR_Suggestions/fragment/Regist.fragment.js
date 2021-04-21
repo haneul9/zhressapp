@@ -1,9 +1,7 @@
 ﻿sap.ui.define([
     "../../common/Common",
-	"../../common/HoverIcon",
-    "../delegate/ViewTemplates",
-	"sap/m/InputBase"
-], function (Common, HoverIcon, ViewTemplates, InputBase) {
+    "../delegate/ViewTemplates"
+], function (Common, ViewTemplates) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", {
