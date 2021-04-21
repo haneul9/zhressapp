@@ -16,7 +16,7 @@ $.extend(CalendarPortlet.prototype, {
 
 ui: function() {
 
-	var cardHeader = this.hideTitle() ? '' : [
+	var cardHeader = this.mobile() ? '' : [
 		'<div class="card-header">',
 			'<h6>${title}</h6>'.interpolate(this.title()),
 			'<div>',
