@@ -13,15 +13,19 @@ $.extend(HiTalkTalkPortlet.prototype, {
 
 ui: function() {
 
+	var cardHeader = this.hideTitle() ? '' : [
+		'<div class="card-header">',
+			'<h6>${title}</h6>'.interpolate(this.title()),
+			'<div>',
+				this.dismissButton(),
+				this.link(true),
+			'</div>',
+		'</div>'
+	].join('');
+
 	return [
 		'<div class="card portlet portlet-${size}h portlet-bbs portlet-hitalktalk" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
-			'<div class="card-header">',
-				'<h6>${title}</h6>'.interpolate(this.title()),
-				'<div>',
-					this.dismissButton(),
-					this.link(true),
-				'</div>',
-			'</div>',
+			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-hitalktalk-list"></div>',
 			'</div>',
