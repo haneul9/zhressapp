@@ -183,7 +183,7 @@
 						visible: {
 							path: "/Gubun",
 							formatter: function(v) {
-								return v === "X" || v === "Y";
+								return v === "Y";
 							}
 						}
 					}).addStyleClass("button-delete"),
