@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 sap.ui.define([
 	"../../common/Common",
 	"../../common/PickOnlyDateRangeSelection",
@@ -381,9 +382,12 @@ sap.ui.define([
 				.setModel(oController.DetailModel)
 				.bindElement("/FormData")
 				.addStyleClass("mb-10px"),
-				new sap.m.HBox({
+				new sap.m.VBox({
+					width: "100%",
+					height: "210px",
+					fitContainer: true,
 					items: [
-						ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Right"), // 첨부파일
+						ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Left").addStyleClass("sub-title mt-10px"), // 첨부파일
 						new sap.m.VBox({
 							items: [
 								new sap.m.HBox({
@@ -399,10 +403,12 @@ sap.ui.define([
 								fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
 							]
 						})
+						.addStyleClass("custom-multiAttach-file")
 					]
-				}).addStyleClass("pl-10px pr-10px")
+				})
+				.addStyleClass("/*search-field-group*/")
 			]
-		})
+		});
 				
 			var oDialog = new sap.m.Dialog({
 				title: "{i18n>LABEL_29001}",    // 어학비신청
