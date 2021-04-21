@@ -181,9 +181,9 @@
 						press: oController.onDialogDeleteBtn.bind(oController),
 						text: "{i18n>LABEL_57017}", // 삭제
 						visible: {
-							path: "/Gubun",
-							formatter: function(v) {
-								return v === "Y" || Common.checkNull(!v);
+							parts: [{path: "Aedtm"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return (v1 && v2 === "X") || v2 === "Y";
 							}
 						}
 					}).addStyleClass("button-delete"),

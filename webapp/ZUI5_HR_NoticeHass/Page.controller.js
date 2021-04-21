@@ -237,9 +237,12 @@
 								oController.RegistModel.setProperty("/Gubun", "");
 							}
 						}else {
-							oController.RegistModel.setProperty("/Gubun", Common.checkNull(oCopiedRow.Hide) ? oCopiedRow.Hide : "X");
+							if(vPernr === oController.TableModel.getProperty(Path).Apern){
+								oController.RegistModel.setProperty("/Gubun", oCopiedRow.Hide);
+							}else {
+								oController.RegistModel.setProperty("/Gubun", "");
+							}
 						}
-
 					}
 				},
 				error: function(oResponse) {
