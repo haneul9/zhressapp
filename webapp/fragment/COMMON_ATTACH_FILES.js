@@ -321,6 +321,7 @@ fragment.COMMON_ATTACH_FILES = {
 
 		JSonModel.setProperty("/Settings/Length", Datas.Data.length);
 		JSonModel.setProperty("/Data", Datas.Data);
+		JSonModel.refresh();
 	},
 
 	/*

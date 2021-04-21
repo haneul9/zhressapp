@@ -276,7 +276,7 @@ sap.ui.define(
                                                         parts: [{ path: "Begshp" }, { path: "Endshp" }],
                                                         formatter: function (fVal1, fVal2) {
                                                             if (fVal1 && fVal2) {
-                                                                return "{i18n>LABEL_39019}" + " " + fVal1 + " ~ " + fVal2;
+                                                                return oController.getBundleText("LABEL_39019") + " " + fVal1 + " ~ " + fVal2;
                                                             } else {
                                                                 return "";
                                                             }
@@ -376,7 +376,7 @@ sap.ui.define(
                                                         parts: [{ path: "Begsh2p" }, { path: "Endsh2p" }],
                                                         formatter: function (fVal1, fVal2) {
                                                             if (fVal1 && fVal2) {
-                                                                return "{i18n>LABEL_39019}" + " " + fVal1 + " ~ " + fVal2;
+                                                                return oController.getBundleText("LABEL_39019") + " " + fVal1 + " ~ " + fVal2;
                                                             } else {
                                                                 return "";
                                                             }

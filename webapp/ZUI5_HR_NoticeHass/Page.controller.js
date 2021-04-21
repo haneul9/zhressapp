@@ -193,10 +193,10 @@
 
 		onSelectDetail: function(Gubun, Path){
 			var oController = $.app.getController();
-			var oView = $.app.byId("ZUI5_HR_Notice.Page");
+			var oView = $.app.byId("ZUI5_HR_NoticeHass.Page");
 			
 			if (!oController._RegistModel) {
-				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Notice.fragment.Regist", oController);
+				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_NoticeHass.fragment.Regist", oController);
 				oView.addDependent(oController._RegistModel);
 			}
 			
