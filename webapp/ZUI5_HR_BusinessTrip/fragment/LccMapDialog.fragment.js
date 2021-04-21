@@ -57,20 +57,20 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 				height: "100%",
 				items: [
 					new sap.m.Label({ text: "{i18n>LABEL_19633}" }), // 출발지
-					new sap.m.Input("LccMapDeparture", {
-						maxLength: 30,
+					new sap.m.SearchField("LccMapDeparture", {
+						maxLength: common.Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtSettlementTableIn05", "Startpl"),
 						width: "100%",
 						value: "{/LccMap/Departure}",
 						placeholder: oController.getBundleText("MSG_19036", oController.getBundleText("LABEL_19633")), // 출발지를 검색하세요.
-						submit: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
+						search: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
 					}),
 					new sap.m.Label({ text: "{i18n>LABEL_19634}" }).addStyleClass("mt-16px"), // 도착지
-					new sap.m.Input("LccMapDestination", {
-						maxLength: 30,
+					new sap.m.SearchField("LccMapDestination", {
+						maxLength: common.Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtSettlementTableIn05", "Destpl"),
 						width: "100%",
 						value: "{/LccMap/Destination}",
 						placeholder: oController.getBundleText("MSG_19036", oController.getBundleText("LABEL_19634")), // 도착지를 검색하세요.
-						submit: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
+						search: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
 					}),
 					new sap.m.Label({ text: "{i18n>LABEL_00120}" }).addStyleClass("mt-16px"), // 검색결과
 					new sap.m.List("LccMapPlaceList", {

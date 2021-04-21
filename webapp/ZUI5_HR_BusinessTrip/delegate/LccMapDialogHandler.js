@@ -264,11 +264,15 @@ var Handler = {
 	// 지역 검색
 	searchPlace: function(oEvent) {
 
-		var keyword = oEvent.getParameter("value"),
+		var keyword = oEvent.getParameter("query"),
 		target = oEvent.getParameter("id").replace(/LccMap/, "").toLowerCase();
 
 		setTimeout(function() {
 			$.app.byId("LccMapPlaceList").removeSelections(true);
+
+			if (!keyword) {
+				this.LccMap.removeMarker(target);
+			}
 
 			this.LccMap.searchLocal({
 				keyword: keyword,

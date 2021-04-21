@@ -183,6 +183,7 @@ table.search-box.search-bg {table-layout:auto !important}
 .button-light .sapMBtnInner.sapMBtnText {padding-right:20px; padding-left: 20px}
 .button-light .sapMBtnIcon,
 .button-light .sapMBtnContent {line-height:36px; border-color:#0070bd; font-size:14px; font-weight:500; color:#0070bd}
+.button-light .sapMBtnActive .sapMBtnContent {color:#fff}
 
 .button-dark.sapMBtn {padding:0}
 .button-dark.sapMBtn,
@@ -220,7 +221,7 @@ table.search-box.search-bg {table-layout:auto !important}
 /* .button-light-sm .sapMBtnInner.sapMBtnText {padding-right:20px; padding-left:20px} */
 .button-light-sm .sapMBtnIcon {line-height:31px; font-size:14px; color:#0070bd}
 .button-light-sm .sapMBtnContent {line-height:31px; font-size:14px; color:#333}
-.button-light-sm:hover .sapMBtnIcon {color:#0070bd}
+.button-light-sm:hover .sapMBtnActive .sapMBtnIcon {color:#0070bd}
 /* .button-light-sm:hover .sapMBtnContent {color:#0070bd} */
 
 .button-delete.sapMBtn {padding:0}
