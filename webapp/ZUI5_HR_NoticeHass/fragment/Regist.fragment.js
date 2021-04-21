@@ -183,7 +183,7 @@
 						visible: {
 							parts: [{path: "Aedtm"}, {path: "/Gubun"}],
 							formatter: function(v1, v2) {
-								return Common.checkNull(!v1) || v2 === "Y";
+								return Common.checkNull(!v1) || v2 === "Y" || Common.checkNull(!v2);
 							}
 						}
 					}).addStyleClass("button-delete"),
