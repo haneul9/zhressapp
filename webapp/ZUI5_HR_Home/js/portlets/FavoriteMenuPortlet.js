@@ -21,14 +21,18 @@ ui: function() {
 			this._gateway.redirect(this._gateway.menuUrl($(e.currentTarget).data('menuId')));
 		}.bind(this));
 
+	var cardHeader = this.hideTitle() ? '' : [
+		'<div class="card-header">',
+			'<h6>${title}</h6>'.interpolate(this.title()),
+			'<div>',
+				this.dismissButton(),
+			'</div>',
+		'</div>'
+	].join('');
+
 	return [
 		'<div class="card portlet portlet-${size}h portlet-favorite-menu" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
-			'<div class="card-header">',
-				'<h6>${title}</h6>'.interpolate(this.title()),
-				'<div>',
-					this.dismissButton(),
-				'</div>',
-			'</div>',
+			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-favorite-menu-list"></div>',
 			'</div>',

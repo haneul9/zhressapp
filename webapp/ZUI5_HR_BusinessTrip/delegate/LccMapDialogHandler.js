@@ -284,7 +284,8 @@ var Handler = {
 
 		var o = oEvent.getParameter("listItem").getBindingContext().getProperty();
 		setTimeout(function() {
-			this.LccMap
+			this.setPlace(o.target, o.address)
+				.LccMap
 				.panTo(o.coord)
 				.setMarker({
 					target: o.target,

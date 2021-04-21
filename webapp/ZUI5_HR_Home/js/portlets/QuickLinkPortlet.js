@@ -14,22 +14,26 @@ $.extend(QuickLinkPortlet.prototype, {
 
 ui: function() {
 
+	var cardHeader = this.hideTitle() ? '' : [
+		'<div class="card-header">',
+			'<h6>${title}</h6>'.interpolate(this.title()),
+			'<div>',
+				'<button type="button" class="d-none" data-dismiss="portlet" aria-label="Close">',
+					'<span aria-hidden="true" style="font-size:1.125rem;color:#333"><i class="fas fa-times" title="숨기기"></i></span>',
+				'</button>',
+				'<button type="button" data-quick-link-button="add" aria-label="추가" class="pb-2px">',
+					'<span aria-hidden="true" style="font-size:1.125rem;color:#333"><i class="fas fa-plus" title="추가"></i></span>',
+				'</button>',
+				'<button type="button" data-quick-link-button="remove" aria-label="삭제" class="pb-2px">',
+					'<span aria-hidden="true" style="font-size:1.125rem;color:#333"><i class="fas fa-minus" title="삭제"></i></span>',
+				'</button>',
+			'</div>',
+		'</div>'
+	].join('');
+
 	return [
 		'<div class="card portlet portlet-${size}h portlet-quick-link" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
-			'<div class="card-header">',
-				'<h6>${title}</h6>'.interpolate(this.title()),
-				'<div>',
-					'<button type="button" class="d-none" data-dismiss="portlet" aria-label="Close">',
-						'<span aria-hidden="true" style="font-size:1.125rem;color:#333"><i class="fas fa-times" title="숨기기"></i></span>',
-					'</button>',
-					'<button type="button" data-quick-link-button="add" aria-label="추가" class="pb-2px">',
-						'<span aria-hidden="true" style="font-size:1.125rem;color:#333"><i class="fas fa-plus" title="추가"></i></span>',
-					'</button>',
-					'<button type="button" data-quick-link-button="remove" aria-label="삭제" class="pb-2px">',
-						'<span aria-hidden="true" style="font-size:1.125rem;color:#333"><i class="fas fa-minus" title="삭제"></i></span>',
-					'</button>',
-				'</div>',
-			'</div>',
+			cardHeader,
 			'<div class="card-body">',
 				'<div class="portlet-quick-link-box"></div>',
 			'</div>',
