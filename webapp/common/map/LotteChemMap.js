@@ -86,6 +86,18 @@ common.map.LotteChemMap = function(options) {
 		this.maxBounds = options.maxBounds;
 		this.oMap.setOptions('maxBounds', options.maxBounds.get()); // new common.map.SouthKoreaBounds().get()
 	}
+
+	$(document)
+		.off('click', '.button-departure')
+		.on('click', '.button-departure', function () {
+			this.setPlace(this.PLACE_TARGET.DEPARTURE);
+		}.bind(this));
+
+	$(document)
+		.off('click', '.button-destination')
+		.on('click', '.button-destination', function () {
+			this.setPlace(this.PLACE_TARGET.DESTINATION);
+		}.bind(this));
 };
 
 common.map.LotteChemMap.prototype.instantiate = function(options) {
@@ -159,7 +171,10 @@ common.map.LotteChemMap.prototype.setMarker = function(o) {
 		this.mMarkerMap[o.target] = oMarker;
 	}
 
-	oMarker.setPosition(o.coord);
+	if (o.address) { // setPosition 이전에 custom-address를 변경해야함
+		oMarker.set('custom-address', o.address);
+	}
+	oMarker.setPosition(o.coord); // position_changed event 발생
 	oMarker.setMap(this.oMap);
 
 	return this;
@@ -195,17 +210,16 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 		this.functionProvider.spinner(true);
 
 		var target = oMarker.get('custom-target'),
-		// address = oMarker.get('custom-address'),
+		address = oMarker.get('custom-address'),
 		oAddressOverlay = this.mAddressOverlayMap[target];
 
 		if (oAddressOverlay) {
 			oAddressOverlay.setMap();
 		}
 
-		this.initPath()
-			.searchAddress(target);
-/*
-		if (address) {
+		this.initPath();
+
+		if (target !== this.PLACE_TARGET.CHOICE && address) {
 			this.setAddressOverlay({
 				target: target,
 				address: address
@@ -218,7 +232,6 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 		} else {
 			this.searchAddress(target);
 		}
-*/
 	}.bind(this));
 
 	return oMarker;
@@ -241,9 +254,25 @@ common.map.LotteChemMap.prototype.setAddressOverlay = function(o) {
 common.map.LotteChemMap.prototype.getAddressOverlayContent = function(o) {
 
     if (!o || !o.address) {
-		this.functionProvider.alert('주소 정보가 없습니다.');
+		if (this.mAddressOverlayMap[o.target]) {
+			this.mAddressOverlayMap[o.target].setMap();
+		}
+		if (this.mMarkerMap[o.target]) {
+			this.mMarkerMap[o.target].setMap();
+		}
+		this.functionProvider.alert('Not found address data.');
 		return;
     }
+	if (!o.address.building) {
+		if (this.mAddressOverlayMap[o.target]) {
+			this.mAddressOverlayMap[o.target].setMap();
+		}
+		if (this.mMarkerMap[o.target]) {
+			this.mMarkerMap[o.target].setMap();
+		}
+		this.functionProvider.alert('해당 지점에 사용가능한 적절한 지명이 없습니다.\n다시 선택해주세요.');
+		return;
+	}
 
 	var address = o.address,
 	htmlAddresses = [this.mPlaceTargetText[o.target]];
@@ -290,17 +319,22 @@ common.map.LotteChemMap.prototype.replaceMarker = function(target) {
 
 	if (oChoiceMarker) {
 		oChoiceMarker.setIcon(this.mPlaceMarkerIcon[target]);
+
+		var address = oChoiceMarker.get('custom-address');
 		oAddressOverlay.setContent(this.getAddressOverlayContent({
 			target: target,
-			address: oChoiceMarker.get('custom-address')
+			address: address
 		}));
 		oAddressOverlay.draw();
+		this.functionProvider.setPlace(target, address);
 
 		this.mMarkerMap[target] = oChoiceMarker;
 		this.mAddressOverlayMap[target] = oAddressOverlay;
 
 		this.mMarkerMap[choice] = null;
 		this.mAddressOverlayMap[choice] = null;
+
+		oChoiceMarker.set('custom-target', target);
 	}
 
 	this.oPathPolyline1.setPath([]);
@@ -375,6 +409,8 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 					return;
 				}
 	
+				response.v2.address.building = ((((response.v2.results || [])[0] || {}).land || {}).addition0 || {}).value || '';
+
 				oMarker.set('custom-address', response.v2.address);
 
 				this.setAddressOverlay({
@@ -425,6 +461,7 @@ common.map.LotteChemMap.prototype.searchLocal = function(o) {
 					this.setMarker({
 						title: title,
 						address: {
+							building: title,
 							jibunAddress: place.address,
 							roadAddress: place.roadAddress + ' ' + title
 						},
@@ -437,6 +474,7 @@ common.map.LotteChemMap.prototype.searchLocal = function(o) {
 						return {
 							title: title,
 							address: {
+								building: title,
 								jibunAddress: place.address,
 								roadAddress: place.roadAddress + ' ' + title
 							},

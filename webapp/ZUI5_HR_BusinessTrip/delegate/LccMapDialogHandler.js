@@ -154,17 +154,6 @@ var Handler = {
 				});
 				this.LccMap.get().setOptions("coord", this.LccMap.getCoord());
 			}.bind(this), 500);
-
-			$(document)
-				.off('click', '.button-departure')
-				.on('click', '.button-departure', function() {
-					this.LccMap.setPlace(this.LccMap.PLACE_TARGET.DEPARTURE);
-				}.bind(this));
-			$(document)
-				.off('click', '.button-destination')
-				.on('click', '.button-destination', function() {
-					this.LccMap.setPlace(this.LccMap.PLACE_TARGET.DESTINATION);
-				}.bind(this));
 		}.bind(this));
 	},
 
@@ -220,9 +209,9 @@ var Handler = {
 */
 		return {
 			option: "traoptimal",											// 탐색 옵션
-			cartype: "1",													// 차종
-			fueltype: this.oModel.getProperty("/LccMap/Params/fueltype"),	// 유종
-			mileage: 14,													// 연비
+			cartype: "2",													// 차종 - 톨비
+			fueltype: this.oModel.getProperty("/LccMap/Params/fueltype"),	// 유종 - 의미없음
+			mileage: 14,													// 연비 - 의미없음
 			lang: this.oModel.getProperty("/LccMap/Params/lang")			// 언어
 		};
 	},
@@ -279,6 +268,8 @@ var Handler = {
 		target = oEvent.getParameter("id").replace(/LccMap/, "").toLowerCase();
 
 		setTimeout(function() {
+			$.app.byId("LccMapPlaceList").removeSelections(true);
+
 			this.LccMap.searchLocal({
 				keyword: keyword,
 				target: target,
@@ -300,8 +291,17 @@ var Handler = {
 					coord: o.coord,
 					address: o.address
 				});
-			$.app.byId("LccMapPlaceList").removeSelections(true);
 		}.bind(this), 0);
+	},
+
+	setPlace: function(target, address) {
+
+		if (target === this.LccMap.getDepartureId()) {
+			this.oModel.setProperty("/LccMap/Departure", address.building);
+		} else if (target === this.LccMap.getDestinationId()) {
+			this.oModel.setProperty("/LccMap/Destination", address.building);
+		}
+		return this;
 	},
 
 	// 경로 탐색
@@ -350,7 +350,8 @@ var Handler = {
 	applyResult: function() {
 
 		var departure = this.oModel.getProperty("/LccMap/Departure"),
-		destination = this.oModel.getProperty("/LccMap/Destination");
+		destination = this.oModel.getProperty("/LccMap/Destination"),
+		distance = this.oModel.getProperty("/LccMap/Results/distance");
 
 		if (!departure) {
 			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19633"))); // 출발지를 검색하세요.
@@ -358,6 +359,10 @@ var Handler = {
 		}
 		if (!destination) {
 			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19634"))); // 도착지를 검색하세요.
+			return;
+		}
+		if (!distance) {
+			MessageBox.alert(this.oController.getBundleText("MSG_19037")); // 이동거리 정보가 입력되지 않았습니다.\n출발지와 도착지를 다시 한 번 확인해주세요.
 			return;
 		}
 

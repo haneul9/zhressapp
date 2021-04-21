@@ -50,7 +50,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 			layoutData: new sap.m.FlexItemData({ minHeight: "100%", alignSelf: sap.m.FlexAlignSelf.Stretch }),
 			horizontal: false,
 			vertical: true,
-			width: "360px",
+			width: "400px",
 			height: "100%",
 			content: new sap.m.VBox({
 				width: "100%",
@@ -61,6 +61,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 						maxLength: 30,
 						width: "100%",
 						value: "{/LccMap/Departure}",
+						placeholder: oController.getBundleText("MSG_19036", oController.getBundleText("LABEL_19633")), // 출발지를 검색하세요.
 						submit: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
 					}),
 					new sap.m.Label({ text: "{i18n>LABEL_19634}" }).addStyleClass("mt-16px"), // 도착지
@@ -68,6 +69,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 						maxLength: 30,
 						width: "100%",
 						value: "{/LccMap/Destination}",
+						placeholder: oController.getBundleText("MSG_19036", oController.getBundleText("LABEL_19634")), // 도착지를 검색하세요.
 						submit: LccMapDialogHandler.searchPlace.bind(LccMapDialogHandler)
 					}),
 					new sap.m.Label({ text: "{i18n>LABEL_00120}" }).addStyleClass("mt-16px"), // 검색결과
@@ -82,23 +84,35 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.LccMapDialog", {
 						},
 						mode: sap.m.ListMode.SingleSelectMaster,
 						selectionChange: LccMapDialogHandler.selectPlace.bind(LccMapDialogHandler)
-					}).addStyleClass("mt-16px"),
-					new sap.m.Label({ text: "{i18n>LABEL_19625}" }).addStyleClass("mt-16px"), // 이동거리
-					new sap.m.Label({ text: "{/LccMap/Distance}" }),
-					new sap.m.Label({ text: "{i18n>LABEL_19629}" }).addStyleClass("mt-16px"), // 톨게이트요금
-					new sap.m.Label({ text: "{/LccMap/TollFare}" }),
-					new sap.m.Button({
-						press: LccMapDialogHandler.clear.bind(LccMapDialogHandler),
-						text: "{i18n>LABEL_19636}", // 경로 초기화
-						width: "100%"
+					}),
+					new sap.m.HBox({
+						width: "100%",
+						items: [
+							new sap.m.Label({ layoutData: new sap.m.FlexItemData({ minWidth: "30%" }), text: "{i18n>LABEL_19625}" }), // 이동거리
+							new sap.m.Label({ layoutData: new sap.m.FlexItemData({ minWidth: "70%" }), text: "{/LccMap/Distance}" })
+						]
 					})
-					.addStyleClass("button-light mt-16px"),
+					.addStyleClass("mt-16px"),
+					new sap.m.HBox({
+						width: "100%",
+						items: [
+							new sap.m.Label({ layoutData: new sap.m.FlexItemData({ minWidth: "30%" }), text: "{i18n>LABEL_19629}" }), // 톨게이트요금
+							new sap.m.Label({ layoutData: new sap.m.FlexItemData({ minWidth: "70%" }), text: "{/LccMap/TollFare}" })
+						]
+					})
+					.addStyleClass("mt-16px"),
 					new sap.m.Button({
 						press: LccMapDialogHandler.applyResult.bind(LccMapDialogHandler),
 						text: "{i18n>LABEL_00204}", // 적용
 						width: "100%"
 					})
-					.addStyleClass("button-search mt-16px mb-40px")
+					.addStyleClass("button-search mt-16px"),
+					new sap.m.Button({
+						press: LccMapDialogHandler.clear.bind(LccMapDialogHandler),
+						text: "{i18n>LABEL_19636}", // 경로 초기화
+						width: "100%"
+					})
+					.addStyleClass("button-light mt-16px")
 				]
 			})
 		})
