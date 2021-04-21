@@ -68,8 +68,8 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 								width: "210px",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
-								dateValue: new Date(vYear-1, vMonth, 1),
-								secondDateValue: new Date(vYear, vMonth, 0)
+								dateValue: new Date(vYear, 1, 1),
+								secondDateValue: new Date()
 							}),
 							new sap.m.Label({
 								text: "{i18n>LABEL_47004}" // 신청자 성명							
