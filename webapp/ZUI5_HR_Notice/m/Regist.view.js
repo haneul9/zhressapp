@@ -78,7 +78,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57010}", "105px", "Left").addStyleClass("mr-8px"), // 최종변경일/시
+							ViewTemplates.getLabel("header", "{i18n>LABEL_57010}", "105px", "Left"), // 최종변경일/시
                             new sap.m.Text({
                                 text : {
                                     parts: [{path: "Aedtm"}, {path: "Aetim"}],
