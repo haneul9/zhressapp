@@ -17,7 +17,7 @@ init: function() {
 		'P101': EmployeePortlet,	// 개인정보
 		'P102': NoticePortlet,		// 공지사항
 		'P105': CalendarPortlet,	// 팀 달력
-		'P108': HiTalkTalkPortlet	// 하이톡톡
+		'P106': HiTalkTalkPortlet	// 하이톡톡
 	};
 
 	$(document)
