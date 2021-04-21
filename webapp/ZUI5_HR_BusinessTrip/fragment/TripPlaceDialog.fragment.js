@@ -9,7 +9,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.TripPlaceDialog", {
 
 		return  new sap.m.SelectDialog({
 			contentHeight: "50%",
-			title: oController.getBundleText("LABEL_19631"), // 출장지 선택
+			title: oController.getBundleText("LABEL_19631"), // 출장지
 			search: TripPlaceDialogHandler.onSearch.bind(TripPlaceDialogHandler),
 			confirm: TripPlaceDialogHandler.onConfirm.bind(TripPlaceDialogHandler),
 			draggable: true,

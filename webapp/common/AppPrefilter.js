@@ -22,7 +22,7 @@ function AppPrefilter() {
 	try {
 		if (!parent || !parent._gateway) {
 			alert("잘못된 메뉴 접속입니다.\nHome 화면에서 접속해주시기 바랍니다.");
-	
+
 			var indexPage = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 'Mobile' : '';
 			if (/^webide/i.test(location.host)) {
 				location.href = "/webapp/index" + indexPage + ".html?hc_orionpath=%2FDI_webide_di_workspaceiwil0nuxhaqnmtpv%2Fzhressapp";
@@ -149,8 +149,9 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 
 AppPrefilter.prototype.confirmADPW = function(result) {
 
-	if (result.ECheckPw === "X" && sessionStorage.getItem("ehr.ad-pw-confirm.state") !== "ok") {
+	if (result.ECheckPw === "X") {
 		this._gateway.spinner(false);
+
 		this._gateway.confirmADPW({
 			message: "개인/민감정보 조회를 위해 MOIN 비밀번호를 입력하시기 바랍니다.",
 			confirm: function() {
@@ -159,24 +160,28 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 				}.bind(this), 0);
 				this._menu_authorized = true;
 
-				window.startAppInit();
+				setTimeout(function() {
+					window.startAppInit();
+				}, 300);
 			}.bind(this),
 			cancel: function() {
-				this._gateway.handleAuthCancel(this.errorHandler.bind(this));
-				this._gateway.restoreHome();
+				setTimeout(function() {
+					this._gateway.handleAuthCancel(this.errorHandler.bind(this));
+					this._gateway.restoreHome();
+				}.bind(this), 0);
 			}.bind(this)
 		});
 
 	} else {
-		if (result.ECheckPw !== "X") {
-			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
-		}
-
-		this._gateway.successAppPrefilter(); // 메뉴 iframe 정상 로딩시 Home 화면 후속 처리
+		setTimeout(function() {
+			this._gateway.successAppPrefilter(); // 메뉴 iframe 정상 로딩시 Home 화면 후속 처리
+		}.bind(this), 0);
 		this._menu_authorized = true;
 
 		document.addEventListener("DOMContentLoaded", function() {
-			window.startAppInit();
+			setTimeout(function() {
+				window.startAppInit();
+			}, 0);
 		});
 
 	}

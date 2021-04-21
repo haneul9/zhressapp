@@ -16,14 +16,18 @@ $.extend(CalendarPortlet.prototype, {
 
 ui: function() {
 
+	var cardHeader = this.hideTitle() ? '' : [
+		'<div class="card-header">',
+			'<h6>${title}</h6>'.interpolate(this.title()),
+			'<div>',
+				this.dismissButton(),
+			'</div>',
+		'</div>'
+	].join('');
+
 	return [
 		'<div class="card portlet portlet-${size}h portlet-calendar" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
-			'<div class="card-header">',
-				'<h6>${title}</h6>'.interpolate(this.title()),
-				'<div>',
-					this.dismissButton(),
-				'</div>',
-			'</div>',
+			cardHeader,
 			'<div class="card-body">',
 				'<div class="portlet-calendar-inline"></div>',
 				'<div class="d-flex">',
@@ -323,7 +327,7 @@ initPopover: function() {
 			title: function() {
 				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
 				if (!tooltipBody.length) {
-					return '해당 인원이 없습니다.';
+					return null;
 				}
 				return [
 					'<table class="portlet-calendar-tooltip">',
@@ -355,7 +359,7 @@ initPopover: function() {
 			title: function() {
 				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
 				if (!tooltipBody.length) {
-					return '해당 인원이 없습니다.';
+					return null;
 				}
 				return [
 					'<table class="portlet-calendar-tooltip">',
@@ -383,7 +387,7 @@ initPopover: function() {
 			title: function() {
 				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
 				if (!tooltipBody.length) {
-					return '해당 인원이 없습니다.';
+					return null;
 				}
 				return [
 					'<table class="portlet-calendar-tooltip">',
@@ -477,7 +481,7 @@ initI18n: function() {
 		datepicker: 'yymmdd',
 		moment: 'YYYYMMDD',
 		report: ko ? 'YYYY년 MM월 DD일' : 'MM/DD/YYYY',
-		period: ko ? 'DD일' : 'DD'
+		period: 'M/D'
 	};
 
 	$.datepicker.regional.ko_KR = {

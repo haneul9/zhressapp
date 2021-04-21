@@ -295,25 +295,25 @@
 											new sap.m.Button({
 												press: oController.onCommentSubBtn.bind(oController),
 												text: "{i18n>LABEL_56017}" // 대댓글
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onCommentReBtn.bind(oController),
 												text: "{i18n>LABEL_56013}" // 수정
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onCommentSaBtn.bind(oController),
 												visible: false,
 												text: "{i18n>LABEL_56016}" // 저장
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onCommentDeBtn.bind(oController),
 												text: "{i18n>LABEL_56014}" // 삭제
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onCommentCanBtn.bind(oController),
 												visible: false,
 												text: "{i18n>LABEL_56019}" // 취소
-											})
+											}).addStyleClass("button-light-sm")
 										]
 									})
 									.addStyleClass("button-group")
@@ -399,21 +399,21 @@
 													new sap.m.Button({
 														press: oController.onSubCommentReBtn.bind(oController),
 														text: "{i18n>LABEL_56013}" // 수정
-													}),
+													}).addStyleClass("button-light-sm"),
 													new sap.m.Button({
 														press: oController.onSubCommentSaBtn.bind(oController),
 														visible: false,
 														text: "{i18n>LABEL_56016}" // 저장
-													}),
+													}).addStyleClass("button-light-sm"),
 													new sap.m.Button({
 														press: oController.onSubCommentDeBtn.bind(oController),
 														text: "{i18n>LABEL_56014}" // 삭제
-													}),
+													}).addStyleClass("button-light-sm"),
 													new sap.m.Button({
 														press: oController.onSubCommentCanBtn.bind(oController),
 														visible: false,
 														text: "{i18n>LABEL_56019}" // 취소
-													})
+													}).addStyleClass("button-light-sm")
 												]
 											})
 											.addStyleClass("button-group")
@@ -478,21 +478,21 @@
 												press: oController.onSubCommentReBtn.bind(oController),
 												visible: false,
 												text: "{i18n>LABEL_56013}" // 수정
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onSubCommentSaBtn.bind(oController),
 												text: "{i18n>LABEL_56016}" // 저장
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onSubCommentDeBtn.bind(oController),
 												visible: false,
 												text: "{i18n>LABEL_56014}" // 삭제
-											}),
+											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
 												press: oController.onSubCommentCanBtn.bind(oController),
 												visible: true,
 												text: "{i18n>LABEL_56019}" // 취소
-											})
+											}).addStyleClass("button-light-sm")
 										]
 									})
 									.addStyleClass("button-group")

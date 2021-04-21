@@ -7,6 +7,7 @@ sap.ui.define([
 	"./AirportDialogHandler",
 	"./CurrencyDialogHandler",
 	"./LccMapDialogHandler",
+	"./TripPlaceDialogHandler",
 	"sap/m/MessageBox",
 	"sap/ui/model/json/JSONModel"
 ], function(
@@ -17,6 +18,7 @@ sap.ui.define([
 	AirportDialogHandler,
 	CurrencyDialogHandler,
 	LccMapDialogHandler,
+	TripPlaceDialogHandler,
 	MessageBox,
 	JSONModel
 ) {
@@ -756,6 +758,26 @@ var Handler = {
 	},
 
 	// 출장지 선택 dialog
+	selectTripPlace: function(oEvent) {
+
+		var sPath = oEvent.getParameter("id").replace(/(ExpenseDetail)/, "/$1/");
+
+		setTimeout(function() {
+			var callback = function(PlaceName) {
+				this.oModel.setProperty(sPath, PlaceName);
+
+				var Startpl = this.oModel.getProperty("/ExpenseDetail/Startpl"),
+				Destpl = this.oModel.getProperty("/ExpenseDetail/Destpl");
+				this.oModel.setProperty("/ExpenseDetail/Zzkm", TripPlaceDialogHandler.getDistanceBetween(Startpl, Destpl));
+
+				this.changeTripPlace();
+			}.bind(this);
+
+			DialogHandler.open(TripPlaceDialogHandler.get(this.oController, this.oModel.getProperty(sPath), callback));
+		}.bind(this), 0);
+	},
+
+	// 출장지 선택 지도 dialog
 	searchTripPlace: function(oEvent) {
 
 		setTimeout(function() {
@@ -772,7 +794,7 @@ var Handler = {
 				this.oModel.setProperty("/ExpenseDetail/TollTr", o.tollFare);
 				this.oModel.setProperty("/ExpenseDetail/GasTr", o.fuelPrice);
 
-				this.calculateCarExpenses();
+				this.changeTripPlace();
 			}.bind(this);
 
 			DialogHandler.open(LccMapDialogHandler.get(this.oController, params, callback));

@@ -33,6 +33,9 @@ init: function() {
 			});
 			return template;
 		},
+		escapeHtml: function(s) {
+			return (s || '').replace(/\<([^<>]*)\>/g, '');
+		},
 		capitalize: function(v) {
 			if (!v) {
 				return '';
@@ -78,6 +81,9 @@ init: function() {
 				template = template.replace(/\$\{[^{}]*\}/, v);
 			});
 			return template;
+		},
+		escapeHtml: function() {
+			return String.escapeHtml(this);
 		},
 		capitalize: function() {
 			return String.capitalize(this);

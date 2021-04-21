@@ -144,18 +144,44 @@
 
 		onPressRegi: function() { // 등록
 			var oView = $.app.byId("ZUI5_HR_NoticeHass.Page");
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var oController = this;
+			var vBukrs = this.getUserGubun();
+			var vPernr = this.getUserId();
 			
             this.RegistModel.setData({FormData: []});
 			
 			if (!this._RegistModel) {
 				this._RegistModel = sap.ui.jsfragment("ZUI5_HR_NoticeHass.fragment.Regist", this);
 				oView.addDependent(this._RegistModel);
-			};
-
-			this.RegistModel.setProperty("/Gubun", "X");
+			}
+				
+			var sendObject = {};
+			// Header
+            sendObject.IPernr = vPernr;
+			sendObject.IBukrs = vBukrs;
+            sendObject.IConType = "1";
+			// Navigation property
+			sendObject.TableIn2 = [];
 			
-            this.onBeforeOpenDetailDialog();
-		    this._RegistModel.open();
+			oModel.create("/NoticeManageSet", sendObject, {
+				success: function(oData, oResponse) {
+					if (oData && oData.TableIn2) {
+						Common.log(oData);
+						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
+						oController.RegistModel.setData({FormData: oCopiedRow});
+						oController.RegistModel.setProperty("/Gubun", "X");
+						oController.onBeforeOpenDetailDialog();
+						oController._RegistModel.open();
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});			
 		},
 		
 		onSelectedRow: function(oEvent) {
@@ -167,10 +193,10 @@
 
 		onSelectDetail: function(Gubun, Path){
 			var oController = $.app.getController();
-			var oView = $.app.byId("ZUI5_HR_Notice.Page");
+			var oView = $.app.byId("ZUI5_HR_NoticeHass.Page");
 			
 			if (!oController._RegistModel) {
-				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Notice.fragment.Regist", oController);
+				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_NoticeHass.fragment.Regist", oController);
 				oView.addDependent(oController._RegistModel);
 			}
 			
@@ -211,9 +237,12 @@
 								oController.RegistModel.setProperty("/Gubun", "");
 							}
 						}else {
-							oController.RegistModel.setProperty("/Gubun", Common.checkNull(oCopiedRow.Hide) ? oCopiedRow.Hide : "X");
+							if(vPernr === oController.TableModel.getProperty(Path).Apern){
+								oController.RegistModel.setProperty("/Gubun", oCopiedRow.Hide);
+							}else {
+								oController.RegistModel.setProperty("/Gubun", "");
+							}
 						}
-
 					}
 				},
 				error: function(oResponse) {

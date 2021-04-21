@@ -9,7 +9,7 @@ sap.ui.define([
 	sap.ui.jsview($.app.APP_ID, {
 		
 		_colModel: [
-			{id: "AppDate", 	label: "{i18n>LABEL_08005}" /* 신청일 */,	 plabel: "", resize: true, span: 0, type: "date",	 sort: true,  filter: true,  width: "30%"},
+			{id: "Begda", 		label: "{i18n>LABEL_08005}" /* 신청일 */,	 plabel: "", resize: true, span: 0, type: "date",	 sort: true,  filter: true,  width: "30%"},
 			{id: "TypeTxt", 	label: "{i18n>LABEL_08006}" /* 경조유형 */,	 plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "37%"},
 			{id: "StatusText", 	label: "{i18n>LABEL_08016}" /* 처리결과 */,	 plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "auto", templateGetter: "getVisibleBotton"}
 		],

@@ -1,26 +1,32 @@
 sap.ui.define([
 	"common/Common",
 	"sap/ui/model/json/JSONModel"
-], function(Common, JSONModel) {
+], function(
+	Common,
+	JSONModel
+) {
 "use strict";
 
 var Handler = {
 
 	oController: null,
 	oDialog: null,
-	oModel: new JSONModel(),
+	oModel: new JSONModel({
+		PlaceName: null,
+		PlaceList: null
+	}),
 	callback: null,
+	search: null,
 
 	// DialogHandler 호출 function
-	get: function(oController, initData, callback) {
+	get: function(oController, dialogTitle, search, callback) {
 
 		this.oController = oController;
 		this.callback = callback;
+		this.search = search;
+		this.dialogTitle = dialogTitle;
 
-		this.oModel.setProperty("/Ename",     initData.ename || "");
-		this.oModel.setProperty("/EnameList", initData.list || []);
-
-		oController.EnameDialogHandler = this;
+		oController.PlaceSearchDialogHandler = this;
 
 		return this;
 	},
@@ -29,8 +35,8 @@ var Handler = {
 	getLoadingProperties: function() {
 
 		return {
-			id: "EnameDialog",
-			name: "ZUI5_HR_BusinessTripMap.fragment.EnameDialog",
+			id: "PlaceSearchDialog",
+			name: "ZUI5_HR_BusinessTrip.fragment.PlaceSearchDialog",
 			type: "JS",
 			controller: this.oController
 		};
@@ -65,35 +71,32 @@ var Handler = {
 	onBeforeOpen: function() {
 
 		return Common.getPromise(function() {
-			var oModel = this.getModel(),
-			Ename = oModel.getProperty("/Ename"),
-			EnameList = oModel.getProperty("/EnameList");
-	
-			EnameList.forEach(function(data) {
-				data.selected = (data.Innam === Ename);
+			this.oDialog.setTitle(this.dialogTitle);
+			this.oModel.setData({
+				PlaceName: null,
+				PlaceList: null
 			});
-			oModel.setProperty("/EnameList", EnameList);
 		}.bind(this));
 	},
 
 	onSearch: function(oEvent) {
 
-		oEvent.getParameter("itemsBinding").filter([
-			new sap.ui.model.Filter("Innam", sap.ui.model.FilterOperator.Contains, oEvent.getParameter("value"))
-		]);
+		var value = oEvent.getParameter("value");
+		setTimeout(function() {
+			this.search({
+				keyword: value,
+				callback: function(PlaceList) {
+					this.oModel.setProperty("/PlaceList", PlaceList);
+				}.bind(this)
+			});
+		}.bind(this), 0);
 	},
 
 	onConfirm: function(oEvent) {
 
 		if (this.callback) {
 			var oSelectedItem = oEvent.getParameter("selectedItem");
-			this.callback(!oSelectedItem ? {
-				Ename: "",
-				Pernr: ""
-			} : {
-				Ename: oSelectedItem.getBindingContext().getProperty().Innam || "",
-				Pernr: oSelectedItem.getBindingContext().getProperty().Inper || ""
-			});
+			this.callback(!oSelectedItem ? {} : oSelectedItem.getBindingContext().getProperty());
 		}
 	}
 

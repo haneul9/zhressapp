@@ -1,3 +1,22 @@
 @charset "utf-8";
 
 .tableMargin5 { margin:5px !important; }
+
+/* 첨부파일(Multi Row) UI수정 */
+.custom-multiAttach-file {border-top:1px solid #e4e4e4}
+.custom-multiAttach-file .sub-title {width:150px;font-size:14px}
+.custom-multiAttach-file > div {flex-direction: row;}
+.custom-multiAttach-file > div > div {align-items: stretch;border-bottom:1px solid #e4e4e4;}
+.custom-multiAttach-file > div > div.mt-10px{margin-top:0 !important}
+.custom-multiAttach-file > div > div > div:first-child {background-color:#f3f4f5;}
+.custom-multiAttach-file > div > div > div .sapMLabel {text-align:right !important;font-weight:500px;padding-right:8px}
+.custom-multiAttach-file .sapMListTblCnt {border-top:0}
+.custom-multiAttach-file .sapMLIBShowSeparator>td {border:0}
+.custom-multiAttach-file .sapMListShowSeparatorsAll .sapMLIBShowSeparator:last-child>td:not(.sapMListTblDummyCell) {border-bottom:0}
+.custom-multiAttach-file .sapUiFupButtonOnly {padding-left:10px;}
+.custom-multiAttach-file .sapMListTbl .sapUiIcon:not(.sapMLIBImgNav):not(.sapMBtnIcon):not(.sapFAvatarTypeIcon) {font-size:1rem !important}
+[data-sap-ui-browser="ie11"] .custom-multiAttach-file > div > div > div:first-child {width: 210px;}
+[data-sap-ui-browser="ie11"] .custom-multiAttach-file > div > div:nth-child(2) {width: 100%;}
+[data-sap-ui-browser='ie11'] .custom-multiAttach-file .sapMListTbl {padding:0}
+[data-sap-ui-browser="ie11"] .custom-multiAttach-file > div > div > div .sapMLabel {padding:8px}  
+[data-sap-ui-browser="ie11"] .custom-multiAttach-file .sub-title {width: 136px;}

@@ -38,22 +38,7 @@
                             new sap.m.Text({
                                 width: "auto",
                                 textAlign: "Begin",
-                                text: {
-									path: "ApernTxt",
-									formatter: function(v) {
-										if(v) return v;
-										else{
-											var vUser1 = oController.getUserDetail("Pbtxt");
-											var vUser2 = oController.getUserDetail("Btrtx");
-											var vUser3 = oController.getUserDetail("HgradeT");
-											var vUser4 = oController.getUserDetail("Stext");
-											var vUser5 = oController.getUserDetail("Ename");
-											var vUser6 = oController.getUserDetail("ZtitleT");
-
-											return vUser1 + " " + vUser2 + " " + vUser3 + " " + vUser4 + " " + vUser5 + " " + vUser6
-										}
-									}
-								}
+                                text: "{ApernTxt}"
                             })
 						]
 					})
@@ -62,7 +47,7 @@
 						width: "100%",
 						fitContainer: true,
 						visible: {
-							path: "Sdate",
+							path: "Aedtm",
 							formatter: function(v) {
 								return Common.checkNull(!v);
 							}
@@ -196,9 +181,9 @@
 						press: oController.onDialogDeleteBtn.bind(oController),
 						text: "{i18n>LABEL_57017}", // 삭제
 						visible: {
-							path: "/Gubun",
-							formatter: function(v) {
-								return v === "X" || v === "Y";
+							parts: [{path: "Aedtm"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return (v1 && v2 === "X") || v2 === "Y";
 							}
 						}
 					}).addStyleClass("button-delete"),

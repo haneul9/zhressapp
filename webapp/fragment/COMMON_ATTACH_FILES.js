@@ -288,6 +288,10 @@ fragment.COMMON_ATTACH_FILES = {
 									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 									Datas.Data.push(elem);
 								}
+							}else if(vPage=="009"){
+								elem.New = false;
+								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+								Datas.Data.push(elem);
 							}else{
 								if(elem.Cntnm =="009"){
 									elem.New = false;
@@ -317,6 +321,7 @@ fragment.COMMON_ATTACH_FILES = {
 
 		JSonModel.setProperty("/Settings/Length", Datas.Data.length);
 		JSonModel.setProperty("/Data", Datas.Data);
+		JSonModel.refresh();
 	},
 
 	/*

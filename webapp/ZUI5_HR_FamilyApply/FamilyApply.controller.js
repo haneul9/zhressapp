@@ -130,7 +130,7 @@ sap.ui.define([
 				Mode: "S",
 				Max: "1",
 				Editable: true,
-				FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+				FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "bmp", "pdf", "zip", "gif", "png"]
 			});	
 			$.app.byId(oController.PAGEID+"_Re").setVisible(false);
 		},
@@ -183,7 +183,7 @@ sap.ui.define([
 					Mode: "S",
 					Max: "1",
 					Editable: vStatus=="X"?true:false,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "bmp", "pdf", "zip", "gif", "png"],
 				};
 					
 				var oDialog=$.app.byId(oController.PAGEID+"_Dialog");
@@ -269,7 +269,7 @@ sap.ui.define([
 					Mode: "S",
 					Max: "1",
 					Editable: true,
-					FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "bmp", "pdf", "zip", "gif", "png"]
 				});
 				if(oPro.Status==""){
 					$.app.byId(oController.PAGEID+"_Sel1").setEditable(false);
@@ -285,7 +285,7 @@ sap.ui.define([
 					true,
 					{ 
 						Editable: false, 
-						FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip"], 
+						FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "bmp", "pdf", "zip", "gif", "png"], 
 						InfoMessage: "", 
 						Appnm: "",
 						Mode: "S",	// S: single file, M: multi file

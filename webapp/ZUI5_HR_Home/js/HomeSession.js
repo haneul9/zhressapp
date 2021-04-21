@@ -10,7 +10,6 @@ function HomeSession(_gateway, initHome) {
 		ehr.odata.csrf-token
 		ehr.odata.destination
 		ehr.menu-auth.state
-		ehr.ad-pw-confirm.state
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -82,18 +81,20 @@ dkdlTlqpfmffls: function(resolve) {
 				e.stopImmediatePropagation();
 			}
 
-			var dkdlTlqpfmffls = $('#dkdlTl-qpfmffls'),
-			pernr = dkdlTlqpfmffls.val().replace(/^0+/g, '');
-			if (!pernr) {
-				dkdlTlqpfmffls.siblings('.value-required').show();
-				return;
-			} else {
-				dkdlTlqpfmffls.siblings('.value-required').hide();
-			}
+			setTimeout(function() {
+				var dkdlTlqpfmffls = $('#dkdlTl-qpfmffls'),
+				pernr = dkdlTlqpfmffls.val().replace(/^0+/g, '');
+				if (!pernr) {
+					dkdlTlqpfmffls.siblings('.value-required').show();
+					return;
+				} else {
+					dkdlTlqpfmffls.siblings('.value-required').hide();
+				}
 
-			sessionStorage.setItem('ehr.sf-user.name', pernr);
-			resolve();
-			this._gateway.confirm('hide');
+				sessionStorage.setItem('ehr.sf-user.name', pernr);
+				resolve();
+				this._gateway.confirm('hide');
+			}.bind(this), 0);
 		}.bind(this),
 		cancel: function() {
 			this._retrieveSFUserName(resolve);
@@ -432,13 +433,9 @@ authenticateADAccount: function(pw) {
 		},
 		success: function() {
 			this._gateway.prepareLog('HomeSession.authenticateADAccount ${url} success'.interpolate(url), arguments).log();
-
-			sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount ' + url);
-
-			sessionStorage.removeItem('ehr.ad-pw-confirm.state');
 		}.bind(this)
 	});
 },
@@ -468,34 +465,40 @@ confirmADPW: function(o) {
 				e.stopImmediatePropagation();
 			}
 
-			var adpw = $('#adpw'),
-			pw = adpw.val();
-			if (!pw) {
-				adpw.siblings('.value-required').show();
-				return;
-			} else {
-				adpw.siblings('.value-required').hide();
-			}
+			setTimeout(function() {
+				var adpw = $('#adpw'),
+				pw = adpw.val();
+				if (!pw) {
+					adpw.siblings('.value-required').show();
+					return;
+				} else {
+					adpw.siblings('.value-required').hide();
+				}
 
-			if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
-				setTimeout(function() {
-					sessionStorage.setItem('ehr.ad-pw-confirm.state', 'ok');
-					this._gateway.confirm('hide');
-				}.bind(this), 0);
-
-				o.confirm();
-			} else {
-				this.authenticateADAccount(pw)
-					.then(function() {
+				if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
+					setTimeout(function() {
 						this._gateway.confirm('hide');
-						o.confirm();
-					}.bind(this))
-					.catch(function(jqXHR) {
-						var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
+					}.bind(this), 0);
 
-						adpw.siblings('.value-invalid').text(errorMessage).show();
-					}.bind(this));
-			}
+					o.confirm();
+				} else {
+					setTimeout(function() {
+						this.authenticateADAccount(pw)
+							.then(function() {
+								setTimeout(function () {
+									this._gateway.confirm('hide');
+								}.bind(this), 0);
+
+								o.confirm();
+							}.bind(this))
+							.catch(function(jqXHR) {
+								var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
+
+								adpw.siblings('.value-invalid').text(errorMessage).show();
+							}.bind(this));
+					}.bind(this), 0);
+				}
+			}.bind(this), 0);
 		}.bind(this),
 		cancel: o.cancel
 	};

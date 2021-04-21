@@ -438,8 +438,7 @@ sap.ui.define([
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
 								width: "120px",
 								textAlign: "End"
-							})
-							.addStyleClass("mt-5px"),
+							}),
 							new sap.m.Text(oController.PAGEID + "_StatusText", {
 								text: "{StatusText}",
 								width: "10em"

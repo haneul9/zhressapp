@@ -13,6 +13,14 @@
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
+<script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
+<script>
+	$(function() {
+		$(document).on('click', '.btn.android', function() {
+			location.href = "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/application/app-release.apk";
+		});
+	});
+</script>
 </head>
 <style type="text/css">
     body{overflow:auto}
@@ -29,7 +37,7 @@
 				<div><img src="images/img-android-setting1.png" /></div>
 				<div><img src="images/img-android-setting2.png" /></div>
 			</div>
-			<div class="btn mb-16px">Hi HR 설치하기</div>
+			<div class="btn mb-16px android">Hi HR 설치하기</div>
 		</div> 		
 	</div>
 </div>
