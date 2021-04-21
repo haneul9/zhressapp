@@ -68,7 +68,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 								width: "210px",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
-								dateValue: new Date(vYear, 1, 1),
+								dateValue: new Date(vYear, 0, 1),
 								secondDateValue: new Date()
 							}),
 							new sap.m.Label({
