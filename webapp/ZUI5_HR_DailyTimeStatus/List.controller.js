@@ -534,14 +534,19 @@ sap.ui.define(
 
                 var oModel = sap.ui.getCore().getModel("ZHR_WORKSCHEDULE_SRV");
                 var createData = { OvertimeStatDetailNav: [] };
-                createData.IWerks = oFilter.Werks;
-                createData.IBukrs = oFilter.Werks;
-                createData.ITmdat = "/Date(" + Common.getTime(new Date(oFilter.Tmdat)) + ")/";
-                createData.IFlcty = oFlcty;
-                createData.ILangu = oFilter.Langu;
-                createData.IEmpid = oFilter.Pernr;
-                createData.IAusty = $.app.getAuth();
+	                createData.IWerks = oFilter.Werks;
+	                createData.IBukrs = oFilter.Werks;
+	                createData.ITmdat = "/Date(" + Common.getTime(new Date(oFilter.Tmdat)) + ")/";
+	                createData.IFlcty = oFlcty;
+	                createData.ILangu = oFilter.Langu;
+	                createData.IEmpid = oFilter.Pernr;
+	                createData.IAusty = $.app.getAuth();
 
+					var oOrgeh = sap.ui.getCore().byId(oController.PAGEID + "_Orgeh");
+                    if (oOrgeh.getTokens().length > 0) {
+                        createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
+                    }
+                    
                 oModel.create(
                     "/OvertimeStatusDetailSet",
                     createData,
@@ -581,10 +586,16 @@ sap.ui.define(
                     }
                 );
 
+                if (oController.Error == "E") {
+                    oController.Error = "";
+                    MessageBox.error(oController.ErrorMessage);
+                    return;
+                }
+
                 oJSONModel.setData(vData);
                 oTable.bindRows("/Data");
                 oTable.setVisibleRowCount(vData.Data.length >= 10 ? 10 : vData.Data.length);
-
+                
                 oController._OvertimeStatusDialog.open();
             },
 
