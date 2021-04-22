@@ -164,6 +164,14 @@ sap.ui.define(
                     MessageBox.error(oController.getBundleText("MSG_65015"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
                 }
+                
+                // 재발급시 재출력사유 필수 입력 
+                if (oController.ApplyModel.getProperty("/Data/actmode") && 
+                    oController.ApplyModel.getProperty("/Data/actmode") == "X" &&
+                    Common.checkNull(oController.ApplyModel.getProperty("/Data/Reasn"))){
+                    MessageBox.error(oController.getBundleText("MSG_65019"), { title: oController.getBundleText("LABEL_00149") });
+                    return true;
+                }
 
                 return false;
             },
@@ -208,12 +216,7 @@ sap.ui.define(
                                     Object.assign(vPrintData, oData.TableIn.results[0]);
                                     BusyIndicator.hide();
                                     oController._ApplyDialog.close();
-                                    if (vPrintData.Aptyp == "1") {
-                                        // ESS 본인 출력 시에만 Print
-                                        oController.onPressPrint(vPrintData);
-                                    } else {
-                                        oController.onTableSearch();
-                                    }
+                                    oController.onTableSearch();
                                 }
                             },
                             error: function (oResponse) {
