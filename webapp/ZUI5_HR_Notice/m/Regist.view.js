@@ -38,7 +38,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_57008}", "105px", "Left"), // 제목
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57008}", "105px", "Left").addStyleClass("sub-con-title"), // 제목
                             new sap.m.Input({
                                 width: "250px",
                                 value: "{Title}",
@@ -49,19 +49,19 @@
 					new sap.m.HBox({
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_57011}", "105px", "Left"), // 등록자
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57011}", "105px", "Left").addStyleClass("sub-con-title"), // 등록자
                             new sap.m.Text({
                                 width: "auto",
                                 textAlign: "Begin",
                                 text: "{ApernTxt}"
-                            })
+                            }).addStyleClass("line-height-24")
 						]
 					}),
 					new sap.m.HBox({
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57004}", "105px", "Left"), // 등록일
+							ViewTemplates.getLabel("header", "{i18n>LABEL_57004}", "105px", "Left").addStyleClass("sub-con-title"), // 등록일
 							new sap.m.Text({
                                 width: "250px",
                                 textAlign: "Begin",
@@ -78,7 +78,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57010}", "105px", "Left"), // 최종변경일/시
+							ViewTemplates.getLabel("header", "{i18n>LABEL_57010}", "105px", "Left").addStyleClass("sub-con-title"), // 최종변경일/시
                             new sap.m.Text({
                                 text : {
                                     parts: [{path: "Aedtm"}, {path: "Aetim"}],
@@ -98,7 +98,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_57012}", "105px", "Left"), // 중요항목
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57012}", "105px", "Left").addStyleClass("sub-con-title"), // 중요항목
                             new sap.m.CheckBox({ 
                                 selected: {
                                     path: "Impor",
@@ -113,7 +113,7 @@
                     new sap.m.HBox({
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57016}", "105px", "Left"), // 내용
+							ViewTemplates.getLabel("header", "{i18n>LABEL_57016}", "105px", "Left").addStyleClass("sub-con-title"), // 내용
                             new sap.m.TextArea({
                                 rows: 10,
 								width: "250px",

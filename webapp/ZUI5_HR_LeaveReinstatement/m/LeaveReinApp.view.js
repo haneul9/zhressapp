@@ -213,7 +213,7 @@
 								}
 						 	})
                         ]
-                    })
+                    }).addStyleClass("mb-5px")
                 ]
             });
 
@@ -431,7 +431,7 @@
 								}
 							})
 						]
-					}),
+					}).addStyleClass("mb-5px"),
 					new sap.m.HBox(oController.PAGEID + "_BabyDateBox", {
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
@@ -458,7 +458,7 @@
                         height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left").addStyleClass("sub-con-title"), // 결재선 안내
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left"), // 결재선 안내
                             new sap.m.VBox({
                                 fitContainer: true,
                                 items: [
@@ -475,7 +475,7 @@
                                             }
                                         },
                                         textAlign: "Begin"
-                                    }),
+                                    }).addStyleClass("line-height-24"),
                                     new sap.m.Text({
                                         width: "auto",
                                         text: {
@@ -489,7 +489,7 @@
                                             }
                                         },
                                         textAlign: "Begin"
-                                    })
+                                    }).addStyleClass("line-height-24")
                                 ]
                             })
                         ]
@@ -498,12 +498,12 @@
                         height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left").addStyleClass("sub-con-title"), // 증빙서류 안내
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left"), // 증빙서류 안내
                             new sap.m.Text({
                                 width: "auto",
                                 text: "{/InfoText}",
                                 textAlign: "Begin"
-                            })
+                            }).addStyleClass("line-height-24")
                         ]
                     }),
                     sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
@@ -512,4 +512,4 @@
 			.addStyleClass("vbox-form-mobile");
 		}
 	});
-});
+});  

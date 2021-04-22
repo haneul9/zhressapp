@@ -331,7 +331,7 @@ sap.ui.define(
 														icon: "sap-icon://inspection",
 														tooltip: "{i18n>LABEL_32047}", // 식사내역 조회
 														enabled: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/Header/Begda} === null ? false : true }",
-														visible: "{= !${/Detail/IsViewMode} }",
+														visible: "{= !${/Detail/IsViewMode} && ${/Detail/Header/Bukrs3} === 'A100' }",
 														press: PostHandler.pressSelectMealBtn.bind(PostHandler),
 														customData: [
 															new sap.ui.core.CustomData({
@@ -467,7 +467,7 @@ sap.ui.define(
 														icon: "sap-icon://inspection",
 														tooltip: "{i18n>LABEL_32048}", // 웰리스내역 조회
 														enabled: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/Header/Begda} === null ? false : true }",
-														visible: "{= !${/Detail/IsViewMode} }",
+														visible: "{= !${/Detail/IsViewMode} && ${/Detail/Header/Bukrs3} === 'A100' }",
 														press: PostHandler.pressSelectMealBtn.bind(PostHandler),
 														customData: [
 															new sap.ui.core.CustomData({

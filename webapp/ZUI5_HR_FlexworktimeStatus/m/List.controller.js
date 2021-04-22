@@ -301,7 +301,7 @@ sap.ui.define([
 			      id : "ZUI5_HR_FlexworktimeStatus.m.Detail",
 			      data : {
 			    	  FromPageId : "ZUI5_HR_FlexworktimeStatus.m.List",
-			    	  Data : oData,
+			    	  Data : Object.assign({}, oData, oController._ListCondJSonModel.getProperty("/Data")),
 			    	  Data2 : oData2
 			      }
 			});

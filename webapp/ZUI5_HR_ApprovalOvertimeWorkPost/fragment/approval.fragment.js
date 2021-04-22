@@ -108,7 +108,6 @@ sap.ui.define(
                     { id: "TottmW", label: "{i18n>LABEL_32029}" /* 총근로시간 */, plabel: "", resize: true, span: 0, type: "time", sort: false, filter: false, width: "120px" },
                     { id: "MottmW", label: "{i18n>LABEL_32053}" /* 월누적연장근로 */, plabel: "", resize: true, span: 0, type: "string", sort: false, filter: false, width: "120px" },
                     { id: "Horex", label: "{i18n>LABEL_32054}" /* 사유 */, plabel: "", resize: true, span: 0, type: "string", sort: false, filter: false, width: "200px", align: sap.ui.core.HorizontalAlign.Begin },
-                    { id: "Rjres", label: "{i18n>LABEL_32023}" /* 반려사유 */, plabel: "", resize: true, span: 0, type: "string", sort: false, filter: false, width: "200px", align: sap.ui.core.HorizontalAlign.Begin },
                     { id: "Stchk", label: "{i18n>LABEL_32064}" /* 비고 */, plabel: "", resize: true, span: 0, type: "string", sort: false, filter: false, width: "200px", align: sap.ui.core.HorizontalAlign.Begin }
                 ];
             }
