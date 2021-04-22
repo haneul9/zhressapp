@@ -34,24 +34,24 @@ sap.ui.define(
                     { id: "Idx", label: "No.", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "50px" },
                     { id: "Pernr", label: "{i18n>LABEL_41016}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     { id: "Ename", label: "{i18n>LABEL_41018}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "PgradeT", label: "{i18n>LABEL_00110}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
+                    { id: "PgradeT", label: "{i18n>LABEL_00124}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     { id: "HgradeT", label: "{i18n>ZHGRADE}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     { id: "Orgtx", label: "{i18n>LABEL_43081}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     // 기본, 연장, 소계
-                    { id: "Hrs20", label: "{i18n>LABEL_43083}", plabel: "", resize: true, span: 3, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs21", label: "{i18n>LABEL_43084}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs22", label: "{i18n>LABEL_43085}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
+                    { id: "Hrs20", label: "{i18n>LABEL_43083}", plabel: "", resize: true, span: 3, type: "string", sort: true, filter: true },
+                    { id: "Hrs21", label: "{i18n>LABEL_43084}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
+                    { id: "Hrs22", label: "{i18n>LABEL_43085}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     // 평일(기본, 연장, 소계)
-                    { id: "Hrs30", label: "{i18n>LABEL_43057}", plabel: "{i18n>LABEL_43083}", resize: true, span: 3, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs31", label: "{i18n>LABEL_43057}", plabel: "{i18n>LABEL_43084}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs32", label: "{i18n>LABEL_43057}", plabel: "{i18n>LABEL_43085}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
-                    // 휴일(기본, 연장, 소계)
-                    { id: "Hrs40", label: "{i18n>LABEL_43079}", plabel: "{i18n>LABEL_43083}", resize: true, span: 3, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs41", label: "{i18n>LABEL_43079}", plabel: "{i18n>LABEL_43084}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs42", label: "{i18n>LABEL_43079}", plabel: "{i18n>LABEL_43085}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs30", label: "{i18n>LABEL_43057}", plabel: "{i18n>LABEL_43083}", resize: true, span: 3, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs31", label: "{i18n>LABEL_43057}", plabel: "{i18n>LABEL_43084}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs32", label: "{i18n>LABEL_43057}", plabel: "{i18n>LABEL_43085}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
+                    // // 휴일(기본, 연장, 소계)
+                    // { id: "Hrs40", label: "{i18n>LABEL_43079}", plabel: "{i18n>LABEL_43083}", resize: true, span: 3, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs41", label: "{i18n>LABEL_43079}", plabel: "{i18n>LABEL_43084}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs42", label: "{i18n>LABEL_43079}", plabel: "{i18n>LABEL_43085}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
                     // 한도(기본, 연장)
-                    { id: "Hrs10", label: "{i18n>LABEL_43086}", plabel: "{i18n>LABEL_43083}", resize: true, span: 2, type: "string", sort: true, filter: true, width: "70px" },
-                    { id: "Hrs11", label: "{i18n>LABEL_43086}", plabel: "{i18n>LABEL_43084}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs10", label: "{i18n>LABEL_43086}", plabel: "{i18n>LABEL_43083}", resize: true, span: 2, type: "string", sort: true, filter: true, width: "70px" },
+                    // { id: "Hrs11", label: "{i18n>LABEL_43086}", plabel: "{i18n>LABEL_43084}", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" },
                     // 심야
                     { id: "Hrs50", label: "{i18n>LABEL_43034}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "70px" }
                 ];
