@@ -234,7 +234,12 @@ body {min-width:576px; font-size:14px}
 .bg-lcc-signature-green {background-color:#8dc63f !important}
 .bg-lcc-signature-red {background-color:#da291c !important}
 
-
+@media all and (min-width:499px) {
+	.navbar {padding-top:0; padding-bottom:0}
+	.navbar .nav-link {padding:.75rem .5rem}
+	.navbar .mega-menu {right:0; width:100%; padding:0 30px 20px}
+	.navbar-nav {flex-direction:row}
+}
 @media (min-width:499px) {
 	.portlet-masonry-wrapper {width:382px}
 }
