@@ -23,7 +23,9 @@ sap.ui.define(
                         // 신청현황
                         new sap.m.Label({ text: "{i18n>LABEL_38002}", design: "Bold" }).addStyleClass("sub-title"),
                         new sap.m.Button({
-                            press: oController.onPressReq.bind(oController),
+                            press: function(){
+                            	oController.onPressReq();
+                            },
                             text: "{i18n>LABEL_38044}" // 신청
                         }).addStyleClass("button-light-sm")
                     ]

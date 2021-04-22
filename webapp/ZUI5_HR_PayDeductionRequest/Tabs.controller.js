@@ -185,15 +185,11 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		var oView = sap.ui.getCore().byId("ZUI5_HR_PayDeductionRequest.Tabs");
 		var oController = oView.getController();
 		var saveData = oController._ApplyJSonModel.getProperty("/Data");
-		// var vOData = oController.onValidationData(oController, saveData, "A1");
-		// if( !vOData || vOData == "") return ;
 		
 		var create = function(){
 			var oPath = "";
 			var createData = {TempPayDeductionTableIn1 : []};
 			var detailData = {};
-			// var saveData = oController._BasicJSonModel.getProperty("/Data");
-			// Address
 			oPath = "/TempPayDeductionSet";
 			createData.IMode = "I";
 			createData.IEmpid = oController.getView().getModel("session").getData().Pernr;
@@ -201,7 +197,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			Object.assign(detailData, saveData);
 			delete detailData.EnameOrOrgehTxt;
 			createData.IPernr = detailData.Pernr;
-			
+			createData.IBukrs = detailData.Bukrs;
+			delete detailData.Bukrs;
 			detailData.Begda = "\/Date(" + common.Common.getTime(new Date(oController._ListCondJSonModel.getProperty("/Info/EPaydt"))) + ")\/";
 			createData.IPaydt = detailData.Begda;  // 지급공제일
 
@@ -568,11 +565,13 @@ return CommonController.extend($.app.APP_ID, { // 출장
                     Langu: this.getSessionInfoByKey("Langu"),
                     Molga: this.getSessionInfoByKey("Molga"),
                     Datum: new Date(),
-                    Mssty: "",
+                    Mssty: ""
                 },
                 callback = function(o) {
 					if(o.Otype === "P"){
 						oModel.setProperty("/Data/Pernr", o.Otype === "P" ? o.Objid : "");
+						oModel.setProperty("/Data/Ename", o.Otype === "P" ? o.Stext : "");
+						oModel.setProperty("/Data/Bukrs", o.Otype === "P" ? o.Bukrs3 : "");
 					}else{
 						sap.m.MessageBox.error(oController.getBundleText("MSG_50003"));
 					}
@@ -599,7 +598,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		var oModel = oController._ApplyJSonModel;
 		oModel.setProperty("/Data/Pernr", "");
 		oModel.setProperty("/Data/Orgeh", "");
-		oModel.setProperty("/Data/EnameOrOrgehTxt", "");
+		oModel.setProperty("/Data/Stext", "");
 	},
 
 	getLocalSessionModel: Common.isLOCAL() ? function() {

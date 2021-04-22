@@ -13,6 +13,7 @@ sap.ui.define(
 
             TableModel: new JSONModelHelper(),
             LogModel: new JSONModelHelper(),
+            ApplyModel : new JSONModelHelper(),
 
             getUserId: function () {
                 return this.getSessionInfoByKey("name");
@@ -92,14 +93,16 @@ sap.ui.define(
                 });
             },
 
-            onPressReq: function () {
+            onPressReq: function (vData) {
+            	var oController = $.app.getController();
+            	if(!vData || vData == "") vData = {};
                 //신청
                 sap.ui
                     .getCore()
                     .getEventBus()
                     .publish("nav", "to", {
                         id: [$.app.CONTEXT_PATH, "Apply"].join($.app.getDeviceSuffix()),
-                        data: {}
+                        data: vData
                     });
             },
 
@@ -159,8 +162,7 @@ sap.ui.define(
                     // 재발급
                     // 기본값 설정
                     oCopiedRow.actmode = "X";
-                    oController.ApplyModel.setData({ Data: oCopiedRow });
-                    oController._ApplyDialog.open();
+                    oController.onPressReq(oCopiedRow);
                 } else if (oCopiedRow.Zstatus == "3") {
                     // 프린트
                     BusyIndicator.show(0);
