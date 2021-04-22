@@ -1,4 +1,5 @@
-function HomeSession(_gateway, initHome) {
+/* global HomeMFA */
+function HomeSession(_gateway, callback) {
 
 	/*
 	sessionStorage = {
@@ -17,13 +18,12 @@ function HomeSession(_gateway, initHome) {
 	this._gateway = _gateway;
 	_gateway.homeSession(this);
 
-
-	this.init(initHome);
+	this.init(callback);
 }
 
 $.extend(HomeSession.prototype, {
 
-init: function(initHome) {
+init: function(callback) {
 
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
@@ -44,6 +44,13 @@ init: function(initHome) {
 			this.registerToken()			// Mobile token 등록
 		]);
 	}.bind(this))
+	.then(function() {
+		if (typeof HomeMFA === 'function') {
+			new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
+		} else {
+			throw new Error('다중 인증 모듈이 존재하지 않습니다.');
+		}
+	}.bind(this))
 	.catch(function(jqXHR) {
 		var message = this._gateway.handleError(this._gateway.ODataDestination.ETC, jqXHR, 'HomeSession.init').message || '알 수 없는 오류가 발생하였습니다.';
 
@@ -53,8 +60,7 @@ init: function(initHome) {
 				html: ['<p>', '</p>'].join(message)
 			});
 		}.bind(this));
-	}.bind(this))
-	.then(initHome || function() {});
+	}.bind(this));
 },
 
 dkdlTlqpfmffls: function(resolve) {

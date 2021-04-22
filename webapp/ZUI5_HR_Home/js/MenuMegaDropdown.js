@@ -139,6 +139,7 @@ changeLocale: function() {
 
 	var iframe = $('iframe[name="content-iframe"]');
 	if (iframe.length) {
+		iframe[0].contentWindow.sap.ui.getCore().getConfiguration().setLanguage(this._gateway.loginInfo('Langu'));
 		$('form#menu-form').submit();
 	}
 },

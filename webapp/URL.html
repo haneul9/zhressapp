@@ -142,6 +142,7 @@ $(document).on('click', 'a', function(e) {
             .replace(/\$\{serverNumber\}/g, developers[$('#developers option:selected').index()].server)
             .replace(/\$\{originPath\}/g, developers[$('#developers option:selected').index()].originpath);
     url = /\/sf\//.test(url) ? url : (url + pernr);
+    url += $('#mfa').prop('checked') ? ((/\?/.test(url) ? '&' : '?') + 'mfa=true') : '';
 
     if (!$('#checkbox').prop('checked')) {
         anchor.attr('href', url);
@@ -180,6 +181,7 @@ $(document).on('click', 'input[type="text"]', function(e) {
 </div>
 <div class="d-flex align-items-center m-3">
     <label class="mb-0 text-right" style="width:70px">대상자 사번</label> <input type="text" id="pernr" style="width:114px" />
+    <label class="mb-0 text-right" style="width:70px" for="mfa">2FA 우회</label> <input type="checkbox" id="mfa" />
 </div>
 <div class="d-flex m-3">
 <table>
