@@ -47,7 +47,7 @@ sap.ui.define([
 				.setModel(oController.DetailModel)
 				.bindElement("/FormData"),
 				contentStyleClass: "sub-app-content",
-                contentContainerStyleClass: "app-content-container-mobile",
+                contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
 					this.getApplyInputBox(oController)
 				]

@@ -19,7 +19,7 @@ sap.ui.define([
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				contentStyleClass: "sub-app-content",
-                contentContainerStyleClass: "app-content-container-mobile",
+                contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
 					this.getDetailInputBox(oController)
 				]

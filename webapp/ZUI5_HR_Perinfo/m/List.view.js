@@ -99,7 +99,7 @@ sap.ui.define(
 
                 return new PageHelper({
                     contentContainerStyleClass: "app-content-container-mobile",
-                    contentItems: [new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }), searchBox, tabBox]
+                    contentItems: [searchBox, tabBox]
                 });
             },
 

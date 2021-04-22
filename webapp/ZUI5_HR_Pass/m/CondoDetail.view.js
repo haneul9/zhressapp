@@ -64,7 +64,7 @@ sap.ui.define([
                     ]
                 }),
                 contentStyleClass: "sub-app-content",
-                contentContainerStyleClass: "app-content-container-mobile",
+                contentContainerStyleClass: "app-content-container-mobile custom-title-left",
                 contentItems: [
                     this.getInputBox(oController)	// Input 영역
                 ]
