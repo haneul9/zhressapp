@@ -1,344 +1,117 @@
 ﻿/* eslint-disable no-undef */
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"./delegate/ViewTemplates",
+	"../../common/Common",
+	"../../common/CommonController",
+	"../../common/JSONModelHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, JSONModelHelper, ViewTemplates, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
-	
-	return CommonController.extend($.app.APP_ID, {
+	var SUB_APP_ID = [$.app.CONTEXT_PATH, "CostApply"].join($.app.getDeviceSuffix());
+
+	return CommonController.extend(SUB_APP_ID, {
 		
-		PAGEID: "Page",
+		PAGEID: "CostApply",
 		
-		TableModel: new JSONModelHelper(),
-		ApplyModel: new JSONModelHelper(),
-		CostModel: new JSONModelHelper(),
-		FinishModel: new JSONModelHelper(),
-		LogModel: new JSONModelHelper(),
+        ApplyModel: new JSONModelHelper(),
+		IsFileRequired: "",
 		
 		getUserId: function() {
 
-			return this.getSessionInfoByKey("name");
+			return $.app.getController().getUserId();
 		},
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs2");
+			return $.app.getController().getUserGubun();
         },
 		
 		onInit: function () {
 
-			this.setupView()
-				.getView()
-				.addEventDelegate({
-					onBeforeShow : this.onBeforeShow
-				}, this);
-				
+			this.setupView();
+
 			this.getView()
 				.addEventDelegate({
+					onBeforeShow: this.onBeforeShow,
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
-		onBeforeShow: function() {
-			var oView = $.app.byId("ZUI5_HR_DispatchLivingCost.Page");
-			this._CostApplyModel = sap.ui.jsfragment("ZUI5_HR_DispatchLivingCost.fragment.CostApply", this);
-			oView.addDependent(this._CostApplyModel);
+		onBeforeShow: function(oEvent) {
+			BusyIndicator.show(0);
+            var oFilesB = $.app.byId(this.PAGEID + "_FilesBox"),
+				oFileB = $.app.byId(this.PAGEID + "_FileFlexBox"),
+				oEarlyYears = $.app.byId(this.PAGEID + "_EarlyYears"),
+				oEarlyMonth = $.app.byId(this.PAGEID + "_EarlyMonth");
+            this.ApplyModel.setData({FormData: []});
+
+            if(oEvent.data){
+				this.ApplyModel.setData({ FormData: [] });
+
+                if(Common.checkNull(oEvent.data.RowData)){ // 새로운 신청
+                        oFilesB.setVisible(true);
+                        oFileB.setVisible(false);
+                        oEarlyYears.setEditable(false);
+                        oEarlyMonth.setEditable(false);
+                        this.ApplyModel.setProperty("/FormData/Begda", new Date());
+                        this.ApplyModel.setProperty("/FormData/Zmuflg", "1");
+                        this.ApplyModel.setProperty("/EarlyApp", "");
+				}else{
+					var oRowData = $.extend(true, {}, oEvent.data.RowData);
+					this.ApplyModel.setData({FormData: oRowData});
+
+					if(oEvent.data.Gubun === "N"){ // 신청된 데이터 수정 & 상세보기
+						if(Common.checkNull(this.ApplyModel.getProperty("/FormData/Zseeym")) || this.ApplyModel.getProperty("/FormData/Zseeym") === "000000"){
+							this.ApplyModel.setProperty("/EarlyApp", "");
+							oFilesB.setVisible(true);
+							oFileB.setVisible(false);
+							oEarlyYears.setEditable(false);
+							oEarlyMonth.setEditable(false);
+						}else{
+							this.ApplyModel.setProperty("/EarlyApp", "X");
+							oFilesB.setVisible(false);
+							oFileB.setVisible(true);
+							oEarlyYears.setEditable(true);
+							oEarlyMonth.setEditable(true);
+						}
+					}else { // 조기종료 신청
+						this.ApplyModel.setProperty("/EarlyApp", "X");
+						oFilesB.setVisible(false);
+						oFileB.setVisible(true);	
+						oEarlyYears.setEditable(true);
+						oEarlyMonth.setEditable(true);
+					}
+					
+					this.ApplyModel.setProperty("/FormData/RangYearB", oRowData.Zscsym.slice(0,4));
+					this.ApplyModel.setProperty("/FormData/RangMonthB", oRowData.Zscsym.slice(4));
+					this.ApplyModel.setProperty("/FormData/RangYearsE", oRowData.Zsceym.slice(0,4));
+					this.ApplyModel.setProperty("/FormData/RangMonthE", oRowData.Zsceym.slice(4));
+					this.ApplyModel.setProperty("/FormData/EarlyYears", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(0,4));
+					this.ApplyModel.setProperty("/FormData/EarlyMonth", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(4));
+					this.getDispatchCost();
+                }
+            }
 			Common.log("onBeforeShow");
 		},
 		
 		onAfterShow: function() {
 
-			this.onTableSearch();
-        },
-		
-        getChoice: function() {
-            var oController = $.app.getController();
-
-            return new sap.m.CheckBox({
-                select: oController.onChecked.bind(oController),
-                selected: {
-                    path: "Check",
-                    formatter: function(v) {
-                        return v === "X";
-                    }
-                },
-                visible : {
-                    path : "Zflag", 
-                    formatter : function(fVal){
-                        return fVal === "X";
-                    }
-                }
-            });
-        },
-
-        onChecked: function(oEvent) { // Checkbox선택시 다른Checkbox 비활성화
-			var oController = this;
-			var vIndex = oEvent.getSource().mBindingInfos.selected.binding.oContext.getPath().slice(6);
-
-			oController.FinishModel.setData({FormData: []});
-
-			this.TableModel.getProperty("/Data").forEach(function(ele, index) {
-				if(index === parseInt(vIndex) && oEvent.getSource().getSelected() === true){
-					oController.TableModel.setProperty("/Data/" + index + "/Check", "X");
-					oController.FinishModel.setData({FormData: ele});
-				}else
-					oController.TableModel.setProperty("/Data/" + index + "/Check", "");
-			});
-        },
-
-        getLocation: function() {
-            return new sap.m.Text({
-                text: {
-                    parts: [{ path: "ZfwkpsT" }, { path: "ZtwkpsT" }],
-                    formatter: function(v1, v2) {
-                        if(v1) return v1 + " → " + v2;
-                        else return "";
-                    }
-                }
-            });
-        },
-
-        getCostPlace: function() {
-            return new sap.m.Text({
-                text: {
-                    parts: [{ path: "ZwkplsT" }, { path: "ZlfplsT" }],
-                    formatter: function(v1, v2) {
-                        if(v1) return v1 + " → " + v2;
-                        else return "";
-                    }
-                }
-            });
-        },
-
-        getDatepicker: function() {
-            return new sap.m.Text({
-				text: {
-					parts: [{ path: "Zscsym" }, { path: "Zsceym" }],
-					formatter: function (v1, v2) {
-						if (!v1 || !v2) return "";
-
-						v1 = v1.substr(0,4) + "-" + v1.substr(4);
-						v2 = v2.substr(0,4) + "-" + v2.substr(4);
-
-						return v1 + " ~ " + v2;
-					}
-				},
-				textAlign: "Center"
-			});
-        },
-
-		getEalryDate: function() {
-			return new sap.m.Text({
-				text: {
-					path: "Zseeym",
-					formatter: function (v) {
-						if (!v || v === "000000") return "";
-						v = v.substr(0,4) + "-" + v.substr(4);
-
-						return v;
-					}
-				},
-				textAlign: "Center"
-			});
-		},
-		
-		getLabel: function() {
-			return ViewTemplates.getLabel("header", "{i18n>LABEL_59013}", "150px"); // 파견자 생활경비
-		},
-
-        getStatus: function() {
-            var oController = $.app.getController();
-
-            return 	new sap.m.FlexBox({
-                justifyContent: "Center",
-                items: [
-                    new sap.ui.commons.TextView({
-                        text : "{StatusT}", 
-                        textAlign : "Center",
-                        visible : {
-                            path : "Status", 
-                            formatter : function(fVal){
-                                if(fVal !== "AA") return true;
-                                else return false;
-                            }
-                        }
-                    })
-                    .addStyleClass("font-14px font-regular mt-4px"),
-                    new sap.m.FlexBox({
-                        justifyContent: "Center",
-                        items: [
-                            new sap.ui.commons.TextView({ //처리결과에 Text
-                                text : "{StatusT}", 
-                                textAlign : "Center"
-                            })
-                            .addStyleClass("font-14px font-regular mt-7px"),
-                            new sap.m.Button({ //처리결과에 삭제 버튼
-                                text: "{i18n>LABEL_38047}",
-                                press : oController.onPressCancel
-                            })
-                            .addStyleClass("button-light-sm ml-10px")
-                        ],
-                        visible : {
-                            path : "Status", 
-                            formatter : function(fVal){
-                                if(fVal === "AA") return true;
-                                else return false;
-                            }
-                        }
-                    })
-                ]
-            });
-        },
-
-        onTableSearch: function() {
-			var oController = $.app.getController();
-			var oTable = $.app.byId(oController.PAGEID + "_Table");
-			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
-			var vPernr = oController.getUserId();
-			var vBukrs = oController.getUserGubun();
-			
-            oController.TableModel.setData({Data: []}); 
-
-			var sendObject = {};
-			// Header
-			sendObject.IBukrs = vBukrs;
-			sendObject.IEmpid = vPernr;
-            sendObject.IConType = "1";
-			// Navigation property
-			sendObject.DispatchApplyExport = [];
-			sendObject.DispatchApplyTableIn1 = [];
-			
-			oModel.create("/DispatchApplySet", sendObject, {
-				success: function(oData, oResponse) {
-					var dataLength = 10;
-
-					if (oData && oData.DispatchApplyTableIn1) {
-						Common.log(oData);
-						var rDatas = oData.DispatchApplyTableIn1.results;
-						dataLength = rDatas.length;
-						oController.TableModel.setData({Data: rDatas}); 
-					}
-                    
-                    oController.LogModel.setData({Data: oData.DispatchApplyExport.results[0]});
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
-					});
-				}
-			});
-        },
-
-		onPressReq: function() { //신청
-			var oFilesB = $.app.byId(this.PAGEID + "_FilesBox"),
-				oFileB = $.app.byId(this.PAGEID + "_FileFlexBox"),
-				oEarlyYears = $.app.byId(this.PAGEID + "_EarlyYears"),
-				oEarlyMonth = $.app.byId(this.PAGEID + "_EarlyMonth");
-				
-			oFilesB.setVisible(true);
-			oFileB.setVisible(false);
-			oEarlyYears.setEditable(false);
-			oEarlyMonth.setEditable(false);
-			this.ApplyModel.setData({FormData: []});
-            this.ApplyModel.setProperty("/FormData/Begda", new Date());
-			this.ApplyModel.setProperty("/FormData/Zmuflg", "1");
-			this.ApplyModel.setProperty("/EarlyApp", "");
-
-			this.setZyears(this);
+            this.setZyears(this);
 			this.setZmonths(this);
             this.getLocationList();
 		    this.onBeforeOpenDetailDialog();
-			this._CostApplyModel.open();
-		},
-
-        onPressEnd: function() { // 조기 종료 신청
-			var oController = this;
-			var oFilesB = $.app.byId(this.PAGEID + "_FilesBox"),
-				oFileB = $.app.byId(this.PAGEID + "_FileFlexBox"),
-				oEarlyYears = $.app.byId(this.PAGEID + "_EarlyYears"),
-				oEarlyMonth = $.app.byId(this.PAGEID + "_EarlyMonth");
-				
-			if(this.TableModel.getProperty("/Data").every(function(e) { return Common.checkNull(e.Check)})){
-				sap.m.MessageBox.alert(oController.getBundleText("MSG_59016"), {
-					title: oController.getBundleText("LABEL_00149")
-				});
-				return;
-			}
-
-			var oRowData = $.extend(true, {}, this.FinishModel.getProperty("/FormData"));
-			oEarlyYears.setEditable(true);
-			oEarlyMonth.setEditable(true);
-			oFilesB.setVisible(false);
-			oFileB.setVisible(true);
-
-			this.ApplyModel.setData({FormData: oRowData});
-
-			this.setZyears(this);
-			this.setZmonths(this);
-			this.ApplyModel.setProperty("/EarlyApp", "X");
-			this.ApplyModel.setProperty("/FormData/RangYearB", oRowData.Zscsym.slice(0,4));
-			this.ApplyModel.setProperty("/FormData/RangMonthB", oRowData.Zscsym.slice(4));
-			this.ApplyModel.setProperty("/FormData/RangYearsE", oRowData.Zsceym.slice(0,4));
-			this.ApplyModel.setProperty("/FormData/RangMonthE", oRowData.Zsceym.slice(4));
-			this.ApplyModel.setProperty("/FormData/EarlyYears", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(0,4));
-			this.ApplyModel.setProperty("/FormData/EarlyMonth", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(4));
-			this.getDispatchCost();
-            this.getLocationList();
-		    this.onBeforeOpenDetailDialog();
-			this._CostApplyModel.open();
+			BusyIndicator.hide();
         },
-		
-		onSelectedRow: function(oEvent) {
-			var oController = $.app.getController();
-			var vPath = oEvent.getParameters().rowBindingContext.getPath();
-			var oRowData = oController.TableModel.getProperty(vPath);
-			var oCopiedRow = $.extend(true, {}, oRowData);
-			var oFilesB = $.app.byId(oController.PAGEID + "_FilesBox"),
-				oFileB = $.app.byId(oController.PAGEID + "_FileFlexBox");
-			var oEarlyYears = $.app.byId(oController.PAGEID + "_EarlyYears"),
-				oEarlyMonth = $.app.byId(oController.PAGEID + "_EarlyMonth");
-				
-				
-				
-			oController.ApplyModel.setData({FormData: oCopiedRow});
-			oController.setZyears(oController);
-			oController.setZmonths(oController);
-				
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zseeym")) || oController.ApplyModel.getProperty("/FormData/Zseeym") === "000000"){
-				oController.ApplyModel.setProperty("/EarlyApp", "");
-				oFilesB.setVisible(true);
-				oFileB.setVisible(false);
-				oEarlyYears.setEditable(false);
-				oEarlyMonth.setEditable(false);
-			}else{
-				oController.ApplyModel.setProperty("/EarlyApp", "X");
-				oFilesB.setVisible(false);
-				oFileB.setVisible(true);
-				oEarlyYears.setEditable(true);
-				oEarlyMonth.setEditable(true);
-			}
 
-			oController.ApplyModel.setProperty("/FormData/RangYearB", oCopiedRow.Zscsym.slice(0,4));
-			oController.ApplyModel.setProperty("/FormData/RangMonthB", oCopiedRow.Zscsym.slice(4));
-			oController.ApplyModel.setProperty("/FormData/RangYearsE", oCopiedRow.Zsceym.slice(0,4));
-			oController.ApplyModel.setProperty("/FormData/RangMonthE", oCopiedRow.Zsceym.slice(4));
-			oController.ApplyModel.setProperty("/FormData/EarlyYears", Common.checkNull(oCopiedRow.Zseeym) || oRowData.Zseeym === "000000" ? "" : oCopiedRow.Zseeym.slice(0,4));
-			oController.ApplyModel.setProperty("/FormData/EarlyMonth", Common.checkNull(oCopiedRow.Zseeym) || oRowData.Zseeym === "000000" ? "" : oCopiedRow.Zseeym.slice(4));
-			oController.getDispatchCost();
-            oController.getLocationList();
-			oController.onBeforeOpenDetailDialog();
-			oController._CostApplyModel.open();
-		},
+        navBack: function() {
+            sap.ui.getCore().getEventBus().publish("nav", "to", {
+                id: [$.app.CONTEXT_PATH, "Page"].join($.app.getDeviceSuffix())
+            });
+        },
 
-		setZyears: function(oController) {
+        setZyears: function(oController) {
 			var vZyear = new Date().getFullYear(),
 				vConvertYear = "",
 				aYears = [];
@@ -371,7 +144,7 @@ sap.ui.define([
 		},
 
 		getDispatchCost: function() { // 숙소비, 교통비, 회사금액
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vBukrs = oController.getUserGubun();
 			var vPernr = oController.getUserId();
@@ -382,8 +155,6 @@ sap.ui.define([
 				Zwkpls: vZwkpls,
 				Zlfpls: vZlfpls
 			};
-
-			oController.CostModel.setData({Data: []});
 
 			var sendObject = {};
 			// Header
@@ -399,7 +170,6 @@ sap.ui.define([
 						Common.log(oData);
 						var rDatas = oData.DispatchApplyTableIn1.results;
 
-						oController.CostModel.setData({Data: rDatas});
 						oController.ApplyModel.setProperty("/FormData/Zssamt", rDatas[0].Zssamt);
 						oController.ApplyModel.setProperty("/FormData/Ztramt", rDatas[0].Ztramt);
 						oController.ApplyModel.setProperty("/FormData/Zcoamt", rDatas[0].Zcoamt);
@@ -416,7 +186,7 @@ sap.ui.define([
 		},
 
         getLocationList: function() { // 지역정보
-            var oController = $.app.getController();
+            var oController = this.getView().getController();
             var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
             var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
@@ -456,7 +226,7 @@ sap.ui.define([
 		},
 
 		checkLocation_1: function(oEvent) { // 파견지 Check
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oLocation1 = $.app.byId(oController.PAGEID + "_LocationCombo1");
 			var oLocation2 = $.app.byId(oController.PAGEID + "_LocationCombo2");
 
@@ -479,7 +249,7 @@ sap.ui.define([
 		},
 
 		checkLocation_2: function(oEvent) { // 기준지 Check
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oLocation3 = $.app.byId(oController.PAGEID + "_LocationCombo3");
 			var oLocation4 = $.app.byId(oController.PAGEID + "_LocationCombo4");
 
@@ -507,8 +277,8 @@ sap.ui.define([
 			}
 		},
 
-		checkError: function() {
-			var oController = $.app.getController();
+        checkError :function() { // Error Check
+			var oController = this.getView().getController();
 
             // 파견지
             if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zfwkps")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/Ztwkps"))){
@@ -582,64 +352,22 @@ sap.ui.define([
 			return false;
 		},
 
-		onPressCancel: function(oEvent) { // 삭제
-			var oController = $.app.getController();
-			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
-			var vPernr = oController.getUserId();
-			var vBukrs = oController.getUserGubun();
-			var vPath = oEvent.getSource().oParent.oParent.getBindingContext().getPath();
-			var oRowData = oController.TableModel.getProperty(vPath);
-
-			var onPressCancel = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_59028")) { // 삭제
-
-					var sendObject = {};
-					// Header
-					sendObject.IEmpid = vPernr;
-					sendObject.IBukrs = vBukrs;
-					sendObject.IConType = "4";
-					// Navigation property
-                    sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
-					
-					oModel.create("/DispatchApplySet", sendObject, {
-						success: function(oData, oResponse) {
-								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_59015"), { title: oController.getBundleText("MSG_08107")});
-								oController.onTableSearch();
-						},
-						error: function(oResponse) {
-							Common.log(oResponse);
-							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-								title: oController.getBundleText("LABEL_09030")
-							});
-						}
-					});
-				}
-			};
-
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_59014"), {
-				title: oController.getBundleText("LABEL_59001"),
-				actions: [oController.getBundleText("LABEL_59028"), oController.getBundleText("LABEL_00119")],
-				onClose: onPressCancel
-			});
-		},
-
-		onDialogApplyBtn: function() {
-			if(this.ApplyModel.getProperty("/EarlyApp") === "X")
+        onDialogApplyBtn: function() { // 신청
+            if(this.ApplyModel.getProperty("/EarlyApp") === "X")
 				this.onDialogApplyBtn2();
 			else
 				this.onDialogApplyBtn1();
-		},
+        },
 
         onDialogApplyBtn1: function() { // 신청
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.ApplyModel.getProperty("/FormData");
 
 			if(oController.checkError()) return;
-
+			
 			BusyIndicator.show(0);
 			var onPressApply = function (fVal) {
 				if (fVal && fVal == oController.getBundleText("LABEL_59026")) { // 신청
@@ -663,11 +391,10 @@ sap.ui.define([
 					
 					oModel.create("/DispatchApplySet", sendObject, {
 						success: function(oData, oResponse) {
-								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_59011"), { title: oController.getBundleText("MSG_08107")});
-								oController.onTableSearch();
-								BusyIndicator.hide();
-								oController._CostApplyModel.close();
+							Common.log(oData);
+                            sap.m.MessageBox.alert(oController.getBundleText("MSG_59011"), { title: oController.getBundleText("MSG_08107")});
+							BusyIndicator.hide();
+                            oController.navBack();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -689,7 +416,7 @@ sap.ui.define([
         },
 
         onDialogApplyBtn2: function() { // 조기신청
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
@@ -718,9 +445,8 @@ sap.ui.define([
 						success: function(oData, oResponse) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59011"), { title: oController.getBundleText("MSG_08107")});
-								oController.onTableSearch();
 								BusyIndicator.hide();
-								oController._CostApplyModel.close();
+                                oController.navBack();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -742,7 +468,7 @@ sap.ui.define([
         },
 
         onDialogSaveBtn: function() { // 저장
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
@@ -780,9 +506,8 @@ sap.ui.define([
 						success: function(oData, oResponse) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59013"), { title: oController.getBundleText("MSG_08107")});
-								oController.onTableSearch();
 								BusyIndicator.hide();
-								oController._CostApplyModel.close();
+                                oController.navBack();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -804,7 +529,7 @@ sap.ui.define([
         },
 
         onDialogDelBtn: function() { // 삭제
-			var oController = $.app.getController();
+			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
@@ -826,9 +551,8 @@ sap.ui.define([
 						success: function(oData, oResponse) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59015"), { title: oController.getBundleText("MSG_08107")});
-								oController.onTableSearch();
 								BusyIndicator.hide();
-								oController._CostApplyModel.close();
+                                oController.navBack();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -849,8 +573,8 @@ sap.ui.define([
 			});
         },
 
-		onBeforeOpenDetailDialog: function() {
-			var oController = $.app.getController();
+        onBeforeOpenDetailDialog: function() {
+			var oController = this.getView().getController();
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 
@@ -900,9 +624,9 @@ sap.ui.define([
 				},"004");
 			}
 		},
-		
+
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			return new JSONModelHelper({name: "20063005"}); // 20063005
+			return new JSONModelHelper({name: $.app.getController().getUserId()});
 		} : null
 	});
 });

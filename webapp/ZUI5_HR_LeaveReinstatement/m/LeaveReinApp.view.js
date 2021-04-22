@@ -180,7 +180,7 @@
                         height: "40px",
                         alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42027}", "105px", "Left", true), // 질병 명
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42027}", "105px", "Left", true).addStyleClass("sub-con-title"), // 질병 명
                             new sap.m.Input({
 								textAlign: "Begin",
 								width: "250px",
@@ -199,7 +199,7 @@
                         height: "40px",
                         alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42028}", "105px", "Left", true), // 의사 소견 (요약)
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42028}", "105px", "Left", true).addStyleClass("sub-con-title"), // 의사 소견 (요약)
                             new sap.m.Input({
 								textAlign: "Begin",
 								width: "250px",
@@ -224,7 +224,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42020}", "105px", "Left", true), // 성명
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42020}", "105px", "Left", true).addStyleClass("sub-con-title"), // 성명
                             new sap.m.Input({
                                 textAlign: "Begin",
                                 width: "250px",
@@ -243,7 +243,7 @@
                         height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42021}", "105px", "Left", true), // 생년월일
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42021}", "105px", "Left", true).addStyleClass("sub-con-title"), // 생년월일
                             new PickOnlyDatePicker({
                                 width: "220px",
                                 dateValue: "{Zfgbdt}",
@@ -265,7 +265,7 @@
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42022}", "105px", "Left", true), // 초등학교 명
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42022}", "105px", "Left", true).addStyleClass("sub-con-title"), // 초등학교 명
                                     new sap.m.Input({
                                         textAlign: "Begin",
                                         width: "250px",
@@ -284,7 +284,7 @@
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42023}", "105px", "Left", true), // 입학일
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42023}", "105px", "Left", true).addStyleClass("sub-con-title"), // 입학일
                                     new PickOnlyDatePicker({
                                         width: "220px",
                                         dateValue: "{Zentdt}",
@@ -309,7 +309,7 @@
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42024}", "105px", "Left", true), // 관계
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_42024}", "105px", "Left", true).addStyleClass("sub-con-title"), // 관계
                                     oRelationCombo
                                 ]
                             }),
@@ -339,7 +339,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42004}", "105px", "Left"), // 신청일
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42004}", "105px", "Left").addStyleClass("sub-con-title"), // 신청일
                             new sap.m.Text({
 								width: "200px",
 								text: {
@@ -357,7 +357,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_42013}", "105px", "Left", true), // 휴/복직 구분
+							ViewTemplates.getLabel("header", "{i18n>LABEL_42013}", "105px", "Left", true).addStyleClass("sub-con-title"), // 휴/복직 구분
 							oTypeCombo
 						]
 					}),
@@ -365,7 +365,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_42014}", "105px", "Left", true), // 휴/복직 사유
+							ViewTemplates.getLabel("header", "{i18n>LABEL_42014}", "105px", "Left", true).addStyleClass("sub-con-title"), // 휴/복직 사유
 							oUsedTypeCombo
 						]
 					}),
@@ -373,7 +373,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_42007}", "105px", "Left", true), // 휴직기간
+							ViewTemplates.getLabel("header", "{i18n>LABEL_42007}", "105px", "Left", true).addStyleClass("sub-con-title"), // 휴직기간
 							new PickOnlyDateRangeSelection(oController.PAGEID + "_LeaveDate", {
 								width: "250px",
 								displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
@@ -395,7 +395,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42008}", "105px", "Left", true), // 복직예정일
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42008}", "105px", "Left", true).addStyleClass("sub-con-title"), // 복직예정일
 							new PickOnlyDatePicker(oController.PAGEID + "_ReinDate", {
                                 width: "220px",
                                 dateValue: "{Zrhsdt}",
@@ -416,7 +416,7 @@
 						height: "auto",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42016}", "105px", "Left", true), // 세부사유
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42016}", "105px", "Left", true).addStyleClass("sub-con-title"), // 세부사유
 							new sap.m.TextArea({
                                 rows: 3,
 								width: "250px",
@@ -436,7 +436,7 @@
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_42018}", "105px", "Left", true), // 출산예정일
+							ViewTemplates.getLabel("header", "{i18n>LABEL_42018}", "105px", "Left", true).addStyleClass("sub-con-title"), // 출산예정일
 							new PickOnlyDatePicker({
                                 width: "220px",
                                 dateValue: "{Zexbdt}",
@@ -458,7 +458,7 @@
                         height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left"), // 결재선 안내
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left").addStyleClass("sub-con-title"), // 결재선 안내
                             new sap.m.VBox({
                                 fitContainer: true,
                                 items: [
@@ -498,7 +498,7 @@
                         height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left"), // 증빙서류 안내
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left").addStyleClass("sub-con-title"), // 증빙서류 안내
                             new sap.m.Text({
                                 width: "auto",
                                 text: "{/InfoText}",

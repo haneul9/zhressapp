@@ -36,7 +36,7 @@
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -72,7 +72,7 @@
                     }
                 }, 
                 textAlign : "Center"
-            })
+            });
         },
 		
 		onTableSearch: function() {
@@ -201,7 +201,7 @@
 			if (!oController._RegistModel) {
 				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Notice.fragment.Regist", oController);
 				oView.addDependent(oController._RegistModel);
-			};
+			}
 			
 			oController.getDetailData(vSdate, vSeqnr);
             oController.onBeforeOpenDetailDialog();
@@ -250,7 +250,7 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: !vSdate ? true : false,
+				Editable: !vSdate ? true : false
 			});
 		},
 		
