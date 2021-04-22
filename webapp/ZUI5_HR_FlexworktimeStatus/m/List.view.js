@@ -203,7 +203,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 							               items : [oCalendar, oLayout1, oLayout2, oLayout3]
 							           })]
 			        });
-			        
+			
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");
 		

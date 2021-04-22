@@ -75,6 +75,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        		formatter : function(fVal){
 										        			return fVal == "" ? true : false;
 										        		}
+										        	},
+										        	change : function(oEvent){
+										        		oController.setMonyn(oEvent, "1");
 										        	}
 												}),
 												new sap.m.Text({text : " ~ "}).addStyleClass("pt-5px pr-5px pl-5px"),
@@ -90,6 +93,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        		formatter : function(fVal){
 										        			return (fVal == "" || fVal == "2") ? true : false;
 										        		}
+										        	},
+										        	change : function(oEvent){
+										        		oController.setMonyn(oEvent, "1");
 										        	}
 												})],
 								 	 hAlign : "Begin",
@@ -115,6 +121,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 														formatter : function(fVal){
 															return (fVal == "" || fVal == "2") ? true : false;
 														}
+													},
+													change : function(oEvent){
+														oController.setMonyn(oEvent, "1");
 													}
 												})],
 								 	 hAlign : "Begin",
@@ -173,6 +182,11 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        	  	 formatter : function(fVal){
 										        	  		return (fVal == "" || fVal == "2") ? true : false;
 										        	  	 }
+										        	  },
+										        	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
+										        	  change : function(oEvent){
+										        	  		oController.setMonyn(oEvent, "2");
+										        	  		oController.onChangeTime(oEvent);
 										        	  }
 												  }),
 												  new sap.m.Text({text : " ~ "}).addStyleClass("pt-5px pr-5px pl-5px"),
@@ -188,6 +202,11 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        		  formatter : function(fVal){
 										        			  return (fVal == "" || fVal == "2") ? true : false;
 										        		  }
+										        	  },
+										        	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
+										        	  change : function(oEvent){
+										        	  		oController.setMonyn(oEvent, "2");
+										        	  		oController.onChangeTime(oEvent);
 										        	  }
 												  })]
 		                        	 }),
@@ -279,6 +298,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 						headerButton : new sap.m.HBox({
 										   items : [new sap.m.Button({
 													   	text: oBundleText.getText("LABEL_00101"), // 저장
+													   	press : oController.onPressSave,
 													   	visible : {
 													   		path : "Offyn",
 													   		formatter : function(fVal){

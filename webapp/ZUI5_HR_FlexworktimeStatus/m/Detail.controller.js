@@ -36,7 +36,7 @@ sap.ui.define([
 		
 			if(oEvent.data.Data){
 				var oData = Object.assign({}, oEvent.data.Data);
-					
+					console.log(oData)
 				oController._DetailJSonModel.setProperty("/Data", oData);
 			}
 			
@@ -66,12 +66,17 @@ sap.ui.define([
 						vData1.Data.push(data1[i]);
 					}
 				}
-				
-				if(vData1.Data.length != 5){
+				// 추가휴게는 5개까지 입력할 수 있음
+				var oOffyn = oController._DetailJSonModel.getProperty("/Data/Offyn");
+				if((oOffyn == "" || oOffyn == "2") && vData1.Data.length != 5){
 					for(var i=vData1.Data.length; i<5; i++){
 						var detail = {};
 							detail.Idx = vData1.Data.length;
-							detail.Offyn = oController._DetailJSonModel.getProperty("/Data/Offyn");
+							detail.Offyn = oOffyn;
+							detail.Datum = oController._DetailJSonModel.getProperty("/Data/Datum");
+							detail.Beguz = "";
+							detail.Enduz = "";
+							detail.Notes = "";
 							
 							vData1.Data.push(detail);
 					}
@@ -80,6 +85,17 @@ sap.ui.define([
 				if(vData2.Data.length == 0){
 					vData2.Data.push({Text : oBundleText.getText("LABEL_69015"), Value : ""}); // 추가휴게시간
 				}
+				
+				var oWrktm = oController._DetailJSonModel.getProperty("/Data/Wrktm"); // 평일근로시간
+					oWrktm = oWrktm && oWrktm != "" ? oWrktm.substring(0,2) + ":" + oWrktm.substring(2,4) : "";
+				var oExttm = oController._DetailJSonModel.getProperty("/Data/Exttm"); // 연장근로시간
+					oExttm = oExttm && oExttm != "" ? oExttm.substring(0,2) + ":" + oExttm.substring(2,4) : "";
+				var oHoltm = oController._DetailJSonModel.getProperty("/Data/Holtm"); // 휴일근로시간
+					oHoltm = oHoltm && oHoltm != "" ? oHoltm.substring(0,2) + ":" + oHoltm.substring(2,4) : "";
+				
+				vData2.Data.push({Text : oBundleText.getText("LABEL_69041"), Value : oWrktm}); // 평일근로시간
+				vData2.Data.push({Text : oBundleText.getText("LABEL_69042"), Value : oExttm}); // 연장근로시간
+				vData2.Data.push({Text : oBundleText.getText("LABEL_69043"), Value : oHoltm}); // 휴일근로시간
 			}
 			
 			oJSONModel1.setData(vData1);
@@ -113,162 +129,80 @@ sap.ui.define([
 			}
 		},
 		
-		onPressSearch : function(oEvent){
+		// 수정여부 필드값 변경
+		// 1 근무일정 2 추가휴게 3 둘다변경
+		setMonyn : function(oEvent, Flag){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
 			var oController = oView.getController();
 			
-			var oData = oController._ListCondJSonModel.getProperty("/Data");
+			var oMonyn = oController._DetailJSonModel.getProperty("/Data/Monyn");
+				oMonyn = oMonyn == "" ? Flag : (oMonyn == Flag ? Flag : "3");
 			
-			var oCalendar = sap.ui.getCore().byId(oController.PAGEID + "_Calendar");
-				oCalendar.destroyContent();
-				oCalendar.addContent(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", oController));
+			oController._DetailJSonModel.setProperty("/Data/Monyn", oMonyn);
+		},
+		
+		// 추가휴게 시작/종료시간 변경 시 시간 계산
+		onChangeTime : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oController = oView.getController();	
 			
-			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
-			var oJSONModel1 = oTable1.getModel();
-			var vData1 = {Data : []};
+			var oData = oEvent.getSource().getCustomData()[0].getValue();
 			
-			var oTable2 = sap.ui.getCore().byId(oController.PAGEID + "_Table2");
-			var oJSONModel2 = oTable2.getModel();
-			var vData2 = {Data : []};
-			
-			var oTable3 = sap.ui.getCore().byId(oController.PAGEID + "_Table3");
-			var oJSONModel3 = oTable3.getModel();
-			var vData3 = {Data : []};
-			
-			var search = function(){
-				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
-				var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
-				var today = new Date();
+			if((oData.Beguz == "" && oData.Enduz == "") || (oData.Beguz != "" && oData.Enduz != "")){
+				// 추가휴게시간
+				var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
+				var oJSONModel1 = oTable1.getModel();
+				var oTableData = oJSONModel1.getProperty("/Data");
+				var vData = {Data : []};
 				
-				var vData = [];
+				// 근로시간현황
+				var oTable2 = sap.ui.getCore().byId(oController.PAGEID + "_Table2");
+				var oJSONModel2 = oTable2.getModel();
+				
+				var oFilter = oController._DetailJSonModel.getProperty("/Data");
+				
+				var createData = {FlexWorktime2Nav : []};
+					createData.Langu = oFilter.Langu;
+					createData.Werks = oFilter.Werks;
+					createData.Pernr = oFilter.Pernr;
+					createData.Zyymm = ((oFilter.Year + "") + (oFilter.Month < 10 ? ("0"+oFilter.Month) : (oFilter.Month+"")));
+					createData.Prcty = "3";
+					
+				for(var i=0; i<oTableData.length; i++){
+					var detail = {};
+						detail.Werks = createData.Werks;
+						detail.Pernr = createData.Pernr;
+						detail.Zyymm = createData.Zyymm;
+						detail.Datum = "\/Date(" + common.Common.getTime(oTableData[i].Datum) + ")\/";
+						detail.Beguz = oTableData[i].Beguz;
+						detail.Enduz = oTableData[i].Enduz;
+						detail.Notes = oTableData[i].Notes;
+						
+					createData.FlexWorktime2Nav.push(detail);
+				}
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : []};
-					createData.Werks = oData.Werks;
-					createData.Pernr = oData.Pernr;
-					createData.Zyymm = (oData.Year + (oData.Month < 10 ? ("0"+oData.Month) : (oData.Month + "")));
-					createData.Langu = oData.Langu;
-					createData.Prcty = "1";
-
 				oModel.create("/FlexworktimeSummarySet", createData, null,
 					function(data, res){
 						if(data){
-							// 자율출퇴근 현황
-							var oField = [{text : oBundleText.getText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
-										  {text : oBundleText.getText("LABEL_69027"), field : "Ctrex"},	// 연장근로시간 한도
-										  {text : oBundleText.getText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
-										  {text : oBundleText.getText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
-										  {text : oBundleText.getText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
-										  {text : oBundleText.getText("LABEL_69031"), field : "Tottm"}]; // 근로시간 합계
-										  
-							for(var i=0; i<oField.length; i++){ 
-								vData3.Data.push({Text : oField[i].text, Value : eval("data." + oField[i].field)});
-							}
-							
-							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results){
-								var data1 = data.FlexWorktime1Nav.results;
-								
-								for(var i=0; i<data1.length; i++){
-									var oDatum = new Date(common.Common.getTime(data1[i].Datum));
-									var oControl = sap.ui.getCore().byId(oController.PAGEID + "_" + dateFormat.format(oDatum));
-									
-									if(data1[i].Offyn == ""){
-										// 일자가 현재일 이전인 경우 OFFYN을 변경해서 데이터 선택이 불가능하게 변경한다.
-										if((dateFormat.format(data1[i].Datum) * 1) < (dateFormat.format(today) * 1)){
-											data1[i].Offyn = "1";
-										} else if((dateFormat.format(data1[i].Datum) * 1) == (dateFormat.format(today) * 1)){
-											data1[i].Offyn = "2"; // 현재일인 경우 시작시간만 변경 불가능
-										}
-									}
-									
-									if(oControl){
-										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-bold");
-										
-										if(data1[i].Offyn == "X"){
-											title.addStyleClass("color-info-red");
-										}
-										
-										var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-														  columns : 1,
-														  width : "100%",
-														  rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-																  	  height : "20px",
-																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																		  	  	   content : [title],
-																		  	  	   hAlign : "Center",
-																		  	  	   vAlign : "Middle"
-																		  	   })] 
-																  }).addStyleClass("calendar-datum"),
-																  new sap.ui.commons.layout.MatrixLayoutRow({
-																  	  height : "20px",
-																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																		  	  	   content : [new sap.m.Text({
-																					  	  		  text : (data1[i].Offyn == "X" ? "OFF" : 
-																					  	  					data1[i].Beguz == "" ? "" : (data1[i].Beguz.substring(0,2) + ":" + data1[i].Beguz.substring(2,4)))
-																					  	  	  })],
-																		  	  	   hAlign : "Center",
-																		  	  	   vAlign : "Middle"
-																		  	   })]
-																  }),
-																  new sap.ui.commons.layout.MatrixLayoutRow({
-																  	  height : "20px",
-																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																		  	  	   content : [new sap.m.Text({
-																					  	  		  text : (data1[i].Offyn == "X" ? "" : 
-																					  	  					data1[i].Enduz == "" ? "" : (data1[i].Enduz.substring(0,2) + ":" + data1[i].Enduz.substring(2,4)))
-																					  	  	  })],
-																		  	  	   hAlign : "Center",
-																		  	  	   vAlign : "Middle"
-																		  	   })]
-																  }),
-																  new sap.ui.commons.layout.MatrixLayoutRow({
-																  	  height : "20px",
-																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																		  	  	   content : [new sap.m.Text({
-																					  	  	   	  text : data1[i].Atext, 
-																					  	  	   	  maxLines : 1
-																				  	  	      }).addStyleClass("font-12px font-bold color-signature-blue")],
-																		  	  	   hAlign : "Center",
-																		  	  	   vAlign : "Middle"
-																		  	   })]
-																  })]
-													  });
-													  
-										oControl.addContent(oMatrix);
-										
-										var oJSONModel = new sap.ui.model.json.JSONModel();
-											oJSONModel.setData({Data : data1[i]});
-											
-										oControl.setModel(oJSONModel);
-										oControl.attachBrowserEvent("click", oController.onSelectDate);
-									}
-									
-								}
-							}
-							
 							if(data.FlexWorktime2Nav && data.FlexWorktime2Nav.results){
 								var data2 = data.FlexWorktime2Nav.results;
 								
 								for(var i=0; i<data2.length; i++){
+									data2[i].Idx = i;
+									data2[i].Offyn = oFilter.Offyn;
+									
 									data2[i].Datum = data2[i].Datum ? new Date(common.Common.setTime(data2[i].Datum)) : null;
 									
-									vData.push(data2[i]);
+									if(data2[i].Austy == "A"){
+										oJSONModel2.setProperty("/Data/0/Value", data2[i].Adbtm == "" ? "" : data2[i].Adbtm.substring(0,2) + ":" + data2[i].Adbtm.substring(2,4));
+									} else {
+										vData.Data.push(data2[i]);
+									}
 								}
-							}
-							
-							if(data.FlexWorktime3Nav && data.FlexWorktime3Nav.results){
-								var data3 = data.FlexWorktime3Nav.results;
-								
-								for(var i=0; i<data3.length; i++){
-									vData1.Data.push(data3[i]);
-								}
-							}
-							
-							if(data.FlexWorktime4Nav && data.FlexWorktime4Nav.results){
-								var data4 = data.FlexWorktime4Nav.results;
-								
-								for(var i=0; i<data4.length; i++){
-									vData2.Data.push(data4[i]);
+								// 합계가 넘어오지 않은 경우 추가휴게시간 초기화
+								if(data2.length == 5){
+									oJSONModel2.setProperty("/Data/0/Value", "");
 								}
 							}
 						}
@@ -288,57 +222,120 @@ sap.ui.define([
 					}
 				);
 				
-				oJSONModel1.setData(vData1);
-				oJSONModel2.setData(vData2);
-				oJSONModel3.setData(vData3);
-				
-				oController._ListCondJSonModel.setProperty("/Data2", vData);
+				oJSONModel1.setData(vData);
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
-					sap.m.MessageBox.error(oController.ErrorMessage);
-				}          
-				
-				oController._BusyDialog.close();
+					sap.m.MessageBox.error(oController.ErrorMesage);
+					oJSONModel2.setProperty("/Data/0/Value", "");
+					return;
+				}
 				
 			}
-			
-			oController._BusyDialog.open();
-			setTimeout(search, 100);
 		},
 		
-		onSelectDate : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
-			var oController = oView.getController();	
-			
-			var oControl = sap.ui.getCore().byId(oEvent.currentTarget.id);
-			if(oControl == undefined) return;
-			
-			var oJSONModel = oControl.getModel();
-			var oData = oJSONModel.getProperty("/Data");
-			console.log(oData);
-		},
-		
-		onSetYearMonth : function(value){
+		onPressSave : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
 			var oController = oView.getController();
 			
-			var year = oController._ListCondJSonModel.getProperty("/Data/Year");
-			var month = oController._ListCondJSonModel.getProperty("/Data/Month");
-				month = month + value;
-				
-			if(month < 1){
-				year = year - 1;
-				month = 12;
-			} else if(month > 12){
-				year = year + 1;
-				month = 1;
+			var oData = oController._DetailJSonModel.getProperty("/Data");
+			console.log(oData);
+			
+			// 추가휴게시간
+			var oData2 = sap.ui.getCore().byId(oController.PAGEID + "_Table1").getModel().getProperty("/Data");
+			
+			// validation check
+			if(oData.Monyn == ""){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_69007")); // 변경사항이 없습니다.
+				return;
+			} else if(oData.Beguz > oData.Enduz){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
+				return;
 			}
 			
-			oController._ListCondJSonModel.setProperty("/Data/Year", year);
-			oController._ListCondJSonModel.setProperty("/Data/Month", month);
+			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []}; 
 			
-			oController.onPressSearch();
+			for(var i=0; i<oData2.length; i++){
+				if(oData2[i].Austy == "A" || (oData2[i].Beguz == "" && oData2[i].Enduz == "")) continue;
+				
+				if(oData2[i].Beguz > oData2[i].Enduz){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
+					return;
+				}
+				
+				var detail = {};
+					detail.Datum = "\/Date(" + common.Common.getTime(oData2[i].Datum) + ")\/";
+					detail.Beguz = oData2[i].Beguz;
+					detail.Enduz = oData2[i].Enduz;
+					detail.Adbtm = oData2[i].Adbtm;
+					detail.Notes = oData2[i].Notes;
+					
+				createData.FlexWorktime2Nav.push(detail);
+			}
+			
+			var onProcess = function(){
+				createData.Werks = oData.Werks;
+				createData.Pernr = oData.Pernr;
+				createData.Zyymm = (oData.Year + "") + (oData.Month < 10 ? ("0" + oData.Month) : (oData.Month + ""));
+				createData.Prcty = "2";
+				
+				var oAdbtm = sap.ui.getCore().byId(oController.PAGEID + "_Table2").getModel().getProperty("/Data/0/Value");
+				
+				createData.FlexWorktime1Nav.push({
+					Datum : "\/Date(" + common.Common.getTime(oData.Datum) + ")\/",
+					Beguz : oData.Beguz,
+					Enduz : oData.Enduz,
+					Lnctm : oData.Lnctm,
+					Adbtm : oAdbtm == "" ? "" : oAdbtm.replace(":", ""),
+					Monyn : oData.Monyn
+				});
+				
+				console.log(createData);
+				
+				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				oModel.create("/FlexworktimeSummarySet", createData, null,
+					function(data, res){
+						if(data){
+							
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				oController._BusyDialog.close();
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMesage);
+					return;
+				}
+				
+				sap.m.MessageBox.success(oBundleText.getText("MSG_00017"), { // 저장되었습니다.
+					onClose : oController.onBack
+				});
+			};
+			
+			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00058"), { // 저장하시겠습니까?
+				actions : ["YES", "NO"],
+				onClose : function(fVal){
+					if(fVal && fVal == "YES"){
+						oController._BusyDialog.open();
+						setTimeout(onProcess, 100);
+					}
+				}
+			});
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
