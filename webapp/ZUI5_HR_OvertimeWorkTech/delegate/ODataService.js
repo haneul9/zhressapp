@@ -1,9 +1,10 @@
 sap.ui.define(
     [
         "common/Common", //
-        "./OvertimeWork"
+        "./OvertimeWork",
+		"sap/m/MessageBox"
     ],
-    function (Common, OvertimeWork) {
+    function (Common, OvertimeWork, MessageBox) {
         "use strict";
 
         var ODataService = {
@@ -106,7 +107,15 @@ sap.ui.define(
                         },
                         error: function (res) {
                             Common.log(res);
-                        }
+                            if(processType !== OvertimeWork.ProcessType.READ) {
+                                var errData = Common.parseError(res);
+                                if (errData.Error && errData.Error === "E") {
+                                    MessageBox.error(errData.ErrorMessage, {
+                                        title: this.getBundleText("LABEL_00149")
+                                    });
+                                }
+                            }
+                        }.bind(this)
                     }
                 );
 
