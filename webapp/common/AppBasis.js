@@ -187,7 +187,7 @@ getBundleText: function(key, values) {
 geti18nResource: function() {
 	return new sap.ui.model.resource.ResourceModel({
 		bundleUrl: "i18n/i18n.properties",
-		supportedLocales: [""],
+		supportedLocales: ["ko", "en", "zh"],
 		fallbackLocale: ""
 	}).getResourceBundle();
 },
