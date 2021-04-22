@@ -154,7 +154,7 @@
 						]
 					})
 					.setModel(oController.TableModel)
-					.addStyleClass("button-group-notice"),
+					.addStyleClass("app-nav-button-right"),
                     oInfoBox,
                     oTable
                 ]
