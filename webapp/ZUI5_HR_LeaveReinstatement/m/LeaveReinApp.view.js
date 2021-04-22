@@ -458,7 +458,7 @@
                         height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left").addStyleClass("sub-con-title"), // 결재선 안내
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42029}", "105px", "Left"), // 결재선 안내
                             new sap.m.VBox({
                                 fitContainer: true,
                                 items: [
@@ -498,7 +498,7 @@
                         height: "auto",
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left").addStyleClass("sub-con-title"), // 증빙서류 안내
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_42017}", "105px", "Left"), // 증빙서류 안내
                             new sap.m.Text({
                                 width: "auto",
                                 text: "{/InfoText}",
