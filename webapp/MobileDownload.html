@@ -19,6 +19,10 @@
 		$(document).on('click', '.btn.android', function() {
 			location.href = "./MobileDownload-info.html";
 		});
+
+		$(document).on('click', '.btn.ios', function() {
+			location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/oi55e8f66qr8xyx/manifest.plist";
+		});
 	});
 </script>
 </head>
@@ -29,11 +33,11 @@
 		<div class="flex-item">				
 			<div class="bi-area">
 				<div><img src="images/bi-hihr.png" /></div>
-				<div>Hi HR을 사용하기 위해 기기에 맞는 OS버전을 <span class="font-medium">다운로드</span>하여 설치해 주세요.</div>
+				<div>기기 OS에 맞는 Hi HR App을 <span class="font-medium">다운로드</span>하여 설치해 주세요.</div>
 			</div>	
 			<div class="btn android">
 				<img src="images/icon-android.png" />
-				<span class="os-title">안드로이드 다운로드</span>				
+				<span class="os-title">안드로이드폰 다운로드</span>				
 			</div>
 			<div class="btn ios">
 				<img src="images/icon-iOS.png" />
