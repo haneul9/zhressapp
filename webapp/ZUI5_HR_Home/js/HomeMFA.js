@@ -26,8 +26,12 @@ check: function(callback) {
 		this.isTargetPernr()	// MFA 대상 사번인지 확인
 	])
 	.then(function() {
-		if (!this._gateway.isLOCAL() && this.targetIP && this.targetPernr) {
-			this.confirm();
+		if (this.targetIP && this.targetPernr) {
+			if (this._gateway.isLOCAL()) {
+				this.callback();
+			} else {
+				this.confirm();
+			}
 		} else {
 			this.callback();
 		}
@@ -172,11 +176,7 @@ requestCode: function(type) {
 			return;
 		}
 
-		setTimeout(function() {
-			clearInterval(this.mfaCodeTimerStopper);
-			clearInterval(this.mfaCodeTimer);
-			this.hideMessage();
-		}.bind(this), 0);
+		this.hideMessage();
 	}
 	if (type === this.CODE.REQUEST) {
 		codeInput.focus();
