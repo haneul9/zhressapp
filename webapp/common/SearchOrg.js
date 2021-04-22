@@ -197,31 +197,33 @@ common.SearchOrg = {
 			}
 			
 			// 발령-조직변경 시 포지션 변경
-			if(common.SearchOrg.vCallControlId == "ActAppPersonInfo_Orgeh"){
-				var oPlans = sap.ui.getCore().byId(vPrefix + "Plans");
+			if(common.SearchOrg.vCallControlId == "ActAppPersonInfo_Orgeh" || common.SearchOrg.vCallControlId == "ActAppPersonInfo_AddOrgeh"){
+				var oPlans = (common.SearchOrg.vCallControlId == "ActAppPersonInfo_AddOrgeh") 
+					? sap.ui.getCore().byId(vPrefix + "AddPlans")
+					: sap.ui.getCore().byId(vPrefix + "Plans");
 				if(oPlans){
 						oPlans.destroyItems();
 						oPlans.addItem(new sap.ui.core.Item({key : "0000", text : common.SearchOrg.oController.getBundleText("LABEL_02035")}));
 						
-					var oWerks = "";
-	            	for(var i=0; i<common.SearchOrg.oController._vActiveControl.length; i++){
-	            		if(common.SearchOrg.oController._vActiveControl[i].Fieldname == "WERKS"){
-	            			oWerks = common.SearchOrg.oController._vActiveControl[i].Dcode;
-	            		}
-	            	}
+					// var oWerks = "";
+	            	// for(var i=0; i<common.SearchOrg.oController._vActiveControl.length; i++){
+	            	// 	if(common.SearchOrg.oController._vActiveControl[i].Fieldname == "WERKS"){
+	            	// 		oWerks = common.SearchOrg.oController._vActiveControl[i].Dcode;
+	            	// 	}
+	            	// }
 						
 					$.app.getModel("ZHR_COMMON_SRV").read("/EmpCodeListSet", {
 						async: false,
 						filters: [
 							new sap.ui.model.Filter("Field", "EQ", "Plans"),
-							new sap.ui.model.Filter("Persa", "EQ", oWerks), 
+							new sap.ui.model.Filter("Persa", "EQ", common.SearchOrg.oController._vWerksUpdateValue), 
 							new sap.ui.model.Filter("Excod", "EQ", vSelectedOrg[0].Orgeh),
-							new sap.ui.model.Filter("Actda", "EQ", common.SearchOrg.oController._vActda),
+							new sap.ui.model.Filter("Actda", "EQ", common.SearchOrg.oController._vActda)
 						],
 						success: function(oData) {
 							if (oData && oData.results.length) {
 								for(var i=0; i<oData.results.length; i++){
-									oPlans.addItem(new sap.ui.core.Item({key : oData.results[i].Ecode, text: oData.results[i].Etext}))
+									oPlans.addItem(new sap.ui.core.Item({key : oData.results[i].Ecode, text: oData.results[i].Etext}));
 								}
 							}
 						},
