@@ -21,9 +21,7 @@ init: function() {
 		'P103': QuickLinkPortlet,		// 바로가기
 		'P104': FavoriteMenuPortlet,	// 즐겨찾는 메뉴
 		'P105': CalendarPortlet,		// 팀 달력
-		'P106': TempPortlet,			// 날씨정보
-		'P107': TempPortlet,			// 세계시간
-		'P108': HiTalkTalkPortlet		// 하이톡톡
+		'P106': HiTalkTalkPortlet		// 하이톡톡
 	};
 
 	$(document)

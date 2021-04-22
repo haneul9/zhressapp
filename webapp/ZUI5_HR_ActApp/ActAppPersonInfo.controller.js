@@ -2716,27 +2716,30 @@ sap.ui.define(
                             text: "{Etext}"
                         }));
                         oControl.setSelectedKey(vUpdateValue);
-                    } else if(Fieldname == "Plans"){
+                    } else if(Fieldname == "Plans" || Fieldname == "AddPlans"){
                     	// 포지션, 데이터 호출 시 부서코드 필터값 추가
                     	oControl.addItem(new sap.ui.core.Item({key : "0000", text : oController.getBundleText("LABEL_02035")}));
                     	
-                    	var oWerks = "", oOrgeh = "";
-                    	for(var i=0; i<oController._vActiveControl.length; i++){
-                    		if(oController._vActiveControl[i].Fieldname == "WERKS"){
-                    			oWerks = oController._vActiveControl[i].Dcode;
-                    		}
-                    		if(oController._vActiveControl[i].Fieldname == "ORGEH"){
-                    			oOrgeh = oController._vActiveControl[i].Dcode;
-                    		}
-                    	}
+                    	// var oWerks = "", oOrgeh = "";
+                    	// for(var i=0; i<oController._vActiveControl.length; i++){
+                    	// 	if(oController._vActiveControl[i].Fieldname == "WERKS"){
+                    	// 		oWerks = oController._vActiveControl[i].Dcode;
+                    	// 	}
+                    	// 	// if(Fieldname == "Plans" && oController._vActiveControl[i].Fieldname == "ORGEH"){
+                    	// 	// 	oOrgeh = oController._vActiveControl[i].Dcode;
+                        //     // }
+                        //     // if(Fieldname == "AddPlans" && oController._vActiveControl[i].Fieldname == "ADD_ORGEH"){
+                    	// 	// 	oOrgeh = oController._vActiveControl[i].Dcode;
+                    	// 	// }
+                    	// }
                     	
-                		if(oOrgeh != ""){
+                		if(oController._vOrgeh != ""){
                 			$.app.getModel("ZHR_COMMON_SRV").read("/EmpCodeListSet", {
 								async: false,
 								filters: [
 									new sap.ui.model.Filter("Field", "EQ", "Plans"),
-									new sap.ui.model.Filter("Persa", "EQ", oWerks),
-									new sap.ui.model.Filter("Excod", "EQ", oOrgeh),
+									new sap.ui.model.Filter("Persa", "EQ", oController._vWerksUpdateValue),
+									new sap.ui.model.Filter("Excod", "EQ", oController._vOrgeh),
 									new sap.ui.model.Filter("Actda", "EQ", oController._vActda)
 								],
 								success: function(oData) {
@@ -2789,6 +2792,8 @@ sap.ui.define(
                                 value: vUpdateValue
                             })
                         );
+
+                        oController._vOrgeh = vUpdateValue;
                     } else if (
                         Fieldname == "Stell" ||
                         Fieldname == "Zzstell" ||
@@ -2826,6 +2831,8 @@ sap.ui.define(
                                 value: vUpdateValue
                             })
                         );
+
+                        oController._vOrgeh = vUpdateValue;
                     } else if (Fieldname == "Host_staff" || Fieldname == "Home_staff") {
                         oControl = new sap.m.Input(oController.PAGEID + "_" + Fieldname, {
                             width: "95%",

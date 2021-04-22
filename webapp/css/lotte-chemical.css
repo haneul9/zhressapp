@@ -29,6 +29,7 @@ html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {border-r
 .app-content-container-wide>.sapMFlexItem {box-sizing:border-box}
 .app-title-container {margin-top:12px; height:36px; padding-left:5px}
 .app-title {font-size:24px; font-weight:700; color:#333}
+[device="mobile"] .app-title {font-size:1.125rem;}
 .app-title-mobile {font-size:24px; font-weight:700; color:#333; line-height:20px}
 .app-content-container-wide.custom-app-title .app-title-container {margin-bottom:26px}
 .sub-title {margin-left:5px; font-size:16px; font-weight:500; color:#333}
@@ -560,18 +561,18 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .sapMMsgStripInformation .sapMMsgStripIcon {color:#0854A0}
 .sapMMsgStripIcon~.sapMMsgStripMessage {margin-left:1.125rem; margin-top:.125rem}
 
-
+    
 /* MOBILE UI STYLE */
 .app-content-container-mobile .sub-title {margin-left:0; font-size:17px; font-weight:500; color:#333}
-.app-content-container-mobile .sapMFlexItem .sapMLabel.sub-title {font-size: 17px;/*padding-left:.25rem*/}
+.app-content-container-mobile .sapMFlexItem .sapMLabel.sub-title {font-size: 1rem;font-weight: 500 !important;}
 .app-content-container-mobile .sub-con-title {font-size:14px;font-weight:400;height:38px;line-height: 42px;}
 .app-content-container-mobile .sub-con-titleBar {padding:0 1rem;margin:0 -1rem;border-bottom:1px solid #d9d9d9}
 .app-content-container-mobile .sub-con-titleBar-both {padding:.25rem 1rem 0;margin:0 -1rem;border-bottom:1px solid #d9d9d9;border-top:10px solid #f4f5f6;}
 .app-content-container-mobile .sub-conRead-title {font-size:14px;font-weight:400;height:38px;line-height: 42px;color:#6e6e6e}
-.app-content-container-mobile .app-title-container {flex-shrink:0;margin:0 -16px;border-bottom:1px solid #ccc;height:50px;/*line-height:50px;*/justify-content: center;padding-left: 0;}
-.app-content-container-mobile.custom-title-left > div.app-title-container {justify-content: left;padding-left: 2.875rem;}
+.app-content-container-mobile .app-title-container {flex-shrink:0;margin:0 -16px;border-bottom:1px solid #E8E8E9;height:48px;/*line-height:50px;*/justify-content: start;padding-left: 1rem;}
+.app-content-container-mobile.custom-title-left > div.app-title-container {justify-content: left;padding-left: 2.5rem;}
 .app-content-container-mobile .app-title,
-.app-content-container-mobile .app-title-mobile {font-size:1.25rem}
+.app-content-container-mobile .app-title-mobile {font-size:1.125rem}
 .app-content-container-mobile .sapMITBVertical {height:3rem}
 .app-content-container-mobile .sapMITBText {height:20px}
 .app-content-container-mobile .tab-group> div.sapMITH  {margin:0 -1rem;}
@@ -583,9 +584,9 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .search-field-group .sapMFlexItem .sapMInputBaseContentWrapper,
 .app-content-container-mobile .search-field-group .sapMFlexItem .sapMInputBaseInner {height: 42px;font-size:15px;}
 .app-content-container-mobile .search-field-group .sapMFlexItem .sapMInputBaseIcon {line-height: 40px;}
-.app-content-container-mobile .info-box {margin-top: 1rem;align-items:flex-end;align-content:flex-end;}
-.app-content-container-mobile .app-nav-button {position:fixed;top:0;left:0;transform: rotate(0deg);width:46px;height:48px;line-height:48px;}
-.app-content-container-mobile .app-nav-button-right {position: fixed;top:4px;right:16px}
+.app-content-container-mobile .info-box {margin: .5rem 0; align-items:flex-end;align-content:flex-end;}
+.app-content-container-mobile .app-nav-button {position:fixed;top:0;left:0;transform: rotate(0deg);width:44px;height:48px;line-height:48px;color:#333}
+.app-content-container-mobile .app-nav-button-right {position: fixed;top:6px;right:1rem}
 .app-content-container-mobile .app-panel.panel-mobile .sapMPanelHdr {font-size:17px; font-weight:500; color:#333; margin-left:0;}
 .app-content-container-mobile .app-panel .sapMPanelContent {margin:0 -16px}
 .app-content-container-mobile .calendar-box {margin-top:1rem;}
@@ -607,7 +608,7 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .custom-bottom-line{border-bottom:10px solid #f4f5f6;margin:0 -1rem; padding:0 1rem}
 
 
-
+    
 /* Button */
 .app-content-container-mobile .button-group {margin-left: 10px;align-items:flex-start;}
 .app-content-container-mobile .button-search .sapMBtnIcon,
@@ -617,25 +618,25 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 
 .app-content-container-mobile .button-dark.sapMBtn {padding:0}  
 .app-content-container-mobile .button-dark.sapMBtn,
-.app-content-container-mobile .button-dark .sapMBtnInner {height:42px; border-radius:.1875rem; border-color:#0070bd;background-color:#0070bd;color:#fff;}
-.app-content-container-mobile .button-dark .sapMBtnInner.sapMBtnText {padding-right:.625rem; padding-left: .625rem}
+.app-content-container-mobile .button-dark .sapMBtnInner {height:34px; border-radius:.1875rem; border-color:#0070bd;background-color:#0070bd;color:#fff;}
+.app-content-container-mobile .button-dark .sapMBtnInner.sapMBtnText {padding-right:.875rem; padding-left: .875rem}
 .app-content-container-mobile .button-dark .sapMBtnIcon,
-.app-content-container-mobile .button-dark .sapMBtnContent {line-height:42px; border-color:#0070bd; font-size:15px; font-weight:400; color:#fff}
+.app-content-container-mobile .button-dark .sapMBtnContent {line-height:32px; border-color:#0070bd; font-size:15px; font-weight:400; color:#fff}
 
 .app-content-container-mobile .button-light.sapMBtn {padding:0}  
 .app-content-container-mobile .app-nav-button-right .sapMBtn {margin-left: 0.25rem;}  
 .app-content-container-mobile .button-light.sapMBtn,
-.app-content-container-mobile .button-light .sapMBtnInner {height:42px; border-radius:.1875rem; border-color:#0070bd; background-color:#fff; color:#0070bd}
-.app-content-container-mobile .button-light .sapMBtnInner.sapMBtnText {padding-right:.625rem; padding-left: .625rem}
+.app-content-container-mobile .button-light .sapMBtnInner {height:34px; border-radius:.1875rem; border-color:#0070bd; background-color:#fff; color:#0070bd}
+.app-content-container-mobile .button-light .sapMBtnInner.sapMBtnText {padding-right:.875rem; padding-left: .875rem}
 .app-content-container-mobile .button-light .sapMBtnIcon,
-.app-content-container-mobile .button-light .sapMBtnContent {line-height:42px; border-color:#0070bd; font-size:15px; font-weight:400; color:#0070bd}
+.app-content-container-mobile .button-light .sapMBtnContent {line-height:32px; border-color:#0070bd; font-size:15px; font-weight:400; color:#0070bd}
 
 .app-content-container-mobile .button-default.sapMBtn {padding:0}  
 .app-content-container-mobile .button-default.sapMBtn,
-.app-content-container-mobile .button-default .sapMBtnInner {height:42px; border-radius:.1875rem; border-color:#c3c3c3; background-color:#fff; color:#333}
-.app-content-container-mobile .button-default .sapMBtnInner.sapMBtnText {padding-right:.625rem; padding-left: .625rem}
+.app-content-container-mobile .button-default .sapMBtnInner {height:34px; border-radius:.1875rem; border-color:#c3c3c3; background-color:#fff; color:#333}
+.app-content-container-mobile .button-default .sapMBtnInner.sapMBtnText {padding-right:.875rem; padding-left: .875rem}
 .app-content-container-mobile .button-default .sapMBtnIcon,
-.app-content-container-mobile .button-default .sapMBtnContent {line-height:42px; border-color:#c3c3c3; font-size:15px; font-weight:400; color:#333}
+.app-content-container-mobile .button-default .sapMBtnContent {line-height:32px; border-color:#c3c3c3; font-size:15px; font-weight:400; color:#333}
 
 /* Margin & Padding */
 .app-content-container-mobile .mlr-16 {margin:0 -1rem}

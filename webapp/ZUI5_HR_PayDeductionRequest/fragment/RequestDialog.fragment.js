@@ -18,12 +18,12 @@ sap.ui.define(
                     contentHeight: "225px",
                     title: "{i18n>LABEL_50001}",    // 일회성 지급/공제 신청
                     content: [
-                        this.buildInfoBox(oController),
+                        this.buildInfoBox(oController)
                     ],
                     buttons: [
                         new sap.m.Button({
                             text: "{i18n>LABEL_00152}", // 신청
-                            press: oController.onSave.bind(oController, "I"),
+                            press: oController.onSave.bind(oController, "I")
                         }).addStyleClass("button-dark"),
                         new sap.m.Button({
                             text: oController.getBundleText("LABEL_00133"), // 닫기
@@ -93,7 +93,6 @@ sap.ui.define(
                                                         required: true,
                                                         width: "100%",
                                                         value: "{Betrg}",
-                                                        // change: common.Common.numberWithCommas
                                                         change : common.Common.onChangeMoneyInput
                                                     })
                                                 ]
@@ -107,7 +106,7 @@ sap.ui.define(
                                                 items: [
                                                     this.getLabel("{i18n>LABEL_50009}", false), // 성명
                                                     new sap.m.Text({
-                                                        text: "{EnameOrOrgehTxt}"
+                                                        text: "{Ename}"
                                                     }).addStyleClass("mx-10px")
                                                 ]
                                             }).addStyleClass("search-field-group"),

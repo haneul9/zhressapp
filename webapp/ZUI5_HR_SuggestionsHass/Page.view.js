@@ -26,9 +26,6 @@
 			var vMonth = new Date().getMonth()+1;
 			
 			var oSearchBox = new sap.m.FlexBox({
-                justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
-                alignContent: sap.m.FlexAlignContent.End,
-                alignItems: sap.m.FlexAlignItems.End,
 				fitContainer: true,
 				items: [ 
 					new sap.m.HBox({
@@ -47,7 +44,7 @@
 								secondDateValue: new Date(vYear, vMonth, 0)
 							})
 						]
-                    }).addStyleClass("search-field-group"),
+                    }).addStyleClass("search-field-group mr-10px"),
 					new sap.m.HBox({
 						items: [
 							new sap.m.Button({

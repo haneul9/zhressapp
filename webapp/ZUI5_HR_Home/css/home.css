@@ -77,6 +77,7 @@ body {min-width:576px; font-size:14px}
 .portlet-col {flex-basis:412px; min-width:412px; width:412px}
 [device="mobile"] .portlet-col {min-width: 100%;}
 .portlet {margin-top:1.5rem; width:100%; border:1px solid #e8e9e9; border-radius:8px; box-shadow:rgba(0, 0, 0, 0.16) 0 3px 6px}
+[device="mobile"] .portlet {margin-top: .75rem;}
 .portlet .card-header {display:flex; justify-content:space-between; height:4.25rem; cursor:move; border-bottom:0}
 [device="mobile"] .portlet .card-header {height:3.25rem;padding:.125rem 1.25rem}
 .portlet .card-header h6 {margin-bottom:0; line-height:3rem; font-size:1rem; font-weight:700}
@@ -94,6 +95,15 @@ body {min-width:576px; font-size:14px}
 .portlet-7h {height:calc((206px * 7) + (1.5rem * 6))}
 .portlet-8h {height:calc((206px * 8) + (1.5rem * 7))}
 .portlet-9h {height:calc((206px * 9) + (1.5rem * 8))}
+[device="mobile"] .portlet-1h {height:206px}
+[device="mobile"] .portlet-2h {height:calc((206px * 2) + (.5rem * 1))}
+[device="mobile"] .portlet-3h {height:calc((206px * 3) + (.5rem * 2))}
+[device="mobile"] .portlet-4h {height:calc((206px * 4) + (.5rem * 3))}
+[device="mobile"] .portlet-5h {height:calc((206px * 5) + (.5rem * 4))}
+[device="mobile"] .portlet-6h {height:calc((206px * 6) + (.5rem * 5))}
+[device="mobile"] .portlet-7h {height:calc((206px * 7) + (.5rem * 6))}
+[device="mobile"] .portlet-8h {height:calc((206px * 8) + (.5rem * 7))}
+[device="mobile"] .portlet-9h {height:calc((206px * 9) + (.5rem * 8))}
 
 .portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
 .portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
@@ -177,13 +187,14 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%; border-radius:0}
 .portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-top-left-radius:0; border-bottom-left-radius:0; padding-left:5px}
 .portlet-calendar-inline .ui-datepicker td a {margin:6px 5px}
+[device="mobile"] .portlet-calendar-inline .ui-datepicker td a {margin:4px 5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {top:5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev {left:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-next {right:14px}
 .portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
 .portlet-calendar-inline .ui-widget-header {background-color:transparent}
 .portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto 0; width:295px;margin-top: 1.5rem; margin-bottom:1rem}
-[device="mobile"] .portlet-calendar-inline + .d-flex {width:100%;padding:0 1rem}
+[device="mobile"] .portlet-calendar-inline + .d-flex {width:100%;padding:0 1rem;margin-top:1rem}
 .portlet-calendar-inline + .d-flex .btn-outline-dark.button-today {border-radius: 20px;background-color: #8dc63f;border:0;color: #fff;padding: .125rem .5rem}
 .portlet-calendar-date {margin:0; font-weight:700}
 .portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:.5rem 0rem .25rem; text-align:center}
@@ -260,9 +271,7 @@ body {min-width:576px; font-size:14px}
 .navbar.navbar-mobile .dropdown-toggle, .navbar.navbar-mobile .dropdown-menu a {cursor:pointer}
 .navbar.navbar-mobile .dropdown-item.active, .navbar.navbar-mobile .dropdown-item:active {color:inherit; text-decoration:none; background-color:inherit}
 .navbar.navbar-mobile .dropdown-item:focus, .navbar.navbar-mobile .dropdown-item:hover {color:#16181b; text-decoration:none; background-color:#f8f9fa; background-color:#f8f9fa}
-@media (min-width: 767px) {
-	.navbar.navbar-mobile .dropdown-toggle:not(.nav-link)::after {display:inline-block; width:0; height:0; margin-left:.5em; vertical-align:0; border-bottom:.3em solid transparent; border-top:.3em solid transparent; border-left:.3em solid}
-} 
+.navbar.navbar-mobile .navbar-toggler {color:#7f7f7f}
 @media all and (min-width:499px) {
 	.navbar.navbar-mobile .navbar-nav {flex-direction:column}
 }
@@ -275,11 +284,11 @@ body {min-width:576px; font-size:14px}
 .navbar-mobile .navbar-nav .nav-link {padding:.75rem 1rem; margin:0 -1rem; font-size:17px; border-bottom:1px solid #d2d2d2}
 .navbar-mobile .navbar-nav li.nav-item:last-child .nav-link {border-bottom:none}
 .navbar-mobile .navbar-nav .nav-item.dropdown.show .nav-link {border-bottom:none; color:#0854a0}
-.navbar-mobile .dropdown-item.dropdown.show .dropdown-toggle {color:#0854a0}
+.navbar-mobile .dropdown-item.dropdown.show .dropdown-toggle {color:#0854a0;font-weight:500}
 .navbar-mobile .navbar-nav .active>.nav-link {color:#333}
 .navbar-mobile .navbar-nav .nav-link:hover {color:#0854a0}
 .navbar-mobile .dropdown-toggle::after {content:' '; display:block; position:absolute; top:1rem; right:0; width:10px; height:10px; border:2px solid #7f7f7f; border-bottom:none; border-left:none; -webkit-transform:rotate(135deg); -ms-transform:rotate(135deg); transform:rotate(135deg);}
-.navbar-mobile .nav-item .dropdown-menu li {color:#777; font-size:1rem; padding:.5rem 1rem} /*2depth*/
+.navbar-mobile .nav-item .dropdown-menu li {color:#6e6e6e; font-size:1rem; padding:.5rem 1rem} /*2depth*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown {background-color:#fff} /*2depth 영역*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown .dropdown-toggle::after {top:.75rem}
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown ul {background-color:#fff; padding:.5rem 0; margin-left:0; margin-right:0} /*3depth 영역*/
@@ -299,4 +308,4 @@ body {min-width:576px; font-size:14px}
 .app-wrap-download .flex-item .android-info .des {text-align: left;letter-spacing: -0.5px;font-size:.875rem}
 .app-wrap-download .flex-item .android-info img {max-width:100%;padding-top:1rem}
 
-/* 0420 */
+/* 0421 */

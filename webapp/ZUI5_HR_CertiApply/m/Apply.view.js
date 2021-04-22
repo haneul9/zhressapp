@@ -35,8 +35,8 @@ sap.ui.define(
                         // this.oInfoBox(oController)
                     ]
                 })
-                    .setModel(oController.ApplyModel)
-                    .bindElement("/Data");
+                .setModel(oController.ApplyModel)
+                .bindElement("/Data");
             },
 
             ApplyingBox: function (oController) {
@@ -49,7 +49,15 @@ sap.ui.define(
                         new sap.ui.core.ListItem({ key: "03", text: "{i18n>LABEL_65015}" }),
                         new sap.ui.core.ListItem({ key: "04", text: "{i18n>LABEL_65016}" })
                     ],
-                    selectedKey: "{ZformType}"
+                    selectedKey: "{ZformType}",
+                    editable: {
+                        // 재신청일 경우 수정 불가
+                        path: "actmode",
+                        formatter: function (v) {
+                            if (v && v === "X") return false;
+                            return true;
+                        }
+                    }
                 });
 
                 // 키보드 입력 방지
@@ -63,7 +71,7 @@ sap.ui.define(
                 );
 
                 var oAptyp = new sap.m.ComboBox({
-                    //구분
+                    //수령방법
                     width: "180px",
                     items: [
                         new sap.ui.core.ListItem(oController.PAGEID + "_AptypItem", { key: "1", text: "{i18n>LABEL_65011}" }), //
@@ -89,7 +97,15 @@ sap.ui.define(
                         new sap.ui.core.ListItem({ key: "1", text: "{i18n>LABEL_65018}" }), //
                         new sap.ui.core.ListItem({ key: "2", text: "{i18n>LABEL_65019}" })
                     ],
-                    selectedKey: "{Zlang}"
+                    selectedKey: "{Zlang}",
+                    editable: {
+                        // 재신청일 경우 수정 불가
+                        path: "actmode",
+                        formatter: function (v) {
+                            if (v && v === "X") return false;
+                            return true;
+                        }
+                    }
                 });
 
                 // 키보드 입력 방지
@@ -128,7 +144,15 @@ sap.ui.define(
                                 new sap.m.Input({
                                     width: "180px",
                                     value: "{Zyear}",
-                                    textAlign: "Begin"
+                                    textAlign: "Begin",
+                                    editable: {
+				                        // 재신청일 경우 수정 불가
+				                        path: "actmode",
+				                        formatter: function (v) {
+				                            if (v && v === "X") return false;
+				                            return true;
+				                        }
+				                    }
                                 })
                             ]
                         }),
@@ -143,17 +167,33 @@ sap.ui.define(
                                     textAlign: "Begin",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zuse", false)
                                 })
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.HBox({
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
                                 new sap.m.Text({
                                     width: "100%",
-                                    text: "{i18n>MSG_64007}",
+                                    text: "{i18n>MSG_65007}",
                                     textAlign: "Begin"
                                 }).addStyleClass("px-20px lineHeight30")
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.HBox({
                             height: "40px",
@@ -165,7 +205,15 @@ sap.ui.define(
                                     value: "{Zsubmit}",
                                     textAlign: "Begin"
                                 })
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.HBox({
                             // height: "40px",
@@ -173,10 +221,18 @@ sap.ui.define(
                             items: [
                                 new sap.m.Text({
                                     width: "100%",
-                                    text: "{i18n>MSG_64008}",
+                                    text: "{i18n>MSG_65008}",
                                     textAlign: "Begin"
                                 }).addStyleClass("px-20px")
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.HBox({
                             height: "40px",
@@ -189,7 +245,15 @@ sap.ui.define(
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcount", false),
                                     value: "{Zcount}"
                                 })
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.HBox({
                             height: "40px",
@@ -202,7 +266,15 @@ sap.ui.define(
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcomment", false),
                                     value: "{Zcomment}"
                                 })
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.HBox({
                             height: "40px",
@@ -210,40 +282,143 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65017}", "105px", "Left", true), // 수령방법
                                 oAptyp
-                            ]
+                            ],
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_65021}", "105px", "Left", true), // 재출력사유
+                                new sap.m.Input({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Reasn", false),
+                                    value: "{Reasn}"
+                                })
+                            ],
+                            visible: {
+                                // 재신청일 경우 보임.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return true;
+                                    return false;
+                                }
+                            }
                         }),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_64001}"
+                            text: "{i18n>MSG_65001}",
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_64002}"
+                            text: "{i18n>MSG_65002}",
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }).addStyleClass("px-20px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_64003}"
+                            text: "{i18n>MSG_65003}",
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_64004}"
+                            text: "{i18n>MSG_65004}",
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_64005}"
+                            text: "{i18n>MSG_65005}",
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
                         }).addStyleClass("px-20px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_64006}"
+                            text: "{i18n>MSG_65006}",
+                            visible: {
+                                // 재신청일 경우 보이지 않음.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return false;
+                                    return true;
+                                }
+                            }
+                        }).addStyleClass("px-20px"),
+                        new sap.m.Text({
+                            width: "100%",
+                            text: "{i18n>MSG_65017}",
+                            textAlign: "Begin",
+                            visible: {
+                                // 재신청일 경우 보임.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return true;
+                                    return false;
+                                }
+                            }
+                        }).addStyleClass("px-20px"),
+                        new sap.m.Text({
+                            width: "100%",
+                            text: "{i18n>MSG_65018}",
+                            textAlign: "Begin",
+                            visible: {
+                                // 재신청일 경우 보임.
+                                path: "actmode",
+                                formatter: function (v) {
+                                    if (v && v === "X") return true;
+                                    return false;
+                                }
+                            }
                         }).addStyleClass("px-20px")
                     ]
-                }).addStyleClass("vbox-form-mobile");
+                });
             }
         });
     }

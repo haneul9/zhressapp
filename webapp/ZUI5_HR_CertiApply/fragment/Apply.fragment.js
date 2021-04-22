@@ -285,7 +285,7 @@ sap.ui.define(
                             width: "100%",
                             fitContainer: true,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_65021}", "150px", "Right", false), // 재출력사유
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_65021}", "150px", "Right", true), // 재출력사유
                                 new sap.m.Input({
                                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     textAlign: "Begin",
