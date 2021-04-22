@@ -106,7 +106,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.ComboBox({
 													selectedKey : "{Lnctm}",
-													width : "100%",
+													width : "100px",
 													items : [new sap.ui.core.Item({key : "0", text : ""}),
 															 new sap.ui.core.Item({key : "1", text : "01:00"}),
 															 new sap.ui.core.Item({key : "2", text : "00:30"})],
@@ -243,13 +243,17 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
                     type: sap.m.ListType.Active,
                     counter: 5,
                     cells: [
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            text: "{Text}"
+                        new sap.m.VBox({
+                        	items : [new sap.m.Text({
+			                             textAlign: "Begin",
+			                             text: "{Text}"
+			                         })]
                         }),
-                        new sap.m.Text({ // 발생/사용/잔여
-                            textAlign: "Begin",
-                            text: "{Value}"
+                        new sap.m.VBox({
+                        	items : [new sap.m.Text({ // 발생/사용/잔여
+			                             textAlign: "Begin",
+			                             text: "{Value}"
+			                         })]
                         })
                     ]
                 })
