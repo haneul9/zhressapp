@@ -261,6 +261,14 @@ body {min-width:576px; font-size:14px}
 .modal-footer .btn.btn-primary:hover {background-color:#064975; border:1px solid #064975}
 .modal-footer .btn.btn-light {background-color:#fff; color:#0070bd; border:1px solid #0070bd}
 .modal-footer .btn.btn-light:hover {background-color:#ebf5fe}
+.mfa-input {margin:0; padding:0; width:50%}
+.mfa-timer {margin:0; padding:0; width:20%; text-align:center}
+.mfa-timer input {text-align:center}
+.mfa-button {margin:0; padding:0; width:30%}
+.mfa-button button {width:100%}
+[device="mobile"] .mfa-input {width:35%}
+[device="mobile"] .mfa-timer {width:20%}
+[device="mobile"] .mfa-button {width:45%}
 
 /* Mobile Splash */
 .app-wrap.splash {width:100%; height:100%; background:linear-gradient(#f9f9f9, #eaebec); background:-moz-linear-gradient(top, #f8f9f9 70%, #eaebec 100%); background:-webkit-linear-gradient(top, #f8f9f9 70%,#eaebec 100%); background:linear-gradient(top bottom, #f8f9f9 70%,#eaebec 100%)}
