@@ -72,7 +72,7 @@ sap.ui.define([], function () {
                             sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail1", oController),
                             sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail2", oController),
                             sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail3", oController),
-                            sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail4", oController),
+                            // sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail4", oController),
                             new sap.ui.core.HTML({ content: "<div style='height:10px' />" })
                         ]
                     }).addStyleClass("app-content-container-wide")
