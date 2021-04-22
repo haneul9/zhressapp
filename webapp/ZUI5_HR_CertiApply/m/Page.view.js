@@ -21,14 +21,14 @@ sap.ui.define(
                     fitContainer: true,
                     items: [
                         // 신청현황
-                        new sap.m.Label({ text: "{i18n>LABEL_38002}", design: "Bold" }).addStyleClass("sub-title"),
+                        new sap.m.Label({ text: "{i18n>LABEL_38002}" }).addStyleClass("sub-title"),
                         new sap.m.Button({
                             press: oController.onPressReq.bind(oController),
                             text: "{i18n>LABEL_38044}" // 신청
-                        }).addStyleClass("button-light-sm")
+                        }).addStyleClass("button-light")
                     ]
                 })
-                    .addStyleClass("info-box mb-10px")
+                    .addStyleClass("info-box")
                     .setModel(oController.LogModel);
 
                 var oTable = new sap.m.Table({

@@ -243,7 +243,7 @@ sap.ui.define(
                             text: "{i18n>MSG_64006}"
                         }).addStyleClass("px-20px")
                     ]
-                }).addStyleClass("vbox-form-mobile");
+                });
             }
         });
     }
