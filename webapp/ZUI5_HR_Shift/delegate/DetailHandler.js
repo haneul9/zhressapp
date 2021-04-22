@@ -485,6 +485,12 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
+                // 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
+                if(data.Bukrs.charAt(0) === "A" || data.Zflag === "X") {
+                    MessageBox.alert(this.oController.getBundleText("MSG_31012").interpolate(data.Stext));
+                    return;
+                }
+
                 // 중복 체크
                 if(vListData.some(function(elem) { return elem.Pernr === data.Objid; })) {
                     MessageToast.show(this.oController.getBundleText("MSG_30002"), {
@@ -527,7 +533,23 @@ sap.ui.define(
              */
             addTargetTableByMulti: function(data) {
                 var vListData = this.oModel.getProperty("/List"),
+                    vSelectedDataLength = data.length,
+                    impossibleTargets = [];
+
+                // 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
+                data = data.filter(function(elem) {
+                    if(elem.Bukrs.charAt(0) === "A" || elem.Zflag !== "X") {
+                        impossibleTargets.push(elem.Stext);
+                        return false;
+                    }
+                    return true;
+                });
+
+                if(impossibleTargets.length) {
                     vSelectedDataLength = data.length;
+
+                    MessageBox.alert(this.oController.getBundleText("MSG_31013").interpolate(impossibleTargets.join("\n")));
+                }
 
                 if(vListData.length) {
                     // 중복데이터 제거

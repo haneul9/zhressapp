@@ -598,6 +598,7 @@ sap.ui.define(
                 if(Common.checkNull(oTargetPaths)) {
                     // Line add
                     vApprovalLines.push({
+                        Aprsq: String(vApprovalLines.length + 1),
                         AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(vApprovalLines.length + 1),  // ${v}차 결재자
                         ApstaT: "",
                         Apper: data.Pernr,
