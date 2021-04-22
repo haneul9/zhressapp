@@ -23,7 +23,7 @@ sap.ui.define(
                         // press: FacilityHandler.onPressApprovalBtn.bind(FacilityHandler)
                     }).addStyleClass("button-dark app-nav-button-right"),
                     contentStyleClass: "sub-app-content",
-                    contentContainerStyleClass: "app-content-container-mobile",
+                    contentContainerStyleClass: "app-content-container-mobile custom-title-left",
                     contentItems: [
                         //sap.ui.jsfragment("fragment.EmployeeSearchMobile", oController)
                     ]

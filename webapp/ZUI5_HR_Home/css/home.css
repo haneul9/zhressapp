@@ -95,15 +95,15 @@ body {min-width:576px; font-size:14px}
 .portlet-7h {height:calc((206px * 7) + (1.5rem * 6))}
 .portlet-8h {height:calc((206px * 8) + (1.5rem * 7))}
 .portlet-9h {height:calc((206px * 9) + (1.5rem * 8))}
-[device="mobile"] .portlet-1h {height:206px}
-[device="mobile"] .portlet-2h {height:calc((206px * 2) + (.5rem * 1))}
-[device="mobile"] .portlet-3h {height:calc((206px * 3) + (.5rem * 2))}
-[device="mobile"] .portlet-4h {height:calc((206px * 4) + (.5rem * 3))}
-[device="mobile"] .portlet-5h {height:calc((206px * 5) + (.5rem * 4))}
-[device="mobile"] .portlet-6h {height:calc((206px * 6) + (.5rem * 5))}
-[device="mobile"] .portlet-7h {height:calc((206px * 7) + (.5rem * 6))}
-[device="mobile"] .portlet-8h {height:calc((206px * 8) + (.5rem * 7))}
-[device="mobile"] .portlet-9h {height:calc((206px * 9) + (.5rem * 8))}
+[device="mobile"] .portlet-1h {height:186px}
+[device="mobile"] .portlet-2h {height:calc((186px * 2) + (.5rem * 1))}
+[device="mobile"] .portlet-3h {height:calc((186px * 3) + (.5rem * 2))}
+[device="mobile"] .portlet-4h {height:calc((186px * 4) + (.5rem * 3))}
+[device="mobile"] .portlet-5h {height:calc((186px * 5) + (.5rem * 4))}
+[device="mobile"] .portlet-6h {height:calc((186px * 6) + (.5rem * 5))}
+[device="mobile"] .portlet-7h {height:calc((186px * 7) + (.5rem * 6))}
+[device="mobile"] .portlet-8h {height:calc((186px * 8) + (.5rem * 7))}
+[device="mobile"] .portlet-9h {height:calc((186px * 9) + (.5rem * 8))}
 
 .portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
 .portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
@@ -308,4 +308,4 @@ body {min-width:576px; font-size:14px}
 .app-wrap-download .flex-item .android-info .des {text-align: left;letter-spacing: -0.5px;font-size:.875rem}
 .app-wrap-download .flex-item .android-info img {max-width:100%;padding-top:1rem}
 
-/* 0421 */
+/* 0422 */

@@ -570,7 +570,7 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .sub-con-titleBar-both {padding:.25rem 1rem 0;margin:0 -1rem;border-bottom:1px solid #d9d9d9;border-top:10px solid #f4f5f6;}
 .app-content-container-mobile .sub-conRead-title {font-size:14px;font-weight:400;height:38px;line-height: 42px;color:#6e6e6e}
 .app-content-container-mobile .app-title-container {flex-shrink:0;margin:0 -16px;border-bottom:1px solid #E8E8E9;height:48px;/*line-height:50px;*/justify-content: start;padding-left: 1rem;}
-.app-content-container-mobile.custom-title-left > div.app-title-container {justify-content: left;padding-left: 2.5rem;}
+.app-content-container-mobile.custom-title-left .app-title-container {justify-content: start;padding-left: 2.5rem;}
 .app-content-container-mobile .app-title,
 .app-content-container-mobile .app-title-mobile {font-size:1.125rem}
 .app-content-container-mobile .sapMITBVertical {height:3rem}
