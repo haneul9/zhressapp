@@ -50,15 +50,6 @@ function initHome() {
 	var _gateway = window._gateway,
 	popup = _gateway.isPopup();
 
-	if (!popup) {
-		$('.ehr-header').toggleClass('d-none', false);
-		$('.ehr-body').height('calc(100% - 46px)');
-	} else {
-		$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
-		$('.ehr-body').height('100%').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
-		new MenuMegaDropdown(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
-	}
-
 	setTimeout(function() {
 		window._i18n = new HomeI18n(_gateway);
 		window._i18n.changeLocale();
@@ -81,7 +72,18 @@ function initHome() {
 	});
 
 	if (popup) {
+		setTimeout(function() {
+			$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+			$('.ehr-body').height('100%').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+			new MenuMegaDropdown(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
+		}, 0);
+
 		return;
+	} else {
+		setTimeout(function() {
+			$('.ehr-header').toggleClass('d-none', false);
+			$('.ehr-body').height('calc(100% - 46px)');
+		}, 0);
 	}
 
 	setTimeout(function() {

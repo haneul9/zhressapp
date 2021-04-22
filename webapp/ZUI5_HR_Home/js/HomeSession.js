@@ -48,11 +48,11 @@ init: function(callback) {
 		if (typeof HomeMFA === 'function') {
 			new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
 		} else {
-			throw new Error('다중 인증 모듈이 존재하지 않습니다.');
+			throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
 		}
 	}.bind(this))
-	.catch(function(jqXHR) {
-		var message = this._gateway.handleError(this._gateway.ODataDestination.ETC, jqXHR, 'HomeSession.init').message || '알 수 없는 오류가 발생하였습니다.';
+	.catch(function(e) {
+		var message = (e.message ? e.message : this._gateway.handleError(this._gateway.ODataDestination.ETC, e, 'HomeSession.init').message) || '알 수 없는 오류가 발생하였습니다.';
 
 		$(function() {
 			this._gateway.alert({

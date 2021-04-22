@@ -34,6 +34,7 @@
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
 <script src="ZUI5_HR_Home/js/MenuHamburger.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
@@ -45,11 +46,10 @@
 <script>
 function initHome() {
 
-	var _gateway = window._gateway;
+	var _gateway = window._gateway,
+	popup = _gateway.isPopup();
 
-	if (_gateway.isPopup()) {
-		return;
-	}
+	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
 
 	setTimeout(function() {
 		window._i18n = new HomeI18n(_gateway);
@@ -61,6 +61,20 @@ function initHome() {
 
 		$('html').attr('locale', locale).attr('lang', (sessionStorage.getItem('ehr.sf-user.language') || 'ko').toLowerCase());
 	});
+
+	if (popup) {
+		setTimeout(function() {
+			$('.navbar-mobile .button-logout').click(function() {
+				
+			});
+		}, 0);
+
+		$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+		$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+		new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
+
+		return;
+	}
 
 	setTimeout(function() {
 		window._menu = new MenuHamburger(_gateway, '#navbarCollapse');
@@ -81,21 +95,8 @@ $(function() {
 
 var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
-window._session = new HomeSession(_gateway, initHome);
+window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 
-$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
-
-if (_gateway.parameter('popup')) {
-	setTimeout(function() {
-		$('.navbar-mobile .button-logout').click(function() {
-			
-		});
-	}, 0);
-
-	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
-	$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
-	new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), popupUrl);
-}
 });
 </script>
 </head>
