@@ -213,7 +213,7 @@
 								}
 						 	})
                         ]
-                    })
+                    }).addStyleClass("mb-5px")
                 ]
             });
 
@@ -431,7 +431,7 @@
 								}
 							})
 						]
-					}),
+					}).addStyleClass("mb-5px"),
 					new sap.m.HBox(oController.PAGEID + "_BabyDateBox", {
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
@@ -475,7 +475,7 @@
                                             }
                                         },
                                         textAlign: "Begin"
-                                    }),
+                                    }).addStyleClass("line-height-24"),
                                     new sap.m.Text({
                                         width: "auto",
                                         text: {
@@ -489,7 +489,7 @@
                                             }
                                         },
                                         textAlign: "Begin"
-                                    })
+                                    }).addStyleClass("line-height-24")
                                 ]
                             })
                         ]
@@ -503,7 +503,7 @@
                                 width: "auto",
                                 text: "{/InfoText}",
                                 textAlign: "Begin"
-                            })
+                            }).addStyleClass("line-height-24")
                         ]
                     }),
                     sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
@@ -512,4 +512,4 @@
 			.addStyleClass("vbox-form-mobile");
 		}
 	});
-});
+});  
