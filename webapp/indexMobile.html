@@ -49,6 +49,7 @@ function initHome() {
 	var _gateway = window._gateway,
 	popup = _gateway.isPopup();
 
+	$('.navbar-mobile').toggleClass('d-none', false);
 	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
 
 	setTimeout(function() {
@@ -101,7 +102,7 @@ window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 </script>
 </head>
 <body>
-<div class="navbar navbar-light bg-light navbar-mobile" role="navigation"> <!-- 태블릿 지원 class .navbar-expand-md 삭제 -->
+<div class="navbar navbar-light bg-light navbar-mobile d-none" role="navigation"><!-- 태블릿 지원 class .navbar-expand-md 삭제 -->
 	<button class="navbar-toggler pl-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
