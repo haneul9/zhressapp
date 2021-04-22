@@ -423,6 +423,7 @@ sap.ui.define([
 					createData2.ILangu = $.app.getModel("session").getData().Langu;
 					createData2.IMolga = oData.Molga;
 					createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+					createData2.ICorre = "X";
 		
 				oModel.create("/VacationQuotaSet", createData2, null,
 					function(data, res){
