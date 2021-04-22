@@ -22,21 +22,21 @@ sap.ui.define([
 			}
 			var oLabel39=oController.getTxt("LABEL_47087",56);
 			var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{PatiName}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
-							formatter:function(fVal,fVal2){
-								if(fVal2==""){
-									return fVal=="X"?false:true;
-								}else{
-									return false;
-								}
-							}}})
-			,oSelector2=new sap.m.Select(oController.PAGEID+"_dSel2",{width:"80%",selectedKey:"{HospType}",editable:{parts:[{path:"Close"},{path:"Status"}],
-							formatter:function(fVal,fVal2){
-								if(fVal2==""){
-									return fVal=="X"?false:true;
-								}else{
-									return false;
-								}
-							}}});
+						formatter:function(fVal,fVal2){
+							if(fVal2==""){
+								return fVal=="X"?false:true;
+							}else{
+								return false;
+							}
+						}}})
+						,oSelector2=new sap.m.Select(oController.PAGEID+"_dSel2",{width:"80%",selectedKey:"{HospType}",editable:{parts:[{path:"Close"},{path:"Status"}],
+						formatter:function(fVal,fVal2){
+							if(fVal2==""){
+								return fVal=="X"?false:true;
+							}else{
+								return false;
+							}
+						}},change:oController.changeSel2});
 
 			oMat=new c.layout.MatrixLayout(oController.PAGEID+"_Mat",{
 				columns:2,
@@ -63,21 +63,14 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel0});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new common.PickOnlyDatePicker({width:"80%",
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new common.PickOnlyDatePicker({width:"50%",
 			displayFormat: gDtfmt,
 			placeholder: gDtfmt,
 			value : {
 				path : "MedDate", 
 				type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 			},
-			valueFormat: "yyyy-MM-dd",editable:{parts:[{path:"Close"},{path:"Status"}],
-							formatter:function(fVal,fVal2){
-								if(fVal2==""){
-									return fVal=="X"?false:true;
-								}else{
-									return false;
-								}
-							}}})});
+			valueFormat: "yyyy-MM-dd",editable:false})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
@@ -108,9 +101,9 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({showValueHelp: true,
 				width:"80%",
-	            valueHelpOnly: true,
+                valueHelpOnly: true,
 				value:"{HospName}",
-	            valueHelpRequest: oController.onSearchMed,editable:{parts:[{path:"Close"},{path:"Status"}],
+                valueHelpRequest: oController.onSearchMed,editable:{parts:[{path:"Close"},{path:"Status"}],
 				formatter:function(fVal,fVal2){
 					if(fVal2==""){
 						return fVal=="X"?false:true;
@@ -131,14 +124,15 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel6});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",editable:{parts:[{path:"Close"},{path:"Status"}],
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",value:"{DiseName}",maxLength:50
+			,editable:{parts:[{path:"Close"},{path:"Status"}],
 			formatter:function(fVal,fVal2){
 				if(fVal2==""){
 					return fVal=="X"?false:true;
 				}else{
 					return false;
 				}
-			}},maxLength:13,value:"{DiseName}"})});
+			}}})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
@@ -150,7 +144,7 @@ sap.ui.define([
 					path : "Begda", 
 					type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 				},
-				textAlign : "Begin"
+				textAlign : "Center"
 			}).addStyleClass("FontFamily")});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -158,15 +152,15 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oLabel8]});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.CheckBox(oController.PAGEID+"_Chk1",
-			{selected:"{Chk1}",select:oController.onChk1,editable:{parts:[{path:"Close"},{path:"Status"}],
-					formatter:function(fVal,fVal2){
-						if(fVal2==""){
-							return fVal=="X"?false:true;
-						}else{
-							return false;
-						}
-					}}}),new HoverIcon({            
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.CheckBox(oController.PAGEID+"_Chk1",{selected:"{Chk1}",select:oController.onChk1,editable:{parts:[{path:"Close"},{path:"Status"},{path:"Relation"}],
+            formatter:function(fVal,fVal2,fVal3){
+                if(fVal2==""){
+                    return fVal3!="01"&&fVal3!="02"?false:true;
+                    return fVal=="X"?false:true;
+                }else{
+                    return false;
+                }
+            }}}),new HoverIcon({            
 							src: "sap-icon://information",
 							hover: function(oEvent) {
 								common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47002"));
@@ -182,15 +176,15 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oLabel9]});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.CheckBox(oController.PAGEID+"_Chk2",
-			{selected:"{Chk2}",select:oController.onChk2,editable:{parts:[{path:"Close"},{path:"Status"}],
-						formatter:function(fVal,fVal2){
-							if(fVal2==""){
-								return fVal=="X"?false:true;
-							}else{
-								return false;
-							}
-						}}}),new HoverIcon({            
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.CheckBox(oController.PAGEID+"_Chk2",{selected:"{Chk2}",select:oController.onChk2,editable:{parts:[{path:"Close"},{path:"Status"},{path:"Relation"}],
+					formatter:function(fVal,fVal2,fVal3){
+						if(fVal2==""){
+							return fVal3!="01"&&fVal3!="02"?false:true;
+							return fVal=="X"?false:true;
+						}else{
+							return false;
+						}
+					}}}),new HoverIcon({            
 				src: "sap-icon://information",
 				hover: function(oEvent) {
 					common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47003"));
@@ -217,21 +211,30 @@ sap.ui.define([
 						oMat.addRow(oRow);
 	//급여 내역
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47102"),colSpan:2});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			+oController.getBundleText("LABEL_47102")+"</span>"}),colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel20});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp1",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkibbm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}}),new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkiobd}",editable:false})]});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp1",{width:"45%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkibbm}",editable:{parts:[{path:"Close"},{path:"Status"}],
+			formatter:function(fVal,fVal2){
+				if(fVal2==""){
+					return fVal=="X"?false:true;
+				}else{
+					return false;
+				}
+			}}}),new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkiobd}",editable:false})]});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
@@ -239,22 +242,31 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel39});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp2",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkijbm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}}),new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkijbd}",editable:false})]});
+			formatter:function(fVal,fVal2){
+				if(fVal2==""){
+					return fVal=="X"?false:true;
+				}else{
+					return false;
+				}
+			}}}),new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkijbd}",editable:false})]});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 	//비급여 내역
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47103"),colSpan:2});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel21});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			+oController.getBundleText("LABEL_47103")+"</span>"}),colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47119")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp3",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znijcm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -268,7 +280,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel22});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47120")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp4",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zniiwm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -282,7 +294,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel23});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47121")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp5",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znisdm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -296,7 +308,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel24});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47122")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp6",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znoctm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -310,7 +322,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel25});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47123")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp7",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znomrm}",editable:{parts:[{path:"Close"},{path:"Status"}],
 					formatter:function(fVal,fVal2){
@@ -324,7 +336,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel26});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47124")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp8",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znocum}",editable:{parts:[{path:"Close"},{path:"Status"}],
 					formatter:function(fVal,fVal2){
@@ -338,7 +350,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel27});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47125")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp9",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znobcm}",editable:{parts:[{path:"Close"},{path:"Status"}],
 					formatter:function(fVal,fVal2){
@@ -356,6 +368,20 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel31});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Mycharge}",editable:false})]});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47118")});
+			oRow.addCell(oCell);
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zdsctm}",editable:{parts:[{path:"Close"},{path:"Status"}],
+			formatter:function(fVal,fVal2){
+				if(fVal2==""){
+					return fVal=="X"?false:true;
+				}else{
+					return false;
+				}
+			}}})]});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
@@ -435,39 +461,16 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47104"),colSpan:2});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);
-
-			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47037")});
-			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"003")});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);
-
-			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47041")});
-			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"004")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47042")});
-			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"005")});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);
-			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47043")});
-			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"006")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			+oController.getBundleText("LABEL_47104")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47044")});
-			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"007")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
@@ -482,6 +485,13 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47105")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"002")});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47106")});
+			oRow.addCell(oCell);
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"009")});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
@@ -640,7 +650,7 @@ sap.ui.define([
 			//                     new sap.m.ToolbarSpacer({width:"20px"}),new sap.ui.core.HTML({content:"<span style='font-size:13px;color:red;'>"+oBundleText.getText("LABEL_47029")+"</span>"})]})],
 			// 	expanded:true,
 			// 	expandable:false,
-			// 	content:[oMat2,new sap.ui.core.HTML({content:"<div style='height:5px;'/>"}),oMat3]
+			// 	content:[oMat2,new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),oMat3]
 			// });
 
 			var oVert=new sap.ui.commons.layout.VerticalLayout({
