@@ -511,7 +511,7 @@ sap.ui.define([
 				// 추가휴게시간 데이터에서 저장한 일자와 동일한 날짜의 데이터 변경
 				var breakData = oController._ListCondJSonModel.getProperty("/Data2"), newData = [];
 				for(var i=0; i<breakData.length; i++){
-					if(breakData[i].Datum == save[0].Datum){
+					if(dateFormat.format(breakData[i].Datum) == dateFormat.format(save[0].Datum)){
 						continue;
 					} else {
 						newData.push(breakData[i]);
