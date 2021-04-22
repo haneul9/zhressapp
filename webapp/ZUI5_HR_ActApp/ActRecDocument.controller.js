@@ -776,9 +776,11 @@ sap.ui.define(
 
 				var sPath = "/ActionReqListSet";
 				var process_result = false;
+				var errData = null;
 
 				if (oController._vStatu == "00") {
 					oModel.create(sPath, updateData, {
+						async: false,
 						success: function (oData) {
 							if (oData) {
 								oController._vDocno = oData.Docno;
@@ -789,6 +791,7 @@ sap.ui.define(
 						},
 						error: function (oError) {
 							process_result = false;
+							errData = Common.parseError(oError);
 							Common.log(oError);
 						}
 					});
@@ -800,12 +803,14 @@ sap.ui.define(
 					});
 
 					oModel.update(sPath, updateData, {
+						async: false,
 						success: function () {
 							process_result = true;
 							Common.log("Sucess ActionReqListSet Update !!!");
 						},
 						error: function (oError) {
 							process_result = false;
+							errData = Common.parseError(oError);
 							Common.log(oError);
 						}
 					});
@@ -869,6 +874,12 @@ sap.ui.define(
 					oTitle.setValueState(sap.ui.core.ValueState.None);
 					oReqno.setValueState(sap.ui.core.ValueState.None);
 					oActda.setValueState(sap.ui.core.ValueState.None);
+
+					if (errData.Error && errData.Error === "E") {
+						MessageBox.error(errData.ErrorMessage, {
+							title: oController.getBundleText("LABEL_00149")
+						});
+					}
 				}
 			},
 

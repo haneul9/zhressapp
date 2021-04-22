@@ -659,6 +659,7 @@ sap.ui.define(
 
 				if (oController._vStatu == "00") {
 					oModel.create(oPath, updateData, {
+						async: false,
 						success: function (oData) {
 							if (oData) {
 								oController._vDocno = oData.Docno;
@@ -680,6 +681,7 @@ sap.ui.define(
 					updateData.Docno = oController._vDocno;
 					
 					oModel.update(sPath, updateData, {
+						async: false,
 						success: function () {
 							process_result = true;
 							Common.log("Sucess ActionReqListSet Update !!!");
