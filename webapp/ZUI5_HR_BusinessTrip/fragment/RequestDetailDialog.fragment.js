@@ -15,7 +15,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetailDialog", {
 			contentHeight: "96%",
 			content: sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", oController),
 			draggable: true,
-			buttons: [
+			buttons: [ 
 				new sap.m.Button({
 					text: "{i18n>LABEL_00154}", // 재작성
 					enabled: "{/Header/Btact}",
