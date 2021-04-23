@@ -4,9 +4,10 @@ sap.ui.define(
 		"common/CommonController",
 		"common/JSONModelHelper",
 		"sap/ui/core/BusyIndicator",
+		"sap.m.MessageToast",
 		"sap/ui/model/json/JSONModel"
 	],
-	function (Common, CommonController, JSONModelHelper, BusyIndicator, JSONModel) {
+	function (Common, CommonController, JSONModelHelper, BusyIndicator, MessageToast, JSONModel) {
 		"use strict";
 
 		return CommonController.extend($.app.APP_ID, {
@@ -68,6 +69,11 @@ sap.ui.define(
 			onPressResvRow: function(oEvent) {
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
 				Common.log(oRowData);
+
+				if(parseInt(oRowData.Appye) < 2020) {
+					MessageToast.show(this.getBundleText("MSG_07010"));	// 2020년 이후만 조회할 수 있습니다.
+					return;
+				}
 				// // Set data
 				// oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
 				// oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);

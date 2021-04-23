@@ -15,7 +15,7 @@ sap.ui.define([
 				contentContainerStyleClass: "app-content-container-mobile",
 				contentItems: [
 					this.buildInfoText(),
-					this.buildTable()
+					this.buildTable(oController)
 				]
 			}).setModel(oController.oModel);
 		},
