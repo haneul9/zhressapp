@@ -144,7 +144,7 @@
 				visible: {
                     path: "/HideComment",
                     formatter: function(v) {
-                        return v === "X";
+                        return v !== "X";
                     }
                 },
 				fitContainer: true,
