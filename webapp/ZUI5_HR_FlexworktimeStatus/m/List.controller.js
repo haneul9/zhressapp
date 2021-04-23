@@ -286,10 +286,8 @@ sap.ui.define([
 			
 			var oJSONModel = oControl.getModel();
 			var oData = oJSONModel.getProperty("/Data");
-			console.log(oData);
 			
 			var breakdata = oController._ListCondJSonModel.getProperty("/Data2"), oData2 = [];
-			console.log(breakdata);
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			for(var i=0; i<breakdata.length; i++){
 				if(dateFormat.format(breakdata[i].Datum) == dateFormat.format(oData.Datum)){

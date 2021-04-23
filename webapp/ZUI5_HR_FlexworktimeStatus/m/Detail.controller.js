@@ -36,7 +36,7 @@ sap.ui.define([
 		
 			if(oEvent.data.Data){
 				var oData = Object.assign({}, oEvent.data.Data);
-					oData.Atext = oData.Atext == "" ? oBundleText.getText("LABEL_69041") : oData.Atext; // 정상근무
+					oData.Atext = oData.Offyn == "X" ? "OFF" : (oData.Atext == "" ? oBundleText.getText("LABEL_69041") : oData.Atext); // 정상근무
 				oController._DetailJSonModel.setProperty("/Data", oData);
 			}
 			
