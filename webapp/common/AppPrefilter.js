@@ -80,11 +80,6 @@ AppPrefilter.prototype.init = function() {
 	}
 };
 
-AppPrefilter.prototype.isMenuAuthorized = function() {
-
-	return this._menu_authorized;
-};
-
 AppPrefilter.prototype.toggleInitSequenceLogging = function(on) {
 
 	window._init_sequence_logging = on;
@@ -192,6 +187,11 @@ AppPrefilter.prototype.errorHandler = function() {
 	if (this._gateway.isPopup()) {
 		location.href = "Error.html";
 	}
+};
+
+AppPrefilter.prototype.isMenuAuthorized = function() {
+
+	return this._menu_authorized;
 };
 
 new AppPrefilter();

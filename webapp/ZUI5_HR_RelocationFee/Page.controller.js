@@ -83,6 +83,8 @@ sap.ui.define([
 			var oTable = $.app.byId(oController.PAGEID + "_Table");
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
+
+			oController.TableModel.setData({Data: []}); 
 			
 			var sendObject = {};
 			// Header
@@ -99,8 +101,6 @@ sap.ui.define([
 						var rDatas1 = oData.NewPostTableIn1.results;
 						dataLength = rDatas1.length;
 						oController.TableModel.setData({Data: rDatas1}); 
-					}else{
-						oController.TableModel.setData({Data: []}); 
 					}
 
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);

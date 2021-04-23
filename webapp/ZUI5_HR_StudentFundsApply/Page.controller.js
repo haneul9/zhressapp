@@ -108,6 +108,8 @@
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
+
+			oController.TableModel.setData({Data: []}); 
 			
 			var sendObject = {};
 			// Header
@@ -129,8 +131,6 @@
 						var rDatas = oData.EducationfundApplyTableIn.results;
 						dataLength = rDatas.length;
 						oController.TableModel.setData({Data: rDatas}); 
-					}else{
-						oController.TableModel.setData({Data: []}); 
 					}
 
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);

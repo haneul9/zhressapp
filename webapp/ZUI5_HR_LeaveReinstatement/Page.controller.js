@@ -59,6 +59,8 @@
 			var oTable = $.app.byId(oController.PAGEID + "_Table");
 			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
 			var vPernr = oController.getUserId();
+
+			oController.TableModel.setData({Data: []}); 
 			
 			var sendObject = {};
 			// Header
@@ -80,8 +82,6 @@
 						var rDatas = oData.TableIn1.results;
 						dataLength = rDatas.length;
 						oController.TableModel.setData({Data: rDatas}); 
-					}else{
-						oController.TableModel.setData({Data: []}); 
 					}
 
 					oController.HistoryModel.setData({Data: oData.TableIn3.results});

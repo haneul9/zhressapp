@@ -186,6 +186,20 @@ sap.ui.define(
                 );
             },
 
+            checkDateRange: function(oEvent) {
+                var oControl = oEvent.getSource(),
+                    start = moment(oControl.getDateValue()),
+                    end = moment(oControl.getSecondDateValue());
+
+                if(end.diff(start, 'days') > 14) {
+                    oControl.setSecondDateValue(start.add(14, "days").hours(10).toDate());
+
+                    MessageBox.alert(this.oController.getBundleText("MSG_31014"));  // 최대 15일만 신청가능합니다.
+                }
+
+                this.toggleValueState(oEvent);
+            },
+
             openSmoinUrl: function(smoinUrl) {
                 if(!smoinUrl) return;
 
@@ -504,8 +518,8 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
-                // 유연근무제 대상자가 아니거나, 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
-                if(data.Bukrs.charAt(0) === "A" || data.Zflag === "X" || data.Zfxck !== "X") {
+                // 유연근무제 대상자가 아니거나, 첨단 소속일 경우 신청 불가
+                if(data.Bukrs.charAt(0) === "A" || data.Zfxck !== "X") {
                     MessageBox.alert(this.oController.getBundleText("MSG_31012").interpolate(data.Stext));
                     return;
                 }
@@ -553,9 +567,9 @@ sap.ui.define(
                     vSelectedDataLength = data.length,
                     impossibleTargets = [];
 
-                // 유연근무제 대상자가 아니거나, 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
+                // 유연근무제 대상자가 아니거나, 첨단 소속일 경우 신청 불가
                 data = data.filter(function(elem) {
-                    if(elem.Bukrs.charAt(0) === "A" || elem.Zflag === "X" || elem.Zfxck !== "X") {
+                    if(elem.Bukrs.charAt(0) === "A" || elem.Zfxck !== "X") {
                         impossibleTargets.push(elem.Stext);
                         return false;
                     }
@@ -654,6 +668,8 @@ sap.ui.define(
              * 대상기간 Column template
              */
             getTargetDateRange: function(columnInfo, oController) {
+                var DetailHandler = oController.getDetailHandler();
+
                 var oDRS = new sap.m.DateRangeSelection(columnInfo.id, {
                     displayFormat: "{/Dtfmt}",
                     minDate: "{/MinDate}",
@@ -663,7 +679,7 @@ sap.ui.define(
                     delimiter: "~",
                     width: "100%",
                     valueState: "{stateBegda}",
-                    change: oController.getDetailHandler().toggleValueState,
+                    change: DetailHandler.checkDateRange.bind(DetailHandler),
                     valueStateText: "{i18n>MSG_31001}",  // 대상기간을 입력하세요.
                     customData: [ 
 						new sap.ui.core.CustomData({ key: "Pernr", value: "{Pernr}" }) 

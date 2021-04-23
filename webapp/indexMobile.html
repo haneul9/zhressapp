@@ -2,7 +2,7 @@
 <html lang="ko-KR" locale="ko_KR" device="mobile">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Hi HR</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -34,6 +34,7 @@
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
 <script src="ZUI5_HR_Home/js/MenuHamburger.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
@@ -45,11 +46,11 @@
 <script>
 function initHome() {
 
-	var _gateway = window._gateway;
+	var _gateway = window._gateway,
+	popup = _gateway.isPopup();
 
-	if (_gateway.isPopup()) {
-		return;
-	}
+	$('.navbar-mobile').toggleClass('d-none', false);
+	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
 
 	setTimeout(function() {
 		window._i18n = new HomeI18n(_gateway);
@@ -61,6 +62,20 @@ function initHome() {
 
 		$('html').attr('locale', locale).attr('lang', (sessionStorage.getItem('ehr.sf-user.language') || 'ko').toLowerCase());
 	});
+
+	if (popup) {
+		setTimeout(function() {
+			$('.navbar-mobile .button-logout').click(function() {
+				
+			});
+		}, 0);
+
+		$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+		$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+		new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
+
+		return;
+	}
 
 	setTimeout(function() {
 		window._menu = new MenuHamburger(_gateway, '#navbarCollapse');
@@ -81,26 +96,13 @@ $(function() {
 
 var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
-window._session = new HomeSession(_gateway, initHome);
+window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 
-$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
-
-if (_gateway.parameter('popup')) {
-	setTimeout(function() {
-		$('.navbar-mobile .button-logout').click(function() {
-			
-		});
-	}, 0);
-
-	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
-	$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
-	new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), popupUrl);
-}
 });
 </script>
 </head>
 <body>
-<div class="navbar navbar-light bg-light navbar-mobile" role="navigation"> <!-- 태블릿 지원 class .navbar-expand-md 삭제 -->
+<div class="navbar navbar-light bg-light navbar-mobile d-none" role="navigation"><!-- 태블릿 지원 class .navbar-expand-md 삭제 -->
 	<button class="navbar-toggler pl-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>

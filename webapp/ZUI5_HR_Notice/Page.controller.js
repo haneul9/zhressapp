@@ -59,6 +59,31 @@
 			return Common.checkNull(regex)? "" : regex;
 		},
 
+		getTitle: function() {
+			return new sap.m.HBox({
+				fitContainer: true,
+				items: [
+					new sap.ui.core.HTML({
+						content: {
+							parts: [{path : "Title"}, {path: "Newitem"}, {path: "Impor"}],
+							formatter: function(v1, v2, v3) {
+								if(Common.checkNull(v1)){
+									return "";
+								}else{
+									var oList = [
+										'<span class="font14px">' + v1 + '</span>',
+										v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
+										v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
+									].join("");
+									return oList;
+								}
+							}
+						}
+					})
+				]
+			});
+		},
+
         getChangeDate: function() {
 			return new sap.ui.commons.TextView({
                 text : {

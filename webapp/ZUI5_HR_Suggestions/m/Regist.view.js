@@ -69,6 +69,12 @@ sap.ui.define([
 		
 		ApplyingBox: function(oController) {
             var oCommentBox = new sap.m.VBox({
+                visible: {
+                    path: "/HideComment",
+                    formatter: function(v) {
+                        return v !== "X";
+                    }
+                },
 				fitContainer: true,
 				items: [
                     new sap.m.HBox({

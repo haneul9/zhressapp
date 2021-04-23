@@ -470,7 +470,7 @@ handleError: function(destination, jqXHR, loggingName, showModal) {
 	if (destination === this.ODataDestination.SF) {
 		if (jqXHR.status === 403) {
 			message = '요청 정보에 오류가 있습니다.';
-			window._basis.log('HomeSession.handleError error 403', message);
+			window._basis.log('HomeBasis.handleError error 403', message);
 
 		} else if (jqXHR.status === 404) {
 			message = (error.message || {}).value;
@@ -480,26 +480,30 @@ handleError: function(destination, jqXHR, loggingName, showModal) {
 					message = this.isPRD()
 						? 'Successfactors에 존재하지 않는 사번(' + message.replace(rgxp, '$1') + ')입니다.'
 						: '테스트 시스템입니다.';
-					window._basis.log('HomeSession.handleError error 404', message);
+					window._basis.log('HomeBasis.handleError error 404', message);
 				}
 			} else {
-				window._basis.log('HomeSession.handleError error 404', message);
+				window._basis.log('HomeBasis.handleError error 404', message);
 			}
 
 		} else if (jqXHR.status === 503) {
 			message = '재로그인이 필요합니다.';
-			window._basis.log('HomeSession.handleError error 503', message);
+			window._basis.log('HomeBasis.handleError error 503', message);
 
 		} else {
 			message = message || '알 수 없는 오류가 발생하였습니다.';
-			window._basis.log('HomeSession.handleError error ' + jqXHR.status, message);
+			window._basis.log('HomeBasis.handleError error ' + jqXHR.status, message);
 
 		}
 
 	} else if (destination === this.ODataDestination.S4HANA) {
 		if (jqXHR.status === 403) {
-			message = jqXHR.responseText;
-			window._basis.log('HomeSession.handleError error 403', message);
+			if ($.isEmptyObject(error)) {
+				message = jqXHR.responseText;
+			} else {
+				message = (error.message || {}).value || jqXHR.responseText;
+			}
+			window._basis.log('HomeBasis.handleError error 403', message);
 
 		} else {
 			message = (error.message || {}).value;
@@ -516,10 +520,10 @@ handleError: function(destination, jqXHR, loggingName, showModal) {
 				message = this.isPRD()
 					? 'Successfactors에 존재하지 않는 사번(' + message.replace(rgxp, '$1') + ')입니다.'
 					: '테스트 시스템입니다.';
-				window._basis.log('HomeSession.handleError error 404', message);
+				window._basis.log('HomeBasis.handleError error 404', message);
 			}
 		} else {
-			window._basis.log('HomeSession.handleError error ' + jqXHR.status, message);
+			window._basis.log('HomeBasis.handleError error ' + jqXHR.status, message);
 		}
 	}
 

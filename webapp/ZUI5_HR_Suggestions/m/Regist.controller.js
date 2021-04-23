@@ -80,6 +80,7 @@
                     oCommentBox.destroyItems();
                     oDateBox.setVisible(false);
                     oIsHideBox.setVisible(true);
+					this.CommentModel.setProperty("/HideComment", "X");
                 }else{
                     oDateBox.setVisible(true);
                     oIsHideBox.setVisible(false);

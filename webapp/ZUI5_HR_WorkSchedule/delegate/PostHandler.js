@@ -217,7 +217,7 @@ sap.ui.define(
                     IsPossibleSave: false,
                     IsPossibleApproval: false,
                     Header: $.extend(true, {
-                        MaxDate: moment().toDate(),
+                        MaxDate: moment().subtract(1, "days").toDate(),
                         WeekName: this.oController.getBundleText(this.oModel.getProperty("/Weeks")[moment(rowData.Schda).day()]),
                         List: [{ Tim00: "", Tim01: "", Tim07: "", Tim05: "", Tim02: "", Wt40: "", Wt12: "", Wtsum: "", LigbnTx: "" }]
                     }, rowData),
@@ -226,7 +226,7 @@ sap.ui.define(
                 
                 this.openDetailDialog();
                 
-                this.searchDetailData();
+                this.searchDetailData({Worktimetab1: [{ Schda: rowData.Schda, Appnm: rowData.Appnm, Pernr: rowData.Pernr }]});
                 this.toggleIsPossibleSave();
             },
 
@@ -258,7 +258,7 @@ sap.ui.define(
                         Trbu1M: "00",
                         Treu1T: "00",
                         Treu1M: "00",
-                        MaxDate: moment().toDate(),
+                        MaxDate: moment().subtract(1, "days").toDate(),
                         Schda: moment().subtract(1, "days").toDate(),
                         WeekName: this.oController.getBundleText(this.oModel.getProperty("/Weeks")[moment().add(1, "days").day()]),
                         List: [{ Tim00: "", Tim01: "", Tim07: "", Tim05: "", Tim02: "", Wt40: "", Wt12: "", Wtsum: "", LigbnTx: "" }]
@@ -367,7 +367,7 @@ sap.ui.define(
                 }.bind(this));
             },
 
-            searchDetailData: function() {
+            searchDetailData: function(arg) {
                 var vInputHeader = this.oModel.getProperty("/Detail/Header"),
                     results = ODataService.WorktimeApplySet.call(
                     this.oController, 
@@ -375,7 +375,8 @@ sap.ui.define(
                     {
                         Bfchk: WorkSchedule.POST,
                         Pernr: vInputHeader.Pernr,
-                        Datum: moment(vInputHeader.Schda).hours(10).toDate()
+                        Datum: moment(vInputHeader.Schda).hours(10).toDate(),
+                        Worktimetab1: arg.Worktimetab1 ? arg.Worktimetab1 : undefined
                     }
                 );
 
@@ -794,6 +795,7 @@ sap.ui.define(
                 if(Common.checkNull(oTargetPaths)) {
                     // Line add
                     vApprovalLines.push({
+                        Aprsq: String(vApprovalLines.length + 1),
                         AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(vApprovalLines.length + 1),  // ${v}차 결재자
                         ApstaT: "",
                         Apper: data.Pernr,

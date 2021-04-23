@@ -139,6 +139,7 @@ changeLocale: function() {
 
 	var iframe = $('iframe[name="content-iframe"]');
 	if (iframe.length) {
+		iframe[0].contentWindow.sap.ui.getCore().getConfiguration().setLanguage(this._gateway.loginInfo('Langu'));
 		$('form#menu-form').submit();
 	}
 },
@@ -275,6 +276,12 @@ goToLink: function(menuId, url) {
 		if (pernr) {
 			if (!form.find('input[name="pernr"]').val(pernr).length) {
 				$('<input type="hidden" name="pernr" />').val(pernr).appendTo(form);
+			}
+		}
+		var s4hana = this._gateway.parameter('s4hana');
+		if (s4hana) {
+			if (!form.find('input[name="s4hana"]').val(s4hana).length) {
+				$('<input type="hidden" name="s4hana" />').val(s4hana).appendTo(form);
 			}
 		}
 	}

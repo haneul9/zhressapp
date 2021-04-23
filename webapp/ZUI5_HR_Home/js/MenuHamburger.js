@@ -159,6 +159,12 @@ goToLink: function(menuId, url) {
 				$('<input type="hidden" name="pernr" />').val(pernr).appendTo(form);
 			}
 		}
+		var s4hana = this._gateway.parameter('s4hana');
+		if (s4hana) {
+			if (!form.find('input[name="s4hana"]').val(s4hana).length) {
+				$('<input type="hidden" name="s4hana" />').val(s4hana).appendTo(form);
+			}
+		}
 	}
 
 	form.find('input[name="mid"]').val(menuId).end()

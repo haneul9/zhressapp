@@ -34,6 +34,7 @@
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
 <script src="ZUI5_HR_Home/js/MenuMegaDropdown.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
@@ -42,16 +43,12 @@
 <script src="ZUI5_HR_Home/js/portlets/FavoriteMenuPortlet.js"></script><!--	P104 즐겨찾는 메뉴 -->
 <script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--		P105 팀 달력 -->
 <script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--	P108 하이톡톡 -->
-<script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/Portlets.js"></script>
 <script>
 function initHome() {
 
-	var _gateway = window._gateway;
-
-	if (_gateway.isPopup()) {
-		return;
-	}
+	var _gateway = window._gateway,
+	popup = _gateway.isPopup();
 
 	setTimeout(function() {
 		window._i18n = new HomeI18n(_gateway);
@@ -60,17 +57,34 @@ function initHome() {
 
 	setTimeout(function() {
 		var locale = window._session.locale();
-		$('#sf-locale')
-			.val(locale)
-			.change(function() {
-				window._session.changeSFUserLocale();
-			});
+		if (!popup) {
+			$('#sf-locale')
+				.val(locale)
+				.change(function() {
+					window._session.changeSFUserLocale();
+				});
+		}
 
 		$('html').attr({
 			locale: locale,
 			lang: (_gateway.loginInfo('Langu') || 'KO').toLowerCase()
 		});
 	});
+
+	if (popup) {
+		setTimeout(function() {
+			$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+			$('.ehr-body').height('100%').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+			new MenuMegaDropdown(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
+		}, 0);
+
+		return;
+	} else {
+		setTimeout(function() {
+			$('.ehr-header').toggleClass('d-none', false);
+			$('.ehr-body').height('calc(100% - 46px)');
+		}, 0);
+	}
 
 	setTimeout(function() {
 		window._menu = new MenuMegaDropdown(_gateway, '.ehr-gnb');
@@ -139,17 +153,7 @@ $(function() {
 
 var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
-window._session = new HomeSession(_gateway, initHome);
-
-var popupUrl = _gateway.parameter('popup');
-if (!popupUrl) {
-	$('.ehr-header').toggleClass('d-none', false);
-	$('.ehr-body').height('calc(100% - 46px)');
-} else {
-	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
-	$('.ehr-body').height('100%').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
-	new MenuMegaDropdown(_gateway).goToLink(_gateway.parameter('mid'), popupUrl);
-}
+window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 
 });
 </script>

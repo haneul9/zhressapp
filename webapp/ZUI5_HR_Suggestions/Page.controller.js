@@ -162,6 +162,7 @@
 			
 			this.RegistModel.setData({FormData: []});
 			this.CommentModel.setData({Data: {}});
+			this.CommentModel.setProperty("/HideComment", "X");
 			oCommentBox.destroyItems();
 
 			var oDateBox = $.app.byId(this.PAGEID + "_RegistDateBox");

@@ -227,7 +227,7 @@ sap.ui.define(
                 
                 this.openDetailDialog();
                 
-                this.searchDetailData();
+                this.searchDetailData({Worktimetab1: [{ Schda: rowData.Schda, Appnm: rowData.Appnm, Pernr: rowData.Pernr }]});
                 this.toggleIsPossibleSave();
             },
 
@@ -368,7 +368,7 @@ sap.ui.define(
                 }.bind(this));
             },
 
-            searchDetailData: function() {
+            searchDetailData: function(arg) {
                 var vInputHeader = this.oModel.getProperty("/Detail/Header"),
                     results = ODataService.WorktimeApplySet.call(
                     this.oController, 
@@ -376,7 +376,8 @@ sap.ui.define(
                     {
                         Bfchk: WorkSchedule.PRIOR,
                         Pernr: vInputHeader.Pernr,
-                        Datum: moment(vInputHeader.Schda).hours(10).toDate()
+                        Datum: moment(vInputHeader.Schda).hours(10).toDate(),
+                        Worktimetab1: arg.Worktimetab1 ? arg.Worktimetab1 : undefined
                     }
                 );
 
@@ -795,6 +796,7 @@ sap.ui.define(
                 if(Common.checkNull(oTargetPaths)) {
                     // Line add
                     vApprovalLines.push({
+                        Aprsq: String(vApprovalLines.length + 1),
                         AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(vApprovalLines.length + 1),  // ${v}차 결재자
                         ApstaT: "",
                         Apper: data.Pernr,

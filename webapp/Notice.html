@@ -38,7 +38,11 @@
 			LOG: {
 				ENABLE_SUCCESS: true
 			},
-			includeStyleSheets: [[contextPath, "css", "Notice.css"].join("/")]
+			includeStyleSheets: [
+				["css", "fontawesome-all.min.css"].join("/"),
+				["ZUI5_HR_Home", "css", "home.css"].join("/"),
+				[contextPath, "css", "Notice.css"].join("/")
+			]
 		});
 
 		$.app.init();

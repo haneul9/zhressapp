@@ -9,7 +9,7 @@
 	sap.ui.jsview($.app.APP_ID, {
         
         _ColModel: [
-            {id: "Title",   label: "{i18n>LABEL_57008}" /* 제목 */,         plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto", align: sap.ui.core.HorizontalAlign.Left},
+            {id: "Title",   label: "{i18n>LABEL_57008}" /* 제목 */,         plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "auto", templateGetter: "getTitle"},
             {id: "Sdate",   label: "{i18n>LABEL_57004}" /* 등록일 */,       plabel: "", resize: true, span: 0, type: "date",    sort: true,  filter: true,  width: "15%"},
             {id: "Aedtm",   label: "{i18n>LABEL_57010}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "25%", templateGetter: "getChangeDate"},
             {id: "ApernTxt",label: "{i18n>LABEL_57011}" /* 등록자 */,       plabel: "", resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "15%"}
