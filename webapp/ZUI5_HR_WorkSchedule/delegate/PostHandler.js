@@ -226,7 +226,7 @@ sap.ui.define(
                 
                 this.openDetailDialog();
                 
-                this.searchDetailData();
+                this.searchDetailData({Worktimetab1: [{ Schda: rowData.Schda, Appnm: rowData.Appnm, Pernr: rowData.Pernr }]});
                 this.toggleIsPossibleSave();
             },
 
@@ -367,7 +367,7 @@ sap.ui.define(
                 }.bind(this));
             },
 
-            searchDetailData: function() {
+            searchDetailData: function(arg) {
                 var vInputHeader = this.oModel.getProperty("/Detail/Header"),
                     results = ODataService.WorktimeApplySet.call(
                     this.oController, 
@@ -375,7 +375,8 @@ sap.ui.define(
                     {
                         Bfchk: WorkSchedule.POST,
                         Pernr: vInputHeader.Pernr,
-                        Datum: moment(vInputHeader.Schda).hours(10).toDate()
+                        Datum: moment(vInputHeader.Schda).hours(10).toDate(),
+                        Worktimetab1: arg.Worktimetab1 ? arg.Worktimetab1 : undefined
                     }
                 );
 
