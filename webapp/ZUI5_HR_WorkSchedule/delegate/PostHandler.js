@@ -376,7 +376,7 @@ sap.ui.define(
                         Bfchk: WorkSchedule.POST,
                         Pernr: vInputHeader.Pernr,
                         Datum: moment(vInputHeader.Schda).hours(10).toDate(),
-                        Worktimetab1: arg.Worktimetab1 ? arg.Worktimetab1 : undefined
+                        Worktimetab1: arg && arg.Worktimetab1 ? arg.Worktimetab1 : undefined
                     }
                 );
 
