@@ -302,7 +302,7 @@ var Handler = {
 						this.onShow.call(this,TableIn07,"V");
 						this.oModel.getProperty("/Header").Status1!="AA"?this.afterTable(TableIn07):null;
 						$.app.byId($.app.getController().PAGEID+"_aTable").getModel().setProperty("/addData", TableIn07);
-						Common.adjustVisibleRowCount($.app.byId($.app.getController().PAGEID+"_aTable"), 10, TableIn07.length);
+//						Common.adjustVisibleRowCount($.app.byId($.app.getController().PAGEID+"_aTable"), 10, TableIn07.length);
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.onBeforeOpen error", oResponse);
