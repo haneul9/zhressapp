@@ -47,7 +47,7 @@ sap.ui.define([
 				rememberSelections: false,
 				noDataText: "{i18n>LABEL_00901}",
 				growing: true,
-				growingThreshold: 2,
+				growingThreshold: 10,
 				mode: sap.m.ListMode.SingleSelectMaster,
 				itemPress: oController.onPressResvRow.bind(oController),
 				columns: [
