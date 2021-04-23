@@ -230,11 +230,11 @@ var OnRequest = { // 출장 event handler
 			});
 		}
 		if(vTmp){
-			sap.m.MessageBox.alert(oController.getBundleText("MSG_19036"));
+			sap.m.MessageBox.alert(oController.getBundleText("MSG_19043"));
 			return;
 		}
 		if(vTmp2){
-			sap.m.MessageBox.alert(oController.getBundleText("MSG_19037"));
+			sap.m.MessageBox.alert(oController.getBundleText("MSG_19044"));
 			return;
 		}
 		function timeForm(time){

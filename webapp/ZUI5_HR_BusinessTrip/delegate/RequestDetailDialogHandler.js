@@ -299,7 +299,7 @@ var Handler = {
 						this.oModel.getProperty("/Header").Status1=="AA"?TableIn07=new Array():null;
 						this._dArr=TableIn07;					
 						this.renderAdded.call(this,$.app.getController(),TableIn07);
-						this.onShow.call(this,TableIn07);
+						this.onShow.call(this,TableIn07,"V");
 						this.oModel.getProperty("/Header").Status1!="AA"?this.afterTable(TableIn07):null;
 						$.app.byId($.app.getController().PAGEID+"_aTable").getModel().setProperty("/addData", TableIn07);
 						Common.adjustVisibleRowCount($.app.byId($.app.getController().PAGEID+"_aTable"), 10, TableIn07.length);
@@ -872,7 +872,9 @@ var Handler = {
 	},
 
 	onShow : function(oPro,vSig){
-//		sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19042"));
+		if(vSig!="V"){
+			sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19042"));
+		}
 		this._Hando="";
 		var jModel=this.oModel;
 		var oController=$.app.getController();
