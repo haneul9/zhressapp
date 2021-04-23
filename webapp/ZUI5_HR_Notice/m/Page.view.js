@@ -64,7 +64,11 @@
 				itemPress: oController.onSelectedRow.bind(oController),
                 columns: [
                     new sap.m.Column ({
-                        width: "55%",
+                        width: "8%",
+                        hAlign: "Begin"
+                    }),
+                    new sap.m.Column ({
+                        width: "48%",
                         hAlign: "Begin"
                     }),
                     new sap.m.Column ({
@@ -78,6 +82,27 @@
                         type: sap.m.ListType.Active,
                         counter: 5,
                         cells: [
+                            new sap.m.VBox({
+                                fitContainer: true,
+                                items: [
+                                    new sap.ui.core.HTML({
+                                        content: {
+                                            parts: [{path : "Title"}, {path: "Newitem"}, {path: "Impor"}],
+                                            formatter: function(v1, v2, v3) {
+                                                if(Common.checkNull(v1)){
+                                                    return "";
+                                                }else{
+                                                    var oList = [
+                                                        v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
+                                                        v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
+                                                    ].join("");
+                                                    return oList;
+                                                }
+                                            }
+                                        }
+                                    })
+                                ]
+                            }),
                             new sap.m.VBox({
                                 items: [
                                     new sap.m.Text({ // 제목

@@ -48,7 +48,27 @@
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
+
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr"))){
+				var oList = {
+					Sdate: this.getParameterByName("Sdate"),
+					Seqnr: this.getParameterByName("Seqnr")
+				};
+
+				sap.ui.getCore().getEventBus().publish("nav", "to", {
+					id: [$.app.CONTEXT_PATH, "Regist"].join($.app.getDeviceSuffix()),
+					data: {
+						RowData: oList
+					}
+				});
+			}
         },
+
+		getParameterByName: function(name) {
+			var regex = parent._gateway.parameter(name);
+			
+			return Common.checkNull(regex)? "" : regex;
+		},
 		
 		onTableSearch: function() {
 			var oController = $.app.getController();
