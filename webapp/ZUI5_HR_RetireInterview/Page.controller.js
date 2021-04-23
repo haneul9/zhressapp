@@ -66,6 +66,8 @@
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 			
+			oController.TableModel.setData({Data: []}); 
+
 			var sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;
@@ -83,8 +85,6 @@
 						var rDatas = oData.TableIn1.results;
 						dataLength = rDatas.length;
 						oController.TableModel.setData({Data: rDatas}); 
-					}else{
-						oController.TableModel.setData({Data: []}); 
 					}
 
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
