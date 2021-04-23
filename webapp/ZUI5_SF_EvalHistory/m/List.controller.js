@@ -4,7 +4,7 @@ sap.ui.define(
 		"common/CommonController",
 		"common/JSONModelHelper",
 		"sap/ui/core/BusyIndicator",
-		"sap.m.MessageToast",
+		"sap/m/MessageToast",
 		"sap/ui/model/json/JSONModel"
 	],
 	function (Common, CommonController, JSONModelHelper, BusyIndicator, MessageToast, JSONModel) {
