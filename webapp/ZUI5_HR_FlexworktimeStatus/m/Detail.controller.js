@@ -36,7 +36,7 @@ sap.ui.define([
 		
 			if(oEvent.data.Data){
 				var oData = Object.assign({}, oEvent.data.Data);
-					console.log(oData)
+					oData.Atext = oData.Atext == "" ? oBundleText.getText("LABEL_69041") : oData.Atext; // 정상근무
 				oController._DetailJSonModel.setProperty("/Data", oData);
 			}
 			
@@ -93,9 +93,9 @@ sap.ui.define([
 				var oHoltm = oController._DetailJSonModel.getProperty("/Data/Holtm"); // 휴일근로시간
 					oHoltm = oHoltm && oHoltm != "" ? oHoltm.substring(0,2) + ":" + oHoltm.substring(2,4) : "";
 				
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69041"), Value : oWrktm}); // 평일근로시간
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69042"), Value : oExttm}); // 연장근로시간
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69043"), Value : oHoltm}); // 휴일근로시간
+				vData2.Data.push({Text : oBundleText.getText("LABEL_69028"), Value : oWrktm}); // 평일근로시간
+				vData2.Data.push({Text : oBundleText.getText("LABEL_69029"), Value : oExttm}); // 연장근로시간
+				vData2.Data.push({Text : oBundleText.getText("LABEL_69030"), Value : oHoltm}); // 휴일근로시간
 			}
 			
 			oJSONModel1.setData(vData1);
@@ -239,7 +239,6 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oController._DetailJSonModel.getProperty("/Data");
-			console.log(oData);
 			
 			// 추가휴게시간
 			var oData2 = sap.ui.getCore().byId(oController.PAGEID + "_Table1").getModel().getProperty("/Data");
@@ -289,8 +288,6 @@ sap.ui.define([
 					Adbtm : oAdbtm == "" ? "" : oAdbtm.replace(":", ""),
 					Monyn : oData.Monyn
 				});
-				
-				console.log(createData);
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
 				oModel.create("/FlexworktimeSummarySet", createData, null,
