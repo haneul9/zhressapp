@@ -45,6 +45,7 @@ init: function(callback) {
 		]);
 	}.bind(this))
 	.then(function() {
+		callback();
 		// if (typeof HomeMFA === 'function') {
 		// 	new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
 		// } else {
