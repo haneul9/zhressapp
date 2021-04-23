@@ -518,8 +518,9 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
-                // 유연근무제 대상자가 아니거나, 첨단 소속일 경우 신청 불가
-                if(data.Bukrs.charAt(0) === "A" || data.Zfxck !== "X") {
+                // 기초 - 전문직이면 신청 전문직이 아니면 유연근무제 대상자만 신청
+                // 첨단 모두 신청불가
+                if(data.Bukrs.charAt(0) === "A" || (data.Bukrs.charAt(0) !== "A" && data.Zflag !== "X" && data.Zfxck !== "X")) {
                     MessageBox.alert(this.oController.getBundleText("MSG_31012").interpolate(data.Stext));
                     return;
                 }
@@ -567,15 +568,16 @@ sap.ui.define(
                     vSelectedDataLength = data.length,
                     impossibleTargets = [];
 
-                // 유연근무제 대상자가 아니거나, 첨단 소속일 경우 신청 불가
+                // 기초 - 전문직이면 신청 전문직이 아니면 유연근무제 대상자만 신청
+                // 첨단 모두 신청불가
                 data = data.filter(function(elem) {
-                    if(elem.Bukrs.charAt(0) === "A" || elem.Zfxck !== "X") {
+                    if(elem.Bukrs.charAt(0) === "A" || (elem.Bukrs.charAt(0) !== "A" && elem.Zflag !== "X" && elem.Zfxck !== "X")) {
                         impossibleTargets.push(elem.Stext);
                         return false;
                     }
                     return true;
                 });
-                
+
                 if(impossibleTargets.length) {
                     vSelectedDataLength = data.length;
 
