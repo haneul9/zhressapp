@@ -152,7 +152,7 @@ sap.ui.define([
 									}
 									
 									if(oControl){
-										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-bold");
+										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-regular font-11px");
 										
 										if(data1[i].Offyn == "X"){
 											title.addStyleClass("color-info-red");
@@ -168,14 +168,14 @@ sap.ui.define([
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })] 
-																  }).addStyleClass("calendar-datum"),
+																  }), // .addStyleClass("calendar-datum")
 																  new sap.ui.commons.layout.MatrixLayoutRow({
 																  	  height : "20px",
 																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 																		  	  	   content : [new sap.m.Text({
 																					  	  		  text : (data1[i].Offyn == "X" ? "OFF" : 
 																					  	  					data1[i].Beguz == "" ? "" : (data1[i].Beguz.substring(0,2) + ":" + data1[i].Beguz.substring(2,4)))
-																					  	  	  })],
+																					  	  	  }).addStyleClass("font-regular font-11px")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
@@ -186,7 +186,7 @@ sap.ui.define([
 																		  	  	   content : [new sap.m.Text({
 																					  	  		  text : (data1[i].Offyn == "X" ? "" : 
 																					  	  					data1[i].Enduz == "" ? "" : (data1[i].Enduz.substring(0,2) + ":" + data1[i].Enduz.substring(2,4)))
-																					  	  	  })],
+																					  	  	  }).addStyleClass("font-regular font-11px")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
@@ -197,10 +197,10 @@ sap.ui.define([
 																		  	  	   content : [new sap.m.Text({
 																					  	  	   	  text : data1[i].Atext, 
 																					  	  	   	  maxLines : 1
-																				  	  	      }).addStyleClass("font-12px font-bold color-signature-blue")],
+																				  	  	      }).addStyleClass("font-regular font-11px FontWhite")],
 																		  	  	   hAlign : "Center",
-																		  	  	   vAlign : "Middle"
-																		  	   })]
+																		  	  	   vAlign : "Bottom"
+																		  	   }).addStyleClass((data1[i].Atext == "" ? "" : "calendar-atext"))]
 																  })]
 													  });
 													  

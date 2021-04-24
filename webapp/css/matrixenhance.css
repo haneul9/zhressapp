@@ -84,7 +84,7 @@
     border-right: 1px solid rgb(204,204,204);
     border-top: 1px solid rgb(204,204,204);
     border-bottom: 1px solid rgb(204,204,204);
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .calendar-TableHeader2-Start {
@@ -94,7 +94,7 @@
     border-right: 1px solid rgb(204,204,204);
     border-top: 1px solid rgb(204,204,204);
     border-bottom: 1px solid rgb(204,204,204);
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .calendar-TableData {
@@ -137,6 +137,8 @@
 .calendar-background-blue{background-color:#cae6fc}
 .calendar-background-orange{background-color:#fad9c3}
 .calendar-background-green{background-color:#cbf1c4}
+
+.calendar-atext{background-color: #0070bd;}
 
 #signature-pad {border: 1px solid black}
 
