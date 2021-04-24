@@ -110,6 +110,17 @@ sap.ui.define(
                                                 new sap.m.Text({ text: "{i18n>LABEL_37008}" }).addStyleClass("Font15 FontBold"), // 기본인적사항
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
+                                                    text: "{i18n>LABEL_37107}", // 사진저장
+                                                    visible: {
+                                                        parts: [{ path: "Auth" }, { path: "disyn" }],
+                                                        formatter: function (v1, v2) {
+                                                            if (v1 == "E" && v2 === "2") return true;
+                                                            else return false;
+                                                        }
+                                                    },
+                                                    press: oController.changePicture
+                                                }).addStyleClass("button-light"),
+                                                new sap.m.Button({
                                                     text: "{i18n>LABEL_00102}", // 수정
                                                     visible: {
                                                         parts: [{ path: "Auth" }, { path: "disyn" }],

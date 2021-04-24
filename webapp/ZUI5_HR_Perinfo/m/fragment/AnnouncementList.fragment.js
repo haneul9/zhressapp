@@ -18,15 +18,29 @@ sap.ui.define([], function () {
                 columns: [
                     new sap.m.Column({
                         width: "30%",
-                        hAlign: sap.ui.core.TextAlign.Begin
+                        hAlign: sap.ui.core.TextAlign.Begin,
+                  //      header: new sap.m.VBox({
+            					 //items: [
+	            					//  new sap.m.Label({text : oBundleText.getText("LABEL_18025"), textAlign : "Center"}), // 발령일
+	            					//  new sap.m.Label({text : oBundleText.getText("LABEL_37084"), textAlign : "Center"})  // 발령명
+            					 //],
+                  //      })
                     }),
                     new sap.m.Column({
-                        width: "30%",
-                        hAlign: sap.ui.core.TextAlign.Begin
+                        hAlign: sap.ui.core.TextAlign.Begin,
+                        // header: new sap.m.Label({text : oBundleText.getText("LABEL_18008"), textAlign : "Center"}),	// 발령사항
                     }),
                     new sap.m.Column({
-                        hAlign: sap.ui.core.TextAlign.Begin
+                        width: "25%",
+                        hAlign: sap.ui.core.TextAlign.Begin,
+                  //      header: new sap.m.VBox({
+            					 //items: [
+	            					//  new sap.m.Label({text : oBundleText.getText("LABEL_37007"), textAlign : "Center"}), 	// 부서 
+	            					//  new sap.m.Label({text : oBundleText.getText("LABEL_37005"), textAlign : "Center"})     // Grade 
+            					 //],
+                  //      })
                     })
+                    
                 ],
                 items: {
                     path: "/Data",
@@ -39,11 +53,11 @@ sap.ui.define([], function () {
                             }),
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Stext2}" }), new sap.m.Text({ text: "{PGradeTxt}" })]
+                                items: [new sap.m.Text({ text: "{Zzmass}" })]
                             }),
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Zzmass}" })]
+                                items: [new sap.m.Text({ text: "{Stext2}" }), new sap.m.Text({ text: "{PGradeTxt}" })]
                             })
                         ]
                     })

@@ -17,10 +17,14 @@ sap.ui.define(
                     items: [
                         new sap.m.FlexBox({
                             items: [
-                                new sap.m.Button({
-                                    press: oController.moveSearch,
-                                    icon: "sap-icon://search"
-                                }).addStyleClass("button-search")
+                                // new sap.m.Button({
+                                //     press: oController.moveSearch,
+                                //     icon: "sap-icon://search"
+                                // }).addStyleClass("button-search")
+                                new sap.m.Link({
+                                	text :"이동하기",
+                                	href : "bizx://?urlType=deeplink&deeplinkType=orgChart"
+                                })
                             ]
                         }).addStyleClass("button-group pl-0"),
                         new sap.m.FlexBox({
