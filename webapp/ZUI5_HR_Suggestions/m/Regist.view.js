@@ -137,7 +137,7 @@ sap.ui.define([
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "105px", "Left", true), // 제목
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "105px", "Left", true).addStyleClass("sub-con-title"), // 제목
                             new sap.m.Input({
                                 width: "250px",
                                 value: "{Title}",
@@ -158,7 +158,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56003}", "105px", "Left"), // 등록일
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56003}", "105px", "Left").addStyleClass("sub-con-title"), // 등록일
                                     new sap.m.Text({
                                         width: "auto",
                                         textAlign: "Begin",
@@ -175,7 +175,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left"), // 최종변경일/시
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left").addStyleClass("sub-con-title"), // 최종변경일/시
                                     new sap.m.Text({
                                         width: "250px",
                                         textAlign: "Begin",
@@ -207,7 +207,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "105px", "Left").addStyleClass("mr-8px"), // 비공개
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "105px", "Left").addStyleClass("sub-con-title mr-5px"), // 비공개
                                     new sap.m.CheckBox({ 
                                         select: oController.onChangeData.bind(oController),
                                         selected: {
@@ -229,7 +229,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true), // 비밀번호
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true).addStyleClass("sub-con-title"), // 비밀번호
                                     new sap.m.Input({
                                         width: "150px",
                                         value: "{Pword}",
@@ -261,7 +261,7 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true), // 내용
                             new sap.m.TextArea({
                                 rows: 10,
-								width: "250px",
+								width: "100%",
 								value:"{Detail}",
                                 maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
 								editable: {
