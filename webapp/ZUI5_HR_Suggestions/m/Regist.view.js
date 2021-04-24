@@ -97,7 +97,8 @@ sap.ui.define([
                                     .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true).addStyleClass("mr-5px"), // 비밀번호
                                     new sap.m.Input({
-										width: "150px",
+										width: "100%",
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 										value: "{Pword}",
 										type: sap.m.InputType.Password
 									})
@@ -114,14 +115,15 @@ sap.ui.define([
 						items: [
 							new sap.m.TextArea({
 								rows: 3,
-								width: "315px",
+								width: "100%",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								value:"{Detail}",
 								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							}).addStyleClass("mt-15px mr-8px"),
+							}).addStyleClass("mt-15px"),
 							new sap.m.Button({
 								press: oController.onDialogSaveBtn.bind(oController),
 								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-light h-101px")
+							}).addStyleClass("button-light h-101px ml-8px")
 						]
 					})
 				]
@@ -139,8 +141,9 @@ sap.ui.define([
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "105px", "Left", true), // 제목
                             new sap.m.Input({
-                                width: "250px",
+                                width: "100%",
                                 value: "{Title}",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Title", false),
                                 editable: {
 									parts: [{path: "Sdate"}, {path: "/Gubun"}],
@@ -160,8 +163,9 @@ sap.ui.define([
                                 items: [
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_56003}", "105px", "Left"), // 등록일
                                     new sap.m.Text({
-                                        width: "auto",
+                                        width: "100%",
                                         textAlign: "Begin",
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         text: {
                                             path: "Sdate",
                                             formatter: function(v) {
@@ -177,8 +181,9 @@ sap.ui.define([
                                 items: [
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left"), // 최종변경일/시
                                     new sap.m.Text({
-                                        width: "250px",
+                                        width: "100%",
                                         textAlign: "Begin",
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         text : {
                                             parts: [{path: "Aedtm"}, {path: "Aetim"}],
                                             formatter: function(v1, v2) {
@@ -210,6 +215,7 @@ sap.ui.define([
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "105px", "Left").addStyleClass("mr-8px"), // 비공개
                                     new sap.m.CheckBox({ 
                                         select: oController.onChangeData.bind(oController),
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         selected: {
                                             path: "Hide",
                                             formatter: function(v) {
@@ -231,7 +237,8 @@ sap.ui.define([
                                 items: [
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true), // 비밀번호
                                     new sap.m.Input({
-                                        width: "150px",
+                                        width: "80%",
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         value: "{Pword}",
                                         type: sap.m.InputType.Password,
                                         editable: {
@@ -261,8 +268,9 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true), // 내용
                             new sap.m.TextArea({
                                 rows: 10,
-								width: "250px",
+								width: "100%",
 								value:"{Detail}",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
 								editable: {
 									parts: [{path: "Sdate"}, {path: "/Gubun"}],

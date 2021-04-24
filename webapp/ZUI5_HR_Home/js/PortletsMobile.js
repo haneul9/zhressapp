@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet TempPortlet */
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet*/
 function PortletsMobile(_gateway) {
 
 	this._gateway = _gateway;
@@ -14,10 +14,12 @@ init: function() {
 	this.items = null;
 	this.itemMap = null;
 	this.portletTypeMap = {
-		'P101': EmployeePortlet,	// 개인정보
-		'P102': NoticePortlet,		// 공지사항
-		'P105': CalendarPortlet,	// 팀 달력
-		'P106': HiTalkTalkPortlet	// 하이톡톡
+		'P101': EmployeePortlet,			// 개인정보
+		'P102': NoticePortlet,				// 공지사항
+		'P105': CalendarPortlet,			// 팀 달력
+		'P106': HiTalkTalkPortlet,			// 하이톡톡
+		'P107': EvalGoalPortlet	,			// 목표관리
+		'p108': EvalGoalProgressingPortlet  // 팀원 목표 진척율
 	};
 
 	$(document)
