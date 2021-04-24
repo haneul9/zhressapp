@@ -66,7 +66,7 @@ fill: function() {
 
 			this.items = this._gateway.odataResults(data).TableIn4;
 
-			var list = this.$(), jspPane;
+			var list = this.$(), jspPane; // 메뉴 즐겨찾기 추가/제거를 반복하다보면 scroll이 없어졌다가 다시 생성되어야하는 시점에 생성되지 않는 버그가 있어 따로 jspPane 변수를 사용함
 			if (!this.items.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
@@ -111,6 +111,8 @@ onceAfter: function() {
 			horizontalGutter: 0
 		});
 	}
+
+	this.$().height(this.cardBody().height() + 'px'); // iPhone jScrollPane 버그 수정
 },
 update: function() {
 

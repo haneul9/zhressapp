@@ -65,6 +65,10 @@ fill: function() {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
+			if (this._gateway.isMobile()) {
+				TableIn2 = TableIn2.splice(0, 8);
+			}
+
 			list.prepend($.map(TableIn2, function(o) {
 				var date = moment(Number((o.Edate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 				return [
@@ -99,6 +103,8 @@ onceAfter: function() {
 			horizontalGutter: 0
 		});
 	}
+
+	this.$().height(this.cardBody().height() + 'px'); // iPhone jScrollPane 버그 수정
 },
 changeLocale: function() {
 
