@@ -18,6 +18,8 @@ function HomeSession(_gateway, callback) {
 	this._gateway = _gateway;
 	_gateway.homeSession(this);
 
+	sessionStorage.clear();
+
 	this.init(callback);
 }
 
