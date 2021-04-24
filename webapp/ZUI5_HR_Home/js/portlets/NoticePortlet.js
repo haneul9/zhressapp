@@ -103,8 +103,6 @@ onceAfter: function() {
 			horizontalGutter: 0
 		});
 	}
-
-	this.$().height(this.cardBody().height() + 'px'); // iPhone jScrollPane 버그 수정
 },
 changeLocale: function() {
 
