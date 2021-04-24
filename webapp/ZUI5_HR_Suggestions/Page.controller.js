@@ -292,9 +292,10 @@
 										items: [
 											new sap.m.Text({ 
 												text: Common.DateFormatter(e.Adatl)
-											}),
+											}).addStyleClass("pt-6px"),
 											new sap.m.Button({
 												press: oController.onCommentSubBtn.bind(oController),
+												icon: "sap-icon://comment",
 												text: "{i18n>LABEL_56017}" // 대댓글
 											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
@@ -317,7 +318,7 @@
 											}).addStyleClass("button-light-sm")
 										]
 									})
-									.addStyleClass("button-group")
+									.addStyleClass("button-group mt-10px")
 								]
 							}),
 							new sap.m.HBox({
@@ -396,7 +397,7 @@
 												items: [
 													new sap.m.Text({ 
 														text: Common.DateFormatter(e.Adatl)
-													}),
+													}).addStyleClass("pt-6px"),
 													new sap.m.Button({
 														press: oController.onSubCommentReBtn.bind(oController),
 														text: "{i18n>LABEL_56013}" // 수정
@@ -417,13 +418,14 @@
 													}).addStyleClass("button-light-sm")
 												]
 											})
-											.addStyleClass("button-group")
+											.addStyleClass("button-group mt-10px")
 										]
 									}),
 									new sap.m.HBox({
 										fitContainer: true,
 										items: [
 											new sap.m.TextArea({ 
+
 												width: "755px",
 												value: e.Detail,
 												growing: true,
@@ -474,7 +476,7 @@
 										items: [
 											new sap.m.Text({
 												text: ""
-											}),
+											}).addStyleClass("pt-6px"),
 											new sap.m.Button({
 												press: oController.onSubCommentReBtn.bind(oController),
 												visible: false,
@@ -496,13 +498,13 @@
 											}).addStyleClass("button-light-sm")
 										]
 									})
-									.addStyleClass("button-group")
+									.addStyleClass("button-group mt-10px")
 								]
 							}),
 							new sap.m.HBox({
 								fitContainer: true,
 								items: [
-									new sap.m.TextArea({ 
+									new sap.m.TextArea({ 										
 										width: "755px",
 										growing: true
 									}),

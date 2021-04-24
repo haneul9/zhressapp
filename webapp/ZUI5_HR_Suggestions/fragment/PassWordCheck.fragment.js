@@ -20,7 +20,7 @@
             })
             .setModel(oController.PWordModel)
 			.bindElement("/Data")
-            .addStyleClass("search-field-group");
+            .addStyleClass("search-field-group search-inner-vbox");
 				
 			var oDialog = new sap.m.Dialog({
 				title: "{i18n>LABEL_56001}",    // 케미톡톡

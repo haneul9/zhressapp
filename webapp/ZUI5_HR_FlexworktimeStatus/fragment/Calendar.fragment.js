@@ -82,7 +82,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 		oMatrix.addRow(oRow);
 		
 		for(var i=0; i<row; i++) {
-			oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "80px"});
+			oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "84px"});
 			
 			for (var j=0; j<vHeader.length; j++) {
 				var vCellId = oController.PAGEID;
