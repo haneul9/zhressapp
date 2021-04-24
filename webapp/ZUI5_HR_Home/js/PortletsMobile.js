@@ -145,8 +145,6 @@ generate: function() {
 					item.appendTo('.portlet-col', true); // Portlet UI rendering
 				}
 			});
-
-			$(document).on('click', '.portlet [data-url]', this._gateway.handleUrl);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'PortletsMobile.generate ' + url);

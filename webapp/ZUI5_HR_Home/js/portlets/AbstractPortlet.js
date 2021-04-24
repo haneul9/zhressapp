@@ -193,7 +193,7 @@ dismissButton: function() {
 	return [
 		'<button type="button" class="d-none" data-dismiss="portlet" aria-label="Close">',
 			'<span aria-hidden="true" title="숨기기"><i class="fas fa-times"></i></span>',
-		'</button>',
+		'</button>'
 	].join('');
 },
 // Portlet 단독 spinner

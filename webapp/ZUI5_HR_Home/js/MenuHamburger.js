@@ -94,7 +94,7 @@ changeLocale: function() {
 			setTimeout(function() {
 				$(parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
-					// .parents(this.parentSelector).hide() // dropdown 닫기
+					.parents(this.parentSelector).toggleClass('show', false) // dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
 			}, 0);
 		});
@@ -205,12 +205,12 @@ handleUrl: function(e) {
 		}
 
 		setTimeout(function() {
-			$('[data-target="${}"]'.interpolate(this.parentSelector)).click();
+			$(this.parentSelector).toggleClass('show', false);
 		}.bind(this), 0);
 
 	} else {
 		setTimeout(function() {
-			$('[data-target="${}"]'.interpolate(this.parentSelector)).click();
+			$(this.parentSelector).toggleClass('show', false);
 			$('.ehr-body').toggleClass('menu-loaded', true);
 		}.bind(this), 0);
 

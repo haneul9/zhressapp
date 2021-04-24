@@ -553,8 +553,6 @@ generate: function() {
 				}
 			});
 
-			$(document).on('click', '.portlet [data-url]', this._gateway.handleUrl);
-
 			$('.portlet-col').sortable({
 				containment: '.portlet-masonry',
 				connectWith: '.portlet-col',

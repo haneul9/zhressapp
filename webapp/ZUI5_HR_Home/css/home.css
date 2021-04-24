@@ -140,6 +140,7 @@ body {min-width:576px; font-size:14px}
 .portlet-bbs-item {display:flex; justify-content:space-between; align-items:center; width:100%}
 .portlet-bbs-item .portlet-bbs-date {font-size:100%; color:#888; padding-right:.5rem}
 .portlet-bbs-title {display:flex; align-items:center; width:239px}
+[device="mobile"] .portlet-bbs-title {width:221px}
 .portlet-bbs-title .portlet-bbs-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .portlet-bbs-title span + span, .portlet-bbs-title span + i {margin-left:3px}
 .portlet-bbs-title i {vertical-align:middle; font-size:15.25px}
@@ -186,8 +187,8 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; border-top-right-radius:0; border-bottom-right-radius:0; padding-right:5px}
 .portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%; border-radius:0}
 .portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-top-left-radius:0; border-bottom-left-radius:0; padding-left:5px}
-.portlet-calendar-inline .ui-datepicker td a {margin:6px 5px}
-[device="mobile"] .portlet-calendar-inline .ui-datepicker td a {margin:4px 5px}
+.portlet-calendar-inline .ui-datepicker td a {margin:6px auto}
+[device="mobile"] .portlet-calendar-inline .ui-datepicker td a {margin:4px auto}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {top:5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev {left:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-next {right:14px}
