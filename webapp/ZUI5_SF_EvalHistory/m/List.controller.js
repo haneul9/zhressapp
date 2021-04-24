@@ -74,18 +74,21 @@ sap.ui.define(
 					MessageToast.show(this.getBundleText("MSG_07010"));	// 2020년 이후만 조회할 수 있습니다.
 					return;
 				}
-				// // Set data
-				// oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
-				// oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);
 
-				// // Display control
-				// oRowData.isNew = false;
+				BusyIndicator.show(0);
 
-				// this.oModel.setProperty("/Detail/Data", oRowData);
-
-				// sap.ui.getCore().getEventBus().publish("nav", "to", {
-				// 	id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix())
-				// });
+				Common.getPromise(
+					function () {
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
+							data : {
+								Appye : oRowData.Appye
+							}
+						});
+					}
+				).then(function () {
+					BusyIndicator.hide();
+				});
 			},
 
 			getLocalSessionModel: Common.isLOCAL() ? function() {
