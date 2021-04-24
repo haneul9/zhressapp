@@ -332,7 +332,7 @@ initPopover: function() {
 				return [
 					'<table class="portlet-calendar-tooltip">',
 						'<colgroup>',
-							'<col style="width:100px" /><col style="width:100px" /><col style="width:100px" /><col style="width:100px" />',
+							'<col style="width:80px" /><col style="width:80px" /><col style="width:80px" /><col style="width:80px" />',
 						'</colgroup>',
 						'<thead>',
 							'<tr><th>이름</th><th>직위</th><th>휴가명</th><th>기간</th></tr>',
