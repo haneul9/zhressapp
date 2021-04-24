@@ -31,7 +31,7 @@
                             })
                             .addStyleClass("mr-5px"),
                             new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
-								width: "220px",
+							//	width: "220px",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
 								dateValue: new Date(vYear, vMonth-2, 1),
