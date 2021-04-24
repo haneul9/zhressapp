@@ -75,11 +75,19 @@ sap.ui.define(
 					return;
 				}
 
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
-					data : {
-						Appye : oRowData.Appye
+				BusyIndicator.show(0);
+
+				Common.getPromise(
+					function () {
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
+							data : {
+								Appye : oRowData.Appye
+							}
+						});
 					}
+				).then(function () {
+					BusyIndicator.hide();
 				});
 			},
 

@@ -31,6 +31,20 @@ sap.ui.define(
 				}
 			},
 
+			navBack: function() {
+				BusyIndicator.show(0);
+
+				Common.getPromise(
+					function () {
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "List"].join($.app.getDeviceSuffix())
+						});
+					}
+				).then(function () {
+					BusyIndicator.hide();
+				});
+			},
+
 			load: function() {
 				BusyIndicator.show(0);
 
