@@ -166,7 +166,7 @@ sap.ui.define(
                 var oFilters = [
                     new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
                     new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, vBurks),
-                    new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, $.app.APP_ID == "ZUI5_HR_HRDoc.Page" ? "A" : common.SearchUser1.searchAuth ? common.SearchUser1.searchAuth : $.app.getAuth()),
+                    new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, "A"),
                     new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(new Date().setHours(9))),
                     new sap.ui.model.Filter("Ename", sap.ui.model.FilterOperator.EQ, vPernr)
                 ];
@@ -237,7 +237,7 @@ sap.ui.define(
                                     var vData = { User: {} };
                                     vData.User.Auth = gAuth;
                                     oController._HeaderJSonModel.setData(vData, true);
-                                    Common.displaylog(oError);
+                                    // Common.displaylog(oError);
                                     resolve();
                                 }
                             });
@@ -249,7 +249,6 @@ sap.ui.define(
                                 {
                                     IPernr: vPernr,
                                     IConType: vConType,
-                                    // ILangu: Langu,
                                     PinfoBasicNav: []
                                 },
                                 {
@@ -279,7 +278,7 @@ sap.ui.define(
                                         vData.Data.disyn = "2";
                                         oController._ListCondJSonModel.setProperty("/Data/Openf", "");
                                         oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                                        Common.displaylog(oError);
+                                        // Common.displaylog(oError);
                                         resolve();
                                     }
                                 }
@@ -3051,22 +3050,10 @@ sap.ui.define(
 				    var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
 					try {
 						var _handleSuccess = function (data) {
-							// common.Common.log(this.getBundleText("MSG_00034") + ", " + data);
-							  oController._BusyDialog.close();
-			                  oController._ChangePictureDialog.close();
-			                  oController._PictureJSonModel.setData({ Data: {} });
-							
-			                  MessageBox.alert(oController.getBundleText("MSG_57006"), {
-			                      title: oController.getBundleText("LABEL_00149")
-			                  });
+
 						};
 						var _handleError = function (data) {
-							console.log(data);
 							oController.requestSF();
-							// var errorMsg = this.getBundleText("MSG_00031");
-			
-							// common.Common.log("Error: " + data);
-							// sap.m.MessageToast.show(errorMsg, { my: "center center", at: "center center"});
 						};
 	    				var vData = oController._PicChangeJSonModel.getProperty("/Data");
 	    				
@@ -3107,7 +3094,7 @@ sap.ui.define(
                 var saveData = oController._PictureJSonModel.getProperty("/Data");
                 var vOData = {} ;
 				Object.assign( vOData, saveData);
-				// vOData.photo = vOData.photo.replace("data:image/jpeg;base64,", "");
+				vOData.photo = vOData.photo.replace("data:image/jpeg;base64,", "");
 			
 			
 				var oDataModel = new sap.ui.model.odata.ODataModel("/odata/v2", {
@@ -3123,26 +3110,27 @@ sap.ui.define(
 				.attachMetadataFailed(function() { if ($.app.LOG.ENABLE_FAILURE) { Common.log("metadataFailed", arguments); } });
 				
 				oDataModel.create("/upsert",{
-					// __metadata: {
-					// 	uri: "Attachment",
-					// },
-					// documentCategory : "NATIONAL_ID",
-					// // documentEntityId :
-					// documentEntityType : "PERSON",
-					// fileContent : vOData.photo,
-					// fileName : saveData.name,
-					// module :  "HRIS",
-					// moduleCategory : "HRIS_ATTACHMENT",
-					// userId : oController.getView().getModel("session").getData().Pernr
-					
 					    __metadata: {
 			               uri: "Photo(photoType=1,userId='"+ oController.getView().getModel("session").getData().Pernr  + "')",
 			               type: "SFOData.Photo"
 						},
 		                photoType  : 1,
 		                userId : oController.getView().getModel("session").getData().Pernr,
-		                photoName  : vOData.photo,
-		                photo : "BASE64_ENCODED_STRING" 
+		                photoName  : saveData.name,
+		                photo : vOData.photo
+						},
+						null,
+						function(data){
+						   console.log(data);
+						   oController._BusyDialog.close();
+		                   oController._ChangePictureDialog.close();
+		                   oController._PictureJSonModel.setData({ Data: {} });
+						},
+						function(data){
+						   console.log(data);
+						   oController._BusyDialog.close();
+		                   oController._ChangePictureDialog.close();
+		                   oController._PictureJSonModel.setData({ Data: {} });
 						}
 				);	
 				
