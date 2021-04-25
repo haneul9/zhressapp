@@ -256,52 +256,72 @@ sap.ui.define(
                             }),
                             new sap.m.HBox({
                                 items: [
-                                    this.getLabel("L/C", true),
-                                    new sap.m.Input({
-                                        required: true,
-                                        width: "100px",
-                                        type: sap.m.InputType.Number,
-                                        maxLength: 4,
-                                        value: "{/Info/Lcsco}",
-                                        editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
-                                        layoutData: new sap.m.FlexItemData({minWidth: "29.3%"})
+                                    new sap.m.VBox({
+                                        width: "50%",
+                                        items: [
+                                            this.getLabel("L/C", true),
+                                            new sap.m.Input({
+                                                required: true,
+                                                width: "100px",
+                                                type: sap.m.InputType.Number,
+                                                maxLength: 4,
+                                                value: "{/Info/Lcsco}",
+                                                editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
+                                                change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                                layoutData: new sap.m.FlexItemData({minWidth: "29.3%"})
+                                            })
+                                        ]
                                     }),
-                                    this.getLabel("R/C", true),
-                                    new sap.m.Input({
-                                        required: true,
-                                        width: "100px",
-                                        type: sap.m.InputType.Number,
-                                        maxLength: 4,
-                                        editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
-                                        value: "{/Info/Rcsco}"
-                                    }).addStyleClass("ml-8px")
+                                    new sap.m.VBox({
+                                        width: "50%",
+                                        items: [
+                                            this.getLabel("R/C", true),
+                                            new sap.m.Input({
+                                                required: true,
+                                                width: "100px",
+                                                type: sap.m.InputType.Number,
+                                                maxLength: 4,
+                                                editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
+                                                change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                                value: "{/Info/Rcsco}"
+                                            }).addStyleClass("ml-8px")
+                                        ]
+                                    })
                                 ],
                                 visible: "{= ${/Info/Codty} === '001' ? true : false }"
                             }).addStyleClass("search-field-group"),
                             new sap.m.HBox({
                                 items: [
-                                    this.getLabel("{i18n>LABEL_51009}", false), // 총점
-                                    new sap.m.Input({
-                                        width: "100px",
-                                        type: sap.m.InputType.Number,
-                                        maxLength: 4,
-                                        editable: false,
-                                        value: "{/Info/Ttsco}",
-                                        layoutData: new sap.m.FlexItemData({minWidth: "29.3%"})
+                                    new sap.m.VBox({
+                                        width: "50%",
+                                        items: [
+                                            this.getLabel("{i18n>LABEL_51009}", false), // 총점
+                                            new sap.m.Input({
+                                                width: "100px",
+                                                type: sap.m.InputType.Number,
+                                                maxLength: 4,
+                                                editable: false,
+                                                value: "{/Info/Ttsco}",
+                                                layoutData: new sap.m.FlexItemData({minWidth: "29.3%"})
+                                            })
+                                        ]
                                     }),
-                                    this.getLabel("W/C", true, "120px", "{= ${/Info/IsHSK} === true ? true : false }"),
-                                    new sap.m.Input({
-                                        required: true,
-                                        width: "100px",
-                                        type: sap.m.InputType.Number,
-                                        maxLength: 4,
-                                        editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
-                                        value: "{/Info/Wcsco}",
-                                        visible: "{= ${/Info/IsHSK} === true ? true : false }"
-                                    }).addStyleClass("ml-8px")
+                                    new sap.m.VBox({
+                                        width: "50%",
+                                        items: [
+                                            this.getLabel("W/C", true, "120px", "{= ${/Info/IsHSK} === true ? true : false }"),
+                                            new sap.m.Input({
+                                                required: true,
+                                                width: "100px",
+                                                type: sap.m.InputType.Number,
+                                                maxLength: 4,
+                                                editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
+                                                change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                                value: "{/Info/Wcsco}",
+                                                visible: "{= ${/Info/IsHSK} === true ? true : false }"
+                                            }).addStyleClass("ml-8px")
+                                        ]
+                                    })
                                 ],
                                 visible: "{= ${/Info/Codty} === '001' ? true : false }"
                             }).addStyleClass("search-field-group"),
