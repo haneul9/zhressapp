@@ -37,14 +37,14 @@ sap.ui.define(
                                 })
                             ]
                         }).addStyleClass("search-field-group pl-0")
-                    ]
-                    // visible: {
-                    //     path: "Auth",
-                    // 	formatter: function(v) {
-                    // 		if(v == "E" ) return false;
-                    // 		else return true;
-                    // 	}
-                    // 	        }
+                    ],
+                 //   visible: {
+                 //       path: "Auth",
+                 //   	formatter: function(v) {
+                 //   		if(v == "E" ) return false;
+                 //   		else return true;
+                 //   	}
+        	        // }
                 }).addStyleClass("search-box-mobile h-auto");
                 searchBox.setModel(oController._ListCondJSonModel);
                 searchBox.bindElement("/Data");

@@ -77,7 +77,7 @@ sap.ui.define(
 
                 var oDialog = new sap.m.Dialog({
                     contentWidth: "600px",
-                    contentHeight: "350px",
+                    contentHeight: "400px",
                     draggable: false,
                     horizontalScrolling: false,
                     content: [oMatrix],
