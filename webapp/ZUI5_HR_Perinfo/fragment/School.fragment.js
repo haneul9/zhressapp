@@ -74,13 +74,13 @@ sap.ui.define(
                                                     press: function () {
                                                         oController.onSchoolDblClick("3");
                                                     },
-                                                    // visible: {
-                                                    //     parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                    //     formatter: function (v1, v2) {
-                                                    //         if (v1 == "E" && v2 === "Y") return true;
-                                                    //         else return false;
-                                                    //     }
-                                                    // }
+                                                    visible: {
+                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
+                                                        formatter: function (v1, v2) {
+                                                            if (v1 == "E" && v2 === "Y") return true;
+                                                            else return false;
+                                                        }
+                                                    }
                                                 }).addStyleClass("button-light"),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_00102}", // 수정
