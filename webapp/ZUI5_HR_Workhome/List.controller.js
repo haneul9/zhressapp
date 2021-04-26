@@ -172,7 +172,7 @@ sap.ui.define([
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
 				
-				var row = parseInt((window.innerHeight - 400) / 37);
+				var row = parseInt((window.innerHeight - 450) / 37);
 				oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
 				
 				if(oController.Error == "E"){

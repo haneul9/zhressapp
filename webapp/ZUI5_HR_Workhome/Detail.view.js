@@ -100,7 +100,7 @@ sap.ui.jsview("ZUI5_HR_Workhome.Detail", {
 									 hAlign : "Begin",
 									 vAlign : "Middle"
 								 }).addStyleClass("p-15px")]
-					}).addStyleClass("search-box search-bg")]
+					}).addStyleClass("custom-OpenHelp-msgBox")]
 		});
 		
 		var oPanel1 = new sap.m.Panel({
