@@ -1,5 +1,6 @@
 @charset "utf-8";
 html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar-thumb {border-radius:0;}
+.sap-phone body {min-width:100%}
 
 .app-content-body {overflow-x:hidden}
 .app-content.sapMPageBgStandard,
@@ -159,6 +160,9 @@ table.search-box.search-bg {table-layout:auto !important}
 .vbox-form-mobile .sapMFlexItem .sapMTextArea,
 .vbox-form-mobile .sapMFlexItem .sapMTextArea .sapMInputBaseContentWrapper,
 .vbox-form-mobile .sapMFlexItem .sapMTextArea .sapMInputBaseInner {height:auto}
+.vbox-form-mobile .sapMTextArea.h-100,
+.vbox-form-mobile .sapMTextArea.h-100 .sapMInputBaseContentWrapper,
+.vbox-form-mobile .sapMTextArea.h-100 .sapMInputBaseInner {height:100%}
 .vbox-form-mobile .sapMText {min-height:38px; font-size:14px; color:#333; line-height:38px}
 .vbox-form-mobile .sapMText.line-height-24 {line-height:24px}
 .vbox-form-mobile .vbox-form-infotext .sapMText {line-height:normal !important; font-size:13px;padding-left:8px}

@@ -1,5 +1,5 @@
 html, body {height:100%; overflow:hidden}
-html *:not(i) {font-family:NotoSansKR !important}
+html *:not(.sapUiIcon):not(i) {font-family:NotoSansKR !important}
 body {min-width:576px; font-size:14px}
 [device="mobile"] body {min-width:100%}
 

@@ -64,11 +64,7 @@
 				itemPress: oController.onSelectedRow.bind(oController),
                 columns: [
                     new sap.m.Column ({
-                        width: "8%",
-                        hAlign: "Begin"
-                    }),
-                    new sap.m.Column ({
-                        width: "48%",
+                        width: "55%",
                         hAlign: "Begin"
                     }),
                     new sap.m.Column ({
@@ -83,33 +79,29 @@
                         counter: 5,
                         cells: [
                             new sap.m.VBox({
-                                fitContainer: true,
                                 items: [
-                                    new sap.ui.core.HTML({
-                                        content: {
-                                            parts: [{path : "Title"}, {path: "Newitem"}, {path: "Impor"}],
-                                            formatter: function(v1, v2, v3) {
-                                                if(Common.checkNull(v1)){
-                                                    return "";
-                                                }else{
-                                                    var oList = [
-                                                        v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
-                                                        v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
-                                                    ].join("");
-                                                    return oList;
+                                    new sap.m.HBox({
+                                        fitContainer: true,
+                                        items: [
+                                            new sap.ui.core.HTML({
+                                                content: {
+                                                    parts: [{path : "Title"}, {path: "Newitem"}, {path: "Impor"}],
+                                                    formatter: function(v1, v2, v3) {
+                                                        if(Common.checkNull(v1)){
+                                                            return "";
+                                                        }else{
+                                                            var oList = [
+                                                                '<span class="font14px">' + v1 + '</span>',
+                                                                v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
+                                                                v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
+                                                            ].join("");
+                                                            return oList;
+                                                        }
+                                                    }
                                                 }
-                                            }
-                                        }
-                                    })
-                                ]
-                            }),
-                            new sap.m.VBox({
-                                items: [
-                                    new sap.m.Text({ // 제목
-                                        textAlign: "Begin",
-                                        text : "{Title}"
-                                    })
-                                    .addStyleClass("L2P13Font font-14px"),
+                                            })
+                                        ]
+                                    }),
                                     new sap.m.Text({ // 등록자
                                         text: "{ApernTxt}",
                                         textAlign: "Begin"

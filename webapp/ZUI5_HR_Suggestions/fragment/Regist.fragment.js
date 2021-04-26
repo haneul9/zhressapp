@@ -93,6 +93,7 @@
                                 width: "150px",
                                 value: "{Pword}",
 								type: sap.m.InputType.Password,
+								maxLength: 10,
                                 editable: {
 									parts: [{path: "Sdate"}, {path: "/Gubun"}],
 									formatter: function(v1, v2) {
@@ -171,6 +172,7 @@
 									new sap.m.Input({
 										width: "150px",
 										value: "{Pword}",
+										maxLength: 10,
 										type: sap.m.InputType.Password
 									})
 								]

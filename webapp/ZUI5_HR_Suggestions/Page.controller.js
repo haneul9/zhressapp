@@ -272,6 +272,7 @@
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
 												width: "150px",
+												maxLength: 10,
 												value: e.Pword,
 												type: sap.m.InputType.Password
 											})
@@ -377,6 +378,7 @@
 													ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 													new sap.m.Input({
 														width: "150px",
+														maxLength: 10,
 														value: e.Pword,
 														type: sap.m.InputType.Password
 													})
@@ -463,6 +465,7 @@
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
 												width: "150px",
+												maxLength: 10,
 												type: sap.m.InputType.Password
 											})
 										]

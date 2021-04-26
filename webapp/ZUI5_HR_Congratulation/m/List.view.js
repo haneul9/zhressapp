@@ -1,18 +1,10 @@
 sap.ui.define([
 	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/PageHelper",
-	"../../common/ZHR_TABLES"
-], function (Common, Formatter, PageHelper, ZHR_TABLES) {
+	"../../common/PageHelper"
+], function (Common, PageHelper) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
-		
-		_colModel: [
-			{id: "Begda", 		label: "{i18n>LABEL_08005}" /* 신청일 */,	 plabel: "", resize: true, span: 0, type: "date",	 sort: true,  filter: true,  width: "30%"},
-			{id: "TypeTxt", 	label: "{i18n>LABEL_08006}" /* 경조유형 */,	 plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "37%"},
-			{id: "StatusText", 	label: "{i18n>LABEL_08016}" /* 처리결과 */,	 plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "auto", templateGetter: "getVisibleBotton"}
-		],
 		
 		getControllerName: function () {
 			return $.app.APP_ID;
@@ -32,7 +24,7 @@ sap.ui.define([
 							new sap.m.Label({
 								text: "{i18n>LABEL_08020}"
 							})
-							.addStyleClass("sub-title"), // 신청 현황
+							.addStyleClass("sub-title") // 신청 현황
 						]
 					}),
 					
@@ -40,35 +32,73 @@ sap.ui.define([
 						items: [
 							new sap.m.Button({
 								press: oController.onPressNew,
-								text: "{i18n>LABEL_08001}", // 신청
+								text: "{i18n>LABEL_08001}" // 신청
 							}).addStyleClass("button-light")
 						]
 					})
 					.addStyleClass("button-group")
 				]
 			})
-			.addStyleClass("info-box"); 
-			
-			var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
-				selectionMode: sap.ui.table.SelectionMode.None,
-				enableColumnReordering: false,
-				enableColumnFreeze: false,
-				enableBusyIndicator: true,
-				visibleRowCount: 10,
-				showOverlay: false,
-				showNoData: true,
-			    width: "auto",
-				rowHeight: 45,
-				columnHeaderHeight: 46,   
-				noData: "{i18n>LABEL_00901}"
-			})
-			.addStyleClass("mt-8px")
-			.setModel(oController.TableModel)
-			.bindRows("/Data")
-			.attachCellClick(oController.onSelectedRow);
-			
-			ZHR_TABLES.makeColumn(oController, oTable, this._colModel);
-			
+			.addStyleClass("info-box");
+
+			var oTable = new sap.m.Table({
+                inset: false,
+				rememberSelections: false,
+				noDataText: "{i18n>LABEL_00901}",
+				growing: true,
+				growingThreshold: 5,
+				mode: sap.m.ListMode.SingleSelectMaster,
+				itemPress: oController.onSelectedRow.bind(oController),
+                columns: [
+                    new sap.m.Column ({
+                        width: "50%",
+                        hAlign: "Begin"
+                    }),
+                    new sap.m.Column ({
+                        width: "auto",
+                        hAlign: "Begin"
+                    })
+                ],
+                items: {
+                    path: "/Data",
+                    template: new sap.m.ColumnListItem({
+                        type: sap.m.ListType.Active,
+                        counter: 5,
+                        cells: [
+                            new sap.m.VBox({
+                                items: [
+                                    new sap.m.Text({ // 신청일
+                                        textAlign: "Begin",
+                                        text : {
+                                            path : "Begda",
+                                            formatter : function(v){
+                                                return v ? Common.DateFormatter(v) : "";
+                                            }
+                                        }
+                                    })
+                                    .addStyleClass("L2P13Font font-14px")
+                                ]
+                            }),
+                            new sap.m.VBox({
+                                items: [
+                                    new sap.m.Text({
+                                        text: "{TypeTxt}",
+                                        textAlign: "Begin"
+                                    })
+                                    .addStyleClass("L2P13Font font-14px"),
+                                    new sap.m.Text({
+                                        text: "{StatusText}",
+                                        textAlign: "Begin"
+                                    })
+                                    .addStyleClass("L2P13Font font-14px")
+                                ]
+                            })
+                        ]
+                    })
+                }
+            })
+            .setModel(oController.TableModel);
+						
 			return new PageHelper({
 				contentContainerStyleClass: "app-content-container-mobile",
 				contentItems: [

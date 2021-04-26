@@ -30,7 +30,7 @@ sap.ui.define([
 									return false;
 								}
 							}
-						}).addStyleClass("button-light app-nav-button-right"),
+						}).addStyleClass("button-light"),
 						new sap.m.Button({
 							press: $.proxy(oController.onPressApply, oController),
 							text: "{i18n>LABEL_08001}", // 신청
@@ -41,9 +41,20 @@ sap.ui.define([
 									return false;
 								}
 							}
-						}).addStyleClass("button-dark app-nav-button-right")
+						}).addStyleClass("button-dark"),
+						new sap.m.Button({
+                            press: oController.onDialogDelBtn.bind(oController),
+                            text: "{i18n>LABEL_08003}", // 삭제
+                            visible: {
+                                path: "Status",
+                                formatter: function (v) {
+                                    if (v === "AA") return true;
+                                    return false;
+                                }
+                            }
+                        }).addStyleClass("button-light")
 					]
-				})
+				}).addStyleClass("app-nav-button-right")
 				.setModel(oController.DetailModel)
 				.bindElement("/FormData"),
 				contentStyleClass: "sub-app-content",
