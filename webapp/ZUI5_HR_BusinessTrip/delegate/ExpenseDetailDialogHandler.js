@@ -153,7 +153,9 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+
+							this.oModel.setProperty("/CategorySelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -192,7 +194,10 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+
+							this.oModel.setProperty("/TaxSelectList11", []);
+							this.oModel.setProperty("/TaxMap11", {});
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -231,7 +236,10 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+
+							this.oModel.setProperty("/TaxSelectList15", []);
+							this.oModel.setProperty("/TaxMap15", {});
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -270,7 +278,10 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+
+							this.oModel.setProperty("/TaxSelectList21", []);
+							this.oModel.setProperty("/TaxMap21", {});
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -309,27 +320,30 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+
+							this.oModel.setProperty("/TaxSelectList25", []);
+							this.oModel.setProperty("/TaxMap25", {});
+						}.bind(this)
 					}
 				);
-			}.bind(this)),
-			Common.encryptByJava({
-				input: this.getParentModelProperty("/Header/Pernr"),
-				success: function(GisUser) {
+			}.bind(this))
+			// Common.encryptByJava({
+			// 	input: this.getParentModelProperty("/Header/Pernr"),
+			// 	success: function(GisUser) {
 
-					var protocol = document.location.protocol,
-					p = {
-						protocol: protocol,
-						domain: "gis",
-						port: protocol === "https:" ? "7002" : "7001"
-					},
-					GisParams = $.param({ callScrCls: "c3", hi: "N", checkone: "1", isCallBack: "Y", user_id: GisUser }),
-						GisUrl = "${protocol}//${domain}.lottechem.com:${port}/sdsgis/proxy_caller.jsp?uri=${protocol}//${domain}SBL0zHYazX9BnhspgEE4TQ==SBL0zHYazX9BnhspgEE4TQ==.lottechem.com:${port}/sdsgis/EP_gisMap.jsp?" + GisParams;
+			// 		var protocol = document.location.protocol,
+			// 		p = {
+			// 			protocol: protocol,
+			// 			domain: "gis",
+			// 			port: protocol === "https:" ? "7002" : "7001"
+			// 		},
+			// 		GisParams = $.param({ callScrCls: "c3", hi: "N", checkone: "1", isCallBack: "Y", user_id: GisUser }),
+			// 			GisUrl = "${protocol}//${domain}.lottechem.com:${port}/sdsgis/proxy_caller.jsp?uri=${protocol}//${domain}SBL0zHYazX9BnhspgEE4TQ==SBL0zHYazX9BnhspgEE4TQ==.lottechem.com:${port}/sdsgis/EP_gisMap.jsp?" + GisParams;
 
-					this.oModel.setProperty("/GisUser", GisUser);
-					this.oModel.setProperty("/GisUrl", GisUrl.replace(/\$\{protocol\}/g, p.protocol).replace(/\$\{domain\}/g, p.domain).replace(/\$\{port\}/g, p.port));
-				}.bind(this)
-			})
+			// 		this.oModel.setProperty("/GisUser", GisUser);
+			// 		this.oModel.setProperty("/GisUrl", GisUrl.replace(/\$\{protocol\}/g, p.protocol).replace(/\$\{domain\}/g, p.domain).replace(/\$\{port\}/g, p.port));
+			// 	}.bind(this)
+			// })
 		]);
 	},
 
@@ -521,11 +535,15 @@ var Handler = {
 						if (userEvent || !this.oModel.getProperty("/ExpenseDetail/Subcategory")) {
 							this.oModel.setProperty("/ExpenseDetail/Subcategory", this.oModel.getProperty("/SubcategorySelectList/0/Code") || "");
 						}
-						this.changeSubcategory.call(this);
+						this.changeSubcategory();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
-					}
+
+						this.oModel.setProperty("/SubcategorySelectList", []);
+						this.oModel.setProperty("/ExpenseDetail/Subcategory", "");
+						this.changeSubcategory();
+					}.bind(this)
 				}
 			);
 		}.bind(this), 0);
@@ -598,7 +616,7 @@ var Handler = {
 				}
 
 				if (Subcategory === "09") {
-					this.retrieveFuelList.call(this);
+					this.retrieveFuelList();
 				}
 			} else {
 				this.oModel.setProperty("/GasTypeSelectList", []);
@@ -942,7 +960,7 @@ var Handler = {
 		var Budat = Common.adjustGMTOdataFormat(this.getParentModelProperty("/Header/Budat")); // 전기일
 
 		Promise.all([
-			Common.getPromise(true, function(resolve, reject) {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 소유 차종의 연료종류 코드 목록 조회
 					"/BtSettlementSet",
 					{
@@ -965,16 +983,16 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-
+							
 							this.oModel.setProperty("/OwnCarGasTypeList", []);
 							this.oModel.setProperty("/OwnCarGasTypeDefault", "");
 
-							reject();
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(true, function(resolve, reject) {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 연료종류 코드 목록 조회
 					"/BtBaseSet",
 					{
@@ -998,9 +1016,12 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
+							
+							this.oModel.setProperty("/GasTypeMap", {});
+							this.oModel.setProperty("/GasTypeSelectList", []);
 
-							reject();
-						}
+							resolve();
+						}.bind(this)
 					}
 				);
 			}.bind(this))
