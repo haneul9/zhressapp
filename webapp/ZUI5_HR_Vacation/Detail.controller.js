@@ -492,6 +492,9 @@ sap.ui.define([
 				oController._DetailJSonModel.setProperty("/Data/Holyt", "");
 				// 대근신청 비활성화
 				oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
+				// 근태시간 초기화
+				oController._DetailJSonModel.setProperty("/Data/Beguz", "");
+				oController._DetailJSonModel.setProperty("/Data/Enduz", "");
 			}
 			
 			if(oController._DetailJSonModel.getProperty("/Data/Awart")){
@@ -1117,6 +1120,9 @@ sap.ui.define([
 						return;
 					} else if(oData.Halfc == "H" && !oData.Half){
 						sap.m.MessageBox.error(oBundleText.getText("MSG_48008")); // 오전/오후 구분을 선택하여 주십시오.
+						return;
+					} else if(oData.Halfc == "X" && (oData.Beguz == "" || oData.Enduz == "")){
+						sap.m.MessageBox.error(oBundleText.getText("MSG_48024")); // 근태시간을 입력하여 주십시오.
 						return;
 					} else if(!oData.Begda || !oData.Endda){
 						sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
