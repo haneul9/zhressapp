@@ -13,9 +13,8 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 		$.app.setModel("ZHR_COMMON_SRV");
 		$.app.setModel("ZHR_FLEX_TIME_SRV");
 		
-		var oCalendar = new sap.ui.layout.VerticalLayout({
-			width : "100%",
-			content : [new sap.m.Toolbar({
+		var oCalendar = new sap.m.VBox({
+			items : [new sap.m.Toolbar({
 						   height : "40px",
 						   content : [new sap.m.Button({
 									   	  type : "Transparent",
@@ -44,7 +43,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 										  tooltip : " "
 									  })]
 					   }).addStyleClass("toolbarNoBottomLine"),
-					   new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar")]
+					   new sap.m.VBox(oController.PAGEID + "_Calendar")]
 		});
 		
 		// 휴가쿼터 현황
@@ -71,20 +70,24 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
                     type: sap.m.ListType.Active,
                     counter: 5,
                     cells: [
-                        new sap.m.Text({ // 쿼터명
-                            textAlign: "Begin",
-                            text: "{Ktext}"
+                        new sap.m.VBox({
+                        	items : [new sap.m.Text({ // 쿼터명
+			                             textAlign: "Begin",
+			                             text: "{Ktext}"
+			                         })]
                         }),
-                        new sap.m.Text({ // 발생/사용/잔여
-                            textAlign: "Begin",
-                            text: {
-                            	parts : [{path : "Crecnt"}, {path : "Usecnt"}, {path : "Balcnt"}],
-                            	formatter : function(fVal1, fVal2, fVal3){
-                            		return  oBundleText.getText("LABEL_69023") + " " + parseFloat(fVal1) + " / " +
-                            				oBundleText.getText("LABEL_69024") + " " + parseFloat(fVal2) + " / " +
-                            				oBundleText.getText("LABEL_69025") + " " + parseFloat(fVal3)
-                            	}
-                            }
+                        new sap.m.VBox({
+                        	items : [new sap.m.Text({ // 발생/사용/잔여
+			                             textAlign: "Begin",
+			                             text: {
+			                            	parts : [{path : "Crecnt"}, {path : "Usecnt"}, {path : "Balcnt"}],
+			                            	formatter : function(fVal1, fVal2, fVal3){
+			                            		return  oBundleText.getText("LABEL_69023") + " " + parseFloat(fVal1) + " / " +
+			                            				oBundleText.getText("LABEL_69024") + " " + parseFloat(fVal2) + " / " +
+			                            				oBundleText.getText("LABEL_69025") + " " + parseFloat(fVal3)
+			                            	}
+			                             }
+			                         })]
                         })
                     ]
                 })
@@ -95,12 +98,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
         
         var oLayout1 = new sap.m.VBox({
 			fitContainer: true,
-			items: [new sap.m.Label({
-	                    text: oBundleText.getText("LABEL_69020"), // 휴가쿼터 현황
-	                    design: "Bold"
-	                }).addStyleClass("sub-title"),
+			items: [new sap.m.FlexBox({
+						items : [new sap.m.Label({
+				                     text: oBundleText.getText("LABEL_69020"), // 휴가쿼터 현황
+				                     design: "Bold"
+				                 }).addStyleClass("sub-title")]
+					}).addStyleClass("info-box"),
 	                oTable1]
-        }).addStyleClass("pt-10px");
+        });
         
         // 근태수당 현황
         var oTable2 = new sap.m.Table(oController.PAGEID + "_Table2", {
@@ -125,13 +130,17 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
                     type: sap.m.ListType.Active,
                     counter: 5,
                     cells: [
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            text: "{Text}"
+                    	new sap.m.VBox({
+                        	items : [new sap.m.Text({
+			                             textAlign: "Begin",
+			                             text: "{Text}"
+			                         })]
                         }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            text: "{Value}"
+                        new sap.m.VBox({
+                        	items : [new sap.m.Text({
+			                             textAlign: "Begin",
+			                             text: "{Value}"
+			                         })]
                         })
                     ]
                 })
@@ -142,12 +151,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
         
         var oLayout2 = new sap.m.VBox({
 			fitContainer: true,
-			items: [new sap.m.Label({
-	                    text: oBundleText.getText("LABEL_69021"), // 근태수당 현황
-	                    design: "Bold"
-	                }).addStyleClass("sub-title"),
+			items: [new sap.m.FlexBox({
+						items : [new sap.m.Label({
+				                     text: oBundleText.getText("LABEL_69021"), // 근태수당 현황
+				                     design: "Bold"
+				                 }).addStyleClass("sub-title")]
+					}).addStyleClass("info-box"),
 	                oTable2]
-        }).addStyleClass("pt-10px");
+        });
         
         // 자율출퇴근 현황
 		 var oTable3 = new sap.m.Table(oController.PAGEID + "_Table3", {
@@ -172,13 +183,17 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
                     type: sap.m.ListType.Active,
                     counter: 5,
                     cells: [
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            text: "{Text}"
+                    	new sap.m.VBox({
+                        	items : [new sap.m.Text({
+			                             textAlign: "Begin",
+			                             text: "{Text}"
+			                         })]
                         }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            text: "{Value}"
+                        new sap.m.VBox({
+                        	items : [new sap.m.Text({
+			                             textAlign: "Begin",
+			                             text: "{Value}"
+			                         })]
                         })
                     ]
                 })
@@ -189,19 +204,21 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
         
         var oLayout3 = new sap.m.VBox({
 			fitContainer: true,
-			items: [new sap.m.Label({
-	                    text: oBundleText.getText("LABEL_69022"), // 자율출퇴근 현황
-	                    design: "Bold"
-	                }).addStyleClass("sub-title"),
+			items: [new sap.m.FlexBox({
+						items : [new sap.m.Label({
+				                     text: oBundleText.getText("LABEL_69022"), // 자율출퇴근 현황
+				                     design: "Bold"
+				                 }).addStyleClass("sub-title")]
+					}).addStyleClass("info-box"),
 	                oTable3]
-        }).addStyleClass("pt-10px");
+        });
         
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,
 						contentContainerStyleClass: "app-content-container-mobile",
 			            contentItems: [new sap.m.VBox({
 							               items : [oCalendar, oLayout1, oLayout2, oLayout3]
-							           })]
+							           }).addStyleClass("vbox-form-mobile")]
 			        });
 			
 		oPage.setModel(oController._ListCondJSonModel);

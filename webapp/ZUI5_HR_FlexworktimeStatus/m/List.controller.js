@@ -90,8 +90,8 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			var oCalendar = sap.ui.getCore().byId(oController.PAGEID + "_Calendar");
-				oCalendar.destroyContent();
-				oCalendar.addContent(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", oController));
+				oCalendar.destroyItems();
+				oCalendar.addItem(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", oController));
 			
 			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
 			var oJSONModel1 = oTable1.getModel();
@@ -152,7 +152,7 @@ sap.ui.define([
 									}
 									
 									if(oControl){
-										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px");
+										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px calendar-text");
 										
 										if(data1[i].Offyn == "X"){
 											title.addStyleClass("color-info-red");
@@ -175,7 +175,7 @@ sap.ui.define([
 																		  	  	   content : [new sap.m.Text({
 																					  	  		  text : (data1[i].Offyn == "X" ? "OFF" : 
 																					  	  					data1[i].Beguz == "" ? "" : (data1[i].Beguz.substring(0,2) + ":" + data1[i].Beguz.substring(2,4)))
-																					  	  	  }).addStyleClass("font-11px")],
+																					  	  	  }).addStyleClass("font-11px calendar-text")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
@@ -186,7 +186,7 @@ sap.ui.define([
 																		  	  	   content : [new sap.m.Text({
 																					  	  		  text : (data1[i].Offyn == "X" ? "" : 
 																					  	  					data1[i].Enduz == "" ? "" : (data1[i].Enduz.substring(0,2) + ":" + data1[i].Enduz.substring(2,4)))
-																					  	  	  }).addStyleClass("font-11px")],
+																					  	  	  }).addStyleClass("font-11px calendar-text")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
@@ -199,7 +199,7 @@ sap.ui.define([
 																					  	  	   	  width : "100%",
 																					  	  	   	  textAlign : "Center",
 																					  	  	   	  maxLines : 1
-																				  	  	      }).addStyleClass("font-11px FontWhite calendar-background-atext")],
+																				  	  	      }).addStyleClass("font-11px FontWhite calendar-background-atext calendar-text")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
