@@ -26,7 +26,7 @@ ZUI5_HR_MssMboEval.fragment.content02={
 			oLabels.push({Label:"LABEL_360"+i,rowspan:1,colspan:2});
 		}
 		for(var i=2;i<=5;i++){
-			i!=3?oLabels.push({Label:"LABEL_3605"+i,rowspan:1,colspan:1}):
+			i!=4?oLabels.push({Label:"LABEL_3605"+i,rowspan:1,colspan:1}):
 			oLabels.push({Label:"LABEL_36072",rowspan:1,colspan:1});
 		}
 		oLabels.push({Label:"LABEL_36053",rowspan:1,colspan:1});
