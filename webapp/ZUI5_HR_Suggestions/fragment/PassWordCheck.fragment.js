@@ -13,6 +13,7 @@
                     ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "130px", "Right", true), // 비밀번호
                     new sap.m.Input({
                         width: "200px",
+						maxLength: 10,
                         value: "{PassWord}",
                         type: sap.m.InputType.Password
                     })

@@ -87,7 +87,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EnameList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -110,7 +111,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/BtPurpose1SelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -133,7 +135,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EncardSelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this))
@@ -872,9 +875,6 @@ var Handler = {
 	},
 
 	onShow : function(oPro,vSig){
-		if(vSig!="V"){
-			sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19042"));
-		}
 		this._Hando="";
 		var jModel=this.oModel;
 		var oController=$.app.getController();
@@ -1096,6 +1096,11 @@ var Handler = {
 			this.onSearchDG.call(this,dArr,vSig);
 		}
 		this._dArr=dArr;
+		if(dArr.length!=0){
+			if(vSig!="V"){
+				sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19042"));
+			}
+		}
 	},
 
 	afterTable : function(oDatas){

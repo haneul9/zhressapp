@@ -48,13 +48,6 @@ sap.ui.jsview($.app.APP_ID, { // 출장 신청/정산
 		.addStyleClass("tab-group mt-26px");
 
 		return new PageHelper({
-			contentHeaderRight: [
-				new sap.m.Button({
-					type: sap.m.ButtonType.Default,
-					text: oController.getBundleText("LABEL_00133") // 닫기
-				})
-				.addStyleClass("button-default")
-			],
 			contentItems: [tabBox]
 		});
 	}

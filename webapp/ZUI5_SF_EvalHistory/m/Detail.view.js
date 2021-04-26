@@ -10,6 +10,18 @@ sap.ui.define([
         getControllerName: function () {
 			return SUB_APP_ID;
         },
+
+        getInputBox : function(oController){
+            return new sap.m.VBox({
+				items: [
+                    new sap.m.VBox({
+                        items:[
+                            new sap.ui.commons.layout.MatrixLayout(oController.PAGEID+"_Mat",{columns:2})
+                        ]
+                    })                
+                ]
+            }).addStyleClass("vbox-form-mobile");
+        },
         
         createContent: function(oController) {
 
@@ -21,7 +33,7 @@ sap.ui.define([
                 contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
                 contentItems: [
-                    // this.getInputBox(oController)
+                     this.getInputBox(oController)
                 ]
             })
             .setModel(oController.oModel);

@@ -24,9 +24,10 @@ sap.ui.define(
 			},
 
 			onBeforeShow: function (oEvent) {
+				console.log(oEvent.data);
 				if (oEvent) {
 					this.oModel.setProperty("/Appye", oEvent.data.Appye);
-
+					this.oModel.setProperty("/Pernr", oEvent.data.Pernr);
 					this.load();
 				}
 			},
@@ -47,7 +48,6 @@ sap.ui.define(
 
 			load: function() {
 				BusyIndicator.show(0);
-
 				Promise.all([
 					Common.getPromise(
 						function () {
@@ -57,6 +57,7 @@ sap.ui.define(
 									IConType: "3",
 									IAppye: this.oModel.getProperty("/Appye"),
 									IEmpid: this.getSessionInfoByKey("Pernr"),
+									NoCheckPeriod:"X",
 									TableIn2: []
 								},
 								{
@@ -80,12 +81,14 @@ sap.ui.define(
 									IConType: "2",
 									IAppye: this.oModel.getProperty("/Appye"),
 									IEmpid: this.getSessionInfoByKey("Pernr"),
+									NoCheckPeriod:"X",
 									TableIn: []
 								},
 								{
 									success: function (data) {
 										if (data.TableIn) {
 											this.oModel.setProperty("/TableIn", data.TableIn.results);
+											this.renderHeader.call(this);
 										}
 									}.bind(this),
 									error: function (res) {
@@ -103,6 +106,152 @@ sap.ui.define(
 					)
 				]).then(function () {
 					BusyIndicator.hide();
+				});
+			},
+
+			renderHeader : function(){
+				var l=sap.ui.commons.layout;
+				var oRow,oCell,oMat=$.app.byId(this.PAGEID+"_Mat"),HBox;
+				var oArr=new Array();
+				console.log(this.oModel.getProperty("/TableIn"));
+				var oData=this.oModel.getProperty("/TableIn")[0];
+				var oData2=this.oModel.getProperty("/TableIn2")[0];		
+				oMat.removeAllRows();
+				
+				if(oData.Evstatustx!=""){
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07312")
+							}),
+							new sap.m.Text({
+								text:"{Evstaustx}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData.Appye!=""){
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07313")
+							}),
+							new sap.m.Text({
+								text:"{Appye}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn01=="X"){ //업적
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07314")
+							}),
+							new sap.m.Text({
+								text:"{Pepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn02=="X"){ //역량
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07315")
+							}),
+							new sap.m.Text({
+								text:"{Cepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn03=="X"){ //다면
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07316")
+							}),
+							new sap.m.Text({
+								text:"{Mepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn04=="X"){ //1차
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07317")
+							}),
+							new sap.m.Text({
+								text:"{Mepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn05=="X"){ //2차
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07318")
+							}),
+							new sap.m.Text({
+								text:"{Mepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn06=="X"){ //종합
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07319")
+							}),
+							new sap.m.Text({
+								text:"{Mepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn07=="X"){ //업적1차
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07324")
+							}),
+							new sap.m.Text({
+								text:"{Mepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				if(oData2.Btn08=="X"){ //역량1차
+					HBox=new sap.m.HBox({
+						items : [
+							new sap.m.Label({
+								text:this.getBundleText("LABEL_07325")
+							}),
+							new sap.m.Text({
+								text:"{Mepnt}"
+							})
+						]
+					});
+					oArr.push(HBox);
+				}
+				oArr.forEach(function(e,i){
+					if(i%2==0){
+						
+					}
 				});
 			},
 

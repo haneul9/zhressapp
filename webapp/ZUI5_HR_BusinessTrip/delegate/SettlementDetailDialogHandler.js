@@ -1,4 +1,4 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
 	"common/Common",
 	"common/moment-with-locales",
@@ -85,7 +85,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EnameList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -108,7 +109,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/BtPurpose1SelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this))

@@ -160,7 +160,9 @@
 										items: [
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
-												width: "100px",
+												width: "100%",
+												maxLength: 10,
+												layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 												value: e.Pword,
 												type: sap.m.InputType.Password
 											})
@@ -221,11 +223,14 @@
 										visible: false
 									}),
 									new sap.m.TextArea({ 
-										width: "375px",
+										width: "100%",
 										value: e.Detail,
+										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 										growing: true,
+										// height: "100px",
 										editable: false
 									})
+									.addStyleClass("h-100")
 								]
 							}),
 							new sap.m.VBox({
@@ -236,6 +241,7 @@
 							.addStyleClass("ml-20px")
 						]
 					})
+					.addStyleClass("mt-5px")
 				);
 				oController.setSubComments(e, i);
 			});
@@ -271,7 +277,9 @@
 												items: [
 													ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 													new sap.m.Input({
-														width: "100px",
+														width: "100%",
+														layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+														maxLength: 10,
 														value: e.Pword,
 														type: sap.m.InputType.Password
 													})
@@ -320,8 +328,9 @@
 										fitContainer: true,
 										items: [
 											new sap.m.TextArea({ 
-												width: "355px",
+												width: "100%",
 												value: e.Detail,
+												layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 												growing: true,
 												editable: false
 											}),
@@ -331,6 +340,7 @@
 											}),
 											new sap.m.Text({ 
 												text: e.Seqnr3,
+												layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 												visible: false
 											})
 										]
@@ -356,7 +366,9 @@
 										items: [
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
-												width: "100px",
+												width: "100%",
+												layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+												maxLength: 10,
 												type: sap.m.InputType.Password
 											})
 										]
@@ -399,7 +411,8 @@
 								fitContainer: true,
 								items: [
 									new sap.m.TextArea({ 
-										width: "355px",
+										width: "100%",
+										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 										growing: true
 									}),
 									new sap.m.Text({ 
