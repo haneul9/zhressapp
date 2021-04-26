@@ -18,9 +18,9 @@ sap.ui.define([
 			createContent: function (oController) {
 			var oRow,oCell,oMat,c=sap.ui.commons;
 			for(var i=17;i<56;i++) { 
-				window["oLabel"+(i-17)] = oController.getTxt("LABEL_470"+i,i);
+				window["oLabel"+(i-17)] = oController.getTxtMobiles("LABEL_470"+i,i);
 			}
-			var oLabel39=oController.getTxt("LABEL_47087",56);
+			var oLabel39=oController.getTxtMobiles("LABEL_47087",56);
 			var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{PatiName}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
 						formatter:function(fVal,fVal2){
 							if(fVal2==""){
@@ -215,7 +215,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
 			+oController.getBundleText("LABEL_47102")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -257,7 +257,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
 			+oController.getBundleText("LABEL_47103")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -266,7 +266,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47119")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47119")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp3",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znijcm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -280,7 +280,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47120")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47120")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp4",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zniiwm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -294,7 +294,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47121")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47121")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp5",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znisdm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -308,7 +308,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47122")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47122")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp6",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znoctm}",editable:{parts:[{path:"Close"},{path:"Status"}],
         formatter:function(fVal,fVal2){
@@ -322,7 +322,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47123")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47123")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp7",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znomrm}",editable:{parts:[{path:"Close"},{path:"Status"}],
 					formatter:function(fVal,fVal2){
@@ -336,7 +336,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47124")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47124")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp8",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znocum}",editable:{parts:[{path:"Close"},{path:"Status"}],
 					formatter:function(fVal,fVal2){
@@ -350,7 +350,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47125")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47125")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input(oController.PAGEID+"_Inp9",{width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znobcm}",editable:{parts:[{path:"Close"},{path:"Status"}],
 					formatter:function(fVal,fVal2){
@@ -372,7 +372,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47118")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47118")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zdsctm}",editable:{parts:[{path:"Close"},{path:"Status"}],
 			formatter:function(fVal,fVal2){
@@ -465,7 +465,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
 			+oController.getBundleText("LABEL_47104")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -475,21 +475,21 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47107")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47107")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"001")});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47105")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47105")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"002")});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47106")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47106")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"009")});
 			oRow.addCell(oCell);
@@ -647,7 +647,7 @@ sap.ui.define([
 
 			// var oPanel2 = new sap.m.Panel({
 			// 	headerToolbar : [new sap.m.Toolbar({content:[new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
-			//                     new sap.m.ToolbarSpacer({width:"20px"}),new sap.ui.core.HTML({content:"<span style='font-size:13px;color:red;'>"+oBundleText.getText("LABEL_47029")+"</span>"})]})],
+			//                     new sap.m.ToolbarSpacer({width:"14px"}),new sap.ui.core.HTML({content:"<span style='font-size:13px;color:red;'>"+oBundleText.getText("LABEL_47029")+"</span>"})]})],
 			// 	expanded:true,
 			// 	expandable:false,
 			// 	content:[oMat2,new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),oMat3]

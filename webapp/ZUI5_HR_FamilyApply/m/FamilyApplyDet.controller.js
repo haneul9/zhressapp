@@ -70,6 +70,12 @@ sap.ui.define([
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
 		},
 
+		getMobileTxt:function(vTxt,vNo){  
+			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
+			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?new sap.m.Label({required:true,text:oController.getBundleText(vTxt)}):
+			new sap.m.Label({required:false,text:oController.getBundleText(vTxt)});
+		},
+
 		initTdata:function(){
 			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
 			oController._tData={

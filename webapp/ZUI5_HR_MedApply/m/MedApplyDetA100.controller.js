@@ -309,6 +309,13 @@ sap.ui.define([
 			return new sap.ui.core.HTML({content:oTxt});
 		},
 
+		getTxtMobiles:function(vTxt,vNo){
+			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController();
+			return vNo<=23||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
+			vNo==89?new sap.m.Label({required:true,text:oController.getBundleText(vTxt)}):
+			new sap.m.Label({required:false,text:oController.getBundleText(vTxt)});
+		},
+
 		onClose:function(){
 			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController();
 			if(oController.oDialog.isOpen()){
