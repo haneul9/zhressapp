@@ -849,9 +849,11 @@ var OnRequest = { // 출장 event handler
 	
 	// 신청 확인
 	pressRequest: function() {
-		if(this.RequestDetailDialogHandler._Hando==""){
-			sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19039"));
-			return;
+		if($.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData").length!=0){
+			if(this.RequestDetailDialogHandler._Hando==""){
+				sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19039"));
+				return;
+			}
 		}
 		Common.log("OnRequest.pressRequest");
 
