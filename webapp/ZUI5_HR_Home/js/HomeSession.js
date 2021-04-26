@@ -47,16 +47,10 @@ init: function(callback) {
 		]);
 	}.bind(this))
 	.then(function() {
-		if (this._gateway.parameter('mfa-test') === 'true') {
-			if (typeof HomeMFA === 'function') {
-				new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
-			} else {
-				throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
-			}
+		if (typeof HomeMFA === 'function') {
+			new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
 		} else {
-			if (typeof callback === 'function') {
-				callback();
-			}
+			throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
 		}
 	}.bind(this))
 	.catch(function(e) {
@@ -489,35 +483,50 @@ confirmADPW: function(o) {
 					adpw.siblings('.value-required').hide();
 				}
 
-				if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
-					setTimeout(function() {
-						this._gateway.confirm('hide');
-					}.bind(this), 0);
+				setTimeout(function() {
+					this.authenticateADAccount(pw)
+						.then(function() {
+							setTimeout(function() {
+								this._gateway.confirm('hide');
+							}.bind(this), 0);
 
-					o.confirm();
-				} else {
-					setTimeout(function() {
-						this.authenticateADAccount(pw)
-							.then(function() {
-								setTimeout(function () {
-									this._gateway.confirm('hide');
-								}.bind(this), 0);
+							o.confirm();
+						}.bind(this))
+						.catch(function(jqXHR) {
+							var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
 
-								o.confirm();
-							}.bind(this))
-							.catch(function(jqXHR) {
-								var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
-
-								adpw.siblings('.value-invalid').text(errorMessage).show();
-							}.bind(this));
-					}.bind(this), 0);
-				}
+							adpw.siblings('.value-invalid').text(errorMessage).show();
+						}.bind(this));
+				}.bind(this), 0);
 			}.bind(this), 0);
 		}.bind(this),
 		cancel: o.cancel
 	};
 
 	this._gateway.confirm(options);
+},
+
+s4hanaLog: function(pernr) {
+
+	var url = 'ZHR_COMMON_SRV/SaveConnEhrLogSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			TableIn: [{
+				Usrid: sessionStorage.getItem('ehr.odata.user.percod'),
+				Menid: this._gateway.parameter('mid'),
+				Pernr: pernr,
+				Mobile: this._gateway.isMobile() ? 'X' : ''
+			}]
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeSession.s4hanaLog ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.s4hanaLog ' + url);
+		}.bind(this)
+	});
 }
 
 });

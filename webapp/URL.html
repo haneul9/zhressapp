@@ -142,8 +142,8 @@ $(document).on('click', 'a', function(e) {
             .replace(/\$\{serverNumber\}/g, developers[$('#developers option:selected').index()].server)
             .replace(/\$\{originPath\}/g, developers[$('#developers option:selected').index()].originpath);
     url = /\/sf\//.test(url) ? url : (url + pernr);
-    url += $('#mfa').prop('checked') ? ((/\?/.test(url) ? '&' : '?') + 'mfa=true') : '';
-    url += $('#mfa-test').prop('checked') ? ((/\?/.test(url) ? '&' : '?') + 'mfa-test=true') : '';
+    url += $('#mfa-bypass').prop('checked') ? ((/\?/.test(url) ? '&' : '?') + 'xptmxmwhagkrpTtmqslek=true') : '';
+    url += $('#mfa-force').prop('checked') ? ((/\?/.test(url) ? '&' : '?') + 'dlswmddlvlfdygkqslek=true') : '';
 
     if (!$('#checkbox').prop('checked')) {
         anchor.attr('href', url);
@@ -182,8 +182,8 @@ $(document).on('click', 'input[type="text"]', function(e) {
 </div>
 <div class="d-flex align-items-center m-3">
     <label class="mb-0 text-right" style="width:70px">대상자 사번</label> <input type="text" id="pernr" style="width:114px" />
-    <label class="mb-0 text-right" style="margin-left:50px" for="mfa">2FA Bypass(DEV: 1, QAS: 2)</label> <input type="checkbox" id="mfa" />
-    <label class="mb-0 text-right" style="margin-left:50px" for="mfa-test">2FA Test</label> <input type="checkbox" id="mfa-test" />
+    <label class="mb-0 text-right" style="margin-left:50px" for="mfa-bypass">2FA Bypass(DEV: 1, QAS: 2)</label> <input type="checkbox" id="mfa-bypass" />
+    <label class="mb-0 text-right" style="margin-left:50px" for="mfa-force">2FA Test</label> <input type="checkbox" id="mfa-force" />
 </div>
 <div class="d-flex m-3">
 <table>

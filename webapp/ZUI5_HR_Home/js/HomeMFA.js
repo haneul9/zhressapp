@@ -26,14 +26,22 @@ check: function(callback) {
 		this.isTargetPernr()	// MFA 대상 사번인지 확인
 	])
 	.then(function() {
-		if (this.targetIP && this.targetPernr) {
-			if (this._gateway.isLOCAL()) {
-				this.callback();
-			} else {
-				this.confirm();
-			}
+		if (this._gateway.parameter('dlswmddlvlfdygkqslek') === 'true') {
+			this.confirm();
 		} else {
-			this.callback();
+			if (this._gateway.parameter('xptmxmwhagkrpTtmqslek') !== 'true') {
+				if (this.targetIP && this.targetPernr) {
+					this.confirm();
+				} else {
+					if (typeof callback === 'function') {
+						this.callback();
+					}
+				}
+			} else {
+				if (typeof callback === 'function') {
+					this.callback();
+				}
+			}
 		}
 	}.bind(this))
 	.catch(function(e) {
@@ -183,11 +191,9 @@ requestCode: function(type) {
 	}
 
 	setTimeout(function() {
-		if (this._gateway.parameter('mfa') === 'true' && type === this.CODE.CONFIRM) {
-			if ((this._gateway.isDEV() && code === '1') || (this._gateway.isQAS() && code === '2')) {
-				this.done();
-				return;
-			}
+		if (type === this.CODE.CONFIRM && ((this._gateway.isDEV() && code === '1') || (this._gateway.isQAS() && code === '2'))) {
+			this.done();
+			return;
 		}
 
 		var url = 'ZHR_COMMON_SRV/TwoFactorAuthNumberSet';
