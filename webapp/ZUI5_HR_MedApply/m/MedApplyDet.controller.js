@@ -445,8 +445,10 @@ sap.ui.define([
 			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
 			var oSel2 = $.app.byId(oController.PAGEID+"_dSel2");
 			if(oSel2.getSelectedKey()=="05"){
-				$.app.byId(oController.PAGEID+"_Inp1").setEditable(true);			
-				$.app.byId(oController.PAGEID+"_Inp2").setEditable(true);
+				$.app.byId(oController.PAGEID+"_Inp1").setEditable(false);	
+				$.app.byId(oController.PAGEID+"_Inp1").setValue("0");		
+				$.app.byId(oController.PAGEID+"_Inp2").setEditable(false);
+				$.app.byId(oController.PAGEID+"_Inp2").setValue("0");
 				$.app.byId(oController.PAGEID+"_Inp3").setEditable(false);
 				$.app.byId(oController.PAGEID+"_Inp3").setValue("0");
 				$.app.byId(oController.PAGEID+"_Inp4").setEditable(false);

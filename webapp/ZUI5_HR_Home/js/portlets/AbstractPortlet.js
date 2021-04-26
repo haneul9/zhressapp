@@ -196,6 +196,10 @@ dismissButton: function() {
 		'</button>'
 	].join('');
 },
+cardBody: function() {
+
+	return $('[data-key="${key}"].portlet .card-body'.interpolate(this.key()));
+},
 // Portlet 단독 spinner
 spinner: function(onoff) {
 

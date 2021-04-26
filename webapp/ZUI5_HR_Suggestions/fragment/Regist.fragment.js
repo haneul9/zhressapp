@@ -104,7 +104,7 @@
                                 width: "auto",
                                 textAlign: "Begin",
                                 text: "{i18n>MSG_56006}"
-                            })
+                            }).addStyleClass("pt-10px")
 						]
 					})
 					.addStyleClass("search-field-group"),
@@ -161,7 +161,7 @@
 										width: "auto",
 										textAlign: "Begin",
 										text: "{i18n>MSG_56006}"
-									})
+									}).addStyleClass("pt-10px")
 								]
 							}),
 							new sap.m.HBox({
@@ -186,17 +186,17 @@
 						fitContainer: true,
 						items: [
 							new sap.m.TextArea({
-								rows: 3,
-								width: "710px",
+								rows: 2,
+								width: "699px",
 								value:"{Detail}",
 								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							}).addStyleClass("mt-15px mr-8px"),
+							}).addStyleClass("mr-8px"),
 							new sap.m.Button({
 								press: oController.onDialogSaveBtn.bind(oController),
 								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-light h-101px")
+							}).addStyleClass("button-dark mt-4px")
 						]
-					})
+					}).addStyleClass("mt-10px")
 				]
 			})
 			.setModel(oController.CommentModel)

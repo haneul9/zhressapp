@@ -1,99 +1,102 @@
 {
-    "welcomeFile": "/webapp/index.html",
-    "routes": [
-        {
-            "path": "/resources",
-            "target": {
-                "type": "service",
-                "name": "sapui5",
-                "entryPath": "/resources",
-                "version": "1.87.0"
-            },
-            "description": "SAPUI5 Resources"
+  "welcomeFile": "/webapp/index.html",
+  "routes": [
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources",
+        "version": "1.87.0"
+      },
+      "description": "SAPUI5 Resources"
     },
-        {
-            "path": "/test-resources",
-            "target": {
-                "type": "service",
-                "name": "sapui5",
-                "entryPath": "/test-resources"
-            },
-            "description": "SAPUI5 Resources"
+    {
+      "path": "/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources",
+        "version": "1.87.0"
+      },
+      "description": "SAPUI5 Resources"
     },
-        {
-            "path": "/webapp/resources",
-            "target": {
-                "type": "service",
-                "name": "sapui5",
-                "entryPath": "/resources"
-            },
-            "description": "SAPUI5 Resources"
+    {
+      "path": "/webapp/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources",
+        "version": "1.87.0"
+      },
+      "description": "SAPUI5 Resources"
     },
-        {
-            "path": "/webapp/test-resources",
-            "target": {
-                "type": "service",
-                "name": "sapui5",
-                "entryPath": "/test-resources"
-            },
-            "description": "SAPUI5 Test Resources"
+    {
+      "path": "/webapp/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources",
+        "version": "1.87.0"
+      },
+      "description": "SAPUI5 Test Resources"
     },
-        {
-            "path": "/cmis",
-            "target": {
-                "type": "destination",
-                "name": "documentservice"
-            },
-            "description": "CMIS Connection Document Service"
+    {
+      "path": "/cmis",
+      "target": {
+        "type": "destination",
+        "name": "documentservice"
+      },
+      "description": "CMIS Connection Document Service"
     },
-        {
-            "path": "/essproxy",
-            "target": {
-                "type": "destination",
-                "name": "essproxy"
-            },
-            "description": "SCP JAVA Proxy Application"
+    {
+      "path": "/essproxy",
+      "target": {
+        "type": "destination",
+        "name": "essproxy"
+      },
+      "description": "SCP JAVA Proxy Application"
     },
-        {
-            "path": "/odata/fix",
-            "target": {
-                "type": "destination",
-                "name": "sfs_hxm_odata"
-            },
-            "description": "SuccessFactors Extension UI5 App --> SuccessFactors OData(sfadmin)"
+    {
+      "path": "/odata/fix",
+      "target": {
+        "type": "destination",
+        "name": "sfs_hxm_odata"
+      },
+      "description": "SuccessFactors Extension UI5 App --> SuccessFactors OData(sfadmin)"
     },
-        {
-            "path": "/odata/v2",
-            "target": {
-                "type": "destination",
-                "name": "sfs_hxm_odata_ess"
-            },
-            "description": "SuccessFactors Extension UI5 App --> SuccessFactors OData(Session User)"
+    {
+      "path": "/odata/v2",
+      "target": {
+        "type": "destination",
+        "name": "sfs_hxm_odata_ess"
+      },
+      "description": "SuccessFactors Extension UI5 App --> SuccessFactors OData(Session User)"
     },
-        {
-            "path": "/services/userapi",
-            "target": {
-                "type": "service",
-                "name": "userapi"
-            },
-            "description": "SuccessFactors Extension UI5 App --> SuccessFactors OData"
+    {
+      "path": "/services/userapi",
+      "target": {
+        "type": "service",
+        "name": "userapi"
+      },
+      "description": "SuccessFactors Extension UI5 App --> SuccessFactors OData"
     },
-        {
-            "path": "/s4hana-pjt",
-            "target": {
-                "type": "destination",
-                "name": "zsf_pjt"
-            },
-            "description": "SuccessFactors Extension UI5 App --> S/4 HANA Project Server ABAP OData"
+    {
+      "path": "/s4hana-pjt",
+      "target": {
+        "type": "destination",
+        "name": "zsf_pjt"
+      },
+      "description": "SuccessFactors Extension UI5 App --> S/4 HANA Project Server ABAP OData"
     },
-        {
-            "path": "/s4hana",
-            "target": {
-                "type": "destination",
-                "name": "zsf"
-            },
-            "description": "SuccessFactors Extension UI5 App --> S/4 HANA Legacy Server ABAP OData"
+    {
+      "path": "/s4hana",
+      "target": {
+        "type": "destination",
+        "name": "zsf"
+      },
+      "description": "SuccessFactors Extension UI5 App --> S/4 HANA Legacy Server ABAP OData"
     }
   ],
-    "sendWelcomeFileRedirect": true
+  "sendWelcomeFileRedirect": true
 }

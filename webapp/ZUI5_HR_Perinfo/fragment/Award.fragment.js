@@ -69,45 +69,6 @@ sap.ui.define(
                                             content: [
                                                 new sap.m.Text({ text: "{i18n>LABEL_18010}" }).addStyleClass("Font15 FontBold"), // 포상
                                                 new sap.m.ToolbarSpacer()
-                                                // new sap.m.Button({
-                                                //  	text : "{i18n>LABEL_37042}",  // 신규
-                                                //  	press : function(){
-                                                // 			oController.onAwardDblClick("3");
-                                                // 		},
-                                                // 		visible: {
-                                                //   parts : [{path: "Auth"}, {path: "Openf"}],
-                                                // formatter: function(v1, v2) {
-                                                // 	if(v1 == "E" && v2 === "Y") return true;
-                                                // 	else return false;
-                                                // }
-                                                //      },
-                                                // }).addStyleClass("button-light"),
-                                                // new sap.m.Button({
-                                                //  	text : "{i18n>LABEL_00102}", // 수정
-                                                //  	press : function(){
-                                                // 			oController.onAwardDblClick("2");
-                                                // 		},
-                                                // 		visible: {
-                                                //   parts : [{path: "Auth"}, {path: "Openf"}],
-                                                // formatter: function(v1, v2) {
-                                                // 	if(v1 == "E" && v2 === "Y") return true;
-                                                // 	else return false;
-                                                // }
-                                                //     	},
-                                                // }).addStyleClass("button-light"),
-                                                // new sap.m.Button({
-                                                //  	text : "{i18n>LABEL_00103}", // 삭제
-                                                //  	press : function(){
-                                                //  		oController.onAwardDblClick("4");
-                                                // 		},
-                                                // 		visible: {
-                                                //   parts : [{path: "Auth"}, {path: "Openf"}],
-                                                // formatter: function(v1, v2) {
-                                                // 	if(v1 == "E" && v2 === "Y") return true;
-                                                // 	else return false;
-                                                // }
-                                                //     	 },
-                                                // }).addStyleClass("button-light")
                                             ]
                                         })
                                             .setModel(oController._ListCondJSonModel)

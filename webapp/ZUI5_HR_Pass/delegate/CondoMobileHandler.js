@@ -23,7 +23,22 @@ sap.ui.define(
 				var results = ODataService.CondoUseBookTotSet.call(this.oController);
 
 				this.oModel.setProperty("/RequestList", results);
+				this.oModel.setProperty("/RequestList-origin", results);
 				$.app.byId(this.oController.PAGEID + "_RequestList").removeSelections();
+
+				var filterItems = [{ Code: "ALL", Text: this.oController.getBundleText("LABEL_00131") }];	// 전체
+				results.map(function(elem) {
+					return { Code: elem.Condo, Text: elem.Contx };
+				}).forEach(function(elem) {
+					if(!filterItems.some(function(item) { return item.Code === elem.Code; })) {
+						filterItems.push(elem);
+					}
+				});
+
+				this.oModel.setProperty("/filter", {
+					Condo: "ALL",
+					CondoItems: filterItems
+				});
 			},
 
 			navBack: function(isRefresh) {
@@ -72,6 +87,21 @@ sap.ui.define(
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
 					id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
 				});
+			},
+
+			setFilter: function(oEvent) {
+				var vCondoKey = oEvent.getSource().getSelectedKey();
+
+				if(vCondoKey === "ALL") {
+					this.oModel.setProperty("/RequestList", this.oModel.getProperty("/RequestList-origin"));
+				} else {
+					this.oModel.setProperty(
+						"/RequestList",
+						this.oModel.getProperty("/RequestList-origin").filter(function(elem) {
+							return elem.Condo === vCondoKey;
+						})
+					);
+				}
 			},
 
 			ProcessAfterNavigation: function() {

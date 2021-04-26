@@ -65,6 +65,10 @@ fill: function() {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
+			if (this._gateway.isMobile()) {
+				TableIn6 = TableIn6.splice(0, 8);
+			}
+
 			list.prepend($.map(TableIn6, function(o) {
 				var date = moment(Number((o.Sdate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 				return [
