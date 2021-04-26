@@ -82,7 +82,8 @@ sap.ui.define(
 						sap.ui.getCore().getEventBus().publish("nav", "to", {
 							id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
 							data : {
-								Appye : oRowData.Appye
+								Appye : oRowData.Appye,
+								Pernr : oRowData.Pernr
 							}
 						});
 					}
