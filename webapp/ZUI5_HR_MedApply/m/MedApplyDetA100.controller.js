@@ -1429,12 +1429,17 @@ sap.ui.define([
 				if(oPro.DiseName.trim()==""){
 					oMsg=oBundleText.getText("MSG_47027");
 				}
+				if(oPro.Inpdt!=null&&oPro.Inpdt!=""){
+					if(new Date(oPro.MedDate.getFullYear(),oPro.MedDate.getMonth(),
+					oPro.MedDate.getDate(),9,0,0).getTime()>new Date(oPro.Inpdt.getFullYear(),oPro.Inpdt.getMonth(),
+					oPro.Inpdt.getDate(),9,0,0).getTime()){
+						oMsg=oBundleText.getText("MSG_47040");
+					}
+				}
 				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
 					if(oPro.Ptamt.trim()=="0"){
 						oMsg=oBundleText.getText("MSG_47028");
 					}
-				}
-				if(oPro.Gtz51!="D"){
 					if(oPro.Medsp.trim()=="0"){
 						oMsg=oBundleText.getText("MSG_47029");
 					}

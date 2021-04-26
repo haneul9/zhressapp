@@ -17,10 +17,14 @@ sap.ui.define(
                     items: [
                         new sap.m.FlexBox({
                             items: [
-                                new sap.m.Button({
-                                    press: oController.moveSearch,
-                                    icon: "sap-icon://search"
-                                }).addStyleClass("button-search")
+                                // new sap.m.Button({
+                                //     press: oController.moveSearch,
+                                //     icon: "sap-icon://search"
+                                // }).addStyleClass("button-search")
+                                new sap.m.Link({
+                                	text :"이동하기",
+                                	href : "bizx://?urlType=deeplink&deeplinkType=orgChart"
+                                })
                             ]
                         }).addStyleClass("button-group pl-0"),
                         new sap.m.FlexBox({
@@ -33,14 +37,14 @@ sap.ui.define(
                                 })
                             ]
                         }).addStyleClass("search-field-group pl-0")
-                    ]
-                    // visible: {
-                    //     path: "Auth",
-                    // 	formatter: function(v) {
-                    // 		if(v == "E" ) return false;
-                    // 		else return true;
-                    // 	}
-                    // 	        }
+                    ],
+                 //   visible: {
+                 //       path: "Auth",
+                 //   	formatter: function(v) {
+                 //   		if(v == "E" ) return false;
+                 //   		else return true;
+                 //   	}
+        	        // }
                 }).addStyleClass("search-box-mobile h-auto");
                 searchBox.setModel(oController._ListCondJSonModel);
                 searchBox.bindElement("/Data");

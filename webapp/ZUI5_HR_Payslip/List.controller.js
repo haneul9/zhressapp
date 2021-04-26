@@ -50,7 +50,7 @@ sap.ui.define(
             onPressSearch: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-
+				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
                 var vCondiData = oController._ListCondJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
 
@@ -97,7 +97,11 @@ sap.ui.define(
                     );
 
                     oController._ListJSonModel.setProperty("/Data", vData.Data);
-                    Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
+                    var row = parseInt((window.innerHeight - 170) / 38);
+					oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
+                    // Common.adjustAutoVisibleRowCount.call(oTable);
+                    oTable.setFixedBottomRowCount(1);
+                    
                     oController._BusyDialog.close();
 
                     if (oController.Error == "E") {

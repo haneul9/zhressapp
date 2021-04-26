@@ -17,7 +17,7 @@ body {min-width:576px; font-size:14px}
 .ehr-header {position:relative; width:100%; padding:0; margin:0; border-bottom:1px solid #ccc}
 .ehr-header .navbar {padding:0 30px}
 .ehr-header .ehr-logo-container {height:46px}
-.ehr-header .ehr-logo {width:81px; height:28px; background:url('../../images/w-hihr.png') no-repeat}
+.ehr-header .ehr-logo {position:absolute;top:15px;left:40px;width:92px; height:62px; background:url('../../images/w-hihr-smile.png') no-repeat}
 .ehr-header .custom-select-locale {margin-top:-2px; height:auto; border:0; font-size:14px; color:#777; background:#fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23777777' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px; cursor:pointer}
 .ehr-header .container-fluid {min-height:46px; padding-left:0; padding-right:0}
 
@@ -277,7 +277,7 @@ body {min-width:576px; font-size:14px}
 	.navbar.navbar-mobile .navbar-nav {flex-direction:column}
 }
 .navbar.navbar-mobile {border-bottom:1px solid #ccc; font-size:1rem; background-color:#fff !important; padding:0 1rem}
-.navbar.navbar-mobile .navbar-brand  {padding-top:.75rem; padding-bottom:.75rem; margin-right:0}
+.navbar.navbar-mobile .navbar-brand  {padding-top:.5625rem; padding-bottom:.375rem; margin-right:0}
 .navbar-mobile .navbar-nav .dropdown-menu {border-radius:0; font-size:1rem; background-color:#fff; border:0; margin:0 -1rem; padding:.5rem 1rem}
 .navbar-mobile .navbar-toggler {border:none}
 .navbar-mobile .navbar-collapse {position:absolute; z-index:3; top:57px; left:16px; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7;border-bottom:1px solid #d2d2d2;}
@@ -309,4 +309,4 @@ body {min-width:576px; font-size:14px}
 .app-wrap-download .flex-item .android-info .des {text-align: left;letter-spacing: -0.5px;font-size:.875rem}
 .app-wrap-download .flex-item .android-info img {max-width:100%;padding-top:1rem}
 
-/* 0424_2 */
+/* 0424_3 */

@@ -48,29 +48,60 @@ sap.ui.define(
 			load: function() {
 				BusyIndicator.show(0);
 
-				Common.getPromise(
-					function () {
-						$.app.getModel("ZHR_APPRAISAL_SRV").create(
-							"/EvaResultAgreeSet",
-							{
-								IConType: "3",
-								IAppye: this.oModel.getProperty("/Appye"),
-								IEmpid: this.getSessionInfoByKey("Pernr"),
-								TableIn2: []
-							},
-							{
-								success: function (data) {
-									if (data.TableIn2) {
-										this.oModel.setProperty("/TableIn2", data.TableIn2.results);
+				Promise.all([
+					Common.getPromise(
+						function () {
+							$.app.getModel("ZHR_APPRAISAL_SRV").create(
+								"/EvaResultAgreeSet",
+								{
+									IConType: "3",
+									IAppye: this.oModel.getProperty("/Appye"),
+									IEmpid: this.getSessionInfoByKey("Pernr"),
+									TableIn2: []
+								},
+								{
+									success: function (data) {
+										if (data.TableIn2) {
+											this.oModel.setProperty("/TableIn2", data.TableIn2.results);
+										}
+									}.bind(this),
+									error: function (res) {
+										Common.log(res);
 									}
-								}.bind(this),
-								error: function (res) {
-									Common.log(res);
 								}
-							}
-						);
-					}.bind(this)
-				).then(function () {
+							);
+						}.bind(this)
+					),
+					Common.getPromise(
+						function () {
+							$.app.getModel("ZHR_APPRAISAL_SRV").create(
+								"/EvaResultAgreeSet",
+								{
+									IConType: "2",
+									IAppye: this.oModel.getProperty("/Appye"),
+									IEmpid: this.getSessionInfoByKey("Pernr"),
+									TableIn: []
+								},
+								{
+									success: function (data) {
+										if (data.TableIn) {
+											this.oModel.setProperty("/TableIn", data.TableIn.results);
+										}
+									}.bind(this),
+									error: function (res) {
+										Common.log(res);
+										var errData = Common.parseError(res);
+										if(errData.Error && errData.Error === "E") {
+											MessageBox.error(errData.ErrorMessage, {
+												title: this.getBundleText("LABEL_09029")
+											});
+										}
+									}.bind(this)
+								}
+							);
+						}.bind(this)
+					)
+				]).then(function () {
 					BusyIndicator.hide();
 				});
 			},

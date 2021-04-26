@@ -479,8 +479,10 @@ sap.ui.define([
 			var	oController = $.app.getController();
 			var oSel2 = $.app.byId(oController.PAGEID+"_dSel2");
 			if(oSel2.getSelectedKey()=="05"){
-				$.app.byId(oController.PAGEID+"_Inp1").setEditable(true);			
-				$.app.byId(oController.PAGEID+"_Inp2").setEditable(true);
+				$.app.byId(oController.PAGEID+"_Inp1").setEditable(false);	
+				$.app.byId(oController.PAGEID+"_Inp1").setValue("0");		
+				$.app.byId(oController.PAGEID+"_Inp2").setEditable(false);
+				$.app.byId(oController.PAGEID+"_Inp2").setValue("0");
 				$.app.byId(oController.PAGEID+"_Inp3").setEditable(false);
 				$.app.byId(oController.PAGEID+"_Inp3").setValue("0");
 				$.app.byId(oController.PAGEID+"_Inp4").setEditable(false);
@@ -1450,6 +1452,13 @@ sap.ui.define([
 				if(oPro.PatiName.trim()==""){
 					oMsg=oBundleText.getText("MSG_47018");
 				}
+				if(oPro.Inpdt!=null&&oPro.Inpdt!=""){
+					if(new Date(oPro.MedDate.getFullYear(),oPro.MedDate.getMonth(),
+					oPro.MedDate.getDate(),9,0,0).getTime()>new Date(oPro.Inpdt.getFullYear(),oPro.Inpdt.getMonth(),
+					oPro.Inpdt.getDate(),9,0,0).getTime()){
+						oMsg=oBundleText.getText("MSG_47040");
+					}
+				}				
 				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
 					if(oPro.Inpdt==""||oPro.Inpdt==null){
 						oMsg=oBundleText.getText("MSG_47015");				
@@ -1468,8 +1477,6 @@ sap.ui.define([
 					if(oPro.Ptamt.trim()=="0"){
 						oMsg=oBundleText.getText("MSG_47028");
 					}
-				}
-				if(oPro.Gtz51!="D"){
 					if(oPro.Medsp.trim()=="0"){
 						oMsg=oBundleText.getText("MSG_47029");
 					}

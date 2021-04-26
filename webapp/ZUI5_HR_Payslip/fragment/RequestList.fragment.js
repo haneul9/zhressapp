@@ -1,8 +1,9 @@
 sap.ui.define(
     [
-        "common/ZHR_TABLES" //
+        "common/ZHR_TABLES", //
+         "common/makeTable"
     ],
-    function (ZHR_TABLES) {
+    function (ZHR_TABLES, makeTable) {
         "use strict";
 
         sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
@@ -48,19 +49,29 @@ sap.ui.define(
                     enableColumnFreeze: false,
                     enableBusyIndicator: true,
                     busyIndicatorDelay: 0,
-                    visibleRowCount: 1,
+                    visibleRowCount: 10,
                     showOverlay: false,
                     showNoData: true,
                     width: "100%",
                     rowHeight: 37,
                     columnHeaderHeight: 38,
                     noData: "{i18n>LABEL_00901}",
-                    cellClick: oController.clickListCell
+                    cellClick: oController.clickListCell,
+                    sort : makeTable.onTableSort
+                    
                 })
                     .addStyleClass("mt-10px")
                     .setModel(oController._ListJSonModel)
                     .bindRows("/Data");
-
+                    
+                oTable.addDelegate({
+					onAfterRendering: function() {
+						$("#" + oController.PAGEID + "_Table").find('BUTTON > span')
+						.removeClass('sapMBtnDefault sapMBtnHoverable')
+						.addClass('sapMBtnGhost');
+					}
+				});
+				
                 ZHR_TABLES.makeColumn(oController, oTable, [
                     { id: "Zyymm", label: "{i18n>LABEL_54002}" /* 대상년월     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "14%", templateGetter: "getYYYYMMTemplate", templateGetterOwner: this },
                     { id: "Ocrtx", label: "{i18n>LABEL_54005}" /* 급여구분 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "14%" },

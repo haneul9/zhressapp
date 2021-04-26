@@ -10,6 +10,17 @@ sap.ui.define([], function () {
         },
 
         getList: function (oController) {
+        	
+        	var oZzmajor = new sap.m.Text({ text: "{Zzmajor}",
+        									visible: {
+						                        path: "Slart",
+						                        formatter: function (v) {
+						                            if (v === "H4" || v === "H5" || v === "H6") return true;
+						                            else return false;
+						                        }
+						                    },
+        								  });
+    	  								
             return new sap.m.Table({
                 inset: false,
                 noDataText: "{i18n>LABEL_00901}",
@@ -39,11 +50,21 @@ sap.ui.define([], function () {
                             }),
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Etext}" }), new sap.m.Text({ text: "{Zzmajor}" })]
+                                items: [new sap.m.Text({ text: "{Etext}" })]
                             }),
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Insti}" }), new sap.m.Text({ text: "{Stext}" })]
+                                items: [new sap.m.Text({ text: "{Insti}" }), 
+                                	    new sap.m.Text({ text: "{Zzmajor}",
+        									visible: {
+						                        path: "Slart",
+						                        formatter: function (v) {
+						                            if (v === "H4" || v === "H5" || v === "H6") return true;
+						                            else return false;
+						                        }
+						                    },
+        								  })
+                                       ]
                             })
                         ]
                     })
