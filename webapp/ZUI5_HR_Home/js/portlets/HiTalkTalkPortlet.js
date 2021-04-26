@@ -94,7 +94,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && !this._gateway.isMobile()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,

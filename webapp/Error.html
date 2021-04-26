@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko-KR">
+<html lang="ko-KR" locale="ko_KR">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,12 +23,32 @@
 <script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/jquery-ui.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
+<script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
+<script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
+<script src="ZUI5_HR_Home/js/HomeSession.js"></script>
+<script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script>
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+	$('html').attr('device', 'mobile');
+}
+
+$(function () {
+
+var _gateway = window._gateway = new HomeGateway();
+window._basis = new HomeBasis(_gateway);
+window._session = new HomeSession(_gateway); // 2FA 처리 포함
+window._i18n = new HomeI18n(_gateway);
+
+});
+</script>
 </head>
 <body>
 <div class="ehr-body h-100">
 	<div class="container-fluid">
 		<div class="portlet-masonry-wrapper mx-auto">
-			<div class="portlet-data-not-found"><span>Error!!</span></div>
+			<div class="portlet-data-not-found pt-80px">
+				<div><span>Error!!</span></div>
+			</div>
 		</div>
 	</div>
 </div>

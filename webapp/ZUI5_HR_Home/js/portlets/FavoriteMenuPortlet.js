@@ -81,6 +81,10 @@ fill: function() {
 				jspPane = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
+			if (this._gateway.isMobile()) {
+				this.items = this.items.splice(0, 8);
+			}
+
 			(jspPane || list).prepend($.map(this.items, function(o) {
 				return [
 					'<a href="#" class="list-group-item list-group-item-action"${data-url}>'.interpolate(this.itemUrl(o)),
@@ -104,7 +108,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && !this._gateway.isMobile()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,

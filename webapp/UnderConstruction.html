@@ -38,7 +38,8 @@ $('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) 
 
 var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
-window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
+window._session = new HomeSession(_gateway); // 2FA 처리 포함
+window._i18n = new HomeI18n(_gateway);
 
 });
 </script>
@@ -54,8 +55,9 @@ window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 <div class="ehr-body">
 	<div class="container-fluid">
 		<div class="portlet-masonry-wrapper mx-auto">
-			<div class="portlet-data-not-found">
-				<span>시스템 준비중입니다.<br />5월 3일부터 사용 가능합니다.</span>
+			<div class="portlet-data-not-found pt-80px">
+				<div><span>시스템 준비중입니다.</span></div>
+				<div><span>5월 3일부터 사용 가능합니다.</span></div>
 			</div>
 		</div>
 	</div>
