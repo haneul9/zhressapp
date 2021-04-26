@@ -648,8 +648,8 @@ sap.ui.define([
 			}).addStyleClass("paddingbody");
 				/////////////////////////////////////////////////////////
 				
-			return new PageHelper({
-				idPrefix: oController.PAGEID+"_Mat",
+			return new PageHelper(oController.PAGEID+"_Mat",{
+				idPrefix: "MedApplyDet",
                 title: "{i18n>LABEL_47001}", // 의료비
                 showNavButton: true,
 				headerButton : new sap.m.Button({

@@ -451,8 +451,8 @@ sap.ui.define([
 				items: [oVert]
 			}).addStyleClass("paddingbody");
 		
-			return new PageHelper({
-				idPrefix: oController.PAGEID+"_Mat2",
+			return new PageHelper(oController.PAGEID+"_Mat2",{
+				idPrefix: "MedApplyDetA100",
                 title: "{i18n>LABEL_47001}", // 의료비
                 showNavButton: true,
 				navBackFunc: oController.navBack,
