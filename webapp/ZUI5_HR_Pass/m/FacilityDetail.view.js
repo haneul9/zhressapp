@@ -23,7 +23,7 @@ sap.ui.define([
                 headerButton: new sap.m.Button({					
                     text: "{i18n>LABEL_09023}", // 신청
                     press: FacilityHandler.onPressApprovalBtn.bind(FacilityHandler)
-                }).addStyleClass("button-light app-nav-button-right"),
+                }).addStyleClass("button-dark app-nav-button-right"),
                 contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
                 contentItems: [

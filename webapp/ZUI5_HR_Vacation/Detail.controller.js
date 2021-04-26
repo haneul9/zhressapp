@@ -782,7 +782,7 @@ sap.ui.define([
 				oController._DetailJSonModel.setProperty("/Data/EAbsmm", "");
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
-				var createData = {ChkAbsenceNav : []};
+				var createData = {ChkAbsenceNav : [], ChkAbsence2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
@@ -809,6 +809,27 @@ sap.ui.define([
 							} else {
 								oController._DetailJSonModel.setProperty("/Data/EAbshr", data.EAbshr);
 								oController._DetailJSonModel.setProperty("/Data/EAbsmm", data.EAbsmm);
+							}
+							
+							if(data.ChkAbsence2Nav && data.ChkAbsence2Nav.results){
+								var data1 = data.ChkAbsence2Nav.results;
+								
+								var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
+								var oHolyt = "";
+								
+								for(var i=0; i<data1.length; i++){
+									if(i==0){
+										oHolyt = "(";
+									} else {
+										oHolyt += ", ";
+									}
+									
+									oHolyt += dateFormat.format(new Date(common.Common.getTime(data1[i].Mldda)));
+								}
+								
+								oHolyt = (oHolyt == "" ? "" : oHolyt + ")");
+								
+								oController._DetailJSonModel.setProperty("/Data/Holyt", oHolyt);
 							}
 							
 							if(data.ChkAbsenceNav && data.ChkAbsenceNav.results){

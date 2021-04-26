@@ -32,7 +32,7 @@ sap.ui.define([
                                     else return false;
                                 }
                             }
-                        }).addStyleClass("button-light"),
+                        }).addStyleClass("button-dark app-nav-button-right"),
                         new sap.m.Button({
                             text: "{i18n>LABEL_00101}", // 저장
                             press: CondoHandler.onPressCondoModifyCompleteBtn.bind(CondoHandler),
@@ -46,7 +46,7 @@ sap.ui.define([
                                     else return false;
                                 }
                             }
-                        }).addStyleClass("button-light"),
+                        }).addStyleClass("button-light app-nav-button-right right-6em"),
                         new sap.m.Button({
                             text: "{i18n>LABEL_00119}", // 취소
                             press: CondoHandler.onPressCondoRequestCancelBtn.bind(CondoHandler),
@@ -60,7 +60,7 @@ sap.ui.define([
                                     else return false;
                                 }
                             }
-                        }).addStyleClass("button-light ml-14px")
+                        }).addStyleClass("button-light ml-14px app-nav-button-right")
                     ]
                 }),
                 contentStyleClass: "sub-app-content",

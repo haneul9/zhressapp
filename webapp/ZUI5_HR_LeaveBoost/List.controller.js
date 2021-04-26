@@ -492,6 +492,65 @@ sap.ui.define([
 			});
 		},
 		
+		// 연차촉진 form
+		onOpenForm : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_LeaveBoost.List");
+			var oController = oView.getController();
+			
+			var oData = oController._ListCondJSonModel.getProperty("/Data");
+			
+			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+			var oPath = "/LeaveBoostFormSet?$filter=Percod eq '" + encodeURIComponent($.app.getModel("session").getData().Percod) + "'";
+				oPath += " and Bukrs eq '" + oData.Bukrs + "'";
+				oPath += " and Zyear eq '" + new Date().getFullYear() + "'";
+					
+			if(!oController._FormDialog){
+				oController._FormDialog = sap.ui.jsfragment("ZUI5_HR_LeaveBoost.fragment.Form", oController);
+				oView.addDependent(oController._FormDialog);
+			}
+			
+			var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_FormLayout");
+				oLayout.destroyContent();
+			
+			oModel.read(oPath, null, null, false,
+				function(data, oResponse) {
+					if(data && data.results.length){
+						if(data.results[0].Zpdf != ""){
+							oLayout.addContent(
+								new sap.ui.core.HTML({	
+										content : ["<iframe id='iWorkerPDF'" +
+														   "name='iWorkerPDF' src='data:application/pdf;base64," + data.results[0].Zpdf + "'" +
+														   "width='1050px' height='680px'" +
+														   "frameborder='0' border='0' scrolling='no'></>"],
+									preferDOM : false
+								})
+							);
+						}
+					}
+				},
+				function(Res) {
+					oController.Error = "E";
+					if(Res.response.body){
+						ErrorMessage = Res.response.body;
+						var ErrorJSON = JSON.parse(ErrorMessage);
+						if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+							oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+						} else {
+							oController.ErrorMessage = ErrorMessage;
+						}
+					}
+				}
+			);
+			
+			if(oController.Error == "E"){
+				oController.Error = "";
+				sap.m.MessageBox.error(oController.ErrorMessage);
+				return;
+			}
+			
+			oController._FormDialog.open();
+		},
+		
 		// 상태: 저장 clear 버튼 클릭 시 signature canvas 재생성
 		resetSignature : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_LeaveBoost.List");
