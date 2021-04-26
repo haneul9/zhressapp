@@ -159,7 +159,7 @@ body {min-width:576px; font-size:14px}
 .portlet-favorite-menu .list-group-item > div {display:inline-block; max-width:315px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 
 [device="mobile"] .card-body {padding:1rem}
-[device="mobile"] .portlet-calendar .card-body {padding:1rem 0 0 0}
+[device="mobile"] .portlet-calendar .card-body {padding:1rem 0}
 .portlet-calendar-inline .ui-datepicker-inline {width:100%}
 .portlet-calendar-inline .ui-datepicker-calendar {margin:0 auto; width:322px; border:0; border-spacing:0; table-layout:fixed}
 [device="mobile"] .portlet-calendar-inline .ui-datepicker-calendar {width:100%}
