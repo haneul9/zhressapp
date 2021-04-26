@@ -15,9 +15,9 @@ sap.ui.define([
 		createContent: function (oController) {
 			var oRow,oCell,oMat,c=sap.ui.commons;
 			for(var i=15;i<30;i++) { 
-				window["oLabel"+(i-14)] = oController.getTxt("LABEL_440"+i,i);
+				window["oLabel"+(i-14)] = oController.getMobileTxt("LABEL_440"+i,i);
 			}
-			var oLabel15=oController.getTxt("LABEL_44034",30)
+			var oLabel15=oController.getMobileTxt("LABEL_44034",30)
 			var oSelect1=new sap.m.Select(oController.PAGEID+"_Sel1",{width:"100%",change:oController.onChange,selectedKey:"{Famsa}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
@@ -72,7 +72,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel3})
+				content:oLabel3
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -89,7 +89,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel1})
+				content:oLabel1
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -102,7 +102,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel2})
+				content:oLabel2
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -115,7 +115,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel4})
+				content:oLabel4
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -128,7 +128,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel5})
+				content:oLabel5
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -141,7 +141,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel6})
+				content:oLabel6
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -172,7 +172,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel7})
+				content:oLabel7
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -185,7 +185,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel8})
+				content:oLabel8
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -198,7 +198,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel9})
+				content:oLabel9
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -211,7 +211,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel10})
+				content:oLabel10
 			});
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -226,7 +226,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel11})
+				content:oLabel11
 			})
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -247,7 +247,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel12})
+				content:oLabel12
 			})
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -268,7 +268,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel13})
+				content:oLabel13
 			})
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -289,7 +289,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel14})
+				content:oLabel14
 			})
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -304,7 +304,7 @@ sap.ui.define([
 			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_ModLine");
 			oCell=new c.layout.MatrixLayoutCell({
 				hAlign:"Begin",
-				content:new sap.ui.core.HTML({content:oLabel15})
+				content:oLabel15
 			})
 			oRow.addCell(oCell);
 			oCell=new c.layout.MatrixLayoutCell({
@@ -334,14 +334,14 @@ sap.ui.define([
 			}).addStyleClass("paddingbody");
 					
 			/////////////////////////////////////////////////////////
-				
-			return new PageHelper({
+
+			return new PageHelper({ 
 				idPrefix: "FamilyApplyDet",
                 title: "{i18n>LABEL_44001}", // 가족사항
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				contentStyleClass: "sub-app-content",
-                contentContainerStyleClass: "app-content-container-mobile",
+                contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
 					oContent
 				],

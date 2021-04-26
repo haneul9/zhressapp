@@ -231,12 +231,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
         
         var oLayout1 = new sap.m.VBox({
 			fitContainer: true,
-			items: [new sap.m.Label({
-	                    text: oBundleText.getText("LABEL_69015"), // 추가휴게시간
-	                    design: "Bold"
-	                }).addStyleClass("sub-title"),
+			items: [new sap.m.FlexBox({
+						items : [new sap.m.Label({
+				                     text: oBundleText.getText("LABEL_69015"), // 추가휴게시간
+				                     design: "Bold"
+				                 }).addStyleClass("sub-title")]
+					}).addStyleClass("info-box"),
 	                oTable1]
-        }).addStyleClass("pt-10px");
+        });
         
         // 근로시간현황
 		var oTable2 = new sap.m.Table(oController.PAGEID + "_Table2", {
@@ -244,15 +246,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 			rememberSelections: false,
 			noDataText: oBundleText.getText("LABEL_00901"),
 			growing: false,
-			// growingThreshold: 5,
 			mode: "None",
             columns: [
                 new sap.m.Column ({
-                    width: "30%",
+                    width: "50%",
                     hAlign: "Begin"
                 }),
                 new sap.m.Column ({
-                    width: "70%",
+                    width: "50%",
                     hAlign: "End"
                 })
             ],
@@ -262,14 +263,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
                     type: sap.m.ListType.Active,
                     counter: 5,
                     cells: [
-                        new sap.m.VBox({
+                    	new sap.m.VBox({
                         	items : [new sap.m.Text({
 			                             textAlign: "Begin",
 			                             text: "{Text}"
 			                         })]
                         }),
                         new sap.m.VBox({
-                        	items : [new sap.m.Text({ // 발생/사용/잔여
+                        	items : [new sap.m.Text({
 			                             textAlign: "Begin",
 			                             text: "{Value}"
 			                         })]
@@ -283,12 +284,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
         
         var oLayout2 = new sap.m.VBox({
 			fitContainer: true,
-			items: [new sap.m.Label({
-	                    text: oBundleText.getText("LABEL_69039"), // 근로시간현황
-	                    design: "Bold"
-	                }).addStyleClass("sub-title"),
+			items: [new sap.m.FlexBox({
+						items : [new sap.m.Label({
+				                     text: oBundleText.getText("LABEL_69039"), // 근로시간현황
+				                     design: "Bold"
+				                 }).addStyleClass("sub-title")]
+					}).addStyleClass("info-box"),
 	                oTable2]
-        }).addStyleClass("pt-10px");
+        });
         
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,

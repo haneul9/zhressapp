@@ -71,7 +71,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 			oCell = new sap.ui.commons.layout.MatrixLayoutCell(oController.PAGEID + "_CalHeadCell_" + i, {
 				hAlign : "Center",
 				vAlign : "Middle",
-				content : [new sap.m.Text({text:vHeader[i].title})]
+				content : [new sap.m.Text({text:vHeader[i].title}).addStyleClass("calendar-text")]
 			});
 			
 			if(i == 0) oCell.addStyleClass("calendar-TableHeader2-Start"); 

@@ -342,6 +342,14 @@ sap.ui.define([
 			return new sap.ui.core.HTML({content:oTxt});
 		},
 
+		getTxtMobiles:function(vTxt,vNo){
+			var redStar="<span style='color:red;font-weight:bold;font-size:14px;'>*</span>";
+			var oTxt=vNo<=23||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
+			vNo==89?"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>"+redStar:
+			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
+			return new sap.ui.core.HTML({content:oTxt});
+		},
+
 		onClose:function(){
 			var	oController = $.app.getController();
 			if(oController.oDialog.isOpen()){

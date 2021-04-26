@@ -18,7 +18,7 @@ sap.ui.define([
 		createContent: function (oController) {
 			var oRow,oCell,oMat,c=sap.ui.commons;
 			for(var i=63;i<87;i++) { 
-				window["oLabel"+(i-63)] = oController.getTxt("LABEL_470"+i,i);
+				window["oLabel"+(i-63)] = oController.getTxtMobiles("LABEL_470"+i,i);
 			}
 			var oMat=null;
 
@@ -228,7 +228,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
 			+oController.getBundleText("LABEL_47028")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -238,7 +238,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 	//1
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47075")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47075")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Ptamt}",
 			editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -261,7 +261,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47076")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47076")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Medsp}",
 			editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -284,7 +284,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47077")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47077")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Medpp}",
 			editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -307,7 +307,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 	//2
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47078")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47078")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Oiamt}",
 			editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -330,7 +330,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47079")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47079")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Insnp}",
 			editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -353,7 +353,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47080")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47080")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znobcm}"
 			,editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -378,21 +378,21 @@ sap.ui.define([
 			oMat.addRow(oRow);
 	//3
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47081")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47081")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Medmp}",editable:false})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47082")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47082")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Inspp}",editable:false})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxt("LABEL_47083")});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oController.getTxtMobiles("LABEL_47083")});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Framt}",editable:false})});
 			oRow.addCell(oCell);
@@ -403,7 +403,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:20px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
 			+oController.getBundleText("LABEL_47130")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -414,7 +414,7 @@ sap.ui.define([
 
 	//4
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oController.getTxt("LABEL_47084")]});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oController.getTxtMobiles("LABEL_47084")]});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zdbcrl}",editable:false}),
 			new HoverIcon({            
@@ -431,7 +431,7 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oController.getTxt("LABEL_47085")]});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oController.getTxtMobiles("LABEL_47085")]});
 			oRow.addCell(oCell);			
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Ziftrl}",editable:false}),
 			new HoverIcon({            
