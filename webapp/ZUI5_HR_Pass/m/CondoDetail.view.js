@@ -32,7 +32,7 @@ sap.ui.define([
                                     else return false;
                                 }
                             }
-                        }).addStyleClass("button-light app-nav-button-right"),
+                        }).addStyleClass("button-dark app-nav-button-right"),
                         new sap.m.Button({
                             text: "{i18n>LABEL_00101}", // 저장
                             press: CondoHandler.onPressCondoModifyCompleteBtn.bind(CondoHandler),
