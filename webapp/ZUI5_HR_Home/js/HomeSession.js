@@ -47,14 +47,17 @@ init: function(callback) {
 		]);
 	}.bind(this))
 	.then(function() {
-		if (typeof callback === 'function') {
-			callback();
+		if (this._gateway.parameter('mfa-test') === 'true') {
+			if (typeof HomeMFA === 'function') {
+				new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
+			} else {
+				throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
+			}
+		} else {
+			if (typeof callback === 'function') {
+				callback();
+			}
 		}
-		// if (typeof HomeMFA === 'function') {
-		// 	new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
-		// } else {
-		// 	throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
-		// }
 	}.bind(this))
 	.catch(function(e) {
 		var message = (e.message ? e.message : this._gateway.handleError(this._gateway.ODataDestination.ETC, e, 'HomeSession.init').message) || '알 수 없는 오류가 발생하였습니다.';
