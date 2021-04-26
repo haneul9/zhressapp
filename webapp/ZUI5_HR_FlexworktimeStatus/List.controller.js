@@ -102,15 +102,15 @@ sap.ui.define([
 				column[i].setFiltered(false);
 			}
 			
-			oController._ListCondJSonModel.setProperty("/Data/Ctrnm", "");
-			oController._ListCondJSonModel.setProperty("/Data/Wrktm", "");
-			oController._ListCondJSonModel.setProperty("/Data/Exttm", "");
-			oController._ListCondJSonModel.setProperty("/Data/Holtm", "");
-			oController._ListCondJSonModel.setProperty("/Data/Extholtm", "");
-			oController._ListCondJSonModel.setProperty("/Data/Tottm", "");
-			oController._ListCondJSonModel.setProperty("/Data/Notes", "");
-			
 			var search = function(){
+				oController._ListCondJSonModel.setProperty("/Data/Ctrnm", "");
+				oController._ListCondJSonModel.setProperty("/Data/Wrktm", "");
+				oController._ListCondJSonModel.setProperty("/Data/Exttm", "");
+				oController._ListCondJSonModel.setProperty("/Data/Holtm", "");
+				oController._ListCondJSonModel.setProperty("/Data/Extholtm", "");
+				oController._ListCondJSonModel.setProperty("/Data/Tottm", "");
+				oController._ListCondJSonModel.setProperty("/Data/Notes", "");
+				
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
 				var today = new Date();
 				
@@ -186,7 +186,7 @@ sap.ui.define([
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
 				
-				var row = parseInt((window.innerHeight - 350) / 37);
+				var row = parseInt((window.innerHeight - 355) / 37);
 				oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
 				
 				oController._ListCondJSonModel.setProperty("/Data2", vData2);
@@ -200,8 +200,30 @@ sap.ui.define([
 				
 			}
 			
-			oController._BusyDialog.open();
-			setTimeout(search, 100);
+			// 테이블 내 수정 플래그 값이 존재하는 경우, confirm message 출력 이후 조회처리
+			var tabledata = oJSONModel.getProperty("/Data"), oMonyn = "";
+			if(tabledata){
+				for(var i=0; i<tabledata.length; i++){
+					if(tabledata[i].Monyn != ""){
+						oMonyn = tabledata[i].Monyn;
+					}
+				}
+			}
+			
+			if(oMonyn == ""){
+				oController._BusyDialog.open();
+				setTimeout(search, 100);
+			} else {
+				sap.m.MessageBox.confirm(oBundleText.getText("MSG_69008"), { // 저장하지 않은 수정사항이 존재합니다. 조회를 진행하시겠습니까?
+					actions : ["YES", "NO"],
+					onClose : function(fVal){
+						if(fVal && fVal == "YES"){
+							oController._BusyDialog.open();
+							setTimeout(search, 100);
+						}
+					}
+				});
+			}
 		},
 		
 		searchOrgehPernr : function(oController){
@@ -907,6 +929,7 @@ sap.ui.define([
 						oTemplate = new sap.ui.core.Icon({
 										src : "sap-icon://accept",
 										size : "14px",
+										color : "#f00",
 										visible : {
 											path : col_info[i].id,
 											formatter : function(fVal){

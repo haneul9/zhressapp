@@ -177,6 +177,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 			showNoData: true,
 			rowHeight: 37,
 			columnHeaderHeight: 38,
+			rowSettingsTemplate : [new sap.ui.table.RowSettings({
+									   highlight : {
+									   		path : "Monyn",
+									   		formatter : function(fVal){
+									   			return fVal != "" ? "Error" : "None";
+									   		}
+									   }
+								   })],
 			extension : [new sap.m.Toolbar({
 							 height : "40px",
 							 content : [new sap.m.MessageStrip({
