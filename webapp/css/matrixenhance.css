@@ -139,7 +139,7 @@
 .calendar-background-green{background-color:#cbf1c4}
 .calendar-background-atext{background-color: #0070bd;}
 
-.calendar-text{min-height: 0 !important; line-height: 0 !important;}
+.calendar-text{min-height: 20px !important; line-height: 20px !important;}
 
 #signature-pad {border: 1px solid black}
 
