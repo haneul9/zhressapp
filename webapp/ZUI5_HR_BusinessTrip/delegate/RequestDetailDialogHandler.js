@@ -87,7 +87,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EnameList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -110,7 +111,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/BtPurpose1SelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -133,7 +135,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EncardSelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this))

@@ -76,7 +76,9 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+
+							this.oModel.setProperty("/City/BtCrtList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -103,7 +105,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.arrangeFavoriteCityList([]);
+						}.bind(this)
 					}
 				);
 			}.bind(this))
@@ -215,7 +218,7 @@ var Handler = {
 						this.oModel.setProperty("/City/SearchList", []);
 
 						Common.adjustVisibleRowCount($.app.byId("CityTable").setBusy(false), 1, 1);
-					}
+					}.bind(this)
 				}
 			);
 		}.bind(this), 0);

@@ -103,10 +103,14 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				success: function(oData) {
 					if (oData && oData.NavCommonCodeList.results) {
 						oModel.setProperty("/ApprovalStatusList", oData.NavCommonCodeList.results);
+					} else {
+						oModel.setProperty("/ApprovalStatusList", []);
 					}
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
+
+					oModel.setProperty("/ApprovalStatusList", []);
 				}
 			}
 		);
@@ -157,8 +161,12 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		}, 0);
 	},
 
-	onESSelectPerson: function(oEvent) {this.RequestDetailDialogHandler.flag=="5"?OnRequest.setAdded.call($.app.getController(),oEvent):
-	OnRequest.setAccompanier.call($.app.getController(),oEvent);},
+	onESSelectPerson: function(oEvent) {
+
+		this.RequestDetailDialogHandler.flag == "5"
+			? OnRequest.setAdded.call($.app.getController(), oEvent)
+			: OnRequest.setAccompanier.call($.app.getController(), oEvent);
+	},
 
 	displayMultiOrgSearchDialog: OnRequest.searchOrg,
 

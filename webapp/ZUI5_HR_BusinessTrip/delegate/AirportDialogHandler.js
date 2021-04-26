@@ -81,7 +81,11 @@ var Handler = {
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
-					}
+
+						this.oModel.setProperty("/Airport/BtCrtList", []);
+						this.oModel.setProperty("/Airport/BtCrt", "");
+						this.oModel.setProperty("/Airport/BtCrtTxt", "");
+					}.bind(this)
 				}
 			);
 		}.bind(this));
@@ -151,7 +155,7 @@ var Handler = {
 						this.oModel.setProperty("/Airport/SearchList", []);
 
 						Common.adjustVisibleRowCount($.app.byId("AirportTable").setBusy(false), 1, 1);
-					}
+					}.bind(this)
 				}
 			);
 		}.bind(this));
