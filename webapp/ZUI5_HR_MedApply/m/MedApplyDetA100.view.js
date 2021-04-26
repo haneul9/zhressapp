@@ -22,27 +22,11 @@ sap.ui.define([
 			}
 			var oMat=null;
 
-			oMat=new c.layout.MatrixLayout(oController.PAGEID+"_Mat2",{
+			oMat=new c.layout.MatrixLayout({
 				columns:2,
 				width:"100%",
 				widths:['40%','60%']
-			}).setModel(oController._DataModel);
-
-			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,
-				hAlign:"Right",content:new sap.m.Button({
-					press: function(){oController.onSave("A100")},
-					text: "{i18n>LABEL_47006}" // 신청
-					,visible:{parts:[{path:"Close"},{path:"Status"}],
-					formatter:function(fVal,fVal2){
-						if(fVal2==""){
-							return fVal=="X"?false:true;
-						}else{
-							return false;
-						}
-					}}}).addStyleClass("button-light")});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);
+			});
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel0});
@@ -468,16 +452,27 @@ sap.ui.define([
 			}).addStyleClass("paddingbody");
 		
 			return new PageHelper({
-				idPrefix: "MedApplyDetA100",
+				idPrefix: oController.PAGEID+"_Mat2",
                 title: "{i18n>LABEL_47001}", // 의료비
                 showNavButton: true,
 				navBackFunc: oController.navBack,
+				headerButton : new sap.m.Button({
+					press: function(){oController.onSave("A100")},
+					text: "{i18n>LABEL_47006}" // 신청
+					,visible:{parts:[{path:"Close"},{path:"Status"}],
+					formatter:function(fVal,fVal2){
+						if(fVal2==""){
+							return fVal=="X"?false:true;
+						}else{
+							return false;
+						}
+					}}}).addStyleClass("button-light app-nav-button-right"),
 				contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
 					oContent
 				],
-			});
+			}).setModel(oController._DataModel);
 		},
 		
 		loadModel: function () {

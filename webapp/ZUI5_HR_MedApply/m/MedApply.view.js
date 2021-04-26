@@ -42,7 +42,7 @@ sap.ui.define([
 							new sap.m.Button(oController.PAGEID+"_NewBtn",{
 								press: function(){oController.onDialog(null,"N3")},
 								text: "{i18n>LABEL_47006}", // 신청
-							}).addStyleClass("button-light")]
+							}).addStyleClass("button-default")]
 					}).addStyleClass("button-group")
 				]
 			}).addStyleClass("info-box");
@@ -81,11 +81,11 @@ sap.ui.define([
 							new sap.m.Text({
 								text: "{PatiName}",
 								textAlign: "Begin"
-							}).addStyleClass("L2P13FontCustom"),
+							}),
 							new sap.m.Text({
 								text: "{HospName}",
 								textAlign: "Begin"
-							}).addStyleClass("L2P13Font")
+							})
 						]
 					}),
 					new sap.m.FlexBox({
@@ -94,7 +94,7 @@ sap.ui.define([
 							new sap.m.Text({
 								text: "{Regnot}",
 								textAlign: "Begin"
-							}).addStyleClass("L2P13Font")
+							})
 						]
 					}),
 					new sap.m.FlexBox({
@@ -106,11 +106,11 @@ sap.ui.define([
 									type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 								},
 								textAlign: "End"
-							}).addStyleClass("L2P13Font"),
+							}),
 							new sap.m.Text({
 								text: "{StatusText}",
 								textAlign: "End"
-							}).addStyleClass("L2P13Font")
+							})
 						]
 					})
 				]
