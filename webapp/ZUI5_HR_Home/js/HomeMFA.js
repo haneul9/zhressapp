@@ -191,7 +191,7 @@ requestCode: function(type) {
 	}
 
 	setTimeout(function() {
-		if (type === this.CODE.CONFIRM && ((this._gateway.isDEV() && code === '1') || (this._gateway.isQAS() && code === '2'))) {
+		if (type === this.CODE.CONFIRM && (((this._gateway.isLOCAL() || this._gateway.isDEV()) && code === '1') || (this._gateway.isQAS() && code === '2'))) {
 			this.done();
 			return;
 		}
