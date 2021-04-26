@@ -287,6 +287,57 @@ sap.ui.define(
 				});
 			},
 			
+			onDialogDelBtn: function () { // 삭제
+				var oController = this;
+				var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+				var vDetailData = oController.DetailModel.getProperty("/FormData");
+				var vPernr = oController.getUserId();
+				
+				delete vDetailData.FilePlaceholder //필요없는 값이므로 key 삭제
+				delete vDetailData.TextA; //필요없는 값이므로 key 삭제
+				delete vDetailData.isVisibleType;
+				delete vDetailData.isVisibleVehicle; 
+				delete vDetailData.Dtfmt; 
+
+				BusyIndicator.show(0);
+				var onProcessSave = function (fVal) {
+					if (fVal && fVal == "삭제") {
+						
+						var sendObject = {
+							IConType: "4",
+							ILangu: "3",
+							IPernr: vPernr,
+							IBukrs: "1000",
+							TableIn: [vDetailData] //넘길 값들을 담아놓음
+						};
+						
+						oModel.create("/CongratulationApplySet", sendObject, {
+							success: function (oData, response) {
+								sap.m.MessageBox.alert(oController.getBundleText("LABEL_08003") + oController.getBundleText("LABEL_08023"));
+								oController.onTableSearch();
+								oController.navBack();
+								Common.log(oData);
+								BusyIndicator.hide();
+							},
+							error: function (oError) {
+								sap.m.MessageBox.alert(Common.parseError(oError).ErrorMessage, {
+									title: oController.getBundleText("LABEL_09030")
+								});
+								oController.onTableSearch();
+								Common.log(oError);
+								BusyIndicator.hide();
+							}
+						});
+					}
+					BusyIndicator.hide();
+				};
+				sap.m.MessageBox.confirm(oController.getBundleText("LABEL_08003") + oController.getBundleText("LABEL_08024"), {
+					title: oController.getBundleText("LABEL_08022"),
+					actions: ["삭제", "취소"],
+					onClose: onProcessSave
+				});
+			},
+			
 			onCheckedBox: function (){ //체크박스 상태여부
 				var oController = this.getView().getController();
 				var vCheckBox = $.app.byId(oController.PAGEID+"_TypeCheck");
