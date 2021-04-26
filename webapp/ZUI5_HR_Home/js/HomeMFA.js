@@ -54,9 +54,9 @@ isTargetIP: function() {
 	return $.getJSON({
 		url: '/essproxy/check2FA',
 		success: function(data) {
-			this._gateway.prepareLog('HomeMFA.isTargetIP success.', arguments).log();
-
 			this.targetIP = (data || {}).result === 'E';
+
+			this._gateway.prepareLog('HomeMFA.isTargetIP success : ' + this.targetIP, arguments).log();
 		}.bind(this)
 	}).promise();
 },
@@ -71,9 +71,9 @@ isTargetPernr: function() {
 			$filter: "Percod eq '${Percod}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'))
 		},
 		success: function(data) {
-			this._gateway.prepareLog('HomeMFA.isTargetPernr success', arguments).log();
-
 			this.targetPernr = this._gateway.odataResults(data).Authyn === 'Y';
+
+			this._gateway.prepareLog('HomeMFA.isTargetPernr success : ' + this.targetPernr, arguments).log();
 		}.bind(this)
 	}).promise();
 },
