@@ -55,37 +55,47 @@ sap.ui.define([], function () {
                 ]
             }).addStyleClass("search-box search-bg pb-7px mt-16px");
 
-            var oContent = new sap.m.FlexBox({
-                justifyContent: "Center",
-                fitContainer: true,
-                items: [
-                    new sap.m.FlexBox({
-                        direction: sap.m.FlexDirection.Column,
-                        items: [
-                            new sap.m.FlexBox({
-                                alignItems: "End",
-                                fitContainer: true,
-                                items: [new sap.m.Text({ text: "{i18n>LABEL_43001}" }).addStyleClass("app-title")] // 일근태현황
-                            }).addStyleClass("app-title-container"),
-                            oFilter,
-                            new sap.ui.core.HTML({ content: "<div style='height:20px' />" }),
-                            sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail1", oController),
-                            sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail2", oController),
-                            sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail3", oController),
-                            // sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail4", oController),
-                            new sap.ui.core.HTML({ content: "<div style='height:10px' />" })
-                        ]
-                    }).addStyleClass("app-content-container-wide")
-                ]
-            }).addStyleClass("app-content-body");
+            // var oContent = new sap.m.FlexBox({
+            //     justifyContent: "Center",
+            //     fitContainer: true,
+            //     items: [
+            //         new sap.m.FlexBox({
+            //             direction: sap.m.FlexDirection.Column,
+            //             items: [
+            //                 new sap.m.FlexBox({
+            //                     alignItems: "End",
+            //                     fitContainer: true,
+            //                     items: [new sap.m.Text({ text: "{i18n>LABEL_43001}" }).addStyleClass("app-title")] // 일근태현황
+            //                 }).addStyleClass("app-title-container"),
+            //                 oFilter,
+            //                 new sap.ui.core.HTML({ content: "<div style='height:20px' />" }),
+            //                 sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail1", oController),
+            //                 sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail2", oController),
+            //                 sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail3", oController),
+            //                 // sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail4", oController),
+            //                 new sap.ui.core.HTML({ content: "<div style='height:10px' />" })
+            //             ]
+            //         }).addStyleClass("app-content-container-wide")
+            //     ]
+            // }).addStyleClass("app-content-body");
 
-            /////////////////////////////////////////////////////////
+            // /////////////////////////////////////////////////////////
 
-            var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-                // customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-                showHeader: false,
-                content: [oContent]
-            }).addStyleClass("app-content");
+            // var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+            //     // customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
+            //     showHeader: false,
+            //     content: [oContent]
+            // }).addStyleClass("app-content");
+            
+            
+			$.sap.require("common.PageHelper");
+			var oPage = new common.PageHelper({
+				idPrefix : oController.PAGEID,
+	            contentItems: [oFilter,
+							   sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail1", oController),
+							   sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail2", oController),
+							   sap.ui.jsfragment("ZUI5_HR_DailyTimeStatus.fragment.Detail3", oController),]
+	        });
 
             oPage.setModel(oController._ListCondJSonModel);
             oPage.bindElement("/Data");

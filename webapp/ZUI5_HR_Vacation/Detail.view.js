@@ -247,10 +247,10 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            textAlign : "Begin",
 										            change : oController.onChangeTime2,
 										            editable : {
-										            	parts : [{path : "Status1"}, {path : "Awart"}],
+										            	parts : [{path : "Status1"}, {path : "Halfc"}],
 										            	formatter : function(fVal1, fVal2){
 										            		if(fVal1 == "" || fVal1 == "AA"){
-										            			return (fVal2 && fVal2 == "1A2") ? true : false; // 반차
+										            			return (fVal2 && fVal2 == "X") ? true : false;
 										            		} else {
 										            			return false;
 										            		}
@@ -266,10 +266,10 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            textAlign : "Begin",
 										            change : oController.onChangeTime2,
 										            editable : {
-										            	parts : [{path : "Status1"}, {path : "Awart"}],
+										            	parts : [{path : "Status1"}, {path : "Halfc"}],
 										            	formatter : function(fVal1, fVal2){
 										            		if(fVal1 == "" || fVal1 == "AA"){
-										            			return (fVal2 && fVal2 == "1A2") ? true : false; // 반차
+										            			return (fVal2 && fVal2 == "X") ? true : false;
 										            		} else {
 										            			return false;
 										            		}
@@ -596,7 +596,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 			  })
 		];
 			  
-		if(parent && window._use_emp_info_box === true) {
+		if((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true) {
 			window._CommonEmployeeModel = new common.EmployeeModel();
 			window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
 
