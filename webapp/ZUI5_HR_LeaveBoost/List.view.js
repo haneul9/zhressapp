@@ -1,6 +1,7 @@
 $.sap.require("common.Common");
 $.sap.require("common.Formatter");
 $.sap.require("common.makeTable");
+$.sap.require("common.PageHelper");
 
 sap.ui.jsview("ZUI5_HR_LeaveBoost.List", {
 	
@@ -25,7 +26,7 @@ sap.ui.jsview("ZUI5_HR_LeaveBoost.List", {
 	                	visible : {
 			 	 			path : "Status1",
 			 	 			formatter : function(fVal){
-			 	 				return fVal == "AA" || fVal == "00" ? true : false;
+			 	 				return fVal == "AA" || fVal == "00" || fVal == "99" ? true : false;
 			 	 			}
 			 	 		},
 	                    items: [/*new sap.m.Button({
@@ -54,6 +55,16 @@ sap.ui.jsview("ZUI5_HR_LeaveBoost.List", {
 						 	 			path : "Status1",
 						 	 			formatter : function(fVal){
 						 	 				return fVal == "AA" || fVal == "00" ? true : false;
+						 	 			}
+						 	 		}
+						 		}).addStyleClass("button-dark"),
+						 		new sap.m.Button({
+						 	 		text : oBundleText.getText("LABEL_52016"), // 연차 지정 통보서 출력
+						 	 		press : oController.onOpenForm,
+						 	 		visible : {
+						 	 			path : "Status1",
+						 	 			formatter : function(fVal){
+						 	 				return fVal == "99" ? true : false;
 						 	 			}
 						 	 		}
 						 		}).addStyleClass("button-dark")]
@@ -175,36 +186,41 @@ sap.ui.jsview("ZUI5_HR_LeaveBoost.List", {
 		        	})]
         });
 		
-		var oContent = new sap.m.FlexBox({
-			  justifyContent: "Center",
-			  fitContainer: true,
-			  items: [new sap.m.FlexBox({
-						  direction: sap.m.FlexDirection.Column,
-						  items: [new sap.m.FlexBox({
-									  alignItems: "End",
-									  fitContainer: true,
-									  items: [new sap.m.Text({text: oBundleText.getText("LABEL_52001")}).addStyleClass("app-title")] // 연차촉진
-								  }).addStyleClass("app-title-container"),
-								  oHeader,
-								  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
-								  oMatrix1,
-								  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
-								  oMatrix2,
-								  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
-								  oMatrix3,
-								  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
-								  oMatrix4,
-								  new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
-					  }).addStyleClass("app-content-container-wide")]
-		}).addStyleClass("app-content-body");
+		// var oContent = new sap.m.FlexBox({
+		// 	  justifyContent: "Center",
+		// 	  fitContainer: true,
+		// 	  items: [new sap.m.FlexBox({
+		// 				  direction: sap.m.FlexDirection.Column,
+		// 				  items: [new sap.m.FlexBox({
+		// 							  alignItems: "End",
+		// 							  fitContainer: true,
+		// 							  items: [new sap.m.Text({text: oBundleText.getText("LABEL_52001")}).addStyleClass("app-title")] // 연차촉진
+		// 						  }).addStyleClass("app-title-container"),
+		// 						  oHeader,
+		// 						  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
+		// 						  oMatrix1,
+		// 						  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
+		// 						  oMatrix2,
+		// 						  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
+		// 						  oMatrix3,
+		// 						  new sap.ui.core.HTML({content : "<div style='height:10px' />"}),
+		// 						  oMatrix4,
+		// 						  new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
+		// 			  }).addStyleClass("app-content-container-wide")]
+		// }).addStyleClass("app-content-body");
 				
 		/////////////////////////////////////////////////////////
 
-		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-			// customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-			showHeader : false,
-			content: [oContent]
-		}).addStyleClass("app-content");
+		var oPage = new common.PageHelper({
+			idPrefix : oController.PAGEID,
+            contentItems: [new sap.ui.core.HTML({content : "<div style='height:20px' />"}), oHeader, oMatrix1, oMatrix2, oMatrix3, oMatrix4]
+        });
+			        
+		// var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+		// 	// customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
+		// 	showHeader : false,
+		// 	content: [oContent]
+		// }).addStyleClass("app-content");
 		
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");
