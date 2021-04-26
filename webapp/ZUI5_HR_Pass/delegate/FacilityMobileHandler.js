@@ -1,8 +1,10 @@
 sap.ui.define(
 	[
-		"./ODataService"
+		"common/Common",
+		"./ODataService",
+		"sap/ui/core/BusyIndicator"
 	],
-	function (ODataService) {
+	function (Common, ODataService, BusyIndicator) {
 		"use strict";
 
 		/**
@@ -35,22 +37,30 @@ sap.ui.define(
 			},
 
 			onPressRowRequest: function (oEvent) {
+				BusyIndicator.show(0);
+
 				var vSpath = oEvent.getSource().getParent().getBindingContext().getPath(),
 					oRowData = $.extend(true, {}, this.oModel.getProperty(vSpath));
-	
-				// Set data
-				delete oRowData.Reqno;
-				delete oRowData.Cellp;
-				delete oRowData.Email;
-				delete oRowData.Zbigo;
-	
-				// Display control
-				oRowData.isNew = true;
 
-				this.oModel.setProperty("/Detail", oRowData);
-	
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix())
+				Common.getPromise(
+					function () {
+						// Set data
+						delete oRowData.Reqno;
+						delete oRowData.Cellp;
+						delete oRowData.Email;
+						delete oRowData.Zbigo;
+			
+						// Display control
+						oRowData.isNew = true;
+
+						this.oModel.setProperty("/Detail", oRowData);
+			
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
 				});
 			},
 

@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"common/Common",
-		"./ODataService"
+		"./ODataService",
+		"sap/ui/core/BusyIndicator"
 	],
-	function (Common, ODataService) {
+	function (Common, ODataService, BusyIndicator) {
 		"use strict";
 
 		/**
@@ -49,43 +50,59 @@ sap.ui.define(
 			},
 
 			onPressResvRow: function(oEvent) {
+				BusyIndicator.show(0);
+
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
 
-				// Set data
-				oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
-				oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);
+				Common.getPromise(
+					function () {
+						// Set data
+						oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
+						oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);
 
-				// Display control
-				oRowData.isNew = false;
+						// Display control
+						oRowData.isNew = false;
 
-				this.oModel.setProperty("/Detail/Data", oRowData);
+						this.oModel.setProperty("/Detail/Data", oRowData);
 
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
 				});
 			},
 
 			onPressRequestRow: function(oEvent) {
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
 	
-				// Set data
-				oRowData.Compcd = this.getBasicTechCode(oRowData.Werks);
-				oRowData.Appbg = oRowData.Begda;
-				oRowData.Appen = oRowData.Endda;
-				oRowData.Romno = "01";
+				BusyIndicator.show(0);
 
-				delete oRowData.__metadata;
-				delete oRowData.Begda;
-				delete oRowData.Endda;
-				delete oRowData.Usepn;
+				Common.getPromise(
+					function () {
+						// Set data
+						oRowData.Compcd = this.getBasicTechCode(oRowData.Werks);
+						oRowData.Appbg = oRowData.Begda;
+						oRowData.Appen = oRowData.Endda;
+						oRowData.Romno = "01";
 
-				// Display control
-				oRowData.isNew = true;
+						delete oRowData.__metadata;
+						delete oRowData.Begda;
+						delete oRowData.Endda;
+						delete oRowData.Usepn;
 
-				this.oModel.setProperty("/Detail/Data", oRowData);
-	
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						// Display control
+						oRowData.isNew = true;
+
+						this.oModel.setProperty("/Detail/Data", oRowData);
+			
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
 				});
 			},
 
