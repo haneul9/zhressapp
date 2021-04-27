@@ -2,8 +2,10 @@
 function EvalGoalProgressingPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
-
 	this.$selector = '#portlet-evalGoalProgressingPortlet-list';
+	this.photoMap = null;
+	this.goalDataMap = null;
+	this.vGoalData = null;
 }
 
 EvalGoalProgressingPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -36,125 +38,12 @@ ui: function() {
 fill: function() {
 
 	var url = '/odata/v2/GoalPlanTemplate?$filter=defaultTemplate eq true&$format=json&$select=id, defaultTemplate';
-	
+
 	return $.getJSON({ // Id받아옴
 		url: url,
 		success: function(data) {
-			var oDataId = data.d.results[0].id;
-			var url2 = "/odata/v2/User('" + this._gateway.pernr() +"')/directReports?$select=userId,nickname,custom01&$format=json";
-            
-			$.getJSON({ // 평가 대상자조회 조회한 사원번호의 평가대상자를 조회
-				url: url2,
-				success: function(data) {
-					var oEmpData = data.d.results;
-					var list = this.$();
-					var oEmpPoto = "",
-						vEmpName = "",
-						vEmpPosition = "";
-					var oBackGround = [
-						"bg-danger",
-						"bg-warning",
-						"bg-info",
-						"bg-success"
-					];
-
-					if (!oEmpData.length) {
-						if (list.data('jsp')) {
-							list.find('.list-group-item').remove().end()
-								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">평가목표가 없습니다.</a>');
-						} else {
-							list.html('<a href="#" class="list-group-item list-group-item-action text-center">평가목표가 없습니다.</a>');
-						}
-						return;
-					}
-
-					if (list.data('jsp')) {
-						list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-					}
-					
-					oEmpData.forEach(function(e) {
-						var url3 = "/odata/v2/Photo?$filter=userId eq '" + e.userId + "' and photoType eq '1' &$select=photo&format=json";
-						vEmpName = e.nickname;
-						vEmpPosition = e.custom01;
-
-						$.getJSON({ // 사진조회
-							url: url3,
-							success: function(data) {
-								oEmpPoto = data.poto ? data.poto : 'images/photoNotAvailable.gif';	
-							}.bind(this),
-							error: function(jqXHR) {
-								this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
-							}.bind(this),
-							complete: function(data) {
-								oEmpPoto = data.poto ? data.poto : 'images/photoNotAvailable.gif';	
-							}.bind(this)
-						});
-
-						url3 = "/odata/v2/Goal_" + oDataId +"?$select=name,done&$filter=userId eq '" + e.userId + "'&$format=json";
-						$.getJSON({ // 목표조회
-							url: url3,
-							success: function(data) {
-								var oDetailData = data.d.results;
-								var vIndex = oDetailData.length;
-								var oGroundColor = "",
-									vScore = 0;
-
-								if(vIndex !== 0){
-									for(var i=0; i<vIndex; i++){
-										vScore += parseInt(oDetailData[i].done);
-									}
-									vScore = vScore/vIndex;
-								}
-						
-								$.map(oDetailData, function(v, i) {
-									if(parseInt(vScore) > 80)
-										oGroundColor= oBackGround[3];
-									else if(parseInt(vScore) > 60)
-										oGroundColor= oBackGround[2];
-									else if(parseInt(vScore) > 30)
-										oGroundColor= oBackGround[1];
-									else 
-										oGroundColor= oBackGround[0];
-									
-									setTimeout(function() {
-										list.append([
-											'<img src="${src}" style="width: 70px; height: 100px;"/>'.interpolate(oEmpPoto),
-											'<div style="height: auto; margin-bottom: 15px; display: flex; flex-direction: column">',
-												'<div style="font-size: 14px; height: 25px;">',
-												vEmpName + vEmpPosition,
-												'</div>',
-												'<div style="display: flex; justify-content: flex-end">',
-													'<div class="progress" style="height: 20px; width: 50%; display: flex;">',
-														'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-														vScore + '%',
-														'</div>',
-													'</div>',
-												'</div>',
-											'</div>'
-										].join(''));
-			
-										$('.progress-bar.i' + i).animate({ width: parseInt(v.done) + '%' }, 2000);
-									}, 0);
-
-								});
-							}.bind(this),
-							error: function(jqXHR) {
-								this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
-							}.bind(this),
-							complete: function(data) {
-							}.bind(this)
-						});
-					});
-
-
-				}.bind(this),
-				error: function(jqXHR) {
-					this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
-				}.bind(this),
-				complete: function() {
-					this.spinner(false);
-				}.bind(this)
-			});
+			this.vGoalData = this._gateway.odataResults(data).id || '';
+			this.retrieveDirectReports(this);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
@@ -164,6 +53,138 @@ fill: function() {
 		}.bind(this)
 	});
 },
+
+retrieveDirectReports: function(oPage) { // 평가사원들 조회
+	var url2 = "/odata/v2/User('" + this._gateway.pernr() +"')/directReports?$select=userId,nickname,custom01&$format=json";
+
+	$.getJSON({ // 평가 대상자조회 조회한 사원번호의 평가대상자를 조회
+		url: url2,
+		success: function(data) {
+			var oEmpData = data.d.results;
+			var list = this.$();
+
+			if (!oEmpData.length) {
+				if (list.data('jsp')) {
+					list.find('.list-group-item').remove().end()
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">평가대상이 없습니다.</a>');
+				} else {
+					list.html('<a href="#" class="list-group-item list-group-item-action text-center">평가대상이 없습니다.</a>');
+				}
+				return;
+			}
+
+			if (list.data('jsp')) {
+				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+			}
+
+			this.photoMap = {};
+			this.goalDataMap = {};
+
+			oEmpData.forEach(function(e, i) {
+				oPage.goalDataMap[e.userId] = {
+					nickname: e.nickname,
+					position: e.custom01
+				};
+
+				Promise.all([
+					oPage.retrievePhoto(e.userId),
+					oPage.retrieveGoalData(e.userId, oPage)
+				]).then(function() {
+					setTimeout(function() {
+						list.append([
+							'<div style="height: auto; margin-bottom: 15px; display: flex;">',
+								'<img src="${src}" style="width: 65px; height: 80px;"/>'.interpolate(oPage.photoMap[e.userId]),
+								'<div style="display: flex; flex-direction: column; margin-left: 25px; justify-content: space-evenly;">',
+									'<div style="font-size: 14px; height: 25px; margin-bottom: 20px; font-weight: bold;">',
+										oPage.goalDataMap[e.userId].nickname,
+									'</div>',
+									'<div style="font-size: 14px; height: 25px;">',
+									oPage.goalDataMap[e.userId].position,
+									'</div>',
+								'</div>',
+								'<div style="display: flex; align-items: center; margin-left: 15px; width: 50%;">',
+									'<div class="progress" style="height: 20px; width: 100%; display: flex;">',
+										'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+											oPage.goalDataMap[e.userId].score + '%',
+										'</div>',
+									'</div>',
+								'</div>',
+							'</div>'
+						].join(''));
+		
+						$('.progress-bar.i' + i).animate({ width: parseInt(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
+					}, 0);
+				}).catch(function(e) {
+				});
+			});
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url2);
+		}.bind(this)
+	});
+},
+
+retrievePhoto: function(userId) { // 사원사진
+	var url3 = "/odata/v2/Photo?$filter=userId eq '" + userId + "' and photoType eq '1' &$select=photo,mimeType&format=json";
+
+	return $.getJSON({ // 사진조회
+		url: url3,
+		success: function(data) {
+			var result = this._gateway.odataResults(data);
+			if (!$.isEmptyObject(result)) {
+				this.photoMap[userId] = 'data:${mimeType};base64,${photo}'.interpolate(result.mimeType, result.photo);
+			} else {
+				this.photoMap[userId] = 'images/photoNotAvailable.gif';
+			}
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url3);
+		}.bind(this)
+	}).promise();
+},
+
+retrieveGoalData: function(userId, oPage) { // 사원목표정보
+	var url4 = "/odata/v2/Goal_" + oPage.vGoalData +"?$select=name,done&$filter=userId eq '" + userId + "'&$format=json";
+
+	return $.getJSON({ // 목표조회
+		url: url4,
+		success: function(data) {
+			var oDetailData = data.d.results;
+			var vDetailIndex = oDetailData.length;
+			var oGroundColor = "",
+				vScore = 0;
+			var oBackGround = [
+				"bg-danger",
+				"bg-warning",
+				"bg-info",
+				"bg-success"
+			];
+
+			if(vDetailIndex !== 0){
+				for(var i=0; i<vDetailIndex; i++){
+					vScore += parseInt(oDetailData[i].done);
+				}
+				vScore = vScore/vDetailIndex;
+			}
+			
+			if(parseInt(vScore) > 80)
+				oGroundColor= oBackGround[3];
+			else if(parseInt(vScore) > 60)
+				oGroundColor= oBackGround[2];
+			else if(parseInt(vScore) > 30)
+				oGroundColor= oBackGround[1];
+			else 
+				oGroundColor= oBackGround[0];
+			
+			oPage.goalDataMap[userId].score = vScore,
+			oPage.goalDataMap[userId].groundColor = oGroundColor;
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
+		}.bind(this)
+	}).promise();
+},
+
 onceAfter: function() {
 
 	var list = this.$();

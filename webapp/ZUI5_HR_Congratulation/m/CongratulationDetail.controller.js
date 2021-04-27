@@ -49,6 +49,8 @@ sap.ui.define(
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
+
 				var	oController = this.getView().getController();
 				var oIconText = $.app.byId(oController.PAGEID + "_IconText");
 				
@@ -76,6 +78,8 @@ sap.ui.define(
 				
 				if(oController.DetailModel.getProperty("/FormData").Fgbdt) oBirthDayDate.setVisible(true);
 				else oBirthDayDate.setVisible(false);
+				
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {

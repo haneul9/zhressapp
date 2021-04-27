@@ -164,18 +164,6 @@
 										text: "{i18n>MSG_56006}"
 									}).addStyleClass("pt-10px")
 								]
-							}),
-							new sap.m.HBox({
-								fitContainer: true,
-								items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
-									new sap.m.Input({
-										width: "150px",
-										value: "{Pword}",
-										maxLength: 10,
-										type: sap.m.InputType.Password
-									})
-								]
 							})
 						]
 					})
@@ -185,20 +173,33 @@
 						items: []
 					}),
 					new sap.m.HBox({
+						justifyContent: sap.m.FlexJustifyContent.End,
+						fitContainer: true,
+						items: [
+							new sap.m.Input({
+								width: "160px",
+								value: "{Pword}",
+								maxLength: 10,
+								type: sap.m.InputType.Password,
+								placeholder: "{i18n>MSG_56013}"
+							}).addStyleClass("mr-5px"),
+							new sap.m.Button({
+								press: oController.onDialogSaveBtn.bind(oController),
+								text: "{i18n>LABEL_56016}" // 저장
+							}).addStyleClass("button-dark")
+						]
+					}).addStyleClass("mt-10px"),
+					new sap.m.HBox({
 						fitContainer: true,
 						items: [
 							new sap.m.TextArea({
 								rows: 2,
-								width: "699px",
+								width: "775px",
 								value:"{Detail}",
 								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							}).addStyleClass("mr-8px"),
-							new sap.m.Button({
-								press: oController.onDialogSaveBtn.bind(oController),
-								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-dark mt-4px")
+							})
 						]
-					}).addStyleClass("mt-10px")
+					}).addStyleClass("mt-3px")
 				]
 			})
 			.setModel(oController.CommentModel)

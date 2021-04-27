@@ -143,9 +143,9 @@ sap.ui.define([
 							new sap.m.HBox({
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40024}", "150px", "Right", true ), // 교육과정
-                                    new sap.m.Input({
+                                    new sap.m.Input(oController.PAGEID + "TrainingInput", {
                                         textAlign: "Begin",
-                                        width: "704px",
+                                        width: "550px",
                                         maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edkaj", false),
                                         editable: {
                                             path: "Status1",

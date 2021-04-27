@@ -42,6 +42,7 @@ sap.ui.define(
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
 				this.DetailModel.setData({ FormData: {} });
 				
 				if(oEvent.data)
@@ -52,6 +53,7 @@ sap.ui.define(
 
 			onAfterShow: function () {
 				Common.log("onAfterShow");
+				BusyIndicator.hide();
 			},
 			
 			onPressCancel: function() {

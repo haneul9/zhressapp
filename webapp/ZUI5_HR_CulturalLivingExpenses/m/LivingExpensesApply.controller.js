@@ -49,6 +49,8 @@ sap.ui.define(
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
+				
 				this.onBeforeOpenFileUpload();
 				
 				Common.log("onBeforeShow");
@@ -74,6 +76,7 @@ sap.ui.define(
 					oRewirteBtn.setVisible(true);
 				
 				Common.log("onAfterShow");
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {

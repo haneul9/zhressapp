@@ -126,6 +126,7 @@
 			oModel.create("/NoticeManageSet", sendObject, {
 				success: function(oData, oResponse) {
 					var dataLength = 10;
+					
 					if (oData && oData.TableIn1) {
 						Common.log(oData);
 						var rDatas = oData.TableIn1.results;

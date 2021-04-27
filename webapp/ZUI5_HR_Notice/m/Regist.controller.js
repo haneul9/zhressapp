@@ -2,9 +2,10 @@
 	"../../common/Common",
 	"../../common/CommonController",
 	"../../common/JSONModelHelper",
-    "../../common/AttachFileAction"
+    "../../common/AttachFileAction",
+	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, BusyIndicator) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Regist"].join($.app.getDeviceSuffix());
@@ -37,6 +38,8 @@
 		},
 		
 		onBeforeShow: function(oEvent) {
+			BusyIndicator.show(0);
+
             this.RegistModel.setData({FormData: []});
 
             if(oEvent.data){
@@ -49,6 +52,7 @@
 
             this.onBeforeOpenDetailDialog(this);
             this.getDetailData(this);
+			BusyIndicator.hide();
         },
 
         navBack: function() {

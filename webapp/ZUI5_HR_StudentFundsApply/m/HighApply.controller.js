@@ -39,6 +39,7 @@
 		},
 		
 		onBeforeShow: function(oEvent) {
+			BusyIndicator.show(0);
             this.HighApplyModel.setData({FormData: []});
 
             if(oEvent.data){
@@ -57,6 +58,7 @@
             this.onBeforeOpenDetailDialog(this);
             this.setZyears(oRowData);
             this.getComboCodeList(oRowData);
+			BusyIndicator.hide();
         },
 
         navBack: function() {

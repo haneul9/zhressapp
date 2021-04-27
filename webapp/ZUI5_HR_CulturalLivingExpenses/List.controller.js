@@ -60,6 +60,8 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			
+			oController.TableModel.setData({Data: []}); //직접적으로 화면 테이블에 셋팅하는 작업
+
 			var sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;
@@ -73,17 +75,17 @@ sap.ui.define([
 			
 			oModel.create("/CultureImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 5;
+					var dataLength = 10;
+
 					if (oData && oData.CultureTableIn1) { //값을 제대로 받아 왔을 때
 						Common.log(oData);
 						var rDatas1 = oData.CultureTableIn1.results;
 						dataLength = rDatas1.length;
 						oController.TableModel.setData({Data: rDatas1}); //직접적으로 화면 테이블에 셋팅하는 작업
-					}else{
-						oController.TableModel.setData({Data: []}); //직접적으로 화면 테이블에 셋팅하는 작업
 					}
 					
-					oTable.setVisibleRowCount(dataLength > 5 ? 5 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
+					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
+
 					var rDatas2 = oData.CultureExport.results[0];
 					oController.DetailModel.setData({LogData: rDatas2});
 					

@@ -2,9 +2,10 @@
 	[
 		"../../common/Common",
 		"../../common/CommonController",
-		"../../common/JSONModelHelper"
+		"../../common/JSONModelHelper",
+        "sap/ui/core/BusyIndicator"
 	],
-	function (Common, CommonController, JSONModelHelper) {
+	function (Common, CommonController, JSONModelHelper, BusyIndicator) {
 		"use strict";
 
 		var SUB_APP_ID = [$.app.CONTEXT_PATH, "TuitionSearch"].join($.app.getDeviceSuffix());
@@ -39,16 +40,13 @@
 			},
 
 			onBeforeShow: function (oEvent) {
-                
-                if(oEvent.data){
-                    
-                }
-
+                BusyIndicator.show(0);
 				Common.log("onBeforeShow");
 			},
 
 			onAfterShow: function () {
                 this.onTableSearch(this);
+                BusyIndicator.hide();
 			},
 			
 			navBack: function() {

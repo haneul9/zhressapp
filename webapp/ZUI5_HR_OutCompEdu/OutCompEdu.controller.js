@@ -265,6 +265,7 @@ sap.ui.define([
 			oModel.create("/TrainingOutApplySet", sendObject, {
 				success: function(oData, oResponse) {
 					var dataLength = 10;
+					
 					if (oData && oData.TrainingOutApplyTableIn1) { //값을 제대로 받아 왔을 때
 						Common.log(oData);
 						var rDatas1 = oData.TrainingOutApplyTableIn1.results;
