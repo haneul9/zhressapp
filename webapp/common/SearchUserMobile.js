@@ -1,6 +1,8 @@
 jQuery.sap.declare("common.SearchUserMobile");
 
 jQuery.sap.require("common.Common");
+jQuery.sap.require("common.JSONModelHelper");
+
 
 common.SearchUserMobile = {
     /**
@@ -27,21 +29,6 @@ common.SearchUserMobile = {
         }
         $.app.byId(common.SearchUserMobile.oController.PAGEID + "_EmpSearchResult_Table").setModel(sap.ui.getCore().getModel("EmpSearchResult"));
     },
-    
-    
-	// pressEmployeeSearch: function() {
-	// 	SearchUserMobile.oController = this.oController;
-	// 	SearchUserMobile.fPersaEnabled = false;
-	// 	SearchUserMobile._vPersa = this.oController.getSessionInfoByKey("Persa");
-	// 	SearchUserMobile.dialogContentHeight = 480;
-		
-	// 	if (!this.oEmployeeSearchDialog) {
- //           this.oEmployeeSearchDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this.oController);
- //           $.app.getView().addDependent(this.oEmployeeSearchDialog);
- //       }
-
- //       this.oEmployeeSearchDialog.open();
-	// },
 
     loadPersaControl: function () {
         var oController = common.SearchUserMobile.oController;
@@ -196,15 +183,11 @@ common.SearchUserMobile = {
             return;
         }
 
-        // oTable.clearSelection();
-        // oDialog.setBusyIndicatorDelay(0);
-        // oDialog.setBusy(true);
-
-        // var mEmpSearchResult = sap.ui.getCore().getModel("EmpSearchResult");
         var vEmpSearchResult = {
             EmpSearchResultSet: []
         };
-
+		
+		common.SearchUserMobile.EsBusyDialog.open(); 
         common.Common.getPromise(
             function () {
                 $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
@@ -218,6 +201,7 @@ common.SearchUserMobile = {
                                 });
                             });
                             oTableModel.setData(vEmpSearchResult);
+                            common.SearchUserMobile.searchPhoto();
                         }
                     },
                     error: function (oResponse) {
@@ -226,8 +210,53 @@ common.SearchUserMobile = {
                 });
             }.bind(this)
         ).then(function () {
-            // oDialog.setBusy(false);
+            common.SearchUserMobile.EsBusyDialog.close();
         });
+    },
+    
+    searchPhoto :function(){
+    	var oController = common.SearchUserMobile.oController;
+		var oTable = sap.ui.getCore().byId(oController.PAGEID + "_EmpSearchResult_Table");
+		var oTableModel = oTable.getModel();
+		var vData = oTableModel.getProperty("/EmpSearchResultSet");
+		var promises = [];
+		
+		var isPernr = function(vPernr) {
+			for(var i = 0; i< vData.length; i++){
+				if(vData[i].Pernr === vPernr){
+					return i;
+					break;
+				}
+			}
+		};
+		
+		vData.forEach(function(o){
+			promises.push(
+				new Promise(function(){
+					 new JSONModelHelper()
+                            .url("/odata/v2/Photo?$filter=userId eq '" + o.Pernr + "' and photoType eq '1'")
+                            .select("photo")
+                            .setAsync(true)
+                            .attachRequestCompleted(function () {
+                                var data = this.getData().d;
+                                var oPhoto = "";
+								if (data && data.results.length) {
+                                    oPhoto = "data:text/plain;base64," + data.results[0].photo;
+                                } else {
+                                    oPhoto = "images/male.jpg";
+                                }
+								oTableModel.setProperty("/EmpSearchResultSet/" + isPernr(o.Pernr) + "/photo",  oPhoto  );
+						    })
+                            .attachRequestFailed(function () {
+                                var oPhoto = "images/male.jpg";
+                                oTableModel.setProperty("/EmpSearchResultSet/" +isPernr(o.Pernr) + "/photo",  oPhoto  );
+						    })
+                            .load();
+					})		
+			);
+		});
+		
+		Promise.all(promises);
     },
     
 	onESSelectPerson: function (oEvent) {
