@@ -24,12 +24,12 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" datakey="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-evalGoalPortlet-list"></div>',
 			'</div>',
-			this.spinner(false),
+			this.spinner(),
 		'</div>'
 	].join('');
 },

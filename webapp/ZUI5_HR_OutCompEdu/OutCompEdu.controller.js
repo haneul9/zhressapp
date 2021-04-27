@@ -386,6 +386,18 @@ sap.ui.define([
 			this._ReportModel.open();
 		},
 
+		onDInput: function(oEvent) { // 직접입력 CheckBox
+			if(oEvent.getSource().getSelected())
+				this.ApplyModel.setProperty("/TraningCheck", "Y");
+			else
+				this.ApplyModel.setProperty("/TraningCheck", "X");
+			this.ApplyModel.setProperty("/FormData/Edkaj", "");
+		},
+
+		RegistTraning: function() { // 교육과정 Dialog
+
+		},
+
 		onPressReqBtn: function() { // 결재요청
 			var oController = $.app.getController();
 			var vPernr = oController.getUserId();
