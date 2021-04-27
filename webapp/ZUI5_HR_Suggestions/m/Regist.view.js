@@ -81,13 +81,13 @@ sap.ui.define([
 						height: "40px",
 						justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left") // 댓글                                 
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left").addStyleClass("sub-title") // 댓글                                 
 						]
 					}),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
                         fitContainer: true,
 						items: []
-					}),
+					}).addStyleClass("mt--24px"),
                     new sap.m.HBox({
                         justifyContent: sap.m.FlexJustifyContent.End,
                         fitContainer: true,
@@ -101,22 +101,22 @@ sap.ui.define([
                                     Common.onPressTableHeaderInformation.call(oController, oEvent);
                                 }
                             })
-                            .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                            .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue mt-10px"),
                             new sap.m.Input({
-                                width: "60%",
+                                width: "170px",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 maxLength: 10,
                                 value: "{Pword}",
                                 type: sap.m.InputType.Password,
                                 placeholder: "{i18n>MSG_56013}"
-                            }),
+                            }).addStyleClass("mr-8px"),
                             new sap.m.Button({
 								press: oController.onDialogSaveBtn.bind(oController),
 								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-dark")
+							}).addStyleClass("button-dark mt-4px")
                         ]
                     })
-                    .addStyleClass("mt-15px"),
+                    .addStyleClass("custom-comment"),
                     new sap.m.HBox({
 						fitContainer: true,
 						items: [
@@ -266,10 +266,11 @@ sap.ui.define([
                             })
                         ]
                     }),
-                    new sap.m.HBox({
-						alignItems: sap.m.FlexAlignItems.Center,
+                    new sap.m.VBox({
+                        fitContainer: true,
+					//	alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true), // 내용
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title"), // 내용
                             new sap.m.TextArea({
                                 rows: 10,
 								width: "100%",
@@ -282,7 +283,7 @@ sap.ui.define([
 										return !v1 || v2 === "X";
 									}
 								}
-							}).addStyleClass("mt-8px mb-8px")
+							})
 						]
 					}),
 					new sap.m.HBox({

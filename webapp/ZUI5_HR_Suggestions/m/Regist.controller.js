@@ -186,9 +186,10 @@
 										items: [
 											new sap.m.Text({ 
 												text: Common.DateFormatter(e.Adatl)
-											}),
+											}).addStyleClass("mt--3px"),
 											new sap.m.Button({
 												press: oController.onCommentSubBtn.bind(oController),
+												icon: "sap-icon://comment",
 												text: "{i18n>LABEL_56017}" // 대댓글
 											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
@@ -303,7 +304,7 @@
 												items: [
 													new sap.m.Text({ 
 														text: Common.DateFormatter(e.Adatl)
-													}),
+													}).addStyleClass("mt--3px"),
 													new sap.m.Button({
 														press: oController.onSubCommentReBtn.bind(oController),
 														text: "{i18n>LABEL_56013}" // 수정
@@ -385,7 +386,7 @@
 										items: [
 											new sap.m.Text({
 												text: ""
-											}),
+											}).addStyleClass("mt--3px"),
 											new sap.m.Button({
 												press: oController.onSubCommentReBtn.bind(oController),
 												visible: false,

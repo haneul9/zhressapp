@@ -54,7 +54,6 @@ sap.ui.define(
                     oIconBar.setSelectedKey("Basic");
                     oIconBar.fireSelect();
                 }
-                // else if(oEvent && oEvent.data && typeof oEvent.data.isResvRefresh === "boolean") return;
             },
 
             onAfterShow: function () {},
@@ -71,9 +70,19 @@ sap.ui.define(
                 switch (this._vCurrentTabKey) {
                     case "Basic":
                         oController.onPressSearchBasic();
+                        Common.userPrivateLog({
+                        	pernr : vPernr,
+                        	func : "개인정보|주소",
+                        	mobile : ""
+                        });
                         break;
                     case "Address":
                         oController.onPressSearchAddress();
+                        Common.userPrivateLog({
+                        	pernr : vPernr,
+                        	func : "개인정보|주소",
+                        	mobile : ""
+                        });
                         break;
                     case "Car":
                         oController.onPressSearchCar();
