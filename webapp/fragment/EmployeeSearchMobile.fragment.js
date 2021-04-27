@@ -13,7 +13,7 @@ sap.ui.jsfragment("fragment.EmployeeSearchMobile", {
 			items: [
                 this.getSearchHBox(oController),
 				this.getList(oController),
-				new sap.ui.core.HTML({content : "<div style='height : 5px;'/>"}),
+				new sap.ui.core.HTML({content : "<div style='height : 5px;'/>"})
 			]
 		}).addEventDelegate({
 			onAfterRendering: function() {
@@ -60,6 +60,10 @@ sap.ui.jsfragment("fragment.EmployeeSearchMobile", {
 				growingThreshold: 5,
 				columns: [
 					new sap.m.Column({
+						width: "45px",
+						hAlign: sap.ui.core.TextAlign.Begin
+					}),
+					new sap.m.Column({
 						width: "30%",
 						hAlign: sap.ui.core.TextAlign.Begin
 					}),
@@ -76,6 +80,15 @@ sap.ui.jsfragment("fragment.EmployeeSearchMobile", {
 					template: new sap.m.ColumnListItem({
 						counter: 5,
 						cells: [
+							new sap.m.FlexBox({
+								direction: sap.m.FlexDirection.Column,
+								items: [
+									new sap.m.Image({
+										src : "{photo}",
+										width : "40px"
+									})
+								]
+							}),
 							new sap.m.FlexBox({
 								direction: sap.m.FlexDirection.Column,
 								items: [

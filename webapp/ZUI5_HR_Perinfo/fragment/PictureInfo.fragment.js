@@ -2,8 +2,9 @@ sap.ui.define(
     [
         "common/Common" ,
     	"control/ODataFileUploader", 
+    	"common/AttachFileAction"
     ],
-    function (Common, ODataFileUploader ) {
+    function (Common, ODataFileUploader, AttachFileAction ) {
         "use strict";
 
         sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.PictureInfo", {
@@ -26,7 +27,7 @@ sap.ui.define(
                             height: "45px",
                             cells: [
                             	new sap.ui.commons.layout.MatrixLayoutCell({ 
-		                            	content : new sap.m.Text({ text: "{i18n>MSG_37037}" }).addStyleClass("px-10") //JPG/JPEG/PNG 형식으로 사진을 업로드하십시오. 파일 크기는 2MB를 넘지 않아야 하며 가로 세로 비율은 3 : 4가 권장됩니다.
+		                            	content : new sap.m.Text({ text: "{i18n>MSG_37037}" }).addStyleClass("px-10px") //JPG/JPEG/PNG 형식으로 사진을 업로드하십시오. 파일 크기는 2MB를 넘지 않아야 하며 가로 세로 비율은 3 : 4가 권장됩니다.
 	                            })]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
@@ -53,17 +54,15 @@ sap.ui.define(
 												name: oController.PAGEID + "PICUploadFile",
 												modelName: "ZHR_COMMON_SRV",
 												slug: "",
-												maximumFileSize: 1,
+												maximumFileSize: 0.030,
 												multiple: false,
 												uploadOnChange: false,
-												mimeType: ["image"], //["image","text","application"],
-												fileType: ["jpg","png","jpeg"], //["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf"]
+												mimeType: ["image"],
+												fileType: ["jpg","JPG"], 
 												buttonText: "{i18n>LABEL_37108}", // 업로드
 												buttonOnly: true,
-												// uploadComplete: $.proxy(AttachFileAction.uploadComplete, oController),
-												// uploadAborted: $.proxy(AttachFileAction.uploadAborted, oController),
-												// fileSizeExceed: $.proxy(AttachFileAction.fileSizeExceed, oController),
-												// typeMissmatch: $.proxy(AttachFileAction.typeMissmatch, oController),
+												fileSizeExceed: oController.fileSizeExceed,
+												typeMissmatch: $.proxy(AttachFileAction.typeMissmatch, oController),
 												change: oController.onFileChange,
 											})  	
                                     ], 

@@ -41,15 +41,17 @@ sap.ui.define(
                     var vData = {
                         Data: Object.assign({ Auth: gAuth }, this.getView().getModel("session").getData())
                     };
-                    this._ListCondJSonModel.setData(vData);
+                     this._ListCondJSonModel.setData(vData);
+                     this.getPhoto();
                 }
 
                 if (oEvent && oEvent.data && oEvent.data.Pernr) {
+                   // Employee Div 정의
                     this._ListCondJSonModel.setProperty("/Data/Pernr", oEvent.data.Pernr);
                     this._ListCondJSonModel.setProperty("/Data/Ename", oEvent.data.Ename);
+                    this.getPhoto();
                     var oIconBar = sap.ui.getCore().byId(this.PAGEID + "_IconBar");
                     oIconBar.setSelectedKey("Basic");
-                    // this.handleTabBarSelect(this, "X");
                     oIconBar.fireSelect();
                 }
                 // else if(oEvent && oEvent.data && typeof oEvent.data.isResvRefresh === "boolean") return;
@@ -525,6 +527,66 @@ sap.ui.define(
                         }
                     });
             },
+            getPhoto : function() {
+            	var oController = $.app.getController();
+            	var vPernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
+            	var oPhoto = ""; 
+            	
+        		$.ajax({
+					url:"/odata/v2/Photo?$filter=userId%20eq%20%27"+vPernr+"%27%20and%20photoType%20eq%20%2701%27&customPageSize="+1000,
+					method:"get",
+					dataType: "json",
+					async:true
+				}).done(function(data){
+					if(data&&data.d.results.length){
+						if (data && data.d.results.length) {
+                            oPhoto = "data:text/plain;base64," + data.d.results[0].photo;
+                        } else {
+                            oPhoto = "images/male.jpg";
+                        }
+                    	oController._ListCondJSonModel.setData({ Data: { photo: oPhoto } }, true);
+                    	// oController.makeHtml();
+					}
+				}).fail(function(res) {
+					common.Common.log(res);
+				});
+		    },
+            
+            makeHtml: function () {
+                var oController = $.app.getController();
+                var oHtml = "";
+                var oData = oController._ListCondJSonModel.getProperty("/Data");
+                $.ajax({
+                    url: "ZUI5_HR_Perinfo/m/fragment/EmployeeDiv.html",
+                    cache: false,
+                    async: false
+                }).done(function (html) {
+                    oHtml = html;
+                }).fail(function (res) {
+                    Common.log(res);
+                });
+
+                if (oHtml == "") {
+                    sap.m.MessageBox.error(oController.getBundleText("MSG_27006")); // 오류가 발생하였습니다.
+                    return "";
+                }
+                
+                // 인적사항
+                var textReplace = [
+                    { label: "[PHOTO]", data: oData.photo },
+                    { label: "[ENAME]", data: oData.Ename },
+                    { label: "[STEXT]", data: oData.Ename },
+                    { label: "[PERNR]", data: oData.Pernr }
+                ];
+
+                for (var i = 0; i < textReplace.length; i++) {
+                    oHtml = oHtml.replace(textReplace[i].label, textReplace[i].data);
+                }
+				
+				oController._ListCondJSonModel.setData({ Data: { html: oHtml } }, true);  
+		        return oHtml;
+            },
+       
 
             getLocalSessionModel: Common.isLOCAL()
                 ? function () {
