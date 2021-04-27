@@ -33,7 +33,6 @@ sap.ui.define(
             _PictureJSonModel: new sap.ui.model.json.JSONModel(), // 사진 저장 Popup Dialog
             _PicChangeJSonModel: new sap.ui.model.json.JSONModel(), // 사진 저장 Popup Dialog
             EmpSearchResult: new sap.ui.model.json.JSONModel(),
-            _MenuId: "",
             EmployeeModel: new EmployeeModel(),
 
             onInit: function () {
@@ -57,8 +56,7 @@ sap.ui.define(
             onBeforeShow: function () {
                 var oController = this;
                 oController._SchoolJSonModel.setSizeLimit(5000);
-                oController._MenuId = parent._gateway.mid();
-
+              
                 if (!oController._ListCondJSonModel.getProperty("/Data")) {
                     var vData = {
                         Data: Object.assign({ Auth: $.app.getAuth() }, oController.getView().getModel("session").getData())
@@ -124,9 +122,9 @@ sap.ui.define(
                             {
                                 ILangu : oController.getView().getModel("session").getData().Langu,
                                 TableIn : [{ Pernr: vPernr,  
-                                             UserId : oController.getView().getModel("session").getData().Pernr,
+                                             Usrid : oController.getView().getModel("session").getData().Pernr,
                                 		     Func:  vFunc,
-                                		     Menuid: $.app.getMenuId()
+                                		     Menid: $.app.getMenuId()
                                 }]
                             },
                            {
@@ -746,7 +744,13 @@ sap.ui.define(
                                 }
                             );
                         }),
-                        oController.retrieveLog(vPernr, "개인정보|주소")
+                        oController.onPressSearchFamily(vPernr),
+                        // oController.retrieveLog(vPernr, "개인정보|주소")
+                        Common.userPrivateLog({
+                        	pernr : vPernr,
+                        	func : "개인정보|주소",
+                        	mobile : ""
+                        })
                     ]).then(function () {
                         oController._HandicapJSonModel.setProperty("/Data/Openf", oController._ListCondJSonModel.getProperty("/Data/Openf"));
                         oController._MilitaryJSonModel.setProperty("/Data/Openf", oController._ListCondJSonModel.getProperty("/Data/Openf"));
@@ -762,6 +766,9 @@ sap.ui.define(
             onPressSearchFamily : function(vPernr) {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
+                if(gAuth == "M"){
+                	return ;	
+                }
                 var vConType = "1";
                 var vBurks = oController.getView().getModel("session").getData().Bukrs2;
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
@@ -805,31 +812,13 @@ sap.ui.define(
 		                            oFamilyTable.setVisibleRowCount(vData.Data.length);
 		                        }
 		                    }
-		                ),
-		                Common.getPromise(true, function (resolve) {
-                            $.app.getModel("ZHR_COMMON_SRV").create(
-                                // 로그 입력
-                                "/SaveConnEhrLogSet",
-                                {
-                                    ILangu : oController.getView().getModel("session").getData().Langu,
-                                    TableIn : [{ Pernr: vPernr,  
-                                                 UserId : oController.getView().getModel("session").getData().Pernr, 
-                                    		     Func: "가족",
-                                    		     Menuid: $.app.getMenuId()
-                                    }]
-                                },
-                                {
-                                    async: true,
-                                    success: function () {
-                                    	resolve();
-                                    },
-                                    error: function () {
-                                    	resolve();
-                                    }
-                                }
-                            );
-                        })
-                	})
+		                )
+                	}),
+                	Common.userPrivateLog({
+                    	pernr : vPernr,
+                    	func : "가족",
+                    	mobile : ""
+                    })
             	]).then(function () {
                     
             	});
@@ -844,7 +833,8 @@ sap.ui.define(
                 var search = function () {
                     var oPath = "/PerinfoBasicSet";
                     var createData = { PinfoBasicNav: [] };
-                   	Promise.all([
+                    var vData = { Data: [] };
+		            Promise.all([
                         Common.getPromise(true, function (resolve) {
                             $.app.getModel("ZHR_PERS_INFO_SRV").create(
 		                    oPath,
@@ -853,22 +843,21 @@ sap.ui.define(
 		                        IDatum: "/Date(" + Common.getTime(new Date()) + ")/",
 		                        IConType: "1",
 		                        ILangu: oController.getView().getModel("session").getData().Langu,
-		                        PinfoFamilyNav: []
+		                        PinfoBasicNav: []
 		                    },
 		                    {
 		                        async: true,
 		                        success: function (data) {
-		                            var vData = { Data: [] };
 		                            if (data) {
 		                                if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
 		                                    vData.Data = data.PinfoBasicNav.results[0];
 		                                }
 		                            }
+		                            resolve();
 		                        },
 		                        error: function (oError) {
 		                          var Err = {};
 		                            oController.Error = "E";
-		
 		                            if (oError.response) {
 		                                Err = window.JSON.parse(oError.response.body);
 		                                var msg1 = Err.error.innererror.errordetails;
@@ -877,35 +866,17 @@ sap.ui.define(
 		                            } else {
 		                                oController.ErrorMessage = oError.toString();
 		                            }
+		                            resolve();
 		                        }
 		                    }
 		                 )
                         }),
-                    	Common.getPromise(true, function (resolve) {
-                            $.app.getModel("ZHR_COMMON_SRV").create(
-                                // 로그 입력
-                                "/SaveConnEhrLogSet",
-                                {
-                                    ILangu : oController.getView().getModel("session").getData().Langu,
-                                    TableIn : [{ Pernr: vPernr,  
-                                                 UserId : oController.getView().getModel("session").getData().Pernr, 
-                                    		     Func: "개인정보|주소",
-                                    		     Menuid: $.app.getMenuId()
-                                    }]
-                                },
-                                {
-                                    async: true,
-                                    success: function () {
-                                    	resolve();
-                                    },
-                                    error: function () {
-                                    	resolve();
-                                    }
-                                }
-                            );
-                        })
+                    	Common.userPrivateLog({
+	                    	pernr : vPernr,
+	                    	func : "개인정보",
+	                    	mobile : ""
+	                    })
                     ]).then(function () {
-                        oController._BusyDialog.close();
                         vData.Data.disyn = "2";
 	                    vData.Data.Auth = gAuth;
 	                    vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
@@ -927,108 +898,11 @@ sap.ui.define(
                 oController._BusyDialog.open();
                 setTimeout(search, 100);
             },
-            
-            
-      //      onPressSearchBasic: function (vPernr) {
-      //          var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
-      //          var oController = oView.getController();
-
-      //          // var oData = oController._ListCondJSonModel.getProperty("/Data");
-      //          var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
-      //          var vData = { Data: {} };
-
-      //          var search = function () {
-      //              var oPath = "";
-      //              var createData = { PinfoBasicNav: [] };
-
-      //              oPath = "/PerinfoBasicSet";
-      //              createData.IPernr = vPernr;
-      //              createData.IConType = "1";
-      //              createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
-					
-					
-					 //Promise.all([
-      //                  Common.getPromise(true, function (resolve) {
-      //                      $.app.getModel("ZHR_PERS_INFO_SRV").create(
-		    //                 oPath,
-		    //                 {
-		    //                     IPernr: vPernr,
-		    //                     IDatum: "/Date(" + Common.getTime(new Date()) + ")/",
-		    //                     IConType: "1",
-		    //                     ILangu: oController.getView().getModel("session").getData().Langu,
-		    //                     PinfoFamilyNav: []
-		    //                 },
-		    //                 {
-		    //                     async: true,
-		    //                     success: function (data) {
-		    //                         var vData = { Data: [] };
-		    //                         if (data) {
-		    //                             if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
-		    //                                 vData.Data = data.PinfoBasicNav.results[0];
-		    //                             }
-		    //                         }
-		    //                     },
-		    //                     error: function () {
-		                          
-		    //                     }
-		    //                 }
-		    //             )ㅅ
-                       
-                       
-                        
-      //              var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
-      //              oModel.create(
-      //                  oPath,
-      //                  createData,
-      //                  null,
-      //                  function (data) {
-      //                      if (data) {
-      //                          if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
-      //                              vData.Data = data.PinfoBasicNav.results[0];
-      //                          }
-      //                      }
-      //                  },
-      //                  function (oError) {
-      //                      var Err = {};
-      //                      oController.Error = "E";
-
-      //                      if (oError.response) {
-      //                          Err = window.JSON.parse(oError.response.body);
-      //                          var msg1 = Err.error.innererror.errordetails;
-      //                          if (msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-      //                          else oController.ErrorMessage = Err.error.message.value;
-      //                      } else {
-      //                          oController.ErrorMessage = oError.toString();
-      //                      }
-      //                  }
-      //              );
-      //              vData.Data.disyn = "2";
-      //              vData.Data.Auth = gAuth;
-      //              vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
-      //              vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
-      //              vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(Common.setTime(vData.Data.Famdt))) : null;
-      //              vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
-      //              vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat02))) : null;
-      //              oController._BasicJSonModel.setProperty("/Data", vData.Data);
-      //              oController._BusyDialog.close();
-
-      //              if (oController.Error == "E") {
-      //                  oController.Error = "";
-      //                  MessageBox.error(oController.ErrorMessage);
-      //                  return;
-      //              }
-      //          };
-
-      //          oController._BusyDialog.open();
-      //          setTimeout(search, 100);
-      //      },
-
+           
             onPressSearchAddress: function (vPernr) {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
-
-                // var oData = oController._ListCondJSonModel.getProperty("/Data"),
-                var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
+			    var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
                     oJSONModel = oTable.getModel();
                 var vData = { Data: [] };
 
@@ -1039,7 +913,6 @@ sap.ui.define(
                     // Address
                     oPath = "/PerinfoAddressSet";
                     createData.IPernr = vPernr;
-                    // this.oController.getSessionInfoByKey("Pernr");
                     createData.IConType = "1";
                     createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
@@ -1073,11 +946,15 @@ sap.ui.define(
                             }
                         }
                     );
-
+					
                     oJSONModel.setData(vData);
                     oTable.bindRows("/Data");
                     oTable.setVisibleRowCount(vData.Data.length >= 10 ? 10 : vData.Data.length);
-
+					Common.userPrivateLog({
+                    	pernr : vPernr,
+                    	func : "주소",
+                    	mobile : ""
+                    });
                     oController._BusyDialog.close();
 
                     if (oController.Error == "E") {
