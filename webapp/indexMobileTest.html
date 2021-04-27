@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko-KR" locale="ko_KR" device="mobile">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+<title>Hi HR</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-500.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-700.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="stylesheet" href="css/noto-sans-kr.css" />
+<link rel="stylesheet" href="css/fontawesome-all.min.css" />
+<link rel="stylesheet" href="css/utils/box-size.css" />
+<link rel="stylesheet" href="css/utils/spinner.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery-ui.min.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane.css" media="all" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
+<script src="common/PromisePolyfillNpm.min.js"></script>
+<script src="common/moment-with-locales.js"></script>
+<script src="common/moment-timezone-with-data.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery-ui.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery.mousewheel.js"></script>
+<script src="ZUI5_HR_Home/js/lib/jquery.jscrollpane.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
+<script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
+<script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
+<script src="ZUI5_HR_Home/js/HomeSession.js"></script>
+<script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
+<script src="ZUI5_HR_Home/js/MenuHamburgerTest.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--				P101 개인정보 -->
+<script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--				P102 공지사항 -->
+<script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--				P105 팀 달력 -->
+<script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--			P108 하이톡톡 -->
+<script src="ZUI5_HR_Home/js/portlets/EvalGoalPortlet.js"></script><!--				P107 목표관리 -->
+<script src="ZUI5_HR_Home/js/portlets/EvalGoalProgressingPortlet.js"></script><!--	P108 팀원 목표 진척율 -->
+<script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
+<script src="ZUI5_HR_Home/js/PortletsMobileTest.js"></script>
+<script>
+function initHome() {
+
+	var _gateway = window._gateway,
+	popup = _gateway.isPopup();
+
+	$('.navbar-mobile').toggleClass('d-none', false);
+	$('.ehr-body').height('calc(100% - ${navbar-height}px)'.interpolate($('.navbar-mobile').height()));
+
+	setTimeout(function() {
+		window._i18n = new HomeI18n(_gateway);
+		window._i18n.changeLocale();
+	}, 0);
+
+	setTimeout(function() {
+		var locale = window._session.locale();
+
+		$('html').attr('locale', locale).attr('lang', (sessionStorage.getItem('ehr.sf-user.language') || 'ko').toLowerCase());
+	});
+
+	if (popup) {
+		setTimeout(function() {
+			$('.navbar-mobile .button-logout').click(function() {
+				
+			});
+		}, 0);
+
+		$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+		$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
+		new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
+
+		return;
+	}
+
+	setTimeout(function() {
+		window._menu = new MenuHamburger(_gateway, '#navbarCollapse');
+		window._menu.generate(); // 메뉴 목록 조회 및 링크 생성
+	}, 0);
+
+	setTimeout(function() {
+		window._portlet = new PortletsMobile(_gateway);
+		window._portlet.generate(); // Portlet 설정 조회 및 생성
+	}, 0);
+
+	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
+
+	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
+}
+
+$(function() {
+
+var _gateway = window._gateway = new HomeGateway();
+window._basis = new HomeBasis(_gateway);
+window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
+
+});
+</script>
+</head>
+<body>
+<div class="navbar navbar-light bg-light navbar-mobile d-none" role="navigation"><!-- 태블릿 지원 class .navbar-expand-md 삭제 -->
+	<button class="navbar-toggler pl-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<a class="navbar-brand ehr-logo" href="javascript:;"></a>
+	<a class="navbar-brand" href="UnderConstruction.html">임시</a>
+<!--
+	<button class="navbar-toggler pr-0 button-logout" type="button">
+		<svg width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+			<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+		</svg>
+	</button>
+-->
+	<div class="collapse navbar-collapse" id="navbarCollapse">
+<!--
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">인사행정</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">급여</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">근태</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">복리후생</a>
+				<ul class="dropdown-menu" aria-labelledby="dropdown1">
+					<li class="dropdown-item" href="#"><a>2Depth Menu</a></li>
+					<li class="dropdown-item dropdown">
+						<a class="dropdown-toggle" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">2Depth Menu</a>
+						<ul class="dropdown-menu" aria-labelledby="dropdown1-1">
+							<li class="dropdown-item" href="#"><a>3Depth Menu</a></li>
+							<li class="dropdown-item" href="#"><a>3Depth Menu</a></li>
+							<li class="dropdown-item" href="#"><a>3Depth Menu</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">인재개발</a>
+				<ul class="dropdown-menu" aria-labelledby="dropdown2">
+					<li class="dropdown-item" href="#"><a>2Depth Menu</a></li>
+					<li class="dropdown-item" href="#"><a>2Depth Menu</a></li>
+					<li class="dropdown-item" href="#"><a>2Depth Menu</a></li>
+					<li class="dropdown-item dropdown">
+						<a class="dropdown-toggle" id="dropdown2-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">2Depth Menu</a>
+						<ul class="dropdown-menu" aria-labelledby="dropdown2-1">
+							<li class="dropdown-item" href="#"><a>3Depth Menu</a></li>
+							<li class="dropdown-item" href="#"><a>3Depth Menu</a></li>
+							<li class="dropdown-item" href="#"><a>3Depth Menu</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+-->
+	</div>
+</div>
+
+<div class="ehr-body">
+	<div class="menu-spinner-wrapper">
+		<div class="spinner menu-spinner"></div>
+	</div>
+	<div class="container-fluid">
+<!--
+		<div class="portlet-masonry-wrapper mx-auto">
+			<div class="row portlet-masonry">
+				<div class="col portlet-col"></div>
+					<div class="card portlet portlet-5h">
+						<div class="card-header">Header</div>
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						</div>
+					</div>
+					<div class="card portlet portlet-3h">
+						<div class="card-header">Header</div>
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+-->
+	</div>
+</div>
+</body>
+</html>
