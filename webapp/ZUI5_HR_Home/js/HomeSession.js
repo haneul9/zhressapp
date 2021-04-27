@@ -42,9 +42,12 @@ init: function(callback) {
 	}.bind(this))
 	.then(function() {
 		return Promise.all([
-			this.retrieveLoginInfo(),		// 인사정보 조회
+			this.sessionToken(),			// Session token 등록
 			this.registerToken()			// Mobile token 등록
 		]);
+	}.bind(this))
+	.then(function() {
+		return this.retrieveLoginInfo();	// 인사정보 조회
 	}.bind(this))
 	.then(function() {
 		if (typeof HomeMFA === 'function') {
@@ -385,10 +388,43 @@ retrieveLoginInfo: function() {
 	}).promise();
 },
 
+sessionToken: function(pernr) {
+
+	var args = [].slice.call(arguments);
+	if (args.length) {
+		return {
+			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
+			IUsrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
+			IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
+			IUsrpn: sessionStorage.getItem('ehr.sf-user.name'),			// 로그인 사번
+			IMenuid: this._gateway.parameter('mid'),					// 메뉴 ID
+			IPernr: pernr || ''											// 대상자 사번
+		};
+	}
+
+	var url = 'ZHR_COMMON_SRV/SessionInfoSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			IUsrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
+			IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
+			ILangu: sessionStorage.getItem('ehr.sf-user.language')
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeSession.sessionToken ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + url);
+		}.bind(this)
+	}).promise();
+},
+
 registerToken: function() {
+
 	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
-		token = this._gateway.parameter("token"),
-		percod = sessionStorage.getItem('ehr.odata.user.percod');
+	token = this._gateway.parameter("token"),
+	percod = sessionStorage.getItem('ehr.odata.user.percod');
 
 	if (token === undefined || token === null || token === '') {
 		// throw new Error("Token is blank.");
