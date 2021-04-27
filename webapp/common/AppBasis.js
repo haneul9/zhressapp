@@ -217,7 +217,23 @@ getViewInitStyleClasses: function() {
 	}
 },
 getMenuId: function() {
-	return parent._gateway.mid((document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1"));
+	try {
+		var mid;
+		if (parent && parent._gateway && typeof parent._gateway.mid === "function") {
+			mid = parent._gateway.mid((document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1"));
+		}
+		if (mid) {
+			return mid;
+		}
+		throw new Error("No mid.");
+	} catch(e) {
+		var paramMap = {};
+		$.map(location.search.replace(/\?/, '').split(/&/), function (v) {
+			var pair = v.split(/=/);
+			paramMap[pair[0]] = decodeURIComponent(pair[1]);
+		});
+		return paramMap.mid || '';
+	}
 },
 spinner: function(show) {
 	setTimeout(function() {
