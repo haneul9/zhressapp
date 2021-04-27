@@ -201,7 +201,7 @@ sap.ui.define([
 			var oIndices = oTable.getSelectedIndices();
 			
 			if(oIndices.length != 1){
-				sap.m.MessageBox.error(oBundleTExt.getText("MSG_48021")); // 삭제신청할 데이터를 선택하여 주십시오.
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48021")); // 삭제신청할 데이터를 선택하여 주십시오.
 				return;
 			}
 			
@@ -239,7 +239,7 @@ sap.ui.define([
 			
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : "ZUI5_HR_Vacation.Detail",
-			      data : Object.assign({FromPageId : "ZUI5_HR_Vacation.List"}, oData)
+			      data : Object.assign({FromPageId : "ZUI5_HR_Vacation.List", Flag : (oData.Delapp == "X" ? "D" : "")}, oData)
 			});
 		},
 		
