@@ -668,6 +668,36 @@ common.Common = {
 
         return p.async ? promise : traceInfo;
     },
+    usePrivateLog: function (p) {
+        if (window._init_sequence_logging) {
+            $.app.log("common.Common.retrieveLoginInfo called.");
+        }
+
+        var _this = $.app.getController();
+
+        $.app.getModel("ZHR_COMMON_SRV").create(
+            "/SaveConnEhrLogSet",
+            {
+                ILangu: _this.getSessionInfoByKey("Langu"),
+                TableIn: [{
+                    Usrid: _this.getSessionInfoByKey("Pernr"),
+                    Menid: $.app.getMenuId(),
+                    Pernr: p.pernr ? p.pernr : "",
+                    Func: p.func ? p.func : "",
+                    Mobile: p.mobile ? p.mobile : ""
+                }]
+            },
+            {
+                async: false,
+                success: function (data) {
+                    common.Common.log(data);
+                },
+                error: function (res) {
+                    common.Common.log(res);
+                }
+            }
+        );
+    },
     encryptPernr: function (vPernr) {
         if (!vPernr) return "";
 

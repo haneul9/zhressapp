@@ -148,13 +148,35 @@ sap.ui.define([
                                         width: "550px",
                                         maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edkaj", false),
                                         editable: {
+                                            parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+                                            formatter: function(v1, v2) {
+                                                return v1 === "AA" || v2 === "Y";
+                                            }
+                                        },
+                                        value: "{Edkaj}"
+                                    }),
+									new sap.m.Button({
+										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+										icon: "sap-icon://search",
+										press: oController.RegistTraning.bind(oController),
+										visible: {
+											parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+                                            formatter: function(v1, v2) {
+                                                return (!v1 || v1 === "AA") && (!v2 || v2 === "X");
+                                            }
+										}
+									}).addStyleClass("button-search-icon mx-5px"),
+									new sap.m.CheckBox(oController.PAGEID + "_CheckBox", { 
+                                        select: oController.onDInput.bind(oController),
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                        editable: {
                                             path: "Status1",
                                             formatter: function(v1) {
                                                 return !v1 || v1 === "AA";
                                             }
-                                        },
-                                        value: "{Edkaj}"
-                                    })
+                                        }
+                                    }),
+									new sap.m.Text({ text: "{i18n>LABEL_40072}", textAlign: "Begin" })
 								]
 							})
 							.addStyleClass("search-field-group")

@@ -26,12 +26,12 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" datakey="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-evalGoalProgressingPortlet-list"></div>',
 			'</div>',
-			this.spinner(false),
+			this.spinner(),
 		'</div>'
 	].join('');
 },
@@ -93,9 +93,9 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 					setTimeout(function() {
 						list.append([
 							'<div style="height: auto; margin-bottom: 15px; display: flex;">',
-								'<img src="${src}" style="width: 65px; height: 80px;"/>'.interpolate(oPage.photoMap[e.userId]),
+								'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
 								'<div style="display: flex; flex-direction: column; margin-left: 25px; justify-content: space-evenly;">',
-									'<div style="font-size: 14px; height: 25px; margin-bottom: 20px; font-weight: bold;">',
+									'<div style="font-size: 14px; height: 25px; font-weight: bold;">',
 										oPage.goalDataMap[e.userId].nickname,
 									'</div>',
 									'<div style="font-size: 14px; height: 25px;">',

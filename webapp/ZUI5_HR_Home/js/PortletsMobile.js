@@ -18,8 +18,8 @@ init: function() {
 		'P102': NoticePortlet,				// 공지사항
 		'P105': CalendarPortlet,			// 팀 달력
 		'P106': HiTalkTalkPortlet,			// 하이톡톡
-		// 'P107': EvalGoalPortlet	,			// 목표관리
-		// 'p108': EvalGoalProgressingPortlet  // 팀원 목표 진척율
+		'P107': EvalGoalPortlet	,			// 목표관리
+		'P108': EvalGoalProgressingPortlet	// 팀원 목표 진척율
 	};
 
 	$(document)

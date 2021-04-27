@@ -1,73 +1,78 @@
 <!DOCTYPE html>
 <html lang="ko-KR" locale="ko_KR" device="mobile">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hi HR Download</title>
-<link rel="stylesheet" href="css/noto-sans-kr.css" />
-<link rel="stylesheet" href="css/fontawesome-all.min.css" />
-<link rel="stylesheet" href="css/utils/box-size.css" />
-<link rel="stylesheet" href="css/utils/spinner.css" />
-<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery-ui.min.css" />
-<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane.css" media="all" />
-<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
-<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
-<link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
-<script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
-<script>
-	function getParameterByName(name) {
-		console.log(location.search);
-		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-				results = regex.exec(location.search);
-		return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-	}
-	
-	$(function() {
-		$(document).on('click', '.btn.android', function() {
-			var _target = getParameterByName("target");
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Hi HR Download</title>
+        <link rel="stylesheet" href="css/noto-sans-kr.css" />
+        <link rel="stylesheet" href="css/fontawesome-all.min.css" />
+        <link rel="stylesheet" href="css/utils/box-size.css" />
+        <link rel="stylesheet" href="css/utils/spinner.css" />
+        <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery-ui.min.css" />
+        <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane.css" media="all" />
+        <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
+        <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
+        <link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
+        <script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
+        <script>
+			var appSchem = "lottechemhihr://app";
 
-			if(_target.toUpperCase() === "PDH" || _target.toUpperCase() === "PTH") {
-				location.href = "./MobileDownload-info.html?target=" + _target;
-			} else {
-				location.href = "./MobileDownload-info.html";
-			}
-		});
+            function getParameterByName(name) {
+            	console.log(location.search);
+            	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            			results = regex.exec(location.search);
+            	return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
 
-		$(document).on('click', '.btn.ios', function() {
-			var _target = getParameterByName("target");
-			
-			if(_target.toUpperCase() === "PDH") {
-				location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/th4mldgkxze64si/manifest.plist";
-			} else if(_target.toUpperCase() === "PTH") {
-				location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/5d8nkccqc4vg9oe/manifest.plist";
-			} else {
-				location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/0q854nfkpfpg5ct/manifest.plist";
-			}
-		});
-	});
-</script>
-</head>
-<body>
+            $(function() {
+            	$(document).on('click', '.btn.android', function() {
+            		var _target = getParameterByName("target");
 
-<div class="app-wrap-download">
-	<div class="d-flex flex-column h-100"> 
-		<div class="flex-item">				
-			<div class="bi-area">
-				<div><img src="images/bi-hihr.png" /></div>
-				<div>기기 OS에 맞는 Hi HR App을 <span class="font-medium">다운로드</span>하여 설치해 주세요.</div>
-			</div>	
-			<div class="btn android">
-				<img src="images/icon-android.png" />
-				<span class="os-title">안드로이드폰 다운로드</span>				
-			</div>
-			<div class="btn ios">
-				<img src="images/icon-iOS.png" />
-				<span class="os-title">아이폰 다운로드</span>
-			</div>
-		</div> 
-	</div>
-</div>
+            		if(_target.toUpperCase() === "PDH" || _target.toUpperCase() === "PTH") {
+            			location.href = "./MobileDownload-info.html?target=" + _target;
+            		} else {
+            			location.href = "./MobileDownload-info.html";
+            		}
+            	});
 
-</body>
+            	$(document).on('click', '.btn.ios', function() {
+            		var _target = getParameterByName("target");
+
+            		if(_target.toUpperCase() === "PDH") {
+            			location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/th4mldgkxze64si/manifest.plist";
+            		} else if(_target.toUpperCase() === "PTH") {
+            			location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/5d8nkccqc4vg9oe/manifest.plist";
+            		} else {
+            			location.href = "itms-services://?action=download-manifest&url=https://dl.dropboxusercontent.com/s/0q854nfkpfpg5ct/manifest.plist";
+            		}
+				});
+				
+				var _action = getParameterByName("action");
+				if(_action !== undefined && _action !== null && _action.toUpperCase() !== "U") {
+					location.href = appSchem;
+				}
+            });
+        </script>
+    </head>
+    <body>
+        <div class="app-wrap-download">
+            <div class="d-flex flex-column h-100">
+                <div class="flex-item">
+                    <div class="bi-area">
+                        <div><img src="images/bi-hihr.png" /></div>
+                        <div>기기 OS에 맞는 Hi HR App을 <span class="font-medium">다운로드</span>하여 설치해 주세요.</div>
+                    </div>
+                    <div class="btn android">
+                        <img src="images/icon-android.png" />
+                        <span class="os-title">안드로이드폰 다운로드</span>
+                    </div>
+                    <div class="btn ios">
+                        <img src="images/icon-iOS.png" />
+                        <span class="os-title">아이폰 다운로드</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
