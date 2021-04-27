@@ -206,11 +206,6 @@ getDeviceSystem: function() {
 			: (sap.ui.Device.system.tablet === true) ? sap.ui.Device.system.SYSTEMTYPE.PHONE
 			: "";
 },
-spinner: function(show) {
-	setTimeout(function() {
-		$(".spinner-container em")[show ? "show" : "hide"]();
-	}, 0);
-},
 getViewInitStyleClasses: function() {
 	var s = $.app.VIEW_STYLE_CLASSES;
 	if (typeof s === "string") {
@@ -220,6 +215,14 @@ getViewInitStyleClasses: function() {
 	} else {
 		return "sapUiSizeCompact";
 	}
+},
+getMenuId: function() {
+	return parent._gateway.mid((document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1"));
+},
+spinner: function(show) {
+	setTimeout(function() {
+		$(".spinner-container em")[show ? "show" : "hide"]();
+	}, 0);
 }
 
 });
