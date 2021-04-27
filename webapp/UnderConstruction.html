@@ -27,6 +27,7 @@
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
 <script>
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 	$('html').attr('device', 'mobile');
@@ -47,7 +48,7 @@ window._i18n = new HomeI18n(_gateway);
 <body>
 <div class="ehr-header">
 	<header class="container-fluid">
-		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" style="height:90px" aria-label="상단 보조 메뉴 영역">
+		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" style="height:90px; justify-content:space-between" aria-label="상단 보조 메뉴 영역">
 			<span></span>
 			<a class="navbar-brand ehr-logo" style="position:static; margin:0" href="javascript:;"></a>
 			<span></span>

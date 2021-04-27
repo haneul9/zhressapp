@@ -53,7 +53,7 @@ init: function(callback) {
 		if (typeof HomeMFA === 'function') {
 			new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
 		} else {
-			throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
+			this._gateway.log('Multi Factor Authentication 모듈이 존재하지 않습니다.');
 		}
 	}.bind(this))
 	.catch(function(e) {
