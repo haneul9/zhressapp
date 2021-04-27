@@ -160,7 +160,25 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 				        			 vAlign : "Middle"
 				        		 }).addStyleClass("Data"),
 				        		 new sap.ui.commons.layout.MatrixLayoutCell({
-				        			 content : [new sap.m.Text({text : "{Notes}"})], // 비고
+				        			 content : [new sap.m.Text({ // 비고
+							        			 	// text : "{Notes}"
+							        			 	text : {
+							        			 		parts : [{path : "Ctrnm"}, {path : "Tottm"}, {path : "Notes"}],
+							        			 		formatter : function(fVal1, fVal2, fVal3){
+							        			 			this.removeStyleClass("color-info-red color-blue");
+							        			 			
+							        			 			if(fVal1 && fVal2){
+							        			 				if(fVal1.replace(":", "") > fVal2.replace(":", "")){
+							        			 					this.addStyleClass("color-info-red");
+							        			 				} else {
+							        			 					this.addStyleClass("color-blue");
+							        			 				}
+							        			 			}
+							        			 			
+							        			 			return fVal3;
+							        			 		}
+							        			 	}
+							        		 	}).addStyleClass("font-bold")],
 				        			 hAlign : "Center",
 				        			 vAlign : "Middle"
 				        		 }).addStyleClass("Data")]
