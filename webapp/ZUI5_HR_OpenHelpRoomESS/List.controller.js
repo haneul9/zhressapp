@@ -190,9 +190,8 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
 							oController.onBeforeOpenDetailDialog();
 							// oController.getPDFView();
-							if(oController.OpenHelpModel.getProperty("/PDFData/Url").length) {
-								window.open(oController.OpenHelpModel.getProperty("/PDFData/Url"));
-							}
+							
+							oController.openPDF(oController);
 						}
 						
 						if(Common.checkNull(!oController.gSelectedRoute.Url)){
@@ -207,6 +206,29 @@ sap.ui.define([
 					});
 				}
 			});
+		},
+
+		openPDF: function(oController) {
+			var vUrl = oController.OpenHelpModel.getProperty("/PDFData/Url");
+			
+			if(!vUrl) return;
+
+			setTimeout(function() {
+				var width = 1000, height = screen.availHeight * 0.9,
+				left = (screen.availWidth - width) / 2,
+				top = (screen.availHeight - height) / 2,
+				popup = window.open(vUrl, "hi-pdf-popup", [
+					"width=" + width,
+					"height=" + height,
+					"left=" + left,
+					"top=" + top,
+					"status=yes,resizable=yes,scrollbars=yes"
+				].join(","));
+
+				setTimeout(function() {
+					popup.focus();
+				}, 500);
+			}, 0);
 		},
 
 		getPDFView: function() {
