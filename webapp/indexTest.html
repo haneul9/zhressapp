@@ -2,9 +2,6 @@
 <html lang="ko-KR" locale="ko_KR">
 <head>
 <meta charset="utf-8" />
-<!--
-<meta http-equiv="refresh" content="0; url=UnderConstruction.html" />
--->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Hi HR</title>
 <link rel="shortcut icon" href="favicon.ico" />
@@ -38,7 +35,7 @@
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
 <script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
-<script src="ZUI5_HR_Home/js/MenuMegaDropdown.js"></script>
+<script src="ZUI5_HR_Home/js/MenuMegaDropdownTest.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--				P101 개인정보 -->
 <script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--				P102 공지사항 -->
@@ -48,7 +45,7 @@
 <script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--			P106 하이톡톡 -->
 <script src="ZUI5_HR_Home/js/portlets/EvalGoalPortlet.js"></script><!--				P107 목표관리 -->
 <script src="ZUI5_HR_Home/js/portlets/EvalGoalProgressingPortlet.js"></script><!--	P108 팀원 목표 진척율 -->
-<script src="ZUI5_HR_Home/js/Portlets.js"></script>
+<script src="ZUI5_HR_Home/js/PortletsTest.js"></script>
 <script>
 function initHome() {
 
@@ -129,7 +126,7 @@ function initHome() {
 				paramMap.pernr = _gateway.parameter('pernr');
 			}
 			_gateway.openWindow({ // openPopup openWindow
-				url: 'index.html?' + $.param(paramMap),
+				url: 'indexTest.html?' + $.param(paramMap),
 				name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
 				width: 1280,
 				height: 800

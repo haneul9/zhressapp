@@ -59,7 +59,7 @@ sap.ui.define(
               
                 if (!oController._ListCondJSonModel.getProperty("/Data")) {
                     var vData = {
-                        Data: Object.assign({ Auth: $.app.getAuth() }, oController.getView().getModel("session").getData())
+                        Data: Object.assign({ Auth: $.app.getAuth() }, oController.getView().getModel("session").getData() )
                     };
 
                     oController._ListCondJSonModel.setData(vData);
@@ -111,36 +111,7 @@ sap.ui.define(
 				.then(typeof opt.After === "function" ? opt.After() : undefined);
             },
 			
-			// 로그 입력
-			retrieveLog: function (vPernr, vFunc) {
-                var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
-                var oController = oView.getController();
-                return Common.getPromise(function () {
-                        $.app.getModel("ZHR_COMMON_SRV").create(
-                        
-                            "/SaveConnEhrLogSet",
-                            {
-                                ILangu : oController.getView().getModel("session").getData().Langu,
-                                TableIn : [{ Pernr: vPernr,  
-                                             Usrid : oController.getView().getModel("session").getData().Pernr,
-                                		     Func:  vFunc,
-                                		     Menid: $.app.getMenuId()
-                                }]
-                            },
-                           {
-	                            async: true,
-	                            success: function () {
-	                               
-	                            },
-	                            error: function (oResponse) {
-	                                Common.log(oResponse);
-	                            }
-                        	}
-                        )
-                });
-			},
-			
-            /**
+			/**
              * @brief [공통]부서/사원 조직도호출
              */
             searchOrgehPernr: function (oController) {
@@ -745,8 +716,7 @@ sap.ui.define(
                             );
                         }),
                         oController.onPressSearchFamily(vPernr),
-                        // oController.retrieveLog(vPernr, "개인정보|주소")
-                        Common.userPrivateLog({
+                        Common.usePrivateLog({
                         	pernr : vPernr,
                         	func : "개인정보|주소",
                         	mobile : ""
@@ -766,7 +736,7 @@ sap.ui.define(
             onPressSearchFamily : function(vPernr) {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
-                if(gAuth == "M"){
+                if(gAuth != "M"){
                 	return ;	
                 }
                 var vConType = "1";
@@ -814,7 +784,7 @@ sap.ui.define(
 		                    }
 		                )
                 	}),
-                	Common.userPrivateLog({
+                	Common.usePrivateLog({
                     	pernr : vPernr,
                     	func : "가족",
                     	mobile : ""
@@ -871,7 +841,7 @@ sap.ui.define(
 		                    }
 		                 )
                         }),
-                    	Common.userPrivateLog({
+                    	Common.usePrivateLog({
 	                    	pernr : vPernr,
 	                    	func : "개인정보",
 	                    	mobile : ""
@@ -950,7 +920,7 @@ sap.ui.define(
                     oJSONModel.setData(vData);
                     oTable.bindRows("/Data");
                     oTable.setVisibleRowCount(vData.Data.length >= 10 ? 10 : vData.Data.length);
-					Common.userPrivateLog({
+					Common.usePrivateLog({
                     	pernr : vPernr,
                     	func : "주소",
                     	mobile : ""

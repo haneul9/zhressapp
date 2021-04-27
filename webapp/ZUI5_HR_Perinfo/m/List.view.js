@@ -75,9 +75,19 @@ sap.ui.define(
                         	width : "100%",
                             items: [
                             	new sap.m.VBox({
-                            		items : [new sap.m.Text({ text: "김성준" }).addStyleClass("EmployeeLayoutHeader"), 
-                            				 new sap.m.Text({ text: "인재육성팀" }).addStyleClass("EmployeeLayoutText"),
-                            				 new sap.m.Text({ text: "20001003/S1/팀장" }).addStyleClass("EmployeeLayoutText")
+                            		items : [new sap.m.Text({ text: "{Ename}" }).addStyleClass("EmployeeLayoutHeader"), 
+                            				 new sap.m.Text({ 
+                            				 	layoutData : new sap.m.FlexItemData({ lineHeight: "16px" }),
+                            				 	text: "{Stext}}" 
+                            				 }).addStyleClass("EmployeeLayoutText"),
+                            				 new sap.m.Text({ 
+                            				 	text : "20001003/S1/팀장"
+                            				 	
+                            				 	
+                            				 	
+                            				 
+                            				 	
+                            				 }).addStyleClass("EmployeeLayoutText")
                             		]
                             	})
                             ]
@@ -143,12 +153,15 @@ sap.ui.define(
                         })
                     ]
                 }).addStyleClass("tab-group");
-
+				
                 tabBox.addEventDelegate(
                     {
                         onAfterRendering: function () {
-                            this.setSelectedKey("Basic");
-                            this.fireSelect();
+                        	if(oController.doubleRendering == "X"){
+	                        	this.setSelectedKey("Basic");
+	                            this.fireSelect();	
+                        	}
+                            oController.doubleRendering = "X";
                         }
                     },
                     tabBox
