@@ -71,7 +71,8 @@ changeState: function(toggle, restore) {
 
 	setTimeout(function() {
 		if (restore) {
-			$(this.parentSelector + ' .active').toggleClass('active', false);
+			$(this.parentSelector).toggleClass('show', false)
+				.find('.active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
 			var iframe = $('iframe[name="content-iframe"]');
