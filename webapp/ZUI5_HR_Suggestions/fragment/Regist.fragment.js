@@ -167,7 +167,7 @@
 							})
 						]
 					})
-					.addStyleClass("mt-15px"),
+					.addStyleClass("mt-10px"),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
 						fitContainer: true,
 						items: []
@@ -186,9 +186,9 @@
 							new sap.m.Button({
 								press: oController.onDialogSaveBtn.bind(oController),
 								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-dark")
+							}).addStyleClass("button-dark mt-4px")
 						]
-					}).addStyleClass("mt-10px"),
+					}).addStyleClass("custom-comment"),
 					new sap.m.HBox({
 						fitContainer: true,
 						items: [
@@ -199,7 +199,7 @@
 								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
 							})
 						]
-					}).addStyleClass("mt-3px")
+					})
 				]
 			})
 			.setModel(oController.CommentModel)

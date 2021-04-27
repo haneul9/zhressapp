@@ -598,7 +598,7 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .app-panel .sapMPanelContent {margin:0 -16px}
 .app-content-container-mobile .calendar-box {margin-top:1rem;}
 .app-content-container-mobile .sapMSPCMonthDayNumber {font-size:.75rem}
-.app-content-container-mobile .vbox-form-mobile {overflow-y:auto; padding-bottom:1rem;}
+.app-content-container-mobile .vbox-form-mobile {overflow-y:auto; padding-top:1rem;padding-bottom:1rem;}
 .app-content-container-mobile .sapMFlexItem .sapMInputBaseContentWrapper  {border:solid 1px #c3c3c3 !important;border-radius:.1875rem;}
 .app-content-container-mobile .sapMMsgStripInformation {background-color: #fff;border-color:#fff;color:#333}
 .app-content-container-mobile .sapMMsgStrip {}
