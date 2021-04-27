@@ -151,6 +151,12 @@ sap.ui.define([
 										}
 									}
 									
+									// 종일여부 필드값이 true 인 경우 해당 라인 비활성화 + 점심시간 코드값 0 으로 변경
+									if(data1[i].Alldf == true){
+										data1[i].Offyn = "1";
+										data1[i].Lnctm = "0";
+									}
+									
 									if(oControl){
 										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px calendar-text");
 										
@@ -199,7 +205,9 @@ sap.ui.define([
 																					  	  	   	  width : "100%",
 																					  	  	   	  textAlign : "Center",
 																					  	  	   	  maxLines : 1
-																				  	  	      }).addStyleClass("font-11px FontWhite calendar-background-atext calendar-text")],
+																				  	  	      }).addStyleClass((data1[i].Atext == "" ? 
+																				  	  	    		"font-11px FontWhite calendar-text" :
+																				  	  	    		"font-11px FontWhite calendar-background-atext calendar-text"))],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]

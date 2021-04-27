@@ -81,36 +81,42 @@ sap.ui.define([
 						height: "40px",
 						justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 						items: [
-                            new sap.m.HBox({
-								fitContainer: true,
-								items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left"), // 댓글
-                                    new HoverIcon({
-                                        src: "sap-icon://information",
-                                        hover: function(oEvent) {
-                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_56006")); // ※ 알파벳,숫자,특수기호를 포함해 6~10자리로 입력하세요.
-                                        },
-                                        leave: function(oEvent) {
-                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
-                                        }
-                                    })
-                                    .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true).addStyleClass("mr-5px"), // 비밀번호
-                                    new sap.m.Input({
-										width: "100%",
-                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                        maxLength: 10,
-										value: "{Pword}",
-										type: sap.m.InputType.Password
-									})
-                                ]
-                            })
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left") // 댓글                                 
 						]
 					}),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
-						fitContainer: true,
+                        fitContainer: true,
 						items: []
 					}),
+                    new sap.m.HBox({
+                        justifyContent: sap.m.FlexJustifyContent.End,
+                        fitContainer: true,
+						items: [
+                            new HoverIcon({
+                                src: "sap-icon://information",
+                                hover: function(oEvent) {
+                                    Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_56006")); // ※ 알파벳,숫자,특수기호를 포함해 6~10자리로 입력하세요.
+                                },
+                                leave: function(oEvent) {
+                                    Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                }
+                            })
+                            .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                            new sap.m.Input({
+                                width: "60%",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                maxLength: 10,
+                                value: "{Pword}",
+                                type: sap.m.InputType.Password,
+                                placeholder: "{i18n>MSG_56013}"
+                            }),
+                            new sap.m.Button({
+								press: oController.onDialogSaveBtn.bind(oController),
+								text: "{i18n>LABEL_56016}" // 저장
+							}).addStyleClass("button-dark")
+                        ]
+                    })
+                    .addStyleClass("mt-15px"),
                     new sap.m.HBox({
 						fitContainer: true,
 						items: [
@@ -120,11 +126,7 @@ sap.ui.define([
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								value:"{Detail}",
 								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							}).addStyleClass("mt-15px"),
-							new sap.m.Button({
-								press: oController.onDialogSaveBtn.bind(oController),
-								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-light h-101px ml-8px")
+							})
 						]
 					})
 				]

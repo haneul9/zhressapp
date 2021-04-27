@@ -142,7 +142,7 @@ sap.ui.define([
 									
 									data1[i].Datum = data1[i].Datum ? new Date(common.Common.setTime(data1[i].Datum)) : null;
 									
-									data1[i].Adbtm = data1[i].Adbtm == "" ? "" : data1[i].Adbtm.substring(0,2) + ":" + data1[i].Adbtm.substring(2,4);
+									data1[i].Adbtm = data1[i].Adbtm == "" || data1[i].Adbtm == "0000" ? "" : data1[i].Adbtm.substring(0,2) + ":" + data1[i].Adbtm.substring(2,4);
 									
 									if(data1[i].Offyn == ""){
 										// 일자가 현재일 이전인 경우 OFFYN을 변경해서 데이터 선택이 불가능하게 변경한다.
@@ -151,6 +151,12 @@ sap.ui.define([
 										} else if((dateFormat.format(data1[i].Datum) * 1) == (dateFormat.format(today) * 1)){
 											data1[i].Offyn = "2"; // 현재일인 경우 시작시간만 변경 불가능
 										}
+									}
+									
+									// 종일여부 필드값이 true 인 경우 해당 라인 비활성화 + 점심시간 코드값 0 으로 변경
+									if(data1[i].Alldf == true){
+										data1[i].Offyn = "1";
+										data1[i].Lnctm = "0";
 									}
 									
 									vData.Data.push(data1[i]);
@@ -210,7 +216,7 @@ sap.ui.define([
 				}
 			}
 			
-			if(oMonyn == ""){
+			if(!oEvent || oMonyn == ""){
 				oController._BusyDialog.open();
 				setTimeout(search, 100);
 			} else {
@@ -699,8 +705,6 @@ sap.ui.define([
 					oJSONModel.setProperty("/Data/" + oIndices[i] + "/Checkbox", false);
 				}
 				
-				console.log(oJSONModel.getProperty("/Data"))
-				
 				oController._BusyDialog.close();
 				sap.m.MessageBox.success(oBundleText.getText("MSG_00017"), { // 저장되었습니다.
 					onClose : function(){
@@ -758,7 +762,6 @@ sap.ui.define([
 					
 					createData.FlexWorktime2Nav.push(detail);
 				}
-				console.log(createData)
 				
 				oModel.create("/FlexworktimeSummarySet", createData, null,
 					function(data, res){
@@ -790,7 +793,9 @@ sap.ui.define([
 				}
 				
 				sap.m.MessageBox.success(oBundleText.getText("MSG_00017"), { // 저장되었습니다.
-					onClose : oController.onPressSearch
+					onClose : function(oEvent){
+						oController.onPressSearch();
+					}
 				});
 			};
 			
@@ -912,6 +917,7 @@ sap.ui.define([
 											}
 										}
 									});
+						oColumn.setHAlign("Begin");
 						break;
 					case "time":
 						oTemplate = new sap.ui.commons.TextView({

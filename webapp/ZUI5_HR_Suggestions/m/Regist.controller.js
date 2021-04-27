@@ -67,6 +67,8 @@
 		},
 		
 		onBeforeShow: function(oEvent) {
+			BusyIndicator.show(0);
+
             this.RegistModel.setData({FormData: []});
             var oDateBox = $.app.byId(this.PAGEID + "_RegistDateBox");
             var oIsHideBox = $.app.byId(this.PAGEID + "_IsHideBox");
@@ -93,6 +95,7 @@
 		
 		onAfterShow: function() {
             this.onBeforeOpenDetailDialog();
+			BusyIndicator.hide();
         },
 
         navBack: function() {

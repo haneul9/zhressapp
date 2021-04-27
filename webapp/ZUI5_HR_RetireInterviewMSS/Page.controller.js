@@ -64,6 +64,8 @@
 			var vDate1 = oApplyDate.getDateValue();
 			var vDate2 = oApplyDate.getSecondDateValue();
 			
+			oController.TableModel.setData({Data: []}); 
+
 			var sendObject = {};
 			// Header
 			sendObject.IZchpnr = vPernr;
@@ -79,13 +81,12 @@
 			oModel.create("/RtrintRequestSet", sendObject, {
 				success: function(oData, oResponse) {
 					var dataLength = 10;
+					
 					if (oData && oData.TableIn1) {
 						Common.log(oData);
 						var rDatas = oData.TableIn1.results;
 						dataLength = rDatas.length;
 						oController.TableModel.setData({Data: rDatas}); 
-					}else{
-						oController.TableModel.setData({Data: []}); 
 					}
 
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);

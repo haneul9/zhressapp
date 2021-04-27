@@ -150,7 +150,7 @@ table.search-box.search-bg {table-layout:auto !important}
 .info-box-mobile .info-field-group .sapMFlexItem .sapMInputBaseContentWrapper {border:solid 1px #c3c3c3}
 .info-box-mobile .info-field-group .sapMFlexItem + .sapMFlexItem {margin-top:8px}
 
-.vbox-form-mobile {/*margin-top:1rem;*/ margin:1rem -1rem 1rem;padding:0 1rem}
+.vbox-form-mobile {margin:0 -1rem; padding:0 1rem}
 .vbox-form-mobile .sapMHBox + .sapMHBox,
 .vbox-form-mobile span + .sapMHBox,
 .vbox-form-mobile>.sapMHBox:last-child {margin-top:6px}
@@ -598,7 +598,7 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .app-panel .sapMPanelContent {margin:0 -16px}
 .app-content-container-mobile .calendar-box {margin-top:1rem;}
 .app-content-container-mobile .sapMSPCMonthDayNumber {font-size:.75rem}
-.app-content-container-mobile .vbox-form-mobile {overflow-y:auto; margin-top:1rem;/*border-bottom: 10px solid #f4f5f6;*/} /*0422-2*/
+.app-content-container-mobile .vbox-form-mobile {overflow-y:auto; padding-bottom:1rem;}
 .app-content-container-mobile .sapMFlexItem .sapMInputBaseContentWrapper  {border:solid 1px #c3c3c3 !important;border-radius:.1875rem;}
 .app-content-container-mobile .sapMMsgStripInformation {background-color: #fff;border-color:#fff;color:#333}
 .app-content-container-mobile .sapMMsgStrip {}

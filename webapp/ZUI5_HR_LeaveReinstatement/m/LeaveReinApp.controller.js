@@ -40,6 +40,8 @@
 		},
 		
 		onBeforeShow: function(oEvent) {
+			BusyIndicator.show(0);
+			
             this.ApplyModel.setData({FormData: []});
 
             if(oEvent.data){
@@ -64,6 +66,7 @@
             this.onBeforeOpenDetailDialog(this);
             this.getLeaveReinCombo(this);
             this.getPartnerCheck();
+			BusyIndicator.hide();
         },
 
         navBack: function() {

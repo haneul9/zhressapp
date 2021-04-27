@@ -39,7 +39,8 @@
 			},
 
 			onBeforeShow: function (oEvent) {
-                
+                BusyIndicator.show(0);
+
                 if(oEvent.data){
 					if(Common.checkNull(oEvent.data.vGubun)){
 						this.DetailModel.setData({ FormData: oEvent.data.RowData ? oEvent.data.RowData : []});
@@ -77,6 +78,7 @@
 					oPeriodDate.setEditable(false)
 				
                 this.getComboData(this);
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {

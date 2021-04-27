@@ -3,9 +3,10 @@ sap.ui.define(
 		"../../common/Common",
 		"../../common/CommonController",
 		"../../common/JSONModelHelper",
-		"sap/ui/core/IconPool"
+		"sap/ui/core/IconPool",
+		"sap/ui/core/BusyIndicator"
 	],
-	function (Common, CommonController, JSONModelHelper, IconPool) {
+	function (Common, CommonController, JSONModelHelper, IconPool, BusyIndicator) {
 		"use strict";
 
 		var SUB_APP_ID = [$.app.CONTEXT_PATH, "ClubApplyOut"].join($.app.getDeviceSuffix());
@@ -40,6 +41,7 @@ sap.ui.define(
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
 				this.DetailModel.setData({ FormData: {} });
 				
 				if(oEvent.data)
@@ -50,6 +52,7 @@ sap.ui.define(
 
 			onAfterShow: function () {
 				Common.log("onAfterShow");
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {

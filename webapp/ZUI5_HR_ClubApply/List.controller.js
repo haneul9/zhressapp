@@ -200,6 +200,8 @@ sap.ui.define(
 				var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 				var vPernr = oController.getUserId();
 				
+				oController.TableModel.setData({Data: []}); 
+
 				var sendObject = {};
 				// Header
 				sendObject.IPernr = vPernr;
@@ -210,12 +212,15 @@ sap.ui.define(
 				
 				oModel.create("/DonghoListSet", sendObject, {
 					success: function(oData, oResponse) {
+						var dataLength = 10;
+
 						if (oData && oData.TableIn.results) { //값을 제대로 받아 왔을 때
 							var rDatas = oData.TableIn.results;
-							var dataLength = rDatas.length;
+							dataLength = rDatas.length;
 							oController.TableModel.setData({Data: rDatas}); //직접적으로 화면 테이블에 셋팅하는 작업
-							oTable.setVisibleRowCount(dataLength > 5 ? 5 : rDatas.length); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 						}
+						
+						oTable.setVisibleRowCount(dataLength > 10 ? 10 : rDatas.length); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 					},
 					error: function(oResponse) {
 						Common.log(oResponse);

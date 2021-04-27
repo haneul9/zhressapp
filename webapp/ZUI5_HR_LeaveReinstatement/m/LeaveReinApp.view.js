@@ -375,7 +375,7 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_42007}", "105px", "Left", true).addStyleClass("sub-con-title"), // 휴직기간
 							new PickOnlyDateRangeSelection(oController.PAGEID + "_LeaveDate", {
-								width: "250px",
+							//	width: "250px",
 								displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 change: oController.getReinTerm.bind(oController),
                                 placeholder: "yyyy-mm-dd ~ yyyy-mm-dd",
@@ -397,7 +397,7 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42008}", "105px", "Left", true).addStyleClass("sub-con-title"), // 복직예정일
 							new PickOnlyDatePicker(oController.PAGEID + "_ReinDate", {
-                                width: "220px",
+                            //    width: "220px",
                                 dateValue: "{Zrhsdt}",
                                 change: oController.getLeaveTerm.bind(oController),
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
@@ -419,7 +419,7 @@
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42016}", "105px", "Left", true).addStyleClass("sub-con-title"), // 세부사유
 							new sap.m.TextArea({
                                 rows: 3,
-								width: "250px",
+							//	width: "250px",
 								value:"{Zdtlrs}",
 								maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zdtlrs", false),
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
@@ -438,7 +438,7 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_42018}", "105px", "Left", true).addStyleClass("sub-con-title"), // 출산예정일
 							new PickOnlyDatePicker({
-                                width: "220px",
+                            //    width: "220px",
                                 dateValue: "{Zexbdt}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 valueFormat: "yyyy-MM-dd",
