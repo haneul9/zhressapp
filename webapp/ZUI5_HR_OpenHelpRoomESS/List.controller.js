@@ -42,7 +42,7 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -189,7 +189,10 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
 							oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
 							oController.onBeforeOpenDetailDialog();
-							oController.getPDFView();
+							// oController.getPDFView();
+							if(oController.OpenHelpModel.getProperty("/PDFData/Url").length) {
+								window.open(oController.OpenHelpModel.getProperty("/PDFData/Url"));
+							}
 						}
 						
 						if(Common.checkNull(!oController.gSelectedRoute.Url)){
@@ -227,7 +230,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L4txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L4id === ele.L4id
+				return ele.L4txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L4id === ele.L4id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -238,7 +241,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L3txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L3id === ele.L3id
+				return ele.L3txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L3id === ele.L3id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -249,7 +252,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L2txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L2id === ele.L2id
+				return ele.L2txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L2id === ele.L2id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -260,7 +263,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L1txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L1id === ele.L1id
+				return ele.L1txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L1id === ele.L1id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -380,7 +383,7 @@ sap.ui.define([
 				Mode: "M",
 				Max: "10",
 				Editable: false,
-				FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+				FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"]
 			});
 		},
 		

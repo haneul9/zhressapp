@@ -26,7 +26,7 @@ sap.ui.define([
 				contentItems: [
 					this.getMenuBox(oController)
 				]
-			})
+			});
 		},   
 
 		getMenuBox: function(oController) {
@@ -75,29 +75,30 @@ sap.ui.define([
 							})
 						]
 					}).addStyleClass("custom-OpenHelp-field"),
-					new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
-						fitContainer: true,
-						width: "auto",
-						height: "600px",
-						visible: {
-							path: "/PDFData/Url",
-							formatter: function(v) {
-								if(v) return true;
-								else return false;
-							}
-						},
-						items: [
-							new sap.m.PDFViewer(oController.PAGEID + "_PDFView", {
-								displayType: sap.m.PDFViewerDisplayType.Embedded,
-								sourceValidationFailed: function(oEvent) {
-									oEvent.preventDefault();
-								},
-								layoutData: new sap.m.FlexItemData({
-									growFactor: 1
-								})
-							})
-						]
-					}).addStyleClass("mt-20px"),
+					// new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
+					// 	fitContainer: true,
+					// 	width: "auto",
+					// 	height: "600px",
+					// 	visible: {
+					// 		path: "/PDFData/Url",
+					// 		formatter: function(v) {
+					// 			if(v) return true;
+					// 			else return false;
+					// 		}
+					// 	},
+					// 	items: [
+					// 		new sap.m.PDFViewer({
+					// 			displayType: sap.m.PDFViewerDisplayType.Embedded,
+					// 			source: "{/PDFData/Url}",
+					// 			sourceValidationFailed: function(oEvent) {
+					// 				oEvent.preventDefault();
+					// 			},
+					// 			layoutData: new sap.m.FlexItemData({
+					// 				growFactor: 1
+					// 			})
+					// 		})
+					// 	]
+					// }).addStyleClass("mt-20px"),
 					new sap.m.HBox(oController.PAGEID + "_FileUploadBox", {
 						alignItems: sap.m.FlexAlignItems.Center,
 						fitContainer: true,
