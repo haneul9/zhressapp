@@ -36,9 +36,9 @@ sap.ui.define([
 			this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
-		onBeforeShow: function(oEvent){
+		onBeforeShow: function(){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
+			// var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -52,7 +52,7 @@ sap.ui.define([
 						Orgeh : $.app.getModel("session").getData().Orgeh,
 						Ename : $.app.getModel("session").getData().Stext,
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
-						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
+						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))))
 					}
 				};
 				
@@ -66,7 +66,7 @@ sap.ui.define([
 			oController.onPressSearch(oEvent);
 		},
 		
-		onBack : function(oEvent){
+		onBack : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
 			var oController = oView.getController();
 		
@@ -79,27 +79,21 @@ sap.ui.define([
 			});
 		},
 		
-		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
-			var oController = oView.getController();
-		
-		},
-		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(this.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
 		},
 		
-		onPressSearch : function(oEvent){
+		onPressSearch : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
 			var oController = oView.getController();
 			
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_60001")); // 대상기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_60001")); // 대상기간을 입력하여 주십시오.
 				return;
 			}
 			
@@ -125,7 +119,7 @@ sap.ui.define([
 					createData.IEmpid = oData.Pernr;
 				
 				oModel.create("/DayWorkScheduleSet", createData, null,
-					function(data, res){
+					function(data){
 						if(data){
 							if(data.DWorkScheduleNav && data.DWorkScheduleNav.results){
 								var data1 = data.DWorkScheduleNav.results;
@@ -177,7 +171,7 @@ sap.ui.define([
 			setTimeout(search, 100);
 		},
 		
-		searchOrgehPernr : function(oController){
+		searchOrgehPernr : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
 			var oController = oView.getController();
 			
@@ -187,7 +181,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ""
             },
             callback = function(o) {
             	var oView = sap.ui.getCore().byId("ZUI5_HR_DayWorkSchedule.List");
