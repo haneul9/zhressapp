@@ -53,7 +53,7 @@ sap.ui.define([
 									return v === "AA";
 								}
 							}
-						}).addStyleClass("button-delete")
+						}).addStyleClass("button-light")
 					]
 				}).addStyleClass("app-nav-button-right"),
 				contentStyleClass: "sub-app-content",
