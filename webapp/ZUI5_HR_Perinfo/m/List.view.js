@@ -78,15 +78,16 @@ sap.ui.define(
                             		items : [new sap.m.Text({ text: "{Ename}" }).addStyleClass("EmployeeLayoutHeader"), 
                             				 new sap.m.Text({ 
                             				 	layoutData : new sap.m.FlexItemData({ lineHeight: "16px" }),
-                            				 	text: "{Stext}}" 
+                            				 	text: "{Stext}" 
                             				 }).addStyleClass("EmployeeLayoutText"),
                             				 new sap.m.Text({ 
-                            				 	text : "20001003/S1/팀장"
-                            				 	
-                            				 	
-                            				 	
-                            				 
-                            				 	
+                            				 	text : {
+                                                    parts: [{ path: "Pernr" },{ path: "PGradeTxt" },{ path: "ZtitleT" } ],
+                                                    formatter: function (v1, v2, v3) {
+                                                        if (v3 != "") return v1+ " / " + v2 + " / " + v3;
+                                                        else return  v1+ " / " + v2 ;
+                                                    }
+                                                 }
                             				 }).addStyleClass("EmployeeLayoutText")
                             		]
                             	})
@@ -100,7 +101,7 @@ sap.ui.define(
                                		height : "85px"
                                })
                             ]
-                        }).addStyleClass("EmployeeLayoutPic"),
+                        }).addStyleClass("EmployeeLayoutPic")
                     ]
                 }).addStyleClass("EmployeeLayout");
                 
@@ -169,12 +170,12 @@ sap.ui.define(
 
                 return new PageHelper({
                 	contentContainerStyleClass: "app-content-container-mobile",
-                    contentItems: [searchBox, tabBox],
-                    // contentHeaderRight : [ new sap.m.Button({
-		                  //                  press: oController.moveSearch,
-		                  //                  icon: "sap-icon://search",
-		                  //                  text : "{i18n>LABEL_00205}"  //사원검색
-		                  //              })]
+                    contentItems: [searchBox, tabBox], 
+                    headerButton : new sap.m.Button({
+		                                   press: oController.moveSearch,
+		                                   text : "{i18n>LABEL_00205}"  //사원검색
+		                                 })
+
                 });
             },
 

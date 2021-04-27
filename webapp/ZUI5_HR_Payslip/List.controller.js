@@ -219,8 +219,6 @@ sap.ui.define(
             onPressSearchDetail: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-                // 		var oHeight = sap.ui.getCore().byId(oController.PAGEID + "_DetailDialog").getContentHeight();
-                // var oHeight = "380px";
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");
                 var vZpdf = "";
 
@@ -286,8 +284,8 @@ sap.ui.define(
                     );
 
                     oController._DetailJSonModel.setProperty("/Data/Zpdf", vZpdf);
-                    oController._BusyDialog.close();
-
+                    // oController._BusyDialog.close();
+                    oController._DetailDialog.setBusy(false);    
                     if (oController.Error == "E") {
                         oController.Error = "";
                         MessageBox.error(oController.ErrorMessage);
@@ -295,7 +293,9 @@ sap.ui.define(
                     }
                 };
 
-                oController._BusyDialog.open();
+                // oController._BusyDialog.open();
+                oController._DetailDialog.setBusyIndicatorDelay(0);
+                oController._DetailDialog.setBusy(true);
                 setTimeout(search, 100);
             },
 
