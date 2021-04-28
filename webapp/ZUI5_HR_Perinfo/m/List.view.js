@@ -170,11 +170,18 @@ sap.ui.define(
 
                 return new PageHelper({
                 	contentContainerStyleClass: "app-content-container-mobile",
-                    contentItems: [searchBox, tabBox], 
-                    headerButton : new sap.m.Button({
-		                                   press: oController.moveSearch,
-		                                   text : "{i18n>LABEL_00205}"  //사원검색
-		                                 })
+                    contentItems: [searchBox, tabBox],
+                    headerButton : new sap.m.FlexBox({
+                                    items: [ 
+                                        new sap.m.Button({
+                                            press: oController.moveSearch,
+                                            text : "{i18n>LABEL_00205}",  //사원검색
+                                            // visible: {
+                                            //     return gAuth === "M" ? true : false;
+                                            // }
+                                        }).addStyleClass("button-light")
+                                    ]
+                                }).addStyleClass("app-nav-button-right")
 
                 });
             },
