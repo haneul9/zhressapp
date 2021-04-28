@@ -173,7 +173,7 @@ sap.ui.define(
                     contentItems: [searchBox, tabBox],
                     headerButton : new sap.m.FlexBox({
                                     items: [ 
-                                        new sap.m.Button({
+                                        new sap.m.Button({ 
                                             press: oController.moveSearch,
                                             text : "{i18n>LABEL_00205}",  //사원검색
                                             // visible: {
