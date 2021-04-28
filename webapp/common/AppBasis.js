@@ -242,10 +242,10 @@ getMenuId: function() {
 mix: function(o, pernr) {
 
 	return $.extend(o, {
-		IUsrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
-		IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
-		IUsrpn: sessionStorage.getItem('ehr.sf-user.name'),			// 로그인 사번
-		IMenuid: this.getMenuId(),									// 메뉴 ID
+		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
+		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
+		ICmenuid: this.getMenuId(),									// 메뉴 ID
 		IPernr: pernr || ''											// 대상자 사번
 	});
 },

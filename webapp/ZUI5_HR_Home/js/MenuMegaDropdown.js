@@ -2,6 +2,8 @@
 function MenuMegaDropdown(_gateway, parentSelector) {
 
 	this.parentSelector = parentSelector;
+	this.iframeName = 'content-iframe';
+	this.iframeSelector = 'iframe[name="${}"]'.interpolate(this.iframeName);
 	this.menuFavorites = null;
 	this.menuUrlMap = null;
 	this.menuDataMap = null;
@@ -105,7 +107,7 @@ changeState: function(toggle, restore) {
 			$(this.parentSelector + ' .active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
-			var iframe = $('iframe[name="content-iframe"]');
+			var iframe = $(this.iframeSelector);
 			if (iframe.length) {
 				iframe.hide(0, function() {
 					$(this).remove();
@@ -137,7 +139,7 @@ changeLocale: function() {
 		});
 	}.bind(this), 0);
 
-	var iframe = $('iframe[name="content-iframe"]');
+	var iframe = $(this.iframeSelector);
 	if (iframe.length) {
 		iframe[0].contentWindow.sap.ui.getCore().getConfiguration().setLanguage(this._gateway.loginInfo('Langu'));
 		$('form#menu-form').submit();
@@ -257,18 +259,18 @@ menuParam: function() {
 
 goToLink: function(menuId, url) {
 
-	var iframe = $('iframe[name="content-iframe"]');
+	var iframe = $(this.iframeSelector);
 	if (!iframe.length) {
 		var container = $('.ehr-body .container-fluid');
 		if (container.data('jsp')) {
 			container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
 		}
-		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
+		$('.ehr-body .container-fluid').append('<iframe name="${content-iframe}"></iframe>'.interpolate(this.iframeName));
 	}
 
 	var form = $('form#menu-form');
 	if (!form.length) {
-		form = $('<form id="menu-form" method="GET" target="content-iframe"><input type="hidden" name="mid" /></form>').appendTo('body');
+		form = $('<form id="menu-form" method="GET" target="${content-iframe}"><input type="hidden" name="mid" /></form>'.interpolate(this.iframeName)).appendTo('body');
 	}
 
 	if (!this._gateway.isPRD()) {
