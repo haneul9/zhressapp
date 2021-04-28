@@ -2,6 +2,7 @@ function HomeBasis(_gateway) {
 
 	this.ODataDestination = { SF: 'SF', S4HANA: 'S4HANA', ETC: 'ETC' };
 	this.paramMap = this.parameterMap(location.search);
+	this.metadataMap = {};
 
 	this._gateway = _gateway;
 	_gateway.homeBasis(this);
@@ -468,7 +469,7 @@ metadata: function(namespace, entityType) {
 	}
 
 	var url = this.s4hanaURL(namespace + '/$metadata');
-	return this.get({
+	return $.get({
 		url: url,
 		success: function(data) {
 			this._gateway.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
