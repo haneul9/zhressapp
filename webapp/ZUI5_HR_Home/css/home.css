@@ -1,7 +1,7 @@
 html, body {height:100%; overflow:hidden}
 html *:not(.sapUiIcon):not(i) {font-family:NotoSansKR !important}
 body {min-width:576px; font-size:14px}
-[device="mobile"] body {min-width:100%}
+[device="mobile"] body, body.under-construction {min-width:100%}
 
 .font-preload {color:transparent}
 .font-preload-100 {font-weight:100}
@@ -18,8 +18,10 @@ body {min-width:576px; font-size:14px}
 .ehr-header .navbar {padding:0 30px}
 .ehr-header .ehr-logo-container {height:46px}
 [device="mobile"] .ehr-header .ehr-logo-container {height:3.5625rem}
+body.under-construction .ehr-header .ehr-logo-container {justify-content:space-between; height:5.625rem}
 .ehr-header .ehr-logo {position:absolute; top:15px; left:40px; width:92px; height:62px; background:url('../../images/w-hihr-smile.png') no-repeat}
 [device="mobile"] .ehr-logo {position:static; margin:.5625rem 0 .375rem 0; width:3.9375rem; height:2.625rem; background:url('../../images/hihr-smile.png') no-repeat; background-size:3.9375rem 2.625rem}
+body.under-construction .ehr-logo {position:static; margin:0}
 .ehr-header .custom-select-locale {margin-top:-2px; height:auto; border:0; font-size:14px; color:#777; background:#fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23777777' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px; cursor:pointer}
 .ehr-header .container-fluid {min-height:46px; padding-left:0; padding-right:0}
 

@@ -454,6 +454,35 @@ post: function(o) {
 
 	return $.post(postOptions);
 },
+metadata: function(namespace, entityType) {
+
+	var metadata = this.metadataMap[namespace],
+	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType.replace(/Set$/i, ''));
+
+	if (metadata) {
+		return $.map(metadata.find(finder), function(o) {
+			return o.attributes.Name.nodeValue;
+		});
+	}
+
+	var url = this.s4hanaURL(namespace + '/$metadata');
+	return this.get({
+		url: url,
+		success: function(data) {
+			this._gateway.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
+
+			metadata = $(data);
+			this.metadataMap[namespace] = metadata;
+
+			return $.map(metadata.find(finder), function(o) {
+				return o.attributes.Name.nodeValue;
+			});
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
+		}.bind(this)
+	});
+},
 odataResults: function(data) {
 
 	if (!data) {
