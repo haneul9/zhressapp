@@ -718,8 +718,9 @@ sap.ui.define(
                         oController.onPressSearchFamily(vPernr),
                         Common.usePrivateLog({
                         	pernr : vPernr,
-                        	func : "개인정보|주소",
-                        	mobile : ""
+                        	func : "기본인적사항|주소",
+                        	mobile : "",
+                            action : "R" //CRUD
                         })
                     ]).then(function () {
                         oController._HandicapJSonModel.setProperty("/Data/Openf", oController._ListCondJSonModel.getProperty("/Data/Openf"));
@@ -787,7 +788,8 @@ sap.ui.define(
                 	Common.usePrivateLog({
                     	pernr : vPernr,
                     	func : "가족",
-                    	mobile : ""
+                    	mobile : "",
+                        action : "R" //CRUD
                     })
             	]).then(function () {
                     
@@ -843,8 +845,9 @@ sap.ui.define(
                         }),
                     	Common.usePrivateLog({
 	                    	pernr : vPernr,
-	                    	func : "개인정보",
-	                    	mobile : ""
+	                    	func : "기본인적사항",
+	                    	mobile : "",
+                            action : "R" //CRUD
 	                    })
                     ]).then(function () {
                         vData.Data.disyn = "2";
@@ -923,7 +926,8 @@ sap.ui.define(
 					Common.usePrivateLog({
                     	pernr : vPernr,
                     	func : "주소",
-                    	mobile : ""
+                    	mobile : "",
+                        action : "R" //CRUD
                     });
                     oController._BusyDialog.close();
 
@@ -1873,6 +1877,13 @@ sap.ui.define(
                             }
                         }
                     );
+                    
+                    Common.usePrivateLog({
+                    	pernr : oController.getView().getModel("session").getData().Pernr,
+                    	func : "기본인적사항",
+                    	mobile : "",
+                        action : "C"
+                    });
 
                     oController._BusyDialog.close();
 
@@ -1956,8 +1967,15 @@ sap.ui.define(
                         }
                     );
 
-                    oController._BusyDialog.close();
+                    Common.usePrivateLog({
+                    	pernr : oController.getView().getModel("session").getData().Pernr,
+                    	func : "주소",
+                    	mobile : "",
+                        action : "U"
+                    });
 
+                    oController._BusyDialog.close();
+                    
                     // Data setting
                     if (oController.Error == "E") {
                         oController.Error = "";

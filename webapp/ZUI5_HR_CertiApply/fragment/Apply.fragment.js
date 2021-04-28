@@ -313,7 +313,7 @@ sap.ui.define(
                             textAlign: "Begin",
                             width: "100%",
                             text: "{i18n>MSG_65020}"
-                        }).addStyleClass("lineHeight30 font-14px"),
+                        }).addStyleClass("font-bold lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
@@ -323,17 +323,17 @@ sap.ui.define(
                             textAlign: "Begin",
                             width: "100%",
                             text: "{i18n>MSG_65022}"
-                        }).addStyleClass("lineHeight30 font-14px"),
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
                             text: "{i18n>MSG_65023}"
-                        }).addStyleClass("lineHeight30 font-14px"),
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
                             text: "{i18n>MSG_65024}"
-                        }).addStyleClass("px-20px lineHeight30 font-14px"),
+                        }).addStyleClass("font-bold lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
@@ -348,7 +348,17 @@ sap.ui.define(
                             textAlign: "Begin",
                             width: "100%",
                             text: "{i18n>MSG_65027}"
-                        }).addStyleClass("px-20px lineHeight30 font-14px")
+                        }).addStyleClass("font-bold lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65028}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65029}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
                     ],
                     visible: {
                         // 재신청일 경우 보이지 않음
@@ -373,7 +383,7 @@ sap.ui.define(
                             width: "100%",
                             text: "{i18n>MSG_65018}"
                         }).addStyleClass("px-20px lineHeight30 font-14px")
-                    ],
+                    ], 
                     visible: {
                         // 재신청일 경우 보임
                         path: "actmode",

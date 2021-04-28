@@ -674,7 +674,13 @@ common.Common = {
             if (window._init_sequence_logging) {
                 $.app.log("common.Common.usePrivateLog called.");
             }
-    
+
+            // IP조회
+            var vIP = "",
+                vIPs = common.Common.activeClientTrace({async:false});
+            if(vIPs.Ipadd && vIPs.Ipadd != "" ){
+                vIP = vIPs.Ipadd.split(",")[0];
+            }
             $.app.getModel("ZHR_COMMON_SRV").create(
                 "/SaveConnEhrLogSet",
                 {
@@ -684,7 +690,9 @@ common.Common = {
                         Menid: $.app.getMenuId(),
                         Pernr: p.pernr ? p.pernr : "",
                         Func: p.func ? p.func : "",
-                        Mobile: p.mobile ? p.mobile : ""
+                        Mobile: p.mobile ? p.mobile : "",
+                        Pcip : vIP,
+                        Action : p.action
                     }]
                 },
                 {
