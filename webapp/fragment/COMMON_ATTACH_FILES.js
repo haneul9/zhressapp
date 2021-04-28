@@ -453,6 +453,16 @@ fragment.COMMON_ATTACH_FILES = {
 				return;
 			}
 
+			if(vMode === "S" && (vFileData.length + files.length) > 1) {
+				oFileUploader.clear();
+				oFileUploader.setValue("");
+				if (f1) f1.setAttribute("value", "");
+
+				sap.m.MessageToast.show(oController.getBundleText("MSG_00036").interpolate(1), { my: "center center", at: "center center"});
+
+				return;
+			}
+
 			for (var i = 0; i < files.length; i++) {
 				files[i].New = true;
 				files[i].Fname = files[i].name;
