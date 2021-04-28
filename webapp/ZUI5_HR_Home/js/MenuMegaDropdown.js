@@ -343,6 +343,7 @@ handleUrl: function(e) {
 },
 
 urlData: function(url) {
+
 	if (!url) {
 		return {
 			getScript: function() {
@@ -546,7 +547,7 @@ generate: function(reload) {
 	return this._gateway.post({
 		// url: 'ZUI5_HR_Home/menu.json',
 		url: url,
-		data: {
+		data: this._gateway.mix({
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -555,7 +556,7 @@ generate: function(reload) {
 			TableIn2: [],
 			TableIn3: [],
 			TableIn4: []
-		},
+		}),
 		success: function(data) {
 			this._gateway.prepareLog('MenuMegaDropdown.generate ${url} success'.interpolate(url), arguments).log();
 

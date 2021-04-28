@@ -145,7 +145,7 @@ retrieveSFUserName: function() {
 
 	return new Promise(function(resolve) {
 
-		if (this._gateway.isMobile()) {
+		if (!this._gateway.isPRD() && this._gateway.isMobile()) {
 			this.dkdlTlqpfmffls(resolve);
 		} else {
 			this._retrieveSFUserName(resolve);
@@ -388,20 +388,7 @@ retrieveLoginInfo: function() {
 	}).promise();
 },
 
-sessionToken: function(pernr) {
-
-	var args = [].slice.call(arguments);
-	if (args.length) {
-		return {
-			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
-			IUsrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
-			IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
-			IUsrpn: sessionStorage.getItem('ehr.sf-user.name'),			// 로그인 사번
-			IMenuid: this._gateway.parameter('mid'),					// 메뉴 ID
-			IPernr: pernr || '',										// 대상자 사번
-			Export: []
-		};
-	}
+sessionToken: function() {
 
 	var url = 'ZHR_COMMON_SRV/SessionInfoSet';
 
