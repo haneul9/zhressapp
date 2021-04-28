@@ -284,8 +284,8 @@ sap.ui.define(
 							if (oData && oData.NavCommonCodeList.results) {
 								//값을 제대로 받아 왔을 때
 								var rDatas = oData.NavCommonCodeList.results;
-								oController.g_BDate = rDatas[0].Svalu;
-								oController.g_EDate = rDatas[1].Svalu;
+								oController.g_BDate = rDatas[0].Cvalu;
+								oController.g_EDate = rDatas[1].Cvalu;
 							}
 						},
 						error: function (oResponse) {
