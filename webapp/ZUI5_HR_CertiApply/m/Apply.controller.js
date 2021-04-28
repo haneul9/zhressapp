@@ -40,7 +40,7 @@ sap.ui.define(
             	if(oEvent.data && oEvent.data.ZformType && oEvent.data.ZformType != ""){
             		this.ApplyModel.setData({ Data: oEvent.data });
             	}else{
-            		this.ApplyModel.setData({ Data: { ZformType: "01", Aptyp: "1" , Zlang: "1", Zcount: "1", Zyear: new Date().getFullYear(), actmode : "" } });
+            		this.ApplyModel.setData({ Data: { ZformType: "01", Aptyp: "1" , Zlang: "1", Zcount: "1", Zyear: "" + new Date().getFullYear(), actmode : "" } });
             		
             	}
                 Common.log("onBeforeShow");
@@ -88,7 +88,7 @@ sap.ui.define(
 
                 // 기준년도 , 미입력 시 올해 년도 세팅
                 if (Common.checkNull(oController.ApplyModel.getProperty("/Data/Zyear"))) {
-                    oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear());
+                    oController.ApplyModel.setProperty("/Data/Zyear", "" + new Date().getFullYear());
                 }
 
                 // 수량 , 미입력 시 1 기본 세팅
