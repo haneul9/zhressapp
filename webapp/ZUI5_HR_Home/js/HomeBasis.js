@@ -458,7 +458,7 @@ post: function(o) {
 metadata: function(namespace, entityType) {
 
 	var metadata = this.metadataMap[namespace],
-	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType.replace(/Set$/i, ''));
+	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType.replace(/Set$/ig, ''));
 
 	if (metadata) {
 		return new Promise(function(resolve) {
