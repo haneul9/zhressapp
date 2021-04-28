@@ -29,6 +29,7 @@ homeBasis: function(_basis) {
 		s4hanaURL: _basis.s4hanaURL.bind(_basis),
 		s4hanaDestination: _basis.s4hanaDestination.bind(_basis),
 		metadata: _basis.metadata.bind(_basis),
+		copyFields: _basis.copyFields.bind(_basis),
 		post: _basis.post.bind(_basis),
 		getJSON: $.getJSON,
 		odataResults: _basis.odataResults.bind(_basis),

@@ -460,8 +460,10 @@ metadata: function(namespace, entityType) {
 	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType.replace(/Set$/i, ''));
 
 	if (metadata) {
-		return $.map(metadata.find(finder), function(o) {
-			return o.attributes.Name.nodeValue;
+		return new Promise(function(resolve) {
+			resolve($.map(metadata.find(finder), function(o) {
+				return o.attributes.Name.nodeValue;
+			}));
 		});
 	}
 
@@ -481,7 +483,22 @@ metadata: function(namespace, entityType) {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
 		}.bind(this)
-	});
+	}).promise();
+},
+copyFields: function(o) {
+
+	var url = o.url.split('/');
+	return this._gateway.metadata(url[0], url[1])
+		.then(function(metadata) {
+			var data = {};
+			$.map(metadata, function(name) {
+				var v = o.data[name];
+				if (v) {
+					data[name] = v;
+				}
+			});
+			return data;
+		});
 },
 odataResults: function(data) {
 

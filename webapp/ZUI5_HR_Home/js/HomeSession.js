@@ -545,22 +545,6 @@ confirmADPW: function(o) {
 	this._gateway.confirm(options);
 },
 
-copyFields: function(o) {
-
-	var url = o.url.split('/');
-	return this._gateway.metadata(url[0], url[1])
-		.then(function(metadata) {
-			var data = {};
-			$.map(metadata, function(name) {
-				var v = o.data[name];
-				if (v) {
-					data[name] = v;
-				}
-			});
-			return data;
-		});
-},
-
 usePrivateLog: function(o) {
 
 	var url = 'ZHR_COMMON_SRV/SaveConnEhrLogSet';
