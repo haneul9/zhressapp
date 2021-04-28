@@ -439,7 +439,7 @@ generate: function() {
 
 	return this._gateway.post({
 		url: url,
-		data: this._gateway.mix({
+		data: {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -448,7 +448,7 @@ generate: function() {
 			TableIn2: [],
 			TableIn3: [],
 			TableIn4: []
-		}),
+		},
 		success: function(data) {
 			this._gateway.prepareLog('MenuHamburger.generate ${url} success'.interpolate(url), arguments).log();
 
