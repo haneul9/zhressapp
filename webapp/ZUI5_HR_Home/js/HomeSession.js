@@ -398,7 +398,8 @@ sessionToken: function(pernr) {
 			IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
 			IUsrpn: sessionStorage.getItem('ehr.sf-user.name'),			// 로그인 사번
 			IMenuid: this._gateway.parameter('mid'),					// 메뉴 ID
-			IPernr: pernr || ''											// 대상자 사번
+			IPernr: pernr || '',										// 대상자 사번
+			Export: []
 		};
 	}
 
@@ -409,7 +410,8 @@ sessionToken: function(pernr) {
 		data: {
 			IUsrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
 			IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
-			ILangu: sessionStorage.getItem('ehr.sf-user.language')
+			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
+			Export: []
 		},
 		success: function() {
 			this._gateway.prepareLog('HomeSession.sessionToken ${url} success'.interpolate(url), arguments).log();
