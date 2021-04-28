@@ -190,11 +190,10 @@ parameter: function(key) {
 },
 mix: function(o) {
 
-	$()
 	return $.extend(o, {
 		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
-		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
-		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),			// 로그인 사번
+		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
 		ICmenuid: ''				// 메뉴 ID this._gateway.mid(this.actualUrl())
 	});
 },
