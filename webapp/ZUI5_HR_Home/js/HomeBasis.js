@@ -471,20 +471,21 @@ metadata: function(namespace, entityType) {
 	var url = this.s4hanaURL(namespace + '/$metadata');
 	return $.get({
 		url: url,
-		success: function(data) {
+		success: function() {
 			this._gateway.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
-
-			metadata = $(data);
-			this.metadataMap[namespace] = metadata;
-
-			return $.map(metadata.find(finder), function(o) {
-				return o.attributes.Name.nodeValue;
-			});
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
 		}.bind(this)
-	}).promise();
+	}).then(function(data) {
+		var metadata = $(data);
+
+		this.metadataMap[namespace] = metadata;
+
+		return $.map(metadata.find(finder), function(o) {
+			return o.attributes.Name.nodeValue;
+		});
+	}.bind(this));
 },
 copyFields: function(o) {
 
