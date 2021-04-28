@@ -42,7 +42,7 @@ init: function(callback) {
 	}.bind(this))
 	.then(function() {
 		return Promise.all([
-			// this.sessionToken(),			// Session token 등록
+			this.sessionToken(),			// Session token 등록
 			this.registerToken()			// Mobile token 등록
 		]);
 	}.bind(this))
