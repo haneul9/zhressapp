@@ -1,6 +1,9 @@
 function MenuHamburger(_gateway, parentSelector) {
 
 	this.parentSelector = parentSelector;
+	this.menuIframeName = 'content-iframe';
+	this.menuIframeSelector = 'iframe[name="${content-iframe}"]'.interpolate(this.menuIframeName);
+	this.menuFormName = 'menu-form';
 	this.menuFavorites = null;
 	this.menuUrlMap = null;
 	this.menuDataMap = null;
@@ -57,6 +60,7 @@ handleAuthCancel: function(message, hidden) {
 	this._gateway.alert({ title: '알림', html: ['<p>', '</p>'].join(message), hidden: hidden });
 	this.spinner(false);
 },
+
 redirect: function(menuUrl) {
 
 	var menuId = this.menuUrlMap[menuUrl];
@@ -75,9 +79,9 @@ changeState: function(toggle, restore) {
 				.find('.active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
-			var iframe = $('iframe[name="content-iframe"]');
-			if (iframe.length) {
-				iframe.hide(0, function() {
+			var menuIframe = $(this.menuIframeSelector);
+			if (menuIframe.length) {
+				menuIframe.hide(0, function() {
 					$(this).remove();
 				});
 			}
@@ -93,7 +97,7 @@ changeLocale: function() {
 		var parentSelector = this.parentSelector;
 		this.generate(true).then(function() {
 			setTimeout(function() {
-				$(parentSelector + ' a[data-menu-id="${}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
+				$(parentSelector + ' a[data-menu-id="${menu-id}"]'.interpolate($('form#${menu-form} input[name="mid"]'.interpolate(this.menuFormName)).val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
 					.parents(this.parentSelector).toggleClass('show', false) // dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
@@ -101,9 +105,9 @@ changeLocale: function() {
 		});
 	}.bind(this), 0);
 
-	var iframe = $('iframe[name="content-iframe"]');
-	if (iframe.length) {
-		$('form#menu-form').submit();
+	var menuIframe = $(this.menuIframeSelector);
+	if (menuIframe.length) {
+		$('form#' + this.menuFormName).submit();
 	}
 },
 
@@ -143,14 +147,14 @@ menuParam: function() {
 
 goToLink: function(menuId, url) {
 
-	var iframe = $('iframe[name="content-iframe"]');
-	if (!iframe.length) {
-		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
+	var menuIframe = $(this.menuIframeSelector);
+	if (!menuIframe.length) {
+		$('.ehr-body .container-fluid').append('<iframe name="${content-iframe}"></iframe>'.interpolate(this.menuIframeName));
 	}
 
-	var form = $('form#menu-form');
+	var form = $('form#' + this.menuFormName);
 	if (!form.length) {
-		form = $('<form id="menu-form" method="GET" target="content-iframe"><input type="hidden" name="mid" /></form>').appendTo('body');
+		form = $('<form id="${menu-form}" method="GET" target="${content-iframe}"><input type="hidden" name="mid" /></form>'.interpolate(this.menuFormName, this.menuIframeName)).appendTo('body');
 	}
 
 	if (!this._gateway.isPRD()) {
@@ -425,7 +429,7 @@ generate: function() {
 
 	return this._gateway.post({
 		url: url,
-		data: {
+		data: this._gateway.mix({
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -434,7 +438,7 @@ generate: function() {
 			TableIn2: [],
 			TableIn3: [],
 			TableIn4: []
-		},
+		}),
 		success: function(data) {
 			this._gateway.prepareLog('MenuHamburger.generate ${url} success'.interpolate(url), arguments).log();
 

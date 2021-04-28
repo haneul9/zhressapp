@@ -67,7 +67,9 @@ init: function(callback) {
 		}.bind(this));
 	}.bind(this));
 },
-
+/*
+DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
+*/
 dkdlTlqpfmffls: function(resolve) {
 
 	var options = {
@@ -134,7 +136,9 @@ _retrieveSFUserName: function(resolve) {
 		}
 	});
 },
-
+/*
+SF의 사번 조회
+*/
 retrieveSFUserName: function() {
 
 	var pernr = this._gateway.parameter('pernr');
@@ -152,7 +156,9 @@ retrieveSFUserName: function() {
 		}
 	}.bind(this));
 },
-
+/*
+S4HANA OData 호출을 위한 CSRF token 조회
+*/
 retrieveOdataCsrfToken: function() {
 
 	return $.getJSON({
@@ -177,7 +183,9 @@ retrieveOdataCsrfToken: function() {
 		}.bind(this)
 	}).promise();
 },
-
+/*
+SF의 개인 사진 조회
+*/
 retrieveSFUserPhoto: function() {
 
 	return $.getJSON({
@@ -203,7 +211,9 @@ retrieveSFUserPhoto: function() {
 		}.bind(this)
 	}).promise();
 },
-
+/*
+SF의 언어를 조회하여 Home 화면에 적용
+*/
 retrieveSFUserLocale: function() {
 
 	return $.getJSON({
@@ -232,7 +242,9 @@ retrieveSFUserLocale: function() {
 		}.bind(this)
 	}).promise();
 },
-
+/*
+Home 화면에서 언어 변경시 API를 통해 SF의 언어도 변경
+*/
 changeSFUserLocale: function() {
 
 	this._gateway.spinner(true);
@@ -256,7 +268,10 @@ changeSFUserLocale: function() {
 		}.bind(this)
 	});
 },
-
+/*
+Home 화면에서 언어 변경 후처리 작업 function
+아래 addLocaleChangeCallbackOwner function으로 등록된 callbackOwner 들의 changeLocale function이 각각 호출됨
+*/
 afterChangeLocale: function() {
 
 	var sfLocale = $('#sf-locale option:selected'),
@@ -288,9 +303,8 @@ afterChangeLocale: function() {
 			}.bind(this));
 		}.bind(this));
 },
-
 /*
-Home 화면에서 언어 변경시 언어 변경 작업을 해야하는 모듈(callbackOwner) 등록 function
+Home 화면에서 언어 변경시 언어 변경 작업을 해야하는 모듈(callbackOwner)을 등록하는 function
 callbackOwner는 반드시 changeLocale function을 구현해야함
 */
 addLocaleChangeCallbackOwner: function(callbackOwner) {
@@ -531,25 +545,27 @@ confirmADPW: function(o) {
 	this._gateway.confirm(options);
 },
 
-s4hanaLog: function(pernr) {
+usePrivateLog: function(o) {
 
 	var url = 'ZHR_COMMON_SRV/SaveConnEhrLogSet';
 
 	return this._gateway.post({
 		url: url,
 		data: {
+			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			TableIn: [{
 				Usrid: sessionStorage.getItem('ehr.odata.user.percod'),
 				Menid: this._gateway.parameter('mid'),
-				Pernr: pernr,
+				Pernr: o.pernr || '',
+				Func: o.func || '',
 				Mobile: this._gateway.isMobile() ? 'X' : ''
 			}]
 		},
 		success: function() {
-			this._gateway.prepareLog('HomeSession.s4hanaLog ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('HomeSession.usePrivateLog ${url} success'.interpolate(url), arguments).log();
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.s4hanaLog ' + url);
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.usePrivateLog ' + url);
 		}.bind(this)
 	});
 }

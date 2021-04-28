@@ -60,6 +60,8 @@ homeMenu: function(_menu) {
 		spinner: _menu.spinner.bind(_menu),
 		redirect: _menu.redirect.bind(_menu),
 		toggleMenu: _menu.toggleMenu.bind(_menu),
+		currentMid: _menu.currentMid.bind(_menu),
+		currentUrl: _menu.currentUrl.bind(_menu),
 		mid: _menu.mid.bind(_menu),
 		urlData: _menu.urlData.bind(_menu),
 		menuUrl: _menu.menuUrl.bind(_menu),

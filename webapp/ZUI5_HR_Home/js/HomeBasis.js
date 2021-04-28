@@ -171,10 +171,6 @@ prepareLog: function() {
 		}.bind(this)
 	};
 },
-actualUrl: function() {
-
-	return (document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1");
-},
 parameterMap: function(locationSearch) {
 
 	var paramMap = {};
@@ -194,7 +190,7 @@ mix: function(o) {
 		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
 		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
 		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
-		ICmenuid: ''				// 메뉴 ID this._gateway.mid(this.actualUrl())
+		ICmenuid: this._gateway.currentMid()						// 메뉴 ID this._gateway.mid(this.actualUrl())
 	});
 },
 s4hanaURL: function(modelAndEntityName) {
