@@ -46,7 +46,7 @@ homeSession: function(_session) {
 		pernr: _session.pernr.bind(_session),
 		locale: _session.locale.bind(_session),
 		loginInfo: _session.loginInfo.bind(_session),
-		s4hanaLog: _session.s4hanaLog.bind(_session),
+		usePrivateLog: _session.usePrivateLog.bind(_session),
 		confirmADPW: _session.confirmADPW.bind(_session),
 		addLocaleChangeCallbackOwner: _session.addLocaleChangeCallbackOwner.bind(_session),
 		removeLocaleChangeCallbackOwner: _session.removeLocaleChangeCallbackOwner.bind(_session)
