@@ -186,11 +186,15 @@ parameter: function(key) {
 },
 mix: function(o) {
 
+	var mid;
+	if (typeof this._gateway.currentMid === 'function') {
+		mid = this._gateway.currentMid();
+	}
 	return $.extend(o, {
 		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
 		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
 		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
-		ICmenuid: this._gateway.currentMid()						// 메뉴 ID this._gateway.mid(this.actualUrl())
+		ICmenuid: mid || ''											// 메뉴 ID
 	});
 },
 s4hanaURL: function(modelAndEntityName) {
