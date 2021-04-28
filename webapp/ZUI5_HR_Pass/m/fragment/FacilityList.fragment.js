@@ -85,11 +85,15 @@ sap.ui.define([
 		},
 
 		getRequestList: function(oController) {
+			var FacilityHandler = oController.getFacilityHandler();
+
 			return new sap.m.Table({
 				inset: false,
 				noDataText: "{i18n>LABEL_00901}",
 				growing: true,
 				growingThreshold: 5,
+				mode: sap.m.ListMode.SingleSelectMaster,
+				itemPress: FacilityHandler.onPressResvRow.bind(FacilityHandler),
 				columns: [
 					new sap.m.Column({
 						width: "35%",
