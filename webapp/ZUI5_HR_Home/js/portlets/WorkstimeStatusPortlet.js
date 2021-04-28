@@ -76,8 +76,8 @@ fill: function() {
             vExttm = vExttm.split(":"),
             vTottm = vTottm.split(":");
 
-            var vCtrnmH = vCtrnm[0] !== "00" ? vCtrnm[0] + "시간" : "",
-                vCtrnmM = vCtrnm[1] !== "00" ? vCtrnm[1] + "분" : "",
+            var vCtrnmH = vCtrnm[0] !== "00" && this.checkNull(!vCtrnm[0]) ? vCtrnm[0] + "시간" : (this.checkNull(vCtrnm[1]) ? "0시간" : ""),
+                vCtrnmM = vCtrnm[1] !== "00" ? (this.checkNull(vCtrnm[1]) ? "" : vCtrnm[1] + "분") : "",
                 vWrktmH = vWrktm[0] !== "00" && this.checkNull(!vWrktm[0]) ? vWrktm[0] + "시간" : (this.checkNull(vWrktm[1]) ? "0시간" : ""),
                 vWrktmM = vWrktm[1] !== "00" ? (this.checkNull(vWrktm[1]) ? "" : vWrktm[1] + "분") : "",
                 vExttmH = vExttm[0] !== "00" && this.checkNull(!vExttm[0]) ? vExttm[0] + "시간" : (this.checkNull(vExttm[1]) ? "0시간" : ""),
