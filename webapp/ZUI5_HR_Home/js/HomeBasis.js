@@ -490,12 +490,11 @@ copyFields: function(o) {
 
 	var url = o.url.split('/');
 	return this._gateway.metadata(url[0], url[1])
-		.then(function(metadata) {
+		.then(function(fieldNames) {
 			var data = {};
-			$.map(metadata, function(name) {
-				var v = o.data[name];
-				if (v) {
-					data[name] = v;
+			$.map(fieldNames, function(name) {
+				if (typeof o.data[name] !== 'undefined') {
+					data[name] = o.data[name];
 				}
 			});
 			return data;
