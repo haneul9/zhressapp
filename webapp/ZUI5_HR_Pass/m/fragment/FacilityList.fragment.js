@@ -87,8 +87,9 @@ sap.ui.define([
 		getRequestList: function(oController) {
 			var FacilityHandler = oController.getFacilityHandler();
 
-			return new sap.m.Table({
+			return new sap.m.Table(oController.PAGEID + "_MyResv2List", {
 				inset: false,
+				rememberSelections: false,
 				noDataText: "{i18n>LABEL_00901}",
 				growing: true,
 				growingThreshold: 5,

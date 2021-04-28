@@ -28,6 +28,7 @@ sap.ui.define(
 				});
 
 				this.oModel.setProperty("/MyList", results);
+				$.app.byId(this.oController.PAGEID + "_MyResv2List").removeSelections();
 			},
 
 			buildRequestTable: function () {
