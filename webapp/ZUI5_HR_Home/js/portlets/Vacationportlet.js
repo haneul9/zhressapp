@@ -1,15 +1,15 @@
 ﻿/* global AbstractPortlet moment */
-function WorkstimeStatusPortlet() {
+function Vacationportlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
-	this.$selector = '#portlet-workstimeStatusPortlet-list';
+	this.$selector = '#portlet-vacationportlet-list';
 }
 
-WorkstimeStatusPortlet.prototype = Object.create(AbstractPortlet.prototype);
-WorkstimeStatusPortlet.prototype.constructor = WorkstimeStatusPortlet;
+Vacationportlet.prototype = Object.create(AbstractPortlet.prototype);
+Vacationportlet.prototype.constructor = Vacationportlet;
 
-$.extend(WorkstimeStatusPortlet.prototype, {
+$.extend(Vacationportlet.prototype, {
 
 ui: function() {
 
@@ -27,7 +27,7 @@ ui: function() {
 		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="list-group" id="portlet-workstimeStatusPortlet-list"></div>',
+				'<div class="list-group" id="portlet-vacationportlet-list"></div>',
 			'</div>',
 			this.spinner(),
 		'</div>'
@@ -62,7 +62,7 @@ fill: function() {
             FlexWorktime2Nav : []
 		},
 		success: function(data) {
-			this._gateway.prepareLog('WorkstimeStatusPortlet.fill ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('Vacationportlet.fill ${url} success'.interpolate(url), arguments).log();
 
 			var list = this.$(),
                 oWorkData = data.d;
@@ -153,7 +153,7 @@ fill: function() {
             $('.progress-bar').animate({ width: vWorkTime + '%' }, 2000);
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'WorkstimeStatusPortlet.fill ' + url);
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Vacationportlet.fill ' + url);
 		}.bind(this),
 		complete: function() {
 			this.spinner(false);
