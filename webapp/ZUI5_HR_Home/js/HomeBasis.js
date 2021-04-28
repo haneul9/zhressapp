@@ -440,7 +440,7 @@ post: function(o) {
 		postOptions.async = o.async;
 	}
 	if (o.data) {
-		postOptions.data = JSON.stringify(this.mix(o.data));
+		postOptions.data = JSON.stringify(o.data);
 	}
 	if (o.success) {
 		postOptions.success = o.success;

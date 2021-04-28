@@ -489,7 +489,7 @@ generate: function() {
 
 	return this._gateway.post({
 		url: url,
-		data: {
+		data: this._gateway.mix({
 			IMode: 'R',
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
@@ -497,7 +497,7 @@ generate: function() {
 			IDatum: Date.toODataString(),
 			TableIn1: [],
 			TableIn2: []
-		},
+		}),
 		success: function(data) {
 			this._gateway.prepareLog('Portlets.generate ${url} success'.interpolate(url), arguments).log();
 
