@@ -395,8 +395,8 @@ sessionToken: function() {
 	return this._gateway.post({
 		url: url,
 		data: {
-			IUsrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
-			IUsrse: sessionStorage.getItem('ehr.odata.csrf-token'),		// Token
+			ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
+			ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
 			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			Export: []
 		},
