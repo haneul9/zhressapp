@@ -18,6 +18,8 @@ sap.ui.define(
 			PAGEID: "CongratulationDetail",
 
 			DetailModel: new JSONModelHelper(), 
+			g_BDate: "",
+			g_EDate: "",
 
 			getUserId: function() {
 				
@@ -134,14 +136,16 @@ sap.ui.define(
 					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
 					vStartDate.setMaxDate(new Date(vYear2, vMonth1, vDate2));
 				}else {
-					vYear1 = new Date(new Date().setDate(new Date().getDate()-30)).getFullYear();
-					vMonth1 = new Date(new Date().setDate(new Date().getDate()-30)).getMonth();
-					vDate1 = new Date(new Date().setDate(new Date().getDate()-30)).getDate();
+					var Bdate = parseInt(oController.g_BDate),
+						Edate = parseInt(oController.g_EDate);
+					vYear1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getFullYear();
+					vMonth1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getMonth();
+					vDate1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getDate();
 					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
 					
-					vYear2 = new Date(new Date().setDate(new Date().getDate()+7)).getFullYear();
-					vMonth2 = new Date(new Date().setDate(new Date().getDate()+7)).getMonth();
-					vDate2 = new Date(new Date().setDate(new Date().getDate()+7)).getDate();
+					vYear2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getFullYear();
+					vMonth2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getMonth();
+					vDate2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getDate();
 					vStartDate.setMaxDate(new Date(vYear1, vMonth2, vDate2));
 				}
 			},
@@ -155,6 +159,28 @@ sap.ui.define(
 				var oBirthDayBox = $.app.byId(oController.PAGEID + "_BirthDayBox");
 				oBirthDayBox.setVisible(false);
 				
+				if(vBukrs === "A100"){
+					oCodeHeaderParams.ICodeT = "018";
+					oCodeHeaderParams.ICodty = "PB120";
+					oCodeHeaderParams.IPernr = vPernr;
+					oCodeHeaderParams.ISubCode = "DATE";
+					oCodeHeaderParams.NavCommonCodeList = [];
+					
+					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
+						success: function (oData, oResponse) {
+							if (oData && oData.NavCommonCodeList.results) {
+								//값을 제대로 받아 왔을 때
+								var rDatas = oData.NavCommonCodeList.results;
+								oController.g_BDate = rDatas[0].Cvalu;
+								oController.g_EDate = rDatas[1].Cvalu;
+							}
+						},
+						error: function (oResponse) {
+							common.Common.log(oResponse);
+						}
+					});
+				}
+
 				oCodeHeaderParams = {
 					ICodeT: "018",
 					IPernr: vPernr,
@@ -591,13 +617,12 @@ sap.ui.define(
 						if (oController.getUserGubun() === "A100") {
 							//첨단일 경우 CopayT에 값이 들어있지 않아 기본급으로 측정되기에 BasicT에서 그대로 받아서 넣어줌.
 							oController.DetailModel.setProperty("/FormData/CopayT", oData.TableIn.results[0].AmountT);
-						} else {
-							//기초일 경우
-							oController.DetailModel.setProperty("/FormData/BasicT", oData.TableIn.results[0].BasicT);
-							oController.DetailModel.setProperty("/FormData/Rate", oData.TableIn.results[0].Rate);
-							oController.DetailModel.setProperty("/FormData/AmountT", oData.TableIn.results[0].AmountT);
-							oController.onCheckPress();
 						}
+						//기초일 경우
+						oController.DetailModel.setProperty("/FormData/BasicT", oData.TableIn.results[0].BasicT);
+						oController.DetailModel.setProperty("/FormData/Rate", oData.TableIn.results[0].Rate);
+						oController.DetailModel.setProperty("/FormData/AmountT", oData.TableIn.results[0].AmountT);
+						oController.onCheckPress();
 						Common.log(oData);
 					},
 					error: function (oResponse) {

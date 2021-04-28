@@ -289,14 +289,7 @@ sap.ui.define([
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								text: "{BasicT}"
 							})
-						],
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if (vBukrs === "A100") return false;
-								return true;
-							}
-						}
+						]
 					}),
 					new sap.m.HBox({
 						height: "42px",
@@ -316,14 +309,7 @@ sap.ui.define([
 									}
 								}
 							})
-						],
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if (vBukrs === "A100") return false;
-								return true;
-							}
-						}
+						]
 					}),
 					new sap.m.HBox({
 						height: "42px",
@@ -334,32 +320,7 @@ sap.ui.define([
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								text: "{AmountT}"
 							})
-						],
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if (vBukrs === "A100") return false;
-								return true;
-							}
-						}
-					}),
-					new sap.m.HBox({
-						height: "42px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_08013}" }).addStyleClass("sub-con-title"), // 회사 경조금
-							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								text: "{CopayT}"
-							})
-						],
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if (vBukrs === "A100") return true;
-								return false;
-							}
-						}
+						]
 					}),
 					new sap.m.HBox({
 						height: "42px",

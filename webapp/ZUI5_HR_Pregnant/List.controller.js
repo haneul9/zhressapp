@@ -684,7 +684,7 @@ sap.ui.define(
                     var detail = {};
                     detail.Pernr = $.app.getModel("session").getData().Pernr;
                     detail.Preen = "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/"; // 출산예정일
-                    detail.Prebg = "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/"; // 임신시작일
+                    detail.Prebg = oData.Prebg ? "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/" : null; // 임신시작일
                     detail.Prebn = oData.Prebn; // 태아수
                     detail.Pampm = oData.Pampm; // 단축근무시간
                     detail.Mptyp = oData.Mptyp ? oData.Mptyp : ""; // 법정관리유형

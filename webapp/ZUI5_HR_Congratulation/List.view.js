@@ -17,8 +17,6 @@ sap.ui.define([
 			{id: "BasicT",		label: "{i18n>LABEL_08010}" /* 기본급 */,	 plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto", align: sap.ui.core.HorizontalAlign.Right},
 			{id: "Rate",		label: "{i18n>LABEL_08011}" /* 경조율 */,	 plabel: "", resize: true, span: 0, type: "template",  sort: false, filter: false, width: "auto", templateGetter: "getStatusTxt"},
 			{id: "AmountT", 	label: "{i18n>LABEL_08012}" /* 경조금액 */,	 plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "auto", align: sap.ui.core.HorizontalAlign.Right},
-			{id: "CopayT", 		label: "{i18n>LABEL_08013}" /* 회사경조금 */,plabel: "", resize: true, span: 0, type: "string", sort: false, filter: false, width: "auto", align: sap.ui.core.HorizontalAlign.Right},
-			{id: "EmpayT",		label: "{i18n>LABEL_08014}" /* 상호경조금 */,plabel: "", resize: true, span: 0, type: "string", sort: true,  filter: true,  width: "auto", align: sap.ui.core.HorizontalAlign.Right},
 			{id: "Zbigo",		label: "{i18n>LABEL_08015}" /* 비고 */,		 plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 			{id: "StatusText", 	label: "{i18n>LABEL_08016}" /* 처리결과 */,	 plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "auto", templateGetter: "getVisibleBotton"}
 		],
