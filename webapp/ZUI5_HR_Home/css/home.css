@@ -313,10 +313,10 @@ body {min-width:576px; font-size:14px}
 .app-wrap-download .flex-item .android-info img {max-width:100%;padding-top:1rem}
 
 /* Error Page */
-.custom-system-message {padding:0 3rem}
+.custom-system-message {padding:0 3rem }
 .custom-system-message img {width:83px;height:auto}
 .custom-system-message .title {font-size:2.625rem; font-weight: 700;}
 .custom-system-message .message {font-size:1rem; padding-top:2rem;line-height: 1.2;}  
 
 
-/* 0427_3 */   
+/* 0428_1 */   
