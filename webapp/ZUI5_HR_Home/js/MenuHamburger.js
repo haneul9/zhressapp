@@ -111,6 +111,16 @@ changeLocale: function() {
 	}
 },
 
+currentMid: function() {
+
+	return $('form#${menu-form} input[name="mid"]'.interpolate(this.menuFormName)).val();
+},
+
+currentUrl: function() {
+
+	return $('form#${menu-form}'.interpolate(this.menuFormName)).attr('action');
+},
+
 mid: function(url) {
 
 	return this.menuUrlMap[url] || '';
