@@ -42,15 +42,18 @@ init: function(callback) {
 	}.bind(this))
 	.then(function() {
 		return Promise.all([
-			this.retrieveLoginInfo(),		// 인사정보 조회
+			this.sessionToken(),			// Session token 등록
 			this.registerToken()			// Mobile token 등록
 		]);
+	}.bind(this))
+	.then(function() {
+		return this.retrieveLoginInfo();	// 인사정보 조회
 	}.bind(this))
 	.then(function() {
 		if (typeof HomeMFA === 'function') {
 			new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
 		} else {
-			throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
+			this._gateway.log('Multi Factor Authentication 모듈이 존재하지 않습니다.');
 		}
 	}.bind(this))
 	.catch(function(e) {
@@ -142,7 +145,7 @@ retrieveSFUserName: function() {
 
 	return new Promise(function(resolve) {
 
-		if (this._gateway.isMobile()) {
+		if (!this._gateway.isPRD() && this._gateway.isMobile()) {
 			this.dkdlTlqpfmffls(resolve);
 		} else {
 			this._retrieveSFUserName(resolve);
@@ -385,10 +388,32 @@ retrieveLoginInfo: function() {
 	}).promise();
 },
 
+sessionToken: function() {
+
+	var url = 'ZHR_COMMON_SRV/SessionInfoSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
+			ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
+			Export: []
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeSession.sessionToken ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + url);
+		}.bind(this)
+	}).promise();
+},
+
 registerToken: function() {
+
 	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
-		token = this._gateway.parameter("token"),
-		percod = sessionStorage.getItem('ehr.odata.user.percod');
+	token = this._gateway.parameter("token"),
+	percod = sessionStorage.getItem('ehr.odata.user.percod');
 
 	if (token === undefined || token === null || token === '') {
 		// throw new Error("Token is blank.");

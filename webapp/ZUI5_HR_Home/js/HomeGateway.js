@@ -21,6 +21,7 @@ homeBasis: function(_basis) {
 		functionName: _basis.functionName.bind(_basis),
 		parameter: _basis.parameter.bind(_basis),
 		parameterMap: _basis.parameterMap.bind(_basis),
+		mix: _basis.mix.bind(_basis),
 		isLOCAL: _basis.isLOCAL.bind(_basis),
 		isDEV: _basis.isDEV.bind(_basis),
 		isQAS: _basis.isQAS.bind(_basis),

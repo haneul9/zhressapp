@@ -2,8 +2,6 @@
 function MenuMegaDropdown(_gateway, parentSelector) {
 
 	this.parentSelector = parentSelector;
-	this.iframeName = 'content-iframe';
-	this.iframeSelector = 'iframe[name="${}"]'.interpolate(this.iframeName);
 	this.menuFavorites = null;
 	this.menuUrlMap = null;
 	this.menuDataMap = null;
@@ -107,7 +105,7 @@ changeState: function(toggle, restore) {
 			$(this.parentSelector + ' .active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
-			var iframe = $(this.iframeSelector);
+			var iframe = $('iframe[name="content-iframe"]');
 			if (iframe.length) {
 				iframe.hide(0, function() {
 					$(this).remove();
@@ -139,7 +137,7 @@ changeLocale: function() {
 		});
 	}.bind(this), 0);
 
-	var iframe = $(this.iframeSelector);
+	var iframe = $('iframe[name="content-iframe"]');
 	if (iframe.length) {
 		iframe[0].contentWindow.sap.ui.getCore().getConfiguration().setLanguage(this._gateway.loginInfo('Langu'));
 		$('form#menu-form').submit();
@@ -259,18 +257,18 @@ menuParam: function() {
 
 goToLink: function(menuId, url) {
 
-	var iframe = $(this.iframeSelector);
+	var iframe = $('iframe[name="content-iframe"]');
 	if (!iframe.length) {
 		var container = $('.ehr-body .container-fluid');
 		if (container.data('jsp')) {
 			container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
 		}
-		$('.ehr-body .container-fluid').append('<iframe name="${content-iframe}"></iframe>'.interpolate(this.iframeName));
+		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
 	}
 
 	var form = $('form#menu-form');
 	if (!form.length) {
-		form = $('<form id="menu-form" method="GET" target="${content-iframe}"><input type="hidden" name="mid" /></form>'.interpolate(this.iframeName)).appendTo('body');
+		form = $('<form id="menu-form" method="GET" target="content-iframe"><input type="hidden" name="mid" /></form>').appendTo('body');
 	}
 
 	if (!this._gateway.isPRD()) {
@@ -320,7 +318,7 @@ handleUrl: function(e) {
 				params.pernr = this._gateway.parameter('pernr');
 			}
 			this._gateway.openWindow({
-				url: 'index.html?' + $.param(params),
+				url: 'indexTest.html?' + $.param(params),
 				name: url.replace(/[^a-zA-Z0-9]/g, '')
 			});
 		}
@@ -345,7 +343,6 @@ handleUrl: function(e) {
 },
 
 urlData: function(url) {
-
 	if (!url) {
 		return {
 			getScript: function() {
@@ -549,7 +546,7 @@ generate: function(reload) {
 	return this._gateway.post({
 		// url: 'ZUI5_HR_Home/menu.json',
 		url: url,
-		data: this._gateway.mix({
+		data: {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -558,7 +555,7 @@ generate: function(reload) {
 			TableIn2: [],
 			TableIn3: [],
 			TableIn4: []
-		}),
+		},
 		success: function(data) {
 			this._gateway.prepareLog('MenuMegaDropdown.generate ${url} success'.interpolate(url), arguments).log();
 

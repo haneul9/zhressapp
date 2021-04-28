@@ -216,11 +216,15 @@ getViewInitStyleClasses: function() {
 		return "sapUiSizeCompact";
 	}
 },
+getMenuUrl: function() {
+
+	return (document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1");
+},
 getMenuId: function() {
 	try {
 		var mid;
 		if (parent && parent._gateway && typeof parent._gateway.mid === "function") {
-			mid = parent._gateway.mid((document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1"));
+			mid = parent._gateway.mid(this.getMenuUrl());
 		}
 		if (mid) {
 			return mid;
@@ -228,12 +232,22 @@ getMenuId: function() {
 		throw new Error("No mid.");
 	} catch(e) {
 		var paramMap = {};
-		$.map(location.search.replace(/\?/, '').split(/&/), function (v) {
+		$.map(location.search.replace(/\?/, '').split(/&/), function(v) {
 			var pair = v.split(/=/);
 			paramMap[pair[0]] = decodeURIComponent(pair[1]);
 		});
 		return paramMap.mid || '';
 	}
+},
+mix: function(o, pernr) {
+
+	return $.extend(o, {
+		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
+		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
+		ICmenuid: this.getMenuId(),									// 메뉴 ID
+		IPernr: pernr || ''											// 대상자 사번
+	});
 },
 spinner: function(show) {
 	setTimeout(function() {

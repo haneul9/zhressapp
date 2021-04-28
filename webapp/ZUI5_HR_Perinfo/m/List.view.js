@@ -75,9 +75,20 @@ sap.ui.define(
                         	width : "100%",
                             items: [
                             	new sap.m.VBox({
-                            		items : [new sap.m.Text({ text: "김성준" }).addStyleClass("EmployeeLayoutHeader"), 
-                            				 new sap.m.Text({ text: "인재육성팀" }).addStyleClass("EmployeeLayoutText"),
-                            				 new sap.m.Text({ text: "20001003/S1/팀장" }).addStyleClass("EmployeeLayoutText")
+                            		items : [new sap.m.Text({ text: "{Ename}" }).addStyleClass("EmployeeLayoutHeader"), 
+                            				 new sap.m.Text({ 
+                            				 	layoutData : new sap.m.FlexItemData({ lineHeight: "16px" }),
+                            				 	text: "{Stext}" 
+                            				 }).addStyleClass("EmployeeLayoutText"),
+                            				 new sap.m.Text({ 
+                            				 	text : {
+                                                    parts: [{ path: "Pernr" },{ path: "PGradeTxt" },{ path: "ZtitleT" } ],
+                                                    formatter: function (v1, v2, v3) {
+                                                        if (v3 != "") return v1+ " / " + v2 + " / " + v3;
+                                                        else return  v1+ " / " + v2 ;
+                                                    }
+                                                 }
+                            				 }).addStyleClass("EmployeeLayoutText")
                             		]
                             	})
                             ]
@@ -90,7 +101,7 @@ sap.ui.define(
                                		height : "85px"
                                })
                             ]
-                        }).addStyleClass("EmployeeLayoutPic"),
+                        }).addStyleClass("EmployeeLayoutPic")
                     ]
                 }).addStyleClass("EmployeeLayout");
                 
@@ -143,12 +154,15 @@ sap.ui.define(
                         })
                     ]
                 }).addStyleClass("tab-group");
-
+				
                 tabBox.addEventDelegate(
                     {
                         onAfterRendering: function () {
-                            this.setSelectedKey("Basic");
-                            this.fireSelect();
+                        	if(oController.doubleRendering == "X"){
+	                        	this.setSelectedKey("Basic");
+	                            this.fireSelect();	
+                        	}
+                            oController.doubleRendering = "X";
                         }
                     },
                     tabBox
@@ -157,11 +171,18 @@ sap.ui.define(
                 return new PageHelper({
                 	contentContainerStyleClass: "app-content-container-mobile",
                     contentItems: [searchBox, tabBox],
-                    // contentHeaderRight : [ new sap.m.Button({
-		                  //                  press: oController.moveSearch,
-		                  //                  icon: "sap-icon://search",
-		                  //                  text : "{i18n>LABEL_00205}"  //사원검색
-		                  //              })]
+                    headerButton : new sap.m.FlexBox({
+                                    items: [ 
+                                        new sap.m.Button({
+                                            press: oController.moveSearch,
+                                            text : "{i18n>LABEL_00205}",  //사원검색
+                                            // visible: {
+                                            //     return gAuth === "M" ? true : false;
+                                            // }
+                                        }).addStyleClass("button-light")
+                                    ]
+                                }).addStyleClass("app-nav-button-right")
+
                 });
             },
 

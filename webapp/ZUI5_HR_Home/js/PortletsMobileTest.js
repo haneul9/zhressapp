@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet Vacationportlet*/
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet*/
 function PortletsMobile(_gateway) {
 
 	this._gateway = _gateway;
@@ -19,9 +19,7 @@ init: function() {
 		'P105': CalendarPortlet,			// 팀 달력
 		'P106': HiTalkTalkPortlet,			// 하이톡톡
 		'P107': EvalGoalPortlet	,			// 목표관리
-		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
-		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
-		// 'P110': Vacationportlet				// 근태신청
+		'P108': EvalGoalProgressingPortlet	// 팀원 목표 진척율
 	};
 
 	$(document)
@@ -41,7 +39,7 @@ init: function() {
 					paramMap.pernr = this._gateway.parameter('pernr') || sessionStorage.getItem('ehr.sf-user.name');
 				}
 				this._gateway.openWindow({ // openPopup openWindow
-					url: 'indexMobile.html?' + $.param(paramMap),
+					url: 'indexMobileTest.html?' + $.param(paramMap),
 					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
 					width: screen.availWidth,
 					height: screen.availHeight

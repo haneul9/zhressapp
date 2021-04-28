@@ -23,10 +23,13 @@
 <script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/jquery-ui.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
+<!--
 <script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
+-->
 <script>
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 	$('html').attr('device', 'mobile');
@@ -35,21 +38,21 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 $(function() {
 
 $('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) + 'px)');
-
+/*
 var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
 window._session = new HomeSession(_gateway); // 2FA 처리 포함
 window._i18n = new HomeI18n(_gateway);
-
+*/
 });
 </script>
 </head>
 <body>
 <div class="ehr-header">
 	<header class="container-fluid">
-		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" aria-label="상단 보조 메뉴 영역">
+		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" style="height:90px; justify-content:space-between" aria-label="상단 보조 메뉴 영역">
 			<span></span>
-			<a class="navbar-brand ehr-logo" href="javascript:;"></a>
+			<a class="navbar-brand ehr-logo" style="position:static; margin:0" href="javascript:;"></a>
 			<span></span>
 		</nav>
 	</header>

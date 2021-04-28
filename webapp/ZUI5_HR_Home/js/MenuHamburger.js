@@ -71,7 +71,8 @@ changeState: function(toggle, restore) {
 
 	setTimeout(function() {
 		if (restore) {
-			$(this.parentSelector + ' .active').toggleClass('active', false);
+			$(this.parentSelector).toggleClass('show', false)
+				.find('.active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
 			var iframe = $('iframe[name="content-iframe"]');
@@ -455,8 +456,11 @@ generate: function() {
 					return;
 				}
 
-				e.preventDefault();
-				e.stopPropagation();
+				var anchor = $(e.target);
+				if (!anchor.is('a') || !/^javascript/i.test(anchor.attr('href'))) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
 
 				var block = toggle.offsetParent('.dropdown-menu');
 				if (block.hasClass('show')) {

@@ -23,7 +23,7 @@ sap.ui.define(
             _AnnouncementJSonModel: new sap.ui.model.json.JSONModel(),
             EmpSearchResult: new sap.ui.model.json.JSONModel(),
             EmployeeModel: new common.EmployeeModel(),
-
+			doubleRendering : "",	
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
                     {
@@ -54,13 +54,17 @@ sap.ui.define(
                     oIconBar.setSelectedKey("Basic");
                     oIconBar.fireSelect();
                 }
-                // else if(oEvent && oEvent.data && typeof oEvent.data.isResvRefresh === "boolean") return;
             },
 
-            onAfterShow: function () {},
+            onAfterShow: function () {
+            	// var oIconBar = sap.ui.getCore().byId(this.PAGEID + "_IconBar");
+             //       oIconBar.setSelectedKey("Basic");
+             //       oIconBar.fireSelect();
+            },
 
             handleTabBarSelect: function (oEvent) {
                 var oController = $.app.getController();
+                var oData = oController._ListCondJSonModel.getProperty("/Data");
                 var sKey = oEvent.getParameter("selectedKey");
                 if (!sKey || sKey == "") {
                     sKey = "Basic";
@@ -71,9 +75,19 @@ sap.ui.define(
                 switch (this._vCurrentTabKey) {
                     case "Basic":
                         oController.onPressSearchBasic();
+                        Common.usePrivateLog({
+                        	pernr : oData.Pernr,
+                        	func : "개인정보",
+                        	mobile : "X"
+                        });
                         break;
                     case "Address":
                         oController.onPressSearchAddress();
+                        Common.usePrivateLog({
+                        	pernr : oData.Pernr,
+                        	func : "주소",
+                        	mobile : "X"
+                        });
                         break;
                     case "Car":
                         oController.onPressSearchCar();
