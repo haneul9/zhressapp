@@ -14,7 +14,7 @@
 	    var session = new Cmis();
 	    var file = document.getElementById('filename').files[0];
 	    
-	    session.getObjectByPath('/zhressapp/2021-02-19')
+	    session.getObjectByPath('/zhressapp/application')
     		.then(function(data) {
     		    var folderObjectId = data.succinctProperties['cmis:objectId'];
     		    
