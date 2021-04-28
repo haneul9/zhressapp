@@ -116,15 +116,34 @@ sap.ui.define(
 			
 			onStartDatePicker: function() {
 				var oController = this.getView().getController();
+				var vBurks = oController.getUserGubun();
 				var vStartDate = $.app.byId(oController.PAGEID + "_StartDatePicker");
-				var vYear1 = new Date().getFullYear()-1;
-				var vYear2 = new Date().getFullYear()+1;
-				var vMonth = new Date().getMonth();
-				var vDate1 = new Date().getDate();
-				var vDate2 = new Date().getDate()-1;
+				var vYear1 = "",
+					vYear2 = "",
+					vMonth1 = "",
+					vMonth2 = "",
+					vDate1 = "",
+					vDate2 = "";
 				
-				vStartDate.setMinDate(new Date(vYear1, vMonth, vDate1));
-				vStartDate.setMaxDate(new Date(vYear2, vMonth, vDate2));
+				if(vBurks !== "A100"){
+					vYear1 = new Date().getFullYear()-1;
+					vYear2 = new Date().getFullYear()+1;
+					vMonth1 = new Date().getMonth();
+					vDate1 = new Date().getDate();
+					vDate2 = new Date().getDate()-1;
+					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
+					vStartDate.setMaxDate(new Date(vYear2, vMonth1, vDate2));
+				}else {
+					vYear1 = new Date(new Date().setDate(new Date().getDate()-30)).getFullYear();
+					vMonth1 = new Date(new Date().setDate(new Date().getDate()-30)).getMonth();
+					vDate1 = new Date(new Date().setDate(new Date().getDate()-30)).getDate();
+					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
+					
+					vYear2 = new Date(new Date().setDate(new Date().getDate()+7)).getFullYear();
+					vMonth2 = new Date(new Date().setDate(new Date().getDate()+7)).getMonth();
+					vDate2 = new Date(new Date().setDate(new Date().getDate()+7)).getDate();
+					vStartDate.setMaxDate(new Date(vYear1, vMonth2, vDate2));
+				}
 			},
 			
 			setTypeCombo: function (oController) { //경조유형을 받아오는곳
