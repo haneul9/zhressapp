@@ -119,7 +119,7 @@ sap.ui.define(
                                                     }
                                                 }
                                             }
-                                        })
+                                        }).addStyleClass("button-light-sm")
                                     ]
                                 })
                             ]
