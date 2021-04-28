@@ -456,8 +456,11 @@ generate: function() {
 					return;
 				}
 
-				e.preventDefault();
-				e.stopPropagation();
+				var anchor = $(e.target);
+				if (!anchor.is('a') || !/^javascript/i.test(anchor.attr('href'))) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
 
 				var block = toggle.offsetParent('.dropdown-menu');
 				if (block.hasClass('show')) {
