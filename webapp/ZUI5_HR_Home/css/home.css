@@ -300,7 +300,6 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown ul {background-color:#fff; padding:.5rem 0; margin-left:0; margin-right:0} /*3depth 영역*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a {color:#777; font-size:1rem; font-weight:400; text-decoration:none} /*3depth*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a::before{content:'ㄴ'; font-size:12px; padding-right:6px}
-.navbar-mobile .button-logout {visibility:hidden}
 
 /* Mobile 설치안내 */
 .app-wrap-download {width:100%; height:100%;padding:2rem;}

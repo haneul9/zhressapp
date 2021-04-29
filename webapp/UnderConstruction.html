@@ -28,23 +28,11 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 <script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/jquery-ui.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
-<!--
-<script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
-<script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
-<script src="ZUI5_HR_Home/js/HomeSession.js"></script>
-<script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
-<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
--->
 <script>
 $(function() {
 
 $('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) + 'px)');
-/*
-var _gateway = window._gateway = new HomeGateway();
-window._basis = new HomeBasis(_gateway);
-window._session = new HomeSession(_gateway); // 2FA 처리 포함
-window._i18n = new HomeI18n(_gateway);
-*/
+
 });
 </script>
 </head>
