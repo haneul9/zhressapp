@@ -23,7 +23,7 @@ sap.ui.define([
 		},
 
 		getSearchBox: function(oController) {
-			var FacilityHandler = oController.getFacilityHandler();
+			var FacilityHandler = oController.FacilityHandler;
 
 			return new sap.m.FlexBox({
 				fitContainer: true,
@@ -85,7 +85,7 @@ sap.ui.define([
 		},
 
 		getRequestList: function(oController) {
-			var FacilityHandler = oController.getFacilityHandler();
+			var FacilityHandler = oController.FacilityHandler;
 
 			return new sap.m.Table(oController.PAGEID + "_MyResv2List", {
 				inset: false,
@@ -111,6 +111,7 @@ sap.ui.define([
 				items: {
 					path: "/MyList",
 					template: new sap.m.ColumnListItem({
+						type: sap.m.ListType.Active,
 						counter: 5,
 						cells: [
 							new sap.m.Text({
@@ -164,7 +165,7 @@ sap.ui.define([
 		},
 
 		getList: function(oController) {
-			var FacilityHandler = oController.getFacilityHandler();
+			var FacilityHandler = oController.FacilityHandler;
 
 			return new sap.m.Table({
 				inset: false,

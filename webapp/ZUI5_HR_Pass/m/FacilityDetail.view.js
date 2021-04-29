@@ -35,7 +35,7 @@ sap.ui.define([
 						}).addStyleClass("button-dark"),
 						new sap.m.Button({
                             text: "{i18n>LABEL_00101}", // 저장
-                            // press: FacilityHandler.onPressCondoModifyCompleteBtn.bind(FacilityHandler),
+                            press: FacilityHandler.onPressSaveBtn.bind(FacilityHandler),
                             visible: {
                                 parts: [
                                     {path: "isNew"},
@@ -49,7 +49,7 @@ sap.ui.define([
                         }).addStyleClass("button-light"),
                         new sap.m.Button({
                             text: "{i18n>LABEL_00119}", // 취소
-                            // press: FacilityHandler.onPressCondoRequestCancelBtn.bind(FacilityHandler),
+                            press: FacilityHandler.onPressCancelBtn.bind(FacilityHandler),
                             visible: {
                                 parts: [
                                     {path: "isNew"},
@@ -69,7 +69,8 @@ sap.ui.define([
                     this.getInputBox()	// Input 영역
                 ]
 			})
-			.setModel(FacilityHandler.Model());
+			.setModel(FacilityHandler.Model())
+            .bindElement("/Detail");
         },
 
         getInputBox: function() {
@@ -81,7 +82,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_09011}" }).addStyleClass("sub-con-title"), // 이용시설
 							new sap.m.Input({
-								width: "80%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: false,
 								value: "{FactyT}"
@@ -101,7 +102,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_09001}" }).addStyleClass("sub-con-title"), // 사용일
 							new sap.m.Input({
-								width: "80%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: false,
 								value: {
@@ -192,7 +193,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_09005}" }).addStyleClass("sub-con-title"), // 회신사항
 							new sap.m.TextArea({
-								width: "95%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: false,
 								value: "{Rettx}",

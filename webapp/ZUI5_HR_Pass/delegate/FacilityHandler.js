@@ -265,12 +265,16 @@ sap.ui.define(
 				var vSpath = oEvent.getSource().getParent().getBindingContext().getPath(),
 					oRowData = this.oModel.getProperty(vSpath) || {};
 
+				this.FacilityDeleteProcess(oRowData);
+			},
+
+			FacilityDeleteProcess: function(detailData) {
 				var Process = function (fVal) {
 					if (!fVal || fVal === MessageBox.Action.NO) return;
 
 					BusyIndicator.show(0);
 
-					var sendData = Common.copyByMetadata($.app.getModel("ZHR_BENEFIT_SRV"), "FacilityApplyTableIn", oRowData);
+					var sendData = Common.copyByMetadata($.app.getModel("ZHR_BENEFIT_SRV"), "FacilityApplyTableIn", detailData);
 
 					ODataService.FacilityApplySetByProcess.call(this.oController, $.app.ConType.DELETE, sendData, this.ProcessOnSuccess.bind(this), this.ProcessOnFail.bind(this));
 				};

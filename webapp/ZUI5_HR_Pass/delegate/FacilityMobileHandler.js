@@ -70,17 +70,14 @@ sap.ui.define(
 				BusyIndicator.show(0);
 
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
+				Common.log(oRowData);
 
 				Common.getPromise(
 					function () {
-						// Set data
-						oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
-						oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);
-
 						// Display control
 						oRowData.isNew = false;
 
-						this.oModel.setProperty("/Detail/Data", oRowData);
+						this.oModel.setProperty("/Detail", oRowData);
 
 						sap.ui.getCore().getEventBus().publish("nav", "to", {
 							id: [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix())
@@ -89,6 +86,11 @@ sap.ui.define(
 				).then(function () {
 					BusyIndicator.hide();
 				});
+			},
+
+			onPressCancelBtn: function () {
+
+				this.FacilityDeleteProcess(this.oModel.getProperty("/Detail"));
 			},
 
 			ProcessAfterNavigation: function() {
