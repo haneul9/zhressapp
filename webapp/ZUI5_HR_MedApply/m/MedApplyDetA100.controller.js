@@ -46,6 +46,7 @@ sap.ui.define([
 			this._ListCondJSonModel.setData({Data:oController.getView().getModel("session").getData()});
 			oController._SessionData=oController.getView().getModel("session").getData();
 			var oSessionData=oController._SessionData;
+			oController._SelData={Sel1:[],Sel2:[],Sel3:[],Sel4:[],Sel5:[],Sel6:[]};
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ IConType:"0",
@@ -235,7 +236,8 @@ sap.ui.define([
 				var oPro=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController()._DataModel.getProperty("/Pop2")[0];
 				eval("$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').getController()._DataModel.setProperty('/Pop2/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
 			});
-			$.app.byId(oController.PAGEID+"_Mat2").bindElement("/Pop2/0");		
+			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').setModel(oController._DataModel);
+			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').bindElement("/Pop2/0");		
 			if(oController._onDialog=="M"){
 				oController.getSelData2("B");
 				$.app.byId(oController.PAGEID+"_dSel5").setSelectedKey($.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController()._DataModel.getProperty("/Pop2")[0].Relation);
@@ -246,9 +248,9 @@ sap.ui.define([
 			}else{
 				oController.getSelData2();
 			}
-			$.app.byId(oController.PAGEID+"_Mat2").bindElement("/Pop2/0");		
+			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').bindElement("/Pop2/0");		
 			var vAppnm="";
-			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0].Appnm:null;
+			oController._onDialog=="M"?vAppnm=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').getModel().getProperty("/Pop2")[0].Appnm:null;
 			if (!oController._BusyDialog) {
 				oController._BusyDialog = new sap.m.Dialog({showHeader:false}).addStyleClass("centerAlign busyDialog");
 				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
@@ -1123,7 +1125,7 @@ sap.ui.define([
 
 		onCloseDialog2 : function(){
 			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController();
-			$.app.byId(oController.PAGEID+"_Mat2").close();
+			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').close();
 		},
 
 		onChange: function(){
@@ -1181,7 +1183,7 @@ sap.ui.define([
 				);
 			});
 			vSig!="B"?oSel4.setSelectedKey():null;
-			var oPro=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0];			
+			var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').getModel().getProperty("/Pop2")[0];			
 			if(oSel3.getSelectedKey()=="A"){
 				oPro.Inspp="250,000";
 			}else if(oSel3.getSelectedKey()=="B"){
@@ -1406,7 +1408,7 @@ sap.ui.define([
 				}
 
 			}else{
-				var oPro=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0];		
+				var oPro=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').getModel().getProperty("/Pop2")[0];		
 				if(oPro.MedDate==""||oPro.MedDate==null){
 					oMsg=oBundleText.getText("MSG_47011");				
 				}
@@ -1556,13 +1558,13 @@ sap.ui.define([
 								},100);
 								
 							}else{
-								var oJSON = $.app.byId(oController.PAGEID+"_Mat2").getModel();
+								var oJSON = $.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').getModel();
 								var aData={Pop1:[],Pop2:[]};
 								data.MedicalApplyTableIn.results.forEach(function(e){							
 									aData.Pop2.push(e);
 								});
 								oJSON.setData(aData);
-								$.app.byId(oController.PAGEID+"_Mat2").bindElement("/Pop2/0");
+								$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').bindElement("/Pop2/0");
 								vTmp=true;
 							}
 						}

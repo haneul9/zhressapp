@@ -57,11 +57,11 @@ sap.ui.define([
 					}),
 					new sap.m.Column({
 						width: "40%",
-						hAlign: sap.ui.core.TextAlign.Center
+						hAlign: sap.ui.core.TextAlign.Begin
 					}),
 					new sap.m.Column({
 						width: "30%",
-						hAlign: sap.ui.core.TextAlign.End
+						hAlign: sap.ui.core.TextAlign.Begin
 					})
 				]
 			}).addStyleClass("mt-4px");
@@ -101,11 +101,15 @@ sap.ui.define([
 									path : "Apdat", 
 									type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 								},
+<<<<<<< HEAD
 								textAlign: "End"
+=======
+								textAlign: "Begin"
+>>>>>>> zktw_mobiles
 							}),
 							new sap.m.Text({
 								text: "{StatusText}",
-								textAlign: "End"
+								textAlign: "Begin"
 							}).addStyleClass("L2P13Font")
 						]
 					})

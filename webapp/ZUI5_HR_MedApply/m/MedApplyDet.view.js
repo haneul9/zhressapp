@@ -28,7 +28,7 @@ sap.ui.define([
 							}else{
 								return false;
 							}
-						}}})
+						}}}).addStyleClass("height38px")
 						,oSelector2=new sap.m.Select(oController.PAGEID+"_dSel2",{width:"80%",selectedKey:"{HospType}",editable:{parts:[{path:"Close"},{path:"Status"}],
 						formatter:function(fVal,fVal2){
 							if(fVal2==""){
@@ -36,29 +36,13 @@ sap.ui.define([
 							}else{
 								return false;
 							}
-						}},change:oController.changeSel2});
+						}},change:oController.changeSel2}).addStyleClass("height38px");
 
-			oMat=new c.layout.MatrixLayout(oController.PAGEID+"_Mat",{
+			oMat=new c.layout.MatrixLayout({
 				columns:2,
 				width:"100%",
 				widths:['40%','60%']
-			}).setModel(oController._DataModel);
-			
-			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,
-				hAlign:"Right",content:new sap.m.Button({
-				press: function(){oController.onSave("1000")},
-				text: "{i18n>LABEL_47006}" // 신청
-				,visible:{parts:[{path:"Close"},{path:"Status"}],
-				formatter:function(fVal,fVal2){
-					if(fVal2==""){
-						return fVal=="X"?false:true;
-					}else{
-						return false;
-					}
-				}}}).addStyleClass("button-light")});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);			
+			});
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel0});
@@ -657,11 +641,11 @@ sap.ui.define([
 				content:[oMat]
 			});
 
-			var oContent = new sap.m.FlexBox({
+			var oContent = new sap.m.VBox({
 				justifyContent: "Center",
 				fitContainer: true,
 				items: [oVert]
-			}).addStyleClass("paddingbody");
+			}).addStyleClass("vbox-form-mobile");
 				/////////////////////////////////////////////////////////
 				
 			return new PageHelper({
@@ -669,6 +653,21 @@ sap.ui.define([
                 title: "{i18n>LABEL_47001}", // 의료비
                 showNavButton: true,
 				navBackFunc: oController.navBack,
+				headerButton: new sap.m.FlexBox({
+                    items: [
+						new sap.m.Button({
+							press: function(){oController.onSave("1000")},
+							text: "{i18n>LABEL_47006}" // 신청
+							,visible:{parts:[{path:"Close"},{path:"Status"}],
+							formatter:function(fVal,fVal2){
+								if(fVal2==""){
+									return fVal=="X"?false:true;
+								}else{
+									return false;
+								}
+							}}}).addStyleClass("button-light right-custom")
+                    ]
+                }),
 				contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [

@@ -39,10 +39,7 @@ sap.ui.define([
 					}),
 					new sap.m.FlexBox({
 						items: [
-							new sap.m.Button(oController.PAGEID+"_NewBtn",{
-								press: function(){oController.onDialog(null,"N3")},
-								text: "{i18n>LABEL_47006}", // 신청
-							}).addStyleClass("button-light")]
+							]
 					}).addStyleClass("button-group")
 				]
 			}).addStyleClass("info-box");
@@ -61,11 +58,11 @@ sap.ui.define([
 					}),
 					new sap.m.Column({
 						width: "40%",
-						hAlign: sap.ui.core.TextAlign.Center
+						hAlign: sap.ui.core.TextAlign.Begin
 					}),
 					new sap.m.Column({
 						width: "30%",
-						hAlign: sap.ui.core.TextAlign.End
+						hAlign: sap.ui.core.TextAlign.Begin
 					})
 				]
 			}).addStyleClass("mt-4px");
@@ -105,11 +102,11 @@ sap.ui.define([
 									path : "MedDate", 
 									type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 								},
-								textAlign: "End"
+								textAlign: "Begin"
 							}),
 							new sap.m.Text({
 								text: "{StatusText}",
-								textAlign: "End"
+								textAlign: "Begin"
 							})
 						]
 					})
@@ -120,6 +117,14 @@ sap.ui.define([
 				
 			return new PageHelper({
 				contentContainerStyleClass: "app-content-container-mobile",
+				headerButton: new sap.m.FlexBox({
+                    items: [
+						new sap.m.Button(oController.PAGEID+"_NewBtn",{
+							press: function(){oController.onDialog(null,"N3")},
+							text: "{i18n>LABEL_47006}", // 신청
+						}).addStyleClass("button-default right-custom")
+                    ]
+                }),
 				contentItems: [
 					oInfoBox,
 					oTable

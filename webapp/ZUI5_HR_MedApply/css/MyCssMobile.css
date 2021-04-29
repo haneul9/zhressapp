@@ -42,3 +42,12 @@
 .busyDialog{
     width:320px !important;
 }
+.right-custom{
+    position: fixed !important;
+    top: 6px !important;
+    right: 1rem !important;
+}
+.height38px{
+    height:38px !important;
+    padding-top:4px;
+}

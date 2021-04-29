@@ -18,19 +18,19 @@ sap.ui.define([
 				window["oLabel"+(i-14)] = oController.getMobileTxt("LABEL_440"+i,i);
 			}
 			var oLabel15=oController.getMobileTxt("LABEL_44034",30)
-			var oSelect1=new sap.m.Select(oController.PAGEID+"_Sel1",{width:"100%",change:oController.onChange,selectedKey:"{Famsa}",editable:{path:"Opener",formatter:function(fVal){
+			var oSelect1=new sap.m.ComboBox(oController.PAGEID+"_Sel1",{width:"100%",change:oController.onChange,selectedKey:"{Famsa}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
-			var oSelect2=new sap.m.Select(oController.PAGEID+"_Sel2",{width:"100%",selectedKey:"{Kdsvh}",editable:{path:"Opener",formatter:function(fVal){
+			var oSelect2=new sap.m.ComboBox(oController.PAGEID+"_Sel2",{width:"100%",selectedKey:"{Kdsvh}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
-			var oSelect3=new sap.m.Select(oController.PAGEID+"_Sel3",{width:"100%",selectedKey:"{Fgbld}",editable:{path:"Opener",formatter:function(fVal){
+			var oSelect3=new sap.m.ComboBox(oController.PAGEID+"_Sel3",{width:"100%",selectedKey:"{Fgbld}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
-			var oSelect4=new sap.m.Select(oController.PAGEID+"_Sel4",{width:"253px",selectedKey:"{Fanat}",editable:{path:"Opener",formatter:function(fVal){
+			var oSelect4=new sap.m.ComboBox(oController.PAGEID+"_Sel4",{width:"253px",selectedKey:"{Fanat}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
-			var oSelect5=new sap.m.Select(oController.PAGEID+"_Sel5",{width:"100%",selectedKey:"{Fasar}",editable:{path:"Opener",formatter:function(fVal){
+			var oSelect5=new sap.m.ComboBox(oController.PAGEID+"_Sel5",{width:"100%",selectedKey:"{Fasar}",editable:{path:"Opener",formatter:function(fVal){
 				return fVal=="X"?true:false;
 			}}});
 			var oRegNo=new sap.m.Input(oController.PAGEID+"_Regno",{width:"80%",value:"{Regnot}",maxLength:14,liveChange:oController.onAutoInputReg,
@@ -49,25 +49,6 @@ sap.ui.define([
 				width:"100%",
 				widths:['40%','60%']
 			});
-
-
-			
-
-			oRow=new c.layout.MatrixLayoutRow();
-			oCell=new c.layout.MatrixLayoutCell({
-				hAlign:"Right",
-				colSpan:2,
-				content:[				
-				new sap.m.Button(oController.PAGEID+"_Re",{text:oBundleText.getText("LABEL_44035"),press:oController.onRe,visible:{path:"Status",formatter:function(fVal){
-					return fVal=="88"?true:false;
-				}}}).addStyleClass("button-dark"),
-				new sap.ui.core.HTML({content:"<span>&nbsp;</span>"}),
-				new sap.m.Button({text:oBundleText.getText("LABEL_44031"),press:oController.onSave,visible:{path:"Opener",formatter:function(fVal){
-					return fVal=="X"?true:false;
-				}}}).addStyleClass("button-dark")]
-			});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);
 
 			oRow=new c.layout.MatrixLayoutRow();
 			oCell=new c.layout.MatrixLayoutCell({
@@ -327,24 +308,36 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
-			var oContent = new sap.m.FlexBox({
+			var oContent = new sap.m.VBox({
 				justifyContent: "Center",
 				fitContainer: true,
 				items: [oMat]
-			}).addStyleClass("paddingbody");
+			}).addStyleClass("vbox-form-mobile");
 					
 			/////////////////////////////////////////////////////////
 
 			return new PageHelper({ 
-				idPrefix: "FamilyApplyDet",
+				idPrefix: "FamilyApplyDet-",
                 title: "{i18n>LABEL_44001}", // 가족사항
                 showNavButton: true,
 				navBackFunc: oController.navBack,
-				contentStyleClass: "sub-app-content",
-                contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
 					oContent
 				],
+				headerButton: new sap.m.FlexBox({
+                    items: [
+						new sap.m.Button(oController.PAGEID+"_Re",{text:oBundleText.getText("LABEL_44035"),
+							press:oController.onRe,visible:{path:"Status",formatter:function(fVal){
+								return fVal=="88"?true:false;
+						}}}).addStyleClass("button-light right-custom"),
+
+						new sap.m.Button({text:oBundleText.getText("LABEL_44031"),press:oController.onSave,visible:{path:"Opener",formatter:function(fVal){
+							return fVal=="X"?true:false;
+						}}}).addStyleClass("button-light right-custom")
+                    ]
+                }),
+				contentStyleClass: "sub-app-content",
+                contentContainerStyleClass: "app-content-container-mobile custom-title-left"
 			});
 		},
 		

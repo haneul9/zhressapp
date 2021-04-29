@@ -36,3 +36,11 @@
     font-weight:bold !important;
     color:#0070bd !important;
 }
+.app-content-container-mobile .vbox-form-mobile{
+    display:inline;
+}
+.right-custom{
+    position: fixed !important;
+    top: 6px !important;
+    right: 1rem !important;
+}
