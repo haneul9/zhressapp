@@ -34,16 +34,15 @@ sap.ui.define([
 					// .addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
 					new sap.m.FlexBox({
 						items: [
-							new sap.ui.core.HTML({content:"<span class='sub-title' style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47002")+"</span>"}),
+							new sap.ui.core.HTML({content:"<span class='sub-title ml-6px' style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47002")+"</span>"}),
 						]
 					}),
 					new sap.m.FlexBox({
 						items: [
-						new sap.m.Button(oController.PAGEID+"_NewBtn",{
-							press: function(){oController.onDialog(null,"N3")},
-							text: "{i18n>LABEL_47006}", // 신청
-						}).addStyleClass("button-light right-custom")
-							]
+							new sap.m.Button(oController.PAGEID+"_NewBtn",{
+								press: function(){oController.onDialog(null,"N3")},
+								text: "{i18n>LABEL_47006}", // 신청
+							}).addStyleClass("button-default")]
 					}).addStyleClass("button-group")
 				]
 			}).addStyleClass("info-box");
