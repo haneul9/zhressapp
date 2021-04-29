@@ -105,7 +105,7 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_BATCHAPPROVAL_SRV");
+				var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
 				var createData = {RationaleAppNav : []};
 					createData.IConType = "1";
 					createData.IBukrs = oData.Bukrs;
@@ -116,8 +116,8 @@ sap.ui.define([
 					createData.ILangu = oData.Langu;
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
 
-				oModel.create("/RationaleApprovalSet", createData, null,
-					function(data, res){
+				oModel.create("/RationaleApprovalSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.RationaleAppNav && data.RationaleAppNav.results){
 								var data1 = data.RationaleAppNav.results;
@@ -133,7 +133,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -146,7 +146,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -207,7 +207,7 @@ sap.ui.define([
 				return;
 			}
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_BATCHAPPROVAL_SRV");
+			var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
 			var createData = {RationaleAppNav : []};
 			
 			// validation check
@@ -236,13 +236,13 @@ sap.ui.define([
 				createData.ILangu = oData.Langu;
 				createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
 				
-				oModel.create("/RationaleApprovalSet", createData, null,
-					function(data, res){
+				oModel.create("/RationaleApprovalSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -255,7 +255,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

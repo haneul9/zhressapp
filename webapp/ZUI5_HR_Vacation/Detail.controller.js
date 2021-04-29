@@ -149,13 +149,17 @@ sap.ui.define([
 				vData.photo = oPhoto;
 				 
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
-			var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var oPath = "/EmpSearchResultSet?$filter=Percod eq '" + encodeURIComponent(common.Common.encryptPernr($.app.getModel("session").getData().Pernr)) + "'";
 				oPath += " and Actty eq '" + gAuth + "'";
 				oPath += " and Actda eq datetime'" + dateFormat.format(new Date()) + "T00:00:00'";
 				oPath += " and Ename eq '" + Pernr + "'";
 				oPath += " and Persa eq '0AL1' and Stat2 eq '3'";
 				oPath += " and BukrsOld eq '" + $.app.getModel("session").getData().Bukrs + "'";
+				oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
+				oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "'";
+				oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
+				oPath += " and ICmenuid eq '" + $.app.getMenuId() + "'";
 				
 			oModel.read(oPath, null, null, false,
 						function(data, oResponse) {
@@ -223,7 +227,7 @@ sap.ui.define([
 			resetTable(oTable3, oJSONModel3, vData3);
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
 				if(oData.Status1 == "" || (pernr && pernr != "")){
 					// 대상자
@@ -266,8 +270,8 @@ sap.ui.define([
 						
 						createData.VacationApply1Nav.push(detail);
 						
-					oModel.create("/VacationApplySet", createData, null,
-						function(data, res){
+					oModel.create("/VacationApplySet", createData, {
+						success: function(data, res){
 							if(data){
 								// 근태신청
 								if(data.VacationApply1Nav && data.VacationApply1Nav.results){
@@ -333,7 +337,7 @@ sap.ui.define([
 								}
 							}
 						},
-						function (oError) {
+						error: function (oError) {
 					    	var Err = {};
 					    	oController.Error = "E";
 									
@@ -346,7 +350,7 @@ sap.ui.define([
 								oController.ErrorMessage = oError.toString();
 							}
 						}
-					);
+					});
 					
 					oJSONModel2.setData(vData2);
 					oTable2.bindRows("/Data");
@@ -373,8 +377,8 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IMolga = oData.Molga;
 				
-				oModel.create("/VacationTypePeSet", createData, null,
-					function(data, res){
+				oModel.create("/VacationTypePeSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationTypeNav && data.VacationTypeNav.results){
 								for(var i=0; i<data.VacationTypeNav.results.length; i++){   
@@ -389,7 +393,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -402,7 +406,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(oController.Error == "E"){
 					oController._BusyDialog.close();
@@ -425,8 +429,8 @@ sap.ui.define([
 					createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
 					createData2.ICorre = "X";
 		
-				oModel.create("/VacationQuotaSet", createData2, null,
-					function(data, res){
+				oModel.create("/VacationQuotaSet", createData2, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationQuotaNav && data.VacationQuotaNav.results){
 								for(var i=0; i<data.VacationQuotaNav.results.length; i++){   
@@ -440,7 +444,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -453,7 +457,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel3.setData(vData3);
 				oTable3.bindRows("/Data");
@@ -533,7 +537,7 @@ sap.ui.define([
 						var oEncard = sap.ui.getCore().byId(oController.PAGEID + "_Encard");
 							oEncard.destroyItems();
 							
-						var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+						var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 						var createData = {BztrCodeListNav : []};
 							createData.IPernr = oData.Pernr;
 							createData.IBukrs = oData.Bukrs;
@@ -541,8 +545,8 @@ sap.ui.define([
 							createData.IMolga = oData.Molga;
 							createData.IInpType = "04";
 						
-						oModel.create("/BztrCodeTextSet", createData, null,
-							function(data, res){
+						oModel.create("/BztrCodeTextSet", createData, {
+							success: function(data, res){
 								if(data){
 									if(data.BztrCodeListNav && data.BztrCodeListNav.results){
 										for(var i=0; i<data.BztrCodeListNav.results.length; i++){   
@@ -556,7 +560,7 @@ sap.ui.define([
 									}
 								}
 							},
-							function (oError) {
+							error: function (oError) {
 						    	var Err = {};
 						    	oController.Error = "E";
 										
@@ -569,7 +573,7 @@ sap.ui.define([
 									oController.ErrorMessage = oError.toString();
 								}
 							}
-						);
+						});
 						
 						if(oController.Error == "E"){
 							oController.Error = "";
@@ -644,7 +648,7 @@ sap.ui.define([
 				// 대근신청 비활성화
 				oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {OvertimePe1Nav : [], OvertimePe2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
@@ -654,8 +658,8 @@ sap.ui.define([
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
 					createData.IAwart = oData.Awart;
 				
-				oModel.create("/OvertimePeSet", createData, null,
-					function(data, res){
+				oModel.create("/OvertimePeSet", createData, {
+					success: function(data, res){
 						if(data){
 							// 근태일수
 							oController._DetailJSonModel.setProperty("/Data/Kaltg", (parseFloat(data.EKaltg) + ""));
@@ -722,7 +726,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -735,7 +739,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -781,7 +785,7 @@ sap.ui.define([
 				oController._DetailJSonModel.setProperty("/Data/EAbshr", "");
 				oController._DetailJSonModel.setProperty("/Data/EAbsmm", "");
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {ChkAbsenceNav : [], ChkAbsence2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
@@ -794,8 +798,8 @@ sap.ui.define([
 					createData.IEnduz = oData.Enduz;
 					createData.IVtken = oData.Vtken ? oData.Vtken : false;
 				
-				oModel.create("/CheckAbsenceSet", createData, null,
-					function(data, res){
+				oModel.create("/CheckAbsenceSet", createData, {
+					success: function(data, res){
 						if(data){
 							// 근태일수
 							oController._DetailJSonModel.setProperty("/Data/Kaltg", (parseFloat(data.EKaltg) + ""));
@@ -870,7 +874,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -883,7 +887,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -925,7 +929,7 @@ sap.ui.define([
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {VacationCovNav : []};
 					createData.IProType = "2";
 					createData.IPernr = vData.Pernr;
@@ -950,8 +954,8 @@ sap.ui.define([
 					createData.VacationCovNav.push(detail);
 				}
 				
-				oModel.create("/VacationCoverSet", createData, null,
-					function(data, res){
+				oModel.create("/VacationCoverSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationCovNav && data.VacationCovNav.results){
 								var datas = data.VacationCovNav.results;
@@ -982,7 +986,7 @@ sap.ui.define([
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -995,7 +999,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -1198,7 +1202,7 @@ sap.ui.define([
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
 					createData.IEmpid = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
@@ -1243,8 +1247,8 @@ sap.ui.define([
 				
 					createData.VacationApply1Nav.push(detail);
 				
-				oModel.create("/VacationApplySet", createData, null,
-					function(data, res){
+				oModel.create("/VacationApplySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(Flag == "C" && data.EUrl != ""){
 								setTimeout(function() {
@@ -1266,7 +1270,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -1279,7 +1283,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -1415,7 +1419,7 @@ sap.ui.define([
 			oController._WorkScheduleDialog.destroyContent();
 			oController._WorkScheduleDialog.addContent(sap.ui.jsfragment("ZUI5_HR_Vacation.fragment.Calendar", oController));
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+			var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 			var createData = {PerScheduleNav : []};
 				createData.IPernr = oData.Pernr;
 				createData.IBukrs = oData.Bukrs;
@@ -1424,8 +1428,8 @@ sap.ui.define([
 				createData.IYear = oData.Year + "";
 				createData.IMonth = (oData.Month >= 10 ? (oData.Month + "") : ("0" + oData.Month));
 			
-			oModel.create("/PernrScheduleSet", createData, null,
-				function(data, res){
+			oModel.create("/PernrScheduleSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.PerScheduleNav && data.PerScheduleNav.results){
 							var data1 = data.PerScheduleNav.results;
@@ -1467,7 +1471,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -1480,7 +1484,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			if(oController.Error == "E"){
 				oController.Error = "";

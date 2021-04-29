@@ -108,9 +108,9 @@ sap.ui.define([
 					createData.IContType = "1";
 					createData.IScore = "X";
 
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApHeaderSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApHeaderSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.TableIn1 && data.TableIn1.results && data.TableIn1.results.length){
 								for(var i=0; i<data.TableIn1.results.length; i++){
@@ -124,7 +124,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error:function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -137,7 +137,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -150,7 +150,7 @@ sap.ui.define([
 					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
 				}
-			}
+			};
 			
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
@@ -314,14 +314,14 @@ sap.ui.define([
 					createData.TableIn.push(detail);
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApSubappSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApSubappSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -334,7 +334,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -396,14 +396,14 @@ sap.ui.define([
 					createData.TableIn.push(detail);
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApSubappSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApSubappSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error:function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -416,7 +416,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -499,9 +499,9 @@ sap.ui.define([
 					createData.IApgup = "50";
 					createData.IApcnt = "3";
 					
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApGrade2Set", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApGrade2Set", createData, {
+					success: function(data, res){
 						if(data){
 							// 평가인원 summary
 							if(data.TableIn2 && data.TableIn2.results && data.TableIn2.results.length){
@@ -525,7 +525,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -538,7 +538,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel2.setData(vData2);
 				// oTable2.bindRows("/Data");
@@ -649,14 +649,14 @@ sap.ui.define([
 				createData.IApgup = "50";
 				createData.IApcnt = "3";
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApGrade2Set", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApGrade2Set", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -669,7 +669,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

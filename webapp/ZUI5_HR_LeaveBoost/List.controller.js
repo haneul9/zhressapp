@@ -182,7 +182,7 @@ sap.ui.define([
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				var vData2 = [], oPronm = 0;
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {LeaveBoostListTab1 : [], LeaveBoostListTab2 : []};
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
@@ -192,8 +192,8 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = "1";
 
-				oModel.create("/LeaveBoostListHeaderSet", createData, null,
-					function(data, res){
+				oModel.create("/LeaveBoostListHeaderSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.LeaveBoostListTab1 && data.LeaveBoostListTab1.results){
 								var data1 = data.LeaveBoostListTab1.results[0];
@@ -249,7 +249,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -262,7 +262,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(vData2.length == 0){
 					oController._ListCondJSonModel.setProperty("/Data/Pronm2", oPronm);
@@ -443,14 +443,14 @@ sap.ui.define([
 				
 				createData.LeaveBoostListTab1.push(detail);
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
-				oModel.create("/LeaveBoostListHeaderSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
+				oModel.create("/LeaveBoostListHeaderSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -463,7 +463,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(oController.Error == "E"){
 					oController.Error = "";

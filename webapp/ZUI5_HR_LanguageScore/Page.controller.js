@@ -139,9 +139,9 @@ sap.ui.define([
 				// Navigation property
 				sendObject.LanguScoreTableIn = [];
 
-				var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
-				oModel.create(oPath, sendObject, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+				oModel.create(oPath, sendObject, {
+					success: function(data, res){
 						if(data){
 							if(data.LanguScoreTableIn && data.LanguScoreTableIn.results){
 								for(var i=0; i<data.LanguScoreTableIn.results.length; i++){
@@ -151,7 +151,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 						var Err = {};
 						oController.Error = "E";
 							
@@ -164,7 +164,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(oData);
 				oTable.bindRows("/Data");

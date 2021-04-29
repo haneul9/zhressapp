@@ -130,7 +130,7 @@ sap.ui.define([
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
 				var today = new Date();
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
 					createData.Werks = oData.Werks;
 					createData.Pernr = oData.Pernr;
@@ -138,8 +138,8 @@ sap.ui.define([
 					createData.Langu = oData.Langu;
 					createData.Prcty = "1";
 
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							oController._ListCondJSonModel.setProperty("/Data/Ctrnm", data.Ctrnm);
 							oController._ListCondJSonModel.setProperty("/Data/Wrktm", data.Wrktm);
@@ -190,7 +190,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -203,7 +203,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(key == "1"){
 					oJSONModel.setData(vData);
@@ -224,7 +224,7 @@ sap.ui.define([
 				
 				oController._BusyDialog.close();
 				
-			}
+			};
 			
 			// 테이블 내 수정 플래그 값이 존재하는 경우, confirm message 출력 이후 조회처리
 			var oMonyn = "";
@@ -399,7 +399,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ""
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
@@ -637,9 +637,10 @@ sap.ui.define([
 				}
 				
 				var vData = {Data : []}, vData2 = {Data : []};
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
+				
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.FlexWorktime2Nav && data.FlexWorktime2Nav.results){
 								var data2 = data.FlexWorktime2Nav.results;
@@ -661,7 +662,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -674,7 +675,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindElement("/Data");
@@ -768,7 +769,7 @@ sap.ui.define([
 						oController._AddBreakDialog.close();
 					}
 				});
-			}
+			};
 			
 			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00058"), { // 저장하시겠습니까?
 				actions : ["YES", "NO"],
@@ -807,7 +808,7 @@ sap.ui.define([
 				}
 				
 				oController._BusyDialog.close();
-			}
+			};
 			
 			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00059"), { // 삭제하시겠습니까?
 				actions : ["YES", "NO"],
@@ -925,7 +926,7 @@ sap.ui.define([
 			var oData = oController._WorkScheduleDialog.getModel().getProperty("/Data/0");
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
 					createData.Werks = oController._ListCondJSonModel.getProperty("/Data/Werks");
 					createData.Pernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
@@ -956,13 +957,13 @@ sap.ui.define([
 					createData.FlexWorktime2Nav.push(detail);
 				}
 				
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -975,7 +976,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -1009,7 +1010,7 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
 					createData.Werks = oController._ListCondJSonModel.getProperty("/Data/Werks");
 					createData.Pernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
@@ -1043,13 +1044,13 @@ sap.ui.define([
 					createData.FlexWorktime2Nav.push(detail);
 				}
 				
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -1062,7 +1063,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

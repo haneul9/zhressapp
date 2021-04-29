@@ -124,19 +124,17 @@ sap.ui.define(
                     createData.IConType = "1";
                     createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+                    
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
                                     vData.Data = data.PinfoBasicNav.results[0];
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -149,7 +147,8 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
+                    
                     vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
                     vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
                     vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
@@ -184,12 +183,10 @@ sap.ui.define(
                     createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+                    
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.PinfoAddressNav && data.PinfoAddressNav.results) {
                                     for (var i = 0; i < data.PinfoAddressNav.results.length; i++) {
@@ -199,7 +196,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -212,7 +209,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._AddressJSonModel.setData(vData);
                     oController._BusyDialog.close();
@@ -243,19 +240,17 @@ sap.ui.define(
                     createData.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+                    
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results.length > 0) {
                                     vData.Data = data.TableIn.results[0];
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -268,7 +263,8 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
+                    
                     vData.Data.Auth = oController._ListCondJSonModel.getProperty("/Data/Auth");
                     oController._CarJSonModel.setProperty("/Data", vData.Data);
                     oController._BusyDialog.close();
@@ -300,12 +296,10 @@ sap.ui.define(
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
                     createData.ILangu = oController.getView().getModel("session").getData().Langu;
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_RECORD_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_RECORD_SRV");
+
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -315,7 +309,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -328,7 +322,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._LicenseJSonModel.setData(vData);
                     oController._BusyDialog.close();
@@ -360,12 +354,10 @@ sap.ui.define(
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
                     createData.ILangu = oController.getView().getModel("session").getData().Langu;
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_RECORD_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_RECORD_SRV");
+                    
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -377,7 +369,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -390,7 +382,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._CareerJSonModel.setData(vData);
                     oController._BusyDialog.close();
@@ -421,12 +413,10 @@ sap.ui.define(
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
                     createData.ILangu = oController.getView().getModel("session").getData().Langu;
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_RECORD_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_RECORD_SRV");
+                   
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -436,7 +426,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -449,7 +439,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._AnnouncementJSonModel.setData(vData);
                     oController._BusyDialog.close();
@@ -482,12 +472,10 @@ sap.ui.define(
                     createData.IBukrs = oController.getView().getModel("session").getData().Bukrs2;
                     createData.ILangu = oController.getView().getModel("session").getData().Langu;
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_PERS_RECORD_SRV");
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_PERS_RECORD_SRV");
+
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.TableIn && data.TableIn.results) {
                                     for (var i = 0; i < data.TableIn.results.length; i++) {
@@ -500,7 +488,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -513,7 +501,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._SchoolJSonModel.setData(vData);
                     oController._BusyDialog.close();

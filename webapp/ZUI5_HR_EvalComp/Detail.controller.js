@@ -105,7 +105,7 @@ sap.ui.define([
 					createData.IEePernr = oData.EePernr;
 					createData.IApcha = oData.Apcha;
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
 				oModel.create("/ApAppCompSet", createData, null,
 					function(data, res){
 						if(data){
@@ -224,7 +224,7 @@ sap.ui.define([
 			}
 			
 			var process = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
 				var createData = {TableIn1 : [], TableIn2 : []};
 					createData.IBukrs = oData.Bukrs;
 					createData.IApyear = oData.Apyear;
@@ -251,13 +251,13 @@ sap.ui.define([
 					
 					createData.TableIn2.push(detail);
 					
-				oModel.create("/ApAppCompUSet", createData, null,
-					function(data, res){
+				oModel.create("/ApAppCompUSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -270,7 +270,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);	
+				});
 					
 				oController._BusyDialog.close();
 				

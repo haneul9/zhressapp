@@ -41,17 +41,14 @@ sap.ui.define(
                 // var mEmpLoginInfo = sap.ui.getCore().getModel("EmpLoginInfo");
                 // var vEmpLoginInfo = mEmpLoginInfo.getProperty("/Data");
 
-                var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+                var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 
                 var createData = { BukrsExport: [] };
                 // createData.Pernr = vEmpLoginInfo.Pernr;
                 createData.Pernr = oController.getView().getModel("session").getData().Pernr;
 
-                oModel.create(
-                    "/BukrsImportSet",
-                    createData,
-                    null,
-                    function (data) {
+                oModel.create("/BukrsImportSet", createData, {
+					success: function (data) {
                         if (data.BukrsExport) {
                             if (data.BukrsExport.results && data.BukrsExport.results.length) {
                                 oController._Bukrs = data.BukrsExport.results[0].Bukrs;
@@ -64,7 +61,7 @@ sap.ui.define(
                             }
                         }
                     },
-                    function (oError) {
+					error: function (oError) {
                         var Err = {};
                         oController.Error = "E";
 
@@ -77,7 +74,7 @@ sap.ui.define(
                             oController.ErrorMessage = oError.toString();
                         }
                     }
-                );
+				});
 
                 if (oController.Error == "E") {
                     oController.Error = "";
@@ -127,12 +124,9 @@ sap.ui.define(
                     createData.IBukrs = oController._Bukrs;
                     createData.IConType = "H";
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
-                    oModel.create(
-                        "/PensionPaySet",
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+                    oModel.create("/PensionPaySet", createData, {
+                        success: function (data) {
                             if (data && data.PensionPayTableInSet) {
                                 if (data.PensionPayTableInSet.results && data.PensionPayTableInSet.results.length) {
                                     if (oTable2) {
@@ -151,7 +145,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -164,7 +158,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oJSONModel1.setData(vData1);
                     oTable1.bindRows("/Data");
@@ -206,12 +200,9 @@ sap.ui.define(
 
                     var vData = { Data: {} };
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
-                    oModel.create(
-                        "/PensionPaySet",
-                        createData,
-                        null,
-                        function (data) {
+                    var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+                    oModel.create("/PensionPaySet", createData, {
+                        success: function (data) {
                             if (data && data.PensionPayTableInSet) {
                                 if (data.PensionPayTableInSet.results && data.PensionPayTableInSet.results.length) {
                                     data.PensionPayTableInSet.results[0].AppBeg = data.PensionPayTableInSet.results[0].AppBeg ? dateFormat.format(new Date(data.PensionPayTableInSet.results[0].AppBeg)) : null;
@@ -237,7 +228,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -250,7 +241,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._ListCondJSonModel.setData(vData);
 
@@ -402,13 +393,10 @@ sap.ui.define(
 
                     createData.PensionPayTableInSet.push(detail);
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
-                    oModel.create(
-                        "/PensionPaySet",
-                        createData,
-                        null,
-                        function () {},
-                        function (oError) {
+                    var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+                    oModel.create("/PensionPaySet", createData, {
+                        success: function () {},
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -421,7 +409,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._BusyDialog.close();
 

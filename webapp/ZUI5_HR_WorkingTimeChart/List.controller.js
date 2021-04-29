@@ -45,8 +45,12 @@ sap.ui.define([
 			var oWerks = sap.ui.getCore().byId(oController.PAGEID + "_Werks");
 				oWerks.destroyItems();
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var oPath = "/WerksListAuthSet?$filter=Percod eq '" + encodeURIComponent(oLoginData.Percod) + "' and Bukrs eq '" + oLoginData.Bukrs + "'";
+				oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
+				oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "'";
+				oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
+				oPath += " and ICmenuid eq '" + $.app.getMenuId() + "'";
 			
 			oModel.read(oPath, null, null, false,
 						function(data, oResponse) {
@@ -276,9 +280,9 @@ sap.ui.define([
 					createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_WORKSCHEDULE_SRV");
-				oModel.create("/WorkingTimeHistorySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
+				oModel.create("/WorkingTimeHistorySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WorkingTimeHisNav && data.WorkingTimeHisNav.results){
 								for(var i=0; i<data.WorkingTimeHisNav.results.length; i++){
@@ -290,7 +294,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -303,7 +307,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				
@@ -347,7 +351,7 @@ sap.ui.define([
 			var oJSONModel = oTable.getModel();
 			var vData = {Data : []};
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_WORKSCHEDULE_SRV");
+			var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
 			var createData = {WorkingTimeStatNav : []};
 				createData.IEmpid = $.app.getModel("session").getData().Pernr;
 				createData.ILangu = $.app.getModel("session").getData().Langu;
@@ -366,8 +370,8 @@ sap.ui.define([
 			
 			var field = ["Empcnt", "Hrs10", "Hrs11", "Hrs20", "Hrs21", "Hrs22", "Hrs30", "Hrs31", "Hrs32", "Hrs40", "Hrs41", "Hrs42", "Hrs50"];
 			
-			oModel.create("/WorkingTimeStatusSet", createData, null,
-				function(data, res){
+			oModel.create("/WorkingTimeStatusSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.WorkingTimeStatNav && data.WorkingTimeStatNav.results){
 							for(var i=0; i<data.WorkingTimeStatNav.results.length; i++){
@@ -390,7 +394,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -403,7 +407,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			oJSONModel.setData(vData);
 			oTable.bindRows("/Data");

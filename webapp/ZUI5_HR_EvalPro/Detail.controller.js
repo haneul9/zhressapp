@@ -81,9 +81,9 @@ sap.ui.define([
 					createData.IAppnm = oEvent.data.Appnm;
 					createData.IFlag = "1";
 					
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/AppraisalSheetSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/AppraisalSheetSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.TableIn1 && data.TableIn1.results && data.TableIn1.results.length){
 								data.TableIn1.results[0].Score = parseFloat(data.TableIn1.results[0].Score);
@@ -127,7 +127,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -140,7 +140,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._DetailJSonModel.setData(vData);
 				oContent.addContent(oController.makeMatrix(oData.Data));
@@ -200,7 +200,7 @@ sap.ui.define([
 			}
 			
 			var process = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
 				var createData = {TableIn1 : [], TableIn2 : [], TableIn3 : []};
 					createData.IPernr = oData.Pernr;
 					createData.IAppid = oData.Appid;
@@ -226,13 +226,13 @@ sap.ui.define([
 					
 					createData.TableIn1.push(detail);
 					
-				oModel.create("/AppraisalSheetSet", createData, null,
-					function(data, res){
+				oModel.create("/AppraisalSheetSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -245,7 +245,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);	
+				});
 					
 				oController._BusyDialog.close();
 				
@@ -424,15 +424,15 @@ sap.ui.define([
 			if(oData && oData.length > 0){
 				// 점수 combobox 
 				var grade = [];
-				var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+				var oModel = $.app.getModel("ZHR_COMMON_SRV");
 				var createData = {NavCommonCodeList : []};
 					createData.ICodeT = "004";
 					createData.IPernr = oView.getModel("session").getData().Pernr;
 					createData.IBukrs = oView.getModel("session").getData().Bukrs;
 					createData.ICodty = "ZHRD_ZITEM1";
 					
-				oModel.create("/CommonCodeListHeaderSet", createData, null,
-					function(data, res){
+				oModel.create("/CommonCodeListHeaderSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.NavCommonCodeList && data.NavCommonCodeList.results && data.NavCommonCodeList.results.length){
 								for(var i=0; i<data.NavCommonCodeList.results.length; i++){
@@ -441,7 +441,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -454,7 +454,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(oController.Error == "E"){
 					oController.Error = "";

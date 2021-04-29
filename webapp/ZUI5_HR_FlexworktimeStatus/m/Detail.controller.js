@@ -181,9 +181,9 @@ sap.ui.define([
 					createData.FlexWorktime2Nav.push(detail);
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.FlexWorktime2Nav && data.FlexWorktime2Nav.results){
 								var data2 = data.FlexWorktime2Nav.results;
@@ -207,7 +207,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -220,7 +220,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel1.setData(vData);
 				
@@ -289,14 +289,14 @@ sap.ui.define([
 					Monyn : oData.Monyn
 				});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -309,7 +309,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

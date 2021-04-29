@@ -120,7 +120,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_WORKTIME_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 				var createData = {WorkhomeNav : []};
 					createData.IEmpid = (oData.Pernr && oData.Pernr != "" ? oData.Pernr : "");
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
@@ -130,8 +130,8 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = "1";
 
-				oModel.create("/WorkhomeApplySet", createData, null,
-					function(data, res){
+				oModel.create("/WorkhomeApplySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WorkhomeNav && data.WorkhomeNav.results){
 								for(var i=0; i<data.WorkhomeNav.results.length; i++){   
@@ -154,7 +154,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -167,7 +167,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -219,7 +219,7 @@ sap.ui.define([
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_WORKTIME_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 				var createData = {WorkhomeNav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
@@ -237,8 +237,8 @@ sap.ui.define([
 					detail.Bigo = oData.Bigo;
 				createData.WorkhomeNav.push(detail);
 				
-				oModel.create("/WorkhomeApplySet", createData, null,
-					function(data, res){
+				oModel.create("/WorkhomeApplySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.EUrl != ""){
 								setTimeout(function() {
@@ -260,7 +260,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -273,7 +273,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

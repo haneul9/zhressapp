@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 jQuery.sap.require("sap.m.MessageBox");
 sap.ui.define([
 	"../../common/Common",
@@ -150,21 +151,24 @@ sap.ui.define([
 
 		getBukrs : function(vDatum){
 			var oController=$.app.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");	
 			oController._MedDate=new Date(vDatum.getValue());
 			var oSessionData=oController._SessionData;
+
+			var payload = {Pernr:oSessionData.Pernr,
+				Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",
+				MedicalBukrsExport:[]};
+			
 			function getBukrs(){
-				oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,
-														 Datum:"\/Date("+new Date(vDatum.getValue()).getTime()+")\/",
-														 MedicalBukrsExport:[]}, null,
-					function(data,res){
+				oModel.create("/MedicalBukrsImportSet", payload, {
+					success: function(data,res){
 						if(data&&data.MedicalBukrsExport.results){
 							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
 							oController.onClose3();
 							oController.onDialog("N",oController._Bukrs);
 						}					
 					},
-					function (oError) {
+					error: function (oError) {
 						var Err = {};						
 						if (oError.response) {
 							Err = window.JSON.parse(oError.response.body);
@@ -175,7 +179,7 @@ sap.ui.define([
 							sap.m.MessageBox.alert(oError.toString());
 						}
 					}
-				);
+				});
 			}
 			vDatum.getValue()==null||vDatum.getValue()==""?sap.m.MessageBox.alert(oController.getBundleText("MSG_47011")):getBukrs();
 			return;
@@ -183,7 +187,6 @@ sap.ui.define([
 
 		onAfterOpen:function(){
 			var oController=$.app.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._SessionData;
 			oController.getSelector("A");
 			oController.getSelData();
@@ -270,7 +273,6 @@ sap.ui.define([
 
 		onAfterOpen2 : function(){
 			var oController=$.app.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._SessionData;
 			oController.getSelector("A");
 			oController._DataModel.setData({Pop1:[],Pop2:[oController._tData]});
@@ -1062,7 +1064,7 @@ sap.ui.define([
 			oController.initTdata();
 			var oTable=$.app.byId(oController.PAGEID+"_Table");
 			var oCol=$.app.byId(oController.PAGEID + "_Column");
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
 			var oSel=$.app.byId(oController.PAGEID + "_HeadSel");
 			var vData={ IConType:"1",
@@ -1093,31 +1095,32 @@ sap.ui.define([
 				oController._BusyDialog.open();
 			}
 			setTimeout(function(){
-				oModel.create("/MedicalApplySet", vData, null,
-						function(data,res){
-							if(data&&data.MedicalApplyTableIn.results.length){
-								data.MedicalApplyTableIn.results.forEach(function(e){
-									aData.oData.push(e);
-								});
+				oModel.create("/MedicalApplySet", vData, {
+					success: function(data,res){
+						if(data&&data.MedicalApplyTableIn.results.length){
+							data.MedicalApplyTableIn.results.forEach(function(e){
+								aData.oData.push(e);
+							});
 //								data.MedicalApplyTableIn.results.length>10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(data.MedicalApplyTableIn.results.length);
-							}
-							if(data&&data.MedicalApplyExport.results.length){
-//								oController._onClose="X";
-								oController._onClose=data.MedicalApplyExport.results[0].Close;
-							}
-						},
-						function (oError) {
-							var Err = {};						
-							if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							} else {
-								sap.m.MessageBox.alert(oError.toString());
-							}
 						}
-					);
+						if(data&&data.MedicalApplyExport.results.length){
+//								oController._onClose="X";
+							oController._onClose=data.MedicalApplyExport.results[0].Close;
+						}
+					},
+					error: function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
+					}
+				});
+				
 				oJSON.setData(aData);
 				oTable.setModel(oJSON);
 				oTable.bindItems("/oData",oCol);
@@ -1486,7 +1489,7 @@ sap.ui.define([
 		onCal : function(vSig,vSig2){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MedApply.MedApply");
 			var oController = oView.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
 			var vTmp=false;
@@ -1557,47 +1560,49 @@ sap.ui.define([
 			delete vData.MedicalApplyTableIn[0].Chk1;
 			delete vData.MedicalApplyTableIn[0].Chk2;
 			vSig=="1000"?vData.IMedDate=$.app.getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.getController()._DataModel.getProperty("/Pop2")[0].MedDate;
-			oModel.create("/MedicalApplySet", vData, null,
-					function(data,res){
-						if(data&&data.MedicalApplyTableIn.results.length){
-							if(vSig=="1000"){
-								var oJSON = $.app.byId(oController.PAGEID+"_Dialog").getModel();
-								var aData={Pop1:[],Pop2:[]};
-								data.MedicalApplyTableIn.results.forEach(function(e){							
-									aData.Pop1.push(e);
-								});
-								oJSON.setData(aData);
-								$.app.byId(oController.PAGEID+"_Dialog").bindElement("/Pop1/0");
-								vTmp=true;
-								setTimeout(function(){
-									oController.changeSel2("R");
-								},100);
-								
-							}else{
-								var oJSON = $.app.byId(oController.PAGEID+"_Dialog2").getModel();
-								var aData={Pop1:[],Pop2:[]};
-								data.MedicalApplyTableIn.results.forEach(function(e){							
-									aData.Pop2.push(e);
-								});
-								oJSON.setData(aData);
-								$.app.byId(oController.PAGEID+"_Dialog2").bindElement("/Pop2/0");
-								vTmp=true;
-							}
+			
+			oModel.create("/MedicalApplySet", vData, {
+				success: function(data,res){
+					if(data&&data.MedicalApplyTableIn.results.length){
+						if(vSig=="1000"){
+							var oJSON = $.app.byId(oController.PAGEID+"_Dialog").getModel();
+							var aData={Pop1:[],Pop2:[]};
+							data.MedicalApplyTableIn.results.forEach(function(e){							
+								aData.Pop1.push(e);
+							});
+							oJSON.setData(aData);
+							$.app.byId(oController.PAGEID+"_Dialog").bindElement("/Pop1/0");
+							vTmp=true;
+							setTimeout(function(){
+								oController.changeSel2("R");
+							},100);
+							
+						}else{
+							var oJSON = $.app.byId(oController.PAGEID+"_Dialog2").getModel();
+							var aData={Pop1:[],Pop2:[]};
+							data.MedicalApplyTableIn.results.forEach(function(e){							
+								aData.Pop2.push(e);
+							});
+							oJSON.setData(aData);
+							$.app.byId(oController.PAGEID+"_Dialog2").bindElement("/Pop2/0");
+							vTmp=true;
 						}
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-						vTmp=false;
 					}
-				);
+				},
+				error: function (oError) {
+					var Err = {};						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+					} else {
+						sap.m.MessageBox.alert(oError.toString());
+					}
+					vTmp=false;
+				}
+			});
+			
 			vSig=="1000"?$.app.getController()._DataModel.getProperty("/Pop1")[0].Close=oController._onClose:
 						 $.app.getController()._DataModel.getProperty("/Pop2")[0].Close=oController._onClose;
 			if(vSig=="1000"){
@@ -1624,7 +1629,7 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MedApply.MedApply");
 			var oController = oView.getController();
 			var oCal=oController.onCal(vSig,"S");
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
 			if(oCal){
@@ -1690,30 +1695,32 @@ sap.ui.define([
 				delete vData.MedicalApplyTableIn[0].Close;
 				delete vData.MedicalApplyTableIn[0].Chk1;
 				delete vData.MedicalApplyTableIn[0].Chk2;
-				oModel.create("/MedicalApplySet", vData, null,
-						function(data,res){
-							if(data&&data.MedicalApplyTableIn.results.length){
-								new sap.m.MessageBox.alert(oBundleText.getText("MSG_44002"),{
-									title:oBundleText.getText("LABEL_35023"),
-									onClose:function(){
-										if(vSig=="1000"){oController.onClose();oController.onSearch();}else{
-											oController.onClose2();oController.onSearch();
-										}}
-								});
-							}
-						},
-						function (oError) {
-							var Err = {};						
-							if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							} else {
-								sap.m.MessageBox.alert(oError.toString());
-							}
+				
+				oModel.create("/MedicalApplySet", vData, {
+					success: function(data,res){
+						if(data&&data.MedicalApplyTableIn.results.length){
+							new sap.m.MessageBox.alert(oBundleText.getText("MSG_44002"),{
+								title:oBundleText.getText("LABEL_35023"),
+								onClose:function(){
+									if(vSig=="1000"){oController.onClose();oController.onSearch();}else{
+										oController.onClose2();oController.onSearch();
+									}}
+							});
 						}
-					);
+					},
+					error: function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
+					}
+				});
+				
 				if(vSig=="1000"){
 					vData.MedicalApplyTableIn[0].Zfvcgb=="X"?
 					$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk1=true:

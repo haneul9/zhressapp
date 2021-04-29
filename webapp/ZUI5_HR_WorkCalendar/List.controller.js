@@ -119,7 +119,7 @@ sap.ui.define([
 				var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
 				var dateFormat3 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {WorkCalendarNav1 : [], WorkCalendarNav2 : [], WorkCalendarNav3 : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
@@ -129,8 +129,8 @@ sap.ui.define([
 					createData.IMonth = oData.Zyymm.substring(4,6);
 					createData.IWtype = "W";
 
-				oModel.create("/WorkCalendarSet", createData, null,
-					function(data, res){
+				oModel.create("/WorkCalendarSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WorkCalendarNav1 && data.WorkCalendarNav1.results && data.WorkCalendarNav1.results.length){
 								var data1 = data.WorkCalendarNav1.results;
@@ -323,7 +323,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -336,7 +336,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -377,7 +377,7 @@ sap.ui.define([
 				column[i].setSorted(false);
 			}
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+			var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 			var oFilter = oController._ListCondJSonModel.getProperty("/Data");
 			var createData = {WorkCalendarNav2 : []};
 				createData.IPernr = oFilter.Pernr;
@@ -391,8 +391,8 @@ sap.ui.define([
 				createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
 				createData.IWtype = "";
 
-			oModel.create("/WorkCalendarSet", createData, null,
-				function(data, res){
+			oModel.create("/WorkCalendarSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.WorkCalendarNav2 && data.WorkCalendarNav2.results && data.WorkCalendarNav2.results.length){
 							var data2 = data.WorkCalendarNav2.results;
@@ -412,7 +412,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -425,7 +425,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			if(oController.Error == "E"){
 				oController.Error = "";
@@ -477,7 +477,7 @@ sap.ui.define([
 			var process = function(){
 				var oFilter = oController._ListCondJSonModel.getProperty("/Data");
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {WrkCalendarPopupNav : []};
 					createData.IConType = "3";
 					createData.IBukrs = oFilter.Bukrs;
@@ -500,15 +500,15 @@ sap.ui.define([
 					
 					createData.WrkCalendarPopupNav.push(detail);
 					
-				oModel.create("/WorkCalendarPopupSet", createData, null,
-					function(data, res){
+				oModel.create("/WorkCalendarPopupSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WrkCalendarPopupNav && data.WrkCalendarPopupNav.results && data.WrkCalendarPopupNav.results.length){
 								
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -521,7 +521,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);	
+				});
 				
 				oController._BusyDialog.close();
 				
