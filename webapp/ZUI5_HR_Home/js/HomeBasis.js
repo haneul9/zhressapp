@@ -450,18 +450,18 @@ post: function(o) {
 		postOptions.complete = o.complete;
 	}
 	if (o.data) {
-		postOptions.data = JSON.stringify(o.data);
-		// o.data = this.mix(o.data);
+		// postOptions.data = JSON.stringify(o.data);
+		o.data = this.mix(o.data);
 
-		// return this.copyFields(o)
-		// 	.then(function(copiedData) {
-		// 		postOptions.data = JSON.stringify(copiedData);
+		return this.copyFields(o)
+			.then(function(copiedData) {
+				postOptions.data = JSON.stringify(copiedData);
 
-		// 		return $.post(postOptions);
-		// 	});
+				return $.post(postOptions);
+			});
 	}
 
-	return $.post(postOptions);
+	return $.post(postOptions).promise();
 },
 copyFields: function(o) {
 

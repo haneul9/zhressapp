@@ -540,6 +540,9 @@ common.Common = {
                 }).join("");
                 map[p.name] = p;
             });
+            $.map(o.navigationProperty, function (p) {
+                map[p.name] = p;
+            });
         });
 
         var core = sap.ui.getCore();

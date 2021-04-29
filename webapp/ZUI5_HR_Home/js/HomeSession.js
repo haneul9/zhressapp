@@ -368,7 +368,7 @@ encodePernr: function() {
 
 			sessionStorage.removeItem('ehr.odata.user.percod');
 		}.bind(this)
-	}).promise();
+	});
 },
 
 retrieveLoginInfo: function() {
@@ -420,7 +420,7 @@ sessionToken: function() {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + url);
 		}.bind(this)
-	}).promise();
+	});
 },
 
 registerToken: function() {
@@ -446,7 +446,7 @@ registerToken: function() {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);
 		}.bind(this)
-	}).promise();
+	});
 },
 
 logout: function() {
