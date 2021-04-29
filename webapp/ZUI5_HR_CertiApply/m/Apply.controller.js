@@ -34,7 +34,7 @@ sap.ui.define(
                     },
                     this
                 );
-            },
+            }, 
 
             onBeforeShow: function (oEvent) {
             	if(oEvent.data && oEvent.data.ZformType && oEvent.data.ZformType != ""){
