@@ -42,7 +42,7 @@ sap.ui.define([
 							new sap.m.Button(oController.PAGEID+"_NewBtn",{
 								press: function(){oController.onDialog(null,"N3")},
 								text: "{i18n>LABEL_47006}", // 신청
-							}).addStyleClass("button-default")]
+							}).addStyleClass("button-light")]
 					}).addStyleClass("button-group")
 				]
 			}).addStyleClass("info-box");
