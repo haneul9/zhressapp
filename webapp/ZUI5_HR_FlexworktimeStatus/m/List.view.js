@@ -104,6 +104,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 				                     design: "Bold"
 				                 }).addStyleClass("sub-title")]
 					}).addStyleClass("info-box"),
+					new sap.ui.core.HTML({
+						content : '<canvas id="vacChart" class="ChartClass"></canvas>'
+					}),
 	                oTable1]
         });
         
@@ -210,6 +213,28 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 				                     design: "Bold"
 				                 }).addStyleClass("sub-title")]
 					}).addStyleClass("info-box"),
+					new sap.ui.core.HTML({
+						content : '<div style="background-color: rgb(236,244,253); margin-top: 10px;">' +
+				                    '<div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 15px;">' +
+				                        '<div style="font-size: 15px; font-weight: bold; color: rgb(4,62,127);">' + oBundleText.getText("LABEL_69051") + '</div>' + // 총 근로시간
+				                        '<div style="font-size: 15px; font-weight: bold; color: rgb(4,62,127);">' + "{Tottmtx}" + '</div>' +
+				                    '</div>' +
+				                  '</div>'	
+					}),
+					new sap.ui.core.HTML({
+						content : '<div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 10px; margin-bottom:10px">' +
+				                	'<div class="progress" style="height: 20px; width: 100%; display: flex; position: relative;">' +
+				                        '<div style="height: 100%; position: absolute;" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">' +
+				                        '</div>' +
+				                        '<div style="height: 100%; position: absolute; background-color: transparent; border-right: solid; width: 80%;">' +
+				                        '</div>' +
+				                    '</div>' +
+				                    '<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">' +
+				                        '<div style="font-size: 14px; color: rgb(145,149,155)">' + "0h" + '</div>' +
+				                        '<div style="font-size: 14px; color: rgb(145,149,155); margin-right: 55px;">' + '{CtrnmHH}' + "h" + '</div>' +
+				                    '</div>' +
+				                '</div>'
+					}),
 	                oTable3]
         });
         
@@ -217,7 +242,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 						idPrefix : oController.PAGEID,
 						contentContainerStyleClass: "app-content-container-mobile",
 			            contentItems: [new sap.m.VBox({
-							               items : [oCalendar, oLayout1, oLayout2, oLayout3]
+							               items : [oCalendar, oLayout3, oLayout1, oLayout2]
 							           }).addStyleClass("vbox-form-mobile")]
 			        });
 			
