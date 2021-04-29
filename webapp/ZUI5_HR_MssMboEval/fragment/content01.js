@@ -79,7 +79,7 @@ ZUI5_HR_MssMboEval.fragment.content01={
 			showNoData: true,
 			width: "auto",
 			selectionBehavior:sap.ui.table.SelectionBehavior.RowOnly,
-			noData: "{i18n>MSG_05001}"
+			noData: "{i18n>LABEL_00901}"
 		}).addStyleClass("mt-8px").attachCellClick(function(oEvent){oController.onSelectedRow(oEvent,vPage)});
 
 		var mTable1 = new c.layout.MatrixLayout(oController.PAGEID+"_"+vPage+"_mTable1",{
