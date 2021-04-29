@@ -13,9 +13,10 @@ sap.ui.define(
 		 */
 		var FacilityHandler = {
 
-			navBack: function() {
+			navBack: function(isRefresh) {
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "PassList"].join($.app.getDeviceSuffix())
+					id: [$.app.CONTEXT_PATH, "PassList"].join($.app.getDeviceSuffix()),
+					data: { isResvRefresh: isRefresh || false }
 				});
 			},
 
@@ -65,7 +66,7 @@ sap.ui.define(
 				});
 			},
 
-			onPressResvRow: function(oEvent) {
+			onPressHistoryRow: function(oEvent) {
 				BusyIndicator.show(0);
 
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
@@ -91,7 +92,7 @@ sap.ui.define(
 			},
 
 			ProcessAfterNavigation: function() {
-				this.navBack();
+				this.navBack(true);
 			}
 		};
 

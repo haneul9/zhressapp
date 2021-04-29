@@ -94,7 +94,7 @@ sap.ui.define([
 				growing: true,
 				growingThreshold: 5,
 				mode: sap.m.ListMode.SingleSelectMaster,
-				itemPress: FacilityHandler.onPressResvRow.bind(FacilityHandler),
+				itemPress: FacilityHandler.onPressHistoryRow.bind(FacilityHandler),
 				columns: [
 					new sap.m.Column({
 						width: "35%",
