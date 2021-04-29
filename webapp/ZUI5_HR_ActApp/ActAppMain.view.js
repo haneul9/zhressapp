@@ -453,7 +453,11 @@ sap.ui.define([
 				async: false,
 				filters: [
 					new sap.ui.model.Filter("Field", sap.ui.model.FilterOperator.EQ, "Natio"),
-					new sap.ui.model.Filter("PersaNc", sap.ui.model.FilterOperator.EQ, "X")
+					new sap.ui.model.Filter("PersaNc", sap.ui.model.FilterOperator.EQ, "X"),
+					new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+					new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+					new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+					new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 				],
 				success: function(oData) {
 					if (oData && oData.results.length) {

@@ -274,7 +274,11 @@ sap.ui.define(
 						new sap.ui.model.Filter("Massn", sap.ui.model.FilterOperator.EQ, Massn),
 						new sap.ui.model.Filter("Massg", sap.ui.model.FilterOperator.EQ, Massg),
 						new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController._vPercod),
-						new sap.ui.model.Filter("Docno", sap.ui.model.FilterOperator.EQ, oController._vDocno)
+                        new sap.ui.model.Filter("Docno", sap.ui.model.FilterOperator.EQ, oController._vDocno),
+                        new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 					],
                     success: function (oData) {
                         if (oData.results && oData.results.length) {
@@ -318,7 +322,11 @@ sap.ui.define(
 						new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, Common.setTime(new Date(oController._vActda))),
 						new sap.ui.model.Filter("Massn", sap.ui.model.FilterOperator.EQ, Massn),
 						new sap.ui.model.Filter("Massg", sap.ui.model.FilterOperator.EQ, Massg),
-						new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController._vPercod)
+                        new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController._vPercod),
+                        new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 					],
                     success: function (oData) {
                         if (oData.results && oData.results.length) {
@@ -360,7 +368,11 @@ sap.ui.define(
 						new sap.ui.model.Filter("Docno", sap.ui.model.FilterOperator.EQ, oController._vDocno),
 						new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, Percod),
 						new sap.ui.model.Filter("VoltId", sap.ui.model.FilterOperator.EQ, VoltId),
-						new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, Common.setTime(new Date(Actda)))
+                        new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, Common.setTime(new Date(Actda))),
+                        new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 					],
                     success: function (oData) {
                         if (oData.results && oData.results.length) {
@@ -540,7 +552,11 @@ sap.ui.define(
                 $.app.getModel("ZHR_ACTIONAPP_SRV").read("/ActionSubjectListSet", {
                     async: false,
                     filters: [
-						new sap.ui.model.Filter("Docno", sap.ui.model.FilterOperator.EQ, oController._vDocno)
+                        new sap.ui.model.Filter("Docno", sap.ui.model.FilterOperator.EQ, oController._vDocno),
+                        new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 					],
                     success: function (oData) {
                         if (oData.results && oData.results.length) {
@@ -2740,7 +2756,11 @@ sap.ui.define(
 									new sap.ui.model.Filter("Field", "EQ", "Plans"),
 									new sap.ui.model.Filter("Persa", "EQ", oController._vWerksUpdateValue),
 									new sap.ui.model.Filter("Excod", "EQ", oController._vOrgeh),
-									new sap.ui.model.Filter("Actda", "EQ", oController._vActda)
+                                    new sap.ui.model.Filter("Actda", "EQ", oController._vActda),
+                                    new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+                                    new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+                                    new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+                                    new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 								],
 								success: function(oData) {
 									if (oData && oData.results.length) {
@@ -4385,7 +4405,11 @@ sap.ui.define(
                 $.app.getModel("ZHR_COMMON_SRV").read("/EmpCodeListSet", {
                     async: false,
                     filters: [
-						new sap.ui.model.Filter("Field", sap.ui.model.FilterOperator.EQ, Fieldname),
+                        new sap.ui.model.Filter("Field", sap.ui.model.FilterOperator.EQ, Fieldname),
+                        new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
 						new sap.ui.model.Filter({
                             filters: subFilters,
                             and: true
