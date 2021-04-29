@@ -85,11 +85,16 @@ sap.ui.define([
 		},
 
 		getRequestList: function(oController) {
-			return new sap.m.Table({
+			var FacilityHandler = oController.getFacilityHandler();
+
+			return new sap.m.Table(oController.PAGEID + "_MyResv2List", {
 				inset: false,
+				rememberSelections: false,
 				noDataText: "{i18n>LABEL_00901}",
 				growing: true,
 				growingThreshold: 5,
+				mode: sap.m.ListMode.SingleSelectMaster,
+				itemPress: FacilityHandler.onPressResvRow.bind(FacilityHandler),
 				columns: [
 					new sap.m.Column({
 						width: "35%",

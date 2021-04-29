@@ -2,6 +2,7 @@ function HomeBasis(_gateway) {
 
 	this.ODataDestination = { SF: 'SF', S4HANA: 'S4HANA', ETC: 'ETC' };
 	this.paramMap = this.parameterMap(location.search);
+	this.metadataMap = {};
 
 	this._gateway = _gateway;
 	_gateway.homeBasis(this);
@@ -171,10 +172,6 @@ prepareLog: function() {
 		}.bind(this)
 	};
 },
-actualUrl: function() {
-
-	return (document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1");
-},
 parameterMap: function(locationSearch) {
 
 	var paramMap = {};
@@ -190,11 +187,15 @@ parameter: function(key) {
 },
 mix: function(o) {
 
+	var mid;
+	if (typeof this._gateway.currentMid === 'function') {
+		mid = this._gateway.currentMid();
+	}
 	return $.extend(o, {
 		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
 		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
 		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
-		ICmenuid: ''				// 메뉴 ID this._gateway.mid(this.actualUrl())
+		ICmenuid: mid || ''											// 메뉴 ID
 	});
 },
 s4hanaURL: function(modelAndEntityName) {
@@ -453,6 +454,54 @@ post: function(o) {
 	}
 
 	return $.post(postOptions);
+},
+metadata: function(namespace, entityType) {
+
+	entityType = entityType.replace(/Set$/i, '');
+
+	var metadata = this.metadataMap[namespace],
+	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType, entityType);
+
+	if (metadata) {
+		return new Promise(function(resolve) {
+			resolve($.map(metadata.find(finder), function(o) {
+				return o.attributes.Name.nodeValue;
+			}));
+		});
+	}
+
+	var url = this.s4hanaURL(namespace + '/$metadata');
+	return $.get({
+		url: url,
+		success: function() {
+			this._gateway.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
+		}.bind(this)
+	}).then(function(data) {
+		var metadata = $(data);
+
+		this.metadataMap[namespace] = metadata;
+
+		return $.map(metadata.find(finder), function(o) {
+			return o.attributes.Name.nodeValue;
+		});
+	}.bind(this));
+},
+copyFields: function(o) {
+
+	var url = o.url.split('/');
+	return this._gateway.metadata(url[0], url[1])
+		.then(function(fieldNames) {
+			var data = {};
+			$.map(fieldNames, function(name) {
+				if (typeof o.data[name] !== 'undefined') {
+					data[name] = o.data[name];
+				}
+			});
+			return data;
+		});
 },
 odataResults: function(data) {
 

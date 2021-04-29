@@ -25,7 +25,7 @@ init: function() {
 		'P107': EvalGoalPortlet	,			// 목표관리
 		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
 		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
-		// 'P110': Vacationportlet				// 근태신청
+		'P110': Vacationportlet				// 근태신청
 	};
 
 	$(document)
@@ -490,7 +490,7 @@ generate: function() {
 
 	return this._gateway.post({
 		url: url,
-		data: {
+		data: this._gateway.mix({
 			IMode: 'R',
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
@@ -498,7 +498,7 @@ generate: function() {
 			IDatum: Date.toODataString(),
 			TableIn1: [],
 			TableIn2: []
-		},
+		}),
 		success: function(data) {
 			this._gateway.prepareLog('Portlets.generate ${url} success'.interpolate(url), arguments).log();
 

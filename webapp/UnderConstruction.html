@@ -4,6 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
 <title>Hi HR</title>
+<script>
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+	document.querySelector('html').setAttribute('device', 'mobile');
+}
+</script>
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -31,10 +36,6 @@
 <script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
 -->
 <script>
-if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-	$('html').attr('device', 'mobile');
-}
-
 $(function() {
 
 $('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) + 'px)');
@@ -47,12 +48,12 @@ window._i18n = new HomeI18n(_gateway);
 });
 </script>
 </head>
-<body>
+<body class="under-construction">
 <div class="ehr-header">
 	<header class="container-fluid">
-		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" style="height:90px; justify-content:space-between" aria-label="상단 보조 메뉴 영역">
+		<nav class="navbar navbar-expand-lg navbar-light ehr-logo-container" aria-label="상단 보조 메뉴 영역">
 			<span></span>
-			<a class="navbar-brand ehr-logo" style="position:static; margin:0" href="javascript:;"></a>
+			<a class="navbar-brand ehr-logo" href="javascript:;"></a>
 			<span></span>
 		</nav>
 	</header>

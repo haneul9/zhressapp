@@ -2,6 +2,9 @@
 function MenuMegaDropdown(_gateway, parentSelector) {
 
 	this.parentSelector = parentSelector;
+	this.menuIframeName = 'content-iframe';
+	this.menuIframeSelector = 'iframe[name="${content-iframe}"]'.interpolate(this.menuIframeName);
+	this.menuFormName = 'menu-form';
 	this.menuFavorites = null;
 	this.menuUrlMap = null;
 	this.menuDataMap = null;
@@ -105,9 +108,9 @@ changeState: function(toggle, restore) {
 			$(this.parentSelector + ' .active').toggleClass('active', false);
 			$('.ehr-body').toggleClass('menu-loaded', false);
 
-			var iframe = $('iframe[name="content-iframe"]');
-			if (iframe.length) {
-				iframe.hide(0, function() {
+			var menuIframe = $(this.menuIframeSelector);
+			if (menuIframe.length) {
+				menuIframe.hide(0, function() {
 					$(this).remove();
 				});
 			}
@@ -129,7 +132,7 @@ changeLocale: function() {
 		var parentSelector = this.parentSelector;
 		this.generate(true).then(function() {
 			setTimeout(function() {
-				$(parentSelector + ' a[data-menu-id="${menu-id}"]'.interpolate($('form#menu-form input[name="mid"]').val()))
+				$(parentSelector + ' a[data-menu-id="${menu-id}"]'.interpolate($('form#${menu-form} input[name="mid"]'.interpolate(this.menuFormName)).val()))
 					.toggleClass('active', true) // 선택된 메뉴 표시
 					.parents('.mega-menu').toggleClass('d-block', false) // mega dropdown 닫기
 					.parents('li.nav-item').toggleClass('active', true); // 선택된 대메뉴 표시
@@ -137,10 +140,14 @@ changeLocale: function() {
 		});
 	}.bind(this), 0);
 
-	var iframe = $('iframe[name="content-iframe"]');
-	if (iframe.length) {
-		iframe[0].contentWindow.sap.ui.getCore().getConfiguration().setLanguage(this._gateway.loginInfo('Langu'));
-		$('form#menu-form').submit();
+	var menuIframe = $(this.menuIframeSelector);
+	if (menuIframe.length) {
+		try {
+			menuIframe[0].contentWindow.sap.ui.getCore().getConfiguration().setLanguage(this._gateway.loginInfo('Langu'));
+		} catch(e) {
+			this._gateway.log(e);
+		}
+		$('form#' + this.menuFormName).submit();
 	}
 },
 
@@ -221,6 +228,16 @@ saveFavorites: function(menuId, toBeFavorite) {
 	});
 },
 
+currentMid: function() {
+
+	return $('form#${menu-form} input[name="mid"]'.interpolate(this.menuFormName)).val();
+},
+
+currentUrl: function() {
+
+	return $('form#${menu-form}'.interpolate(this.menuFormName)).attr('action');
+},
+
 mid: function(url) {
 
 	return this.menuUrlMap[url] || '';
@@ -257,18 +274,18 @@ menuParam: function() {
 
 goToLink: function(menuId, url) {
 
-	var iframe = $('iframe[name="content-iframe"]');
-	if (!iframe.length) {
+	var menuIframe = $(this.menuIframeSelector);
+	if (!menuIframe.length) {
 		var container = $('.ehr-body .container-fluid');
 		if (container.data('jsp')) {
 			container.data('jsp').destroy(); // destroy 후에는 container 변수의 jQuery function들이 제대로 동작하지 않으므로 새로 객체를 만들어야함
 		}
-		$('.ehr-body .container-fluid').append('<iframe name="content-iframe"></iframe>');
+		$('.ehr-body .container-fluid').append('<iframe name="${content-iframe}"></iframe>'.interpolate(this.menuIframeName));
 	}
 
-	var form = $('form#menu-form');
+	var form = $('form#' + this.menuFormName);
 	if (!form.length) {
-		form = $('<form id="menu-form" method="GET" target="content-iframe"><input type="hidden" name="mid" /></form>').appendTo('body');
+		form = $('<form id="${menu-form}" method="GET" target="${content-iframe}"><input type="hidden" name="mid" /></form>'.interpolate(this.menuFormName, this.menuIframeName)).appendTo('body');
 	}
 
 	if (!this._gateway.isPRD()) {
@@ -343,6 +360,7 @@ handleUrl: function(e) {
 },
 
 urlData: function(url) {
+
 	if (!url) {
 		return {
 			getScript: function() {
@@ -546,7 +564,7 @@ generate: function(reload) {
 	return this._gateway.post({
 		// url: 'ZUI5_HR_Home/menu.json',
 		url: url,
-		data: {
+		data: this._gateway.mix({
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -555,7 +573,7 @@ generate: function(reload) {
 			TableIn2: [],
 			TableIn3: [],
 			TableIn4: []
-		},
+		}),
 		success: function(data) {
 			this._gateway.prepareLog('MenuMegaDropdown.generate ${url} success'.interpolate(url), arguments).log();
 

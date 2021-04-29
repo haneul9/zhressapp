@@ -78,7 +78,8 @@ sap.ui.define(
                         Common.usePrivateLog({
                         	pernr : oData.Pernr,
                         	func : "개인정보",
-                        	mobile : "X"
+                        	mobile : "X",
+                            action : "R" 
                         });
                         break;
                     case "Address":
@@ -86,7 +87,8 @@ sap.ui.define(
                         Common.usePrivateLog({
                         	pernr : oData.Pernr,
                         	func : "주소",
-                        	mobile : "X"
+                        	mobile : "X",
+                            action : "R" 
                         });
                         break;
                     case "Car":

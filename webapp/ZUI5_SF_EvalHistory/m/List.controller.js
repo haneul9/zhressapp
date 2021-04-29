@@ -35,10 +35,70 @@ sap.ui.define(
 				this.search();
 			},
 
+			afterTable: function(datas){
+				var oTable=$.app.byId("historyTable");
+				if(datas.length){
+					for(var i=0;i<datas.length;i++){
+						var oItems=oTable.getItems();
+						for(var j=0;j<oItems.length;j++){
+							var oCells=oItems[j].getCells();
+							if(oCells[0].getText()==datas[i].IAppye){
+								if(datas[i].TableIn2.length==0){
+									oCells[2].setText();
+									oCells[3].setText();
+									oCells[4].setText();
+								}else{
+									if(datas[i].TableIn2.results[0].Btn01==""){
+										oCells[2].setText();
+									}
+									if(datas[i].TableIn2.results[0].Btn02==""){
+										oCells[3].setText();
+									}
+									if(datas[i].TableIn2.results[0].Btn06==""){
+										oCells[4].setText();
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+
 			search: function() {
 				BusyIndicator.show(0);
-
-				Common.getPromise(
+				var PromiseData=new Array();
+				var Btns=new Array();
+				var curr = new Date().getFullYear(); 
+				var aAppye = [];
+				for(var i=curr; i>=2020; i--){
+					aAppye.push(String(i));
+				}
+				var _sucFunc = function(data){
+					Btns.push(data);
+				};
+				aAppye.forEach(function(year) {
+					PromiseData.push(
+					Common.getPromise(
+						function () {
+							$.app.getModel("ZHR_APPRAISAL_SRV").create(
+								"/EvaResultAgreeSet",
+								{
+									IConType: "3",
+									IAppye: year,
+									IEmpid: this.getSessionInfoByKey("Pernr"),
+									TableIn2: []
+								},
+								{
+									success: _sucFunc.bind(this),
+									error: function (res) {
+										Common.log(res);
+									}
+								}
+							);
+						}.bind(this)
+					));
+				}.bind(this));
+				PromiseData.push(Common.getPromise(
 					function () {
 						$.app.getModel("ZHR_APPRAISAL_SRV").create(
 							"/EvalResultsSet",
@@ -61,9 +121,11 @@ sap.ui.define(
 							}
 						);
 					}.bind(this)
-				).then(function () {
+				));
+				Promise.all(PromiseData).then(function () {
 					BusyIndicator.hide();
-				});
+					this.afterTable.call(this,Btns);
+				}.bind(this));
 			},
 
 			onPressResvRow: function(oEvent) {

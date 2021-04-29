@@ -669,34 +669,42 @@ common.Common = {
         return p.async ? promise : traceInfo;
     },
     usePrivateLog: function (p) {
-        if (window._init_sequence_logging) {
-            $.app.log("common.Common.retrieveLoginInfo called.");
-        }
 
-        var _this = $.app.getController();
-
-        $.app.getModel("ZHR_COMMON_SRV").create(
-            "/SaveConnEhrLogSet",
-            {
-                ILangu: _this.getSessionInfoByKey("Langu"),
-                TableIn: [{
-                    Usrid: _this.getSessionInfoByKey("Pernr"),
-                    Menid: $.app.getMenuId(),
-                    Pernr: p.pernr ? p.pernr : "",
-                    Func: p.func ? p.func : "",
-                    Mobile: p.mobile ? p.mobile : ""
-                }]
-            },
-            {
-                async: false,
-                success: function (data) {
-                    common.Common.log(data);
-                },
-                error: function (res) {
-                    common.Common.log(res);
-                }
+        setTimeout(function() {
+            if (window._init_sequence_logging) {
+                $.app.log("common.Common.usePrivateLog called.");
             }
-        );
+
+            // IP조회
+            var vIP = "",
+                vIPs = common.Common.activeClientTrace({async:false});
+            if(vIPs.Ipadd && vIPs.Ipadd != "" ){
+                vIP = vIPs.Ipadd.split(",")[0];
+            }
+            $.app.getModel("ZHR_COMMON_SRV").create(
+                "/SaveConnEhrLogSet",
+                {
+                    ILangu: this.getSessionInfoByKey("Langu"),
+                    TableIn: [{
+                        Usrid: this.getSessionInfoByKey("Pernr"),
+                        Menid: $.app.getMenuId(),
+                        Pernr: p.pernr ? p.pernr : "",
+                        Func: p.func ? p.func : "",
+                        Mobile: p.mobile ? p.mobile : "",
+                        Pcip : vIP,
+                        Action : p.action
+                    }]
+                },
+                {
+                    success: function (data) {
+                        common.Common.log(data);
+                    },
+                    error: function (res) {
+                        common.Common.log(res);
+                    }
+                }
+            );
+        }.bind($.app.getController()), 0);
     },
     encryptPernr: function (vPernr) {
         if (!vPernr) return "";

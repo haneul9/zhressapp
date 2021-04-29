@@ -120,7 +120,7 @@
                                                 return v1 + " " + v2; 
                                             }
                                         }, 
-                                        textAlign : "Center"
+                                        textAlign : "Begin"
                                     })
                                     .addStyleClass("L2P13Font font-14px")
                                 ]
