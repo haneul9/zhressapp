@@ -71,11 +71,11 @@ fill: function() {
 					$.map(oDetailData, function(v, i) {
 						var oGroundColor = "";
 						
-						if(parseInt(v.done) > 80)
+						if(parseFloat(v.done) > 80)
 							oGroundColor= oBackGround[3];
-						else if(parseInt(v.done) > 60)
+						else if(parseFloat(v.done) > 60)
 							oGroundColor= oBackGround[2];
-						else if(parseInt(v.done) > 30)
+						else if(parseFloat(v.done) > 30)
 							oGroundColor= oBackGround[1];
 						else 
 							oGroundColor= oBackGround[0];
@@ -89,14 +89,14 @@ fill: function() {
 									'<div style="display: flex; justify-content: flex-end">',
 										'<div class="progress" style="height: 20px; width: 50%; display: flex;">',
 											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												parseInt(v.done) + '%',
+												parseFloat(v.done) + '%',
 											'</div>',
 										'</div>',
 									'</div>',
 								'</div>'
 							].join(''));
 
-							$('.progress-bar.i' + i).animate({ width: parseInt(v.done) + '%' }, 2000);
+							$('.progress-bar.i' + i).animate({ width: parseFloat(v.done) + '%' }, 2000);
 						}, 0);
 					});
 				}.bind(this),

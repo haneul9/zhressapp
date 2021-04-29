@@ -120,6 +120,8 @@ fill: function() {
                 vList3 = [];
             
             oVacationData.forEach(function(e, i) {
+                if(i > 2) return;
+
                 var vKtext = e.Ktext, // 구분
                     vAnzhl = parseFloat(e.Anzhl), // 발생
                     vKverb = parseFloat(e.Kverb), // 사용
@@ -154,22 +156,25 @@ fill: function() {
                     datasets: [
                         { 
                             label: '사용',
-                            barPercentage: 0.6,
-                            categoryPercentage: 0.6,
-                            backgroundColor: 'rgb(130,235,55)', 
-                            borderColor: 'rgb(255, 99, 132)',
+                            // maxBarThickness: "40px",
+                            // barPercentage: 0.6,
+                            // categoryPercentage: 0.6,
+                            barThickness: oVacationData.length === 1 ? 40 : 20,
+                            backgroundColor: 'rgb(141, 198, 63)', 
                             data: vList2
                         },
                         {
                             label: '잔여',
-                            barPercentage: 0.6,
-                            categoryPercentage: 0.6,
-                            backgroundColor: 'rgb(50,118,234)',
-                            borderColor: 'rgb(255, 99, 132)',
+                            // maxBarThickness: "40px",
+                            // barPercentage: 0.6,
+                            // categoryPercentage: 0.6,
+                            barThickness: oVacationData.length === 1 ? 40 : 20,
+                            backgroundColor: 'rgb(221, 238, 197)',
                             data: vList3
                         }
                     ]
-                }
+                },
+                color: 'rgb(242, 242, 242)'
             });
 
             $('.ChartClass').append([chart]);

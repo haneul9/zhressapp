@@ -464,7 +464,7 @@ sap.ui.define([
 											}
                                         }
                                     }),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
                                 ]
                             })
 						]
@@ -486,7 +486,7 @@ sap.ui.define([
 											}
                                         }
                                     }),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
                                 ]
                             })
 						]
@@ -500,7 +500,7 @@ sap.ui.define([
                                     new sap.m.Text({text: "{i18n>MSG_40027}", width: "auto", textAlign: "Begin"}),
                                     new sap.m.Text({text: "{i18n>MSG_40028}", width: "auto", textAlign: "Begin"}),
                                     new sap.m.Text({text: "{i18n>MSG_40029}", width: "auto", textAlign: "Begin"}),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
                                 ]
                             })
 						]

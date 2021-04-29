@@ -59,22 +59,44 @@ fill: function() {
 			Zyymm: vFullYear + vMonth,
 			Langu: "KO",
 			Prcty: "1",
-            FlexWorktime2Nav : []
+            FlexWorktime1Nav : []
 		},
 		success: function(data) {
 			this._gateway.prepareLog('WorkstimeStatusPortlet.fill ${url} success'.interpolate(url), arguments).log();
-
+            var oPortlet = this;
 			var list = this.$(),
-                oWorkData = data.d;
+                oWorkData = data.d,
+                oMonthWorkTime = this._gateway.odataResults(data).FlexWorktime1Nav,
+                vToDate = new Date().getDate()-1;
+
             var vCtrnm = oWorkData.Ctrnm, // 소정근로시간
                 vWrktm = oWorkData.Wrktm, // 근무시간(평일)
                 vExttm = oWorkData.Exttm, // 연장근로
-                vTottm = oWorkData.Tottm; // 총 근로시간
+                vTottm = oWorkData.Tottm, // 총 근로시간
+                vWorStatus = "", // 근무형태
+                vWorBTime = "", //시작시간
+                vWorETime = "", // 종료시간
+                vFullTime = ""; // 근무Time
 
             vCtrnm = vCtrnm.split(":"),
             vWrktm = vWrktm.split(":"),
             vExttm = vExttm.split(":"),
             vTottm = vTottm.split(":");
+
+            oMonthWorkTime.forEach(function(e,i) {
+                if(i === vToDate){
+                    vWorStatus = oPortlet.checkNull(e.Atext) ? "정상근무" : e.Atext,
+                    vWorBTime = e.Beguz,
+                    vWorETime = e.Enduz;
+                    vFullTime = oPortlet.checkNull(vWorBTime) && oPortlet.checkNull(vWorETime) ? "" : "(" + vWorBTime.slice(0,2) + ":" + vWorBTime.slice(-2) + "~" + vWorETime.slice(0,2) + ":" + vWorETime.slice(-2) + ")";
+                    if(e.Offyn === "X"){
+                        vWorStatus = "OFF",
+                        vWorBTime = "",
+                        vWorETime = "",
+                        vFullTime = "";
+                    }
+                }
+            });
 
             var vCtrnmH = vCtrnm[0] !== "00" && this.checkNull(!vCtrnm[0]) ? vCtrnm[0] + "시간" : (this.checkNull(vCtrnm[1]) ? "0시간" : ""),
                 vCtrnmM = vCtrnm[1] !== "00" ? (this.checkNull(vCtrnm[1]) ? "" : vCtrnm[1] + "분") : "",
@@ -93,7 +115,7 @@ fill: function() {
                         "오늘의 근태",
                     '</div>',
                     '<div class="state">',
-                        "정상근무(09:00~18:00)",
+                        vWorStatus + vFullTime,
                     '</div>',
                 '</div>',
                 '<div class="worktime">',
@@ -157,17 +179,6 @@ fill: function() {
 			this.spinner(false);
 		}.bind(this)
 	});
-},
-onceAfter: function() {
-
-	var list = this.$();
-	if (!list.data('jsp') && !this._gateway.isMobile()) {
-		list.jScrollPane({
-			resizeSensor: true,
-			verticalGutter: 0,
-			horizontalGutter: 0
-		});
-	}
 },
 changeLocale: function() {
 

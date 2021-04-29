@@ -968,7 +968,7 @@ sap.ui.define([
 				return true;
 			}
 
-			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") === 0){
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0){
 				MessageBox.error(oController.getBundleText("MSG_40025"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
@@ -1002,7 +1002,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //저장
 					
 					// 첨부파일 저장
-					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["001"]);
 					oSendData.Edoty = "1";
 					oSendData.Pernr = vPernr;
 					oSendData.Waers = "KRW";
@@ -1074,7 +1074,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //저장
 										
 					// 첨부파일 저장
-					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
+					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["001"]);
 					oSendData.Pernr = vPernr;
 					oSendData.Enddhe = Common.getUTCDateTime(oSendData.Enddhe);
 
@@ -1186,12 +1186,12 @@ sap.ui.define([
 				return ;
 			}
 
-			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0){
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0){
 				MessageBox.error(oController.getBundleText("MSG_40040"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
 
-			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0){
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") === 0){
 				MessageBox.error(oController.getBundleText("MSG_40041"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
@@ -1213,9 +1213,9 @@ sap.ui.define([
 					
 					// 첨부파일 저장
 					var uFiles = [];
-					for(var i=1; i<3; i++)	uFiles.push("00" + i);
+					for(var i=2; i<4; i++)	uFiles.push("00" + i);
 
-					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") !== 0) uFiles.push("003");
+					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
 					
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
 
@@ -1273,7 +1273,7 @@ sap.ui.define([
 					Mode: "S",
 					InfoMessage: vInfoMessage,
 					Editable: (!vStatus || vStatus === "AA") ? true : false
-				},"004");
+				},"001");
 			}else {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 내용요약
 					Required: true,
@@ -1281,7 +1281,7 @@ sap.ui.define([
 					Mode: "S",
 					UseMultiCategories: true,
 					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
-				},"001");
+				},"002");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
 					Required: true,
@@ -1289,7 +1289,7 @@ sap.ui.define([
 					Mode: "S",
 					UseMultiCategories: true,
 					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
-				},"002");
+				},"003");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
 					Required: true,
@@ -1297,7 +1297,7 @@ sap.ui.define([
 					Mode: "S",
 					UseMultiCategories: true,
 					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
-				},"003");
+				},"004");
 			}
 		},
 

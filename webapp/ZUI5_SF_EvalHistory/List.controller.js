@@ -135,15 +135,15 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				
 				var createData = {TableIn : []};
 					createData.IEmpid = oData.userId;
 					createData.IAppye = oData.Appye;
 					createData.IConType = "3";
 					
-				oModel.create("/EvalResultsSet", createData, null,
-					function(data){
+				oModel.create("/EvalResultsSet", createData, {
+					success: function(data){
 						if(data && data.TableIn) {
 							if(data.TableIn.results && data.TableIn.results.length){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -154,7 +154,7 @@ sap.ui.define([
 							}
 						} 
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 				    	
@@ -167,7 +167,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oTable.setVisibleRowCount((vData.Data.length >= 10 ? 10 : vData.Data.length));
 				oJSONModel.setData(vData);

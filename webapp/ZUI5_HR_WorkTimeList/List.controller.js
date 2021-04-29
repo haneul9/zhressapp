@@ -116,7 +116,7 @@ sap.ui.define([
 			var vData = [];
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {};
 				eval('createData.Worktime' + oData.Type + "Nav = [];");
 				
@@ -128,8 +128,8 @@ sap.ui.define([
 					createData.IOrgeh = oData.Orgeh;
 					createData.IEmpid = oData.Pernr;
 				
-				oModel.create("/WorktimeListSet", createData, null,
-					function(data, res){
+				oModel.create("/WorktimeListSet", createData, {
+					success: function(data, res){
 						if(data){
 							var data1 = eval("data.Worktime" + oData.Type + "Nav");
 							
@@ -157,7 +157,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -170,7 +170,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 					
 				eval("oController.makeContent" + oData.Type + "(oController, oLayout, vData);");
 

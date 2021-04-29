@@ -576,7 +576,7 @@ sap.ui.define([
 			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
 				fitContainer: true,
 				items: [
-					fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
+					fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
 				]
 			});
 				
