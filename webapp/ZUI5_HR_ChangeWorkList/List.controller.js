@@ -149,7 +149,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oJSONModel.setData(vData);
                     oTable.bindRows("/Data");
