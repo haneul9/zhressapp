@@ -158,7 +158,7 @@ sap.ui.define([
 									}
 									
 									if(oControl){
-										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px calendar-text");
+										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px font-bold calendar-text");
 										
 										if(data1[i].Offyn == "X"){
 											title.addStyleClass("color-info-red");

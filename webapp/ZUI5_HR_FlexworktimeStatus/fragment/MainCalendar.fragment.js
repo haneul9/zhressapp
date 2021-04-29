@@ -1,4 +1,4 @@
-sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
+sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 	/** Specifies the Controller belonging to this View. 
 	* In the case that it is not implemented, or that "null" is returned, this View does not have a Controller.
 	* @memberOf fragment.SelectMassn
@@ -7,7 +7,8 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 	createContent : function(oController) {
 		
 		var oRow, oCell;
-		var vHeader = [{title:oBundleText.getText("LABEL_48057"), width:"", noCalDay:"", sunday:"", saturday:""}, // 월
+		var vHeader = [{title:oBundleText.getText("LABEL_69004"), width:"", noCalDay:"X", sunday:"", saturday:""}, // 요일
+					   {title:oBundleText.getText("LABEL_48057"), width:"", noCalDay:"", sunday:"", saturday:""}, // 월
 		               {title:oBundleText.getText("LABEL_48058"), width:"", noCalDay:"", sunday:"", saturday:""}, // 화
 		               {title:oBundleText.getText("LABEL_48059"), width:"", noCalDay:"", sunday:"", saturday:""}, // 수
 		               {title:oBundleText.getText("LABEL_48060"), width:"", noCalDay:"", sunday:"", saturday:""}, // 목
@@ -20,8 +21,8 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 		
 		var oData = oController._ListCondJSonModel.getProperty("/Data");
 		
-		var y = oData.Year;
-		var m = parseInt(oData.Month) - 1;
+		var y = oData.Zyymm.substring(0,4);
+		var m = parseInt(oData.Zyymm.substring(4,6)) - 1;
 
 		var getLastDate = function(y, m) {
 			var last = [31,28,31,30,31,30,31,31,30,31,30,31];
@@ -61,7 +62,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 		}
 		
 		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-			columns : 7,
+			columns : vHeader.length,
 			widths : vWidths,
 			width : "100%"
 		});
@@ -74,15 +75,15 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 				content : [new sap.m.Text({text:vHeader[i].title}).addStyleClass("calendar-text")]
 			});
 			
-			if(i == 0) oCell.addStyleClass("calendar-TableHeader2-Start-mobile"); 
-			else oCell.addStyleClass("calendar-TableHeader2-mobile");
+			if(i == 0) oCell.addStyleClass("calendar-TableHeader2-Start"); 
+			else oCell.addStyleClass("calendar-TableHeader2");
 			
 			oRow.addCell(oCell);
 		}
 		oMatrix.addRow(oRow);
 		
 		for(var i=0; i<row; i++) {
-			oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "84px"});
+			oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "128px"});
 			
 			for (var j=0; j<vHeader.length; j++) {
 				var vCellId = oController.PAGEID;
@@ -118,11 +119,65 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 					content : oCellid
 				}).addStyleClass("calendar-Padding0");
 				
-				if(j==0) oCell.addStyleClass("calendar-TableData-Start-mobile");
-				else oCell.addStyleClass("calendar-TableData-mobile");
+				if(j==0) oCell.addStyleClass("calendar-TableData-Start");
+				else oCell.addStyleClass("calendar-TableData");
 				
 				if(vHeader[j].noCalDay) {
 					// 달력날짜 이외의 필드
+					oCellid.addContent(
+						new sap.ui.commons.layout.MatrixLayout({
+							columns : 1,
+							width : "100%",
+							rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+										height : "20px",
+										cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69003")})], // 일자
+													 hAlign : "Center",
+													 vAlign : "Middle"
+												 }).addStyleClass("calendar-datum")]
+									}),
+									new sap.ui.commons.layout.MatrixLayoutRow({
+										height : "20px",
+										cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69044")})], // 출/퇴근
+													 hAlign : "Center",
+													 vAlign : "Middle"
+												 })]
+									}),
+									new sap.ui.commons.layout.MatrixLayoutRow({
+										height : "20px",
+										cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69045")})], // 휴게시간
+													 hAlign : "Center",
+													 vAlign : "Middle"
+												 })]
+									}),
+									new sap.ui.commons.layout.MatrixLayoutRow({
+										height : "20px",
+										cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69010")})], // 소정근로
+													 hAlign : "Center",
+													 vAlign : "Middle"
+												 })]
+									}),
+									new sap.ui.commons.layout.MatrixLayoutRow({
+										height : "20px",
+										cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69046")})], // 연장/휴일
+													 hAlign : "Center",
+													 vAlign : "Middle"
+												 })]
+									}),
+									new sap.ui.commons.layout.MatrixLayoutRow({
+										height : "20px",
+										cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69005")})], // 근태
+													 hAlign : "Center",
+													 vAlign : "Middle"
+												 })]
+									})]
+						})
+					);
 				} else {
 					if(preLastDate >= startPreDate) {
 						// 이전달 필드
