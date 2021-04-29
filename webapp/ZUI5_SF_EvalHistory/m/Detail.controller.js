@@ -105,16 +105,16 @@ sap.ui.define(
 						}.bind(this)
 					)
 				]).then(function () {
-					BusyIndicator.hide();
 					this.getTemplateSCP.call(this,vdata);
 					this.getCapaData.call(this);
+					BusyIndicator.hide();
 				}.bind(this));
 			},
 
 			getCapaData : function(){
 				var oController=this;
 				var oChart = sap.ui.getCore().byId(this.PAGEID + "_Chart");
-				var oJSONModel2 = oChart.getModel();
+				var oJSONModel2 = this.oModel;
 				var vData2 = {Data2 : []};
 				
 				// 역량평가 점수 초기화
@@ -154,7 +154,7 @@ sap.ui.define(
 					}
 				);
 				
-				oJSONModel2.setProperty("/Data2",vData2);
+				oJSONModel2.setProperty("/Data2",vData2.Data2);
 				
 				if(this.Error == "E"){
 					this.Error = "";
