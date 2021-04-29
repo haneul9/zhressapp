@@ -21,7 +21,7 @@ sap.ui.define([
 				window["oLabel"+(i-17)] = oController.getTxtMobiles("LABEL_470"+i,i);
 			}
 			var oLabel39=oController.getTxtMobiles("LABEL_47087",56);
-			var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{PatiName}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
+			var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"100%",selectedKey:"{PatiName}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
 						formatter:function(fVal,fVal2){
 							if(fVal2==""){
 								return fVal=="X"?false:true;
@@ -29,7 +29,7 @@ sap.ui.define([
 								return false;
 							}
 						}}}).addStyleClass("height38px")
-						,oSelector2=new sap.m.Select(oController.PAGEID+"_dSel2",{width:"80%",selectedKey:"{HospType}",editable:{parts:[{path:"Close"},{path:"Status"}],
+						,oSelector2=new sap.m.Select(oController.PAGEID+"_dSel2",{width:"100%",selectedKey:"{HospType}",editable:{parts:[{path:"Close"},{path:"Status"}],
 						formatter:function(fVal,fVal2){
 							if(fVal2==""){
 								return fVal=="X"?false:true;
@@ -68,7 +68,7 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel2});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",editable:false,maxLength:13,value:"{RelationTx}",
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"100%",editable:false,maxLength:13,value:"{RelationTx}",
 			customData:new sap.ui.core.CustomData({key:"Rel",value:"{Relation}"}),editable:false})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -84,7 +84,7 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel4});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({showValueHelp: true,
-				width:"80%",
+				width:"100%",
                 valueHelpOnly: true,
 				value:"{HospName}",
                 valueHelpRequest: oController.onSearchMed,editable:{parts:[{path:"Close"},{path:"Status"}],
@@ -101,14 +101,14 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel5});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",editable:false,maxLength:13,value:"{Comid}",editable:false})});
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"100%",editable:false,maxLength:13,value:"{Comid}",editable:false})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel6});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",value:"{DiseName}",maxLength:50
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"100%",value:"{DiseName}",maxLength:50
 			,editable:{parts:[{path:"Close"},{path:"Status"}],
 			formatter:function(fVal,fVal2){
 				if(fVal2==""){
