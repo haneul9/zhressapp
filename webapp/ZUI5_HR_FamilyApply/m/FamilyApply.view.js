@@ -101,11 +101,7 @@ sap.ui.define([
 									path : "Apdat", 
 									type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 								},
-<<<<<<< HEAD
-								textAlign: "End"
-=======
 								textAlign: "Begin"
->>>>>>> zktw_mobiles
 							}),
 							new sap.m.Text({
 								text: "{StatusText}",
