@@ -75,9 +75,9 @@ sap.ui.define([
 			
 			oModel.create("/CultureImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
-
+					
 					if (oData && oData.CultureTableIn1) { //값을 제대로 받아 왔을 때
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.CultureTableIn1.results;
 						dataLength = rDatas1.length;

@@ -150,9 +150,9 @@ sap.ui.define([
 			
 			oModel.create("/RegalsealImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					
 					if (oData && oData.RegalsealTableIn1) { //값을 제대로 받아 왔을 때
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.RegalsealTableIn1.results;
 						dataLength = rDatas1.length;

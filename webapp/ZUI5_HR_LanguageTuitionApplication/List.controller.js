@@ -234,9 +234,9 @@ sap.ui.define([
 			
 			oModel.create("/LanguPayApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					
 					if (oData && oData.LanguPayApplyTableIn) { //값을 제대로 받아 왔을 때
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.LanguPayApplyTableIn.results;
 						dataLength = rDatas1.length;

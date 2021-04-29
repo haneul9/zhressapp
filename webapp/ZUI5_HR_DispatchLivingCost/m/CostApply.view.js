@@ -67,7 +67,8 @@ sap.ui.define([
 		
 		ApplyingBox: function(oController) {
             var oLocationCombo1 = new sap.m.ComboBox(oController.PAGEID + "_LocationCombo1", { // 파견지
-				width: "120px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				change: oController.checkLocation1.bind(oController),
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
@@ -94,7 +95,8 @@ sap.ui.define([
             }, oLocationCombo1);
 
             var oLocationCombo2 = new sap.m.ComboBox(oController.PAGEID + "_LocationCombo2", { // 파견지
-				width: "120px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "97%",
 				change: oController.checkLocation2.bind(oController),
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
@@ -121,7 +123,8 @@ sap.ui.define([
             }, oLocationCombo2);
 
             var oLocationCombo3 = new sap.m.ComboBox(oController.PAGEID + "_LocationCombo3", { // 기준지
-				width: "120px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				change: oController.checkLocation3.bind(oController),
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
@@ -148,7 +151,8 @@ sap.ui.define([
             }, oLocationCombo3);
 
             var oLocationCombo4 = new sap.m.ComboBox(oController.PAGEID + "_LocationCombo4", { // 기준지
-				width: "120px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				change: oController.checkLocation4.bind(oController),
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
@@ -175,7 +179,8 @@ sap.ui.define([
             }, oLocationCombo4);
 
             var oRangYearsB = new sap.m.ComboBox({
-				width: "145px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
 					formatter: function(v1, v2) {
@@ -201,7 +206,8 @@ sap.ui.define([
             }, oRangYearsB);
 
             var oRangMonthB = new sap.m.ComboBox({
-				width: "108px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "95%",
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
 					formatter: function(v1, v2) {
@@ -227,7 +233,8 @@ sap.ui.define([
             }, oRangMonthB);
 
             var oRangYearsE = new sap.m.ComboBox({
-				width: "145px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
 					formatter: function(v1, v2) {
@@ -253,7 +260,8 @@ sap.ui.define([
             }, oRangYearsE);
 
             var oRangMonthE = new sap.m.ComboBox({
-				width: "108px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "95%",
 				editable: {
 					parts: [{path: "Status"}, {path: "/EarlyApp"}],
 					formatter: function(v1, v2) {
@@ -279,7 +287,8 @@ sap.ui.define([
             }, oRangMonthE);
 
             var oEarlyYears = new sap.m.ComboBox(oController.PAGEID + "_EarlyYears", {
-				width: "145px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "/EarlyApp",
 					formatter: function(v) {
@@ -305,7 +314,8 @@ sap.ui.define([
             }, oEarlyYears);
 
             var oEarlyMonth = new sap.m.ComboBox(oController.PAGEID + "_EarlyMonth", {
-				width: "118px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "95%",
 				editable: {
 					path: "/EarlyApp",
 					formatter: function(v) {
@@ -366,7 +376,7 @@ sap.ui.define([
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_59005}", "105px", "Left", true).addStyleClass("sub-con-title"), // 파견지
                             oLocationCombo1,
-                            new sap.ui.core.Icon({ src: "sap-icon://arrow-right" }).addStyleClass("ml-3px mr-3px "),
+                            new sap.ui.core.Icon({ src: "sap-icon://arrow-right" }).addStyleClass("mx-3px"),
                             oLocationCombo2
 						]
 					}),
@@ -376,8 +386,8 @@ sap.ui.define([
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_59011}", "105px", "Left", true).addStyleClass("sub-con-title"), // 발령일자
 							new PickOnlyDatePicker(oController.PAGEID + "_AppDate", {
-                                width: "200px",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 dateValue: "{Zactdt}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 valueFormat: "yyyy-MM-dd",
@@ -398,7 +408,7 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_59006}", "105px", "Left", true).addStyleClass("sub-con-title"), // 기혼/미혼 여부
 							new sap.m.RadioButtonGroup(oController.PAGEID + "_RadioGroup", {
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
-								width: "250px",
+								width: "100%",
 								editable: {
 									parts: [{path: "Status"}, {path: "/EarlyApp"}],
 									formatter: function(v1, v2) {
@@ -440,7 +450,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_59015}", "105px", "Left", true).addStyleClass("sub-con-title"), // 거주지
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "266px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Zadres", false),
 								editable: {
 									parts: [{path: "Status"}, {path: "/EarlyApp"}],
@@ -475,7 +486,8 @@ sap.ui.define([
                             ViewTemplates.getLabel("header", "{i18n>LABEL_59016}", "105px", "Left", true).addStyleClass("sub-con-title"), // 비고
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "266px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Remark", false),
 								editable: {
 									parts: [{path: "Status"}, {path: "/EarlyApp"}],
@@ -496,8 +508,8 @@ sap.ui.define([
 										height: "40px",
 										alignItems: sap.m.FlexAlignItems.Center,
 										items: [
-											oRangYearsB.addStyleClass("mr-3px"),
-											oRangMonthB
+											oRangYearsB,
+											oRangMonthB.addStyleClass("ml-5px")
 										]
 									}),
 									new sap.m.HBox({
@@ -505,8 +517,8 @@ sap.ui.define([
 										alignItems: sap.m.FlexAlignItems.Center,
 										items: [
 											new sap.m.Text({text: "~"}),
-											oRangYearsE.addStyleClass("mx-3px"),
-											oRangMonthE
+											oRangYearsE,
+											oRangMonthE.addStyleClass("ml-5px")
 										]
 									})
 								]
@@ -518,8 +530,8 @@ sap.ui.define([
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_59009}", "105px", "Left", true).addStyleClass("sub-con-title"), // 조기 종료월
-                            oEarlyYears.addStyleClass("mr-3px"),
-							oEarlyMonth
+                            oEarlyYears,
+							oEarlyMonth.addStyleClass("ml-5px")
                         ]
                     }),
                     new sap.m.HBox({
@@ -545,7 +557,8 @@ sap.ui.define([
                         items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_59019}", "105px", "Left").addStyleClass("sub-con-title"),
                             new sap.m.Text({
-                                width: "auto",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 text: {
 									path: "Ztramt",
 									formatter: function(v) {
@@ -562,7 +575,8 @@ sap.ui.define([
                         items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_59010}", "105px", "Left").addStyleClass("sub-con-title"), // 회사 지원금액
                             new sap.m.Text({
-                                width: "auto",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 text: {
 									path: "Zcoamt",
 									formatter: function(v) {

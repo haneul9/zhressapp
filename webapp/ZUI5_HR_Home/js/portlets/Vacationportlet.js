@@ -121,9 +121,9 @@ fill: function() {
             
             oVacationData.forEach(function(e, i) {
                 var vKtext = e.Ktext, // 구분
-                    vAnzhl = parseInt(e.Anzhl), // 발생
-                    vKverb = parseInt(e.Kverb), // 사용
-                    vReman = parseInt(e.Reman); // 잔여
+                    vAnzhl = parseFloat(e.Anzhl), // 발생
+                    vKverb = parseFloat(e.Kverb), // 사용
+                    vReman = parseFloat(e.Reman); // 잔여
 
                 $('.vacationTable').append([
                 '<div style="display: flex; margin-bottom: 5px;">',

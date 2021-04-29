@@ -14,9 +14,9 @@ sap.ui.define([
             var oEduCombo = new sap.m.ComboBox(oController.PAGEID + "_EduCombo", { // 교육구분
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -39,9 +39,9 @@ sap.ui.define([
             var oTypeCombo = new sap.m.ComboBox(oController.PAGEID + "_TypeCombo", { // 교육유형
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -64,9 +64,9 @@ sap.ui.define([
             var oSelectCombo = new sap.m.ComboBox(oController.PAGEID + "_SelectCombo", { // 필수/선택
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -89,9 +89,9 @@ sap.ui.define([
             var oNomalCombo = new sap.m.ComboBox(oController.PAGEID + "_NomalCombo", { // 법정/일반
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -150,7 +150,7 @@ sap.ui.define([
                                         editable: {
                                             parts: [{path: "Status1"}, {path: "/TraningCheck"}],
                                             formatter: function(v1, v2) {
-                                                return v1 === "AA" || v2 === "Y";
+                                                return (!v1 || v1 === "AA") && v2 === "Y";
                                             }
                                         },
                                         value: "{Edkaj}"
@@ -168,6 +168,12 @@ sap.ui.define([
 									}).addStyleClass("button-search-icon mx-5px"),
 									new sap.m.CheckBox(oController.PAGEID + "_CheckBox", { 
                                         select: oController.onDInput.bind(oController),
+										selected: {
+											path: "/Checked",
+											formatter: function(v) {
+												return v === "X";
+											}
+										},
                                         layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         editable: {
                                             path: "Status1",
@@ -402,7 +408,7 @@ sap.ui.define([
 												if(v) return Common.numberWithCommas(v);
 												else return "0";
 											}
-										},
+										}
 									})
 								]
 							})
@@ -427,7 +433,7 @@ sap.ui.define([
 												if(v) return Common.numberWithCommas(v);
 												else return "0";
 											}
-										},
+										}
 									})
 								]
 							})
@@ -581,14 +587,14 @@ sap.ui.define([
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogApplyBtn.bind(oController),
-						text: "{i18n>LABEL_40060}", // 신청,
+						text: "{i18n>LABEL_40022}", // 신규저장,
 						visible: {
 							path: "Status1",
 							formatter: function(v) {
 								return !v;
 							}
 						}
-					}).addStyleClass("button-dark"),
+					}).addStyleClass("button-light"),
 					new sap.m.Button({
 						press: oController.onDialogSaveBtn.bind(oController),
 						text: "{i18n>LABEL_40022}", // 저장,

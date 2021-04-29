@@ -187,9 +187,9 @@ sap.ui.define([
 			
 			oModel.create("/SocialDonationImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					
 					if (oData && oData.SocialDonationTableIn1) {
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.SocialDonationTableIn1.results;
 						dataLength = rDatas1.length;

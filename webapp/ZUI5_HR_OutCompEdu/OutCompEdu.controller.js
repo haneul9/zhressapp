@@ -264,9 +264,9 @@ sap.ui.define([
 			
 			oModel.create("/TrainingOutApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					
 					if (oData && oData.TrainingOutApplyTableIn1) { //값을 제대로 받아 왔을 때
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.TrainingOutApplyTableIn1.results;
 						dataLength = rDatas1.length;
@@ -327,15 +327,26 @@ sap.ui.define([
 			var oView = $.app.byId("ZUI5_HR_OutCompEdu.OutCompEdu");
 
 			this.ApplyModel.setData({FormData: []});
-			this.AttModel.setData({Data: []});
-
+			
 			if (!this._ApplyModel) {
 				this._ApplyModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ReportApp", this);
 				oView.addDependent(this._ApplyModel);
 			}
-
+			var oAttTable = $.app.byId(this.PAGEID + "_AttTable");
+			
 			this.ApplyModel.setProperty("/FormData/Planx", this.getBundleText("MSG_40004"));
 			this.ApplyModel.setProperty("/FormData/Natio", "1");
+			this.ApplyModel.setProperty("/Checked", "");
+			this.AttModel.setData({
+				Data: [{
+					Stext1: this.getSessionInfoByKey("Stext"),
+					PGradeTxt: this.getSessionInfoByKey("PGradeTxt"),
+					Ename: this.getSessionInfoByKey("Ename"),
+					Objid: this.getSessionInfoByKey("name")
+				}]
+			});
+			oAttTable.setVisibleRowCount(1);
+
 			this.getCodeList();
 			this.onBeforeOpenDetailDialog("app");
 			this._ApplyModel.open();
@@ -391,7 +402,6 @@ sap.ui.define([
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
 			else
 				this.ApplyModel.setProperty("/TraningCheck", "X");
-			this.ApplyModel.setProperty("/FormData/Edkaj", "");
 		},
 
 		RegistTraning: function() { // 교육과정 Dialog
@@ -844,7 +854,7 @@ sap.ui.define([
 					var oAtt = oController.AttModel.getProperty("/Data");
 					var vLength = 5;
 
-					if(oAtt.some(function(e) {return e.Objid === o.Objid})) {
+					if(oAtt.some(function(e) {return e.Objid === o.Objid}) || oController.getUserId() === o.Objid) {
 						MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
 						return ;
 					}
@@ -953,11 +963,6 @@ sap.ui.define([
 				return true;
 			}
 
-			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Vatax"))){ // 부가세
-				MessageBox.error(oController.getBundleText("MSG_40023"), { title: oController.getBundleText("MSG_08107")});
-				return true;
-			}
-
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Planx"))){ // 전담교육
 				MessageBox.error(oController.getBundleText("MSG_40024"), { title: oController.getBundleText("MSG_08107")});
 				return true;
@@ -994,7 +999,7 @@ sap.ui.define([
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
 				//신청 클릭시 발생하는 이벤트
-				if (fVal && fVal == oController.getBundleText("LABEL_40060")) { //신청
+				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //저장
 					
 					// 첨부파일 저장
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["004"]);
@@ -1035,9 +1040,9 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40007"), {
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40009"), {
 				title: oController.getBundleText("LABEL_40001"),
-				actions: [oController.getBundleText("LABEL_40060"), oController.getBundleText("LABEL_00119")],
+				actions: [oController.getBundleText("LABEL_40022"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessApply
 			});
 		},

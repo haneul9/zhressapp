@@ -76,9 +76,9 @@
 			
 			oModel.create("/LeaveRequestSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					
 					if (oData && oData.TableIn1) {
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas = oData.TableIn1.results;
 						dataLength = rDatas.length;

@@ -128,9 +128,9 @@ sap.ui.define(
 				oModel.create("/CongratulationApplySet", sendObject, {
 					async: true,
 					success: function (oData, oResponse) {
-						var dataLength = 10;
-
+						
 						if (oData && oData.TableIn.results) {
+							var dataLength = 10;
 							//값을 제대로 받아 왔을 때
 							var rDatas = oData.TableIn.results;
 							dataLength = rDatas.length;

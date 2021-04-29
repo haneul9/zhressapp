@@ -24,7 +24,7 @@
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs");
+			return this.getSessionInfoByKey("Bukrs3");
         },
 		
 		onInit: function () {

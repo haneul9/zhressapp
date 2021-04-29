@@ -72,7 +72,8 @@ sap.ui.define([
 		ApplyingBox: function(oController) {
 
             var oNameCombo = new sap.m.ComboBox({ //성명
-				width: "200px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				change: oController.changeRelation.bind(oController),
 				editable: {
 					path: "Status",
@@ -99,7 +100,8 @@ sap.ui.define([
             }, oNameCombo);
 
             var oGubunCombo = new sap.m.ComboBox({ // 구분
-				width: "200px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -125,7 +127,8 @@ sap.ui.define([
             }, oGubunCombo);
 
             var oSchoolCombo = new sap.m.ComboBox({ // 학교구분
-				width: "200px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -151,7 +154,8 @@ sap.ui.define([
             }, oSchoolCombo);
 
             var oYearCombo = new sap.m.ComboBox({ // 등록년도
-				width: "200px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -177,7 +181,8 @@ sap.ui.define([
             }, oYearCombo);
 
             var oGradeCombo = new sap.m.ComboBox({ // 학년
-				width: "200px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -203,7 +208,8 @@ sap.ui.define([
             }, oGradeCombo);
 
             var oSemesterCombo = new sap.m.ComboBox({ // 등록학기/분기
-				width: "200px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -236,7 +242,8 @@ sap.ui.define([
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_38003}", "105px", "Left"), // 신청일
                             new sap.m.Text({
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								text: {
 									path: "Begda",
 									formatter: function(v) {
@@ -262,7 +269,8 @@ sap.ui.define([
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38004}", "105px", "Left", true), // 관계
 							new sap.m.Text({
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								text: "{RelationTx}",
                                 textAlign: "Begin"
 							})
@@ -299,7 +307,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38007}", "105px", "Left", true), // 학교명
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "SchoolName", false),
 								editable: {
 									path: "Status",
@@ -334,7 +343,8 @@ sap.ui.define([
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38016}", "105px", "Left", true), // 납부일자
 							new PickOnlyDatePicker(oController.PAGEID + "_AppDate", {
-                                width: "200px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 dateValue: "{Paydt}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 valueFormat: "yyyy-MM-dd",
@@ -356,7 +366,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38017}", "105px", "Left"), // 입학금
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "EreqAmt", false),
 								liveChange: oController.getCost1.bind(oController),
 								editable: {
@@ -383,7 +394,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38018}", "105px", "Left"), // 수업료
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "FreqAmt", false),
 								liveChange: oController.getCost2.bind(oController),
 								editable: {
@@ -410,7 +422,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38019}", "105px", "Left"), // 육성회비
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "UreqAmt", false),
 								liveChange: oController.getCost3.bind(oController),
 								editable: {
@@ -437,7 +450,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38021}", "105px", "Left"), // 학교운영지원비
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "DreqAmt", false),
 								liveChange: oController.getCost4.bind(oController),
 								editable: {
@@ -464,7 +478,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38022}", "105px", "Left"), // 학생회비
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "SreqAmt", false),
 								liveChange: oController.getCost5.bind(oController),
 								editable: {
@@ -491,7 +506,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38023}", "105px", "Left"), // 자율학습비
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "SsreqAmt", false),
 								liveChange: oController.getCost6.bind(oController),
 								editable: {
@@ -518,7 +534,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38024}", "105px", "Left"), // 보충수업
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "AreqAmt", false),
 								liveChange: oController.getCost7.bind(oController),
 								editable: {
@@ -546,7 +563,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38025}", "105px", "Left"), // 기타1
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "ReqAmt1", false),
 								liveChange: oController.getCost8.bind(oController),
 								editable: {
@@ -573,7 +591,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38009}", "105px", "Left", true), // 신청금액
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "ReqSum", false),
 								editable: false,
 								value: {
@@ -593,7 +612,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_38010}", "105px", "Left"), // 지원금액
 							new sap.m.Input({
 								textAlign: "End",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "AdmSum", false),
 								editable: false,
 								value: {
@@ -613,7 +633,8 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34021}", "105px", "Left", true), // 비고
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "200px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "EducationfundApplyTableIn", "Remark", false),
 								editable: {
 									path: "Status",

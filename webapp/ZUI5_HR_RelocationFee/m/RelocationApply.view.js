@@ -71,7 +71,8 @@
 		ApplyingBox: function(oController) {
 
             var oLocationCombo1 = new sap.m.ComboBox(oController.PAGEID + "_LocationCombo1", {
-				width: "105px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				change: oController.checkLocation1.bind(oController),
 				editable: {
 					path: "Status",
@@ -98,7 +99,8 @@
             }, oLocationCombo1);
 
             var oLocationCombo2 = new sap.m.ComboBox(oController.PAGEID + "_LocationCombo2", {
-				width: "105px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				change: oController.checkLocation2.bind(oController),
 				editable: {
 					path: "Status",
@@ -132,7 +134,7 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_34003}", "105px", "Left", true ), // 부임지									
                             oLocationCombo1,
-                            new sap.ui.core.Icon({ src: "sap-icon://arrow-right" }).addStyleClass("mx-12px"),
+                            new sap.ui.core.Icon({ src: "sap-icon://arrow-right" }).addStyleClass("mx-5px"),
                             oLocationCombo2
 						]
 					}),
@@ -209,7 +211,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34010}", "105px", "Left"), // 6세 이상
 							new sap.m.Input(oController.PAGEID + "_PersInput1", {
-								width: "50px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								textAlign: "End",
 								value: {
 									path: "Zolda6",
@@ -263,7 +266,8 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_34012}", "105px", "Left"), // 6세 미만
 							new sap.m.Input(oController.PAGEID + "_PersInput2", {
-								width: "50px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								textAlign: "End",
 								value: {
 									path: "Zunda6",
@@ -307,7 +311,8 @@
 							}),
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "NewPostTableIn1", "Ztexme", false),
 								liveChange: oController.InputTransCost2.bind(oController),
 								visible: {
@@ -332,7 +337,8 @@
 								}
 							}),
 							new sap.m.Text({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								visible: {
 									path: "/Bukrs",
 									formatter: function(v) {
@@ -362,7 +368,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34028}", "105px", "Left"), // 일비
 							new sap.m.Text({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 text: {
 									parts: [
 										{path: "Zdexme"},
@@ -386,7 +393,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34016}", "105px", "Left"), // 이전 준비금
 							new sap.m.Text({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 text: {
 									path: "Ztsrsv",
 									formatter: function(v) {
@@ -403,7 +411,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34017}", "105px", "Left"), // 가재 운송비
 							new sap.m.Input(oController.PAGEID + "_CostInput", {
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 value: {
                                     path: "Zmvcst",
                                     formatter: function(v) {
@@ -447,7 +456,8 @@
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34020}", "105px", "Left"), // 인사발령
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "NewPostTableIn1", "Zactnm", false),
 								editable: {
 									path: "Status",
@@ -467,7 +477,8 @@
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34021}", "105px", "Left"), // 비고
 							new sap.m.Input({
 								textAlign: "Begin",
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "NewPostTableIn1", "Remark", false),
 								editable: {
 									path: "Status",
