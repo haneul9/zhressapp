@@ -165,13 +165,15 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 							        			 	text : {
 							        			 		parts : [{path : "Ctrnm"}, {path : "Tottm"}, {path : "Notes"}],
 							        			 		formatter : function(fVal1, fVal2, fVal3){
-							        			 			this.removeStyleClass("color-info-red color-blue");
+							        			 			this.removeStyleClass("color-info-red color-blue color-darkgreen");
 							        			 			
 							        			 			if(fVal1 && fVal2){
 							        			 				if(fVal1.replace(":", "") > fVal2.replace(":", "")){
+							        			 					this.addStyleClass("color-blue");
+							        			 				} else if(fVal1.replace(":", "") < fVal2.replace(":", "")) {
 							        			 					this.addStyleClass("color-info-red");
 							        			 				} else {
-							        			 					this.addStyleClass("color-blue");
+							        			 					this.addStyleClass("color-darkgreen");
 							        			 				}
 							        			 			}
 							        			 			
@@ -236,16 +238,44 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 						{id: "Enduz", label: oBundleText.getText("LABEL_69007"), plabel: "", resize: true, span: 0, type: "timepicker", sort: true, filter: true},
 						{id: "Lnctm", label: oBundleText.getText("LABEL_69008"), plabel: "", resize: true, span: 0, type: "combobox", sort: true, filter: true},
 						{id: "Adbtm", label: oBundleText.getText("LABEL_69009"), plabel: "", resize: true, span: 0, type: "input", sort: true, filter: true},
-						// 소정근로, 연장근로, 휴일근로
+						// 소정근로, 연장근로, 휴일근로, 변경
 						{id: "Wrktm", label: oBundleText.getText("LABEL_69010"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
 						{id: "Exttm", label: oBundleText.getText("LABEL_69011"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
-						{id: "Holtm", label: oBundleText.getText("LABEL_69012"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true}];
+						{id: "Holtm", label: oBundleText.getText("LABEL_69012"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+						{id: "", label: oBundleText.getText("LABEL_69050"), plabel: "", resize: true, span: 0, type: "change", sort: true, filter: true, width : "60px"}];
 		
 		oController.makeTable(oController, oTable, col_info);
 		
+		var oIcontabbar = new sap.m.IconTabBar(oController.PAGEID + "_Icontabbar", {
+            expandable: false,
+            expanded: true,
+            backgroundDesign: "Transparent",
+            items: [
+                new sap.m.IconTabFilter({
+                    key: "1",
+                    text: "List",
+                    design: "Vertical",
+                    content: [oTable]
+                }),
+                new sap.m.IconTabFilter({
+                    key: "2",
+                    text: "Calendar",
+                    design: "Vertical",
+                    content: [new sap.m.Toolbar({
+					        	  height : "40px",
+					        	  content : [new sap.m.Text({text : oBundleText.getText("LABEL_69042"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px"), // 승인완료
+					        			     new sap.m.Text({text : oBundleText.getText("LABEL_69043"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px")] // 변경신청
+					          }).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0"),
+					          new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar").addStyleClass("pt-10px")]
+                })
+            ],
+            select: oController.onPressSearch,
+            content: []
+        }).addStyleClass("tab-group mt-16px");
+		
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,
-			            contentItems: [oFilter, oMatrix1, oTable]
+			            contentItems: [oFilter, oMatrix1, oIcontabbar]
 			        });
 			        
 		oPage.setModel(oController._ListCondJSonModel);

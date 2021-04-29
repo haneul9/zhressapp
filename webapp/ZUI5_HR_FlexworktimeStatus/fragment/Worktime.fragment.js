@@ -5,11 +5,17 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 	*/
 
 	createContent : function(oController) {
-		var onChangeTime = function(oEvent){
+		var onChangeTime = function(oEvent, m){
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
+			} else if(oEvent && m){
+				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					oEvent.getSource().setValue("");
+					return;
+				}
 			}
 		};
 		
@@ -29,10 +35,12 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 													valueFormat : "HHmm",
 													displayFormat : "HH:mm",
 										        	value : "{Beguz}",
-										        	minutesStep : 10,
+										        	minutesStep : 30,
 										        	width : "100%", 
 										        	textAlign : "Begin",
-				                                	change : onChangeTime
+				                                	change : function(oEvent){
+				                                		onChangeTime(oEvent, "30");
+				                                	}
 												})],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
@@ -53,7 +61,9 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 										        	minutesStep : 10,
 										        	width : "100%", 
 										        	textAlign : "Begin",
-				                                	change : onChangeTime
+				                                	change : function(oEvent){
+				                                		onChangeTime(oEvent, "10");
+				                                	}
 												})],
 									 hAlign : "Begin",
 									 vAlign : "Middle"

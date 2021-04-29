@@ -30,7 +30,7 @@
                                 else return true;
                             }
                         }
-                    }).addStyleClass("button-light-sm")
+                    }).addStyleClass("button-light")
                 ]
             })
             .addStyleClass("info-box mb-10px")

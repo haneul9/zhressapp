@@ -112,6 +112,7 @@ sap.ui.define([
 			this._ListCondJSonModel.setData({Data:oController.getView().getModel("session").getData()});
 			oController._SessionData=oController.getView().getModel("session").getData();
 			var oSessionData=oController._SessionData;
+			oController._SelData={Sel1:[],Sel2:[],Sel3:[],Sel4:[],Sel5:[],Sel6:[]};
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
 			oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,Datum:new Date(),MedicalBukrsExport:[]}, null,

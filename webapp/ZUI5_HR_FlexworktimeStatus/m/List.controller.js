@@ -93,6 +93,9 @@ sap.ui.define([
 				oCalendar.destroyItems();
 				oCalendar.addItem(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", oController));
 			
+			oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", "0");
+			oController._ListCondJSonModel.setProperty("/Data/Tottmtx", "-");
+			
 			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
 			var oJSONModel1 = oTable1.getModel();
 			var vData1 = {Data : []};
@@ -129,11 +132,21 @@ sap.ui.define([
 										  {text : oBundleText.getText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
 										  {text : oBundleText.getText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
 										  {text : oBundleText.getText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
-										  {text : oBundleText.getText("LABEL_69031"), field : "Tottm"}]; // 근로시간 합계
+										  /*{text : oBundleText.getText("LABEL_69031"), field : "Tottm"}*/]; // 근로시간 합계
 										  
 							for(var i=0; i<oField.length; i++){ 
 								vData3.Data.push({Text : oField[i].text, Value : eval("data." + oField[i].field)});
 							}
+							
+							// 총근로시간
+							oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", data.Ctrnm.split(":")[0]);
+							$('.progress-bar').animate({ width: ((parseInt(data.Tottm.split(":")[0]) / parseInt(data.Ctrnm.split(":")[0])) * 80) + '%' }, 2000);
+							
+							oController._ListCondJSonModel.setProperty("/Data/Tottmtx", 
+								data.Tottm == "" ? "-" :
+									data.Tottm.split(":")[0] + oBundleText.getText("LABEL_69052") + " " + data.Tottm.split(":")[1] + oBundleText.getText("LABEL_69053")
+																//	시간															 // 분
+							);
 							
 							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results){
 								var data1 = data.FlexWorktime1Nav.results;
@@ -158,7 +171,7 @@ sap.ui.define([
 									}
 									
 									if(oControl){
-										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px calendar-text");
+										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px font-bold calendar-text");
 										
 										if(data1[i].Offyn == "X"){
 											title.addStyleClass("color-info-red");
@@ -236,12 +249,50 @@ sap.ui.define([
 								}
 							}
 							
+							// 휴가쿼터 현황
 							if(data.FlexWorktime3Nav && data.FlexWorktime3Nav.results){
 								var data3 = data.FlexWorktime3Nav.results;
-								
+								var oKtext = [], oCrecnt = [], oUsecnt = [], oBalcnt = [];
+
 								for(var i=0; i<data3.length; i++){
+									oKtext.push(data3[i].Ktext);
+									oCrecnt.push(parseFloat(data3[i].Crecnt));
+									oUsecnt.push(parseFloat(data3[i].Usecnt));
+									oBalcnt.push(parseFloat(data3[i].Balcnt));
+									
 									vData1.Data.push(data3[i]);
 								}
+								
+								var chart = new Chart(document.getElementById('vacChart').getContext('2d'), {
+					                type: 'bar',
+					                data: { 
+					                    labels: oKtext, 
+					                    datasets: [
+					                        { 
+					                            label: '사용',
+					                            barPercentage: 0.6,
+					                            categoryPercentage: 0.6,
+					                            backgroundColor: 'rgb(130,235,55)', 
+					                            borderColor: 'rgb(255, 99, 132)',
+					                            data: oUsecnt
+					                        },
+					                        {
+					                            label: '잔여',
+					                            barPercentage: 0.6,
+					                            categoryPercentage: 0.6,
+					                            backgroundColor: 'rgb(50,118,234)',
+					                            borderColor: 'rgb(255, 99, 132)',
+					                            data: oBalcnt
+					                        }
+					                    ]
+					                },
+					                options: {
+					                    categoryPercentage: 1.0,
+					                    barPercentage: 0.5
+					                }
+					            });
+					            
+					            $('.ChartClass').append([chart]);
 							}
 							
 							if(data.FlexWorktime4Nav && data.FlexWorktime4Nav.results){

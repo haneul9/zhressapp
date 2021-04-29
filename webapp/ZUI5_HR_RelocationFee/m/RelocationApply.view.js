@@ -142,7 +142,7 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34006}", "105px", "Left", true ), // 발령일자
 							new PickOnlyDatePicker(oController.PAGEID + "_AppDate", {
-                                width: "250px",
+                                width: "100%",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 change: oController.getCriteria.bind(oController),
                                 dateValue: "{Zactdt}",
@@ -165,7 +165,7 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34004}", "105px", "Left", true ),  // 가족동반 여부
 							new sap.m.RadioButtonGroup(oController.PAGEID + "_RadioGroup", {
-                                width: "250px",
+                                width: "100%",
                                 editable: {
                                     path: "Status",
                                     formatter: function(v) {

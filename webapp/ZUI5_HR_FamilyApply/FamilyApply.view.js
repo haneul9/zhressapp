@@ -57,7 +57,7 @@ sap.ui.jsview("ZUI5_HR_FamilyApply.FamilyApply", {
 			showOverlay: false,
 			showNoData: true,
 			width: "auto",
-			noData: "{i18n>MSG_05001}"
+			noData: "{i18n>LABEL_00901}"
 		}).addStyleClass("mt-8px").attachCellClick(oController.onSelectedRow);
 
 		oRow=new sap.ui.commons.layout.MatrixLayoutRow();

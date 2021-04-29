@@ -86,20 +86,36 @@ sap.ui.define([
 			}
 		},
 		
+		handleIconTabBarSelect : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			var key = sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").getSelectedKey();
+			
+		},
+		
 		onPressSearch : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
-			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
-			var oJSONModel = oTable.getModel();
+			var key = sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").getSelectedKey();
+			
 			var vData = {Data : []}, vData2 = [];
 			
-			var column = oTable.getColumns();
-			for(var i=0; i<column.length; i++){
-				column[i].setSorted(false);
-				column[i].setFiltered(false);
+			if(key == "1"){
+				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
+				var oJSONModel = oTable.getModel();
+				
+				var column = oTable.getColumns();
+				for(var i=0; i<column.length; i++){
+					column[i].setSorted(false);
+					column[i].setFiltered(false);
+				}
+			} else {
+				var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_Calendar");
+					oLayout.destroyContent();
 			}
 			
 			var search = function(){
@@ -189,11 +205,15 @@ sap.ui.define([
 					}
 				);
 				
-				oJSONModel.setData(vData);
-				oTable.bindRows("/Data");
-				
-				var row = parseInt((window.innerHeight - 355) / 37);
-				oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
+				if(key == "1"){
+					oJSONModel.setData(vData);
+					oTable.bindRows("/Data");
+					
+					var row = parseInt((window.innerHeight - 430) / 37);
+					oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
+				} else {
+					oController.addCalendar(oController, oLayout, vData.Data);
+				}
 				
 				oController._ListCondJSonModel.setProperty("/Data2", vData2);
 				
@@ -207,11 +227,14 @@ sap.ui.define([
 			}
 			
 			// 테이블 내 수정 플래그 값이 존재하는 경우, confirm message 출력 이후 조회처리
-			var tabledata = oJSONModel.getProperty("/Data"), oMonyn = "";
-			if(tabledata){
-				for(var i=0; i<tabledata.length; i++){
-					if(tabledata[i].Monyn != ""){
-						oMonyn = tabledata[i].Monyn;
+			var oMonyn = "";
+			if(key == "1"){
+				var tabledata = oJSONModel.getProperty("/Data");
+				if(tabledata){
+					for(var i=0; i<tabledata.length; i++){
+						if(tabledata[i].Monyn != ""){
+							oMonyn = tabledata[i].Monyn;
+						}
 					}
 				}
 			}
@@ -230,6 +253,140 @@ sap.ui.define([
 					}
 				});
 			}
+		},
+		
+		addCalendar : function(oController, oLayout, oData){
+			oLayout.addContent(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", oController));
+			
+			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
+			var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
+			
+			var makeData = function(time, time2, flag){
+				time = time.replace(":", "");
+				time = (time && time != "") ? time.substring(0,2) + ":" + time.substring(2,4) : "";
+				
+				if(time2){
+					time = time == "" ? "" : (time + flag);
+					time = time + (time2 == "" ? "" : (time2.substring(0,2) + ":" + time2.substring(2,4)));
+				}
+						
+				return new sap.ui.commons.layout.MatrixLayoutRow({
+						   height : "20px",
+						   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+										content : [new sap.m.Text({text : time})],
+										hAlign : "Center",
+										vAlign : "Middle"
+									})]
+					   });
+			};
+			
+			for(var i=0; i<oData.length; i++){
+				var oControl = sap.ui.getCore().byId(oController.PAGEID + "_" + dateFormat.format(oData[i].Datum));
+				
+				if(oControl){
+					var title = new sap.m.Text({text : dateFormat2.format(oData[i].Datum)}).addStyleClass("font-bold");
+					if(oData[i].Offyn == "X"){
+						title.addStyleClass("color-red");
+					}
+					
+					var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+						  columns : 1,
+						  width : "100%",
+						  rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+								  	  height : "20px",
+								  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+										  	  	   content : [title],
+										  	  	   hAlign : "Center",
+										  	  	   vAlign : "Middle"
+										  	   }).addStyleClass("calendar-datum")] 
+								  })]
+					});
+					
+					// 출/퇴근
+					oMatrix.addRow(makeData(oData[i].Beguz, oData[i].Enduz, " ~ "));
+					// 추가휴게
+					oMatrix.addRow(makeData(oData[i].Brktot));
+					// 소정근로
+					oMatrix.addRow(makeData(oData[i].Wrktm));
+					// 연장/휴일
+					oMatrix.addRow(makeData(oData[i].Exttm, oData[i].Holtm, "/"));
+					// 근태
+					oMatrix.addRow(
+						new sap.ui.commons.layout.MatrixLayoutRow({
+							height : "20px",
+							cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+										 content : [new sap.m.Text({
+													 	text : oData[i].Atext,
+													 	width : "100%",
+													 	textAlign : "Center"
+													}).addStyleClass((oData[i].Atext == "" ? "" : "calendar-background-atext FontWhite cursor-pointer"))],
+										 hAlign : "Center",
+										 vAlign : "Middle"
+								 	 })]
+						})
+					);
+					
+					oControl.addContent(oMatrix);
+					
+					if(oData[i].Offyn != "X"){
+						oControl.addStyleClass("cursor-pointer");
+					}
+					
+					oControl.attachBrowserEvent("click", oController.onSelectDate);
+					
+					var oJSONModel = new sap.ui.model.json.JSONModel();
+						oJSONModel.setData({Data : oData[i]});
+					oControl.setModel(oJSONModel);
+				}
+			}
+		},
+		
+		onChangeSchedule : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			var oData = oEvent.getSource().getCustomData()[0].getValue();
+			
+			if(oData.Alldf == true || oData.Offyn == "X") return;
+			
+			if(!oController._WorkScheduleDialog){
+				oController._WorkScheduleDialog = sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", oController);
+				oView.addDependent(oController._WorkScheduleDialog);
+			}
+			
+			var oJSONModel = oController._WorkScheduleDialog.getModel();
+			
+			oController.setBreak(oData.Datum, oData.Offyn, "2");
+			
+			oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")}));
+			
+			oController._WorkScheduleDialog.open();
+		},
+		
+		onSelectDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			var oControl = sap.ui.getCore().byId(oEvent.currentTarget.id);
+			if(oControl == undefined) return;
+			
+			var oJSONModel = oControl.getModel();
+			var oData = oJSONModel.getProperty("/Data");
+			
+			if(oData.Alldf == true || oData.Offyn == "X") return;
+			
+			if(!oController._WorkScheduleDialog){
+				oController._WorkScheduleDialog = sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", oController);
+				oView.addDependent(oController._WorkScheduleDialog);
+			}
+			
+			var oJSONModel = oController._WorkScheduleDialog.getModel();
+			
+			oController.setBreak(oData.Datum, oData.Offyn, "2");
+			
+			oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Title : oBundleText.getText("LABEL_69048"), Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")})); // 근무 변경
+			
+			oController._WorkScheduleDialog.open();
 		},
 		
 		searchOrgehPernr : function(oController){
@@ -273,17 +430,27 @@ sap.ui.define([
 			return last[m];
 		},
 		
-		onChangeTime : function(oEvent){
+		onChangeTime : function(oEvent, m){
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
+			} else if(oEvent && m){
+				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					oEvent.getSource().setValue("");
+					return;
+				}
 			}
 			
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
-			oController.onChangeModyn(oEvent);
+			if(oController._WorkScheduleDialog && oController._WorkScheduleDialog.isOpen() == true){
+				
+			} else {
+				oController.onChangeModyn(oEvent);
+			}
 		},
 		
 		onTableSelectAll : function(oEvent){
@@ -344,23 +511,16 @@ sap.ui.define([
 			oJSONModel.setProperty("/Data/" + oData.Idx + "/Monyn", (oData.Modyn == "1" ? "1" : (oData.Monyn == "2" ? "3" : "1")));
 		},
 		
-		// 추가휴게시간
-		openAddBreak : function(oEvent){
+		// 추가휴게시간 데이터 세팅
+		setBreak : function(oDatum, oOffyn, Flag){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
-		
-			var oData = oEvent.getSource().getCustomData()[0].getValue();
-			
-			if(!oController._AddBreakDialog){
-				oController._AddBreakDialog = sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.AddBreak", oController);
-				oView.addDependent(oController._AddBreakDialog);
-			}
 			
 			var oData2 = oController._ListCondJSonModel.getProperty("/Data2"), vData = [];
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			
 			for(var i=0; i<oData2.length; i++){
-				if(dateFormat.format(oData2[i].Datum) == dateFormat.format(oData.Datum)){
+				if(dateFormat.format(oData2[i].Datum) == dateFormat.format(oDatum)){
 					vData.push(oData2[i]);
 				}
 			}
@@ -381,52 +541,78 @@ sap.ui.define([
 			
 			if(vData.length == 0){
 				for(var i=0; i<5; i++){
-					tableData.Data.push({Datum : oData.Datum, Beguz : "", Enduz : ""});
+					tableData.Data.push({Idx : (tableData.Data.length), Datum : oDatum, Beguz : "", Enduz : "", Offyn : oOffyn});
 				}
 				
-				data.Data.push({Datum : oData.Datum, Austy : "A"});
+				data.Data.push({Datum : oDatum, Austy : "A", Offyn : oOffyn});
 			} else {
 				for(var i=0; i<vData.length; i++){
 					if(vData[i].Austy == "A"){
 						if(tableData.Data.length < 5){
 							var length = 5 - tableData.Data.length;
 							for(var j=0; j<length; j++){
-								tableData.Data.push({Datum : oData.Datum, Beguz : "", Enduz : ""});
+								tableData.Data.push({Idx : (tableData.Data.length), Datum : oDatum, Beguz : "", Enduz : "", Offyn : oOffyn});
 							}
 						}
 						
-						data.Data.push(Object.assign({}, vData[i]));
+						data.Data.push(Object.assign({Offyn : oOffyn}, vData[i]));
 						break;
 					}
 					
-					tableData.Data.push(Object.assign({}, vData[i]));
+					tableData.Data.push(Object.assign({Idx : (tableData.Data.length), Offyn : oOffyn}, vData[i]));
 				}
 			}
 			
-			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddBreakTable");
+			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddBreakTable" + (Flag == "1" ? "" : Flag));
 			var oJSONModel = oTable.getModel();
 				oJSONModel.setData(tableData);
 			
 			oTable.setVisibleRowCount(tableData.Data.length);
 			oTable.bindRows("/Data");
 			
-			oController._AddBreakDialog.getModel().setData(data);
+			if(Flag == "1"){
+				oController._AddBreakDialog.getModel().setData(data);
+			} else {
+				data.Data[0].Offyn = oOffyn;
+				oController._WorkScheduleDialog.getModel().setData(data);
+			}
+		},
+		
+		// 추가휴게시간
+		openAddBreak : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+		
+			var oData = oEvent.getSource().getCustomData()[0].getValue();
+			
+			if(!oController._AddBreakDialog){
+				oController._AddBreakDialog = sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.AddBreak", oController);
+				oView.addDependent(oController._AddBreakDialog);
+			}
+			
+			oController.setBreak(oData.Datum, oData.Offyn, "1");
+		
 			oController._AddBreakDialog.open();
 		},
 		
 		// 추가휴게시간 - 시간계산
-		onChangeTime2 : function(oEvent){
+		onChangeTime2 : function(oEvent, oTable){
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
+			} else if(oEvent && oEvent.getParameters().value != ""){
+				if(parseInt(oEvent.getParameters().value.substring(2,4)) % 10 != 0){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", "10")); // 시간은 MM분 단위로 입력하여 주십시오.
+					oEvent.getSource().setValue("");
+					return;
+				}
 			}
 			
 			var calTime = function(){
 				var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 				var oController = oView.getController();
 				
-				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddBreakTable");
 				var oJSONModel = oTable.getModel();
 				var oData2 = oJSONModel.getProperty("/Data");
 				
@@ -460,6 +646,7 @@ sap.ui.define([
 								
 								for(var i=0; i<data2.length; i++){
 									data2[i].Datum = data2[i].Datum ? new Date(common.Common.setTime(data2[i].Datum)) : null;
+									data2[i].Offyn = oData2[0].Offyn;
 									
 									if(data2[i].Austy == "A"){
 										vData2.Data.push(data2[i]);
@@ -492,7 +679,16 @@ sap.ui.define([
 				oJSONModel.setData(vData);
 				oTable.bindElement("/Data");
 				
-				oController._AddBreakDialog.getModel().setData(vData2);
+				if(oTable.sId == oController.PAGEID + "_AddBreakTable"){
+					oController._AddBreakDialog.getModel().setData(vData2);
+				} else if(oTable.sId == oController.PAGEID + "_AddBreakTable2"){
+					var oMonyn = oController._WorkScheduleDialog.getModel().getProperty("/Data/0/Monyn");
+						oMonyn = (!oMonyn || oMonyn == "") ? "2" : (oMonyn == "1" ? "3" : "2");
+					
+					vData2.Data[0] = Object.assign({}, oController._WorkScheduleDialog.getModel().getProperty("/Data/0"), {Adbtm : vData2.Data[0].Adbtm, Monyn : oMonyn});
+					
+					oController._WorkScheduleDialog.getModel().setData(vData2);
+				} 
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -586,34 +782,31 @@ sap.ui.define([
 		},
 		
 		// 휴게시간 삭제
-		onDeleteBreak : function(oEvent){
+		onDeleteBreak : function(oEvent, oTable){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();	
 			
-			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddBreakTable");
+			// var oTable = sap.ui.getCore().byId(oController.PAGEID + "_AddBreakTable");
 			var oJSONModel = oTable.getModel();
-			var oIndices = oTable.getSelectedIndices();
-			
-			if(oIndices.length == 0){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_69003")); // 삭제할 데이터를 선택하여 주십시오.
-				return;
-			}
+			var oData = oEvent.getSource().getCustomData()[0].getValue();
 			
 			var onProcess = function(){
-				for(var i=0; i<oIndices.length; i++){
-					var sPath = oTable.getContextByIndex(oIndices[i]).sPath;
-					
-					oJSONModel.setProperty(sPath + "/Beguz", "");
-					oJSONModel.setProperty(sPath + "/Enduz", "");
-					oJSONModel.setProperty(sPath + "/Adbtm", "");
-					oJSONModel.setProperty(sPath + "/Notes", "");
-				}
+				oJSONModel.setProperty("/Data/" + oData.Idx + "/Beguz", "");
+				oJSONModel.setProperty("/Data/" + oData.Idx + "/Enduz", "");
+				oJSONModel.setProperty("/Data/" + oData.Idx + "/Adbtm", "");
+				oJSONModel.setProperty("/Data/" + oData.Idx + "/Notes", "");
 				
 				// 휴게시간 재계산
-				oController.onChangeTime2();
+				oController.onChangeTime2(null, oTable);
+				
+				if(oTable.sId == oController.PAGEID + "_AddBreakTable2"){
+					var oMonyn = oController._WorkScheduleDialog.getModel().getProperty("/Data/0/Monyn");
+						oMonyn = (!oMonyn || oMonyn == "") ? "2" : (oMonyn == "1" ? "3" : "2");
+						
+					oController._WorkScheduleDialog.getModel().setProperty("/Data/0/Monyn", oMonyn);	
+				}
 				
 				oController._BusyDialog.close();
-				sap.m.MessageBox.success(oBundleText.getText("MSG_00021")); // 삭제되었습니다.
 			}
 			
 			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00059"), { // 삭제하시겠습니까?
@@ -724,6 +917,93 @@ sap.ui.define([
 			});
 		},
 		
+		// 과거근무 변경신청/근무 변경 → 신청
+		onSaveWorkSchedule : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			var oData = oController._WorkScheduleDialog.getModel().getProperty("/Data/0");
+			
+			var onProcess = function(){
+				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
+					createData.Werks = oController._ListCondJSonModel.getProperty("/Data/Werks");
+					createData.Pernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
+					createData.Zyymm = oController._ListCondJSonModel.getProperty("/Data/Zyymm");
+					createData.Prcty = "2";
+					
+				var detail = {};
+					detail.Datum = "\/Date(" + common.Common.adjustGMT(oData.Datum) + ")\/";
+					detail.Beguz = oData.Beguz;
+					detail.Enduz = oData.Enduz;
+					detail.Lnctm = oData.Lnctm;
+					detail.Adbtm = oData.Adbtm ? oData.Adbtm.replace(":", "") : "";
+					detail.Monyn = oData.Monyn;
+				
+				createData.FlexWorktime1Nav.push(detail);
+				
+				var oData2 = sap.ui.getCore().byId(oController.PAGEID + "_AddBreakTable2").getModel().getProperty("/Data");
+				for(var i=0; i<oData2.length; i++){
+					if(oData2[i].Austy == "A" || (oData2[i].Beguz == "" && oData2[i].Enduz == "")) continue;
+					
+					var detail = {};
+						detail.Datum = "\/Date(" + common.Common.getTime(oData2[i].Datum) + ")\/";
+						detail.Beguz = oData2[i].Beguz;
+						detail.Enduz = oData2[i].Enduz;
+						detail.Adbtm = oData2[i].Adbtm ? oData2[i].Adbtm.replace(":", "") : "";
+						detail.Notes = oData2[i].Notes;
+					
+					createData.FlexWorktime2Nav.push(detail);
+				}
+				
+				oModel.create("/FlexworktimeSummarySet", createData, null,
+					function(data, res){
+						if(data){
+							
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				oController._BusyDialog.close();
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
+				
+				sap.m.MessageBox.success(oBundleText.getText("MSG_00061"), { // 신청되었습니다.
+					onClose : function(oEvent){
+						oController._WorkScheduleDialog.close();
+						oController.onPressSearch();
+					}
+				});
+			};
+			
+			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00060"), { // 신청하시겠습니까?
+				actions : ["YES", "NO"],
+				onClose : function(fVal){
+					if(fVal && fVal == "YES"){
+						oController._BusyDialog.open();
+						setTimeout(onProcess, 100);
+					}
+				}
+			});
+		},
+		
 		onPressSave : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
@@ -810,6 +1090,16 @@ sap.ui.define([
 			});
 		},
 		
+		onDeleteData : function(oEvent, oTable){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			var oJSONModel = oTable.getModel();
+			var oData = oEvent.getSource().getCustomData()[0].getValue();
+			
+			
+		},
+		
 		makeTable : function(oController, oTable, col_info){
 			for(var i=0; i<col_info.length; i++){
 				var oColumn = new sap.ui.table.Column({
@@ -858,7 +1148,7 @@ sap.ui.define([
 											valueFormat : "HHmm",
 											displayFormat : "HH:mm",
 								        	value : "{" + col_info[i].id + "}",
-								        	minutesStep : 10,
+								        	minutesStep : 30,
 								        	width : "100%", 
 								        	textAlign : "Begin",
 		                                	editable : {
@@ -868,7 +1158,9 @@ sap.ui.define([
 			                                    }
 		                                	},
 		                                	customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
-		                                	change : oController.onChangeTime
+		                                	change : function(oEvent){
+		                                		oController.onChangeTime(oEvent, "30");
+		                                	}
 										});
 						} else {
 							oTemplate = new sap.m.TimePicker({
@@ -885,7 +1177,9 @@ sap.ui.define([
 			                                    }
 		                                	},
 		                                	customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
-		                                	change : oController.onChangeTime
+		                                	change : function(oEvent){ 
+		                                		oController.onChangeTime(oEvent, "10");
+		                                	}
 										});
 						}
 						break;
@@ -898,7 +1192,15 @@ sap.ui.define([
 							        	width : "100%", 
 							        	textAlign : "Begin",
 	                                	customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
-	                                	change : oController.onChangeTime2
+	                                	change : function(oEvent){
+	                                		oController.onChangeTime2(oEvent, oTable);
+	                                	},
+	                                	editable : {
+	                                		path : "Offyn",
+	                                		formatter : function(fVal){
+	                                			return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
+	                                		}
+	                                	}
 									});
 						break;
 					case "combobox":
@@ -961,11 +1263,11 @@ sap.ui.define([
 					case "weektx":
 						oTemplate = new sap.ui.commons.TextView({
 										text : {
-											parts : [{path : col_info[i].id}, {path : "Offyn"}],
-											formatter : function(fVal1, fVal2){
+											parts : [{path : col_info[i].id}, {path : "Offyn"}, {path : "Alldf"}],
+											formatter : function(fVal1, fVal2, fVal3){
 												this.removeStyleClass("color-red");
 												
-												if(fVal2 == "X"){
+												if(fVal2 == "X" && fVal3 == false){
 													this.addStyleClass("color-red");
 												}
 												
@@ -995,8 +1297,56 @@ sap.ui.define([
 						oTemplate = new sap.m.Input({
 										value : "{" + col_info[i].id + "}",
 										width : "100%",
-										maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "AddBreakList", col_info[i].id)
+										maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "AddBreakList", col_info[i].id),
+	                                	editable : {
+	                                		path : "Offyn",
+	                                		formatter : function(fVal){
+	                                			return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
+	                                		}
+	                                	}
 									});
+					
+					if(oTable.sId == oController.PAGEID + "_AddBreakTable2"){
+						oTemplate.attachChange(function(){
+							var oMonyn = oController._WorkScheduleDialog.getModel().getProperty("/Data/0/Monyn");
+								oMonyn = (!oMonyn || oMonyn == "") ? "2" : (oMonyn == "1" ? "3" : "2");
+								
+							oController._WorkScheduleDialog.getModel().setProperty("/Data/0/Monyn", oMonyn);	
+						});
+					}
+					
+						break;
+					case "change":
+						oTemplate = new sap.m.Button({
+										icon : "sap-icon://edit",
+										visible : {
+											parts : [{path : "Offyn"}, {path : "Alldf"}],
+											formatter : function(fVal1, fVal2){
+												return fVal1 == "1" && fVal2 == false ? true : false;
+											}
+										},
+										customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
+										press : oController.onChangeSchedule
+									}).addStyleClass("pl-3px");
+						break;
+					case "delete":
+						oTemplate = new sap.m.Button({
+										icon : "sap-icon://decline",
+										visible : {
+											parts : [{path : "Beguz"}, {path : "Enduz"}, {path : "Offyn"}],
+											formatter : function(fVal1, fVal2, fVal3){
+												if(fVal3 == "X"){
+													return false;
+												} else {
+													return fVal1 && fVal2 ? true : false;
+												}
+											}
+										},
+										customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
+										press : function(oEvent){
+											oController.onDeleteBreak(oEvent, oTable);
+										}
+									}).addStyleClass("pl-3px");
 						break;
 					default:
 						oTemplate = new sap.ui.commons.TextView({

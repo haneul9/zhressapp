@@ -71,7 +71,7 @@ sap.ui.define(
 				if (this._vCurrentTabKey === sKey) return;
 				else this._vCurrentTabKey = sKey;
 
-				if (this._vCurrentTabKey === "Facility") this.FacilityHandler.load();
+				if (this._vCurrentTabKey === "Facility") this.initFacilityTabView.call(this);
 				else this.initCondoTabView.call(this);
 			},
 

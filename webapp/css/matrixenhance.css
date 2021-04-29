@@ -67,6 +67,11 @@
     border: 1px solid #dddddd;
 }
 
+.Data3{
+	border-left: 0 !important;
+	border-right: 0 !important;	
+}
+
 .button-default .sapMBtnInner.sapMBtnText{
 	line-height: 2.215rem !important;
 }
@@ -109,6 +114,40 @@
 	border-left:1px solid rgb(204,204,204);
 	border-right:1px solid rgb(204,204,204);
 	border-bottom:1px solid rgb(204,204,204);
+/* 	padding: 5px !important; */
+}
+
+.calendar-TableHeader2-mobile {
+	background-color:#f3f4f4;
+    padding: 5px !important;
+    border-right: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: 500;
+}
+
+.calendar-TableHeader2-Start-mobile {
+	background-color:#f3f4f4;
+    padding: 5px !important;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: 500;
+}
+
+.calendar-TableData-mobile {
+	background-color:rgb(254,254,255);
+	border-right:1px solid #e5e5e5;
+	border-bottom:1px solid #e5e5e5;
+/* 	padding: 5px !important; */
+}
+
+.calendar-TableData-Start-mobile {
+	background-color:rgb(254,254,255);
+	border-left:1px solid #e5e5e5;
+	border-right:1px solid #e5e5e5;
+	border-bottom:1px solid #e5e5e5;
 /* 	padding: 5px !important; */
 }
 

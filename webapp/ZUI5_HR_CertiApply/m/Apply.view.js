@@ -313,10 +313,60 @@ sap.ui.define(
                                 }
                             }
                         }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65001}",
+                        new sap.m.VBox({
+                            alignItems: sap.m.FlexAlignItems.Begin,
+                            items: [
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65020}"
+                                }).addStyleClass("font-bold"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65021}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65022}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65023}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65024}"
+                                }).addStyleClass("font-bold"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65025}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65026}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65027}"
+                                }).addStyleClass("font-bold"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65028}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65029}"
+                                })
+                            ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.
                                 path: "actmode",
@@ -326,71 +376,85 @@ sap.ui.define(
                                 }
                             }
                         }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65002}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }).addStyleClass("px-20px"),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65003}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65004}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65005}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }).addStyleClass("px-20px"),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65006}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }).addStyleClass("px-20px"),
+
+                        // new sap.m.Text({
+                        //     textAlign: "Begin",
+                        //     width: "100%",
+                        //     text: "{i18n>MSG_65001}",
+                        //     visible: {
+                        //         // 재신청일 경우 보이지 않음.
+                        //         path: "actmode",
+                        //         formatter: function (v) {
+                        //             if (v && v === "X") return false;
+                        //             return true;
+                        //         }
+                        //     }
+                        // }),
+                        // new sap.m.Text({
+                        //     textAlign: "Begin",
+                        //     width: "100%",
+                        //     text: "{i18n>MSG_65002}",
+                        //     visible: {
+                        //         // 재신청일 경우 보이지 않음.
+                        //         path: "actmode",
+                        //         formatter: function (v) {
+                        //             if (v && v === "X") return false;
+                        //             return true;
+                        //         }
+                        //     }
+                        // }).addStyleClass("px-20px"),
+                        // new sap.m.Text({
+                        //     textAlign: "Begin",
+                        //     width: "100%",
+                        //     text: "{i18n>MSG_65003}",
+                        //     visible: {
+                        //         // 재신청일 경우 보이지 않음.
+                        //         path: "actmode",
+                        //         formatter: function (v) {
+                        //             if (v && v === "X") return false;
+                        //             return true;
+                        //         }
+                        //     }
+                        // }),
+                        // new sap.m.Text({
+                        //     textAlign: "Begin",
+                        //     width: "100%",
+                        //     text: "{i18n>MSG_65004}",
+                        //     visible: {
+                        //         // 재신청일 경우 보이지 않음.
+                        //         path: "actmode",
+                        //         formatter: function (v) {
+                        //             if (v && v === "X") return false;
+                        //             return true;
+                        //         }
+                        //     }
+                        // }),
+                        // new sap.m.Text({
+                        //     textAlign: "Begin",
+                        //     width: "100%",
+                        //     text: "{i18n>MSG_65005}",
+                        //     visible: {
+                        //         // 재신청일 경우 보이지 않음.
+                        //         path: "actmode",
+                        //         formatter: function (v) {
+                        //             if (v && v === "X") return false;
+                        //             return true;
+                        //         }
+                        //     }
+                        // }).addStyleClass("px-20px"),
+                        // new sap.m.Text({
+                        //     textAlign: "Begin",
+                        //     width: "100%",
+                        //     text: "{i18n>MSG_65006}",
+                        //     visible: {
+                        //         // 재신청일 경우 보이지 않음.
+                        //         path: "actmode",
+                        //         formatter: function (v) {
+                        //             if (v && v === "X") return false;
+                        //             return true;
+                        //         }
+                        //     }
+                        // }).addStyleClass("px-20px"),
                         new sap.m.Text({
                             width: "100%",
                             text: "{i18n>MSG_65017}",

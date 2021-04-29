@@ -572,6 +572,7 @@ sap.ui.define([
 			aData.tData.forEach(function(e,i){
 				aData.tData[i].Seqno=i+1;
 			});
+			aData.tData.length>=10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(0);
 			oJSON.setData(aData);
 			oTable.setModel(oJSON);
 			oTable.bindRows("/tData");
@@ -609,7 +610,7 @@ sap.ui.define([
 				colSpan:22,
 				hAlign:"Center",
 				content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
-				new sap.m.Text({text:oBundleText.getText("MSG_05001")}),
+				new sap.m.Text({text:oBundleText.getText("LABEL_00901")}),
 				new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
 			}).addStyleClass("UnderBar");
 			oRow.addCell(oCell);
@@ -625,7 +626,7 @@ sap.ui.define([
 				colSpan:22,
 				hAlign:"Center",
 				content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
-				new sap.m.Text({text:oBundleText.getText("MSG_05001")}),
+				new sap.m.Text({text:oBundleText.getText("LABEL_00901")}),
 				new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
 			}).addStyleClass("UnderBar");
 			oRow.addCell(oCell);

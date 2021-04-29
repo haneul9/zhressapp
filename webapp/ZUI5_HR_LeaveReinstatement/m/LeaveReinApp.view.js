@@ -69,7 +69,7 @@
             var vBukrs = oController.getUserGubun();
 
             var oTypeCombo = new sap.m.ComboBox({ // 휴/복직 구분
-				width: "220px",
+			//	width: "220px",
 				change: oController.changeType.bind(oController),
 				editable: {
 					path: "Status1",
@@ -95,7 +95,7 @@
             }, oTypeCombo);
 
             var oUsedTypeCombo = new sap.m.ComboBox(oController.PAGEID + "_UsedTypeCombo", { // 휴/복직 사유
-				width: "220px",
+			//	width: "220px",
                 change: oController.changeUsedType.bind(oController),
 				editable: {
 					path: "Status1",
@@ -121,7 +121,7 @@
             }, oUsedTypeCombo);
 
             var oRelationCombo = new sap.m.ComboBox({ // 관계
-				width: "220px",
+			//	width: "220px",
 				editable: {
 					path: "Status1",
 					formatter: function(v) {
@@ -146,7 +146,7 @@
             }, oRelationCombo);
 
             var oPartnerCheckCombo = new sap.m.ComboBox(oController.PAGEID + "_PartnerCheckCombo", { // 배우자 신청여부
-				width: "220px",
+			//	width: "220px",
 				editable: {
 					path: "Status1",
 					formatter: function(v) {
@@ -183,7 +183,7 @@
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42027}", "105px", "Left", true).addStyleClass("sub-con-title"), // 질병 명
                             new sap.m.Input({
 								textAlign: "Begin",
-								width: "250px",
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zdsase", false),
                                 value: "{Zdsase}",
 								editable: {
@@ -202,7 +202,7 @@
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42028}", "105px", "Left", true).addStyleClass("sub-con-title"), // 의사 소견 (요약)
                             new sap.m.Input({
 								textAlign: "Begin",
-								width: "250px",
+								width: "100%",
 								maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zdtopn", false),
                                 value: "{Zdtopn}",
 								editable: {
@@ -227,7 +227,7 @@
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42020}", "105px", "Left", true).addStyleClass("sub-con-title"), // 성명
                             new sap.m.Input({
                                 textAlign: "Begin",
-                                width: "250px",
+                            //    width: "80%",
                                 maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zfmlnm", false),
                                 value: "{Zfmlnm}",
                                 editable: {
@@ -245,7 +245,7 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42021}", "105px", "Left", true).addStyleClass("sub-con-title"), // 생년월일
                             new PickOnlyDatePicker({
-                                width: "220px",
+                                width: "80%",
                                 dateValue: "{Zfgbdt}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 valueFormat: "yyyy-MM-dd",
@@ -268,7 +268,7 @@
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_42022}", "105px", "Left", true).addStyleClass("sub-con-title"), // 초등학교 명
                                     new sap.m.Input({
                                         textAlign: "Begin",
-                                        width: "250px",
+                                        width: "100%",
                                         maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zelmnm", false),
                                         value: "{Zelmnm}",
                                         editable: {
@@ -286,7 +286,7 @@
                                 items: [
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_42023}", "105px", "Left", true).addStyleClass("sub-con-title"), // 입학일
                                     new PickOnlyDatePicker({
-                                        width: "220px",
+                                        width: "80%",
                                         dateValue: "{Zentdt}",
                                         displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                         valueFormat: "yyyy-MM-dd",
@@ -319,7 +319,7 @@
                                 items: [
                                     new sap.m.Label({ // 배우자 육아휴직 신청여부
                                         text: "{i18n>LABEL_42025}",
-                                        width: "105px",
+                                        width: "50%",
                                         textAlign: "Left",
                                         required: true,
                                         wrapping: true
@@ -341,7 +341,7 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42004}", "105px", "Left").addStyleClass("sub-con-title"), // 신청일
                             new sap.m.Text({
-								width: "200px",
+								width: "100%",
 								text: {
 									path: "Begda",
 									formatter: function(v) {
@@ -375,7 +375,7 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_42007}", "105px", "Left", true).addStyleClass("sub-con-title"), // 휴직기간
 							new PickOnlyDateRangeSelection(oController.PAGEID + "_LeaveDate", {
-							//	width: "250px",
+								width: "100%",
 								displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 change: oController.getReinTerm.bind(oController),
                                 placeholder: "yyyy-mm-dd ~ yyyy-mm-dd",
@@ -397,7 +397,7 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42008}", "105px", "Left", true).addStyleClass("sub-con-title"), // 복직예정일
 							new PickOnlyDatePicker(oController.PAGEID + "_ReinDate", {
-                            //    width: "220px",
+                                width: "100%",
                                 dateValue: "{Zrhsdt}",
                                 change: oController.getLeaveTerm.bind(oController),
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
@@ -419,7 +419,7 @@
                             ViewTemplates.getLabel("header", "{i18n>LABEL_42016}", "105px", "Left", true).addStyleClass("sub-con-title"), // 세부사유
 							new sap.m.TextArea({
                                 rows: 3,
-							//	width: "250px",
+								width: "100%",
 								value:"{Zdtlrs}",
 								maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "TableIn1", "Zdtlrs", false),
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
@@ -438,7 +438,7 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_42018}", "105px", "Left", true).addStyleClass("sub-con-title"), // 출산예정일
 							new PickOnlyDatePicker({
-                            //    width: "220px",
+                                width: "80%",
                                 dateValue: "{Zexbdt}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 valueFormat: "yyyy-MM-dd",
