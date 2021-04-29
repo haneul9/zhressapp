@@ -39,6 +39,10 @@ sap.ui.define([
 					}),
 					new sap.m.FlexBox({
 						items: [
+						new sap.m.Button(oController.PAGEID+"_NewBtn",{
+							press: function(){oController.onDialog(null,"N3")},
+							text: "{i18n>LABEL_47006}", // 신청
+						}).addStyleClass("button-light right-custom")
 							]
 					}).addStyleClass("button-group")
 				]
@@ -117,14 +121,6 @@ sap.ui.define([
 				
 			return new PageHelper({
 				contentContainerStyleClass: "app-content-container-mobile",
-				headerButton: new sap.m.FlexBox({
-                    items: [
-						new sap.m.Button(oController.PAGEID+"_NewBtn",{
-							press: function(){oController.onDialog(null,"N3")},
-							text: "{i18n>LABEL_47006}", // 신청
-						}).addStyleClass("button-default right-custom")
-                    ]
-                }),
 				contentItems: [
 					oInfoBox,
 					oTable

@@ -74,7 +74,7 @@ ZUI5_HR_MssMboEval.fragment.content01={
 			enableColumnReordering: false,
 			enableColumnFreeze: false,
 			enableBusyIndicator: true,
-			visibleRowCount: 10,
+			visibleRowCount: 1,
 			showOverlay: false,
 			showNoData: true,
 			width: "auto",
