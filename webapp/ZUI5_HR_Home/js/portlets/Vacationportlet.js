@@ -154,22 +154,24 @@ fill: function() {
                     datasets: [
                         { 
                             label: '사용',
+                            barPercentage: 0.5,
                             backgroundColor: 'rgb(130,235,55)', 
                             borderColor: 'rgb(255, 99, 132)',
                             data: vList2
                         },
                         {
                             label: '잔여',
+                            barPercentage: 0.5,
                             backgroundColor: 'rgb(50,118,234)',
                             borderColor: 'rgb(255, 99, 132)',
                             data: vList3
                         }
                     ]
                 },
-                options: {
-                    categoryPercentage: 1.0,
-                    barPercentage: 0.5
-                }
+                // options: {
+                //     categoryPercentage: 1.0,
+                //     barPercentage: 0.5
+                // }
             });
 
             $('.ChartClass').append([chart]);
