@@ -179,7 +179,7 @@ getModel: function(id, viewId) {
 			var args = [].slice.call(arguments);
 
 			if (args.length >= 2 && $.isPlainObject(args[1])) {
-				args[1] = this.copyFields(id, (args[0] || "").replace(/\W|Set$/g, ""), this.mix(args[1]));
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\(.*|\W/g, "").replace(/Set$/, ''), this.mix(args[1]));
 			}
 
 			return model.create.apply(model, args);
@@ -191,7 +191,7 @@ getModel: function(id, viewId) {
 			var args = [].slice.call(arguments);
 
 			if (args.length >= 2 && $.isPlainObject(args[1])) {
-				args[1] = this.copyFields(id, (args[0] || "").replace(/\W|Set$/g, ""), this.mix(args[1]));
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\(.*|\W/g, "").replace(/Set$/, ''), this.mix(args[1]));
 			}
 
 			return model.update.apply(model, args);

@@ -193,7 +193,7 @@ mix: function(o) {
 	}
 	return $.extend(o, {
 		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
-		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+		ICusrse: sessionStorage.getItem('ehr.session.token'),		// Token
 		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
 		ICmenuid: mid || ''											// 메뉴 ID
 	});
@@ -479,7 +479,7 @@ copyFields: function(o) {
 },
 metadata: function(namespace, entityType) {
 
-	entityType = entityType.replace(/Set$/i, '');
+	entityType = entityType.replace(/\(.*|\W/g, "").replace(/Set$/, '');
 
 	var metadata = this.metadataMap[namespace],
 	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType, entityType);
