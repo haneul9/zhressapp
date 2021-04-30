@@ -318,7 +318,7 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oController._DetailJSonModel.getProperty("/Data");
-			console.log(oData);
+			
 			// 추가휴게시간
 			var oData2 = sap.ui.getCore().byId(oController.PAGEID + "_Table1").getModel().getProperty("/Data");
 			
@@ -354,7 +354,7 @@ sap.ui.define([
 					createData.FlexWorktime2Nav.push(detail);
 				}
 			}
-			
+			// Prcty Monyn 5 : 과거근무 변경신청
 			var onProcess = function(){
 				createData.Werks = oData.Werks;
 				createData.Pernr = oData.Pernr;
@@ -373,7 +373,7 @@ sap.ui.define([
 					Monyn : oData.Offyn == "1" ? "5" : oData.Monyn,
 					Appkey1 : oData.Appkey1
 				});
-				console.log(createData);
+				
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
