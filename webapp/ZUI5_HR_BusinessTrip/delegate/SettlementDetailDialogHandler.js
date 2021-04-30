@@ -52,7 +52,8 @@ var Handler = {
 	// DialogHandler 호출 function
 	once: function() {
 
-		this.oModel.setProperty("/Today", new Date());
+		this.oModel.setProperty("/EmpLoginInfo", this.oController.getSessionModel().getData());
+		this.oModel.setProperty("/EmpLoginInfo/Today", new Date());
 		this.oModel.setProperty("/CardPyTextMap", {
 			"1": this.oController.getBundleText("LABEL_19574"), // 현금/기타
 			"5": this.oController.getBundleText("LABEL_19573")  // 법인카드
