@@ -161,6 +161,7 @@ var OnRequest = { // 출장 event handler
 		target = oEventSource.data("target"),
 		rowIndex = oEventSource.getParent().getIndex();
 		this.RequestDetailDialogHandler.flag="";
+		this._vPersa = "1000";
 		SearchUser1.oController = this;
 		SearchUser1.searchAuth = "A";
 		SearchUser1.dialogContentHeight = 480;
