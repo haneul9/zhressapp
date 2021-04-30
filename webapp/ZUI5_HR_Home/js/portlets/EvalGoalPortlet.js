@@ -24,7 +24,7 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-evalgoal" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-evalGoalPortlet-list"></div>',
@@ -82,12 +82,12 @@ fill: function() {
 
 						setTimeout(function() {
 							list.append([
-								'<div style="height: auto; margin-bottom: 15px; display: flex; flex-direction: column">',
-									'<div style="font-size: 14px; height: 25px;">',
+								'<div class="my-evalgoal-info">',
+									'<div class="mylist">',
 										i + 1 + '.' + v.name,
 									'</div>',
-									'<div style="display: flex; justify-content: flex-end">',
-										'<div class="progress" style="height: 20px; width: 50%; display: flex;">',
+									'<div class="evalgoal-statusBar">',
+										'<div class="progress">',
 											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
 												parseFloat(v.done) + '%',
 											'</div>',
