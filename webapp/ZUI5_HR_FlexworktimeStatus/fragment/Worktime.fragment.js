@@ -4,21 +4,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 	* @memberOf fragment.SelectMassn
 	*/
 
-	createContent : function(oController) {
-		var onChangeTime = function(oEvent, m){
-			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
-				oEvent.getSource().setValue("");
-				return;
-			} else if(oEvent && m){
-				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
-					oEvent.getSource().setValue("");
-					return;
-				}
-			}
-		};
-		
+	createContent : function(oController){
 		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 			columns : 2,
 			width : "100%",
@@ -39,7 +25,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 										        	width : "100%", 
 										        	textAlign : "Begin",
 				                                	change : function(oEvent){
-				                                		onChangeTime(oEvent, "30");
+				                                		oController.onChangeTime(oEvent, "30");
 				                                	}
 												})],
 									 hAlign : "Begin",
@@ -62,7 +48,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 										        	width : "100%", 
 										        	textAlign : "Begin",
 				                                	change : function(oEvent){
-				                                		onChangeTime(oEvent, "10");
+				                                		oController.onChangeTime(oEvent, "10");
 				                                	}
 												})],
 									 hAlign : "Begin",
@@ -82,7 +68,9 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 													width : "100%",
 													items : [new sap.ui.core.Item({key : "0", text : ""}),
 															 new sap.ui.core.Item({key : "1", text : "01:00"}),
-															 new sap.ui.core.Item({key : "2", text : "00:30"})]
+															 new sap.ui.core.Item({key : "2", text : "00:30"}),
+															 new sap.ui.core.Item({key : "3", text : "01:30"}),
+															 new sap.ui.core.Item({key : "4", text : "02:00"})]
 												})],
 									 hAlign : "Begin",
 									 vAlign : "Middle"

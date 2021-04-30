@@ -38,8 +38,7 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
-		
+			
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			 	var today = new Date();
@@ -86,14 +85,6 @@ sap.ui.define([
 			}
 		},
 		
-		handleIconTabBarSelect : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
-			var oController = oView.getController();
-			
-			var key = sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").getSelectedKey();
-			
-		},
-		
 		onPressSearch : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
@@ -102,7 +93,7 @@ sap.ui.define([
 			
 			var key = sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").getSelectedKey();
 			
-			var vData = {Data : []}, vData2 = [];
+			var vData = {Data : []}, vData2 = [], vData5 = [];
 			
 			if(key == "1"){
 				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
@@ -131,7 +122,7 @@ sap.ui.define([
 				var today = new Date();
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
+				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime5Nav : []};
 					createData.Werks = oData.Werks;
 					createData.Pernr = oData.Pernr;
 					createData.Zyymm = oData.Zyymm;
@@ -188,6 +179,16 @@ sap.ui.define([
 									vData2.push(data2[i]);
 								}
 							}
+							
+							if(data.FlexWorktime5Nav && data.FlexWorktime5Nav.results){
+								var data5 = data.FlexWorktime5Nav.results;
+								
+								for(var i=0; i<data5.length; i++){
+									data5[i].Datum = data5[i].Datum ? new Date(common.Common.setTime(data5[i].Datum)) : null;
+									
+									vData5.push(data5[i]);
+								}
+							}
 						}
 					},
 					function (oError) {
@@ -215,7 +216,10 @@ sap.ui.define([
 					oController.addCalendar(oController, oLayout, vData.Data);
 				}
 				
+				// 추가휴게시간
 				oController._ListCondJSonModel.setProperty("/Data2", vData2);
+				// 추가휴게변경신청내역
+				oController._ListCondJSonModel.setProperty("/Data5", vData5);
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -289,6 +293,18 @@ sap.ui.define([
 						title.addStyleClass("color-red");
 					}
 					
+					var titleStyle = "";
+					switch(oData[i].Status){
+						case "99": // 승인
+							titleStyle = "calendar-background-blue";
+							break;
+						case "00": // 변경신청
+							titleStyle = "calendar-background-green";
+							break;
+						default:
+							titleStyle = "calendar-datum";
+					}
+					
 					var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 						  columns : 1,
 						  width : "100%",
@@ -298,7 +314,7 @@ sap.ui.define([
 										  	  	   content : [title],
 										  	  	   hAlign : "Center",
 										  	  	   vAlign : "Middle"
-										  	   }).addStyleClass("calendar-datum")] 
+										  	   }).addStyleClass(titleStyle)] 
 								  })]
 					});
 					
@@ -356,9 +372,14 @@ sap.ui.define([
 			
 			var oJSONModel = oController._WorkScheduleDialog.getModel();
 			
-			oController.setBreak(oData.Datum, oData.Offyn, "2");
+			oController.setBreak(oData, "2");
 			
-			oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")}));
+			// 결재중 데이터가 있는 경우 근무일정 데이터를 변경해서 표시함
+			if(oData.Status == "00"){
+				oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm"), Beguz : oData.Beguz2, Enduz : oData.Enduz2, Lnctm : oData.Lnctm2}));
+			} else {
+				oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")}));
+			}
 			
 			oController._WorkScheduleDialog.open();
 		},
@@ -382,7 +403,7 @@ sap.ui.define([
 			
 			var oJSONModel = oController._WorkScheduleDialog.getModel();
 			
-			oController.setBreak(oData.Datum, oData.Offyn, "2");
+			oController.setBreak(oData, "2");
 			
 			oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Title : oBundleText.getText("LABEL_69048"), Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")})); // 근무 변경
 			
@@ -446,10 +467,88 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
+			// 법정휴게 재계산
+			oController.onSetLnctm(oEvent);
+			
 			if(oController._WorkScheduleDialog && oController._WorkScheduleDialog.isOpen() == true){
+				
+			} else if(oController._WorktimeDialog && oController._WorktimeDialog.isOpen() == true){
 				
 			} else {
 				oController.onChangeModyn(oEvent);
+			}
+		},
+		
+		// 법정휴게 재계산
+		onSetLnctm : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			var oData = null;
+			
+            if(oController._WorkScheduleDialog && oController._WorkScheduleDialog.isOpen() == true){
+                oData = oController._WorkScheduleDialog.getModel().getProperty("/Data/0");
+            } else if(oController._WorktimeDialog && oController._WorktimeDialog.isOpen() == true){
+            	oData = oController._WorktimeDialog.getModel().getProperty("/Data");
+            } else {
+            	oData = oEvent.getSource().getCustomData()[0].getValue();
+            }
+			
+			if(oData.Beguz && oData.Enduz){
+				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var createData = {FlexWorktime1Nav : []};
+					createData.Werks = oController._ListCondJSonModel.getProperty("/Data/Werks");
+					createData.Pernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
+					createData.Zyymm = oController._ListCondJSonModel.getProperty("/Data/Zyymm");
+					createData.Langu = oController._ListCondJSonModel.getProperty("/Data/Langu");
+					createData.Prcty = "4";
+					
+				var detail = {};
+					detail.Datum = "\/Date(" + common.Common.getTime(oData.Datum) + ")\/";
+					detail.Beguz = oData.Beguz;
+					detail.Enduz = oData.Enduz;
+					detail.Lnctm = oData.Lnctm;
+				
+				createData.FlexWorktime1Nav.push(detail);	
+				
+				oModel.create("/FlexworktimeSummarySet", createData, null,
+					function(data, res){
+						if(data){
+							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results && data.FlexWorktime1Nav.results.length){
+								var data1 = data.FlexWorktime1Nav.results[0];
+								
+								if(oController._WorkScheduleDialog && oController._WorkScheduleDialog.isOpen() == true){
+									oController._WorkScheduleDialog.getModel().setProperty("/Data/0/Lnctm", data1.Lnctm);
+								} else if(oController._WorktimeDialog && oController._WorktimeDialog.isOpen() == true){
+									oController._WorktimeDialog.getModel().setProperty("/Data/Lnctm", data1.Lnctm);
+								} else {
+									var oJSONModel = sap.ui.getCore().byId(oController.PAGEID + "_Table").getModel();
+										oJSONModel.setProperty("/Data/" + oData.Idx + "/Lnctm", data1.Lnctm);
+								}
+							}
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
+				
 			}
 		},
 		
@@ -511,16 +610,22 @@ sap.ui.define([
 			oJSONModel.setProperty("/Data/" + oData.Idx + "/Monyn", (oData.Modyn == "1" ? "1" : (oData.Monyn == "2" ? "3" : "1")));
 		},
 		
-		// 추가휴게시간 데이터 세팅
-		setBreak : function(oDatum, oOffyn, Flag){
+		// 추가휴게시간 데이터 세팅 : 선택데이터, table명
+		setBreak : function(oData, Flag){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
-			var oData2 = oController._ListCondJSonModel.getProperty("/Data2"), vData = [];
+			var oData2 = null, vData = [];
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			
+			if(oData.Status == "00"){
+				oData2 = oController._ListCondJSonModel.getProperty("/Data5");
+			} else {
+				oData2 = oController._ListCondJSonModel.getProperty("/Data2");
+			}
+			
 			for(var i=0; i<oData2.length; i++){
-				if(dateFormat.format(oData2[i].Datum) == dateFormat.format(oDatum)){
+				if(dateFormat.format(oData2[i].Datum) == dateFormat.format(oData.Datum)){
 					vData.push(oData2[i]);
 				}
 			}
@@ -541,25 +646,25 @@ sap.ui.define([
 			
 			if(vData.length == 0){
 				for(var i=0; i<5; i++){
-					tableData.Data.push({Idx : (tableData.Data.length), Datum : oDatum, Beguz : "", Enduz : "", Offyn : oOffyn});
+					tableData.Data.push({Idx : (tableData.Data.length), Datum : oData.Datum, Beguz : "", Enduz : "", Offyn : oData.Offyn});
 				}
 				
-				data.Data.push({Datum : oDatum, Austy : "A", Offyn : oOffyn});
+				data.Data.push({Datum : oData.Datum, Austy : "A", Offyn : oData.Offyn});
 			} else {
 				for(var i=0; i<vData.length; i++){
 					if(vData[i].Austy == "A"){
 						if(tableData.Data.length < 5){
 							var length = 5 - tableData.Data.length;
 							for(var j=0; j<length; j++){
-								tableData.Data.push({Idx : (tableData.Data.length), Datum : oDatum, Beguz : "", Enduz : "", Offyn : oOffyn});
+								tableData.Data.push({Idx : (tableData.Data.length), Datum : oData.Datum, Beguz : "", Enduz : "", Offyn : oData.Offyn});
 							}
 						}
 						
-						data.Data.push(Object.assign({Offyn : oOffyn}, vData[i]));
+						data.Data.push(Object.assign({Offyn : oData.Offyn}, vData[i]));
 						break;
 					}
 					
-					tableData.Data.push(Object.assign({Idx : (tableData.Data.length), Offyn : oOffyn}, vData[i]));
+					tableData.Data.push(Object.assign({Idx : (tableData.Data.length), Offyn : oData.Offyn}, vData[i]));
 				}
 			}
 			
@@ -573,7 +678,8 @@ sap.ui.define([
 			if(Flag == "1"){
 				oController._AddBreakDialog.getModel().setData(data);
 			} else {
-				data.Data[0].Offyn = oOffyn;
+				data.Data[0].Offyn = oData.Offyn;
+				
 				oController._WorkScheduleDialog.getModel().setData(data);
 			}
 		},
@@ -590,7 +696,7 @@ sap.ui.define([
 				oView.addDependent(oController._AddBreakDialog);
 			}
 			
-			oController.setBreak(oData.Datum, oData.Offyn, "1");
+			oController.setBreak(oData, "1");
 		
 			oController._AddBreakDialog.open();
 		},
@@ -926,11 +1032,11 @@ sap.ui.define([
 			
 			var onProcess = function(){
 				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []};
+				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime5Nav : []};
 					createData.Werks = oController._ListCondJSonModel.getProperty("/Data/Werks");
 					createData.Pernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
 					createData.Zyymm = oController._ListCondJSonModel.getProperty("/Data/Zyymm");
-					createData.Prcty = "2";
+					createData.Prcty = oData.Offyn == "1" ? "5" : "2";
 					
 				var detail = {};
 					detail.Datum = "\/Date(" + common.Common.adjustGMT(oData.Datum) + ")\/";
@@ -938,7 +1044,9 @@ sap.ui.define([
 					detail.Enduz = oData.Enduz;
 					detail.Lnctm = oData.Lnctm;
 					detail.Adbtm = oData.Adbtm ? oData.Adbtm.replace(":", "") : "";
-					detail.Monyn = oData.Monyn;
+					detail.Monyn = oData.Offyn == "1" ? "5" : oData.Monyn;
+					detail.Chgrsn = oData.Chgrsn;
+					detail.Appkey1 = oData.Appkey1;
 				
 				createData.FlexWorktime1Nav.push(detail);
 				
@@ -953,7 +1061,11 @@ sap.ui.define([
 						detail.Adbtm = oData2[i].Adbtm ? oData2[i].Adbtm.replace(":", "") : "";
 						detail.Notes = oData2[i].Notes;
 					
-					createData.FlexWorktime2Nav.push(detail);
+					if(oData.Offyn == "1"){
+						createData.FlexWorktime5Nav.push(detail);
+					} else {
+						createData.FlexWorktime2Nav.push(detail);
+					}
 				}
 				
 				oModel.create("/FlexworktimeSummarySet", createData, null,
@@ -1025,6 +1137,7 @@ sap.ui.define([
 						detail.Lnctm = oData[i].Lnctm;
 						detail.Adbtm = oData[i].Adbtm ? oData[i].Adbtm.replace(":", "") : "";
 						detail.Monyn = oData[i].Monyn;
+						detail.Appkey1 = oData[i].Appkey1;
 					
 					createData.FlexWorktime1Nav.push(detail);
 				}
@@ -1088,16 +1201,6 @@ sap.ui.define([
 					}
 				}
 			});
-		},
-		
-		onDeleteData : function(oEvent, oTable){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
-			var oController = oView.getController();
-			
-			var oJSONModel = oTable.getModel();
-			var oData = oEvent.getSource().getCustomData()[0].getValue();
-			
-			
 		},
 		
 		makeTable : function(oController, oTable, col_info){
@@ -1208,8 +1311,10 @@ sap.ui.define([
 										selectedKey : "{" + col_info[i].id + "}",
 										width : "100%",
 										items : [new sap.ui.core.Item({key : "0", text : ""}),
-												 new sap.ui.core.Item({key : "1", text : "01:00"}),
-												 new sap.ui.core.Item({key : "2", text : "00:30"})],
+												 new sap.ui.core.Item({key : "1", text : "00:30"}),
+												 new sap.ui.core.Item({key : "2", text : "01:00"}),
+												 new sap.ui.core.Item({key : "3", text : "01:30"}),
+												 new sap.ui.core.Item({key : "4", text : "02:00"})],
 										change : oController.onChangeModyn,  
 										customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
 										editable : {
@@ -1347,6 +1452,22 @@ sap.ui.define([
 											oController.onDeleteBreak(oEvent, oTable);
 										}
 									}).addStyleClass("pl-3px");
+						break;
+					case "status":
+						oTemplate = new sap.ui.commons.TextView({
+										text : {
+											parts : [{path : "Statustx"}, {path : "Monyn"}],
+											formatter : function(fVal1, fVal2){
+												if(fVal2 != ""){
+													return oBundleText.getText("LABEL_69002"); // 수정
+												} else {
+													return fVal1;
+												}
+											}
+										},
+										textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+										tooltip : " "
+									});
 						break;
 					default:
 						oTemplate = new sap.ui.commons.TextView({

@@ -200,8 +200,21 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 			rowSettingsTemplate : [new sap.ui.table.RowSettings({
 									   highlight : {
 									   		path : "Monyn",
-									   		formatter : function(fVal){
-									   			return fVal != "" ? "Error" : "None";
+									   		parts : [{path : "Status"}, {path : "Monyn"}],
+									   		formatter : function(fVal1, fVal2){
+									   			if(fVal2 != ""){
+									   				return "Error";
+									   			} else {
+									   				if(fVal1 == "00"){ // 결재중
+										   				return "Indication02";
+										   			} else if(fVal1 == "88"){ // 반려
+										   				return "Indication03";
+										   			} else if(fVal1 == "99"){ // 결재완료
+										   				return "Indication04";
+										   			} else {
+										   				return "None";
+										   			}
+									   			}
 									   		}
 									   }
 								   })],
@@ -212,6 +225,18 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 										 	text : oBundleText.getText("MSG_69001") // 작업 후에는 반드시 저장하여 주십시오. 저장이 완료되면 수정이 Clear 됩니다.
 										}),
 										new sap.m.ToolbarSpacer(),
+										new sap.m.HBox({
+				                            items: [
+				                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-darkgreen"),
+				                                new sap.m.Label({text: oBundleText.getText("LABEL_00197")}).addStyleClass("custom-legend-item"), // 결재중
+				                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-orange"),
+				                                new sap.m.Label({text: oBundleText.getText("LABEL_00198")}).addStyleClass("custom-legend-item"), // 반려
+				                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-cyanblue"),
+				                                new sap.m.Label({text: oBundleText.getText("LABEL_00199")}).addStyleClass("custom-legend-item"), // 결재완료
+				                                new sap.m.Label().addStyleClass("custom-legend-color bg-lcc-signature-red"),
+				                                new sap.m.Label({text: oBundleText.getText("LABEL_69002")}).addStyleClass("custom-legend-item") // 수정
+				                            ]
+				                        }).addStyleClass("custom-legend-group mr-20px"),
 										new sap.m.Button({
 		                                    text: oBundleText.getText("LABEL_69014"), // 근무일정 일괄입력
 		                                    press : oController.onOpenWorktime
@@ -228,8 +253,8 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 		oTable.bindRows("/Data");
 		
 		var col_info = [{id: "Checkbox", label: "", plabel: "", resize: true, span: 0, type: "checkbox", sort: true, filter: true, width : "60px"},
-						// 수정, 일자, 요일, 근태
-						{id: "Monyn", label: oBundleText.getText("LABEL_69002"), plabel: "", resize: true, span: 0, type: "icon", sort: true, filter: true, width : "60px"},
+						// 상태, 일자, 요일, 근태
+						{id: "Statustx", label: oBundleText.getText("LABEL_69054"), plabel: "", resize: true, span: 0, type: "status", sort: true, filter: true, width : "60px"},
 						{id: "Datum", label: oBundleText.getText("LABEL_69003"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 						{id: "Weektx", label: oBundleText.getText("LABEL_69004"), plabel: "", resize: true, span: 0, type: "weektx", sort: true, filter: true, width : "60px"},
 						{id: "Atext", label: oBundleText.getText("LABEL_69005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},

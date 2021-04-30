@@ -108,8 +108,10 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 													selectedKey : "{Lnctm}",
 													width : "100%",
 													items : [new sap.ui.core.Item({key : "0", text : ""}),
-															 new sap.ui.core.Item({key : "1", text : "01:00"}),
-															 new sap.ui.core.Item({key : "2", text : "00:30"})],
+															 new sap.ui.core.Item({key : "1", text : "00:30"}),
+															 new sap.ui.core.Item({key : "2", text : "01:00"}),
+															 new sap.ui.core.Item({key : "3", text : "01:30"}),
+															 new sap.ui.core.Item({key : "4", text : "02:00"})],
 													editable : {
 														path : "Offyn",
 														parts : [{path : "Offyn"}, {path : "Beguz"}],
@@ -128,7 +130,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Input({
-													value : "{}",
+													value : "{Chgrsn}",
 													width : "100%",
 													editable : {
 														path : "Offyn",
@@ -136,8 +138,8 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 															return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
 														}
 													},
-													change : changeMonyn
-													// maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "AddBreakList", "")
+													change : changeMonyn,
+													maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "FlexworktimeDetail", "Chgrsn")
 												})], // 변경사유
 									 hAlign : "Begin",
 									 vAlign : "Middle"
