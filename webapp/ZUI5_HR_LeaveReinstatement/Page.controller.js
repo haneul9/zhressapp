@@ -67,7 +67,7 @@
 			sendObject.IPernr = vPernr;
 			sendObject.IEmpid = vPernr;
 			sendObject.IDatum = new Date();
-            sendObject.IConType = "1";
+            sendObject.IConType = "1"; 
 			// Navigation property
 			sendObject.Export = [];
 			sendObject.TableIn1 = [];

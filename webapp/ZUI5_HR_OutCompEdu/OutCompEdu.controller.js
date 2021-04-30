@@ -389,7 +389,8 @@ sap.ui.define([
 			}
 
 			oCopyRow = $.extend(true, {}, oCopyRow);
-			
+			oCopyRow.Appnm = "";
+
 			if (!this._ReportModel) {
 				this._ReportModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.ResultReport", this);
 				oView.addDependent(this._ReportModel);
