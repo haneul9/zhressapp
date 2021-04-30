@@ -203,7 +203,12 @@ sap.ui.define(
 					return;
 				}
 
-				var aFilters = [];
+				var aFilters = [
+					new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+					new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+					new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+					new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
+				];
 
 				aFilters.push(new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.BT, oActda_From.getValue(), oActda_To.getValue()));
 
@@ -257,12 +262,7 @@ sap.ui.define(
 					var sKey = oIconTabbar.getSelectedKey();
 
 					var oBinding = oTable.getBinding();
-					var oFilters = [
-						new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
-						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
-						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
-					];
+					var oFilters = [];
 
 					if (sKey === "creation") {
 						oFilters.push(new sap.ui.model.Filter("Statu", "EQ", "10"));
