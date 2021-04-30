@@ -255,7 +255,7 @@ prependTo: function(parent, fill) {
 appendTo: function(parent, fill) {
 
 	parent = (typeof parent === 'string' || parent instanceof String) ? $(parent) : parent;
-	parent.append(this.carousel() ? ['<div class="carousel-item">', this.ui(), '</div>'].join('') : this.ui());
+	parent.append(this.mobile() && this.carousel() ? ['<div class="carousel-item">', this.ui(), '</div>'].join('') : this.ui());
 
 	setTimeout(function() {
 		if (typeof this.onceBefore === 'function') {

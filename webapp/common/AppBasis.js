@@ -149,7 +149,7 @@ getDestination: function() {
 	if (!$.app.DEST) {
 		var param = $.map(location.search.replace(/\?/, "").split(/&/), function(p) {
 			var pair = p.split(/=/);
-			if (pair[0] === "s4hana") { return pair[1]; }
+			if (pair[0] === "s4hana") { return decodeURIComponent(pair[1]); }
 		})[0];
 
 		$.app.DEST = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
