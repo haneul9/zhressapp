@@ -112,7 +112,7 @@ sap.ui.define(
                 }
 
                 var search = function () {
-                    var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+                    var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
                     var createData = { ChangeWorkNav: [] };
                     createData.IBukrs = oData.Bukrs;
                     createData.IPernr = oData.Pernr;
@@ -121,11 +121,8 @@ sap.ui.define(
                     createData.IEndda = "/Date(" + Common.getTime(new Date(oData.Endda)) + ")/";
                     createData.ILangu = oData.Langu;
 
-                    oModel.create(
-                        "/ChangeWorkListSet",
-                        createData,
-                        null,
-                        function (data) {
+                    oModel.create("/ChangeWorkListSet", createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.ChangeWorkNav && data.ChangeWorkNav.results) {
                                     var data1 = data.ChangeWorkNav.results;
@@ -139,7 +136,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -152,7 +149,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oJSONModel.setData(vData);
                     oTable.bindRows("/Data");

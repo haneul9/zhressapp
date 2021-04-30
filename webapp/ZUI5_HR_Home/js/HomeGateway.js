@@ -45,6 +45,7 @@ homeSession: function(_session) {
 	this._session = _session;
 
 	$.extend(HomeGateway.prototype, {
+		logout: _session.logout.bind(_session),
 		pernr: _session.pernr.bind(_session),
 		locale: _session.locale.bind(_session),
 		loginInfo: _session.loginInfo.bind(_session),

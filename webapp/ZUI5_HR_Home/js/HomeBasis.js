@@ -424,7 +424,7 @@ post: function(o) {
 	o = o || {};
 
 	if (!o.url) {
-		this.alert({ title: '오류', html: '<p>대상 서비스 model 및 entity set이 명시된 URL이 없습니다.</p>' });
+		this.alert({ title: '오류', html: '<p>대상 서비스 model 및 entity type이 명시된 URL이 없습니다.</p>' });
 		return;
 	}
 
@@ -440,9 +440,6 @@ post: function(o) {
 	if (typeof o.async !== 'undefined') {
 		postOptions.async = o.async;
 	}
-	if (o.data) {
-		postOptions.data = JSON.stringify(o.data);
-	}
 	if (o.success) {
 		postOptions.success = o.success;
 	}
@@ -452,8 +449,33 @@ post: function(o) {
 	if (o.complete) {
 		postOptions.complete = o.complete;
 	}
+	if (o.data) {
+		// postOptions.data = JSON.stringify(o.data);
+		o.data = this.mix(o.data);
 
-	return $.post(postOptions);
+		return this.copyFields(o)
+			.then(function(copiedData) {
+				postOptions.data = JSON.stringify(copiedData);
+
+				return $.post(postOptions);
+			});
+	}
+
+	return $.post(postOptions).promise();
+},
+copyFields: function(o) {
+
+	var url = o.url.split('/');
+	return this.metadata(url[0], url[1])
+		.then(function(fieldNames) {
+			var data = {};
+			$.map(fieldNames, function(name) {
+				if (typeof o.data[name] !== 'undefined') {
+					data[name] = o.data[name];
+				}
+			});
+			return data;
+		});
 },
 metadata: function(namespace, entityType) {
 
@@ -488,20 +510,6 @@ metadata: function(namespace, entityType) {
 			return o.attributes.Name.nodeValue;
 		});
 	}.bind(this));
-},
-copyFields: function(o) {
-
-	var url = o.url.split('/');
-	return this._gateway.metadata(url[0], url[1])
-		.then(function(fieldNames) {
-			var data = {};
-			$.map(fieldNames, function(name) {
-				if (typeof o.data[name] !== 'undefined') {
-					data[name] = o.data[name];
-				}
-			});
-			return data;
-		});
 },
 odataResults: function(data) {
 

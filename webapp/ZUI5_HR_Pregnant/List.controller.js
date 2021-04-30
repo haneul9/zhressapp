@@ -60,7 +60,7 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Pregnant.List");
                 var oController = oView.getController();
 
-                var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+                var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vEmpLoginInfo = $.app.getModel("session").getData();
                 var oData = oController._ListCondJSonModel.getProperty("/Data");
 
@@ -150,11 +150,8 @@ sap.ui.define(
                 }
 
                 if (oField.length != 0) {
-                    oModel.create(
-                        "/PregnantApplyHeaderSet",
-                        createData,
-                        null,
-                        function (data) {
+                    oModel.create("/PregnantApplyHeaderSet", createData, {
+                        success: function (data) {
                             if (data) {
                                 oController._ListCondJSonModel.setProperty("/Data/Eretcode", data.Eretcode);
                                 oController._ListCondJSonModel.setProperty("/Data/Erettext", data.Erettext);
@@ -188,7 +185,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -201,7 +198,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     if (oController.Error == "E") {
                         oController.Error = "";
@@ -276,7 +273,7 @@ sap.ui.define(
                 }
 
                 var search = function () {
-                    var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+                    var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                     var createData = { PregnantApplyTableIn: [] };
                     createData.IConType = "1";
                     createData.IBukrs = vEmpLoginInfo.Bukrs;
@@ -285,11 +282,8 @@ sap.ui.define(
                     createData.IPernr = vEmpLoginInfo.Pernr;
                     createData.ILangu = vEmpLoginInfo.Langu;
 
-                    oModel.create(
-                        "/PregnantApplyHeaderSet",
-                        createData,
-                        null,
-                        function (data) {
+                    oModel.create("/PregnantApplyHeaderSet", createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.PregnantApplyTableIn && data.PregnantApplyTableIn.results) {
                                     for (var i = 0; i < data.PregnantApplyTableIn.results.length; i++) {
@@ -320,7 +314,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -333,7 +327,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oJSONModel.setData(vData);
                     oTable.bindRows("/Data");
@@ -412,17 +406,14 @@ sap.ui.define(
                 // 단축근무시간 리스트
                 var oPampm = sap.ui.getCore().byId(oController.PAGEID + "_Pampm");
                 oPampm.destroyItems();
-                var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+                var oModel = $.app.getModel("ZHR_COMMON_SRV");
                 var createData = { NavCommonCodeList: [] };
                 createData.ICodeT = "058";
                 createData.IDatum = vData.Data.Reqdt ? "/Date(" + Common.getTime(new Date(vData.Data.Reqdt)) + ")/" : "/Date(" + Common.getTime(new Date()) + ")/";
                 createData.ILangu = $.app.getModel("session").getData().Langu;
 
-                oModel.create(
-                    "/CommonCodeListHeaderSet",
-                    createData,
-                    null,
-                    function (data) {
+                oModel.create("/CommonCodeListHeaderSet", createData, {
+					success: function (data) {
                         if (data) {
                             if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
                                 for (var i = 0; i < data.NavCommonCodeList.results.length; i++) {
@@ -436,7 +427,7 @@ sap.ui.define(
                             }
                         }
                     },
-                    function (oError) {
+					error: function (oError) {
                         var Err = {};
                         oController.Error = "E";
 
@@ -449,7 +440,7 @@ sap.ui.define(
                             oController.ErrorMessage = oError.toString();
                         }
                     }
-                );
+				});
 
                 if (oController.Error == "E") {
                     oController.Error = "";
@@ -463,18 +454,15 @@ sap.ui.define(
                 createData.IDatum = vData.Data.Reqdt ? "/Date(" + Common.getTime(new Date(vData.Data.Reqdt)) + ")/" : "/Date(" + Common.getTime(new Date()) + ")/";
                 createData.ILangu = $.app.getModel("session").getData().Langu;
 
-                oModel.create(
-                    "/CommonCodeListHeaderSet",
-                    createData,
-                    null,
-                    function (data) {
+                oModel.create("/CommonCodeListHeaderSet", createData, {
+					success: function (data) {
                         if (data) {
                             if (data.NavCommonCodeList && data.NavCommonCodeList.results) {
                                 oController._ListCondJSonModel.setProperty("/Data/Prebgyn", data.NavCommonCodeList.results[0].Code);
                             }
                         }
                     },
-                    function (oError) {
+					error: function (oError) {
                         var Err = {};
                         oController.Error = "E";
 
@@ -487,7 +475,7 @@ sap.ui.define(
                             oController.ErrorMessage = oError.toString();
                         }
                     }
-                );
+				});
 
                 // 작성중 문서를 선택한 경우 출산일 - 현재일 체크
                 if (vData.Data.Status1 == "AA") {
@@ -662,7 +650,7 @@ sap.ui.define(
                 }
 
                 var onProcess = function () {
-                    var oModel = sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+                    var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                     var createData = { PregnantApplyTableIn: [] };
                     if (Flag == "D") {
                         createData.IConType = "4";
@@ -725,11 +713,8 @@ sap.ui.define(
 
                     createData.PregnantApplyTableIn.push(detail);
 
-                    oModel.create(
-                        "/PregnantApplyHeaderSet",
-                        createData,
-                        null,
-                        function (data) {
+                    oModel.create("/PregnantApplyHeaderSet", createData, {
+                        success: function (data) {
                             if (data) {
                                 if (Flag == "C" && data.EUrl != "") {
                                     // window.open(data.EUrl);
@@ -747,7 +732,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -760,7 +745,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oController._BusyDialog.close();
 

@@ -94,7 +94,7 @@ sap.ui.define([
 			});
 		},
 
-		loadModel: function () {
+		loadModel: function () { 
 			// Model 선언
 			$.app.setModel("ZHR_COMMON_SRV");
 			$.app.setModel("ZHR_APPRAISAL_SRV");

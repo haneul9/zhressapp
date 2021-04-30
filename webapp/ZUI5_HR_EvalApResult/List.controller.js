@@ -124,9 +124,10 @@ sap.ui.define([
 					createData.IEePernr = oData.Pernr;
 				}
 					
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create(oPath, createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				
+				oModel.create(oPath, createData, {
+					success: function(data, res){
 						if(data){
 							if(data.TableIn && data.TableIn.results){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -137,7 +138,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -150,7 +151,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -171,8 +172,8 @@ sap.ui.define([
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			// return new JSONModelHelper({name: "20120220"});
+			// return new JSONModelHelper({name: "35132261"});
 			return new JSONModelHelper({name: "991004"});
-			return new JSONModelHelper({name: "35132261"});
 		} : null
 		
 	});

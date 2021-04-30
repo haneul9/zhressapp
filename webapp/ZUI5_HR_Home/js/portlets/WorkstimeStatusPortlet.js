@@ -24,7 +24,7 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-worktime" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-workstimeStatusPortlet-list"></div>',
@@ -59,22 +59,44 @@ fill: function() {
 			Zyymm: vFullYear + vMonth,
 			Langu: "KO",
 			Prcty: "1",
-            FlexWorktime2Nav : []
+            FlexWorktime1Nav : []
 		},
 		success: function(data) {
 			this._gateway.prepareLog('WorkstimeStatusPortlet.fill ${url} success'.interpolate(url), arguments).log();
-
+            var oPortlet = this;
 			var list = this.$(),
-                oWorkData = data.d;
+                oWorkData = data.d,
+                oMonthWorkTime = this._gateway.odataResults(data).FlexWorktime1Nav,
+                vToDate = new Date().getDate()-1;
+
             var vCtrnm = oWorkData.Ctrnm, // 소정근로시간
                 vWrktm = oWorkData.Wrktm, // 근무시간(평일)
                 vExttm = oWorkData.Exttm, // 연장근로
-                vTottm = oWorkData.Tottm; // 총 근로시간
+                vTottm = oWorkData.Tottm, // 총 근로시간
+                vWorStatus = "", // 근무형태
+                vWorBTime = "", //시작시간
+                vWorETime = "", // 종료시간
+                vFullTime = ""; // 근무Time
 
             vCtrnm = vCtrnm.split(":"),
             vWrktm = vWrktm.split(":"),
             vExttm = vExttm.split(":"),
             vTottm = vTottm.split(":");
+
+            oMonthWorkTime.forEach(function(e,i) {
+                if(i === vToDate){
+                    vWorStatus = oPortlet.checkNull(e.Atext) ? "정상근무" : e.Atext,
+                    vWorBTime = e.Beguz,
+                    vWorETime = e.Enduz;
+                    vFullTime = oPortlet.checkNull(vWorBTime) && oPortlet.checkNull(vWorETime) ? "" : "(" + vWorBTime.slice(0,2) + ":" + vWorBTime.slice(-2) + "~" + vWorETime.slice(0,2) + ":" + vWorETime.slice(-2) + ")";
+                    if(e.Offyn === "X"){
+                        vWorStatus = "OFF",
+                        vWorBTime = "",
+                        vWorETime = "",
+                        vFullTime = "";
+                    }
+                }
+            });
 
             var vCtrnmH = vCtrnm[0] !== "00" && this.checkNull(!vCtrnm[0]) ? vCtrnm[0] + "시간" : (this.checkNull(vCtrnm[1]) ? "0시간" : ""),
                 vCtrnmM = vCtrnm[1] !== "00" ? (this.checkNull(vCtrnm[1]) ? "" : vCtrnm[1] + "분") : "",
@@ -88,63 +110,61 @@ fill: function() {
             var vWorkTime = parseInt(vTottm[0]+vTottm[1]) / parseInt(vCtrnm[0]+vCtrnm[1]) * 80;
 
 			list.append([
-                '<div style="display: flex; align-items: flex-end;">',
-                    '<div style="font-size: 14px; font-weight: bold; margin-right: 5px; margin-bottom: 2px;">',
+                '<div class="today">',
+                    '<div class="title">',
                         "오늘의 근태",
                     '</div>',
-                    '<div style="font-size: 20px; font-weight: bold; color: rgb(13,122,246);">',
-                        "정상근무(09:00~18:00)",
+                    '<div class="state">',
+                        vWorStatus + vFullTime,
                     '</div>',
                 '</div>',
-                '<div style="background-color: rgb(236,244,253); margin-top: 10px;">',
-                    '<div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 15px;">',
-                        '<div style="font-size: 14px; font-weight: bold; color: rgb(4,62,127);">',
-                            "총 근로시간",
-                        '</div>',
-                        '<div style="font-size: 32px; font-weight: bold; color: rgb(4,62,127);">',
-                            vTottmH + vTottmM,
-                        '</div>',
+                '<div class="worktime">',
+                    '<div class="title">',
+                        "총 근로시간",
+                    '</div>',
+                    '<div class="total">',
+                        vTottmH + " " + vTottmM,
                     '</div>',
                 '</div>',
-                '<div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 10px;">',
-                    '<div class="progress" style="height: 20px; width: 100%; display: flex; position: relative;">',
-                        '<div style="height: 100%; position: absolute;" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+                '<div class="statusBar">',
+                    '<div class="progress">',
+                        '<div class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
                         '</div>',
-                        '<div style="height: 100%; position: absolute; background-color: transparent; border-right: solid; width: 80%;">',
+                        '<div class="progress-line">',
                         '</div>',
                     '</div>',
-                    '<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">',
-                        '<div style="font-size: 14px; color: rgb(145,149,155)">',
+                    '<div class="hour-unit">',
+                        '<div class="unit">',
                             "0h",
                         '</div>',
-                        '<div style="font-size: 14px; color: rgb(145,149,155); margin-right: 55px;">',
+                        '<div class="unit mr-55px">',
                             (vCtrnmH + vCtrnmM).split("시간")[0] + "h",
                         '</div>',
                     '</div>',
                 '</div>',
-                '<div style="display: flex; flex-direction: column; width: 100%; margin-top: 45px;">',
-                    '<div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgb(236 236 236); padding-bottom: 5px;">',
-                        '<div style="font-size: 14px; color: rgb(108,111,115);">',
+                '<div class="worktime-list">',
+                    '<div class="worktime-type">',
+                        '<div class="sub-title">',
                             "소정 근로시간 한도",
                         '</div>',
-                        '<div style="font-size: 18px; font-weight: bold;">',
-                            vCtrnmH + vCtrnmM,
+                        '<div class="time">',
+                            vCtrnmH +  " " + vCtrnmM,
                         '</div>',
                     '</div>',
-                    '<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; border-bottom: 1px solid rgb(236 236 236); padding-bottom: 5px;">',
-                        '<div style="font-size: 14px; color: rgb(108,111,115);">',
+                    '<div class="worktime-type">',
+                        '<div class="sub-title">',
                             "평일근로시간",
                         '</div>',
-                        '<div style="font-size: 18px; font-weight: bold;">',
-                            vWrktmH + vWrktmM,
+                        '<div class="time">',
+                            vWrktmH + " " + vWrktmM,
                         '</div>',
                     '</div>',
-                    '<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; border-bottom: 1px solid rgb(236 236 236); padding-bottom: 5px;">',
-                        '<div style="font-size: 14px; color: rgb(108,111,115);">',
+                    '<div class="worktime-type">',
+                        '<div class="sub-title">',
                             "연장근로시간",
                         '</div>',
-                        '<div style="font-size: 18px; font-weight: bold;">',
-                            vExttmH + vExttmM,
+                        '<div class="time">',
+                            vExttmH + " " + vExttmM,
                         '</div>',
                     '</div>',
                 '</div>'
@@ -159,17 +179,6 @@ fill: function() {
 			this.spinner(false);
 		}.bind(this)
 	});
-},
-onceAfter: function() {
-
-	var list = this.$();
-	if (!list.data('jsp') && !this._gateway.isMobile()) {
-		list.jScrollPane({
-			resizeSensor: true,
-			verticalGutter: 0,
-			horizontalGutter: 0
-		});
-	}
 },
 changeLocale: function() {
 

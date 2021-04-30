@@ -1,5 +1,7 @@
 {
-  "welcomeFile": "/webapp/index.html",
+  "sendWelcomeFileRedirect": true,
+  "welcomeFile": "/index.html",
+  "logoutPage": "/Logout.html",
   "routes": [
     {
       "path": "/resources",
@@ -97,6 +99,5 @@
       },
       "description": "SuccessFactors Extension UI5 App --> S/4 HANA Legacy Server ABAP OData"
     }
-  ],
-  "sendWelcomeFileRedirect": true
+  ]
 }

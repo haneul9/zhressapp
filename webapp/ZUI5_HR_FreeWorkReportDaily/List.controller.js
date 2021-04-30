@@ -114,7 +114,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FreeWorkRptNav : []};
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;
@@ -124,8 +124,8 @@ sap.ui.define([
 					createData.IOrgeh = oData.Orgeh;
 					createData.IPernr = oData.Pernr;
 
-				oModel.create("/FreeWorkReportSet", createData, null,
-					function(data, res){
+				oModel.create("/FreeWorkReportSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.FreeWorkRptNav && data.FreeWorkRptNav.results){
 								var data1 = data.FreeWorkRptNav.results;
@@ -138,7 +138,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -151,7 +151,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");

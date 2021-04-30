@@ -160,7 +160,7 @@ getDestination: function() {
 setModel: function(modelName) {
 	try {
 		var serviceURL = $.app.getDestination() + "/sap/opu/odata/sap/" + modelName,
-			oModel = new sap.ui.model.odata.ODataModel(serviceURL, true, undefined, undefined, undefined, undefined, undefined, false);
+		oModel = new sap.ui.model.odata.ODataModel(serviceURL, true, undefined, undefined, undefined, undefined, undefined, false);
 
 		oModel.setCountSupported(false);
 		sap.ui.getCore().setModel(oModel, modelName);
@@ -173,7 +173,48 @@ setModel: function(modelName) {
 	}
 },
 getModel: function(id, viewId) {
-	return $.app.getView(viewId).getModel(id) || sap.ui.getCore().getModel(id);
+	var model = $.app.getView(viewId).getModel(id) || sap.ui.getCore().getModel(id);
+	return {
+		create: function() {
+			var args = [].slice.call(arguments);
+
+			if (args.length >= 2 && $.isPlainObject(args[1])) {
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\W|Set$/g, ""), this.mix(args[1]));
+			}
+
+			return model.create.apply(model, args);
+		}.bind(this),
+		createKey: function() {
+			return model.createKey.apply(model, [].slice.call(arguments));
+		},
+		update: function() {
+			var args = [].slice.call(arguments);
+
+			if (args.length >= 2 && $.isPlainObject(args[1])) {
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\W|Set$/g, ""), this.mix(args[1]));
+			}
+
+			return model.update.apply(model, args);
+		},
+		remove: function() {
+			return model.remove.apply(model, [].slice.call(arguments));
+		},
+		read: function() {
+			return model.read.apply(model, [].slice.call(arguments));
+		},
+		getData: function() {
+			return model.getData.apply(model, [].slice.call(arguments));
+		},
+		setProperty: function() {
+			return model.setProperty.apply(model, [].slice.call(arguments));
+		},
+		getProperty: function() {
+			return model.getProperty.apply(model, [].slice.call(arguments));
+		},
+		refresh: function() {
+			return model.refresh.apply(model, [].slice.call(arguments));
+		}
+	};
 },
 getView: function(id) {
 	return $.app.byId(id || $.app.APP_ID);
@@ -232,22 +273,31 @@ getMenuId: function() {
 		throw new Error("No mid.");
 	} catch(e) {
 		var paramMap = {};
-		$.map(location.search.replace(/\?/, '').split(/&/), function(v) {
+		$.map(location.search.replace(/\?/, "").split(/&/), function(v) {
 			var pair = v.split(/=/);
 			paramMap[pair[0]] = decodeURIComponent(pair[1]);
 		});
-		return paramMap.mid || '';
+		return paramMap.mid || "";
 	}
 },
-mix: function(o, pernr) {
+mix: function(o) {
 
 	return $.extend(o, {
-		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
-		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
-		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
-		ICmenuid: this.getMenuId(),									// 메뉴 ID
-		IPernr: pernr || ''											// 대상자 사번
+		ICusrid: sessionStorage.getItem("ehr.odata.user.percod"),	// 암호화 로그인 사번
+		ICusrse: sessionStorage.getItem("ehr.odata.csrf-token"),	// Token
+		ICusrpn: sessionStorage.getItem("ehr.sf-user.name"),		// 로그인 사번
+		ICmenuid: this.getMenuId()									// 메뉴 ID
 	});
+},
+copyFields: function(modelName, entityType, o) {
+
+	var data = {};
+	$.each(sap.ui.getCore().getModel("_MetadataModel_").getProperty("/" + modelName).entityType[entityType], function(name) {
+		if (typeof o[name] !== "undefined") {
+			data[name] = o[name];
+		}
+	});
+	return data;
 },
 spinner: function(show) {
 	setTimeout(function() {

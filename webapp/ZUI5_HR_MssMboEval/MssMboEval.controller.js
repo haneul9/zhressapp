@@ -68,22 +68,24 @@ sap.ui.define([
 		},
 
 		getPreData : function(oController){
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
-			var vData={IOdkey:"",
+			var vData={
+				IOdkey:"",
 				IBukrs:oSessionData.Bukrs,
 				IAppyr:String(new Date().getFullYear()),
 				IAptyp:oSessionData.Aptyp,
 				IOptio:oSessionData.Optio,
 				TableIn:[]
-				};
-			oModel.create("/AppraisalListSet", vData, null,
-				function(data,res){
+			};
+			
+			oModel.create("/AppraisalListSet", vData, {
+				success: function(data,res){
 					if(data&&data.TableIn.results){
 						oController._PreData=data.TableIn.results[0];
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -94,13 +96,12 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);
+			});
 		},
 		
 		onAfterShow: function(oEvent){
 			var oController = this;
 		},
-
 		
 		onAfterRenderingTable : function() {
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
@@ -184,7 +185,7 @@ sap.ui.define([
 		},
 
 		getHeaderData : function(oController,vApprc,tData,Signal){
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
 			var oSel1,oSel2,oRow,oCell,oSel3;
@@ -270,8 +271,9 @@ sap.ui.define([
 				vData.IAporg=oSel1.getSelectedKey();
 				vData.IAppgr=oSel2.getSelectedKey();
 			}
-			oModel.create("/AppraisalHeaderSet", vData, null,
-				function(data,res){
+			
+			oModel.create("/AppraisalHeaderSet", vData, {
+				success: function(data,res){
 					if(vApprc=="41"||vApprc=="42"||vApprc=="43"){
 						if(oController.vPage!="2a"&&oController.vPage!="3a"){
 							if(data&&data.TableIn1.results.length){						
@@ -313,7 +315,7 @@ sap.ui.define([
 						}						
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -324,11 +326,11 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);
+			});
 		},
 
 		getHeaderData2 : function(oController,vApprc,tData){
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
 			var oSel1,oSel2,oRow,oCell;
@@ -380,27 +382,28 @@ sap.ui.define([
 
 //mTABLE 수정/////////////////////////////////////////////////////////////////////////////////////////////////
 
-			oModel.create("/AppraisalHeaderSet", vDataA, null,
-			function(data,res){	
-				data&&data.TableIn6.results.length?
-				oController.mTableMapping(oController,mTable,mCol,oFields,data.TableIn6.results):
-				oController.mTableMapping(oController,mTable,mCol,oFields,[]);					
-			},
-			function (oError) {
-				var Err = {};						
-				if (oError.response) {
-					Err = window.JSON.parse(oError.response.body);
-					var msg1 = Err.error.innererror.errordetails;
-					if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-					else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-				} else {
-					sap.m.MessageBox.alert(oError.toString());
+			oModel.create("/AppraisalHeaderSet", vDataA, {
+				success: function(data,res){	
+					data&&data.TableIn6.results.length?
+					oController.mTableMapping(oController,mTable,mCol,oFields,data.TableIn6.results):
+					oController.mTableMapping(oController,mTable,mCol,oFields,[]);					
+				},
+				error: function (oError) {
+					var Err = {};						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+					} else {
+						sap.m.MessageBox.alert(oError.toString());
+					}
 				}
-			}
-			);
+			});
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			oModel.create("/AppraisalMboFinSet", vData, null,
-				function(data,res){
+			oModel.create("/AppraisalMboFinSet", vData, {
+				success: function(data,res){
 					// if(data&&data.TableIn2.results.length){			
 					// 	var mData=data.TableIn2.results;
 					// 	var mCntArea=new Array();						
@@ -461,7 +464,7 @@ sap.ui.define([
 					}
 					oController._FinSet=data;
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -472,7 +475,7 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);
+			});
 		},
 
 		onOpenImg : function(vSig){
@@ -572,6 +575,7 @@ sap.ui.define([
 			aData.tData.forEach(function(e,i){
 				aData.tData[i].Seqno=i+1;
 			});
+			aData.tData.length>=10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(0);
 			oJSON.setData(aData);
 			oTable.setModel(oJSON);
 			oTable.bindRows("/tData");
@@ -609,7 +613,7 @@ sap.ui.define([
 				colSpan:22,
 				hAlign:"Center",
 				content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
-				new sap.m.Text({text:oBundleText.getText("MSG_05001")}),
+				new sap.m.Text({text:oBundleText.getText("LABEL_00901")}),
 				new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
 			}).addStyleClass("UnderBar");
 			oRow.addCell(oCell);
@@ -625,7 +629,7 @@ sap.ui.define([
 				colSpan:22,
 				hAlign:"Center",
 				content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
-				new sap.m.Text({text:oBundleText.getText("MSG_05001")}),
+				new sap.m.Text({text:oBundleText.getText("LABEL_00901")}),
 				new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
 			}).addStyleClass("UnderBar");
 			oRow.addCell(oCell);
@@ -1330,7 +1334,7 @@ sap.ui.define([
 		},
 
 		onSearch1 : function(oController,vApprc){
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
 			var oSel1,oSel2,oRow,oCell,oSel3;
@@ -1375,35 +1379,36 @@ sap.ui.define([
 
 			setTimeout(function(){
 //				oController.getHeaderData(oController,"4"+oController.vPage);
-				oModel.create("/AppraisalHeaderSet", vData, null,
-				function(data,res){
-					if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
-						oController._BusyDialog.close();
-					}
-					if(vApprc=="41"||vApprc=="42"||vApprc=="43"){
-						data&&data.TableIn1.results.length?oController.oTableMapping(oController,data.TableIn1.results):
-						oController.oTableMapping(oController,[]);			
-						
-						if(data&&data.TableIn6.results.length){
-							oController._tableLength=data.TableIn6.results.length;
-							oController.mTableMapping(oController,mTable,mCol,oFields,data.TableIn6.results);																							
-						}else{
-							oController.mTableMapping(oController,mTable,mCol,oFields,[]);								
+				oModel.create("/AppraisalHeaderSet", vData, {
+					success: function(data,res){
+						if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
+							oController._BusyDialog.close();
 						}
-					}
-				},
-				function (oError) {
-					var Err = {};				
-					if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
-						oController._BusyDialog.close();
-					}		
-					if (oError.response) {
-						Err = window.JSON.parse(oError.response.body);
-						var msg1 = Err.error.innererror.errordetails;
-						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-					} else {
-						sap.m.MessageBox.alert(oError.toString());
+						if(vApprc=="41"||vApprc=="42"||vApprc=="43"){
+							data&&data.TableIn1.results.length?oController.oTableMapping(oController,data.TableIn1.results):
+							oController.oTableMapping(oController,[]);			
+							
+							if(data&&data.TableIn6.results.length){
+								oController._tableLength=data.TableIn6.results.length;
+								oController.mTableMapping(oController,mTable,mCol,oFields,data.TableIn6.results);																							
+							}else{
+								oController.mTableMapping(oController,mTable,mCol,oFields,[]);								
+							}
+						}
+					},
+					error: function (oError) {
+						var Err = {};				
+						if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
+							oController._BusyDialog.close();
+						}		
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
 					}
 				});
 			},100);	
@@ -1471,7 +1476,7 @@ sap.ui.define([
 			var oSel4=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel3_3");
 			var oSaveBtn=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Save1_2");
 			var oFinishBtn=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Finish1_2");
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPreData=oController._PreData;
 
@@ -1509,8 +1514,8 @@ sap.ui.define([
 			};
 
 			//본인평가 데이터 로드
-			oModel.create("/AppraisalMboSheetSet", vData, null,
-				function(data,res){
+			oModel.create("/AppraisalMboSheetSet", vData, {
+				success: function(data,res){
 					if(data){
 						oController._SheetData=data;
 					}
@@ -1529,7 +1534,7 @@ sap.ui.define([
 						oSel1.setSelectedKey(oData[0].Apgrd0);
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -1540,11 +1545,11 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);
-
+			});
 		
 			//1차평가 데이터 로드
-			var vData1={IOdkey:"",
+			var vData1={
+				IOdkey:"",
 				IConType:"1",
 				IBukrs:"1000",
 				IAppid:tData.Appid,
@@ -1554,9 +1559,10 @@ sap.ui.define([
 				IGolst:"",
 				ILangu:oSessionData.Langu,
 				TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
-				};
-			oModel.create("/AppraisalMboSheetSet", vData1, null,
-				function(data,res){
+			};
+			
+			oModel.create("/AppraisalMboSheetSet", vData1, {
+				success: function(data,res){
 					if(data){
 						oController._SheetData=data;
 					}
@@ -1575,7 +1581,7 @@ sap.ui.define([
 						oSel2.setSelectedKey(oData[0].Apgrd1);
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -1586,7 +1592,7 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);		
+			});
 
 			switch (oController.vPage) {
 				case "1":
@@ -1607,49 +1613,52 @@ sap.ui.define([
 
 				case "2":
 				//2차평가 데이터 로드
-					var vData1={IOdkey:"",
-					IConType:"1",
-					IBukrs:"1000",
-					IAppid:tData.Appid,
-					IDocid:tData.Docid,
-					IPernr:tData.Appee,
-					IApprc:"42",
-					IGolst:"",
-					ILangu:oSessionData.Langu,
-					TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
+					var vData1={
+						IOdkey:"",
+						IConType:"1",
+						IBukrs:"1000",
+						IAppid:tData.Appid,
+						IDocid:tData.Docid,
+						IPernr:tData.Appee,
+						IApprc:"42",
+						IGolst:"",
+						ILangu:oSessionData.Langu,
+						TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
 					};
-				oModel.create("/AppraisalMboSheetSet", vData1, null,
-					function(data,res){
-						if(data){
-							oController._SheetData=data;
+
+					oModel.create("/AppraisalMboSheetSet", vData1, {
+						success: function(data,res){
+							if(data){
+								oController._SheetData=data;
+							}
+							if(data&&data.TableIn2.results.length){
+								var oData=data.TableIn2.results;
+								oData.forEach(function(e){
+									if(e.Apopt=="52"){
+										oTa5.setValue(e.Apop);
+									}else if(e.Apopt=="62"){
+										oTa6.setValue(e.Apop);
+									}							
+								});
+							}
+							if(data&&data.TableIn4.results.length){
+								var oData=data.TableIn4.results;
+								oSel3.setSelectedKey(oData[0].Apgrd2);
+							}
+						},
+						error: function (oError) {
+							var Err = {};						
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							} else {
+								sap.m.MessageBox.alert(oError.toString());
+							}
 						}
-						if(data&&data.TableIn2.results.length){
-							var oData=data.TableIn2.results;
-							oData.forEach(function(e){
-								if(e.Apopt=="52"){
-									oTa5.setValue(e.Apop);
-								}else if(e.Apopt=="62"){
-									oTa6.setValue(e.Apop);
-								}							
-							});
-						}
-						if(data&&data.TableIn4.results.length){
-							var oData=data.TableIn4.results;
-							oSel3.setSelectedKey(oData[0].Apgrd2);
-						}
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					}
-				);	
+					});
+						
 					if(tData.Apstu=="51"||tData.Apstu=="60"){
 						oTa3.setEditable(false);
 						oTa4.setEditable(false);
@@ -1673,93 +1682,99 @@ sap.ui.define([
 
 				case "3":
 					//2차평가 데이터 로드
-					var vData1={IOdkey:"",
-					IConType:"1",
-					IBukrs:"1000",
-					IAppid:tData.Appid,
-					IDocid:tData.Docid,
-					IPernr:tData.Appee,
-					IApprc:"42",
-					IGolst:"",
-					ILangu:oSessionData.Langu,
-					TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
+					var vData1={
+						IOdkey:"",
+						IConType:"1",
+						IBukrs:"1000",
+						IAppid:tData.Appid,
+						IDocid:tData.Docid,
+						IPernr:tData.Appee,
+						IApprc:"42",
+						IGolst:"",
+						ILangu:oSessionData.Langu,
+						TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
 					};
-				oModel.create("/AppraisalMboSheetSet", vData1, null,
-					function(data,res){
-						if(data){
-							oController._SheetData=data;
+				
+					oModel.create("/AppraisalMboSheetSet", vData1, {
+						success: function(data,res){
+							if(data){
+								oController._SheetData=data;
+							}
+							if(data&&data.TableIn2.results.length){
+								var oData=data.TableIn2.results;
+								oData.forEach(function(e){
+									if(e.Apopt=="52"){
+										oTa5.setValue(e.Apop);
+									}else if(e.Apopt=="62"){
+										oTa6.setValue(e.Apop);
+									}							
+								});
+							}
+							if(data&&data.TableIn4.results.length){
+								var oData=data.TableIn4.results;
+								oSel3.setSelectedKey(oData[0].Apgrd2);
+							}
+						},
+						error: function (oError) {
+							var Err = {};						
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							} else {
+								sap.m.MessageBox.alert(oError.toString());
+							}
 						}
-						if(data&&data.TableIn2.results.length){
-							var oData=data.TableIn2.results;
-							oData.forEach(function(e){
-								if(e.Apopt=="52"){
-									oTa5.setValue(e.Apop);
-								}else if(e.Apopt=="62"){
-									oTa6.setValue(e.Apop);
-								}							
-							});
-						}
-						if(data&&data.TableIn4.results.length){
-							var oData=data.TableIn4.results;
-							oSel3.setSelectedKey(oData[0].Apgrd2);
-						}
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					}
-				);	
-				//3차평가 데이터 로드
-					var vData1={IOdkey:"",
-					IConType:"1",
-					IBukrs:"1000",
-					IAppid:tData.Appid,
-					IDocid:tData.Docid,
-					IPernr:tData.Appee,
-					IApprc:"43",
-					IGolst:"",
-					ILangu:oSessionData.Langu,
-					TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
+					});
+					
+					//3차평가 데이터 로드
+					var vData1={
+						IOdkey:"",
+						IConType:"1",
+						IBukrs:"1000",
+						IAppid:tData.Appid,
+						IDocid:tData.Docid,
+						IPernr:tData.Appee,
+						IApprc:"43",
+						IGolst:"",
+						ILangu:oSessionData.Langu,
+						TableIn1:[],TableIn2:[],TableIn3:[],TableIn4:[]
 					};
-				oModel.create("/AppraisalMboSheetSet", vData1, null,
-					function(data,res){
-						if(data){
-							oController._SheetData=data;
+				
+					oModel.create("/AppraisalMboSheetSet", vData1, {
+						success: function(data,res){
+							if(data){
+								oController._SheetData=data;
+							}
+							if(data&&data.TableIn2.results.length){
+								var oData=data.TableIn2.results;
+								oData.forEach(function(e){
+									if(e.Apopt=="53"){
+										oTa7.setValue(e.Apop);
+									}else if(e.Apopt=="63"){
+										oTa8.setValue(e.Apop);
+									}							
+								});
+							}
+							if(data&&data.TableIn4.results.length){
+								var oData=data.TableIn4.results;
+								oSel4.setSelectedKey(oData[0].Apgrd3);
+							}
+						},
+						error: function (oError) {
+							var Err = {};						
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							} else {
+								sap.m.MessageBox.alert(oError.toString());
+							}
 						}
-						if(data&&data.TableIn2.results.length){
-							var oData=data.TableIn2.results;
-							oData.forEach(function(e){
-								if(e.Apopt=="53"){
-									oTa7.setValue(e.Apop);
-								}else if(e.Apopt=="63"){
-									oTa8.setValue(e.Apop);
-								}							
-							});
-						}
-						if(data&&data.TableIn4.results.length){
-							var oData=data.TableIn4.results;
-							oSel4.setSelectedKey(oData[0].Apgrd3);
-						}
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					}
-				);	
+					});
+					
 					if(tData.Apstu=="61"||tData.Apstu=="70"){
 						oTa3.setEditable(false);
 						oTa4.setEditable(false);
@@ -1877,7 +1892,7 @@ sap.ui.define([
 		onSaveProcess : function(oController,Sig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
 			var oController = oView.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oPreData=oController._PreData;
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oTa1=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA1_2");
@@ -2092,8 +2107,9 @@ sap.ui.define([
 				switch (Sig) {
 					case "S":
 					vData.IConType="2";
-					oModel.create("/AppraisalMboSheetSet", vData, null,
-						function(data,res){
+					
+					oModel.create("/AppraisalMboSheetSet", vData, {
+						success: function(data,res){
 							sap.m.MessageBox.alert(oBundleText.getText("MSG_35005"),{
 								title:oBundleText.getText("LABEL_35023"),
 								onClose:function(){
@@ -2105,7 +2121,7 @@ sap.ui.define([
 									}
 							})
 						},
-						function (oError) {
+						error: function (oError) {
 							var Err = {};						
 							if (oError.response) {
 								Err = window.JSON.parse(oError.response.body);
@@ -2116,28 +2132,31 @@ sap.ui.define([
 								sap.m.MessageBox.alert(oError.toString());
 							}
 						}
-					);
+					});
 						break;
 					case "F":
-					vData.IConType="9";
-					oModel.create("/AppraisalMboSheetSet", vData, null,
-					function(data,res){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_35006"),{
-							title:oBundleText.getText("LABEL_35023"),
-							onClose:oController.onBack
-						})
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					});
+						vData.IConType="9";
+						
+						oModel.create("/AppraisalMboSheetSet", vData, {
+							success: function(data,res){
+								sap.m.MessageBox.alert(oBundleText.getText("MSG_35006"),{
+									title:oBundleText.getText("LABEL_35023"),
+									onClose:oController.onBack
+								})
+							},
+							error: function (oError) {
+								var Err = {};						
+								if (oError.response) {
+									Err = window.JSON.parse(oError.response.body);
+									var msg1 = Err.error.innererror.errordetails;
+									if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+									else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+								} else {
+									sap.m.MessageBox.alert(oError.toString());
+								}
+							}
+						});
+						
 						break;
 					default:
 						break;
@@ -2272,7 +2291,7 @@ sap.ui.define([
 			var oController = oView.getController();
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
 			var oController = oView.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
+			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oPreData=oController._PreData;
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var rData=oController._realTimeData;
@@ -2324,28 +2343,31 @@ sap.ui.define([
 					IAppgr:"",
 					TableIn1:oTableIn1,TableIn2:oTableIn2,TableIn3:oTableIn3,
 				};
-				oModel.create("/AppraisalMboFinSet", vData2, null,function(data,res){},function (oError) {});
+				oModel.create("/AppraisalMboFinSet", vData2, {
+					success: function(data,res){},
+					error: function (oError) {}
+				});
 			}
 
-			oModel.create("/AppraisalMboFinSet", vData, null,
-					function(data,res){
-						sap.m.MessageBox.alert(vMsg,{
-							title:oBundleText.getText("LABEL_35023"),
-							onClose:function(){oController.handleIconTabBarSelect();}
-						})
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
+			oModel.create("/AppraisalMboFinSet", vData, {
+				success: function(data,res){
+					sap.m.MessageBox.alert(vMsg,{
+						title:oBundleText.getText("LABEL_35023"),
+						onClose:function(){oController.handleIconTabBarSelect();}
+					})
+				},
+				error: function (oError) {
+					var Err = {};						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+					} else {
+						sap.m.MessageBox.alert(oError.toString());
 					}
-				);
+				}
+			});
 		},
 
 		onSaveFin : function(){

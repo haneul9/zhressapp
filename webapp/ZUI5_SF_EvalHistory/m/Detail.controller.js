@@ -105,29 +105,29 @@ sap.ui.define(
 						}.bind(this)
 					)
 				]).then(function () {
-					BusyIndicator.hide();
 					this.getTemplateSCP.call(this,vdata);
 					this.getCapaData.call(this);
+					BusyIndicator.hide();
 				}.bind(this));
 			},
 
 			getCapaData : function(){
 				var oController=this;
 				var oChart = sap.ui.getCore().byId(this.PAGEID + "_Chart");
-				var oJSONModel2 = oChart.getModel();
+				var oJSONModel2 = this.oModel;
 				var vData2 = {Data2 : []};
 				
 				// 역량평가 점수 초기화
 				oJSONModel2.setProperty("/Data2",null);
 				
 				// 역량평가 결과
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				var createData = {CompResultsNav : []};
 					createData.Pernr = this.oModel.getProperty("/Data/Pernr");
 					createData.Appye = this.oModel.getProperty("/Data/Appye");
 				
-				oModel.create("/CompResultsSet", createData, null,
-					function(data,res){
+				oModel.create("/CompResultsSet", createData, {
+					success: function(data,res){
 						if(data && data.CompResultsNav) {
 							if(data.CompResultsNav.results && data.CompResultsNav.results.length){
 								for(var i=0; i<data.CompResultsNav.results.length; i++){
@@ -139,7 +139,7 @@ sap.ui.define(
 							}
 						} 
 					},
-					function (oError) {
+					error: function (oError) {
 						var Err = {};
 						this.Error = "E";
 								
@@ -152,9 +152,9 @@ sap.ui.define(
 							this.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
-				oJSONModel2.setProperty("/Data2",vData2);
+				oJSONModel2.setProperty("/Data2",vData2.Data2);
 				
 				if(this.Error == "E"){
 					this.Error = "";

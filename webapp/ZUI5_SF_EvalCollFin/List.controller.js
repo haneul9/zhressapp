@@ -91,15 +91,15 @@ sap.ui.define([
 				
 				var count1 = 0, count2 = 0, count3 = 0, count4 = 0;
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				
 				var createData = {TableIn : []};
 					createData.IConType = "1";
 					createData.IEmpid = oView.getModel("session").getData().Pernr;
 					createData.IAppye = oData.Appye;
 					
-				oModel.create("/EvaAgreeListSet", createData, null,
-					function(data,res){
+				oModel.create("/EvaAgreeListSet", createData, {
+					success: function(data,res){
 						if(data){
 							if(data.TableIn && data.TableIn.results.length){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -133,7 +133,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 				    	
@@ -146,7 +146,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").setSelectedKey("All");
 				
@@ -212,7 +212,7 @@ sap.ui.define([
 			}
 			
 			var saveProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				var createData = {TableIn : []};
 					createData.IConType = "2";
 					createData.IEmpid = oData.Pernr;
@@ -223,13 +223,13 @@ sap.ui.define([
 					createData.IRvtim = common.Common.getCurrentTimeOdataFormat();
 					createData.IEvstaus = vPrcty;
 				
-				oModel.create("/EvaAgreeListSet", createData, null,
-					function(data,res){
+				oModel.create("/EvaAgreeListSet", createData, {
+					success: function(data,res){
 						if(data){
 				
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 				    	
@@ -242,7 +242,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				if(oController.Error == "E"){

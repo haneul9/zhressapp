@@ -25,7 +25,7 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-vacation" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="list-group" id="portlet-vacationportlet-list"></div>',
@@ -97,21 +97,21 @@ fill: function() {
             
 			list.append([
                 '<canvas id="vacChart" class="ChartClass"></canvas>',
-                '<div style="display: flex; justify-content: space-between; padding: 8px; background-color: rgb(241 241 241); margin-top: 20px;">',
-                    '<div style="font-size: 14px; font-weight: bold; position: absolute;">',
+                '<div class="vac-header">',
+                    '<div style="width:30%;">',
                         "구분",
                     '</div>',
-                    '<div style="font-size: 14px; font-weight: bold; margin-left: 26%; position: relative; width: 20%; text-align: end;">',
+                    '<div style="width: 20%; text-align: right;">',
                         "발생",
                     '</div>',
-                    '<div style="font-size: 14px; font-weight: bold; position: relative; width: 25%; text-align: end;">',
+                    '<div style="width: 20%; text-align: right;">',
                         "사용",
                     '</div>',
-                    '<div style="font-size: 14px; font-weight: bold; position: relative; width: 30%; text-align: end;">',
+                    '<div style="width: 20%; text-align: right;">',
                         "잔여",
                     '</div>',
                 '</div>',
-                '<div class="vacationTable" style="display: flex; flex-direction: column; padding: 8px;"></div>'
+                '<div class="vacationTable" class="vac-body"></div>'
             ].join(''));
 
             var vChartId = document.getElementById('vacChart').getContext('2d');
@@ -120,23 +120,25 @@ fill: function() {
                 vList3 = [];
             
             oVacationData.forEach(function(e, i) {
+                if(i > 2) return;
+
                 var vKtext = e.Ktext, // 구분
-                    vAnzhl = parseInt(e.Anzhl), // 발생
-                    vKverb = parseInt(e.Kverb), // 사용
-                    vReman = parseInt(e.Reman); // 잔여
+                    vAnzhl = parseFloat(e.Anzhl), // 발생
+                    vKverb = parseFloat(e.Kverb), // 사용
+                    vReman = parseFloat(e.Reman); // 잔여
 
                 $('.vacationTable').append([
-                '<div style="display: flex; margin-bottom: 5px;">',
-                    '<div style="font-size: 14px; font-weight: bold; position: absolute; width: 30%; display: inline-block;">',
+                '<div class="vac-body">',
+                    '<div style="width: 30%;">',
                         vKtext,
                     '</div>',
-                    '<div style="font-size: 14px; font-weight: bold; margin-left: 26%; position: relative; width: 20%; text-align: end;">',
+                    '<div style="width: 20%; text-align: right;">',
                         vAnzhl,
                     '</div>',
-                    '<div style="font-size: 14px; font-weight: bold; position: relative; width: 25%; text-align: end;">',
+                    '<div style="width: 20%; text-align: right;">',
                         vKverb,
                     '</div>',
-                    '<div style="font-size: 14px; font-weight: bold; position: relative; width: 30%; text-align: end;">',
+                    '<div style="width: 20%; text-align: right;">',
                         vReman,
                     '</div>',
                 '</div>'
@@ -154,22 +156,25 @@ fill: function() {
                     datasets: [
                         { 
                             label: '사용',
-                            barPercentage: 0.6,
-                            categoryPercentage: 0.6,
-                            backgroundColor: 'rgb(130,235,55)', 
-                            borderColor: 'rgb(255, 99, 132)',
+                            // maxBarThickness: "40px",
+                            // barPercentage: 0.6,
+                            // categoryPercentage: 0.6,
+                            barThickness: oVacationData.length === 1 ? 40 : 20,
+                            backgroundColor: 'rgb(141, 198, 63)', 
                             data: vList2
                         },
                         {
                             label: '잔여',
-                            barPercentage: 0.6,
-                            categoryPercentage: 0.6,
-                            backgroundColor: 'rgb(50,118,234)',
-                            borderColor: 'rgb(255, 99, 132)',
+                            // maxBarThickness: "40px",
+                            // barPercentage: 0.6,
+                            // categoryPercentage: 0.6,
+                            barThickness: oVacationData.length === 1 ? 40 : 20,
+                            backgroundColor: 'rgb(221, 238, 197)',
                             data: vList3
                         }
                     ]
-                }
+                },
+                color: 'rgb(242, 242, 242)'
             });
 
             $('.ChartClass').append([chart]);

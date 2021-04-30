@@ -43,7 +43,8 @@
 
 		IngoBox: function(oController) {
 			var oGubunCombo = new sap.m.ComboBox(oController.PAGEID + "_GubunCombo", { // 어학구분
-				width: "110px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
                 change: oController.onDialogGubun.bind(oController),
 				items: {
 					path: "/LanguCombo",
@@ -63,7 +64,8 @@
 			
 			
             var oExamCombo = new sap.m.ComboBox(oController.PAGEID + "_ExamCombo", { // 시험종류
-				width: "120px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				items: {
 					path: "/TestCombo",
 					template: new sap.ui.core.ListItem({
@@ -81,7 +83,8 @@
             }, oExamCombo);
             
             var oCompleteCombo = new sap.m.ComboBox(oController.PAGEID + "_CompleteCombo", { // 이수여부
-				width: "90px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				items: {
 					path: "/CompleteCombo",
 					template: new sap.ui.core.ListItem({

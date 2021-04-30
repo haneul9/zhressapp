@@ -108,7 +108,7 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {DWorkScheduleNav : []};
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;
@@ -118,8 +118,8 @@ sap.ui.define([
 					createData.IOrgeh = oData.Orgeh;
 					createData.IEmpid = oData.Pernr;
 				
-				oModel.create("/DayWorkScheduleSet", createData, null,
-					function(data){
+				oModel.create("/DayWorkScheduleSet", createData, {
+					success: function(data){
 						if(data){
 							if(data.DWorkScheduleNav && data.DWorkScheduleNav.results){
 								var data1 = data.DWorkScheduleNav.results;
@@ -135,7 +135,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -148,7 +148,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");

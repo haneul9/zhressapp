@@ -84,9 +84,9 @@
 			
 			oModel.create("/EducationfundApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 5;
 					
 					if (oData && oData.EducationFundApplyTableIn0) {
+						var dataLength = 5;
 						Common.log(oData);
 						var rDatas = oData.EducationFundApplyTableIn0.results;
 						dataLength = rDatas.length;
@@ -127,9 +127,9 @@
 			
 			oModel.create("/EducationfundApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					
 					if (oData && oData.EducationfundApplyTableIn) {
+						var dataLength = 10; 
 						Common.log(oData);
 						var rDatas = oData.EducationfundApplyTableIn.results;
 						dataLength = rDatas.length;

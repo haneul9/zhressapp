@@ -368,7 +368,7 @@ encodePernr: function() {
 
 			sessionStorage.removeItem('ehr.odata.user.percod');
 		}.bind(this)
-	}).promise();
+	});
 },
 
 retrieveLoginInfo: function() {
@@ -420,7 +420,7 @@ sessionToken: function() {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + url);
 		}.bind(this)
-	}).promise();
+	});
 },
 
 registerToken: function() {
@@ -446,7 +446,33 @@ registerToken: function() {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);
 		}.bind(this)
-	}).promise();
+	});
+},
+
+logout: function() {
+
+	$([	'<div class="modal fade" style="display:none" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-logout-modal">',
+			'<div class="modal-dialog" role="document">',
+				'<div class="modal-content">',
+					'<div class="modal-header">',
+						'<h4 class="modal-title">로그아웃 확인</h4>',
+						'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
+					'</div>',
+					'<div class="modal-body">',
+						'<p>로그아웃하시겠습니까?</p>',
+						'<a href="/Logout.html">로그아웃</a>',
+					'</div>',
+					'<div class="modal-footer">',
+						'<button type="button" class="btn btn-light" data-dismiss="modal">취소</button>',
+					'</div>',
+				'</div>',
+			'</div>',
+		'</div>'
+	].join('')).appendTo('body')
+	.on('hidden.bs.modal', function() {
+		$(this).remove();
+	})
+	.modal();
 },
 
 pernr: function() {

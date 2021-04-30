@@ -12,61 +12,7 @@ sap.ui.define(
 
             createContent: function (oController) {
                 this.loadModel();
-                // var searchBox = new sap.m.FlexBox({
-                //     fitContainer: true,
-                //     items: [
-                //         new sap.m.FlexBox({
-                //             items: [
-                //                 new sap.m.Button({
-                //                     press: oController.moveSearch,
-                //                     icon: "sap-icon://search"
-                //                 }).addStyleClass("button-search")
-                //                 // new sap.m.Link({
-                //                 // 	text :"이동하기",
-                //                 // 	href : "bizx://?urlType=deeplink&deeplinkType=orgChart"
-                //                 // })
-                //             ]
-                //         }).addStyleClass("button-group pl-0"),
-                //         new sap.m.FlexBox({
-                //             // 검색
-                //             items: [
-                //                 new sap.m.Input({
-                //                     value: "{Ename}",
-                //                     editable: false,
-                //                     width: "200px"
-                //                 })
-                //             ]
-                //         }).addStyleClass("search-field-group pl-0")
-                //     ],
-                //  //   visible: {
-                //  //       path: "Auth",
-                //  //   	formatter: function(v) {
-                //  //   		if(v == "E" ) return false;
-                //  //   		else return true;
-                //  //   	}
-        	       // // }
-                // }).addStyleClass("search-box-mobile h-auto");
-                
-                // var searchBox = new sap.m.Vertical({
-                //     fitContainer: true,
-                //     height : "130px",
-                //     items: [
-                //         new sap.m.FlexBox({
-                //         	height : "130px",
-                //             items: [
-                                
-                //             ]
-                //         }).addStyleClass("button-group pl-0"),
-                //         new sap.m.FlexBox({
-                //             // 검색
-                //             items: [
-                           
-                //             ]
-                //         }).addStyleClass("search-field-group pl-0")
-                //     ],
-                // }).addStyleClass("search-box-mobile h-auto");
-                
-                
+               
                 var searchBox = new sap.m.HBox({
                     fitContainer: true,
                     height : "130px",
@@ -105,11 +51,6 @@ sap.ui.define(
                     ]
                 }).addStyleClass("EmployeeLayout");
                 
-    //             var searchBox = new sap.ui.core.HTML({
-				// 	// content : "{html}",
-				// 	content : "<div style='height:130px' />",
-				// 	preferDOM : false
-				// });
                 searchBox.setModel(oController._ListCondJSonModel);
                 searchBox.bindElement("/Data");
                 var tabBox = new sap.m.IconTabBar(oController.PAGEID + "_IconBar", {
@@ -176,9 +117,7 @@ sap.ui.define(
                                         new sap.m.Button({ 
                                             press: oController.moveSearch,
                                             text : "{i18n>LABEL_00205}",  //사원검색
-                                            // visible: {
-                                            //     return gAuth === "M" ? true : false;
-                                            // }
+                                            // visible: gAuth === "M" ? true : false
                                         }).addStyleClass("button-light")
                                     ]
                                 }).addStyleClass("app-nav-button-right")

@@ -157,7 +157,7 @@ common.SearchEmpProfile = {
 			}
 		}
 		
-		var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
+		var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
 		var createData = {TBasic : [], TEducation : [], TAction : [], TEvaluation : [], TPrize : [], TDiscipline : [], TCareer : [], TCertification : [], TLanguage : []};
 			createData.IEmpid = common.SearchEmpProfile._JSONModel.getProperty("/Data/userId");
 			createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";

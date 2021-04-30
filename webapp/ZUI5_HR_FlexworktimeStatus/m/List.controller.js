@@ -115,7 +115,7 @@ sap.ui.define([
 				
 				var vData = [];
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : []};
 					createData.Werks = oData.Werks;
 					createData.Pernr = oData.Pernr;
@@ -123,8 +123,8 @@ sap.ui.define([
 					createData.Langu = oData.Langu;
 					createData.Prcty = "1";
 
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							// 자율출퇴근 현황
 							var oField = [{text : oBundleText.getText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
@@ -304,7 +304,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -317,7 +317,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel1.setData(vData1);
 				oJSONModel2.setData(vData2);

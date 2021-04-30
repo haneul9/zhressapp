@@ -621,7 +621,7 @@ sap.ui.define([
 		onSaveProcess : function(oController,Sig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet");
 			var oController = oView.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._SessionData;
 			var oPro=$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0];
 			oPro.Pernr=oSessionData.Pernr;
@@ -660,8 +660,9 @@ sap.ui.define([
 			}			
 			vData2.FamilyupdateTablein1[0].Regno.search("-")!=-1?vData2.FamilyupdateTablein1[0].Regno=vData2.FamilyupdateTablein1[0].Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]:null;
 			delete vData2.FamilyupdateTablein1[0].Opener;
-			oModel.create("/FamilyupdateSet", vData2, null,
-				function(data,res){
+			
+			oModel.create("/FamilyupdateSet", vData2, {
+				success: function(data,res){
 					var vMsg="";
 					if(data&&data.FamilyupdateExport.results.length){
 						vMsg=data.FamilyupdateExport.results[0].EMsg;
@@ -673,7 +674,7 @@ sap.ui.define([
 					});
 					oPro.Regno.search("-")==-1?oPro.Regno=oPro.Regno.substring(0,6)+"-"+oPro.Regno.substring(6):null;
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -685,7 +686,8 @@ sap.ui.define([
 					}
 					oPro.Regno.search("-")==-1?oPro.Regno=oPro.Regno.substring(0,6)+"-"+oPro.Regno.substring(6):null;
 					oPro.Opener="X";
-				});	
+				}
+			});
 		},
 
 		onSave : function(Sig){

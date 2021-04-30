@@ -128,13 +128,17 @@ sap.ui.define([
 				vData.photo = oPhoto;
 				 
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
-			var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var oPath = "/EmpSearchResultSet?$filter=Percod eq '" + encodeURIComponent(common.Common.encryptPernr($.app.getModel("session").getData().Pernr)) + "'";
 				oPath += " and Actty eq '" + gAuth + "'";
 				oPath += " and Actda eq datetime'" + dateFormat.format(new Date()) + "T00:00:00'";
 				oPath += " and Ename eq '" + Pernr + "'";
 				oPath += " and Persa eq '0AL1' and Stat2 eq '3'";
 				oPath += " and Bukrs eq '" + $.app.getModel("session").getData().Bukrs + "'";
+				oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
+				oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "'";
+				oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
+				oPath += " and ICmenuid eq '" + $.app.getMenuId() + "'";
 				
 			oModel.read(oPath, null, null, false,
 						function(data, oResponse) {
@@ -187,7 +191,6 @@ sap.ui.define([
 			var oData = oController._DetailJSonModel.getProperty("/Data");
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
 				
 				if(oData.Status == "" || (pernr && pernr != "")){
 					// 대상자
@@ -257,15 +260,15 @@ sap.ui.define([
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_WORKTIME_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = $.app.getModel("session").getData().Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = Flag == "C" ? "3" : "4";
 					
-				oModel.create("/WorkhomeApplySet", createData, null,
-					function(data, res){
+				oModel.create("/WorkhomeApplySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(Flag == "C" && data.EUrl != ""){
 								if(!oController._ImageDialog){
@@ -279,7 +282,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -292,7 +295,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

@@ -54,6 +54,10 @@ fill: function() {
 	});
 },
 
+checkNull: function (v) {
+    return v === undefined || v === null || v == "" ? true : false;
+},
+
 retrieveDirectReports: function(oPage) { // 평가사원들 조회
 	var url2 = "/odata/v2/User('" + this._gateway.pernr() +"')/directReports?$select=userId,nickname,custom01&$format=json";
 
@@ -83,7 +87,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 			oEmpData.forEach(function(e, i) {
 				oPage.goalDataMap[e.userId] = {
 					nickname: e.nickname,
-					position: e.custom01
+					position: oPage.checkNull(e.custom01) ? "" : e.custom01.split("(")[0]
 				};
 
 				Promise.all([
@@ -94,25 +98,30 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 						list.append([
 							'<div style="height: auto; margin-bottom: 15px; display: flex;">',
 								'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
-								'<div style="display: flex; flex-direction: column; margin-left: 25px; justify-content: space-evenly;">',
-									'<div style="font-size: 14px; height: 25px; font-weight: bold;">',
-										oPage.goalDataMap[e.userId].nickname,
+								'<div style="height: auto; display: flex; flex-direction: column; width: 75%;">',
+									'<div style="display: flex; margin-left: 15px; justify-content: flex-start;">',
+										'<div style="font-size: 14px; height: 25px; font-weight: bold;">',
+											oPage.goalDataMap[e.userId].nickname,
+										'</div>',
+										'<div style="font-size: 14px; height: 25px; margin-left: 3px;">',
+										oPage.goalDataMap[e.userId].position,
+										'</div>',
 									'</div>',
-									'<div style="font-size: 14px; height: 25px;">',
-									oPage.goalDataMap[e.userId].position,
-									'</div>',
-								'</div>',
-								'<div style="display: flex; align-items: center; margin-left: 15px; width: 50%;">',
-									'<div class="progress" style="height: 20px; width: 100%; display: flex;">',
-										'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-											oPage.goalDataMap[e.userId].score + '%',
+									'<div style="display: flex; align-items: center; margin-left: 15px; width: 100%;">',
+										'<div class="progress" style="height: 20px; width: 100%; display: flex;">',
+											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+												oPage.goalDataMap[e.userId].score + '%',
+											'</div>',
 										'</div>',
 									'</div>',
 								'</div>',
 							'</div>'
 						].join(''));
 		
-						$('.progress-bar.i' + i).animate({ width: parseInt(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
+						if(parseFloat(oPage.goalDataMap[e.userId].score) !== 0)
+							$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
+						else
+							$('.progress-bar.i' + i).width("0%");
 					}, 0);
 				}).catch(function(e) {
 				});
@@ -162,16 +171,16 @@ retrieveGoalData: function(userId, oPage) { // 사원목표정보
 
 			if(vDetailIndex !== 0){
 				for(var i=0; i<vDetailIndex; i++){
-					vScore += parseInt(oDetailData[i].done);
+					vScore += parseFloat(oDetailData[i].done);
 				}
 				vScore = vScore/vDetailIndex;
 			}
 			
-			if(parseInt(vScore) > 80)
+			if(parseFloat(vScore) > 80)
 				oGroundColor= oBackGround[3];
-			else if(parseInt(vScore) > 60)
+			else if(parseFloat(vScore) > 60)
 				oGroundColor= oBackGround[2];
-			else if(parseInt(vScore) > 30)
+			else if(parseFloat(vScore) > 30)
 				oGroundColor= oBackGround[1];
 			else 
 				oGroundColor= oBackGround[0];

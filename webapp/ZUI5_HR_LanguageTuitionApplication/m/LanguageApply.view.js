@@ -73,7 +73,8 @@
 		ApplyingBox: function(oController) {
 
             var oCostCombo = new sap.m.ComboBox(oController.PAGEID + "_CostCombo", { // 원가코드
-				width: "250px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -99,7 +100,8 @@
             }, oCostCombo);
 
             var oWBSCombo = new sap.m.ComboBox(oController.PAGEID + "_WBSCombo", { // WBS
-				width: "250px",
+				layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+				width: "100%",
 				editable: {
 					path: "Status",
 					formatter: function(v) {
@@ -148,7 +150,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29003}", "105px", "Left", true), // 수강기간
 							new PickOnlyDateRangeSelection(oController.PAGEID + "_PeriodDate", {
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								delimiter: "~",
 								dateValue: "{Lecbe}",
 								secondDateValue: "{Lecen}",
@@ -170,7 +173,8 @@
 						items: [
 						ViewTemplates.getLabel("header", "{i18n>LABEL_29009}", "105px", "Left", true), // 영수일자
 							new PickOnlyDatePicker({
-                                width: "175px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 dateValue: "{Caldt}",
                                 displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
                                 valueFormat: "yyyy-MM-dd",
@@ -191,7 +195,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29008}", "105px", "Left", true), // 외국어
 							new sap.m.Input({
-								width: "175px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								textAlign: "Begin",
 								value: "{ZlanguTxt}",
 								editable: false
@@ -215,7 +220,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29047}", "105px", "Left", true), // 시험명
 							new sap.m.Input({
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								textAlign: "Begin",
 								value: "{ZltypeTxt}",
 								editable: false
@@ -228,14 +234,16 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29031}", "105px", "Left", true), // 어학성적
                             new sap.m.Input(oController.PAGEID + "_RankInput", {
-                                width: "100px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 textAlign: "End",
                                 value: "{Acqpot}",
                                 editable: false
                             }).addStyleClass("mr-3px"),
                             new sap.m.Text({ text: "{i18n>LABEL_29029}" }).addStyleClass("mr-7px"),
 							new sap.m.Input({
-								width: "127px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								textAlign: "Begin",
 								value: "{AcqgrdT}",
 								editable: false
@@ -248,7 +256,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29010}", "105px", "Left", true), // 수강학원
 							new sap.m.Input({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 value: "{Zlaorg}",
                                 maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "LanguPayApplyTableIn", "Zlaorg", false),
                                 editable: {
@@ -267,7 +276,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29024}", "105px", "Left", true), // 수강금액
 							new sap.m.Input({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 textAlign: "Begin",
                                 liveChange: oController.getSuportPrice.bind(oController),
                                 maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "LanguPayApplyTableIn", "Lecbet", false),
@@ -294,7 +304,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29018}", "105px", "Left", true), // 학원 전화번호
 							new sap.m.Input({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 value: "{Latell}",
                                 maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "LanguPayApplyTableIn", "Latell", false),
                                 editable: {
@@ -313,7 +324,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29011}", "105px", "Left", true), // 수강중인 어종
 							new sap.m.Input({
-								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
 								textAlign: "Begin",
 								value: "{Zlangu2Txt}",
 								editable: false
@@ -326,7 +338,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29019}", "105px", "Left"), // 지원금액
 							new sap.m.Input({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 textAlign: "Begin",
                                 value: {
                                     path: "Suport",
@@ -345,7 +358,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_29025}", "105px", "Left"), // 지원기간
 							new sap.m.Input({
-                                width: "250px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								width: "100%",
                                 value: {
                                     parts: [
                                         { path: "Supbg" }, 
