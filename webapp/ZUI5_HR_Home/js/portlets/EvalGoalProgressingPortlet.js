@@ -26,10 +26,13 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="list-group" id="portlet-evalGoalProgressingPortlet-list"></div>',
+				'<div class="evalgoal-legend">',
+					"평균진척률",
+				'</div>',
+				'<div class="list-group" id="portlet-evalGoalProgressingPortlet-list"></div>',				
 			'</div>',
 			this.spinner(),
 		'</div>'
@@ -95,20 +98,20 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 					oPage.retrieveGoalData(e.userId, oPage)
 				]).then(function() {
 					setTimeout(function() {
-						list.append([
-							'<div style="height: auto; margin-bottom: 15px; display: flex;">',
+						list.append([							
+							'<div class="evalgoal-area">',
 								'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
-								'<div style="height: auto; display: flex; flex-direction: column; width: 75%;">',
-									'<div style="display: flex; margin-left: 15px; justify-content: flex-start;">',
-										'<div style="font-size: 14px; height: 25px; font-weight: bold;">',
+								'<div class="evalgoal-info">',
+									'<div class="person">',
+										'<div class="name">',
 											oPage.goalDataMap[e.userId].nickname,
 										'</div>',
-										'<div style="font-size: 14px; height: 25px; margin-left: 3px;">',
+										'<div class="position">',
 										oPage.goalDataMap[e.userId].position,
 										'</div>',
 									'</div>',
-									'<div style="display: flex; align-items: center; margin-left: 15px; width: 100%;">',
-										'<div class="progress" style="height: 20px; width: 100%; display: flex;">',
+									'<div class="evalgoal-statusBar">',
+										'<div class="progress">',
 											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
 												oPage.goalDataMap[e.userId].score + '%',
 											'</div>',
@@ -163,10 +166,10 @@ retrieveGoalData: function(userId, oPage) { // 사원목표정보
 			var oGroundColor = "",
 				vScore = 0;
 			var oBackGround = [
-				"bg-danger",
-				"bg-warning",
-				"bg-info",
-				"bg-success"
+				"bg-danger",    /* bg-lcc-signature-red */
+				"bg-warning",   /* bg-signature-orange */
+				"bg-info",      /* bg-lcc-signature-green */ 
+				"bg-success"    /* bg-lcc-signature-blue */
 			];
 
 			if(vDetailIndex !== 0){

@@ -98,7 +98,7 @@ fill: function() {
 			list.append([
                 '<canvas id="vacChart" class="ChartClass"></canvas>',
                 '<div class="vac-header">',
-                    '<div style="width:30%;">',
+                    '<div style="width:40%;">',
                         "구분",
                     '</div>',
                     '<div style="width: 20%; text-align: right;">',
@@ -129,7 +129,7 @@ fill: function() {
 
                 $('.vacationTable').append([
                 '<div class="vac-body">',
-                    '<div style="width: 30%;">',
+                    '<div style="width: 40%;">',
                         vKtext,
                     '</div>',
                     '<div style="width: 20%; text-align: right;">',
