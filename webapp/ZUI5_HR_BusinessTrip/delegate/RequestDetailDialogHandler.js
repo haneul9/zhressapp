@@ -229,6 +229,9 @@ var Handler = {
 								var BtPurpose1SelectList = this.oModel.getProperty("/BtPurpose1SelectList");
 								Header.BtPurpose1 = BtPurpose1SelectList.length === 1 ? this.oModel.getProperty("/BtPurpose1SelectList/0/Code") : this.oModel.getProperty("/BtPurpose1SelectList/1/Code");
 							}
+							if (!Header.Subty) {
+								Header.Subty = SubtySelectList.length === 1 ? this.oModel.getProperty("/SubtySelectList/0/Subty") : this.oModel.getProperty("/SubtySelectList/1/Subty");
+							}
 							if (this.oRowData.isReportPopup) {
 								Header.Edtfg = false;
 							}
