@@ -225,7 +225,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
 										        	  change : function(oEvent){
 										        	  		oController.setMonyn(oEvent, "2");
-										        	  		oController.onChangeTime(oEvent);
+										        	  		oController.onChangeTime(oEvent, "10");
 										        	  }
 												  }),
 												  new sap.m.Text({text : " ~ "}).addStyleClass("pt-5px pr-5px pl-5px"),
@@ -245,7 +245,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
 										        	  change : function(oEvent){
 										        	  		oController.setMonyn(oEvent, "2");
-										        	  		oController.onChangeTime(oEvent);
+										        	  		oController.onChangeTime(oEvent, "10");
 										        	  }
 												  })]
 		                        	 }),

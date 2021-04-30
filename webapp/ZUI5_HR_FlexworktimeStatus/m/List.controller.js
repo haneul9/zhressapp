@@ -113,7 +113,7 @@ sap.ui.define([
 				var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
 				var today = new Date();
 				
-				var vData = [];
+				var vData = [], vData5 = [];
 				
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : [], FlexWorktime5Nav : []};
@@ -126,7 +126,7 @@ sap.ui.define([
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
 						if(data){
-							// 자율출퇴근 현황
+							// 근무시간 현황
 							var oField = [{text : oBundleText.getText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
 										  {text : oBundleText.getText("LABEL_69027"), field : "Ctrex"},	// 연장근로시간 한도
 										  {text : oBundleText.getText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
@@ -309,7 +309,7 @@ sap.ui.define([
 								var data5 = data.FlexWorktime5Nav.results;
 								
 								for(var i=0; i<data5.length; i++){
-									// vData2.Data.push(data4[i]);
+									vData5.push(data5[i]);
 								}
 							}
 						}
@@ -334,6 +334,7 @@ sap.ui.define([
 				oJSONModel3.setData(vData3);
 				
 				oController._ListCondJSonModel.setProperty("/Data2", vData);
+				oController._ListCondJSonModel.setProperty("/Data5", vData5);
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -358,7 +359,17 @@ sap.ui.define([
 			var oJSONModel = oControl.getModel();
 			var oData = oJSONModel.getProperty("/Data");
 			
-			var breakdata = oController._ListCondJSonModel.getProperty("/Data2"), oData2 = [];
+			if(oData.Alldf == true || oData.Offyn == "X") return;
+			
+			var breakdata = null;
+			if(oData.Status == "00"){ // 결재중 데이터의 경우 추가휴게신청내역 데이터에서 선택일과 동일한 일자 데이터 검색
+				breakdata = oController._ListCondJSonModel.getProperty("/Data5");
+			} else {
+				breakdata = oController._ListCondJSonModel.getProperty("/Data2");
+			}
+			
+			var oData2 = [];
+			
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			for(var i=0; i<breakdata.length; i++){
 				if(dateFormat.format(breakdata[i].Datum) == dateFormat.format(oData.Datum)){
