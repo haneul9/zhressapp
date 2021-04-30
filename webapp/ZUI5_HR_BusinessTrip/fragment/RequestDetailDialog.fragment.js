@@ -13,7 +13,9 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetailDialog", {
 			title: oController.getBundleText("LABEL_19002"), // 출장 신청
 			contentWidth: "1600px",
 			contentHeight: "96%",
+			/*대근자
 			afterOpen : function(){oController.RequestDetailDialogHandler.bindAdded.call(oController,oController.RequestDetailDialogHandler.oDatas);},
+			*/
 			content: sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", oController),
 			draggable: true,
 			buttons: [ 
