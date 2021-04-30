@@ -149,6 +149,10 @@ fill: function() {
                 vList3.push(vReman);
             });
 
+            Chart.defaults.global.defaultFontColor = 'rgb(153, 153, 153)';
+            Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
+            Chart.defaults.global.legend.labels.boxWidth = 20;
+            Chart.defaults.global.legend.align = 'end';
             var chart = new Chart(vChartId, { // type : 'bar' = 막대차트를 의미합니다. 
                 type: 'bar',
                 data: { 
@@ -174,7 +178,16 @@ fill: function() {
                         }
                     ]
                 },
-                color: 'rgb(242, 242, 242)'
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor : "rgb(153, 153, 153)",
+                                fontSize : 8
+                            }
+                        }]
+                    }
+                }
             });
 
             $('.ChartClass').append([chart]);
