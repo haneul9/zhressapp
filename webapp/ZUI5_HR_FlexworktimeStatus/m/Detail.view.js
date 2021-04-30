@@ -67,17 +67,23 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 													valueFormat : "HHmm",
 													displayFormat : "HH:mm",
 										        	value : "{Beguz}",
-										        	minutesStep : 10,
+										        	minutesStep : 30,
 										        	width : "100px", 
 										        	textAlign : "Begin",
 										        	editable : {
 										        		path : "Offyn",
 										        		formatter : function(fVal){
-										        			return fVal == "" ? true : false;
+										        			return (fVal == "" || fVal == "1") ? true : false;
 										        		}
 										        	},
 										        	change : function(oEvent){
+										        		oController.onSetLnctm(oEvent, "30");
 										        		oController.setMonyn(oEvent, "1");
+										        		
+										        		// 시작시간이 13:30 이후인 경우 점심시간 변경처리
+										        		if(oEvent.getParameters().value > "1330"){
+										        			oController._DetailJSonModel.setProperty("/Data/Lnctm", "0");
+										        		}
 										        	}
 												}),
 												new sap.m.Text({text : " ~ "}).addStyleClass("pt-5px pr-5px pl-5px"),
@@ -91,10 +97,11 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        	editable : {
 										        		path : "Offyn",
 										        		formatter : function(fVal){
-										        			return (fVal == "" || fVal == "2") ? true : false;
+										        			return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
 										        		}
 										        	},
 										        	change : function(oEvent){
+										        		oController.onSetLnctm(oEvent, "10");
 										        		oController.setMonyn(oEvent, "1");
 										        	}
 												})],
@@ -114,17 +121,49 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 													selectedKey : "{Lnctm}",
 													width : "100px",
 													items : [new sap.ui.core.Item({key : "0", text : ""}),
-															 new sap.ui.core.Item({key : "1", text : "01:00"}),
-															 new sap.ui.core.Item({key : "2", text : "00:30"})],
+															 new sap.ui.core.Item({key : "1", text : "00:30"}),
+															 new sap.ui.core.Item({key : "2", text : "01:00"}),
+															 new sap.ui.core.Item({key : "3", text : "01:30"}),
+															 new sap.ui.core.Item({key : "4", text : "02:00"})],
 													editable : {
-														path : "Offyn",
-														formatter : function(fVal){
-															return (fVal == "" || fVal == "2") ? true : false;
+														parts : [{path : "Offyn"}, {path : "Beguz"}],
+														formatter : function(fVal1, fVal2){
+															if(fVal2 > "1330"){
+																return false;
+															} else {
+																return (fVal1 == "" || fVal1 == "1" || fVal1 == "2") ? true : false;
+															}
 														}
 													},
 													change : function(oEvent){
 														oController.setMonyn(oEvent, "1");
 													}
+												})],
+								 	 hAlign : "Begin",
+								 	 vAlign : "Middle"
+								 })]
+					}),
+					new sap.ui.commons.layout.MatrixLayoutRow({
+						height : "45px",
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69049")})], // 변경사유
+									 hAlign : "Begin",
+									 vAlign : "Middle"
+								 }),
+								 new sap.ui.commons.layout.MatrixLayoutCell({
+								 	 content : [new sap.m.Input({
+													value : "{Chgrsn}",
+													width : "100%",
+													editable : {
+														path : "Offyn",
+														formatter : function(fVal){
+															return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
+														}
+													},
+													change : function(oEvent){
+														oController.setMonyn(oEvent, "1");
+													},
+													maxLength : common.Common.getODataPropertyLength("ZHR_FLEX_TIME_SRV", "FlexworktimeDetail", "Chgrsn")
 												})],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
@@ -180,7 +219,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        	  editable : {
 										        	  	 path : "Offyn",
 										        	  	 formatter : function(fVal){
-										        	  		return (fVal == "" || fVal == "2") ? true : false;
+										        	  		return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
 										        	  	 }
 										        	  },
 										        	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
@@ -200,7 +239,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 										        	  editable : {
 										        		  path : "Offyn",
 										        		  formatter : function(fVal){
-										        			  return (fVal == "" || fVal == "2") ? true : false;
+										        			  return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
 										        		  }
 										        	  },
 										        	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
@@ -217,7 +256,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 		                        	 	 editable : {
 		                        	 	 	path : "Offyn",
 		                        	 	 	formatter : function(fVal){
-		                        	 	 		return (fVal == "" || fVal == "2") ? true : false;
+		                        	 	 		return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
 		                        	 	 	}
 		                        	 	 }
 		                        	 })]
@@ -297,15 +336,26 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.Detail", {
 						idPrefix : oController.PAGEID,
 						showNavButton: true,
 						navBackFunc: oController.onBack,
-						title : oBundleText.getText("LABEL_69037"), // 근무일정 수정
+						title : {
+							path : "Offyn",
+							formatter : function(fVal){
+													// 과거근무 변경신청				   // 근무 변경
+								return fVal == "1" ? oBundleText.getText("LABEL_69047") : oBundleText.getText("LABEL_69048");  
+							}
+						},
 						headerButton : new sap.m.HBox({
 										   items : [new sap.m.Button({
-													   	text: oBundleText.getText("LABEL_00101"), // 저장
+													   	text: {
+													   		path : "Offyn",
+													   		formatter : function(fVal){
+													   			return fVal == "1" ? oBundleText.getText("LABEL_00152") : oBundleText.getText("LABEL_00101");
+													   		}
+													   	},
 													   	press : oController.onPressSave,
 													   	visible : {
 													   		path : "Offyn",
 													   		formatter : function(fVal){
-													   			return (fVal == "" || fVal == "2") ? true : false;
+													   			return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
 													   		}
 													   	}
 													}).addStyleClass("button-dark")]

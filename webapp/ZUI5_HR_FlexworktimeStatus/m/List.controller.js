@@ -116,7 +116,7 @@ sap.ui.define([
 				var vData = [];
 				
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : []};
+				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : [], FlexWorktime5Nav : []};
 					createData.Werks = oData.Werks;
 					createData.Pernr = oData.Pernr;
 					createData.Zyymm = (oData.Year + (oData.Month < 10 ? ("0"+oData.Month) : (oData.Month + "")));
@@ -239,6 +239,7 @@ sap.ui.define([
 								}
 							}
 							
+							// 추가휴게
 							if(data.FlexWorktime2Nav && data.FlexWorktime2Nav.results){
 								var data2 = data.FlexWorktime2Nav.results;
 								
@@ -300,6 +301,15 @@ sap.ui.define([
 								
 								for(var i=0; i<data4.length; i++){
 									vData2.Data.push(data4[i]);
+								}
+							}
+							
+							// 추가휴게 신청내역
+							if(data.FlexWorktime5Nav && data.FlexWorktime5Nav.results){
+								var data5 = data.FlexWorktime5Nav.results;
+								
+								for(var i=0; i<data5.length; i++){
+									// vData2.Data.push(data4[i]);
 								}
 							}
 						}

@@ -68,7 +68,7 @@ sap.ui.define([
 				}
 				// 추가휴게는 5개까지 입력할 수 있음
 				var oOffyn = oController._DetailJSonModel.getProperty("/Data/Offyn");
-				if((oOffyn == "" || oOffyn == "2") && vData1.Data.length != 5){
+				if((oOffyn == "" || oOffyn == "1" || oOffyn == "2") && vData1.Data.length != 5){
 					for(var i=vData1.Data.length; i<5; i++){
 						var detail = {};
 							detail.Idx = vData1.Data.length;
@@ -126,6 +126,73 @@ sap.ui.define([
 				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
+			}
+		},
+		
+		// 시작/종료시간 변경 시 법정휴게시간 세팅
+		onSetLnctm : function(oEvent, m){
+			if(oEvent && oEvent.getParameters().valid == false){
+				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				oEvent.getSource().setValue("");
+				return;
+			} else if(oEvent && m){
+				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
+					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					oEvent.getSource().setValue("");
+					return;
+				}
+			}
+			
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oController = oView.getController();
+			
+			var oData = oController._DetailJSonModel.getProperty("/Data");
+			if(oData.Beguz && oData.Enduz){
+				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var createData = {FlexWorktime1Nav : []};
+					createData.Werks = oData.Werks;
+					createData.Pernr = oData.Pernr;
+					createData.Zyymm = ((oData.Year + "") + (oData.Month < 10 ? ("0"+oData.Month) : (oData.Month+"")));
+					createData.Langu = oData.Langu;
+					createData.Prcty = "4";
+					
+				var detail = {};
+					detail.Datum = "\/Date(" + common.Common.getTime(oData.Datum) + ")\/";
+					detail.Beguz = oData.Beguz;
+					detail.Enduz = oData.Enduz;
+					detail.Lnctm = oData.Lnctm;
+				createData.FlexWorktime1Nav.push(detail);
+				
+				oModel.create("/FlexworktimeSummarySet", createData, null,
+					function(data, res){
+						if(data){
+							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results && data.FlexWorktime1Nav.results.length){
+								var data1 = data.FlexWorktime1Nav.results[0];
+								
+								oController._DetailJSonModel.setProperty("/Data/Lnctm", data1.Lnctm);
+							}
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
 			}
 		},
 		
