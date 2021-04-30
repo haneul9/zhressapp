@@ -16,7 +16,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.minipop", {
         }).addStyleClass("button-search btn-margin"),new sap.m.Button({
             press: oController.onMiniAdd,
             text: "{i18n>LABEL_00153}", // 추가
-        }).addStyleClass("button-search righter btn-margin")]
+        }).addStyleClass("button-light righter btn-margin")]
         });
         oRow.addCell(oCell);
         oMat.addRow(oRow);

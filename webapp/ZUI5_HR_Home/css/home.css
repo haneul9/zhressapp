@@ -312,8 +312,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .modal-header h4 {font-size:1rem}
 .modal-header .close {font-size:2rem;font-weight:400; padding:.25rem; margin:0}
 .modal-footer {border-top:1px solid #d9d9d9; padding:0 20px 0 0}
-.modal-footer .btn {height:36px; border-radius:.1875rem; padding:0 20px; font-size:.875rem} 
-.modal-footer .btn.btn-primary {background-color:#0070bd; color:#fff; border:1px solid #0070bd}
+.modal-body .btn, .modal-footer .btn {height:36px; border-radius:.1875rem; padding:0 20px; font-size:.875rem} 
+.modal-body .btn.btn-primary, .modal-footer .btn.btn-primary {background-color:#0070bd; color:#fff; border:1px solid #0070bd}
 .modal-footer .btn.btn-primary:hover {background-color:#064975; border:1px solid #064975}
 .modal-footer .btn.btn-light {background-color:#fff; color:#0070bd; border:1px solid #0070bd}
 .modal-footer .btn.btn-light:hover {background-color:#ebf5fe}
@@ -378,4 +378,4 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .custom-system-message .message {font-size:1rem; padding-top:2rem;line-height: 1.2;}  
 
 
-/* 0430_4 */   
+/* 0430_5 */   

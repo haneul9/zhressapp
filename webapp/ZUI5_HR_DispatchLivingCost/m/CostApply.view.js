@@ -594,23 +594,23 @@ sap.ui.define([
                             new sap.m.Text({
                                 text: "{i18n>MSG_59003}",
                                 textAlign: "Begin"
-                            }).addStyleClass("line-height-24px mt-16px"),
+                            }).addStyleClass("line-height-24 mt-16px"),
                             new sap.m.Text({
                                 text: "{i18n>MSG_59004}",
                                 textAlign: "Begin"
-                            }).addStyleClass("line-height-24px mt-16px"),
+                            }).addStyleClass("line-height-24 mt-16px"),
                             new sap.m.Text({
                                 text: "{i18n>MSG_59005}",
                                 textAlign: "Begin"
-                            }).addStyleClass("line-height-24px mt-16px"),
+                            }).addStyleClass("line-height-24 mt-16px"),
                             new sap.m.Text({
                                 text: "{i18n>MSG_59006}",
                                 textAlign: "Begin"
-                            }).addStyleClass("line-height-24px mt-16px"),
+                            }).addStyleClass("line-height-24 mt-16px"),
                             new sap.m.Text({
                                 text: "{i18n>MSG_59007}",
                                 textAlign: "Begin"
-                            }).addStyleClass("line-height-24px mt-16px")
+                            }).addStyleClass("line-height-24 mt-16px")
                         ]
                     }),
                     oBotFlexBox,
