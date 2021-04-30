@@ -566,28 +566,7 @@ common.Common = {
      */
     copyByMetadata: function (oModel, entityName, originalObj) {
         var copyData = {};
-        if (oModel instanceof sap.ui.model.Model) {
-            $.each(oModel.getServiceMetadata().dataServices.schema[0].entityType, function (i, entity) {
-                if (entity.name == entityName) {
-                    entity.property.forEach(function (prop) {
-                        if (prop.type === "Edm.DateTime") {
-                            copyData[prop.name] = originalObj[prop.name] ? common.Common.adjustGMTOdataFormat(originalObj[prop.name]) : originalObj[prop.name];
-                        } else if (prop.type === "Edm.Time") {
-                            copyData[prop.name] = originalObj[prop.name] ? originalObj[prop.name] : "P00DT00H00M00S";
-                        } else if (prop.type === "Edm.Byte") {
-                            copyData[prop.name] = originalObj[prop.name] ? Number(originalObj[prop.name]) : 0;
-                        } else if (prop.type === "Edm.Decimal") {
-                            copyData[prop.name] = originalObj[prop.name] || originalObj[prop.name] === 0 ? String(originalObj[prop.name]) : originalObj[prop.name];
-                        } else if (prop.type === "Edm.Boolean") {
-                            copyData[prop.name] = typeof originalObj[prop.name] === "boolean" ? originalObj[prop.name] : undefined;
-                        } else {
-                            copyData[prop.name] = originalObj[prop.name];
-                        }
-                    });
-                    return false;
-                }
-            });
-        } else {
+        if (typeof oModel === 'string' || oModel instanceof String) {
             var args = [].slice.call(arguments),
                 modelName = args[0],
                 type = args[1];
@@ -615,6 +594,29 @@ common.Common = {
                     copyData[name] = typeof v === "number" ? String(v) : (v || "");
                 }
             });
+        } else {
+            if (oModel instanceof sap.ui.model.Model) {
+                $.each(oModel.getServiceMetadata().dataServices.schema[0].entityType, function (i, entity) {
+                    if (entity.name == entityName) {
+                        entity.property.forEach(function (prop) {
+                            if (prop.type === "Edm.DateTime") {
+                                copyData[prop.name] = originalObj[prop.name] ? common.Common.adjustGMTOdataFormat(originalObj[prop.name]) : originalObj[prop.name];
+                            } else if (prop.type === "Edm.Time") {
+                                copyData[prop.name] = originalObj[prop.name] ? originalObj[prop.name] : "P00DT00H00M00S";
+                            } else if (prop.type === "Edm.Byte") {
+                                copyData[prop.name] = originalObj[prop.name] ? Number(originalObj[prop.name]) : 0;
+                            } else if (prop.type === "Edm.Decimal") {
+                                copyData[prop.name] = originalObj[prop.name] || originalObj[prop.name] === 0 ? String(originalObj[prop.name]) : originalObj[prop.name];
+                            } else if (prop.type === "Edm.Boolean") {
+                                copyData[prop.name] = typeof originalObj[prop.name] === "boolean" ? originalObj[prop.name] : undefined;
+                            } else {
+                                copyData[prop.name] = originalObj[prop.name];
+                            }
+                        });
+                        return false;
+                    }
+                });
+            }
         }
         return copyData;
     },
