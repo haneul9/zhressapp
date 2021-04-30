@@ -142,7 +142,7 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65004}", "105px", "Left", true), // 기준년도
                                 new sap.m.Input({
-                                    width: "100%",
+                                    width: "50%",
                                     value: "{Zyear}",
                                     textAlign: "Begin",
                                     editable: {
@@ -165,6 +165,7 @@ sap.ui.define(
                                     width: "100%",
                                     value: "{Zuse}",
                                     textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zuse", false)
                                 })
                             ],
@@ -184,7 +185,7 @@ sap.ui.define(
                                     width: "100%",
                                     text: "{i18n>MSG_65007}",
                                     textAlign: "Begin"
-                                }).addStyleClass("px-20px lineHeight30")
+                                }).addStyleClass("pl-105px lineHeight24 mt--6px")
                             ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.
@@ -203,7 +204,8 @@ sap.ui.define(
                                 new sap.m.Input({
                                     width: "100%",
                                     value: "{Zsubmit}",
-                                    textAlign: "Begin"
+                                    textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 })
                                 })
                             ],
                             visible: {
@@ -223,7 +225,7 @@ sap.ui.define(
                                     width: "100%",
                                     text: "{i18n>MSG_65008}",
                                     textAlign: "Begin"
-                                }).addStyleClass("px-20px")
+                                }).addStyleClass("pl-105px lineHeight24 mt--6px")
                             ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.
@@ -241,7 +243,7 @@ sap.ui.define(
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65007}", "105px", "Left", true), // 수량
                                 new sap.m.Input({
                                     textAlign: "Begin",
-                                    width: "100%",
+                                    width: "50%",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcount", false),
                                     value: "{Zcount}"
                                 })
@@ -262,6 +264,7 @@ sap.ui.define(
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65010}", "105px", "Left"), // 비고
                                 new sap.m.Input({
                                     textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     width: "100%",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcomment", false),
                                     value: "{Zcomment}"
@@ -320,7 +323,7 @@ sap.ui.define(
                                     textAlign: "Begin",
                                     width: "100%",
                                     text: "{i18n>MSG_65020}"
-                                }).addStyleClass("font-bold"),
+                                }).addStyleClass("font-medium mt-16px"),
                                 new sap.m.Text({
                                     textAlign: "Begin",
                                     width: "100%",
@@ -340,12 +343,12 @@ sap.ui.define(
                                     textAlign: "Begin",
                                     width: "100%",
                                     text: "{i18n>MSG_65024}"
-                                }).addStyleClass("font-bold"),
+                                }).addStyleClass("font-medium"),
                                 new sap.m.Text({
                                     textAlign: "Begin",
                                     width: "100%",
                                     text: "{i18n>MSG_65025}"
-                                }),
+                                }).addStyleClass("lineHeight24"),
                                 new sap.m.Text({
                                     textAlign: "Begin",
                                     width: "100%",
@@ -355,17 +358,17 @@ sap.ui.define(
                                     textAlign: "Begin",
                                     width: "100%",
                                     text: "{i18n>MSG_65027}"
-                                }).addStyleClass("font-bold"),
+                                }).addStyleClass("font-medium"),
                                 new sap.m.Text({
                                     textAlign: "Begin",
                                     width: "100%",
                                     text: "{i18n>MSG_65028}"
-                                }),
+                                }).addStyleClass("lineHeight24"),
                                 new sap.m.Text({
                                     textAlign: "Begin",
                                     width: "100%",
                                     text: "{i18n>MSG_65029}"
-                                })
+                                }).addStyleClass("lineHeight24")
                             ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.

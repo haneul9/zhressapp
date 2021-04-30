@@ -174,7 +174,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_08007}", required: true }).addStyleClass("sub-con-title"), // 대상자
 							new sap.m.Input({
-								width: "80%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								value: "{Zname}",
 								editable: {
