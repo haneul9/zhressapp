@@ -94,7 +94,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 	// 신청 : 출장정산 대상 근태정보 선택 dialog
 	pressSettlementForm: function() {
 
-		if (this.getSessionInfoByKey("Bukrs") === "A100" || this.getSessionInfoByKey("Ztitle") === "71") { // 첨단 or 수행비서
+		// if (this.getSessionInfoByKey("Bukrs") === "A100" || this.getSessionInfoByKey("Ztitle") === "71") { // 첨단 or 수행비서
+		if (this.getSessionInfoByKey("Ztitle") === "71") { // 수행비서
 			OnSettlement.openSettlementDetailDialog.call(this, { isA100OrZtitle71: true, isEnameEditable: false });
 			return;
 		}

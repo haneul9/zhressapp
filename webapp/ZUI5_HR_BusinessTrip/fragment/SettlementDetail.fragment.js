@@ -695,7 +695,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 			editable: "{/Header/Edtfg}",
 			secondDateValue: "{BtEnddat}",
 			dateValue: "{BtStartdat}",
-			maxDate: new Date(),
+			minDate: "{= ${/Header/Bukrs} === 'A100' ? ${/Header/BtStartdat} : null }",
+			maxDate: "{= ${/Header/Bukrs} === 'A100' ? ${/Header/BtEnddat} : new Date() }",
 			delimiter: "~",
 			width: "100%"
 		});
