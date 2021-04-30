@@ -68,6 +68,10 @@ fill: function() {
                 oWorkData = data.d,
                 oMonthWorkTime = this._gateway.odataResults(data).FlexWorktime1Nav,
                 vToDate = new Date().getDate()-1;
+            var oBackGround = [
+                "bg-danger",    /* bg-lcc-signature-red */
+                "bg-success"    /* bg-lcc-signature-blue */
+            ];
 
             var vCtrnm = oWorkData.Ctrnm, // 소정근로시간
                 vWrktm = oWorkData.Wrktm, // 근무시간(평일)
@@ -108,6 +112,7 @@ fill: function() {
                 vTottmM = vTottm[1] !== "00" ? (this.checkNull(vTottm[1]) ? "" : vTottm[1] + "분") : "";
                 
             var vWorkTime = parseInt(vTottm[0]+vTottm[1]) / parseInt(vCtrnm[0]+vCtrnm[1]) * 80;
+            var vBackColor = vWorkTime > 80 ? oBackGround[0] : oBackGround[1];
 
 			list.append([
                 '<div class="today">',
@@ -128,7 +133,7 @@ fill: function() {
                 '</div>',
                 '<div class="statusBar">',
                     '<div class="progress">',
-                        '<div class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+                        '<div class="progress-bar ' + vBackColor + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
                         '</div>',
                         '<div class="progress-line">',
                         '</div>',
@@ -191,15 +196,6 @@ itemUrl: function(o) {
 		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
 		' data-menu-id="${menu-id}"'.interpolate(this.mid())
 	].join('');
-},
-clearResource: function() {
-
-	return new Promise(function(resolve) {
-		setTimeout(function() {
-			this.$().data('jsp').destroy();
-			resolve();
-		}.bind(this), 0);
-	}.bind(this));
 }
 
 });

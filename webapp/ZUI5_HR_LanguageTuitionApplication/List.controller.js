@@ -587,8 +587,8 @@ sap.ui.define([
 			
 			oModel.create("/LanguScoreImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					if(oData && oData.LanguScoreTableIn){
+						var dataLength = 10;
 						var rDatas1 = oData.LanguScoreTableIn.results;
 						dataLength = rDatas1.length;
 						oController.GradeModel.setProperty("/TableData", oData.LanguScoreTableIn.results);
