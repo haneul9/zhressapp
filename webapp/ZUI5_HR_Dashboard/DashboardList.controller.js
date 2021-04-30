@@ -1568,14 +1568,14 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 		var mEmpLoginInfo = sap.ui.getCore().getModel("EmpLoginInfo");
 		var vEmpLoginInfo = mEmpLoginInfo.getProperty("/EmpLoginInfoSet");
 			
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {TableIn : []};
 			createData.IAppye = oController._ListCondJSonModel.getProperty("/Data/Year");
 			createData.IPernr = (vEmpLoginInfo[0].name == "sfdev1" ? "20001003" : vEmpLoginInfo[0].name);
 			createData.ISessty = oController._ListCondJSonModel.getProperty("/Data/Sessty");
 			
-		oModel.create("/FinalEvalResultSet", createData, null,
-			function(data,res){
+		oModel.create("/FinalEvalResultSet", createData, {
+			success: function(data,res){
 				if(data && data.TableIn) {
 					if(data.TableIn.results && data.TableIn.results.length){
 						for(var i=0; i<data.TableIn.results.length; i++){
@@ -1585,7 +1585,7 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 					}
 				} 
 			},
-			function (oError) {
+			error: function (oError) {
 		    	var Err = {};
 		    	oController.Error = "E";
 						
@@ -1598,7 +1598,7 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 					oController.ErrorMessage = oError.toString();
 				}
 			}
-		);	
+		});
 		
 		oJSONModel4.setData(vData4);
 		oVizFrame4.bindElement("/Data");

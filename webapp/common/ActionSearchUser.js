@@ -59,9 +59,18 @@ common.ActionSearchUser = {
 			vActda = oController._vActda;
 		}
 
-		var oFilters = [];
+		var oFilters = [
+			new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+			new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+			new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+			new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
+		];
 		var filterString = "/?$filter=Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
 		filterString += "%20and%20Accty%20eq%20%27" + "Y" + "%27";
+		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "%27";
+		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
+		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
 		oFilters.push(new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, vActda));
 
@@ -131,7 +140,7 @@ common.ActionSearchUser = {
 			return;
 		}
 
-		var oCommonModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+		var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 		var mEmpSearchResult = sap.ui.getCore().getModel("ActionEmpSearchResult");
 		var vEmpSearchResult = { EmpSearchResultSet: [] };
 
@@ -182,7 +191,7 @@ common.ActionSearchUser = {
 
 		common.ActionSearchUser.onAfterRendering();
 
-		var oCommonModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+		var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 
 		var oStat1 = sap.ui.getCore().byId(oController.PAGEID + "_AES_Stat1");
 		var oZzjobgr = sap.ui.getCore().byId(oController.PAGEID + "_AES_Zzjobgr");
@@ -421,7 +430,7 @@ common.ActionSearchUser = {
 	onChangePersa: function (oEvent) {
 		var oController = common.ActionSearchUser.oController;
 
-		var oCommonModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+		var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 
 		var oItem = oEvent.getParameter("selectedItem");
 
@@ -514,7 +523,7 @@ common.ActionSearchUser = {
 	onChangePersg: function (oEvent) {
 		var oController = common.ActionSearchUser.oController;
 
-		var oCommonModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+		var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 
 		var oItem = oEvent.getParameter("selectedItem");
 

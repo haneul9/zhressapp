@@ -241,9 +241,9 @@ sap.ui.define([
 					createData.IOrgtx = oData.Text;
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-				oModel.create("/F4PernrAuthSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_COMMON_SRV");
+				oModel.create("/F4PernrAuthSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.TableIn && data.TableIn.results && data.TableIn.results.length){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -252,7 +252,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -265,7 +265,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
