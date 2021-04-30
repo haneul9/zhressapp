@@ -12,7 +12,6 @@ sap.ui.define(
 
             createContent: function (oController) {
                 this.loadModel();
-               
                 var searchBox = new sap.m.HBox({
                     fitContainer: true,
                     height : "130px",
@@ -50,7 +49,6 @@ sap.ui.define(
                         }).addStyleClass("EmployeeLayoutPic")
                     ]
                 }).addStyleClass("EmployeeLayout");
-                
                 searchBox.setModel(oController._ListCondJSonModel);
                 searchBox.bindElement("/Data");
                 var tabBox = new sap.m.IconTabBar(oController.PAGEID + "_IconBar", {
@@ -108,16 +106,21 @@ sap.ui.define(
                     },
                     tabBox
                 );
-
+                
+                var oMainBox = new sap.m.VBox({
+                    items:  [searchBox, tabBox]
+                })
+                .addStyleClass("vbox-form-mobile");
+                
                 return new PageHelper({
                 	contentContainerStyleClass: "app-content-container-mobile",
-                    contentItems: [searchBox, tabBox],
+                    contentItems: [oMainBox],
                     headerButton : new sap.m.FlexBox({
                                     items: [ 
                                         new sap.m.Button({ 
                                             press: oController.moveSearch,
                                             text : "{i18n>LABEL_00205}",  //사원검색
-                                            // visible: gAuth === "M" ? true : false
+                                            visible: gAuth === "M" ? true : false
                                         }).addStyleClass("button-light")
                                     ]
                                 }).addStyleClass("app-nav-button-right")

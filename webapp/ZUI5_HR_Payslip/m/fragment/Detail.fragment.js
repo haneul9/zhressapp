@@ -22,7 +22,7 @@ sap.ui.define([], function () {
                     new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
                     this.getNoticeInfoBox(oController)
                 ]
-            });
+            }).addStyleClass("EmployeeLayout vbox-form-mobile");
         },
 
         getSearchHBox: function (oController) {
@@ -30,9 +30,6 @@ sap.ui.define([], function () {
                 fitContainer: true,
                 items: [
                     new sap.m.FlexBox({
-                        // 검색
-                        //	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                        //	justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
                         items: [
                             new sap.m.ComboBox({
                                 width: "85px",
@@ -59,7 +56,6 @@ sap.ui.define([], function () {
                                 }
                             }).addStyleClass("ml-4px"),
                             new sap.m.ComboBox({
-                                // width: "100px",
                                 selectedKey: "{Seqnr}",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 items: {

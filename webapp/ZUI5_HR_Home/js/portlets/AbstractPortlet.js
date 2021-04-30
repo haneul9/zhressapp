@@ -31,6 +31,7 @@ function AbstractPortlet(_gateway, o) {
 		.mid(this._mobile ? (o.LinkMenid2 || null) : (o.LinkMenid1 || null))
 		.use(o.Zhide !== 'X')
 		.popup(o.Mepop === 'X')
+		.carousel(o.Mocat === 'A')
 		.switchable(o.Fixed !== 'X')
 		.hideTitle(o.HideName === 'X');
 }
@@ -66,7 +67,7 @@ size: function(size) {
 		this._size = Number(size || 1);
 		return this;
 	}
-	return this._size;
+	return this.carousel() ? this._size : (this.mobile() ? 0 : this._size);
 },
 icon: function(icon) {
 
@@ -127,6 +128,14 @@ popup: function(popup) {
 	}
 	return this._popup;
 },
+carousel: function(carousel) {
+
+	if (typeof carousel !== 'undefined') {
+		this._carousel = carousel || false;
+		return this;
+	}
+	return this._carousel;
+},
 switchable: function(switchable) {
 
 	if (typeof switchable !== 'undefined') {
@@ -145,6 +154,10 @@ hideTitle: function(hideTitle) {
 		return this;
 	}
 	return this._hideTitle;
+},
+scrollable: function() {
+
+	return this.carousel() || !this.mobile();
 },
 column: function() {
 
@@ -242,7 +255,7 @@ prependTo: function(parent, fill) {
 appendTo: function(parent, fill) {
 
 	parent = (typeof parent === 'string' || parent instanceof String) ? $(parent) : parent;
-	parent.append(this.ui());
+	parent.append(this.carousel() ? ['<div class="carousel-item">', this.ui(), '</div>'].join('') : this.ui());
 
 	setTimeout(function() {
 		if (typeof this.onceBefore === 'function') {

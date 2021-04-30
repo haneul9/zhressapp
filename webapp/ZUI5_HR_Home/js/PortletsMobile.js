@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet Vacationportlet*/
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet Vacationportlet */
 function PortletsMobile(_gateway) {
 
 	this._gateway = _gateway;
@@ -20,7 +20,7 @@ init: function() {
 		'P106': HiTalkTalkPortlet,			// 하이톡톡
 		'P107': EvalGoalPortlet	,			// 목표관리
 		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
-		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
+		'P109': WorkstimeStatusPortlet		// 자율출퇴근 관리
 		// 'P110': Vacationportlet				// 근태신청
 	};
 
@@ -88,6 +88,43 @@ updatePortlet: function(type) {
 	});
 },
 
+carousel: function() {
+
+	return [
+		'<div id="portlet-carousel" class="portlet-carousel carousel slide" data-ride="carousel">',
+			'<ul class="nav nav-tabs">',
+				// '<li class="nav-item">',
+				// 	'<a class="nav-link active" href="#" data-slide-to="0">Active</a>',
+				// '</li>',
+			'</ul>',
+			'<div class="carousel-inner">',
+				// '<div class="carousel-item active">',
+				// 	'<span>조회된 Portlet 정보가 없습니다.</span>',
+				// '</div>',
+				// '<div class="carousel-item">',
+				// 	'<img src="..." class="d-block w-100" alt="...">',
+				// '</div>',
+				// '<div class="carousel-item">',
+				// 	'<img src="..." class="d-block w-100" alt="...">',
+				// '</div>',
+			'</div>',
+			'<a class="carousel-control-prev d-none" href="#portlet-carousel" role="button" data-slide="prev">',
+				'<span class="carousel-control-prev-icon" aria-hidden="true"></span>',
+				'<span class="sr-only">Previous</span>',
+			'</a>',
+			'<a class="carousel-control-next d-none" href="#portlet-carousel" role="button" data-slide="next">',
+				'<span class="carousel-control-next-icon" aria-hidden="true"></span>',
+				'<span class="sr-only">Next</span>',
+			'</a>',
+			'<ol class="carousel-indicators">',
+				// '<li data-target="#portlet-carousel" data-slide-to="0" class="active"></li>',
+				// '<li data-target="#portlet-carousel" data-slide-to="1"></li>',
+				// '<li data-target="#portlet-carousel" data-slide-to="2"></li>',
+			'</ol>',
+		'</div>'
+	].join('');
+},
+
 generate: function() {
 
 	var url = 'ZHR_COMMON_SRV/PortletInfoSet',
@@ -117,7 +154,8 @@ generate: function() {
 
 			var results = this._gateway.odataResults(data),
 			TableIn2Map = {},
-			selected = [];
+			selected = [],
+			isCarousel = false;
 
 			$.map(results.TableIn2, function(o) {
 				TableIn2Map[o.Potid] = o;
@@ -130,15 +168,40 @@ generate: function() {
 					if (o.Fixed !== 'X' && o.Zhide !== 'X') {
 						selected.push(1);
 					}
+					if (o.Mocat === 'A') {
+						isCarousel = true;
+					}
 					return this.itemMap[o.Potid] = new this.portletTypeMap[o.Potid](this._gateway, o);
 				}
 			}.bind(this));
 
-			setTimeout(function() {
-				if (!selected.length) {
+			if (!selected.length) {
+				setTimeout(function() {
 					$('.portlet-masonry-wrapper').html('<div class="portlet-data-not-found"><span>조회된 Portlet 정보가 없습니다.</span></div>');
-				}
-			}, 0);
+				}, 0);
+				return;
+			}
+
+			var $carousel, carouselIndex = 0;
+			if (isCarousel) {
+				$carousel = $(this.carousel());
+				$carousel
+					.on('slide.bs.carousel', function(e) {
+						$('#portlet-carousel .nav-link[data-slide-to="${index}"]'.interpolate(e.to)).toggleClass('active', true)
+							.parent().siblings().find('.nav-link').toggleClass('active', false);
+					})
+					.carousel({
+						interval: 5000
+					});
+
+				$(document).on('click', '#portlet-carousel .nav-link', function() {
+					var t = $(this).toggleClass('active', true);
+					t.parent().siblings().find('.nav-link').toggleClass('active', false);
+					$('#portlet-carousel').carousel(t.data('slideTo'));
+				});
+
+				$('.portlet-col').append($carousel);
+			}
 
 			this.items.sort(function(item1, item2) {
 				return item1.position() - item2.position();
@@ -146,9 +209,27 @@ generate: function() {
 
 			$.map(this.items, function(item) {
 				if (item.use()) {
-					item.appendTo('.portlet-col', true); // Portlet UI rendering
+					if (item.carousel()) {
+						item.appendTo('.carousel-inner', true); // Portlet UI rendering
+						$carousel.find('.nav').append([
+							'<li class="nav-item">',
+								'<a class="nav-link" href="#" data-slide-to="${index}">${title}</a>'.interpolate(carouselIndex, item.title()),
+							'</li>'
+						].join(''));
+						$carousel.find('.carousel-indicators').append('<li data-target="#portlet-carousel" data-slide-to="${index}"></li>'.interpolate(carouselIndex++));
+					} else {
+						if (item.key() === 'P101') {
+							item.prependTo('.portlet-col', true); // Portlet UI rendering
+						} else {
+							item.appendTo('.portlet-col', true); // Portlet UI rendering
+						}
+					}
 				}
 			});
+
+			if (isCarousel) {
+				$('#portlet-carousel .nav-item:first-child .nav-link,#portlet-carousel .carousel-item:first-child,#portlet-carousel .carousel-indicators li:first-child').addClass('active');
+			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'PortletsMobile.generate ' + url);

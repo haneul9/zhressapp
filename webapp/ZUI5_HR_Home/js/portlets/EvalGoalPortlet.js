@@ -119,7 +119,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && this.scrollable()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,

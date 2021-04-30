@@ -42,7 +42,7 @@ sap.ui.define(
             ApplyingBox: function (oController) {
                 var oZformType = new sap.m.ComboBox({
                     //구분
-                    width: "180px",
+                    width: "100%",
                     items: [
                         new sap.ui.core.ListItem({ key: "01", text: "{i18n>LABEL_65013}" }), //
                         new sap.ui.core.ListItem({ key: "02", text: "{i18n>LABEL_65014}" }),
@@ -72,7 +72,7 @@ sap.ui.define(
 
                 var oAptyp = new sap.m.ComboBox({
                     //수령방법
-                    width: "180px",
+                    width: "100%",
                     items: [
                         new sap.ui.core.ListItem(oController.PAGEID + "_AptypItem", { key: "1", text: "{i18n>LABEL_65011}" }), //
                         new sap.ui.core.ListItem({ key: "2", text: "{i18n>LABEL_65012}" }),
@@ -92,7 +92,7 @@ sap.ui.define(
                 );
 
                 var oZLang = new sap.m.ComboBox({
-                    width: "150px",
+                    width: "100%",
                     items: [
                         new sap.ui.core.ListItem({ key: "1", text: "{i18n>LABEL_65018}" }), //
                         new sap.ui.core.ListItem({ key: "2", text: "{i18n>LABEL_65019}" })
@@ -142,7 +142,7 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65004}", "105px", "Left", true), // 기준년도
                                 new sap.m.Input({
-                                    width: "180px",
+                                    width: "100%",
                                     value: "{Zyear}",
                                     textAlign: "Begin",
                                     editable: {
@@ -162,7 +162,7 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65006}", "105px", "Left", true), // 용도
                                 new sap.m.Input({
-                                    width: "180px",
+                                    width: "100%",
                                     value: "{Zuse}",
                                     textAlign: "Begin",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zuse", false)
@@ -201,7 +201,7 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65005}", "105px", "Left", true), // 제출처
                                 new sap.m.Input({
-                                    width: "180px",
+                                    width: "100%",
                                     value: "{Zsubmit}",
                                     textAlign: "Begin"
                                 })
@@ -241,7 +241,7 @@ sap.ui.define(
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65007}", "105px", "Left", true), // 수량
                                 new sap.m.Input({
                                     textAlign: "Begin",
-                                    width: "120px",
+                                    width: "100%",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcount", false),
                                     value: "{Zcount}"
                                 })
@@ -376,85 +376,6 @@ sap.ui.define(
                                 }
                             }
                         }),
-
-                        // new sap.m.Text({
-                        //     textAlign: "Begin",
-                        //     width: "100%",
-                        //     text: "{i18n>MSG_65001}",
-                        //     visible: {
-                        //         // 재신청일 경우 보이지 않음.
-                        //         path: "actmode",
-                        //         formatter: function (v) {
-                        //             if (v && v === "X") return false;
-                        //             return true;
-                        //         }
-                        //     }
-                        // }),
-                        // new sap.m.Text({
-                        //     textAlign: "Begin",
-                        //     width: "100%",
-                        //     text: "{i18n>MSG_65002}",
-                        //     visible: {
-                        //         // 재신청일 경우 보이지 않음.
-                        //         path: "actmode",
-                        //         formatter: function (v) {
-                        //             if (v && v === "X") return false;
-                        //             return true;
-                        //         }
-                        //     }
-                        // }).addStyleClass("px-20px"),
-                        // new sap.m.Text({
-                        //     textAlign: "Begin",
-                        //     width: "100%",
-                        //     text: "{i18n>MSG_65003}",
-                        //     visible: {
-                        //         // 재신청일 경우 보이지 않음.
-                        //         path: "actmode",
-                        //         formatter: function (v) {
-                        //             if (v && v === "X") return false;
-                        //             return true;
-                        //         }
-                        //     }
-                        // }),
-                        // new sap.m.Text({
-                        //     textAlign: "Begin",
-                        //     width: "100%",
-                        //     text: "{i18n>MSG_65004}",
-                        //     visible: {
-                        //         // 재신청일 경우 보이지 않음.
-                        //         path: "actmode",
-                        //         formatter: function (v) {
-                        //             if (v && v === "X") return false;
-                        //             return true;
-                        //         }
-                        //     }
-                        // }),
-                        // new sap.m.Text({
-                        //     textAlign: "Begin",
-                        //     width: "100%",
-                        //     text: "{i18n>MSG_65005}",
-                        //     visible: {
-                        //         // 재신청일 경우 보이지 않음.
-                        //         path: "actmode",
-                        //         formatter: function (v) {
-                        //             if (v && v === "X") return false;
-                        //             return true;
-                        //         }
-                        //     }
-                        // }).addStyleClass("px-20px"),
-                        // new sap.m.Text({
-                        //     textAlign: "Begin",
-                        //     width: "100%",
-                        //     text: "{i18n>MSG_65006}",
-                        //     visible: {
-                        //         // 재신청일 경우 보이지 않음.
-                        //         path: "actmode",
-                        //         formatter: function (v) {
-                        //             if (v && v === "X") return false;
-                        //             return true;
-                        //         }
-                        //     }
-                        // }).addStyleClass("px-20px"),
                         new sap.m.Text({
                             width: "100%",
                             text: "{i18n>MSG_65017}",
@@ -482,7 +403,7 @@ sap.ui.define(
                             }
                         }).addStyleClass("px-20px")
                     ]
-                });
+                }).addStyleClass("vbox-form-mobile");
             }
         });
     }

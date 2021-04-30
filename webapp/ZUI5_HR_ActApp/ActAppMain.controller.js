@@ -136,7 +136,7 @@ sap.ui.define(
 						new sap.ui.model.Filter("Excod", sap.ui.model.FilterOperator.EQ, "W2"),
 						new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, vPersa),
 						new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
 						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
 						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 					],
@@ -205,7 +205,7 @@ sap.ui.define(
 
 				var aFilters = [
 					new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-					new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+					new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
 					new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
 					new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 				];
@@ -587,7 +587,7 @@ sap.ui.define(
 				var filterString = "?$filter=Reqno%20eq%20%27" + encodeURIComponent(oController._vSelectedReqnoActPerson) + "%27";
 				filterString += "%20and%20Docno%20eq%20%27" + oController._vSelectedDocnoActPerson + "%27";
 				filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
-				filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "%27";
+				filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
 				filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
 				filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 

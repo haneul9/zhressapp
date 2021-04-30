@@ -95,10 +95,16 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		oRow.addCell(oCell);
 		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
 			hAlign:"Right",
-			content:new sap.m.Button(oController.PAGEID+"_NewBtn",{
+			content:[new sap.m.Button(oController.PAGEID+"_NewBtn",{
 				press: function(){oController.onDialog(null,"N3");},
-				text: "{i18n>LABEL_47006}" // 신청
-			}).addStyleClass("button-light")
+				text: "{i18n>LABEL_47006}" // 신청 
+			}).addStyleClass("button-light"),
+			new sap.ui.commons.layout.HorizontalLayout(oController.PAGEID+"_NewIcon",{
+				visible:false,
+				content:[
+					new sap.ui.core.Icon({src:"sap-icon://message-information",color:"red",size:"15px"}),
+					new sap.ui.core.HTML({content:"<span style='font-size:14px;color:red;line-height:0px;'>&nbsp;"+oController.getBundleText('MSG_47040')+"</span>"})]
+			})]
 		});
 		oRow.addCell(oCell);
 		oMat.addRow(oRow);

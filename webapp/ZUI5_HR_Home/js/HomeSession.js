@@ -10,6 +10,7 @@ function HomeSession(_gateway, callback) {
 		ehr.odata.user.percod
 		ehr.odata.csrf-token
 		ehr.odata.destination
+		ehr.session.token
 		ehr.menu-auth.state
 	}
 	*/
@@ -31,6 +32,7 @@ init: function(callback) {
 
 	Promise.all([
 		this.retrieveSFUserName(),			// 사번 조회
+		this.retrieveSessionToken(),		// Session token 조회
 		this.retrieveOdataCsrfToken()		// Odata CSRF token 조회
 	])
 	.then(function() {
@@ -155,6 +157,30 @@ retrieveSFUserName: function() {
 			this._retrieveSFUserName(resolve);
 		}
 	}.bind(this));
+},
+/*
+S4HANA OData 호출을 위한 CSRF token 조회
+*/
+retrieveSessionToken: function() {
+
+	return $.getJSON({
+		url: '/essproxy/sessionkey',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.retrieveSessionToken success', arguments).log();
+
+			var token = data.result;
+			if (token) {
+				sessionStorage.setItem('ehr.session.token', token);
+			} else {
+				sessionStorage.removeItem('ehr.session.token');
+			}
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveSessionToken');
+
+			sessionStorage.removeItem('ehr.session.token');
+		}.bind(this)
+	}).promise();
 },
 /*
 S4HANA OData 호출을 위한 CSRF token 조회
@@ -375,11 +401,30 @@ retrieveLoginInfo: function() {
 
 	var Percod = sessionStorage.getItem('ehr.odata.user.percod'),
 	Langu = sessionStorage.getItem('ehr.sf-user.language');
-
+/*
+		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
+		ICusrse: sessionStorage.getItem('ehr.session.token'),		// Token
+		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
+		ICmenuid: mid || ''											// 메뉴 ID
+*/
 	return $.getJSON({
 		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
 		data: {
-			$filter: "Lpmid eq 'HACTA' and Percod eq '${Percod}' and Langu eq '${Langu}'".interpolate(Percod, Langu)
+			$filter: [
+				"Lpmid eq 'HACTA'",
+				"Percod eq '${Percod}'",
+				"Langu eq '${Langu}'",
+				"ICusrid eq '${ICusrid}'",
+				"ICusrse eq '${ICusrse}'",
+				"ICusrpn eq '${ICusrpn}'",
+				"ICmenuid eq ''" // menu id 불필요
+			].join(' and ').interpolate(
+				Percod,
+				Langu,
+				sessionStorage.getItem('ehr.odata.user.percod'),
+				sessionStorage.getItem('ehr.session.token'),
+				sessionStorage.getItem('ehr.sf-user.name')
+			)
 		},
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();
@@ -410,7 +455,7 @@ sessionToken: function() {
 		url: url,
 		data: {
 			ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
-			ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+			ICusrse: sessionStorage.getItem('ehr.session.token'),		// Token
 			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			Export: []
 		},
@@ -581,7 +626,7 @@ usePrivateLog: function(o) {
 			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			TableIn: [{
 				Usrid: sessionStorage.getItem('ehr.odata.user.percod'),
-				Menid: this._gateway.parameter('mid'),
+				Menid: this._gateway.currentMid(),
 				Pernr: o.pernr || '',
 				Func: o.func || '',
 				Mobile: this._gateway.isMobile() ? 'X' : ''

@@ -179,7 +179,7 @@ getModel: function(id, viewId) {
 			var args = [].slice.call(arguments);
 
 			if (args.length >= 2 && $.isPlainObject(args[1])) {
-				args[1] = this.copyFields(id, (args[0] || "").replace(/\W|Set$/g, ""), this.mix(args[1]));
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\(.*|\W/g, "").replace(/Set$/, ''), this.mix(args[1]));
 			}
 
 			return model.create.apply(model, args);
@@ -191,7 +191,7 @@ getModel: function(id, viewId) {
 			var args = [].slice.call(arguments);
 
 			if (args.length >= 2 && $.isPlainObject(args[1])) {
-				args[1] = this.copyFields(id, (args[0] || "").replace(/\W|Set$/g, ""), this.mix(args[1]));
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\(.*|\W/g, "").replace(/Set$/, ''), this.mix(args[1]));
 			}
 
 			return model.update.apply(model, args);
@@ -210,6 +210,9 @@ getModel: function(id, viewId) {
 		},
 		getProperty: function() {
 			return model.getProperty.apply(model, [].slice.call(arguments));
+		},
+		getResourceBundle: function() {
+			return model.getResourceBundle.apply(model, [].slice.call(arguments));
 		},
 		refresh: function() {
 			return model.refresh.apply(model, [].slice.call(arguments));
@@ -284,7 +287,7 @@ mix: function(o) {
 
 	return $.extend(o, {
 		ICusrid: sessionStorage.getItem("ehr.odata.user.percod"),	// 암호화 로그인 사번
-		ICusrse: sessionStorage.getItem("ehr.odata.csrf-token"),	// Token
+		ICusrse: sessionStorage.getItem("ehr.session.token"),		// Token
 		ICusrpn: sessionStorage.getItem("ehr.sf-user.name"),		// 로그인 사번
 		ICmenuid: this.getMenuId()									// 메뉴 ID
 	});

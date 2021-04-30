@@ -76,7 +76,7 @@ isTargetPernr: function() {
 	return $.getJSON({
 		url: this._gateway.s4hanaURL(url),
 		data: {
-			$filter: "Percod eq '${Percod}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'))
+			$filter: "Percod eq '${Percod}' and Device eq '${Device}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'), this._gateway.isMobile() ? 'M' : '')
 		},
 		success: function(data) {
 			this.targetPernr = this._gateway.odataResults(data).Authyn === 'Y';

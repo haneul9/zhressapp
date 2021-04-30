@@ -90,6 +90,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet .card-header button + button {margin-left:1rem}
 .portlet .card-header button span {font-size:1.125rem; color:#333}
 .portlet .list-group .jspVerticalBar {width:8px}
+.portlet-0h {height:auto}
 .portlet-1h {height:206px}
 .portlet-2h {height:calc((206px * 2) + (1.5rem * 1))}
 .portlet-3h {height:calc((206px * 3) + (1.5rem * 2))}
@@ -99,7 +100,10 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-7h {height:calc((206px * 7) + (1.5rem * 6))}
 .portlet-8h {height:calc((206px * 8) + (1.5rem * 7))}
 .portlet-9h {height:calc((206px * 9) + (1.5rem * 8))}
-[device="mobile"] .portlet {height:auto !important}
+
+.portlet-carousel {margin-top:.75rem; padding-bottom:1.5rem}
+.portlet-carousel .carousel-indicators {margin:0}
+.portlet-carousel .carousel-indicators li {background-color:#000}
 
 .portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
 .portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
@@ -119,7 +123,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 [device="mobile"] .portlet-employee .employee-photo {width:54px; height:81px}
 .portlet-employee .employee-photo img {z-index:1; height:100%}
 .portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
-.portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:70%}
+.portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:100%}
 .portlet-employee .employee-photo svg {position:absolute; top:-1px; left:-1px; z-index:2; width:calc(100% + 2px); height:calc(100% + 2px)}
 .portlet-employee .employee-d-day {display:flex; flex-direction:column; padding:1.5rem 1.25rem 1.25rem}
 .portlet-employee .employee-d-day .title {font-size:1rem; font-weight:700}
@@ -131,6 +135,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 [device="mobile"] .portlet-employee .employee-photo {top:1.25rem; left:auto; right:1rem}
 [device="mobile"] .portlet-employee .employee-information {width:100%; height:130px; border-radius:.5rem; padding-left:1.5rem; background-color:#064975}
 [device="mobile"] .portlet-1h.portlet-employee {height:130px}
+
 .portlet-bbs .list-group {height:100%; overflow:auto}
 .portlet-bbs .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
 .portlet-bbs .list-group-item:hover {color:#0070bd; background:transparent}

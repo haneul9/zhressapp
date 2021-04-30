@@ -151,7 +151,7 @@ sap.ui.define(
                                         height: "55px",
                                         alignItems: sap.m.FlexAlignItems.Center,
                                         items: [
-                                            new sap.m.Label({ width: "150px", text: oController.getBundleText("LABEL_54006"), textAlign: "Left" }).addStyleClass("sub-title"),
+                                            new sap.m.Label({ width: "100%", text: oController.getBundleText("LABEL_54006"), textAlign: "Left" }).addStyleClass("sub-title"),
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
@@ -171,7 +171,7 @@ sap.ui.define(
                                         height: "55px",
                                         alignItems: sap.m.FlexAlignItems.Center,
                                         items: [
-                                            new sap.m.Label({ width: "150px", text: oController.getBundleText("LABEL_54007"), textAlign: "Left" }).addStyleClass("sub-title"),
+                                            new sap.m.Label({ width: "100%", text: oController.getBundleText("LABEL_54007"), textAlign: "Left" }).addStyleClass("sub-title"),
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
@@ -191,7 +191,7 @@ sap.ui.define(
                                         height: "55px",
                                         alignItems: sap.m.FlexAlignItems.Center,
                                         items: [
-                                            new sap.m.Label({ width: "150px", text: oController.getBundleText("LABEL_54015"), textAlign: "Left" }).addStyleClass("sub-title"),
+                                            new sap.m.Label({ width: "180px", text: oController.getBundleText("LABEL_54015"), textAlign: "Left" }).addStyleClass("sub-title"),
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
