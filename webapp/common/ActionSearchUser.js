@@ -61,14 +61,14 @@ common.ActionSearchUser = {
 
 		var oFilters = [
 			new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-			new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+			new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
 			new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
 			new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 		];
 		var filterString = "/?$filter=Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
 		filterString += "%20and%20Accty%20eq%20%27" + "Y" + "%27";
 		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
-		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
 		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
 		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
@@ -251,7 +251,7 @@ common.ActionSearchUser = {
 		var filterString = "/?$filter=Persa%20eq%20%27" + oController._vPersa + "%27";
 		filterString += "%20and%20Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
 		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
-		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
 		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
 		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
@@ -469,7 +469,7 @@ common.ActionSearchUser = {
 		var filterString = "/?$filter=Persa%20eq%20%27" + oItem.getKey() + "%27";
 		filterString += "%20and%20Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
 		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
-		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
 		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
 		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
@@ -548,7 +548,7 @@ common.ActionSearchUser = {
 		filterString += "%20and%20Field%20eq%20%27" + "Persk" + "%27";
 		filterString += "%20and%20Excod%20eq%20%27" + oItem.getKey() + "%27";
 		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
-		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
 		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
 		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 

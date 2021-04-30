@@ -48,7 +48,7 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var oPath = "/WerksListAuthSet?$filter=Percod eq '" + encodeURIComponent(oLoginData.Percod) + "' and Bukrs eq '" + oLoginData.Bukrs + "'";
 				oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
-				oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.csrf-token')) + "'";
+				oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "'";
 				oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
 				oPath += " and ICmenuid eq '" + $.app.getMenuId() + "'";
 			

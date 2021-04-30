@@ -26,7 +26,7 @@ ZUI5_HR_ActApp.common.Common = {
 			new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, Persa),
             new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(Actda)),
             new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-            new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+            new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
             new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
             new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 		];
@@ -221,7 +221,7 @@ ZUI5_HR_ActApp.common.Common = {
 					new sap.ui.model.Filter("VoltId", sap.ui.model.FilterOperator.EQ, oController._vSelected_VoltId),
                     new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(oController._vSelected_Actda)),
                     new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-                    new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+                    new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
                     new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
                     new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 				],
@@ -419,7 +419,7 @@ ZUI5_HR_ActApp.common.Common = {
 					new sap.ui.model.Filter("VoltId", sap.ui.model.FilterOperator.EQ, oController._vSelected_VoltId),
                     new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(oController._vSelected_Actda)),
                     new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-                    new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.csrf-token')),
+                    new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
                     new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
                     new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 				],
