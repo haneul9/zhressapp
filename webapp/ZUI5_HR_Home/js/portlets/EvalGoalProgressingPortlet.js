@@ -123,8 +123,6 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 		
 						if(parseFloat(oPage.goalDataMap[e.userId].score) !== 0)
 							$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
-						else
-							$('.progress-bar.i' + i).width("0%");
 					}, 0);
 				}).catch(function(e) {
 				});
