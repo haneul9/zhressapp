@@ -26,7 +26,7 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-2h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="evalgoal-legend">',
