@@ -530,7 +530,6 @@ sap.ui.define([
 						async: true,
 						success: function(oData, oResponse) {
 							Common.log(oData);
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_40033"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
 							BusyIndicator.hide();
 							window.open(
@@ -1258,16 +1257,6 @@ sap.ui.define([
 
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Plimp"))){ // 직무개선 방안요약
 				MessageBox.error(oController.getBundleText("MSG_40039"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
-
-			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0){
-				MessageBox.error(oController.getBundleText("MSG_40040"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
-
-			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") === 0){
-				MessageBox.error(oController.getBundleText("MSG_40041"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
 			

@@ -88,6 +88,9 @@
 					oController.HistoryModel.setData({Data: oData.TableIn3.results});
 					oController.LogModel.setData({Data: oData.Export.results[0]});
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
+					if(oData.Export.results[0].ReqBtn !== "X"){
+						sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107")});
+					}
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
