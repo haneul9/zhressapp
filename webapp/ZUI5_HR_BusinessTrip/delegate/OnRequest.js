@@ -150,7 +150,9 @@ var OnRequest = { // 출장 event handler
 	changeBtPurpose: function() {
 
 		this.RequestDetailDialogHandler.calculateAmount();
+		/*대근자
 		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"I");
+		*/
 	},
 
 	searchAccompanier: function(oEvent) {
@@ -323,8 +325,10 @@ var OnRequest = { // 출장 event handler
 		oModel.setProperty(oTargetPaths.ename, o.Ename || "");
 
 		this.RequestDetailDialogHandler.calculateAmount();
+		/*대근자
 		this.RequestDetailDialogHandler.oDatas!=null?
 		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"X"):null;
+		*/
 		SearchUser1.onClose();
 	},
 
@@ -524,7 +528,9 @@ var OnRequest = { // 출장 event handler
 						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn03.length);
 
 						this.RequestDetailDialogHandler.calculateAmount();
+						/*대근자
 						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"D1");
+						*/
 					}
 				}.bind(this)
 			});
@@ -581,7 +587,9 @@ var OnRequest = { // 출장 event handler
 						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn04.length);
 
 						this.RequestDetailDialogHandler.calculateAmount();
+						/*대근자
 						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"D2");
+						*/
 					}
 				}.bind(this)
 			});
@@ -633,13 +641,16 @@ var OnRequest = { // 출장 event handler
 						props.BtStartdat = null;
 						props.BtEnddat = null;
 						oModel.refresh();
+						/*대근자
 						this.RequestDetailDialogHandler.onShow.call(RequestHandler,null,"S");
+						*/
 					}.bind(this)
 				});
 			} else {
 				this.RequestDetailDialogHandler.calculateAmount();
-				//대근자 신청 추가
+				/*대근자
 				this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"S");
+				*/
 			}
 		}.bind(this), 0);
 	},
@@ -780,7 +791,7 @@ var OnRequest = { // 출장 event handler
 				return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn04", p);
 			}
 		});
-
+		/*대근자
 		var TableIn07 = [];
 		var oPro=$.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData");
 		if(oPro&&oPro.length){
@@ -788,7 +799,7 @@ var OnRequest = { // 출장 event handler
 				TableIn07.push(Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", e));
 			});
 		}
-
+		*/
 		oModel.setProperty("/Header/Accfg", TableIn04.length > 0);
 
 		if (oModel.getProperty("/Header/Status1") === "JJ") { // 상신취소 상태에서 저장시 키값 초기화
@@ -809,7 +820,9 @@ var OnRequest = { // 출장 event handler
 				TableIn04: TableIn04, // 동반출장자 목록
 				TableIn05: [], // 코스트센터 소속부서
 				TableIn06: [],  // 근태유형 코드 목록
-				TableIn07: [] //대근자
+				/*대근자
+				TableIn07: [] 
+				*/
 			},
 			{
 				success: function(oData) {
@@ -849,12 +862,14 @@ var OnRequest = { // 출장 event handler
 	
 	// 신청 확인
 	pressRequest: function() {
+		/*대근자
 		if($.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData").length!=0){
 			if(this.RequestDetailDialogHandler._Hando==""){
 				sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19039"));
 				return;
 			}
 		}
+		*/
 		Common.log("OnRequest.pressRequest");
 
 		this.RequestDetailDialogHandler.toggleButtonsState(false);
@@ -1085,7 +1100,7 @@ var OnRequest = { // 출장 event handler
 				return;
 			}
 		}
-
+		/*대근자
 		var TableIn07 = [];
 		var oPro=$.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData");
 		if(oPro&&oPro.length){
@@ -1093,7 +1108,7 @@ var OnRequest = { // 출장 event handler
 				TableIn07.push(Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", e));
 			});
 		}
-
+		*/
 		oModel.setProperty("/Header/Accfg", TableIn04.length > 0);
 		oModel.setProperty("/Header/Status1", "");
 		oModel.setProperty("/Header/Appkey1", ""); // 신청시 결재상신없이 SMOIN 결재창을 닫아버리는 경우 Appkey1은 이미 생성되어 SAP에 저장되므로 신청시 무조건 Appkey1을 초기화함
@@ -1103,13 +1118,18 @@ var OnRequest = { // 출장 event handler
 			this.RequestDetailDialogHandler.toggleButtonsState(true);
 			BusyIndicator.hide();
 		} else {
+			OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04);
+			/*대근자
 			OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07);
+			*/
 		}
 	},
 
-	// 신청 OData 호출
+	/*대근자
 	callRequestOData: function(Header, TableIn03, TableIn04, TableIn07) {
-
+	*/
+	// 신청 OData 호출
+	callRequestOData: function(Header, TableIn03, TableIn04) {
 		$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 			"/BtRequestSet",
 			{
@@ -1125,7 +1145,9 @@ var OnRequest = { // 출장 event handler
 				TableIn04: TableIn04, // 동반출장자 목록
 				TableIn05: [], // 코스트센터 소속부서
 				TableIn06: [],  // 근태유형 코드 목록
-				TableIn07: TableIn07 // 대근자 목록
+				/*대근자
+				TableIn07: TableIn07
+				*/
 			},
 			{
 				success: function(oData) {

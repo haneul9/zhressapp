@@ -203,7 +203,9 @@ var Handler = {
 					TableIn04: [], // 동반출장자 목록
 					TableIn05: [], // 코스트센터 소속부서
 					TableIn06: [],  // 근태유형 코드 목록
-					TableIn07: []   // 대근자 목록
+					/*대근자
+					TableIn07: []
+					*/
 				},
 				{
 					success: function(oData) {
@@ -297,15 +299,15 @@ var Handler = {
 						this.oModel.setProperty("/MainCostCenterList", Common.getTableInResults(oData, "TableIn05")); // 코스트센터 소속부서
 
 						this.toggleAdvanceAmtState(); // 가지급금 입력 활성화 여부 결정
-
-						var TableIn07 = Common.getTableInResults(oData, "TableIn07"); // 대근자 
+						/* 대근자
+						var TableIn07 = Common.getTableInResults(oData, "TableIn07");
 						this.oModel.getProperty("/Header").Status1=="AA"?TableIn07=new Array():null;
 						this._dArr=TableIn07;					
 						this.renderAdded.call(this,$.app.getController(),TableIn07);
 						this.onShow.call(this,TableIn07,"V");
 						this.oModel.getProperty("/Header").Status1!="AA"?this.afterTable(TableIn07):null;
 						$.app.byId($.app.getController().PAGEID+"_aTable").getModel().setProperty("/addData", TableIn07);
-//						Common.adjustVisibleRowCount($.app.byId($.app.getController().PAGEID+"_aTable"), 10, TableIn07.length);
+						*/
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.onBeforeOpen error", oResponse);

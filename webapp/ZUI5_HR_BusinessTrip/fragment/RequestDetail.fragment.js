@@ -32,7 +32,9 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		return [
 			this.getHeaderPanel(oController).setModel(oModel),
 			this.getSchedulePanel(oController).setModel(oModel),
+			/*대근자
 			this.getAddedPanel(oController).setModel(oModel)
+			*/
 		];
 	},
 
@@ -64,17 +66,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 							items: [
 								new sap.m.HBox({
 									items: [
-										// new sap.ui.core.HTML(oController.PAGEID+"_DHTML",{
-										// 	preferDOM:false,
-										// 	visible:"{/Header/Btact}",
-										// 	content:"<span style='color:blue;font-weight:bold;line-height:33px;font-size:14px;'>"+oController.getBundleText("LABEL_19813")+"</span>"
-										// }),
-										// new sap.m.Button({
-										// 	press: OnRequest.checkDK.bind(oController),
-										// 	enabled: "{/Header/Btact}",
-										// 	text: "{i18n>LABEL_19802}" // 대근자체크
-										// })
-										// .addStyleClass("button-light-sm"),
+										
 										new sap.m.Button({
 											press: OnRequest.checkHD.bind(oController),
 											enabled: "{/Header/Edtfg}",
