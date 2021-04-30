@@ -518,8 +518,10 @@ logout: function() {
 						'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
 					'</div>',
 					'<div class="modal-body">',
-						'<p>로그아웃하시겠습니까?</p>',
-						'<a href="/Logout.html">로그아웃</a>',
+						'<div class="d-flex flex-column align-items-center">',
+							'<p>로그아웃하시겠습니까?</p>',
+							'<a href="javascript:;" class="btn btn-primary fn-logout">로그아웃</a>',
+						'</div>',
 					'</div>',
 					'<div class="modal-footer">',
 						'<button type="button" class="btn btn-light" data-dismiss="modal">취소</button>',
@@ -528,10 +530,37 @@ logout: function() {
 			'</div>',
 		'</div>'
 	].join('')).appendTo('body')
+	.on('click', '.fn-logout', function() {
+		$('#ehr-logout-modal .modal-body').append([
+			'<iframe class="d-none" name="logout-page-iframe"></iframe>',
+			'<iframe class="d-none" name="logout-action-iframe"></iframe>',
+			'<iframe class="d-none" name="logout-index-iframe"></iframe>'
+		]);
+
+		this.callLogoutPage();
+	}.bind(this))
 	.on('hidden.bs.modal', function() {
 		$(this).remove();
 	})
 	.modal();
+},
+
+callLogoutPage: function() {
+
+	$('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', '/Logout.html');
+},
+
+callLogoutActionPage: function() {
+
+	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke',
+	logoutAction = 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
+
+	$('iframe[name="logout-action-iframe"]').on('load', this.callLogoutIndexPage.bind(this)).attr('src', logoutAction);
+},
+
+callLogoutIndexPage: function() {
+
+	$('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; }).attr('src', '/index.html');
 },
 
 pernr: function() {

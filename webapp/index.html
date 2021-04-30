@@ -142,7 +142,7 @@ function initHome() {
 	});
 
 	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
-	$(document).on('click', '.fn-logout', _gateway.logout.bind(_gateway));
+	$(document).on('click', '.fn-logout-confirm', _gateway.logout.bind(_gateway));
 
 	$('[data-toggle="tooltip"]')
 		.tooltip()
@@ -204,7 +204,7 @@ window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link fn-logout" href="javascript:;">
+					<a class="nav-link fn-logout-confirm" href="javascript:;">
 						<i class="fas fa-sign-out-alt"></i>
 						<span id="text-logout"><!-- 로그아웃 --></span>
 					</a>
