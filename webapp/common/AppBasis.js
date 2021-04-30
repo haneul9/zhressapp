@@ -195,7 +195,7 @@ getModel: function(id, viewId) {
 			}
 
 			return model.update.apply(model, args);
-		},
+		}.bind(this),
 		remove: function() {
 			return model.remove.apply(model, [].slice.call(arguments));
 		},
