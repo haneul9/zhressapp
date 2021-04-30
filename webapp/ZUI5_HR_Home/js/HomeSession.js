@@ -375,11 +375,30 @@ retrieveLoginInfo: function() {
 
 	var Percod = sessionStorage.getItem('ehr.odata.user.percod'),
 	Langu = sessionStorage.getItem('ehr.sf-user.language');
-
+/*
+		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
+		ICusrse: sessionStorage.getItem('ehr.odata.csrf-token'),	// Token
+		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
+		ICmenuid: mid || ''											// 메뉴 ID
+*/
 	return $.getJSON({
 		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
 		data: {
-			$filter: "Lpmid eq 'HACTA' and Percod eq '${Percod}' and Langu eq '${Langu}'".interpolate(Percod, Langu)
+			$filter: [
+				"Lpmid eq 'HACTA'",
+				"Percod eq '${Percod}'",
+				"Langu eq '${Langu}'",
+				"ICusrid eq '${ICusrid}'",
+				"ICusrse eq '${ICusrse}'",
+				"ICusrpn eq '${ICusrpn}'",
+				"ICmenuid eq ''" // menu id 불필요
+			].join(' and ').interpolate(
+				Percod,
+				Langu,
+				sessionStorage.getItem('ehr.odata.user.percod'),
+				sessionStorage.getItem('ehr.odata.csrf-token'),
+				sessionStorage.getItem('ehr.sf-user.name')
+			)
 		},
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();
@@ -581,7 +600,7 @@ usePrivateLog: function(o) {
 			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			TableIn: [{
 				Usrid: sessionStorage.getItem('ehr.odata.user.percod'),
-				Menid: this._gateway.parameter('mid'),
+				Menid: this._gateway.currentMid(),
 				Pernr: o.pernr || '',
 				Func: o.func || '',
 				Mobile: this._gateway.isMobile() ? 'X' : ''

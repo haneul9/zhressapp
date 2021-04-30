@@ -211,6 +211,9 @@ getModel: function(id, viewId) {
 		getProperty: function() {
 			return model.getProperty.apply(model, [].slice.call(arguments));
 		},
+		getResourceBundle: function() {
+			return model.getResourceBundle.apply(model, [].slice.call(arguments));
+		},
 		refresh: function() {
 			return model.refresh.apply(model, [].slice.call(arguments));
 		}

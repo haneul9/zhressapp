@@ -184,20 +184,19 @@ retrieveGoalData: function(userId, oPage) { // 사원목표정보
 				oGroundColor= oBackGround[1];
 			else 
 				oGroundColor= oBackGround[0];
-			
+
 			oPage.goalDataMap[userId].score = vScore,
 			oPage.goalDataMap[userId].groundColor = oGroundColor;
-		}.bind(this),
+		},
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
 		}.bind(this)
 	}).promise();
 },
-
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && this.scrollable()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,

@@ -65,7 +65,7 @@ fill: function() {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
-			if (this._gateway.isMobile()) {
+			if (this.mobile()) {
 				TableIn6 = TableIn6.splice(0, 8);
 			}
 
@@ -94,7 +94,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp') && !this._gateway.isMobile()) {
+	if (!list.data('jsp') && this.scrollable()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
