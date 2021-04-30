@@ -20,6 +20,7 @@ sap.ui.define([
 		ApplyModel: new JSONModelHelper(),
 		SearchModel: new JSONModelHelper(),
 		AttModel: new JSONModelHelper(),
+		TraningModel: new JSONModelHelper(),
 		
 		getUserId: function() {
 
@@ -29,6 +30,11 @@ sap.ui.define([
 		getUserGubun  : function() {
 
 			return this.getSessionInfoByKey("Bukrs3");
+		},
+
+		getUserGubun2  : function() {
+
+			return this.getSessionInfoByKey("Bukrs2");
 		},
 		
 		onInit: function () {
@@ -52,8 +58,8 @@ sap.ui.define([
 		onAfterShow: function() {
             
             this.initDateCreate(this);
-			this.onTableSearch();
 			this.getComboData();
+			this.onTableSearch();
 		},
 
 		getCheckBox: function() {
@@ -404,8 +410,73 @@ sap.ui.define([
 				this.ApplyModel.setProperty("/TraningCheck", "X");
 		},
 
-		RegistTraning: function() { // 교육과정 Dialog
+		RegistTraning: function() { // 교육과정 Dialog			
+			var oView = $.app.byId("ZUI5_HR_OutCompEdu.OutCompEdu");
+			
+			if (!this._TraningModel) {
+				this._TraningModel = sap.ui.jsfragment("ZUI5_HR_OutCompEdu.fragment.TraningRegist", this);
+				oView.addDependent(this._TraningModel);
+			}
+			// var oInput = $.app.byId(this.PAGEID + "DTrainingInput");
 
+			// oInput.setValue("");
+			this._TraningModel.open();
+		},
+
+		onTraningSearch: function() { // 교육과정 조회
+			var oController = $.app.getController();
+			var vBukrs2 = oController.getUserGubun2();
+			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
+			var oTraningTable = $.app.byId(oController.PAGEID + "_TraningTable2");
+			var oInput = $.app.byId(oController.PAGEID + "DTrainingInput");
+			
+			oController.TraningModel.setData({Data : []});
+
+			if(Common.checkNull(oInput.getValue())) {
+				MessageBox.error(oController.getBundleText("MSG_40043"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			var sendObject = {};
+			// Header
+			sendObject.IBukrs = vBukrs2;
+			sendObject.IName = oInput.getValue();
+			// Navigation property
+			sendObject.TrainingEventtypeTableIn = [];
+			
+			oModel.create("/TrainingEventtypeSet", sendObject, {
+				success: function(oData, oResponse) {
+					if(oData && oData.TrainingEventtypeTableIn){
+						var dataLength = 10;
+						var rDatas1 = oData.TrainingEventtypeTableIn.results;
+						dataLength = rDatas1.length;
+						oController.TraningModel.setData({Data : rDatas1});
+						Common.log(oData);
+					}
+
+					oTraningTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+					BusyIndicator.hide();
+				}
+			});
+		},
+
+		onSelectedTraningRow: function(oEvent) {
+			var oController = $.app.getController();
+			var oPath = oEvent.mParameters.rowBindingContext.getPath();
+			var oRowData = oController.TraningModel.getProperty(oPath);
+
+			oController.ApplyModel.setProperty("/FormData/Edkaj", oRowData.Stext); // 교육과정
+			oController.ApplyModel.setProperty("/FormData/Zgtype", oRowData.Zgtype); // 교육구분
+			oController.ApplyModel.setProperty("/FormData/Edgub", oRowData.Edgub); // 교육유형
+			oController.ApplyModel.setProperty("/FormData/Optin", oRowData.Optin); // 필수/선택
+			oController.ApplyModel.setProperty("/FormData/Rules", oRowData.Rules); // 법정/일반
+			oController._TraningModel.close();
 		},
 
 		onPressReqBtn: function() { // 결재요청
@@ -525,15 +596,19 @@ sap.ui.define([
 						Common.log(oData);
 						var vLength = 5;
 						var rDatas1 = oData.TrainingOutApplyTableIn2.results;
-						oController.AttModel.setData({Data: rDatas1});
 						vLength = rDatas1.length;
 
 						if(Gubun === "1"){
 							oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
+							oController.AttModel.setData({Data: rDatas1});
 							oController.AttModel.setProperty("/Status", oRowData.Status1);
-						}else 
+						}else {
 							oAttTable = $.app.byId(oController.PAGEID + "_AttTable2");
-						
+							rDatas1.forEach(function(e) {
+								if(e.Pernr === vPernr)
+									oController.AttModel.setProperty("/Data/0", e);
+							});
+						}
 						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
 					}
 				},
@@ -1276,7 +1351,6 @@ sap.ui.define([
 				},"001");
 			}else {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 내용요약
-					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
@@ -1284,7 +1358,6 @@ sap.ui.define([
 				},"002");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
-					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
@@ -1292,7 +1365,6 @@ sap.ui.define([
 				},"003");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
-					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,

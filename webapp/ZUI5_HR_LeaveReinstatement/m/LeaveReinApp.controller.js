@@ -304,7 +304,6 @@
 										vMsg = vMsg.replace(vMsg, vMsg + oController.getBundleText("MSG_42024"));
 										oController.ApplyModel.setProperty("/InfoText", vMsg.trim());
 										break;
-							case "11":
 							case "12":
 							case "13":	vMsg = ele.TextA;
 										vMsg = vMsg.replace(vMsg, vMsg + oController.getBundleText("MSG_42025") + oController.getBundleText("MSG_42026"));

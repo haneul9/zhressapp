@@ -92,46 +92,6 @@ sap.ui.define([
 				}
             }, oNomalCombo);
 
-            var oTimeCombo = new sap.m.ComboBox({ // 학습시간 (시)
-				width: "70px",
-				editable: false,
-				items: {
-					path: "/TimeCombo",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{hTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo);
-
-            var oTimeCombo2 = new sap.m.ComboBox({ // 학습시간 (분)
-				width: "70px",
-				editable: false,
-				items: {
-					path: "/TimeCombo2",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{mTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo2.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo2.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo2);
-
             var oSatisCombo = new sap.m.ComboBox({ // 학습자만족도
 				width: "250px",
 				editable: {
@@ -315,9 +275,12 @@ sap.ui.define([
 								width: "100%",
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40036}", "150px", "Right", true), // 학습시간
-									oTimeCombo,
-									new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
-									oTimeCombo2
+									new sap.m.Input({
+										textAlign: "Begin",
+										width: "250px",
+										editable: false,
+										value: "{Trtim}"
+									})
 								]
 							})
 							.addStyleClass("search-field-group")

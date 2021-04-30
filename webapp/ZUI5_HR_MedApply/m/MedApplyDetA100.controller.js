@@ -62,8 +62,8 @@ sap.ui.define([
 						MedicalApplyTableIn5:[],
 						MedicalApplyTableInH:[]
 						};
-			oModel.create("/MedicalApplySet", vData, null,
-					function(data,res){
+			oModel.create("/MedicalApplySet", vData, 
+					{success:function(data,res){
 						if(data){
 							if(data&&data.MedicalApplyTableIn0.results.length){
 								data.MedicalApplyTableIn0.results.forEach(function(e){
@@ -73,7 +73,7 @@ sap.ui.define([
 							}
 						}					
 					},
-					function (oError) {
+					error:function (oError) {
 						var Err = {};						
 						if (oError.response) {
 							Err = window.JSON.parse(oError.response.body);
@@ -84,7 +84,7 @@ sap.ui.define([
 							sap.m.MessageBox.alert(oError.toString());
 						}
 					}
-				);
+					});
 			this._tData=oEvent.data[0];
 			this._SelData=oEvent.data[1];
 			this._onDialog=oEvent.data[2];
@@ -668,8 +668,8 @@ sap.ui.define([
 					   IBukrs:oController._Bukrs,
 					   NavCommonCodeList:[],
 					   ICodty:"ZHOSP_TYPE"};
-			oModel.create("/CommonCodeListHeaderSet", vData, null,
-				function(data,res){
+			oModel.create("/CommonCodeListHeaderSet", vData, 
+				{success:function(data,res){
 					if(data&&data.NavCommonCodeList.results.length){
 						data.NavCommonCodeList.results.forEach(function(e){
 							oSel2.addItem(new sap.ui.core.Item({
@@ -679,7 +679,7 @@ sap.ui.define([
 						});
 					}
 				},
-				function (oError) {
+				error:function (oError) {
 					var Err = {};				
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -690,7 +690,7 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);
+				});
 		},
 
 		getSelData2: function(vSig){
@@ -699,8 +699,8 @@ sap.ui.define([
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[]};				
 			if(oController._SelData.Sel3.length==0){
-				oModel.create("/CommonCodeListHeaderSet", vData, null,
-					function(data,res){
+				oModel.create("/CommonCodeListHeaderSet", vData, 
+					{success:function(data,res){
 						if(data){
 							if(data&&data.NavCommonCodeList.results.length){
 								data.NavCommonCodeList.results.forEach(function(e){
@@ -709,7 +709,7 @@ sap.ui.define([
 							}
 						}					
 					},
-					function (oError) {
+					error:function (oError) {
 						var Err = {};						
 						if (oError.response) {
 							Err = window.JSON.parse(oError.response.body);
@@ -720,7 +720,7 @@ sap.ui.define([
 							sap.m.MessageBox.alert(oError.toString());
 						}
 					}
-				);
+					});
 			}
 			var oSel3 = $.app.byId(oController.PAGEID+"_dSel3");
 			oSel3.removeAllItems();
@@ -923,14 +923,14 @@ sap.ui.define([
 			function onSaveProcess(){
 				var vData={Hname:$.app.byId(oController.PAGEID+"_Input1").getValue().trim(),
 						   Comid:$.app.byId(oController.PAGEID+"_Input2").getValue().trim()};
-				oModel.create("/MedComidSaveSet", vData, null,
-				function(data,res){
+				oModel.create("/MedComidSaveSet", vData, 
+				{success:function(data,res){
 					new sap.m.MessageBox.alert(oBundleText.getText("MSG_35005"),{
 						title:oBundleText.getText("LABEL_35023"),
 						onClose:function(){closeDialog();oController.onMini();}
 					});
 				},
-				function (oError) {
+				error:function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -940,7 +940,7 @@ sap.ui.define([
 					} else {
 						sap.m.MessageBox.alert(oError.toString());
 					}
-				});
+				}});
 			}
 			function onSave(){
 				if($.app.byId(oController.PAGEID+"_Input1").getValue().trim()==""){
@@ -1146,8 +1146,8 @@ sap.ui.define([
 			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[]};	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			oController._SelData.Sel4=new Array();
-			oModel.create("/CommonCodeListHeaderSet", vData, null,
-				function(data,res){
+			oModel.create("/CommonCodeListHeaderSet", vData, 
+				{success:function(data,res){
 					if(data){
 						if(data&&data.NavCommonCodeList.results.length){
 							data.NavCommonCodeList.results.forEach(function(e){
@@ -1156,7 +1156,7 @@ sap.ui.define([
 						}
 					}					
 				},
-				function (oError) {
+				error:function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -1167,7 +1167,7 @@ sap.ui.define([
 						sap.m.MessageBox.alert(oError.toString());
 					}
 				}
-			);
+				});
 			oSel4.removeAllItems();
 			oSel4.addItem(
 				new sap.ui.core.Item({
@@ -1292,8 +1292,8 @@ sap.ui.define([
 			}
 			var oCnt=0;
 			setTimeout(function(){
-			oModel.create("/MedComidList2Set", vData, null,
-				function(data,res){
+			oModel.create("/MedComidList2Set", vData, 
+				{success:function(data,res){
 					if(data&&data.MedComidList2TableIn.results.length){
 						data.MedComidList2TableIn.results.forEach(function(e){
 							aData.oData.push(e);
@@ -1304,7 +1304,7 @@ sap.ui.define([
 					}
 					oCnt=data.MedComidList2TableIn.results.length;
 				},
-				function (oError) {
+				error:function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -1314,7 +1314,7 @@ sap.ui.define([
 					} else {
 						sap.m.MessageBox.alert(oError.toString());
 					}
-				});
+				}});
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
 				}

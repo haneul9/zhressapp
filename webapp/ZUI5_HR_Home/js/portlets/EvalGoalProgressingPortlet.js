@@ -2,7 +2,7 @@
 function EvalGoalProgressingPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
-	this.$selector = '#portlet-evalGoalProgressingPortlet-list';
+	this.$selector = '.portlet-evalgoal-progress .list-group';
 	this.photoMap = null;
 	this.goalDataMap = null;
 	this.vGoalData = null;
@@ -29,10 +29,8 @@ ui: function() {
 		'<div class="card portlet portlet-${size}h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="evalgoal-legend">',
-					"평균진척률",
-				'</div>',
-				'<div class="list-group" id="portlet-evalGoalProgressingPortlet-list"></div>',				
+				'<div class="evalgoal-legend">평균진척률</div>',
+				'<div class="list-group"></div>',				
 			'</div>',
 			this.spinner(),
 		'</div>'
@@ -98,7 +96,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 					oPage.retrieveGoalData(e.userId, oPage)
 				]).then(function() {
 					setTimeout(function() {
-						list.append([							
+						list.append([
 							'<div class="evalgoal-area">',
 								'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
 								'<div class="evalgoal-info">',
@@ -121,10 +119,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 							'</div>'
 						].join(''));
 		
-						if(parseFloat(oPage.goalDataMap[e.userId].score) !== 0)
-							$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
-						else
-							$('.progress-bar.i' + i).width("0%");
+						$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
 					}, 0);
 				}).catch(function(e) {
 				});

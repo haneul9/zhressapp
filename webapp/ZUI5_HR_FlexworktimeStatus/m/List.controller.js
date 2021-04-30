@@ -28,7 +28,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -95,6 +95,7 @@ sap.ui.define([
 			
 			oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", "0");
 			oController._ListCondJSonModel.setProperty("/Data/Tottmtx", "-");
+			var check = ""; // 총근로시간 > 소정근로시간 = X
 			
 			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
 			var oJSONModel1 = oTable1.getModel();
@@ -142,6 +143,10 @@ sap.ui.define([
 							oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", data.Ctrnm.split(":")[0]);
 							$('.progress-bar').animate({ width: ((parseInt(data.Tottm.split(":")[0]) / parseInt(data.Ctrnm.split(":")[0])) * 80) + '%' }, 2000);
 							
+							if(parseInt(data.Tottm.split(":")[0]) > parseInt(data.Ctrnm.split(":")[0])){
+								check = "X";
+							}
+							
 							oController._ListCondJSonModel.setProperty("/Data/Tottmtx", 
 								data.Tottm == "" ? "-" :
 									data.Tottm.split(":")[0] + oBundleText.getText("LABEL_69052") + " " + data.Tottm.split(":")[1] + oBundleText.getText("LABEL_69053")
@@ -177,6 +182,20 @@ sap.ui.define([
 											title.addStyleClass("color-info-red");
 										}
 										
+										var titleStyle = "";
+										switch(data1[i].Status){
+											case "99": // 결재완료
+												titleStyle = "calendar-background-blue";
+												break;
+											case "88": // 반려
+												titleStyle = "calendar-background-orange";
+												break;
+											case "00": // 결재중
+												titleStyle = "calendar-background-green";
+												break;
+											default:
+										}
+										
 										var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 														  columns : 1,
 														  width : "100%",
@@ -186,7 +205,7 @@ sap.ui.define([
 																		  	  	   content : [title],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
-																		  	   })] 
+																		  	   }).addStyleClass(titleStyle)] 
 																  }),
 																  new sap.ui.commons.layout.MatrixLayoutRow({
 																  	  height : "20px",
@@ -264,6 +283,11 @@ sap.ui.define([
 									vData1.Data.push(data3[i]);
 								}
 								
+								Chart.defaults.global.defaultFontColor = 'rgb(153, 153, 153)';
+							    Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
+							    Chart.defaults.global.legend.labels.boxWidth = 20;
+							    Chart.defaults.global.legend.align = 'end';
+							    
 								var chart = new Chart(document.getElementById('vacChart').getContext('2d'), {
 					                type: 'bar',
 					                data: { 
@@ -273,27 +297,36 @@ sap.ui.define([
 					                            label: '사용',
 					                            barPercentage: 0.6,
 					                            categoryPercentage: 0.6,
-					                            backgroundColor: 'rgb(130,235,55)', 
-					                            borderColor: 'rgb(255, 99, 132)',
+					                            barThickness: oKtext.length == 1 ? 40 : 20,
+					                            backgroundColor: "rgb(141, 198, 63)",
 					                            data: oUsecnt
 					                        },
 					                        {
 					                            label: '잔여',
 					                            barPercentage: 0.6,
 					                            categoryPercentage: 0.6,
-					                            backgroundColor: 'rgb(50,118,234)',
-					                            borderColor: 'rgb(255, 99, 132)',
+					                            barThickness: oKtext.length == 1 ? 40 : 20,
+					                            backgroundColor: "rgb(221, 238, 197)",
 					                            data: oBalcnt
 					                        }
 					                    ]
 					                },
 					                options: {
-					                    categoryPercentage: 1.0,
-					                    barPercentage: 0.5
+					                     scales: {
+					                        yAxes: [{
+					                            ticks: {
+					                                fontColor : "rgb(153, 153, 153)"
+					                            }
+					                        }]
+					                    }
 					                }
 					            });
 					            
 					            $('.ChartClass').append([chart]);
+					            
+					            if(check == "X"){
+					            	$("#bar").addClass("bg-error");
+					            }
 							}
 							
 							if(data.FlexWorktime4Nav && data.FlexWorktime4Nav.results){
@@ -377,11 +410,18 @@ sap.ui.define([
 				}
 			}
 			
+			var oData1;
+			if(oData.Status == "00"){
+				oData1 = Object.assign({}, oData, {Beguz : oData.Beguz2, Enduz : oData.Enduz2, Lnctm : oData.Lnctm2}, oController._ListCondJSonModel.getProperty("/Data"));
+ 			} else {
+ 				oData1 = Object.assign({}, oData, oController._ListCondJSonModel.getProperty("/Data"));
+ 			}
+			
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : "ZUI5_HR_FlexworktimeStatus.m.Detail",
 			      data : {
 			    	  FromPageId : "ZUI5_HR_FlexworktimeStatus.m.List",
-			    	  Data : Object.assign({}, oData, oController._ListCondJSonModel.getProperty("/Data")),
+			    	  Data : oData1,
 			    	  Data2 : oData2
 			      }
 			});

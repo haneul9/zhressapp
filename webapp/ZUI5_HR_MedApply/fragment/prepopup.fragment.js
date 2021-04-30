@@ -17,7 +17,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.prepopup", {
         oCell=new c.layout.MatrixLayoutCell({
             hAlign:"Begin",
             content:[Datum,new sap.m.Button({text:oBundleText.getText("LABEL_47090"),
-            press:function(){oController.getBukrs(Datum);}}).addStyleClass("button-light righter")]
+            press:function(){oController.getBukrs(Datum);}}).addStyleClass("button-light righter mt-4px")]
         }).addStyleClass("DataCell");
         oRow.addCell(oCell);
         oMat.addRow(oRow);

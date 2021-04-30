@@ -254,8 +254,9 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-vacation .vac-header {background-color: #F3F4F4;border-top: 1px solid #e4e4e4;border-bottom:1px solid #e4e4e4;margin-top:10px}
 .portlet-vacation .vac-body {border-bottom:1px solid #F0F0F0}
 
-.portlet-evalgoal-progress .evalgoal-legend {display: flex;justify-content:flex-end;font-size:.75rem;}
-.portlet-evalgoal-progress .evalgoal-area {display: flex;height: auto; margin-bottom: 15px;}
+.portlet-evalgoal-progress .evalgoal-legend {display:flex; justify-content:flex-end; height:1.1rem; font-size:.75rem;}
+.portlet-evalgoal-progress .list-group {height:calc(100% - 1.1rem)}
+.portlet-evalgoal-progress .evalgoal-area {display:flex; height: auto; margin-bottom: 15px;}
 .portlet-evalgoal-progress .evalgoal-area img {border:1px solid #e4e4e4}
 
 .portlet-evalgoal-progress .evalgoal-info {height: auto; display: flex; flex-direction: column; width: 100%;padding:0 20px}
@@ -377,4 +378,4 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .custom-system-message .message {font-size:1rem; padding-top:2rem;line-height: 1.2;}  
 
 
-/* 0430_2 */   
+/* 0430_4 */   

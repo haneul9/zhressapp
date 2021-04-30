@@ -55,3 +55,13 @@
     height:42px !important;
     padding-top:4px;
 }
+.med-subtitle {
+    display: inline-block;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 500; 
+    padding:8px 0 8px 8px ; 
+    border-top:1px solid #d9d9d9;
+    border-bottom:1px solid #d9d9d9;
+    background-color:#f4f5f6 ;
+}
