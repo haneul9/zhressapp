@@ -99,28 +99,26 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 				]).then(function() {
 					setTimeout(function() {
 						list.append([
-							'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(oPage.itemUrl(e)),
-								'<div class="evalgoal-area">',
-									'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
-									'<div class="evalgoal-info">',
-										'<div class="person">',
-											'<div class="name">',
-												oPage.goalDataMap[e.userId].nickname,
-											'</div>',
-											'<div class="position">',
-											oPage.goalDataMap[e.userId].position,
-											'</div>',
+							'<div class="evalgoal-area">',
+								'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
+								'<div class="evalgoal-info">',
+									'<div class="person">',
+										'<div class="name">',
+											oPage.goalDataMap[e.userId].nickname,
 										'</div>',
-										'<div class="evalgoal-statusBar">',
-											'<div class="progress">',
-												'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-													oPage.goalDataMap[e.userId].score + '%',
-												'</div>',
+										'<div class="position">',
+										oPage.goalDataMap[e.userId].position,
+										'</div>',
+									'</div>',
+									'<div class="evalgoal-statusBar">',
+										'<div class="progress">',
+											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+												oPage.goalDataMap[e.userId].score + '%',
 											'</div>',
 										'</div>',
 									'</div>',
 								'</div>',
-							'</a>'
+							'</div>'
 						].join(''));
 		
 						$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
