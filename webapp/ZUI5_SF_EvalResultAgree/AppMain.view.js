@@ -168,7 +168,7 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.AppMain", {
 	getUrl : function(sUrl) {
 		var param = $.map(location.search.replace(/\?/, "").split(/&/), function(p) {
 			var pair = p.split(/=/);
-			if (pair[0] === "s4hana") { return pair[1]; }
+			if (pair[0] === "s4hana") { return decodeURIComponent(pair[1]); }
 		})[0];
 
 		var destination = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";

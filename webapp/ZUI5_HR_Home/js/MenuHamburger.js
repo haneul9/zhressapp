@@ -144,7 +144,7 @@ menuParam: function() {
 		if (typeof o === 'string' || o instanceof String) {
 			$.map(o.replace(/[^?]*\?/, '').split(/&/), function(v) {
 				var pair = v.split(/=/);
-				map[pair[0]] = pair[1];
+				map[pair[0]] = decodeURIComponent(pair[1]);
 			});
 		} else if ($.isPlainObject(o)) {
 			map = o;
