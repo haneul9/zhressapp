@@ -175,6 +175,8 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 							        			 				} else {
 							        			 					this.addStyleClass("color-darkgreen");
 							        			 				}
+							        			 			} else {
+							        			 				this.addStyleClass("color-darkgreen");
 							        			 			}
 							        			 			
 							        			 			return fVal3;
@@ -288,8 +290,8 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
                     design: "Vertical",
                     content: [new sap.m.Toolbar({
 					        	  height : "40px",
-					        	  content : [new sap.m.Text({text : oBundleText.getText("LABEL_69042"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px"), // 승인완료
-					        			     new sap.m.Text({text : oBundleText.getText("LABEL_69043"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px")] // 변경신청
+					        	  content : [new sap.m.Text({text : oBundleText.getText("LABEL_00199"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px"), // 결재완료
+					        			     new sap.m.Text({text : oBundleText.getText("LABEL_00197"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px")] // 결재중
 					          }).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0"),
 					          new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar").addStyleClass("pt-10px")]
                 })

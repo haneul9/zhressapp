@@ -1138,7 +1138,6 @@ sap.ui.define([
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
 				}
-				oController._onClose="X";
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewBtn").setVisible(false):$.app.byId(oController.PAGEID+"_NewBtn").setVisible(true);
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewIcon").setVisible(true):$.app.byId(oController.PAGEID+"_NewIcon").setVisible(false);
 			},10);

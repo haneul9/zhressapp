@@ -136,13 +136,13 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
                     	new sap.m.VBox({
                         	items : [new sap.m.Text({
 			                             textAlign: "Begin",
-			                             text: "{Text}"
+			                             text: "{Lgtxt}"
 			                         })]
                         }),
                         new sap.m.VBox({
                         	items : [new sap.m.Text({
 			                             textAlign: "Begin",
-			                             text: "{Value}"
+			                             text: "{Anzhl}"
 			                         })]
                         })
                     ]
