@@ -199,7 +199,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span class='med-subtitle'>"
 			+oController.getBundleText("LABEL_47102")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -241,7 +241,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span class='med-subtitle'>"
 			+oController.getBundleText("LABEL_47103")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
@@ -449,7 +449,7 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span style='font-size:14px;font-weight:bold;'>"
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span class='med-subtitle'>"
 			+oController.getBundleText("LABEL_47104")+"</span>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
