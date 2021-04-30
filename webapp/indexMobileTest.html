@@ -74,8 +74,6 @@ function initHome() {
 		$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
 		new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
 
-		$(document).on('click', '.fn-logout-confirm', _gateway.logout.bind(_gateway));
-
 		return;
 	}
 
@@ -90,6 +88,7 @@ function initHome() {
 	}, 0);
 
 	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
+	$(document).on('click', '.fn-logout-confirm', _gateway.logout.bind(_gateway));
 
 	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
 }

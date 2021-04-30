@@ -520,7 +520,7 @@ logout: function() {
 					'<div class="modal-body">',
 						'<div class="d-flex flex-column align-items-center">',
 							'<p>로그아웃하시겠습니까?</p>',
-							'<a href="javascript:;" class="btn btn-primary fn-logout">로그아웃</a>',
+							'<button type="button" class="btn btn-primary fn-logout">로그아웃</button>',
 						'</div>',
 					'</div>',
 					'<div class="modal-footer">',
@@ -530,7 +530,11 @@ logout: function() {
 			'</div>',
 		'</div>'
 	].join('')).appendTo('body')
-	.on('click', '.fn-logout', function() {
+	.on('click', '.fn-logout', function(e) {
+		$(e.currentTarget).prop('disabled', true);
+
+		this._gateway.spinner();
+
 		$('#ehr-logout-modal .modal-body').append([
 			'<iframe class="d-none" name="logout-page-iframe"></iframe>',
 			'<iframe class="d-none" name="logout-action-iframe"></iframe>',
