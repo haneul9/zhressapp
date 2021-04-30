@@ -318,7 +318,7 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oController._DetailJSonModel.getProperty("/Data");
-			
+			console.log(oData);
 			// 추가휴게시간
 			var oData2 = sap.ui.getCore().byId(oController.PAGEID + "_Table1").getModel().getProperty("/Data");
 			
@@ -331,7 +331,7 @@ sap.ui.define([
 				return;
 			}
 			
-			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []}; 
+			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime5Nav : []}; 
 			
 			for(var i=0; i<oData2.length; i++){
 				if(oData2[i].Austy == "A" || (oData2[i].Beguz == "" && oData2[i].Enduz == "")) continue;
@@ -347,15 +347,19 @@ sap.ui.define([
 					detail.Enduz = oData2[i].Enduz;
 					detail.Adbtm = oData2[i].Adbtm;
 					detail.Notes = oData2[i].Notes;
-					
-				createData.FlexWorktime2Nav.push(detail);
+				
+				if(oData.Offyn == "1"){
+					createData.FlexWorktime5Nav.push(detail);
+				} else {
+					createData.FlexWorktime2Nav.push(detail);
+				}
 			}
 			
 			var onProcess = function(){
 				createData.Werks = oData.Werks;
 				createData.Pernr = oData.Pernr;
 				createData.Zyymm = (oData.Year + "") + (oData.Month < 10 ? ("0" + oData.Month) : (oData.Month + ""));
-				createData.Prcty = "2";
+				createData.Prcty = oData.Offyn == "1" ? "5" : "2";
 				
 				var oAdbtm = sap.ui.getCore().byId(oController.PAGEID + "_Table2").getModel().getProperty("/Data/0/Value");
 				
@@ -364,10 +368,12 @@ sap.ui.define([
 					Beguz : oData.Beguz,
 					Enduz : oData.Enduz,
 					Lnctm : oData.Lnctm,
+					Chgrsn : oData.Chgrsn,
 					Adbtm : oAdbtm == "" ? "" : oAdbtm.replace(":", ""),
-					Monyn : oData.Monyn
+					Monyn : oData.Offyn == "1" ? "5" : oData.Monyn,
+					Appkey1 : oData.Appkey1
 				});
-				
+				console.log(createData);
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
@@ -398,12 +404,21 @@ sap.ui.define([
 					return;
 				}
 				
-				sap.m.MessageBox.success(oBundleText.getText("MSG_00017"), { // 저장되었습니다.
+				sap.m.MessageBox.success(successMessage, {
 					onClose : oController.onBack
 				});
 			};
 			
-			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00058"), { // 저장하시겠습니까?
+			var confirmMessage = "", successMessage = "";
+			if(oData.Offyn == "1"){
+				confirmMessage = oBundleText.getText("MSG_00060"); // 신청하시겠습니까?
+				successMessage = oBundleText.getText("MSG_00061"); // 신청되었습니다.
+			} else {
+				confirmMessage = oBundleText.getText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oBundleText.getText("MSG_00017"); // 저장되었습니다.
+			}
+			
+			sap.m.MessageBox.confirm(confirmMessage, {
 				actions : ["YES", "NO"],
 				onClose : function(fVal){
 					if(fVal && fVal == "YES"){

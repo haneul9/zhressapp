@@ -288,12 +288,23 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
                     key: "2",
                     text: "Calendar",
                     design: "Vertical",
-                    content: [new sap.m.Toolbar({
-					        	  height : "40px",
-					        	  content : [new sap.m.Text({text : oBundleText.getText("LABEL_00197"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px"), // 결재중
-					        				 new sap.m.Text({text : oBundleText.getText("LABEL_00198"), width : "100px", textAlign : "Center"}).addStyleClass("legend-orange FontWhite p-5px"), // 반려
-					        	  			 new sap.m.Text({text : oBundleText.getText("LABEL_00199"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px")] // 결재완료
-					          }).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0"),
+                    content: [new sap.m.HBox({
+                    			  justifyContent : "End",
+	                              items: [
+	                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-darkgreen"),
+	                                new sap.m.Label({text: oBundleText.getText("LABEL_00197")}).addStyleClass("custom-legend-item"), // 결재중
+	                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-orange"),
+	                                new sap.m.Label({text: oBundleText.getText("LABEL_00198")}).addStyleClass("custom-legend-item"), // 반려
+	                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-cyanblue"),
+	                                new sap.m.Label({text: oBundleText.getText("LABEL_00199")}).addStyleClass("custom-legend-item") // 결재완료
+	                            ]
+	                          }).addStyleClass("custom-legend-group mr-10px"),
+	              //            new sap.m.Toolbar({
+					        	 // height : "40px",
+					        	 // content : [new sap.m.Text({text : oBundleText.getText("LABEL_00197"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px"), // 결재중
+					        		// 		 new sap.m.Text({text : oBundleText.getText("LABEL_00198"), width : "100px", textAlign : "Center"}).addStyleClass("legend-orange FontWhite p-5px"), // 반려
+					        	 // 			 new sap.m.Text({text : oBundleText.getText("LABEL_00199"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px")] // 결재완료
+					          //}).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0"),
 					          new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar").addStyleClass("pt-10px")]
                 })
             ],

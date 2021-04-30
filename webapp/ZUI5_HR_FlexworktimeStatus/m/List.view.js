@@ -43,6 +43,19 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 										  tooltip : " "
 									  })]
 					   }).addStyleClass("toolbarNoBottomLine"),
+					   new sap.m.HBox({
+					   	   justifyContent : "End",
+					   	   fitContainer : true,
+                           items: [
+                           		new sap.m.ToolbarSpacer(),
+                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-darkgreen"),
+                                new sap.m.Label({text: oBundleText.getText("LABEL_00197")}).addStyleClass("custom-legend-item"), // 결재중
+                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-orange"),
+                                new sap.m.Label({text: oBundleText.getText("LABEL_00198")}).addStyleClass("custom-legend-item"), // 반려
+                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-cyanblue"),
+                                new sap.m.Label({text: oBundleText.getText("LABEL_00199")}).addStyleClass("custom-legend-item") // 결재완료
+                            ]
+                       }).addStyleClass("custom-legend-group mt-5px mb-5px mr-5px"),
 					   new sap.m.VBox(oController.PAGEID + "_Calendar")]
 		});
 		
@@ -103,7 +116,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 				                     text: oBundleText.getText("LABEL_69020"), // 휴가쿼터 현황
 				                     design: "Bold"
 				                 }).addStyleClass("sub-title")]
-					}).addStyleClass("info-box"),
+					}).addStyleClass("info-box pt-5px"),
 					new sap.ui.core.HTML({
 						content : '<canvas id="vacChart" class="ChartClass"></canvas>'
 					}),
@@ -159,7 +172,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 				                     text: oBundleText.getText("LABEL_69021"), // 근태수당 현황
 				                     design: "Bold"
 				                 }).addStyleClass("sub-title")]
-					}).addStyleClass("info-box"),
+					}).addStyleClass("info-box pt-5px"),
 	                oTable2]
         });
         
@@ -209,14 +222,14 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 			fitContainer: true,
 			items: [new sap.m.FlexBox({
 						items : [new sap.m.Label({
-				                     text: oBundleText.getText("LABEL_69022"), // 자율출퇴근 현황
+				                     text: oBundleText.getText("LABEL_69022"), // 근무시간 현황
 				                     design: "Bold"
 				                 }).addStyleClass("sub-title")]
-					}).addStyleClass("info-box"),
+					}).addStyleClass("info-box pt-5px"),
 					new sap.ui.core.HTML({
-						content : '<div style="background-color: rgb(236,244,253); margin-top: 10px;">' +
+						content : '<div style="background-color: rgb(236,244,253);">' +
 				                    '<div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 15px;">' +
-				                        '<div style="font-size: 15px; font-weight: bold; color: rgb(4,62,127);">' + oBundleText.getText("LABEL_69051") + '</div>' + // 총 근로시간
+				                        '<div style="font-size: 15px; color: rgb(4,62,127);">' + oBundleText.getText("LABEL_69051") + '</div>' + // 총 근로시간
 				                        '<div style="font-size: 15px; font-weight: bold; color: rgb(4,62,127);">' + "{Tottmtx}" + '</div>' +
 				                    '</div>' +
 				                  '</div>'	
@@ -224,7 +237,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 					new sap.ui.core.HTML({
 						content : '<div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 10px; margin-bottom:10px">' +
 				                	'<div class="progress" style="height: 20px; width: 100%; display: flex; position: relative;">' +
-				                        '<div style="height: 100%; position: absolute;" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">' +
+				                        '<div id="bar" style="height: 100%; position: absolute;" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">' +
 				                        '</div>' +
 				                        '<div style="height: 100%; position: absolute; background-color: transparent; border-right: solid; width: 80%;">' +
 				                        '</div>' +
