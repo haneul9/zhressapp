@@ -2,7 +2,7 @@
 function EvalGoalProgressingPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
-	this.$selector = '#portlet-evalGoalProgressingPortlet-list';
+	this.$selector = '.portlet-evalgoal-progress .list-group';
 	this.photoMap = null;
 	this.goalDataMap = null;
 	this.vGoalData = null;
@@ -26,13 +26,11 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-2h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="evalgoal-legend">',
-					"평균진척률",
-				'</div>',
-				'<div class="list-group" id="portlet-evalGoalProgressingPortlet-list"></div>',				
+				'<div class="evalgoal-legend">평균진척률</div>',
+				'<div class="list-group"></div>',				
 			'</div>',
 			this.spinner(),
 		'</div>'
