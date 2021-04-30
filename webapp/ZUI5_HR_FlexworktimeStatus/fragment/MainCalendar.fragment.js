@@ -134,7 +134,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69003")})], // 일자
 													 hAlign : "Center",
 													 vAlign : "Middle"
-												 }).addStyleClass("calendar-datum")]
+												 }).addStyleClass("calendar-legend")]
 									}),
 									new sap.ui.commons.layout.MatrixLayoutRow({
 										height : "20px",
@@ -142,7 +142,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69044")})], // 출/퇴근
 													 hAlign : "Center",
 													 vAlign : "Middle"
-												 })]
+												 }).addStyleClass("calendar-legend")]
 									}),
 									new sap.ui.commons.layout.MatrixLayoutRow({
 										height : "20px",
@@ -150,7 +150,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69045")})], // 휴게시간
 													 hAlign : "Center",
 													 vAlign : "Middle"
-												 })]
+												 }).addStyleClass("calendar-legend")]
 									}),
 									new sap.ui.commons.layout.MatrixLayoutRow({
 										height : "20px",
@@ -158,7 +158,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69010")})], // 소정근로
 													 hAlign : "Center",
 													 vAlign : "Middle"
-												 })]
+												 }).addStyleClass("calendar-legend")]
 									}),
 									new sap.ui.commons.layout.MatrixLayoutRow({
 										height : "20px",
@@ -166,7 +166,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69046")})], // 연장/휴일
 													 hAlign : "Center",
 													 vAlign : "Middle"
-												 })]
+												 }).addStyleClass("calendar-legend")]
 									}),
 									new sap.ui.commons.layout.MatrixLayoutRow({
 										height : "20px",
@@ -174,7 +174,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.MainCalendar", {
 													 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69005")})], // 근태
 													 hAlign : "Center",
 													 vAlign : "Middle"
-												 })]
+												 }).addStyleClass("calendar-legend")]
 									})]
 						})
 					);

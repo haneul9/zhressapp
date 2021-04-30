@@ -102,8 +102,10 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-9h {height:calc((206px * 9) + (1.5rem * 8))}
 
 .portlet-carousel {margin-top:.75rem; padding-bottom:1.5rem}
+.portlet-carousel .nav-tabs .nav-link {border-radius:0;border:0;font-size:1rem;color:#777}
+.portlet-carousel .nav-tabs .nav-link.active {border-bottom:4px solid #064975;color:#064975;font-weight:500}
 .portlet-carousel .carousel-indicators {margin:0}
-.portlet-carousel .carousel-indicators li {background-color:#000}
+.portlet-carousel .carousel-indicators li {width:.5rem;height:.5rem;border-radius:50%;background-color:#064975}
 
 .portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
 .portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
@@ -260,15 +262,24 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-evalgoal-progress .evalgoal-info .person {display: flex; justify-content: flex-start;padding:0 0 5px 4px}
 .portlet-evalgoal-progress .evalgoal-info .name {font-weight: 500;margin-top:auto}
 .portlet-evalgoal-progress .evalgoal-info .position {font-size: .75rem;padding-left: 5px; padding-bottom:2px;margin-top:auto}
+
+.portlet-evalgoal .evalgoal-statusBar, 
 .portlet-evalgoal-progress .evalgoal-statusBar {display: flex; align-items: center; width: 100%;padding-top:5px;}
-.portlet-evalgoal-progress .evalgoal-statusBar .progress {display: flex;border-radius: 1rem;background-color:#F0F0F0;height: 18px; width: 100%;}
+.portlet-evalgoal .evalgoal-statusBar .progress,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress {display: flex;border-radius: 1rem;background-color:#F0F0F0;height: 18px; width: 100%;font-weight: 300 !important;}
+.portlet-evalgoal .evalgoal-statusBar .progress-bar,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress-bar {text-align: right;padding-right:5px}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-danger,
 .portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-danger {background-color:#da291c !important}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-warning,
 .portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-warning {background-color:#ffb400 !important}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-info,
 .portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-info {background-color:#8dc63f !important}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-success,
 .portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-success {background-color:#064975 !important}
 
-.portlet-evalgoal {}
-
+.portlet-evalgoal .my-evalgoal-info {height: auto; margin-bottom: 15px; display: flex; flex-direction: column}
+.portlet-evalgoal .my-evalgoal-info .myList{font-size: 14px; height: 25px;color:#333}
 
 
 .color-lcc-signature-blue {color:#064975 !important}
@@ -366,4 +377,4 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .custom-system-message .message {font-size:1rem; padding-top:2rem;line-height: 1.2;}  
 
 
-/* 0430 */   
+/* 0430_2 */   

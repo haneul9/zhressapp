@@ -256,7 +256,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 		
 		var col_info = [{id: "Checkbox", label: "", plabel: "", resize: true, span: 0, type: "checkbox", sort: true, filter: true, width : "60px"},
 						// 상태, 일자, 요일, 근태
-						{id: "Statustx", label: oBundleText.getText("LABEL_69054"), plabel: "", resize: true, span: 0, type: "status", sort: true, filter: true, width : "60px"},
+						{id: "Statustx", label: oBundleText.getText("LABEL_69054"), plabel: "", resize: true, span: 0, type: "status", sort: true, filter: true, width : "100px"},
 						{id: "Datum", label: oBundleText.getText("LABEL_69003"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 						{id: "Weektx", label: oBundleText.getText("LABEL_69004"), plabel: "", resize: true, span: 0, type: "weektx", sort: true, filter: true, width : "60px"},
 						{id: "Atext", label: oBundleText.getText("LABEL_69005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
@@ -290,8 +290,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
                     design: "Vertical",
                     content: [new sap.m.Toolbar({
 					        	  height : "40px",
-					        	  content : [new sap.m.Text({text : oBundleText.getText("LABEL_00199"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px"), // 결재완료
-					        			     new sap.m.Text({text : oBundleText.getText("LABEL_00197"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px")] // 결재중
+					        	  content : [new sap.m.Text({text : oBundleText.getText("LABEL_00197"), width : "100px", textAlign : "Center"}).addStyleClass("legend-green FontWhite p-5px"), // 결재중
+					        				 new sap.m.Text({text : oBundleText.getText("LABEL_00198"), width : "100px", textAlign : "Center"}).addStyleClass("legend-orange FontWhite p-5px"), // 반려
+					        	  			 new sap.m.Text({text : oBundleText.getText("LABEL_00199"), width : "100px", textAlign : "Center"}).addStyleClass("legend-blue FontWhite p-5px")] // 결재완료
 					          }).addStyleClass("toolbarNoBottomLine pt-10px pl-0 pr-0"),
 					          new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Calendar").addStyleClass("pt-10px")]
                 })

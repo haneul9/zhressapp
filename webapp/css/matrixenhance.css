@@ -179,6 +179,7 @@
 .calendar-background-atext{background-color: #0070bd;}
 
 .calendar-text{min-height: 20px !important; line-height: 20px !important;}
+.calendar-legend{background-color:#f3f4f4;}
 
 #signature-pad {border: 1px solid black}
 

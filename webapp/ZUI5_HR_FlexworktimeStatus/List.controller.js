@@ -33,7 +33,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -297,6 +297,9 @@ sap.ui.define([
 					switch(oData[i].Status){
 						case "99": // 승인
 							titleStyle = "calendar-background-blue";
+							break;
+						case "88": // 반려
+							titleStyle = "calendar-background-orange";
 							break;
 						case "00": // 변경신청
 							titleStyle = "calendar-background-green";
