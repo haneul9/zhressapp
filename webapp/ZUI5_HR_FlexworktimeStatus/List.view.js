@@ -21,7 +21,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
                     items: [
                         new sap.m.FlexBox({
                             items: [
-                                new sap.m.Label({text: oBundleText.getText("LABEL_69013")}), // 대상연월
+                                new sap.m.Label({text: "{i18n>LABEL_69013}"}), // 대상연월
 							    new sap.m.DatePicker({
 									valueFormat : "yyyyMM",
 						            displayFormat : "yyyy.MM",
@@ -31,7 +31,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 									change : oController.onChangeDate
 								}),
 								new sap.m.Label({
-									text: oBundleText.getText("LABEL_48002"), // 부서/사원
+									text: "{i18n>LABEL_48002}", // 부서/사원
 									visible : {
                                     	path : "Werks",
                                     	formatter : function(fVal){

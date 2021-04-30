@@ -218,7 +218,7 @@ sap.ui.define([
 			// validation check
 			for(var i=0; i<oData2.length; i++){
 				if(oData2[i].Goal2 == ""){
-					sap.m.MessageBox.error(oData2[i].Ylgupt + " - " + oData2[i].Zobjtx + " " + oBundleText.getText("MSG_26007")); // OOO-OO 역량을 평가하여 주십시오.
+					sap.m.MessageBox.error(oData2[i].Ylgupt + " - " + oData2[i].Zobjtx + " " + oController.getBundleText("MSG_26007")); // OOO-OO 역량을 평가하여 주십시오.
 					return;
 				}
 			}
@@ -291,11 +291,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(Flag == "S"){
-				confirmMessage = oBundleText.getText("MSG_00058"); // 저장하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00017"); // 저장되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_26008"); // 완료하시겠습니까?
-				successMessage = oBundleText.getText("MSG_26009"); // 완료되었습니다.
+				confirmMessage = oController.getBundleText("MSG_26008"); // 완료하시겠습니까?
+				successMessage = oController.getBundleText("MSG_26009"); // 완료되었습니다.
 			}
 			
 			var beforeSave = function(fVal){
@@ -340,7 +340,7 @@ sap.ui.define([
 						oTemplate = new sap.m.Select({
 										selectedKey : "{" + col_info[i].id +"}",
 										width : "100%",
-										items : [new sap.ui.core.Item({key : "", text : oBundleText.getText("LABEL_00181")}), // 선택
+										items : [new sap.ui.core.Item({key : "", text : oController.getBundleText("LABEL_00181")}), // 선택
 												 new sap.ui.core.Item({key : "5", text : "5"}),
 												 new sap.ui.core.Item({key : "4", text : "4"}),
 												 new sap.ui.core.Item({key : "3", text : "3"}),
@@ -353,7 +353,8 @@ sap.ui.define([
 					default:
 						oTemplate = new sap.ui.commons.TextView({
 										text : "{" + col_info[i].id + "}",
-										textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center"
+										textAlign : (col_info[i].align && col_info[i].align != "") ? col_info[i].align : "Center",
+										tooltip : " "
 									});
 				}
 				

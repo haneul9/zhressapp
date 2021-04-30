@@ -33,23 +33,23 @@ sap.ui.define(["../common/Common", "../common/CommonController", "../common/JSON
             if (!oController._ListCondJSonModel.getProperty("/Data")) {
                 var oPhoto = "";
 
-                new JSONModelHelper()
-                    .url("/odata/v2/Photo?$filter=userId eq '" + oController.getView().getModel("session").getData().Pernr + "' and photoType eq '1'")
-                    .select("photo")
-                    .setAsync(false)
-                    .attachRequestCompleted(function () {
-                        var data = this.getData().d;
+                // new JSONModelHelper()
+                //     .url("/odata/v2/Photo?$filter=userId eq '" + oController.getView().getModel("session").getData().Pernr + "' and photoType eq '1'")
+                //     .select("photo")
+                //     .setAsync(false)
+                //     .attachRequestCompleted(function () {
+                //         var data = this.getData().d;
 
-                        if (data && data.results.length) {
-                            oPhoto = "data:text/plain;base64," + data.results[0].photo;
-                        } else {
-                            oPhoto = "images/male.jpg";
-                        }
-                    })
-                    .attachRequestFailed(function () {
-                        oPhoto = "images/male.jpg";
-                    })
-                    .load();
+                //         if (data && data.results.length) {
+                //             oPhoto = "data:text/plain;base64," + data.results[0].photo;
+                //         } else {
+                //             oPhoto = "images/male.jpg";
+                //         }
+                //     })
+                //     .attachRequestFailed(function () {
+                //         oPhoto = "images/male.jpg";
+                //     })
+                //     .load();
 
                 var vData = {
                     Data: Object.assign({ photo: oPhoto }, oController.getView().getModel("session").getData())
@@ -179,19 +179,19 @@ sap.ui.define(["../common/Common", "../common/CommonController", "../common/JSON
 
                 // 차수, 사번, 성명, 직급
                 var col_info = [
-                    { id: "Appnm", label: oBundleText.getText("LABEL_24011"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Pernr", label: oBundleText.getText("LABEL_24012"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Ename", label: oBundleText.getText("LABEL_24013"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "PGradeTxt", label: oBundleText.getText("LABEL_24014"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true }
+                    { id: "Appnm", label: "{i18n>LABEL_24011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
+                    { id: "Pernr", label: "{i18n>LABEL_24012}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
+                    { id: "Ename", label: "{i18n>LABEL_24013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
+                    { id: "PGradeTxt", label: "{i18n>LABEL_24014}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true }
                 ];
 
                 if (check == "X") {
                     // 1차점수, 2차점수
-                    col_info.push({ id: "PreScore", label: oBundleText.getText("LABEL_24015"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true });
-                    col_info.push({ id: "Score", label: oBundleText.getText("LABEL_24016"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true });
+                    col_info.push({ id: "PreScore", label: "{i18n>LABEL_24015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true });
+                    col_info.push({ id: "Score", label: "{i18n>LABEL_24016}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true });
                 } else {
                     // 1차점수
-                    col_info.push({ id: "Score", label: oBundleText.getText("LABEL_24015"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true });
+                    col_info.push({ id: "Score", label: "{i18n>LABEL_24015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true });
                 }
 
                 common.makeTable.makeColumn(oController, oTable, col_info);
@@ -274,7 +274,7 @@ sap.ui.define(["../common/Common", "../common/CommonController", "../common/JSON
                     return;
                 }
 
-                sap.m.MessageBox.success(oBundleText.getText("MSG_24006"), {
+                sap.m.MessageBox.success(oController.getBundleText("MSG_24006"), {
                     // 평가확정처리 완료되었습니다.
                     onClose: oController.onPressSearch
                 });
@@ -287,7 +287,7 @@ sap.ui.define(["../common/Common", "../common/CommonController", "../common/JSON
                 }
             };
 
-            sap.m.MessageBox.confirm(oBundleText.getText("MSG_24005"), {
+            sap.m.MessageBox.confirm(oController.getBundleText("MSG_24005"), {
                 // 평가확정처리 하시겠습니까?
                 actions: ["YES", "NO"],
                 onClose: beforeSave

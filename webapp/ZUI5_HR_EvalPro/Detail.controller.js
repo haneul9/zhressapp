@@ -309,7 +309,7 @@ sap.ui.define([
 					   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 							   	    content : [new sap.ui.layout.HorizontalLayout({
 										   	       content : [new sap.m.Button({
-													   	          text : oBundleText.getText("LABEL_24026"), // 저장
+													   	          text : "{i18n>LABEL_24026}", // 저장
 													   	    	  press : oController.onPressSave,
 													   	    	  visible : {
 														   	    	  	path : "Sndflg",
@@ -335,29 +335,29 @@ sap.ui.define([
 			oRow = new sap.ui.commons.layout.MatrixLayoutRow({
 					   height : "35px",
 					   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-							   	    content : [new sap.m.Text({text : oBundleText.getText("LABEL_24021")})], // 평가요소
+							   	    content : [new sap.m.Label({text : "{i18n>LABEL_24021}"})], // 평가요소
 							   	    hAlign : "Center",
 							   	    vAlign : "Middle",
 							   	    rowSpan : 3
-							    }).addStyleClass("Label border_left0"),
+							    }).addStyleClass("Label3"),
 							    new sap.ui.commons.layout.MatrixLayoutCell({
-							    	content : [new sap.m.Text({text : oBundleText.getText("LABEL_24022")})], // 평가항목
+							    	content : [new sap.m.Label({text : "{i18n>LABEL_24022}"})], // 평가항목
 							    	hAlign : "Center",
 							    	vAlign : "Middle",
 							    	rowSpan : 3
-							    }).addStyleClass("Label"),
+							    }).addStyleClass("Label3"),
 							    new sap.ui.commons.layout.MatrixLayoutCell({
-							    	content : [new sap.m.Text({text : oBundleText.getText("LABEL_24023")})], // 평가내용 및 평점
+							    	content : [new sap.m.Label({text : "{i18n>LABEL_24023}"})], // 평가내용 및 평점
 							    	hAlign : "Center",
 							    	vAlign : "Middle",
 							    	colSpan : 4
-							    }).addStyleClass("Label"),
+							    }).addStyleClass("Label3"),
 							    new sap.ui.commons.layout.MatrixLayoutCell({
-							    	content : [new sap.m.Label({text : oBundleText.getText("LABEL_24025"), required : true, textDirection: "RTL"})], // 점수
+							    	content : [new sap.m.Label({text : "{i18n>LABEL_24025}", required : true, textDirection: "RTL"})], // 점수
 							    	hAlign : "Center",
 							    	vAlign : "Middle",
 							    	rowSpan : 3
-							    }).addStyleClass("Label border_right0")]
+							    }).addStyleClass("Label3")]
 				   });
 				   
 			if(oData.length > 5){
@@ -365,7 +365,7 @@ sap.ui.define([
 					new sap.ui.commons.layout.MatrixLayoutCell({
 						content : [],
 						rowSpan : 3
-					}).addStyleClass("Label border_right0")
+					}).addStyleClass("Label3")
 				);
 			}
 			oMatrix.addRow(oRow);
@@ -373,50 +373,50 @@ sap.ui.define([
 			oRow = new sap.ui.commons.layout.MatrixLayoutRow({
 					   height : "35px",
 					   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								   	content : [new sap.m.Text({text : oBundleText.getText("LABEL_24024")})], // 구분
+								   	content : [new sap.m.Label({text : "{i18n>LABEL_24024}"})], // 구분
 								   	hAlign : "Center",
 								   	vAlign : "Middle"
-								}).addStyleClass("Label"),
+								}).addStyleClass("Label3"),
 								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.Text({text : "A"})],
+									content : [new sap.m.Label({text : "A"})],
 									hAlign : "Center",
 									vAlign : "Middle"
-								}).addStyleClass("Label"),
+								}).addStyleClass("Label3"),
 								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.Text({text : "B"})],
+									content : [new sap.m.Label({text : "B"})],
 									hAlign : "Center",
 									vAlign : "Middle"
-								}).addStyleClass("Label"),
+								}).addStyleClass("Label3"),
 								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.Text({text : "C"})],
+									content : [new sap.m.Label({text : "C"})],
 									hAlign : "Center",
 									vAlign : "Middle"
-								}).addStyleClass("Label")]
+								}).addStyleClass("Label3")]
 				   });
 			oMatrix.addRow(oRow);
 			
 			oRow = new sap.ui.commons.layout.MatrixLayoutRow({
 					   height : "35px",
 					   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-							   	    content : [new sap.m.Text({text : oBundleText.getText("LABEL_24025")})], // 점수
+							   	    content : [new sap.m.Label({text : "{i18n>LABEL_24025}"})], // 점수
 							   	    hAlign : "Center",
 							   	    vAlign : "Middle"
-							    }).addStyleClass("Label"),
+							    }).addStyleClass("Label3"),
 							    new sap.ui.commons.layout.MatrixLayoutCell({
-							    	content : [new sap.m.Text({text : "10 - 9"})],
+							    	content : [new sap.m.Label({text : "10 - 9"})],
 							    	hAlign : "Center",
 							    	vAlign : "Middle"
-							    }).addStyleClass("Label"),
+							    }).addStyleClass("Label3"),
 							    new sap.ui.commons.layout.MatrixLayoutCell({
-							    	content : [new sap.m.Text({text : "8 - 7"})],
+							    	content : [new sap.m.Label({text : "8 - 7"})],
 							    	hAlign : "Center",
 							    	vAlign : "Middle"
-							    }).addStyleClass("Label"),
+							    }).addStyleClass("Label3"),
 							    new sap.ui.commons.layout.MatrixLayoutCell({
-							    	content : [new sap.m.Text({text : "6 - 5"})],
+							    	content : [new sap.m.Label({text : "6 - 5"})],
 							    	hAlign : "Center",
 							    	vAlign : "Middle"
-							    }).addStyleClass("Label")]
+							    }).addStyleClass("Label3")]
 				   });
 			oMatrix.addRow(oRow);
 			
@@ -487,7 +487,7 @@ sap.ui.define([
 									 content : [new sap.m.Text({text : oData[i].Grp01})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("Data border_left0");
+								 }).addStyleClass("Data2");
 								 
 						oRow.addCell(oCell2);
 					} else if(i == oData.length - 1){
@@ -500,7 +500,7 @@ sap.ui.define([
 								content : [new sap.m.Text({text : oData[i].Grp02})],
 								hAlign : "Center",
 								vAlign : "Middle"
-							}).addStyleClass("Data");
+							}).addStyleClass("Data2");
 					oRow.addCell(oCell);
 					
 					oCell = new sap.ui.commons.layout.MatrixLayoutCell({
@@ -533,7 +533,7 @@ sap.ui.define([
 								content : [oGrade],
 								hAlign : "Begin",
 								vAlign : "Middle"
-							}).addStyleClass("Data");
+							}).addStyleClass("Data2");
 					oRow.addCell(oCell);
 					
 					if(oData.length > 5){

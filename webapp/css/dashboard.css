@@ -577,7 +577,7 @@ p{
 }
 
 .evalcomp_label{
-	background-color: #eaf2fa;
+	background-color: #eaf2fa !important;
 }
 
 .dashboard_title{

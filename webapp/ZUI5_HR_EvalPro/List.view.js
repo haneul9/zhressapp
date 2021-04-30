@@ -12,32 +12,6 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 		$.app.setModel("ZHR_COMMON_SRV");
 		$.app.setModel("ZHR_APPRAISAL2_SRV");
 		
-		// 사원정보
-		var oHeader = new sap.ui.commons.layout.MatrixLayout({
-			columns : 1,
-			width : "100%",
-			rows : [new sap.ui.commons.layout.MatrixLayoutRow({ 
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.ui.layout.HorizontalLayout({
-												 	content : [new sap.m.Image({
-																   src : "{photo}",
-																   width : "55px",
-																   height : "55px"
-															   }).addStyleClass("roundImage"),
-															   new sap.ui.layout.VerticalLayout({
-															   	   content : [new sap.ui.layout.HorizontalLayout({
-																		   	   	  content : [new sap.m.Text({text : "{Ename}"}).addStyleClass("Font20 FontBold"),
-																		   	   				 new sap.m.Text({text : "{ZpostT}"}).addStyleClass("Font15 paddingLeft5 paddingTop5")]
-																		   	  }).addStyleClass("paddingTop3"),
-															   				  new sap.m.Text({text : "{Stext} / {PGradeTxt}"}).addStyleClass("info2")]
-															   }).addStyleClass("paddingLeft10 paddingTop3")]
-												})],
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }).addStyleClass("paddingLeft10")]
-					})]
-		});
-		
 		// 평가방법
 		var oPanel1 = new sap.m.Panel({
 			expandable : true,
@@ -50,15 +24,15 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 						   width : "100%",
 						   rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 								   	   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-										   	   		content : [new sap.ui.layout.VerticalLayout({
+										   	   		content : [new sap.m.VBox({
 										   	   								  // - 사원을 클릭하시면 개인별 평가화면이 나타납니다.
-																   content : [new sap.m.Text({text : oBundleText.getText("MSG_24001")}).addStyleClass("paddingLeft10"),
+																   items : [new sap.m.Text({text : "{i18n>MSG_24001}"}),
 																			  // - 모든 인사 평가를 완료하신 후 '평가완료처리' 버튼을 클릭하시면 평가가 완료됩니다.
-																			  new sap.m.Text({text : oBundleText.getText("MSG_24002")}).addStyleClass("paddingLeft10")]
-															   })],
+																			new sap.m.Text({text : "{i18n>MSG_24002}"})]
+															   }).addStyleClass("custom-OpenHelp-msgBox mt-0")],
 													 hAlign : "Begin",
 													 vAlign : "Middle"
-										   	    }).addStyleClass("Data paddingTop10 paddingBottom10")]
+										   	    })]
 								   })]
 					    })]
 		});
@@ -69,7 +43,7 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 			width : "100%",
 			widths : ["", ""],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.ui.layout.HorizontalLayout({
 											 	 	content : [new sap.ui.core.Icon({
@@ -77,14 +51,14 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 														 	 	   size : "1rem",
 														 	 	   color : "#32363A"
 														 	   }).addStyleClass("paddingRight10 paddingtop6"),
-														 	   new sap.m.Text({text : oBundleText.getText("LABEL_24001")}).addStyleClass("paddingRight10 paddingTop4"), // 전문직 평가
+														 	   new sap.m.Text({text : "{i18n>LABEL_24001}"}).addStyleClass("paddingRight10 paddingTop4"), // 전문직 평가
 														 	   new sap.m.Select(oController.PAGEID + "_Appid", {
 														 	   	   selectedKey : "{Appid}",
 														 	   	   width : "300px",
 														 	   	   change : oController.onPressSearch
 														 	   }),
 														 	   new sap.m.Text({
-														 	   	   text : oBundleText.getText("MSG_24007"), // 평가가 완료되었습니다.
+														 	   	   text : "{i18n>MSG_24007}", // 평가가 완료되었습니다.
 														 	   	   visible : {
 														 	   	   		parts : [{path : "Sndflg"}, {path : "Tapnum"}],
 														 	   	   		formatter : function(fVal1, fVal2){
@@ -113,44 +87,44 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 			width : "100%",
 			widths : ["", "", "", "", "", "", "", ""],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : oBundleText.getText("LABEL_24002")})], // 평가대상
+									 content : [new sap.m.Label({text : "{i18n>LABEL_24002}"})], // 평가대상
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("Label border_left0"),
+								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "{Tapnum} " + oBundleText.getText("LABEL_24006")})], // 명
+								 	 content : [new sap.m.Label({text : "{Tapnum} " + oController.getBundleText("LABEL_24006")})], // 명
 								 	 hAlign : "End",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_24003")})], // 평가인원
+								 	 content : [new sap.m.Label({text : "{i18n>LABEL_24003}"})], // 평가인원
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "{Appnum} " + oBundleText.getText("LABEL_24006")})], // 명
+								 	 content : [new sap.m.Label({text : "{Appnum} " + oController.getBundleText("LABEL_24006")})], // 명
 								 	 hAlign : "End",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_24004")})], // 미평가인원
+								 	 content : [new sap.m.Label({text : "{i18n>LABEL_24004}"})], // 미평가인원
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "{Nppnum} " + oBundleText.getText("LABEL_24006")})], // 명
+								 	 content : [new sap.m.Label({text : "{Nppnum} " + oController.getBundleText("LABEL_24006")})], // 명
 								 	 hAlign : "End",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_24005")})], // 평균
+								 	 content : [new sap.m.Label({text : "{i18n>LABEL_24005}"})], // 평균
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "{Apavrg} " + oBundleText.getText("LABEL_24007")})], // 점
+								 	 content : [new sap.m.Label({text : "{Apavrg} " + oController.getBundleText("LABEL_24007")})], // 점
 								 	 hAlign : "End",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data border_right0")]	
@@ -165,7 +139,9 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 			visibleRowCount: 1,
 			showOverlay: false,
 			showNoData: true,
-			noData: oBundleText.getText("LABEL_00901"), // No data found
+			rowHeight: 37,
+			columnHeaderHeight: 38,
+			noData: "{i18n>LABEL_00901}", // No data found
 			cellClick : oController.onPressTable,
 			rowActionCount : 1,
 			rowActionTemplate : [new sap.ui.table.RowAction({
@@ -177,7 +153,7 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 											 	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})]
 											  })]
 								 })]
-		}).addStyleClass("mt-8px");
+		}).addStyleClass("mt-10px");
 		
 		oTable.setModel(new sap.ui.model.json.JSONModel());
 		oTable.bindRows("/Data");
@@ -187,10 +163,10 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 			expanded : true,
 			headerToolbar : [new sap.m.Toolbar({
 								 height : "40px",
-								 content : [new sap.m.Text({text : oBundleText.getText("LABEL_24009")}).addStyleClass("FontBold font-15px"), // 평가대상 대상자 명단
+								 content : [new sap.m.Text({text : "{i18n>LABEL_24009}"}).addStyleClass("FontBold font-15px"), // 평가대상 대상자 명단
 											new sap.m.ToolbarSpacer(),
 											new sap.m.Button({
-												text : oBundleText.getText("LABEL_24010"), // 평가확정처리
+												text : "{i18n>LABEL_24010}", // 평가확정처리
 												// type : "Emphasized",
 												press : oController.onPressSave,
 												visible : {
@@ -203,33 +179,13 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 											new sap.m.ToolbarSpacer({width : "10px"})]
 							 }).addStyleClass("toolbarNoBottomLine")],
 			content : [oSummary2, oSummary, oTable]
-		})
-		
-		var oContent = new sap.m.FlexBox({
-			  justifyContent: "Center",
-			  fitContainer: true,
-			  items: [new sap.m.FlexBox({
-						  direction: sap.m.FlexDirection.Column,
-						  items: [new sap.m.FlexBox({
-									  alignItems: "End",
-									  fitContainer: true,
-									  items: [new sap.m.Text({text: oBundleText.getText("LABEL_24001")}).addStyleClass("app-title")] // 전문직 평가
-								  }).addStyleClass("app-title-container"),
-								  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
-								  oHeader,
-								  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
-								  oPanel1,
-								  new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
-								  oPanel2]
-					  }).addStyleClass("app-content-container-wide")]
-		}).addStyleClass("app-content-body");
+		});
 				
 		/////////////////////////////////////////////////////////
-
-		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-			customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-			content: [oContent]
-		}).addStyleClass("app-content");
+		var oPage = new common.PageHelper({
+						idPrefix : oController.PAGEID,
+			            contentItems: [new sap.ui.core.HTML({content : "<div style='height:10px' />"}), oPanel1, oPanel2]
+			        });
 		
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");
