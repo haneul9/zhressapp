@@ -214,6 +214,9 @@ getModel: function(id, viewId) {
 		getResourceBundle: function() {
 			return model.getResourceBundle.apply(model, [].slice.call(arguments));
 		},
+		getServiceMetadata: function() {
+			return model.getServiceMetadata.apply(model, [].slice.call(arguments));
+		},
 		refresh: function() {
 			return model.refresh.apply(model, [].slice.call(arguments));
 		}

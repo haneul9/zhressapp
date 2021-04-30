@@ -19,12 +19,26 @@ function HomeSession(_gateway, callback) {
 	this._gateway = _gateway;
 	_gateway.homeSession(this);
 
-	sessionStorage.clear();
+	this.clearSessionStorage();
 
 	this.init(callback);
 }
 
 $.extend(HomeSession.prototype, {
+
+clearSessionStorage: function() {
+
+	sessionStorage.removeItem('ehr.sf-user.name');
+	sessionStorage.removeItem('ehr.sf-user.photo');
+	sessionStorage.removeItem('ehr.sf-user.locale');
+	sessionStorage.removeItem('ehr.sf-user.language');
+	sessionStorage.removeItem('ehr.odata.user');
+	sessionStorage.removeItem('ehr.odata.user.percod');
+	sessionStorage.removeItem('ehr.odata.csrf-token');
+	sessionStorage.removeItem('ehr.odata.destination');
+	sessionStorage.removeItem('ehr.session.token');
+	sessionStorage.removeItem('ehr.menu-auth.state');
+},
 
 init: function(callback) {
 

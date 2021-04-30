@@ -595,7 +595,7 @@ common.Common = {
                 }
             });
         } else {
-            if (oModel instanceof sap.ui.model.Model) {
+            if (oModel instanceof sap.ui.model.Model || $.isPlainObject(oModel)) {
                 $.each(oModel.getServiceMetadata().dataServices.schema[0].entityType, function (i, entity) {
                     if (entity.name == entityName) {
                         entity.property.forEach(function (prop) {
