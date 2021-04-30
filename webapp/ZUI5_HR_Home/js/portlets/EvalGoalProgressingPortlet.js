@@ -28,10 +28,10 @@ ui: function() {
 	return [
 		'<div class="card portlet portlet-${size}h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
+			'<div class="evalgoal-legend">',
+				"평균진척률",
+			'</div>',
 			'<div class="card-body">',
-				'<div class="evalgoal-legend">',
-					"평균진척률",
-				'</div>',
 				'<div class="list-group" id="portlet-evalGoalProgressingPortlet-list"></div>',				
 			'</div>',
 			this.spinner(),
@@ -121,8 +121,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 							'</div>'
 						].join(''));
 		
-						if(parseFloat(oPage.goalDataMap[e.userId].score) !== 0)
-							$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
+						$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
 					}, 0);
 				}).catch(function(e) {
 				});
