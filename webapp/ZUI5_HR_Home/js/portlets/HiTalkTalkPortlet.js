@@ -109,10 +109,17 @@ changeLocale: function() {
 },
 itemUrl: function(o) {
 
-	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
-		' data-menu-id="${menu-id}"'.interpolate(this.mid())
-	].join('');
+	if (this.mobile()) {
+		return [
+			' data-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
+			' data-menu-id="${menu-id}"'.interpolate(this.mid())
+		].join('');
+	} else {
+		return [
+			' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
+			' data-menu-id="${menu-id}"'.interpolate(this.mid())
+		].join('');
+	}
 },
 clearResource: function() {
 
