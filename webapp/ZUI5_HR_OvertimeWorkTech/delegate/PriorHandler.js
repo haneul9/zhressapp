@@ -239,6 +239,7 @@ sap.ui.define(
                 });
 
                 this.openDetailDialog();
+                this.calculationOverWork("X");
             },
 
             /**
