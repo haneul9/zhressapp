@@ -316,6 +316,7 @@ sap.ui.define([
 			}
 
 			if(oCopyRow.Edoty === "1"){
+				oController.ApplyModel.setProperty("/Checked", "");
 				oController.getAttTable(oCopyRow, "1");
 				oController.getCodeList(oCopyRow);
 				oController.onBeforeOpenDetailDialog("app");
@@ -405,10 +406,16 @@ sap.ui.define([
 		},
 
 		onDInput: function(oEvent) { // 직접입력 CheckBox
-			if(oEvent.getSource().getSelected())
+			if(oEvent.getSource().getSelected()){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
-			else
+			}else{
 				this.ApplyModel.setProperty("/TraningCheck", "X");
+				this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
+				this.ApplyModel.setProperty("/FormData/Zgtype", ""); // 교육구분
+				this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
+				this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
+				this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
+			}
 		},
 
 		RegistTraning: function() { // 교육과정 Dialog			
@@ -803,8 +810,25 @@ sap.ui.define([
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 교육유형
 				success: function(oData, oResponse) {
 					if(oData && oData.NavCommonCodeList){
+						var vStatus = oController.ApplyModel.getProperty("/FormData/Status1");
+						var vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty");
+						var vRepstT = oController.ApplyModel.getProperty("/FormData/RepstT");
+
 						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
-						oController.ApplyModel.setProperty("/TypeCombo", oData.NavCommonCodeList.results);
+
+						if((Common.checkNull(vStatus) || vStatus === "AA") && Common.checkNull(vRepstT) && (Common.checkNull(vEdoty) || vEdoty === "1")){
+							var oList = ["01", "02", "03", "04", "05"],
+								oList2 = [];
+							
+							oData.NavCommonCodeList.results.forEach(function(e, i) {
+								if(oList.every(function(e1) {return e.Code !== e1})){
+									oList2.push(e);
+								}
+							});
+							oController.ApplyModel.setProperty("/TypeCombo", oList2);
+						}else{
+							oController.ApplyModel.setProperty("/TypeCombo", oData.NavCommonCodeList.results);
+						}
 						
 						if(!oRowData) oController.ApplyModel.setProperty("/FormData/Edgub", "Null");
 					}
