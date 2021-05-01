@@ -64,7 +64,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none; font-weight:500}
 .col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}
 .col-mega-menu i.far.fa-star {color:#b2b2b2}
-.menu-mss > .nav-link, .menu-mss .col-mega-menu li a {color:#8a4144 !important}
+.menu-mss > .nav-link, .menu-mss .col-mega-menu li a {color:#783936 !important}
 .menu-hass > .nav-link, .menu-hass .col-mega-menu li a {color:#137826 !important}
 
 .ehr-body {position:relative; overflow-y:hidden}
@@ -122,7 +122,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 [device="mobile"] .portlet-employee .employee-information div:nth-of-type(3) {width:70%}
 .portlet-employee .employee-photo {display:flex; justify-content:center; position:absolute; top:61px; right:20px; width:90px; height:135px; overflow:hidden; background-color:#fff}
 /* .portlet-employee .employee-photo {position:absolute; top:76px; right:18px; width:106px; height:106px; overflow:hidden; background-color:#fff} */
-[device="mobile"] .portlet-employee .employee-photo {width:54px; height:81px}
+/* [device="mobile"] .portlet-employee .employee-photo {width:64px; height:91px} */
+[device="mobile"] .portlet-employee .employee-photo {width:73px; height:100px}
 .portlet-employee .employee-photo img {z-index:1; height:100%}
 .portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
 .portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:100%}
@@ -134,7 +135,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-employee .employee-d-day .d-day {font-size:2.25rem; font-weight:400; padding-left:.75rem}
 .portlet-employee .employee-d-day .d-day.color-lcc-signature-green {font-size:2.875rem; font-weight:700; padding-left:.75rem}
 .portlet-employee .employee-d-day span + span {margin-left:.5rem}
-[device="mobile"] .portlet-employee .employee-photo {top:1.25rem; left:auto; right:1rem}
+[device="mobile"] .portlet-employee .employee-photo {top:1rem; left:auto; right:1rem}
 [device="mobile"] .portlet-employee .employee-information {width:100%; height:130px; border-radius:.5rem; padding-left:1.5rem; background-color:#064975}
 [device="mobile"] .portlet-1h.portlet-employee {height:130px}
 
@@ -378,4 +379,4 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .custom-system-message .message {font-size:1rem; padding-top:2rem;line-height: 1.2;}  
 
 
-/* 0430_5 */   
+/* 0501 */   
