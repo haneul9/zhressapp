@@ -54,13 +54,9 @@ fill: function() {
 	});
 },
 
-checkNull: function (v) {
-    return v === undefined || v === null || v == "" ? true : false;
-},
-
 retrieveDirectReports: function(goalId) { // 평가사원들 조회
 
-	var url2 = "/odata/v2/User('" + this._gateway.pernr() +"')/directReports?$select=userId,nickname,custom01&$format=json";
+	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01".interpolate(this._gateway.pernr());
 
 	$.getJSON({ // 평가 대상자조회 조회한 사원번호의 평가대상자를 조회
 		url: url2,
@@ -92,7 +88,7 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 			oEmpData.forEach(function(e, i) {
 				this.goalDataMap[e.userId] = {
 					nickname: e.nickname,
-					position: this.checkNull(e.custom01) ? "" : e.custom01.split("(")[0]
+					position: e.custom01 ? e.custom01.split("(")[0] : ""
 				};
 
 				Promise.all([
@@ -105,28 +101,25 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 								'<img src="${src}" style="width:40px; height:50px"/>'.interpolate(this.photoMap[e.userId]),
 								'<div class="evalgoal-info">',
 									'<div class="person">',
-										'<div class="name">',
-											this.goalDataMap[e.userId].nickname,
-										'</div>',
-										'<div class="position">',
-										this.goalDataMap[e.userId].position,
-										'</div>',
+										'<div class="name">', this.goalDataMap[e.userId].nickname, '</div>',
+										'<div class="position">', this.goalDataMap[e.userId].position, '</div>',
 									'</div>',
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
-											'<div style="height:auto" class="progress-bar i' + i + ' ' + this.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												this.goalDataMap[e.userId].score + '%',
+											'<div style="height:auto" style="width:0" class="progress-bar i${i} ${groundColor}"'.interpolate(i, this.goalDataMap[e.userId].groundColor),
+												' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+												this.goalDataMap[e.userId].score, '%',
 											'</div>',
 										'</div>',
 									'</div>',
 								'</div>',
 							'</div>'
 						].join(''));
-		
+
 						$('.progress-bar.i' + i).animate({ width: parseFloat(this.goalDataMap[e.userId].score) + '%' }, 2000);
 					}.bind(this), 0);
 				}.bind(this));
-			});
+			}.bind(this));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url2);
