@@ -38,7 +38,7 @@ ui: function() {
 },
 fill: function() {
 
-	var url = '/odata/v2/GoalPlanTemplate?$filter=defaultTemplate eq true&$format=json&$select=id, defaultTemplate';
+	var url = '/odata/v2/GoalPlanTemplate?$filter=defaultTemplate eq true&$format=json&$select=id,defaultTemplate';
 
 	return $.getJSON({ // Id받아옴
 		url: url,
@@ -96,19 +96,22 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 					this.retrieveGoalData(e.userId, goalId)
 				]).then(function() {
 					setTimeout(function() {
+						var goalData = this.goalDataMap[e.userId],
+							score = parseFloat(goalData.score);
+
 						list.append([
 							'<div class="evalgoal-area">',
 								'<img src="${src}" style="width:40px; height:50px"/>'.interpolate(this.photoMap[e.userId]),
 								'<div class="evalgoal-info">',
 									'<div class="person">',
-										'<div class="name">', this.goalDataMap[e.userId].nickname, '</div>',
-										'<div class="position">', this.goalDataMap[e.userId].position, '</div>',
+										'<div class="name">', goalData.nickname, '</div>',
+										'<div class="position">', goalData.position, '</div>',
 									'</div>',
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
-											'<div style="height:auto" style="width:0" class="progress-bar i${i} ${groundColor}"'.interpolate(i, this.goalDataMap[e.userId].groundColor),
+											'<div style="height:auto" style="width:0" class="progress-bar i${i} ${groundColor}"'.interpolate(i, goalData.groundColor),
 												' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												this.goalDataMap[e.userId].score, '%',
+												score > 0 ? goalData.score + '%' : '',
 											'</div>',
 										'</div>',
 									'</div>',
@@ -116,7 +119,9 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 							'</div>'
 						].join(''));
 
-						$('.progress-bar.i' + i).animate({ width: parseFloat(this.goalDataMap[e.userId].score) + '%' }, 2000);
+						if (score > 0) {
+							$('.progress-bar.i' + i).animate({ width: score + '%' }, 2000);
+						}
 					}.bind(this), 0);
 				}.bind(this));
 			}.bind(this));
@@ -128,7 +133,8 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 },
 
 retrievePhoto: function(userId) { // 사원사진
-	var url3 = "/odata/v2/Photo?$filter=userId eq '" + userId + "' and photoType eq '1' &$select=photo,mimeType";
+
+	var url3 = "/odata/v2/Photo?$filter=userId eq '${pernr}' and photoType eq '1' &$select=photo,mimeType".interpolate(userId);
 
 	return $.getJSON({ // 사진조회
 		url: url3,
@@ -146,9 +152,9 @@ retrievePhoto: function(userId) { // 사원사진
 	}).promise();
 },
 
-retrieveGoalData: function(userId, goalId) { // 사원목표정보
+retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 
-	var url4 = "/odata/v2/Goal_" + goalId +"?$select=name,done&$filter=userId eq '" + userId + "'";
+	var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
 
 	return $.getJSON({ // 목표조회
 		url: url4,
@@ -180,8 +186,8 @@ retrieveGoalData: function(userId, goalId) { // 사원목표정보
 			else 
 				oGroundColor= oBackGround[0];
 
-			this.goalDataMap[userId].score = vScore;
-			this.goalDataMap[userId].groundColor = oGroundColor;
+			this.goalDataMap[pernr].score = vScore;
+			this.goalDataMap[pernr].groundColor = oGroundColor;
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
