@@ -1131,6 +1131,7 @@ sap.ui.define([
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
 				}
+				oController._onClose="X";
 				if(oController._onClose=="X"&&oController._FirstTime=="X"){
 					sap.m.MessageBox.alert(oController.getBundleText("MSG_47040"));
 					Controller._FirstTime="";
