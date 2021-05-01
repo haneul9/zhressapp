@@ -29,6 +29,8 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 <script src="ZUI5_HR_Home/js/lib/jquery-ui.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
 <script>
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event) { history.pushState(null, document.title, location.href); });
 $(function() {
 
 $('.ehr-body').height('calc(100% - ' + ($('.ehr-header:visible').height() || 0) + 'px)');
