@@ -53,7 +53,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
                                 new sap.m.Label().addStyleClass("custom-legend-color bg-signature-orange"),
                                 new sap.m.Label({text: oBundleText.getText("LABEL_00198")}).addStyleClass("custom-legend-item"), // 반려
                                 new sap.m.Label().addStyleClass("custom-legend-color bg-signature-cyanblue"),
-                                new sap.m.Label({text: oBundleText.getText("LABEL_00199")}).addStyleClass("custom-legend-item") // 결재완료
+                                new sap.m.Label({text: oBundleText.getText("LABEL_00199")}).addStyleClass("custom-legend-item"), // 결재완료
+                                new sap.m.Label().addStyleClass("custom-legend-color bg-yellow"),
+                                new sap.m.Label({text: oBundleText.getText("LABEL_69057")}).addStyleClass("custom-legend-item")
                             ]
                        }).addStyleClass("custom-legend-group mt-5px mb-5px mr-5px"),
 					   new sap.m.VBox(oController.PAGEID + "_Calendar")]
@@ -176,7 +178,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
 	                oTable2]
         });
         
-        // 자율출퇴근 현황
+        // 근무시간 현황
 		 var oTable3 = new sap.m.Table(oController.PAGEID + "_Table3", {
             inset: false,
 			rememberSelections: false,
@@ -208,7 +210,19 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.m.List", {
                         new sap.m.VBox({
                         	items : [new sap.m.Text({
 			                             textAlign: "Begin",
-			                             text: "{Value}"
+			                             text: {
+			                            	parts : [{path : "Value"}, {path : "Style"}],
+			                            	formatter : function(fVal1, fVal2){
+		                            			this.removeStyleClass("color-blue color-info-red color-darkgreen");
+		                            			
+			                            		if(fVal2){
+			                            			this.addStyleClass(fVal2);
+			                            			this.addStyleClass("font-bold");
+			                            		}
+			                            		
+			                            		return fVal1;
+			                            	}
+			                             }
 			                         })]
                         })
                     ]

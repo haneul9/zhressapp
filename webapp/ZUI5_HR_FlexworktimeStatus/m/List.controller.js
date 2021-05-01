@@ -133,10 +133,38 @@ sap.ui.define([
 										  {text : oBundleText.getText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
 										  {text : oBundleText.getText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
 										  {text : oBundleText.getText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
-										  /*{text : oBundleText.getText("LABEL_69031"), field : "Tottm"}*/]; // 근로시간 합계
+										  {text : oBundleText.getText("LABEL_63010"), field : "Notes"},	// 상태
+										  /*{text : oBundleText.getText("LABEL_69031"), field : "Tottm"}*/ // 근로시간 합계
+										  {text : oBundleText.getText("LABEL_69055").replace("\n", ""), field : "Tottm2"}, // 근로시간합계(월말예상)
+										  {text : oBundleText.getText("LABEL_69056").replace("\n", ""), field : "Notes2"}]; // 상태(월말예상)
 										  
 							for(var i=0; i<oField.length; i++){ 
-								vData3.Data.push({Text : oField[i].text, Value : eval("data." + oField[i].field)});
+								var detail = {Text : oField[i].text, Value : eval("data." + oField[i].field)};
+								
+								var oCtrnm = "", oTottm = "";
+								switch(oField[i].field){
+									case "Notes":
+										oCtrnm = data.Ctrnm;
+										oTottm = data.Tottm;
+										break;
+									case "Tottm2":
+									case "Notes2":
+										oCtrnm = data.Ctrnm;
+										oTottm = data.Tottm2;
+										break;
+								}
+								
+								if(oCtrnm != "" && oTottm != ""){
+        			 				if(oCtrnm.replace(":", "") > oTottm.replace(":", "")){
+        			 					detail.Style = "color-blue";
+        			 				} else if(oCtrnm.replace(":", "") < oTottm.replace(":", "")) {
+        			 					detail.Style = "color-info-red";
+        			 				} else {
+        			 					detail.Style = "color-darkgreen";
+        			 				}
+        			 			}
+								
+								vData3.Data.push(detail);
 							}
 							
 							// 총근로시간
@@ -192,6 +220,9 @@ sap.ui.define([
 												break;
 											case "00": // 결재중
 												titleStyle = "calendar-background-green";
+												break;
+											case "CC": // 조정대상
+												titleStyle = "bg-yellow";
 												break;
 											default:
 										}
