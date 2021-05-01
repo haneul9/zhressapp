@@ -72,7 +72,7 @@ sap.ui.define(
                                     cells: [
                                         new sap.m.VBox({
                                             items: [
-                                                new sap.m.Text({
+                                                new sap.m.Label({
                                                     // 신청일
                                                     textAlign: "Begin",
                                                     text: {
@@ -82,7 +82,7 @@ sap.ui.define(
                                                         }
                                                     }
                                                 }).addStyleClass("L2P13Font font-14px"),
-                                                new sap.m.Text({
+                                                new sap.m.Label({
                                                     // 구분
                                                     text: "{Typetxt}",
                                                     textAlign: "Begin"
@@ -91,11 +91,11 @@ sap.ui.define(
                                         }),
                                         new sap.m.VBox({
                                             items: [
-                                                new sap.m.Text({
+                                                new sap.m.Label({
                                                     text: "{Zstatustxt}",
                                                     textAlign: "Begin"
                                                 }).addStyleClass("L2P13Font font-14px"),
-                                                new sap.m.Text({
+                                                new sap.m.Label({
                                                     // 구분
                                                     text: "{AptypT}",
                                                     textAlign: "Begin"

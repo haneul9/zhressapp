@@ -1443,7 +1443,7 @@ sap.ui.define([
 					if(new Date(oPro.MedDate.getFullYear(),oPro.MedDate.getMonth(),
 					oPro.MedDate.getDate(),9,0,0).getTime()>new Date(oPro.Inpdt.getFullYear(),oPro.Inpdt.getMonth(),
 					oPro.Inpdt.getDate(),9,0,0).getTime()){
-						oMsg=oBundleText.getText("MSG_47040");
+						oMsg=oBundleText.getText("MSG_47041");
 					}
 				}
 				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
@@ -1804,7 +1804,9 @@ sap.ui.define([
 					oPro.Medmp="0";
 				}
 				if(oPro.Gtz51=="D"){
-					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;					
+					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;
+					oPro.Framt=parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Medpp.replace(/\,/gi,""));
+					oPro.Framt=common.Common.numberWithCommas(parseInt(oPro.Framt));					
 				}else if(oPro.Gtz51=="C"){
 					if(parseInt(oPro.Zdbcrl.replace(/\,/gi,""))<parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Znobcd.replace(/\,/gi,""))){
 						oPro.Framt=oPro.Zdbcrl;

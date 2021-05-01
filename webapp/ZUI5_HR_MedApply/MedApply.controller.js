@@ -28,6 +28,7 @@ sap.ui.define([
 		_vArr1:["Zdbcrl","Zdsctm","Ziftrl","Zfvcrl","Mycharge","SuppAmt","Zmedrl","NsuppAmt","BaseAmt","Zkiobd","Zkibbm","Zkijbd","Zkijbm",
 		"Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
 		_vArr2:["Ptamt","Medsp","Oiamt","Znobcm","Medpp","Insnp","Znobcd","Medmp","Inspp","Zdbcrl","Ziftrl","Framt"],
+		_FirstTime:"X",
 		onInit: function () {
 			this.setupView()
 				.getView()
@@ -1130,6 +1131,10 @@ sap.ui.define([
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
 				}
+				if(oController._onClose=="X"&&oController._FirstTime=="X"){
+					sap.m.MessageBox.alert(oController.getBundleText("MSG_47040"));
+					oController._FirstTime="";
+				}
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewBtn").setVisible(false):$.app.byId(oController.PAGEID+"_NewBtn").setVisible(true);
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewIcon").setVisible(true):$.app.byId(oController.PAGEID+"_NewIcon").setVisible(false);
 			},10);
@@ -1333,7 +1338,7 @@ sap.ui.define([
 					oCnt=data.MedComidList2TableIn.results.length;
 				},
 				error:function (oError) {
-					var Err = {};						
+					var Err = {};					
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
 						var msg1 = Err.error.innererror.errordetails;
@@ -1457,7 +1462,7 @@ sap.ui.define([
 					if(new Date(oPro.MedDate.getFullYear(),oPro.MedDate.getMonth(),
 					oPro.MedDate.getDate(),9,0,0).getTime()>new Date(oPro.Inpdt.getFullYear(),oPro.Inpdt.getMonth(),
 					oPro.Inpdt.getDate(),9,0,0).getTime()){
-						oMsg=oBundleText.getText("MSG_47040");
+						oMsg=oBundleText.getText("MSG_47041");
 					}
 				}				
 				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
@@ -1829,7 +1834,9 @@ sap.ui.define([
 					oPro.Medmp="0";
 				}
 				if(oPro.Gtz51=="D"){
-					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;					
+					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;
+					oPro.Framt=parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Medpp.replace(/\,/gi,""));
+					oPro.Framt=common.Common.numberWithCommas(parseInt(oPro.Framt));
 				}else if(oPro.Gtz51=="C"){
 					if(parseInt(oPro.Zdbcrl.replace(/\,/gi,""))<parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Znobcd.replace(/\,/gi,""))){
 						oPro.Framt=oPro.Zdbcrl;

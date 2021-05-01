@@ -318,6 +318,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oData = oController.DetailModel.getProperty("/Data"),
+				vMobile = Common.isExternalIP() === true ? "X" : "",
 				oCopiedData = {};
 			
 			if(oController.onErrorCheckBox()) return;
@@ -331,6 +332,7 @@ sap.ui.define([
 				IBukrs: vBukrs2,
 				IReqes: "X",
 				IConType: "3",
+				IMobile: vMobile,
 				IDatum: new Date(),
 				RegalsealRExport: [],
 				RegalsealRTableIn1: [oCopiedData]
@@ -347,11 +349,15 @@ sap.ui.define([
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_23003"));
 								oController._DetailModel.close();
 								oController.onTableSearch();
-								window.open(
-									oData.RegalsealRExport.results[0].EUrl,
-									"_blank",
-									"height = 600, width = 900"
-								);
+								
+								if(vMobile !== "X") {
+									window.open(
+										oData.RegalsealRExport.results[0].EUrl,
+										"_blank",
+										"height = 600, width = 900"
+									);
+								}
+								
 								BusyIndicator.hide();
 							}
 						},
@@ -380,6 +386,7 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 			var oData = oController.DetailModel.getProperty("/Data"),
+				vMobile = Common.isExternalIP() === true ? "X" : "",
 				oCopiedData = {};
 			if(oController.onErrorCheckBox()) return;
 
@@ -391,6 +398,7 @@ sap.ui.define([
 				IEmpid: vPernr,
 				IBukrs: vBukrs2,
 				IConType: Common.checkNull(oCopiedData.Status1) ? "3" : "2",
+				IMobile: vMobile,
 				IDatum: new Date(),
 				RegalsealRTableIn1: [oCopiedData]
 			};

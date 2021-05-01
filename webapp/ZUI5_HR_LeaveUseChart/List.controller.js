@@ -176,7 +176,7 @@ sap.ui.define([
 					
 					oScrollContainer.setHeight(height + "px");
 					oChart.setHeight((height - 40) + "px");
-					oScrollContainer2.setHeight((height - 30) + "px");
+					oScrollContainer2.setHeight((height - 20) + "px");
 	
 					var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 					var count = parseInt((height - 95) / 38);

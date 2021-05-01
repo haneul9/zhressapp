@@ -25,6 +25,7 @@ sap.ui.define([
 		_onDialog:"",
 		_onClose:"",
 		_MedDate : null,
+		_FirstTime : "X",
 		_vArr1:["Mycharge","NsuppAmt","Zmedrl","BaseAmt","Zkiobd","Zkibbm","Zkijbd","Zkijbm","Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
 		_vArr2:["Ptamt","Medsp","Oiamt","Znobcm","Medpp","Insnp","Znobcd","Medmp","Inspp","Zdbcrl","Ziftrl","Framt"],
 		onInit: function () {
@@ -1118,6 +1119,10 @@ sap.ui.define([
 				oTable.bindItems("/oData",oCol);
 				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
 					oController._BusyDialog.close();
+				}
+				if(oController._onClose=="X"&&oController._FirstTime=="X"){
+					sap.m.MessageBox.alert(oController.getBundleText("MSG_47040"));
+					oController._FirstTime="";
 				}
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewBtn").setVisible(false):$.app.byId(oController.PAGEID+"_NewBtn").setVisible(true);
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewIcon").setVisible(true):$.app.byId(oController.PAGEID+"_NewIcon").setVisible(false);

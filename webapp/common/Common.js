@@ -673,6 +673,27 @@ common.Common = {
 
         return p.async ? promise : traceInfo;
     },
+    isExternalIP: function () {
+        if (window._init_sequence_logging) {
+            $.app.log("common.Common.checkProxyIP called.");
+        }
+
+        var result;
+
+        $.post({
+            url: common.Common.getJavaOrigin($.app.getController(), "/check2FA"),
+            data: {},
+            async: false,
+            success: function (data) {
+                result = JSON.parse(data).result;
+            },
+            error: function () {
+                common.Common.log([].slice.call(arguments));
+            }
+        });
+
+        return result === "E" ? true : false;
+    },
     usePrivateLog: function (p) {
 
         setTimeout(function() {
