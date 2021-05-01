@@ -168,11 +168,7 @@ sap.ui.jsview("ZUI5_HR_Workhome.List", {
 												 			   new sap.m.Button({
 												 			   	   text : oBundleText.getText("LABEL_53016"),  // 재택근무 가이드
 												 			   	   press : function(){
-												 			   	   		if(common.Common.isLOCAL() == true){
-												 			   	   			window.open("/webapp/ZUI5_HR_Workhome/manual/guide.pdf");
-												 			   	   		} else {
-												 			   	   			window.open("/ZUI5_HR_Workhome/manual/guide.pdf");
-												 			   	   		}
+												 			   	   		window.open("/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/manual/workathome.pdf");
 												 			   	   }
 												 			   }).addStyleClass("button-light")]
 												}).addStyleClass("toolbarNoBottomLine")],
