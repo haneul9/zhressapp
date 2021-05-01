@@ -267,7 +267,7 @@ sap.ui.define([
 					time = time + (time2 == "" ? "" : (time2.substring(0,2) + ":" + time2.substring(2,4)));
 				}
 				
-				style = style ? style : "";
+				style = style ? style : (time == "" ? "" : "cursor-pointer");
 						
 				return new sap.ui.commons.layout.MatrixLayoutRow({
 						   height : "20px",
@@ -325,7 +325,7 @@ sap.ui.define([
 					// 추가휴게
 					oMatrix.addRow(makeData(oData[i].Brktot));
 					// 소정근로
-					oMatrix.addRow(makeData(oData[i].Wrktm, "", "", (oData[i].Wrktm == "" ? "" : "calendar-background-lightblue")));
+					oMatrix.addRow(makeData(oData[i].Wrktm, "", "", (oData[i].Wrktm == "" ? "" : "calendar-background-lightblue cursor-pointer")));
 					// 연장/휴일
 					oMatrix.addRow(makeData(oData[i].Exttm, oData[i].Holtm, "/"));
 					// 근태

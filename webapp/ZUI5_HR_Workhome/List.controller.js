@@ -50,7 +50,8 @@ sap.ui.define([
 				var	vData = {
 					Data : {
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
-						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))
+						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
+						Persa : oLoginData.Persa
 						// Tmdat : dateFormat.format(new Date()),
 					}
 				};

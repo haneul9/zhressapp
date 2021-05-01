@@ -46,13 +46,22 @@ sap.ui.define(
                         Data: {
                             Bukrs: $.app.getModel("session").getData().Bukrs2,
                             Pernr: "",
-                            Orgeh: $.app.getModel("session").getData().Orgeh,
-                            Ename: $.app.getModel("session").getData().Stext,
+                            Orgeh: "",
+                            Ename: "",
                             Langu: $.app.getModel("session").getData().Langu,
                             Begda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
-                            Endda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), oController.getLastDate(today.getFullYear(), today.getMonth())))
+                            Endda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), oController.getLastDate(today.getFullYear(), today.getMonth()))),
+                            Persa : $.app.getModel("session").getData().Persa
                         }
                     };
+                    
+                    if(vData.Data.Persa.substring(0,1) == "D"){
+						vData.Data.Pernr = $.app.getModel("session").getData().Pernr;
+						vData.Data.Ename = $.app.getModel("session").getData().Ename;
+					} else {
+						vData.Data.Orgeh = $.app.getModel("session").getData().Orgeh;
+                        vData.Data.Ename = $.app.getModel("session").getData().Stext;
+					}
 
                     oController._ListCondJSonModel.setData(vData);
                 }
