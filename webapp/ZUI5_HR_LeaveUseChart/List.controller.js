@@ -100,7 +100,8 @@ sap.ui.define([
 						Zyymm : oZyymm,
 						Key : "1",
 						Disty : "1",
-						Pernr : ""
+						Pernr : "",
+						Chief : $.app.getModel("session").getData().Chief
 					}
 				};
 				
@@ -758,7 +759,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

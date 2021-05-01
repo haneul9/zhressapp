@@ -55,7 +55,8 @@ sap.ui.define([
 						Bukrs : oLoginData.Bukrs,
 						Molga : oLoginData.Molga,
 						Langu : oLoginData.Langu,
-						Werks : oLoginData.Persa
+						Werks : oLoginData.Persa,
+						Chief : $.app.getModel("session").getData().Chief
 					}
 				};
 				
@@ -182,7 +183,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

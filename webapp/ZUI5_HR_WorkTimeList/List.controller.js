@@ -55,7 +55,8 @@ sap.ui.define([
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
 						Type : "1",
-						Werks : $.app.getModel("session").getData().Persa
+						Werks : $.app.getModel("session").getData().Persa,
+						Chief : $.app.getModel("session").getData().Chief
 					}
 				};
 				
@@ -639,7 +640,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

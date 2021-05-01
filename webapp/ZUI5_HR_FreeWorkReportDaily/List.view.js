@@ -74,6 +74,12 @@ sap.ui.jsview("ZUI5_HR_FreeWorkReportDaily.List", {
 	                                    		}
                                     		}
                                     	}
+                                    },
+                                    editable : {
+                                    	path : "Chief",
+                                    	formatter : function(fVal){
+                                    		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                    	}
                                     }
                                 })
                             ]
