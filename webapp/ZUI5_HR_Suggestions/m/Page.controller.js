@@ -48,10 +48,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if (!this.getParameterByName("Sdate") && !this.getParameterByName("Skey")) {
+			var Sdate = this.getParameterByName("Sdate"),
+				Skey = this.getParameterByName("Skey");
+
+			if (Sdate && Skey) {
 				var oList = {
-					Sdate: this.getParameterByName("Sdate"),
-					Seqnr: this.getParameterByName("Skey")
+					Sdate: Sdate,
+					Seqnr: Skey
 				};
 
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
