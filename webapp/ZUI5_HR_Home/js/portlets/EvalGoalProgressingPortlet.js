@@ -78,7 +78,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				setTimeout(function () {
 					this.spinner(false);
 					resolve();
-				}, 0);
+				}.bind(this), 0);
 
 				return;
 			}
@@ -120,7 +120,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			setTimeout(function() {
 				this.spinner(false);
 				resolve(); // 레이아웃이 완성되면 resolve를 호출하여 onceAfter가 호출되게 함
-			}, 0);
+			}.bind(this), 0);
 
 			setTimeout(function() {
 				Promise.all(
