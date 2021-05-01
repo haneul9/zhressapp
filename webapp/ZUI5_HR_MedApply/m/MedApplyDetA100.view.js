@@ -254,11 +254,7 @@ sap.ui.define([
 					return false;
 				}else{
 					if(fVal3==""){
-						if(fVal2=="D"){
-							return false;
-						}else{
-							return true;
-						}
+						return true;
 					}else{
 						return false;
 					}

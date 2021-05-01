@@ -1804,7 +1804,9 @@ sap.ui.define([
 					oPro.Medmp="0";
 				}
 				if(oPro.Gtz51=="D"){
-					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;					
+					parseInt(oPro.Ziftrl.replace(/\,/gi,""))<parseInt(oPro.Medpp.replace(/\,/gi,""))?oPro.Framt=oPro.Ziftrl:oPro.Framt=oPro.Medpp;
+					oPro.Framt=parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Medpp.replace(/\,/gi,""));
+					oPro.Framt=common.Common.numberWithCommas(parseInt(oPro.Framt));					
 				}else if(oPro.Gtz51=="C"){
 					if(parseInt(oPro.Zdbcrl.replace(/\,/gi,""))<parseInt(oPro.Medsp.replace(/\,/gi,""))+parseInt(oPro.Znobcd.replace(/\,/gi,""))){
 						oPro.Framt=oPro.Zdbcrl;
