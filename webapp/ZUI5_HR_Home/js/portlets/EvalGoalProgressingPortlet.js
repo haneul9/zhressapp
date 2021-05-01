@@ -136,6 +136,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 							if (score > 0) {
 								$('.progress-bar.i' + i)
+									.text(score + '%')
 									.addClass(goalData.groundColor)
 									.animate({ width: score + '%' }, 2000);
 							}
