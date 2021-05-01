@@ -673,27 +673,23 @@ common.Common = {
 
         return p.async ? promise : traceInfo;
     },
-    isExternalIP: function (p) {
+    isExternalIP: function () {
         if (window._init_sequence_logging) {
             $.app.log("common.Common.checkProxyIP called.");
         }
 
-        var result,
-            success = typeof p.success === "function" ? function (data) {
-                p.success(JSON.parse(data));
-            } : function (data) {
-                result = JSON.parse(data).result;
-            },
-            error = typeof p.error === "function" ? p.error : function () {
-                common.Common.log([].slice.call(arguments));
-            };
+        var result;
 
         $.post({
             url: common.Common.getJavaOrigin($.app.getController(), "/check2FA"),
             data: {},
             async: false,
-            success: success,
-            error: error
+            success: function (data) {
+                result = JSON.parse(data).result;
+            },
+            error: function () {
+                common.Common.log([].slice.call(arguments));
+            }
         });
 
         return result === "E" ? true : false;
