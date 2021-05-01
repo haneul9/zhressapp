@@ -75,7 +75,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 					list.html('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
 				}
 
-				setTimeout(function () {
+				setTimeout(function() {
 					this.spinner(false);
 					resolve();
 				}.bind(this), 0);
@@ -262,7 +262,7 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp') && this.scrollable()) {
+	if (!list.data('jsp') && this.scrollable() && list.find('.list-group-item').length) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
