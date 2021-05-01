@@ -37,6 +37,10 @@ sap.ui.define([
 			var oController = $.app.getController();
 			oController._ListCondJSonModel.setProperty("/Ltype",[{Code : "0" , Text: oController.getBundleText("LABEL_68012")}]);
 			oController._ListCondJSonModel.setProperty("/Data",{});
+
+			if($.app.getAuth() === $.app.Auth.MSS && oController.getSessionInfoByKey("Chief") !== "X") {
+				$.app.byId("Page_SplitContainer-Master").setVisible(false);
+			}
 			
 			Promise.all([
 				common.Common.getPromise(function() {

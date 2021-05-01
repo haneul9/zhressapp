@@ -59,6 +59,10 @@ sap.ui.define(
             onBeforeShow: function () {
                 var oController = this;
                 oController._SchoolJSonModel.setSizeLimit(5000);
+
+                if($.app.getAuth() === $.app.Auth.MSS && oController.getSessionInfoByKey("Chief") !== "X") {
+                    $.app.byId("Perinfo_SplitContainer-Master").setVisible(false);
+                }
               
                 if (!oController._ListCondJSonModel.getProperty("/Data")) {
                     var vData = {
