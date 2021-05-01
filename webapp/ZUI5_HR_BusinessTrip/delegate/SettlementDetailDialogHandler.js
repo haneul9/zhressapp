@@ -246,8 +246,14 @@ var Handler = {
 							}
 						});
 						if (this.oRowData.isFromAbsence) {
-							TableIn04[0].BtStartdat = Common.getUTCDateTime(this.oRowData.BtStartdat);
-							TableIn04[0].BtEnddat = Common.getUTCDateTime(this.oRowData.BtEnddat);
+							var BtStartdat = Common.getUTCDateTime(this.oRowData.BtStartdat),
+							BtEnddat = Common.getUTCDateTime(this.oRowData.BtEnddat);
+
+							TableIn04[0].BtStartdat = BtStartdat;
+							TableIn04[0].BtEnddat = BtEnddat;
+
+							this.oModel.setProperty("/Header/BtStartdat", BtStartdat);
+							this.oModel.setProperty("/Header/BtEnddat", BtEnddat);
 						}
 						this.oModel.setProperty("/SettlementTableIn04", TableIn04);
 						Common.adjustVisibleRowCount($.app.byId("SettlementTableIn04"), 5, TableIn04.length);
