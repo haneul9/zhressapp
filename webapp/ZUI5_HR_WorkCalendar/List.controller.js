@@ -52,7 +52,8 @@ sap.ui.define([
 						Ename : oLoginData.Ename,
 						Bukrs : oLoginData.Bukrs,
 						Langu : oLoginData.Langu,
-						Molga : oLoginData.Molga
+						Molga : oLoginData.Molga,
+						Chief : $.app.getModel("session").getData().Chief
 					}
 				};
 				
@@ -560,7 +561,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
             	if(o.Otype != "P"){

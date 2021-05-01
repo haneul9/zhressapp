@@ -26,7 +26,13 @@ sap.ui.jsview("ZUI5_HR_VacationList.List", {
                                     value: "{Ename}",
                                     showValueHelp: true,
                                     valueHelpOnly: true,
-                                    valueHelpRequest: oController.searchOrgehPernr
+                                    valueHelpRequest: oController.searchOrgehPernr,
+                                    editable : {
+                                    	path : "Chief",
+                                    	formatter : function(fVal){
+                                    		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                    	}
+                                    }
                                 }),
                                 new sap.m.Label({text: oBundleText.getText("LABEL_48003")}), // 대상기간
                                 new sap.m.DateRangeSelection({

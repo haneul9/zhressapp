@@ -74,6 +74,12 @@ sap.ui.jsview("ZUI5_HR_WorkTimeList.List", {
 	                                    		}
                                     		}
                                     	}
+                                    },
+                                    editable : {
+                                    	path : "Chief",
+                                    	formatter : function(fVal){
+                                    		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                    	}
                                     }
                                 }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_60029")}), // 조회구분

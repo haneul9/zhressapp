@@ -37,7 +37,7 @@ sap.ui.define(
                                             showValueHelp: true,
                                             valueHelpOnly: true,
                                             valueHelpRequest: StatusListHandler.searchOrgehPernr.bind(oController),
-                                            editable: "{= ${/Bukrs} === 'A' || ${/Zflag} === 'X' ? false : true }"
+                                            editable: "{/isEditOrgtree}"
                                         }),
                                         new sap.m.Label({ text: "{i18n>LABEL_30005}" }), // 근무일정
                                         new sap.m.ComboBox({

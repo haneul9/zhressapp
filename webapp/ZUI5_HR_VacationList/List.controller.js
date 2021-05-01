@@ -36,7 +36,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -54,7 +54,8 @@ sap.ui.define([
 						Orgeh : "",
 						Ename : oLoginData.Ename,
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
-						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))
+						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
+						Chief : $.app.getModel("session").getData().Chief
 						// Tmdat : dateFormat.format(new Date()),
 					}
 				};
@@ -231,7 +232,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 // oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");
