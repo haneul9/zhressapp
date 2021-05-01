@@ -1,9 +1,10 @@
 ﻿sap.ui.define([
 	"../../common/Common",
 	"../../common/CommonController",
-	"../../common/JSONModelHelper"
+	"../../common/JSONModelHelper",
+	"sap/base/util/UriParameters"
 	], 
-	function (Common, CommonController, JSONModelHelper) {
+	function (Common, CommonController, JSONModelHelper, UriParameters) {
 	"use strict";
 
 	
@@ -47,7 +48,7 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey"))){
+			if (!this.getParameterByName("Sdate") && !this.getParameterByName("Skey")) {
 				var oList = {
 					Sdate: this.getParameterByName("Sdate"),
 					Seqnr: this.getParameterByName("Skey")
@@ -63,9 +64,7 @@
         },
 
 		getParameterByName: function(name) {
-			var regex = parent._gateway.parameter(name);
-			
-			return Common.checkNull(regex)? "" : regex;
+			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
 		},
 		
 		onTableSearch: function() {

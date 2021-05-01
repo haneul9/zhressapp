@@ -75,13 +75,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if (!Common.checkNull(!this.getParameterByName("Sdate")) && !Common.checkNull(this.getParameterByName("Skey"))) {
+			if (!this.getParameterByName("Sdate") && !this.getParameterByName("Skey")) {
 				this.onSelectDetail(false);
 			}
         },
 
 		getParameterByName: function(name) {
-			return parent._gateway.isMobile() ? UriParameters.fromQuery(document.location.search).get(name) : parent._gateway.parameter(name);
+			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
 		},
 
         getChangeDate: function() {
