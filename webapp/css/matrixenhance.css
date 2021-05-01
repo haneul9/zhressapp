@@ -81,6 +81,9 @@
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication05 { background-color: #ae80e2 !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication06 { background-color: #ffdd19 !important; }
+
+.bg-yellow{background-color: #ffdd19 !important;}
 
 /** calendar **/
 .calendar-TableHeader2 {
