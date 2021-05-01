@@ -110,13 +110,10 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				oController._ListCondJSonModel.setProperty("/Data/Ctrnm", "");
-				oController._ListCondJSonModel.setProperty("/Data/Wrktm", "");
-				oController._ListCondJSonModel.setProperty("/Data/Exttm", "");
-				oController._ListCondJSonModel.setProperty("/Data/Holtm", "");
-				oController._ListCondJSonModel.setProperty("/Data/Extholtm", "");
-				oController._ListCondJSonModel.setProperty("/Data/Tottm", "");
-				oController._ListCondJSonModel.setProperty("/Data/Notes", "");
+				var field = ["Ctrnm", "Wrktm", "Exttm", "Holtm", "Extholtm", "Tottm", "Notes", "Tottm2", "Notes2"];
+				for(var i=0; i<field.length; i++){
+					eval("oController._ListCondJSonModel.setProperty('/Data/" + field[i] + "', '');");
+				}
 				
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
 				var today = new Date();
@@ -132,13 +129,9 @@ sap.ui.define([
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
 						if(data){
-							oController._ListCondJSonModel.setProperty("/Data/Ctrnm", data.Ctrnm);
-							oController._ListCondJSonModel.setProperty("/Data/Wrktm", data.Wrktm);
-							oController._ListCondJSonModel.setProperty("/Data/Exttm", data.Exttm);
-							oController._ListCondJSonModel.setProperty("/Data/Holtm", data.Holtm);
-							oController._ListCondJSonModel.setProperty("/Data/Extholtm", data.Extholtm);
-							oController._ListCondJSonModel.setProperty("/Data/Tottm", data.Tottm);
-							oController._ListCondJSonModel.setProperty("/Data/Notes", data.Notes);
+							for(var i=0; i<field.length; i++){
+								eval("oController._ListCondJSonModel.setProperty('/Data/" + field[i] + "', data." + field[i] + ");");
+							}
 							
 							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results){
 								var data1 = data.FlexWorktime1Nav.results;
@@ -423,7 +416,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: ""
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

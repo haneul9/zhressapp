@@ -85,9 +85,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
         
         // summary
         var oMatrix1 = new sap.ui.commons.layout.MatrixLayout({
-        	columns : 7,
+        	columns : 10,
         	width : "100%",
-        	widths : ["", "", "", "", "", "", ""],
+        	widths : ["", "", "", "", "", "", "", "10px", "", ""],
         	rows : [new sap.ui.commons.layout.MatrixLayoutRow({height : "10px"}),
         			new sap.ui.commons.layout.MatrixLayoutRow({
 		        		height : "45px",
@@ -125,12 +125,28 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 				        			 content : [new sap.m.Text({text : oBundleText.getText("LABEL_63010"), textAlign : "Center"}).addStyleClass("font-bold")], // 비고
 				        			 hAlign : "Center",
 				        			 vAlign : "Middle"
+				        		 }).addStyleClass("Label2"),
+				        		 new sap.ui.commons.layout.MatrixLayoutCell({
+				        			 content : [],
+				        			 hAlign : "Center",
+				        			 vAlign : "Middle",
+				        			 rowSpan : 2
+				        		 }),
+				        		 new sap.ui.commons.layout.MatrixLayoutCell({
+				        			 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69055"), textAlign : "Center"}).addStyleClass("font-bold")], // 근로시간합계\n(월말예상)
+				        			 hAlign : "Center",
+				        			 vAlign : "Middle"
+				        		 }).addStyleClass("Label2"),
+				        		 new sap.ui.commons.layout.MatrixLayoutCell({
+				        			 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69056"), textAlign : "Center"}).addStyleClass("font-bold")], // 상태\n(월말예상)
+				        			 hAlign : "Center",
+				        			 vAlign : "Middle"
 				        		 }).addStyleClass("Label2")]
 		        	}),
 		        	new sap.ui.commons.layout.MatrixLayoutRow({
 		        		height : "45px",
 		        		cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-				        			 content : [new sap.m.Text({text : "{Ctrnm}"})], // 소정근로시간\n(평일X8H)
+				        			 content : [new sap.m.Text({text : "{Ctrnm}"}).addStyleClass("font-bold")], // 소정근로시간\n(평일X8H)
 				        			 hAlign : "Center",
 				        			 vAlign : "Middle"
 				        		 }).addStyleClass("Data"),
@@ -161,7 +177,6 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 				        		 }).addStyleClass("Data"),
 				        		 new sap.ui.commons.layout.MatrixLayoutCell({
 				        			 content : [new sap.m.Text({ // 비고
-							        			 	// text : "{Notes}"
 							        			 	text : {
 							        			 		parts : [{path : "Ctrnm"}, {path : "Tottm"}, {path : "Notes"}],
 							        			 		formatter : function(fVal1, fVal2, fVal3){
@@ -175,14 +190,44 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 							        			 				} else {
 							        			 					this.addStyleClass("color-darkgreen");
 							        			 				}
-							        			 			} else {
-							        			 				this.addStyleClass("color-darkgreen");
 							        			 			}
+							        			 			// else {
+							        			 			// 	this.addStyleClass("color-darkgreen");
+							        			 			// }
 							        			 			
 							        			 			return fVal3;
 							        			 		}
 							        			 	}
 							        		 	}).addStyleClass("font-bold")],
+				        			 hAlign : "Center",
+				        			 vAlign : "Middle"
+				        		 }).addStyleClass("Data"),
+				        		 new sap.ui.commons.layout.MatrixLayoutCell({
+				        			 content : [new sap.m.Text({text : "{Tottm2}"})], // 근로시간합계(월말예상)
+				        			 hAlign : "Center",
+				        			 vAlign : "Middle"
+				        		 }).addStyleClass("Data"),
+				        		 new sap.ui.commons.layout.MatrixLayoutCell({
+				        			 content : [new sap.m.Text({ // 비고
+							        			 	text : {
+							        			 		parts : [{path : "Ctrnm"}, {path : "Tottm2"}, {path : "Notes2"}],
+							        			 		formatter : function(fVal1, fVal2, fVal3){
+							        			 			this.removeStyleClass("color-info-red color-blue color-darkgreen");
+							        			 			
+							        			 			if(fVal1 && fVal2){
+							        			 				if(fVal1.replace(":", "") > fVal2.replace(":", "")){
+							        			 					this.addStyleClass("color-blue");
+							        			 				} else if(fVal1.replace(":", "") < fVal2.replace(":", "")) {
+							        			 					this.addStyleClass("color-info-red");
+							        			 				} else {
+							        			 					this.addStyleClass("color-darkgreen");
+							        			 				}
+							        			 			}
+							        			 			
+							        			 			return fVal3;
+							        			 		}
+							        			 	}
+							        		 	}).addStyleClass("font-bold")], // 상태(월말예상)
 				        			 hAlign : "Center",
 				        			 vAlign : "Middle"
 				        		 }).addStyleClass("Data")]
@@ -213,6 +258,8 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 										   				return "Indication03";
 										   			} else if(fVal1 == "99"){ // 결재완료
 										   				return "Indication04";
+										   			} else if(fVal1 == "CC"){ // 조정대상
+										   				return "Indication06";
 										   			} else {
 										   				return "None";
 										   			}
@@ -224,7 +271,7 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 							 height : "40px",
 							 content : [new sap.m.MessageStrip({
 										 	type : "Error",
-										 	text : oBundleText.getText("MSG_69001") // 작업 후에는 반드시 저장하여 주십시오. 저장이 완료되면 수정이 Clear 됩니다.
+										 	text : oBundleText.getText("MSG_69001") // 작업 후에는 반드시 저장하여 주십시오.
 										}),
 										new sap.m.ToolbarSpacer(),
 										new sap.m.HBox({
@@ -236,7 +283,9 @@ sap.ui.jsview("ZUI5_HR_FlexworktimeStatus.List", {
 				                                new sap.m.Label().addStyleClass("custom-legend-color bg-signature-cyanblue"),
 				                                new sap.m.Label({text: oBundleText.getText("LABEL_00199")}).addStyleClass("custom-legend-item"), // 결재완료
 				                                new sap.m.Label().addStyleClass("custom-legend-color bg-lcc-signature-red"),
-				                                new sap.m.Label({text: oBundleText.getText("LABEL_69002")}).addStyleClass("custom-legend-item") // 수정
+				                                new sap.m.Label({text: oBundleText.getText("LABEL_69002")}).addStyleClass("custom-legend-item"), // 수정
+				                                new sap.m.Label().addStyleClass("custom-legend-color bg-yellow"),
+				                                new sap.m.Label({text: oBundleText.getText("LABEL_69057")}).addStyleClass("custom-legend-item") // 조정대상
 				                            ]
 				                        }).addStyleClass("custom-legend-group mr-20px"),
 										new sap.m.Button({
