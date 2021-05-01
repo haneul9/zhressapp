@@ -1,16 +1,15 @@
 jQuery.sap.require("sap.m.MessageBox");
-jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -88,7 +87,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -101,7 +100,7 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			if(!oData.Zyymm || oData.Zyymm.trim() == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_61001")); // 대상기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_61001")); // 대상기간을 입력하여 주십시오.
 				return;
 			}
 			
@@ -136,13 +135,13 @@ sap.ui.define([
 							if(data.WorkCalendarNav1 && data.WorkCalendarNav1.results && data.WorkCalendarNav1.results.length){
 								var data1 = data.WorkCalendarNav1.results;
 								var total = 0;
-								var day = [oBundleText.getText("LABEL_63055"), // 일요일
-										   oBundleText.getText("LABEL_63056"), // 월
-										   oBundleText.getText("LABEL_63057"), // 화
-										   oBundleText.getText("LABEL_63058"), // 수
-										   oBundleText.getText("LABEL_63059"), // 목
-										   oBundleText.getText("LABEL_63060"), // 금
-										   oBundleText.getText("LABEL_63061")] // 토
+								var day = [oController.getBundleText("LABEL_63055"), // 일요일
+										   oController.getBundleText("LABEL_63056"), // 월
+										   oController.getBundleText("LABEL_63057"), // 화
+										   oController.getBundleText("LABEL_63058"), // 수
+										   oController.getBundleText("LABEL_63059"), // 목
+										   oController.getBundleText("LABEL_63060"), // 금
+										   oController.getBundleText("LABEL_63061")] // 토
 								
 								var makeData = function(title, time){
 									time = (time && time != "") ? time.substring(0,2) + ":" + time.substring(2,4) : "";
@@ -166,7 +165,7 @@ sap.ui.define([
 															  rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 																	  	  height : "30px",
 																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63023") + " " + data1[i].Workt3W})], // 근무시간
+																			  	  	   content : [new sap.m.Text({text : oController.getBundleText("LABEL_63023") + " " + data1[i].Workt3W})], // 근무시간
 																			  	  	   hAlign : "Center",
 																			  	  	   vAlign : "Middle"
 																			  	   })] 
@@ -174,7 +173,7 @@ sap.ui.define([
 																	  new sap.ui.commons.layout.MatrixLayoutRow({
 																	  	  height : "30px",
 																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63020") + " " + data1[i].NorwkW})], // 평일재근
+																			  	  	   content : [new sap.m.Text({text : oController.getBundleText("LABEL_63020") + " " + data1[i].NorwkW})], // 평일재근
 																			  	  	   hAlign : "Center",
 																			  	  	   vAlign : "Middle"
 																			  	   })] 
@@ -182,7 +181,7 @@ sap.ui.define([
 																	  new sap.ui.commons.layout.MatrixLayoutRow({
 																	  	  height : "30px",
 																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63021") + " " + data1[i].ComtmW})], // 근태인정
+																			  	  	   content : [new sap.m.Text({text : oController.getBundleText("LABEL_63021") + " " + data1[i].ComtmW})], // 근태인정
 																			  	  	   hAlign : "Center",
 																			  	  	   vAlign : "Middle"
 																			  	   })] 
@@ -190,7 +189,7 @@ sap.ui.define([
 																	  new sap.ui.commons.layout.MatrixLayoutRow({
 																	  	  height : "30px",
 																	  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-																			  	  	   content : [new sap.m.Text({text : oBundleText.getText("LABEL_63022") + " " + data1[i].BrktmW})], // 휴게시간
+																			  	  	   content : [new sap.m.Text({text : oController.getBundleText("LABEL_63022") + " " + data1[i].BrktmW})], // 휴게시간
 																			  	  	   hAlign : "Center",
 																			  	  	   vAlign : "Middle"
 																			  	   })] 
@@ -234,28 +233,28 @@ sap.ui.define([
 											
 											// 입문
 											if(data1[i].Entbg != "" && data1[i].Entbg != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63015"), data1[i].Entbg));
+												oMatrix.addRow(makeData(oController.getBundleText("LABEL_63015"), data1[i].Entbg));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}
 											
 											// 출문
 											if(data1[i].Enten != "" && data1[i].Enten != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63016"), data1[i].Enten));
+												oMatrix.addRow(makeData(oController.getBundleText("LABEL_63016"), data1[i].Enten));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}
 											
 											// 재근시간기준
 											if(data1[i].Workt2 != "" && data1[i].Workt2 != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63009"), data1[i].Workt2));
+												oMatrix.addRow(makeData(oController.getBundleText("LABEL_63009"), data1[i].Workt2));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}
 											
 											// 근무인정시간
 											if(data1[i].Workt != "" && data1[i].Workt != "0000"){
-												oMatrix.addRow(makeData(oBundleText.getText("LABEL_63065"), data1[i].Workt));
+												oMatrix.addRow(makeData(oController.getBundleText("LABEL_63065"), data1[i].Workt));
 											} else {
 												oMatrix.addRow(makeData("", ""));
 											}	  
@@ -453,26 +452,26 @@ sap.ui.define([
 			// validation check
 			if(Frety == "1"){
 				if(!oData.Reqrn || oData.Reqrn.trim() == ""){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_63007")); // 요청사유를 입력하시기 바랍니다.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_63007")); // 요청사유를 입력하시기 바랍니다.
 					return;
 				}
 			} else if(Frety == "2"){
 				if(!oData.Brkbg || !oData.Brken){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_63008")); // 비근무시간을 입력하시기 바랍니다.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_63008")); // 비근무시간을 입력하시기 바랍니다.
 					return;
 				} else if(!oData.Reqrn || oData.Reqrn.trim() == ""){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_63007")); // 요청사유를 입력하시기 바랍니다.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_63007")); // 요청사유를 입력하시기 바랍니다.
 					return;
 				} 
 			}
 			
 			var confirmMessage = "", successMessage = "";
 			if(Frety == "1"){
-				confirmMessage = oBundleText.getText("MSG_63010"); // 승인요청 하시겠습니까?
-				successMessage = oBundleText.getText("MSG_63011"); // 승인요청 되었습니다.
+				confirmMessage = oController.getBundleText("MSG_63010"); // 승인요청 하시겠습니까?
+				successMessage = oController.getBundleText("MSG_63011"); // 승인요청 되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_00058"); // 저장하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00017"); // 저장되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
 			}
 			
 			var process = function(){
@@ -565,7 +564,7 @@ sap.ui.define([
             },
             callback = function(o) {
             	if(o.Otype != "P"){
-            		sap.m.MessageBox.error(oBundleText.getText("MSG_48016")); // 대상자를 선택하여 주십시오.
+            		sap.m.MessageBox.error(oController.getBundleText("MSG_48016")); // 대상자를 선택하여 주십시오.
             		return;
             	}
             	
