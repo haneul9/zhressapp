@@ -30,6 +30,7 @@ sap.ui.define(
                 this.oModel.setData({
                     Dtfmt: "yyyy-MM",
                     Auth: $.app.getAuth(),
+                    isEditOrgtree: false,
                     SearchConditions: {
                         Pernr: null,
                         Orgeh: null,
@@ -54,6 +55,11 @@ sap.ui.define(
 
                 Common.getPromise(
                     function () {
+                        this.oModel.setProperty(
+                            "/isEditOrgtree",
+                            ($.app.getAuth() === $.app.Auth.MSS && this.oController.getSessionInfoByKey("Chief") !== "X")
+                                    ? false : true
+                        );
                         this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
                         this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
                         this.oModel.setProperty("/SearchConditions/Begda", new Date(currDate.getFullYear() - 1, currDate.getMonth(), 1));
