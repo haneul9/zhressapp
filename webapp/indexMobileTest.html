@@ -50,6 +50,8 @@
 <script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
 <script src="ZUI5_HR_Home/js/PortletsMobileTest.js"></script>
 <script>
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event) { history.pushState(null, document.title, location.href); });
 function initHome() {
 
 	var _gateway = window._gateway,
