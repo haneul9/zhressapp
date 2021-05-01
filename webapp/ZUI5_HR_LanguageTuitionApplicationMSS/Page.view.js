@@ -41,7 +41,8 @@ sap.ui.define(
                                             value: "{EnameOrOrgehTxt}",
                                             showValueHelp: true,
                                             valueHelpOnly: true,
-                                            valueHelpRequest: PageHandler.searchOrgehPernr.bind(oController)
+                                            valueHelpRequest: PageHandler.searchOrgehPernr.bind(oController),
+                                            editable: "{/isEditOrgtree}"
                                         }),
                                         new sap.m.Label({text: "{i18n>LABEL_29003}"}), // 수강기간
                                         new sap.m.DateRangeSelection({
