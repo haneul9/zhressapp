@@ -1134,7 +1134,7 @@ sap.ui.define([
 				oController._onClose="X";
 				if(oController._onClose=="X"&&oController._FirstTime=="X"){
 					sap.m.MessageBox.alert(oController.getBundleText("MSG_47040"));
-					Controller._FirstTime="";
+					oController._FirstTime="";
 				}
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewBtn").setVisible(false):$.app.byId(oController.PAGEID+"_NewBtn").setVisible(true);
 				oController._onClose=="X"?$.app.byId(oController.PAGEID+"_NewIcon").setVisible(true):$.app.byId(oController.PAGEID+"_NewIcon").setVisible(false);
