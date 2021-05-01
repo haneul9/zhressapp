@@ -51,6 +51,8 @@
 <script src="ZUI5_HR_Home/js/portlets/Vacationportlet.js"></script><!--				P110 근태신청 -->
 <script src="ZUI5_HR_Home/js/PortletsTest.js"></script>
 <script>
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event) { history.pushState(null, document.title, location.href); });
 function initHome() {
 
 	var _gateway = window._gateway,

@@ -2,6 +2,7 @@
 function EvalGoalProgressingPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
+
 	this.$selector = '.portlet-evalgoal-progress .list-group';
 	this.photoMap = null;
 	this.goalDataMap = null;
@@ -69,14 +70,18 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 			var list = this.$();
 
 			if (!oEmpData.length) {
+				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
+
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">평가대상이 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action text-center">평가대상이 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
 				}
 				return;
 			}
+
+			$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', false);
 
 			if (list.data('jsp')) {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
@@ -98,7 +103,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 					setTimeout(function() {
 						list.append([
 							'<div class="evalgoal-area">',
-								'<img src="${src}" style="width: 40px; height: 50px;"/>'.interpolate(oPage.photoMap[e.userId]),
+								'<img src="${src}" style="width:40px; height:50px"/>'.interpolate(oPage.photoMap[e.userId]),
 								'<div class="evalgoal-info">',
 									'<div class="person">',
 										'<div class="name">',
@@ -110,7 +115,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 									'</div>',
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
-											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+											'<div style="height:auto" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
 												oPage.goalDataMap[e.userId].score + '%',
 											'</div>',
 										'</div>',

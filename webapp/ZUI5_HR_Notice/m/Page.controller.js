@@ -2,16 +2,18 @@
 	"../../common/Common",
 	"../../common/CommonController",
 	"../../common/JSONModelHelper",
-    "../../common/AttachFileAction"
+    "../../common/AttachFileAction",
+	"sap/base/util/UriParameters"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, UriParameters) {
 	"use strict";
 
 	
 	return CommonController.extend($.app.APP_ID, {
 		
 		PAGEID: "Page",
-		
+		alreadyDetailShown: false,
+
 		TableModel: new JSONModelHelper(),
 		RegistModel: new JSONModelHelper(),
 
@@ -49,10 +51,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr"))){
+			var Sdate = this.getParameterByName("Sdate"),
+				Seqnr = this.getParameterByName("Seqnr");
+
+			if (!this.alreadyDetailShown && Sdate && Seqnr) {
 				var oList = {
-					Sdate: this.getParameterByName("Sdate"),
-					Seqnr: this.getParameterByName("Seqnr")
+					Sdate: Sdate,
+					Seqnr: Seqnr
 				};
 
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
@@ -61,13 +66,13 @@
 						RowData: oList
 					}
 				});
+
+				this.alreadyDetailShown = true;
 			}
         },
 
 		getParameterByName: function(name) {
-			var regex = parent._gateway.parameter(name);
-			
-			return Common.checkNull(regex)? "" : regex;
+			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
 		},
 		
 		onTableSearch: function() {
