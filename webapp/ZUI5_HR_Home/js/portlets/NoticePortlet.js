@@ -111,10 +111,17 @@ changeLocale: function() {
 },
 itemUrl: function(o) {
 
-	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
-		' data-menu-id="${menu-id}"'.interpolate(this.mid())
-	].join('');
+	if (this.mobile()) {
+		return [
+			' data-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
+			' data-menu-id="${menu-id}"'.interpolate(this.mid())
+		].join('');
+	} else {
+		return [
+			' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
+			' data-menu-id="${menu-id}"'.interpolate(this.mid())
+		].join('');
+	}
 },
 clearResource: function() {
 
