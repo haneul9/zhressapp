@@ -262,7 +262,7 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp') && this.scrollable() && list.find('.list-group-item').length) {
+	if (!list.data('jsp') && this.scrollable() && list.find('.list-group-item').length > 1) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
