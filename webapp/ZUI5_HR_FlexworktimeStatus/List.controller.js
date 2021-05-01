@@ -258,7 +258,7 @@ sap.ui.define([
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
 			var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
 			
-			var makeData = function(time, time2, flag){
+			var makeData = function(time, time2, flag, style){
 				time = time.replace(":", "");
 				time = (time && time != "") ? time.substring(0,2) + ":" + time.substring(2,4) : "";
 				
@@ -266,11 +266,17 @@ sap.ui.define([
 					time = time == "" ? "" : (time + flag);
 					time = time + (time2 == "" ? "" : (time2.substring(0,2) + ":" + time2.substring(2,4)));
 				}
+				
+				style = style ? style : "";
 						
 				return new sap.ui.commons.layout.MatrixLayoutRow({
 						   height : "20px",
 						   cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-										content : [new sap.m.Text({text : time})],
+										content : [new sap.m.Text({
+													   text : time,
+													   width : "100%",
+													   textAlign : "Center"
+												   }).addStyleClass(style)],
 										hAlign : "Center",
 										vAlign : "Middle"
 									})]
@@ -319,7 +325,7 @@ sap.ui.define([
 					// 추가휴게
 					oMatrix.addRow(makeData(oData[i].Brktot));
 					// 소정근로
-					oMatrix.addRow(makeData(oData[i].Wrktm));
+					oMatrix.addRow(makeData(oData[i].Wrktm, "", "", (oData[i].Wrktm == "" ? "" : "calendar-background-lightblue")));
 					// 연장/휴일
 					oMatrix.addRow(makeData(oData[i].Exttm, oData[i].Holtm, "/"));
 					// 근태
