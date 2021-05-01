@@ -3,7 +3,7 @@ function EvalGoalPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
-	this.$selector = '#portlet-evalGoalPortlet-list';
+	this.$selector = '.portlet-evalgoal .list-group';
 }
 
 EvalGoalPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -27,7 +27,7 @@ ui: function() {
 		'<div class="card portlet portlet-${size}h portlet-evalgoal" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="list-group" id="portlet-evalGoalPortlet-list"></div>',
+				'<div class="list-group"></div>',
 			'</div>',
 			this.spinner(),
 		'</div>'
@@ -35,18 +35,30 @@ ui: function() {
 },
 fill: function() {
 
-	var url = '/odata/v2/GoalPlanTemplate?$select=id,defaultTemplate&$filter=defaultTemplate eq true&$format=json';
-	
+	var url = '/odata/v2/GoalPlanTemplate?$select=id,defaultTemplate&$filter=defaultTemplate eq true';
+
 	return $.getJSON({
 		url: url,
 		success: function(data) {
-			var oDataId = data.d.results[0].id;
-			var url2 = '/odata/v2/Goal_' + oDataId + "?$select=name,done&$filter=userId eq '" + this._gateway.pernr() + "'&$format=json";
+
+			var list = this.$();
+			var results = data.d.results;
+			if (!results || !results.length) {
+				if (list.data('jsp')) {
+					list.find('.list-group-item').remove().end()
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가목표가 없습니다.</a>');
+				} else {
+					list.html('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가목표가 없습니다.</a>');
+				}
+				return;
+			}
+
+			var oDataId = results[0].id;
+			var url2 = '/odata/v2/Goal_' + oDataId + "?$select=name,done&$filter=userId eq '" + this._gateway.pernr() + "'";
 			$.getJSON({
 				url: url2,
 				success: function(data) {
 					var oDetailData = data.d.results;
-					var list = this.$();
 					var oBackGround = [
 						"bg-danger",
 						"bg-warning",
@@ -57,9 +69,9 @@ fill: function() {
 					if (!oDetailData.length) {
 						if (list.data('jsp')) {
 							list.find('.list-group-item').remove().end()
-								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">평가목표가 없습니다.</a>');
+								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가목표가 없습니다.</a>');
 						} else {
-							list.html('<a href="#" class="list-group-item list-group-item-action text-center">평가목표가 없습니다.</a>');
+							list.html('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가목표가 없습니다.</a>');
 						}
 						return;
 					}
@@ -101,7 +113,7 @@ fill: function() {
 					});
 				}.bind(this),
 				error: function(jqXHR) {
-					this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url);
+					this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url2);
 				}.bind(this),
 				complete: function() {
 					this.spinner(false);
@@ -131,13 +143,6 @@ changeLocale: function() {
 
 	this.spinner(true);
 	this.fill();
-},
-itemUrl: function(o) {
-
-	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
-		' data-menu-id="${menu-id}"'.interpolate(this.mid())
-	].join('');
 },
 clearResource: function() {
 

@@ -187,7 +187,9 @@ goToLink: function(menuId, url) {
 
 		splitted.push('');
 		$.map(this._gateway.parameterMap(splitted.join('?')), function(value, name) {
-			$('<input type="hidden" name="${name}" value="${value}" />'.interpolate(name, value)).appendTo(form);
+			if (!form.find('input[name="${name}"]'.interpolate(name)).val(value).length) {
+				$('<input type="hidden" name="${name}" value="${value}" />'.interpolate(name, value)).appendTo(form);
+			}
 		});
 	}
 

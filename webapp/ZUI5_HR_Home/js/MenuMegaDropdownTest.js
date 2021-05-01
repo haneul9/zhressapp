@@ -292,13 +292,13 @@ goToLink: function(menuId, url) {
 		var pernr = this._gateway.parameter('pernr');
 		if (pernr) {
 			if (!form.find('input[name="pernr"]').val(pernr).length) {
-				$('<input type="hidden" name="pernr" />').val(pernr).appendTo(form);
+				$('<input type="hidden" name="pernr" value="${pernr}" />'.interpolate(pernr)).appendTo(form);
 			}
 		}
 		var s4hana = this._gateway.parameter('s4hana');
 		if (s4hana) {
 			if (!form.find('input[name="s4hana"]').val(s4hana).length) {
-				$('<input type="hidden" name="s4hana" />').val(s4hana).appendTo(form);
+				$('<input type="hidden" name="s4hana" value="${s4hana}" />'.interpolate(s4hana)).appendTo(form);
 			}
 		}
 	}
@@ -308,7 +308,9 @@ goToLink: function(menuId, url) {
 
 		splitted.push('');
 		$.map(this._gateway.parameterMap(splitted.join('?')), function(value, name) {
-			$('<input type="hidden" name="${name}" value="${value}" />'.interpolate(name, value)).appendTo(form);
+			if (!form.find('input[name="${name}"]'.interpolate(name)).val(value).length) {
+				$('<input type="hidden" name="${name}" value="${value}" />'.interpolate(name, value)).appendTo(form);
+			}
 		});
 	}
 
