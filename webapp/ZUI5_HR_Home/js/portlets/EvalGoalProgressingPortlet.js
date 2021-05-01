@@ -182,7 +182,7 @@ retrieveGoalData: function(userId, goalId) { // 사원목표정보
 
 			this.goalDataMap[userId].score = vScore;
 			this.goalDataMap[userId].groundColor = oGroundColor;
-		},
+		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
 		}.bind(this)
