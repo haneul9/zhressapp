@@ -1443,7 +1443,7 @@ sap.ui.define([
 					if(new Date(oPro.MedDate.getFullYear(),oPro.MedDate.getMonth(),
 					oPro.MedDate.getDate(),9,0,0).getTime()>new Date(oPro.Inpdt.getFullYear(),oPro.Inpdt.getMonth(),
 					oPro.Inpdt.getDate(),9,0,0).getTime()){
-						oMsg=oBundleText.getText("MSG_47040");
+						oMsg=oBundleText.getText("MSG_47041");
 					}
 				}
 				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
