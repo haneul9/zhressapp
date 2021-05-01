@@ -290,7 +290,7 @@ changeSFUserLocale: function() {
 	this._gateway.spinner(true);
 
 	return $.post({
-		url: "/odata/v2/User('${pernr}')".interpolate(this.pernr()),
+		url: "/odata/fix/User('${pernr}')".interpolate(this.pernr()),
 		data: JSON.stringify({
 			defaultLocale: $('#sf-locale option:selected').val()
 		}),

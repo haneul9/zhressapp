@@ -40,31 +40,32 @@ fill: function() {
 
 	var url = '/odata/v2/GoalPlanTemplate?$filter=defaultTemplate eq true&$format=json&$select=id,defaultTemplate';
 
-	return $.getJSON({ // Id받아옴
-		url: url,
-		success: function(data) {
-			this.retrieveDirectReports(this._gateway.odataResults(data).id || '');
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+	return new Promise(function(resolve, reject) {
+		$.getJSON({ // GoalPlanTemplate id 조회
+			url: url,
+			success: function(data) {
+				this.retrieveDirectReports(this._gateway.odataResults(data).id || '', resolve);
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
+				this.spinner(false);
+				reject();
+			}.bind(this)
+		});
+	}.bind(this));
 },
 
-retrieveDirectReports: function(goalId) { // 평가사원들 조회
+retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01".interpolate(this._gateway.pernr());
 
-	$.getJSON({ // 평가 대상자조회 조회한 사원번호의 평가대상자를 조회
+	$.getJSON({ // 평가 대상자 조회 : 조회한 사원번호의 평가대상자를 조회
 		url: url2,
 		success: function(data) {
-			var oEmpData = data.d.results;
+			var empDataList = data.d.results;
 			var list = this.$();
 
-			if (!oEmpData.length) {
+			if (!empDataList.length) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
 				if (list.data('jsp')) {
@@ -85,7 +86,63 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 			this.photoMap = {};
 			this.goalDataMap = {};
 
-			oEmpData.forEach(function(e, i) {
+			$.map(empDataList, function(e, i) {
+				this.goalDataMap[e.userId] = {
+					nickname: e.nickname,
+					position: e.custom01 ? e.custom01.split("(")[0] : ""
+				};
+
+				list.append([
+					'<div class="evalgoal-area i${i}">'.interpolate(i),
+						'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
+						'<div class="evalgoal-info">',
+							'<div class="person">',
+								'<div class="name">', e.nickname, '</div>',
+								'<div class="position">', e.position, '</div>',
+							'</div>',
+							'<div class="evalgoal-statusBar">',
+								'<div class="progress">',
+									'<div style="height:auto" style="width:0" class="progress-bar i${i}"'.interpolate(i),
+										' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
+								'</div>',
+							'</div>',
+						'</div>',
+					'</div>'
+				].join(''));
+			});
+
+			setTimeout(function() {
+				resolve(); // 레이아웃이 완성되면 resolve를 호출하여 onceAfter가 호출되게 함
+			}, 0);
+
+			setTimeout(function() {
+				Promise.all(
+					$.map(empDataList, function(e, i) {
+						return Promise.all([
+							this.retrievePhoto(e.userId),
+							this.retrieveGoalData(e.userId, goalId)
+						]).then(function() {
+							var goalData = this.goalDataMap[e.userId],
+							score = parseFloat(goalData.score);
+
+							$('.evalgoal-area.i' + i).find('img').attr('src', this.photoMap[e.userId]);
+
+							if (score > 0) {
+								$('.progress-bar.i' + i)
+									.addClass(goalData.groundColor)
+									.animate({ width: score + '%' }, 2000);
+							}
+						}.bind(this));
+					}.bind(this))
+				).then(function() {
+					this.spinner(false);
+				}.bind(this));
+			}.bind(this), 0);
+/*
+			this.photoMap = {};
+			this.goalDataMap = {};
+
+			empDataList.forEach(function(e, i) {
 				this.goalDataMap[e.userId] = {
 					nickname: e.nickname,
 					position: e.custom01 ? e.custom01.split("(")[0] : ""
@@ -125,6 +182,7 @@ retrieveDirectReports: function(goalId) { // 평가사원들 조회
 					}.bind(this), 0);
 				}.bind(this));
 			}.bind(this));
+*/
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url2);
