@@ -187,6 +187,9 @@ goToLink: function(menuId, url) {
 
 		splitted.push('');
 		$.map(this._gateway.parameterMap(splitted.join('?')), function(value, name) {
+			if (name === 'hc_orionpath') {
+				return;
+			}
 			if (!form.find('input[name="${name}"]'.interpolate(name)).val(value).length) {
 				$('<input type="hidden" name="${name}" value="${value}" />'.interpolate(name, value)).appendTo(form);
 			}
