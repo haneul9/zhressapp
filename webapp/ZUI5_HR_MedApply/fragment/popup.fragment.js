@@ -502,7 +502,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
         oMat3.addRow(oRow);
 
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({ 
             colSpan:9,
             content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47038")+"<br/>"+oController.getBundleText("MSG_47039")+"</span>"})
         }).addStyleClass("DataCell");
