@@ -6,7 +6,6 @@ function EvalGoalProgressingPortlet() {
 	this.$selector = '.portlet-evalgoal-progress .list-group';
 	this.photoMap = null;
 	this.goalDataMap = null;
-	this.vGoalData = null;
 }
 
 EvalGoalProgressingPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -30,7 +29,7 @@ ui: function() {
 		'<div class="card portlet portlet-${size}h portlet-evalgoal-progress" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="evalgoal-legend">평균진척률</div>',
+				'<div class="evalgoal-legend d-none">평균진척률</div>',
 				'<div class="list-group"></div>',				
 			'</div>',
 			this.spinner(),
@@ -44,8 +43,7 @@ fill: function() {
 	return $.getJSON({ // Id받아옴
 		url: url,
 		success: function(data) {
-			this.vGoalData = this._gateway.odataResults(data).id || '';
-			this.retrieveDirectReports(this);
+			this.retrieveDirectReports(this._gateway.odataResults(data).id || '');
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
@@ -60,7 +58,8 @@ checkNull: function (v) {
     return v === undefined || v === null || v == "" ? true : false;
 },
 
-retrieveDirectReports: function(oPage) { // 평가사원들 조회
+retrieveDirectReports: function(goalId) { // 평가사원들 조회
+
 	var url2 = "/odata/v2/User('" + this._gateway.pernr() +"')/directReports?$select=userId,nickname,custom01&$format=json";
 
 	$.getJSON({ // 평가 대상자조회 조회한 사원번호의 평가대상자를 조회
@@ -91,32 +90,32 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 			this.goalDataMap = {};
 
 			oEmpData.forEach(function(e, i) {
-				oPage.goalDataMap[e.userId] = {
+				this.goalDataMap[e.userId] = {
 					nickname: e.nickname,
-					position: oPage.checkNull(e.custom01) ? "" : e.custom01.split("(")[0]
+					position: this.checkNull(e.custom01) ? "" : e.custom01.split("(")[0]
 				};
 
 				Promise.all([
-					oPage.retrievePhoto(e.userId),
-					oPage.retrieveGoalData(e.userId, oPage)
+					this.retrievePhoto(e.userId),
+					this.retrieveGoalData(e.userId, goalId)
 				]).then(function() {
 					setTimeout(function() {
 						list.append([
 							'<div class="evalgoal-area">',
-								'<img src="${src}" style="width:40px; height:50px"/>'.interpolate(oPage.photoMap[e.userId]),
+								'<img src="${src}" style="width:40px; height:50px"/>'.interpolate(this.photoMap[e.userId]),
 								'<div class="evalgoal-info">',
 									'<div class="person">',
 										'<div class="name">',
-											oPage.goalDataMap[e.userId].nickname,
+											this.goalDataMap[e.userId].nickname,
 										'</div>',
 										'<div class="position">',
-										oPage.goalDataMap[e.userId].position,
+										this.goalDataMap[e.userId].position,
 										'</div>',
 									'</div>',
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
-											'<div style="height:auto" class="progress-bar i' + i + ' ' + oPage.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												oPage.goalDataMap[e.userId].score + '%',
+											'<div style="height:auto" class="progress-bar i' + i + ' ' + this.goalDataMap[e.userId].groundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+												this.goalDataMap[e.userId].score + '%',
 											'</div>',
 										'</div>',
 									'</div>',
@@ -124,10 +123,9 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 							'</div>'
 						].join(''));
 		
-						$('.progress-bar.i' + i).animate({ width: parseFloat(oPage.goalDataMap[e.userId].score) + '%' }, 2000);
-					}, 0);
-				}).catch(function(e) {
-				});
+						$('.progress-bar.i' + i).animate({ width: parseFloat(this.goalDataMap[e.userId].score) + '%' }, 2000);
+					}.bind(this), 0);
+				}.bind(this));
 			});
 		}.bind(this),
 		error: function(jqXHR) {
@@ -137,7 +135,7 @@ retrieveDirectReports: function(oPage) { // 평가사원들 조회
 },
 
 retrievePhoto: function(userId) { // 사원사진
-	var url3 = "/odata/v2/Photo?$filter=userId eq '" + userId + "' and photoType eq '1' &$select=photo,mimeType&format=json";
+	var url3 = "/odata/v2/Photo?$filter=userId eq '" + userId + "' and photoType eq '1' &$select=photo,mimeType";
 
 	return $.getJSON({ // 사진조회
 		url: url3,
@@ -155,8 +153,9 @@ retrievePhoto: function(userId) { // 사원사진
 	}).promise();
 },
 
-retrieveGoalData: function(userId, oPage) { // 사원목표정보
-	var url4 = "/odata/v2/Goal_" + oPage.vGoalData +"?$select=name,done&$filter=userId eq '" + userId + "'&$format=json";
+retrieveGoalData: function(userId, goalId) { // 사원목표정보
+
+	var url4 = "/odata/v2/Goal_" + goalId +"?$select=name,done&$filter=userId eq '" + userId + "'";
 
 	return $.getJSON({ // 목표조회
 		url: url4,
@@ -188,8 +187,8 @@ retrieveGoalData: function(userId, oPage) { // 사원목표정보
 			else 
 				oGroundColor= oBackGround[0];
 
-			oPage.goalDataMap[userId].score = vScore,
-			oPage.goalDataMap[userId].groundColor = oGroundColor;
+			this.goalDataMap[userId].score = vScore;
+			this.goalDataMap[userId].groundColor = oGroundColor;
 		},
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
@@ -211,13 +210,6 @@ changeLocale: function() {
 
 	this.spinner(true);
 	this.fill();
-},
-itemUrl: function(o) {
-
-	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
-		' data-menu-id="${menu-id}"'.interpolate(this.mid())
-	].join('');
 },
 clearResource: function() {
 
