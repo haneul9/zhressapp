@@ -25,7 +25,6 @@ sap.ui.define([
 		_onDialog:"",
 		_onClose:"",
 		_MedDate:null,
-		_Req:"",
 		_vArr1:["Zdbcrl","Zdsctm","Ziftrl","Zfvcrl","Mycharge","SuppAmt","Zmedrl","NsuppAmt","BaseAmt","Zkiobd","Zkibbm","Zkijbd","Zkijbm",
 		"Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
 		_vArr2:["Ptamt","Medsp","Oiamt","Znobcm","Medpp","Insnp","Znobcd","Medmp","Inspp","Zdbcrl","Ziftrl","Framt"],
@@ -92,9 +91,6 @@ sap.ui.define([
 									);
 								});
 								$.app.byId(oController.PAGEID + "_HeadSel").setSelectedKey();
-							}
-							if(data&&data.MedicalApplyExport.results.length){
-								oController._Req=data.MedicalApplyExport.results[0].Close;
 							}
 						}					
 					},
@@ -846,10 +842,6 @@ sap.ui.define([
 				}
 				oController.oDialog2.open();
 			}else if(Flag=="N3"){
-				if(oController._Req=="X"){
-					sap.m.MessageBox.alert(oController.getBundleText("MSG_47040"));
-					return;
-				}
 				if (!oController.oDialog3) {
 					oController.oDialog3 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.prepopup", oController);
 					$.app.getView().addDependent(oController.oDialog3);
