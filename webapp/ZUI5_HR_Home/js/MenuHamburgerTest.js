@@ -181,6 +181,15 @@ goToLink: function(menuId, url) {
 			}
 		}
 	}
+	if (/\?/.test(url)) {
+		var splitted = url.split('?');
+		url = splitted.shift();
+
+		splitted.push('');
+		$.map(this._gateway.parameterMap(splitted.join('?')), function(value, name) {
+			$('<input type="hidden" name="${name}" value="${value}" />'.interpolate(name, value)).appendTo(form);
+		});
+	}
 
 	form.find('input[name="mid"]').val(menuId).end()
 		.attr('action', url).submit();

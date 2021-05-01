@@ -2,9 +2,10 @@
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-    "../common/AttachFileAction"
+    "../common/AttachFileAction",
+	"sap/base/util/UriParameters"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, UriParameters) {
 	"use strict";
 
 	
@@ -49,14 +50,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Seqnr")))
+			if (!Common.checkNull(this.getParameterByName("Sdate")) && !Common.checkNull(this.getParameterByName("Seqnr"))) {
 				this.onSelectDetail(false);
+			}
         },
 
 		getParameterByName: function(name) {
-			var regex = parent._gateway.parameter(name);
-			
-			return Common.checkNull(regex)? "" : regex;
+			return parent._gateway.isMobile() ? UriParameters.fromQuery(document.location.search).get(name) : parent._gateway.parameter(name);
 		},
 
 		getTitle: function() {
