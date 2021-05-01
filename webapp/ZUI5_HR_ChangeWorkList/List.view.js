@@ -46,7 +46,13 @@ sap.ui.define(
                                             value: "{Ename}",
                                             showValueHelp: true,
                                             valueHelpOnly: true,
-                                            valueHelpRequest: oController.searchOrgehPernr
+                                            valueHelpRequest: oController.searchOrgehPernr,
+                                            editable : {
+                                                path : "Persa",
+                                                formatter : function(fVal){
+                                                    return (fVal && fVal.substring(0,1) == "D") ? false : true;
+                                                }
+                                            }
                                         })
                                     ]
                                 }).addStyleClass("search-field-group"),

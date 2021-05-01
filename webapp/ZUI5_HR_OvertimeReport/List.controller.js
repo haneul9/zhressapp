@@ -49,12 +49,19 @@ sap.ui.define([
 					Data : {
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Orgeh : oLoginData.Orgeh,
-						Ename : oLoginData.Stext,
 						Bukrs : oLoginData.Bukrs2,
-						Langu : oLoginData.Langu
+						Langu : oLoginData.Langu,
+						Persa : oLoginData.Persa
 					}
 				};
+				
+				if(oLoginData.Persa.substring(0,1) == "D"){
+					vData.Data.Pernr = oLoginData.Pernr;
+					vData.Data.Ename = oLoginData.Ename;
+				} else {
+					vData.Data.Orgeh = oLoginData.Orgeh;
+					vData.Data.Ename = oLoginData.Stext;
+				}
 				
 				oController._ListCondJSonModel.setData(vData);
 			}
