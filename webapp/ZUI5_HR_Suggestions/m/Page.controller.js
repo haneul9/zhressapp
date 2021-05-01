@@ -11,7 +11,8 @@
 	return CommonController.extend($.app.APP_ID, {
 		
 		PAGEID: "Page",
-		
+		alreadyDetailShown: false,
+
 		TableModel: new JSONModelHelper(),
 
 		getUserId: function() {
@@ -24,20 +25,16 @@
 			return this.getSessionInfoByKey("Bukrs2");
         },
 		
-		onInit: function () {
+		onInit: function() {
 
 			this.setupView()
 				.getView()
 				.addEventDelegate({
-					onBeforeShow : this.onBeforeShow
-				}, this);
-				
-			this.getView()
-				.addEventDelegate({
+					onBeforeShow : this.onBeforeShow,
 					onAfterShow: this.onAfterShow
 				}, this);
 		},
-		
+
 		onBeforeShow: function() {
 			Common.log("onBeforeShow");
 		},
@@ -51,7 +48,7 @@
 			var Sdate = this.getParameterByName("Sdate"),
 				Skey = this.getParameterByName("Skey");
 
-			if (Sdate && Skey) {
+			if (!this.alreadyDetailShown && Sdate && Skey) {
 				var oList = {
 					Sdate: Sdate,
 					Seqnr: Skey
@@ -63,6 +60,8 @@
 						RowData: oList
 					}
 				});
+
+				this.alreadyDetailShown = true;
 			}
         },
 

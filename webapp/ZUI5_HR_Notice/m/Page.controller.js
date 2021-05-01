@@ -12,7 +12,8 @@
 	return CommonController.extend($.app.APP_ID, {
 		
 		PAGEID: "Page",
-		
+		alreadyDetailShown: false,
+
 		TableModel: new JSONModelHelper(),
 		RegistModel: new JSONModelHelper(),
 
@@ -53,7 +54,7 @@
 			var Sdate = this.getParameterByName("Sdate"),
 				Seqnr = this.getParameterByName("Seqnr");
 
-			if (Sdate && Seqnr) {
+			if (!this.alreadyDetailShown && Sdate && Seqnr) {
 				var oList = {
 					Sdate: Sdate,
 					Seqnr: Seqnr
@@ -65,6 +66,8 @@
 						RowData: oList
 					}
 				});
+
+				this.alreadyDetailShown = true;
 			}
         },
 
