@@ -115,7 +115,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 						'</div>',
 					'</div>'
 				].join(''));
-			});
+			}.bind(this));
 
 			setTimeout(function() {
 				this.spinner(false);
