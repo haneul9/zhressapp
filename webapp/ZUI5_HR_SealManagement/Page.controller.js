@@ -331,6 +331,7 @@ sap.ui.define([
 				IBukrs: vBukrs2,
 				IReqes: "X",
 				IConType: "3",
+				IMobile: Common.isExternalIP === true ? "X" : "",
 				IDatum: new Date(),
 				RegalsealRExport: [],
 				RegalsealRTableIn1: [oCopiedData]
@@ -391,6 +392,7 @@ sap.ui.define([
 				IEmpid: vPernr,
 				IBukrs: vBukrs2,
 				IConType: Common.checkNull(oCopiedData.Status1) ? "3" : "2",
+				IMobile: Common.isExternalIP === true ? "X" : "",
 				IDatum: new Date(),
 				RegalsealRTableIn1: [oCopiedData]
 			};
