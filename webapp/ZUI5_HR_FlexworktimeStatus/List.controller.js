@@ -78,6 +78,9 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
@@ -457,6 +460,9 @@ sap.ui.define([
 		},
 		
 		onChangeTime : function(oEvent, m){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
@@ -468,9 +474,6 @@ sap.ui.define([
 					return;
 				}
 			}
-			
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
-			var oController = oView.getController();
 			
 			// 법정휴게 재계산
 			oController.onSetLnctm(oEvent);
@@ -708,6 +711,9 @@ sap.ui.define([
 		
 		// 추가휴게시간 - 시간계산
 		onChangeTime2 : function(oEvent, oTable){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
