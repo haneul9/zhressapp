@@ -192,7 +192,7 @@ sap.ui.define(
                     Promise.all([
                         Common.getPromise(true, function (resolve) {
                             new JSONModelHelper()
-                                .url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
+                                .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(vPernr) + "' and photoType eq '1'")
                                 .select("photo")
                                 .setAsync(true)
                                 .attachRequestCompleted(function () {
@@ -3135,7 +3135,7 @@ sap.ui.define(
 				
 				oDataModel.create("/upsert",{
 					    __metadata: {
-			               uri: "Photo(photoType=1,userId='"+ oController.getView().getModel("session").getData().Pernr  + "')",
+			               uri: "Photo(photoType=1,userId='"+ parseInt(oController.getView().getModel("session").getData().Pernr)  + "')",
 			               type: "SFOData.Photo"
 						},
 		                photoType  : 1,

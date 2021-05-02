@@ -234,7 +234,7 @@ common.SearchUserMobile = {
 			promises.push(
 				new Promise(function(){
 					 new JSONModelHelper()
-                            .url("/odata/v2/Photo?$filter=userId eq '" + o.Pernr + "' and photoType eq '1'")
+                            .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(o.Pernr) + "' and photoType eq '1'")
                             .select("photo")
                             .setAsync(true)
                             .attachRequestCompleted(function () {

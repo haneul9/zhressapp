@@ -533,11 +533,11 @@ sap.ui.define(
             },
             getPhoto : function() {
             	var oController = $.app.getController();
-            	var vPernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
+            	var vPernr = parseInt(oController._ListCondJSonModel.getProperty("/Data/Pernr"));
             	var oPhoto = ""; 
             	
         		$.ajax({
-					url:"/odata/v2/Photo?$filter=userId%20eq%20%27"+vPernr+"%27%20and%20photoType%20eq%20%2701%27&customPageSize="+1000,
+					url:"/odata/fix/Photo?$filter=userId%20eq%20%27"+vPernr+"%27%20and%20photoType%20eq%20%2701%27&customPageSize="+1000,
 					method:"get",
 					dataType: "json",
 					async:true
@@ -545,12 +545,15 @@ sap.ui.define(
 					if(data&&data.d.results.length){
 						if (data && data.d.results.length) {
                             oPhoto = "data:text/plain;base64," + data.d.results[0].photo;
-                        } else {
+                        }else{
                             oPhoto = "images/male.jpg";
                         }
-                    	oController._ListCondJSonModel.setData({ Data: { photo: oPhoto } }, true);
-                    	// oController.makeHtml();
-					}
+                    }else{
+                        oPhoto = "images/male.jpg";
+                    }
+
+                    oController._ListCondJSonModel.setData({ Data: { photo: oPhoto } }, true);
+
 				}).fail(function(res) {
 					common.Common.log(res);
 				});
