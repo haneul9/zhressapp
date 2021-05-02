@@ -129,7 +129,7 @@ sap.ui.define(
                         Langu: this.getSessionInfoByKey("Langu"),
                         Molga: this.getSessionInfoByKey("Molga"),
                         Datum: new Date(),
-                        Mssty: ""
+                        Mssty: gAuth
                     },
                     callback = function (o) {
                         //전체 조회 OData 호출
