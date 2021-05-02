@@ -59,13 +59,9 @@ ui: function() {
 					'<div class="employee-d-day">',
 						'<div class="title">My D-Day</div>',
 						'<h6 data-company>${company}</h6>'.interpolate((loginInfo.Langu === '3' || loginInfo.Langu === 'KO') ? '롯데케미칼' : 'LOTTE Chemical'),
-						'<div>',
-							'<span class="d-day color-lcc-signature-blue" id="cdays"></span>',
-						'</div>',
+						'<div id="cdays" class="color-lcc-signature-blue"></div>',
 						'<h6 data-stext>${stext}</h6>'.interpolate(loginInfo.Stext),
-						'<div>',
-							'<span class="d-day color-lcc-signature-green" id="odays"></span>',
-						'</div>',
+						'<div id="odays" class="color-lcc-signature-green"></div>',
 					'</div>',
 				'</div>',
 				'<div class="employee-photo${nobody}">'.interpolate(photoNotAvailable ? ' nobody': ''),
@@ -133,15 +129,15 @@ fill: function() {
 
 			this.$()
 				.find('#cdays').html([
-					CdaysYy === 0 ? '' : CdaysYy + '<span class="color-lcc-signature-blue">년</span>',
-					CdaysMm === 0 ? '' : CdaysMm + '<span class="color-lcc-signature-blue">개월</span>',
-					CdaysDd === 0 ? '' : CdaysDd + '<span class="color-lcc-signature-blue">일</span>'
-				].join(' ')).end()
+					CdaysYy === 0 ? '' : '<span class="d-day">${CdaysYy}</span><span>년</span>'.interpolate(CdaysYy),
+					CdaysMm === 0 ? '' : '<span class="d-day">${CdaysMm}</span><span>개월</span>'.interpolate(CdaysMm),
+					CdaysDd === 0 ? '' : '<span class="d-day">${CdaysDd}</span><span>일</span>'.interpolate(CdaysDd)
+				].join('')).end()
 				.find('#odays').html([
-					OddaysYy === 0 ? '' : OddaysYy + '<span class="color-lcc-signature-green">년</span>',
-					OddaysMm === 0 ? '' : OddaysMm + '<span class="color-lcc-signature-green">개월</span>',
-					OddaysDd === 0 ? '' : OddaysDd + '<span class="color-lcc-signature-green">일</span>'
-				].join(' '));
+					OddaysYy === 0 ? '' : '<span class="d-day">${OddaysYy}</span><span>년</span>'.interpolate(OddaysYy),
+					OddaysMm === 0 ? '' : '<span class="d-day">${OddaysMm}</span><span>개월</span>'.interpolate(OddaysMm),
+					OddaysDd === 0 ? '' : '<span class="d-day">${OddaysDd}</span><span>일</span>'.interpolate(OddaysDd)
+				].join(''));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
