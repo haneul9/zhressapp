@@ -192,7 +192,7 @@ sap.ui.define(
                     Promise.all([
                         Common.getPromise(true, function (resolve) {
                             new JSONModelHelper()
-                                .url("/odata/v2/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
+                                .url("/odata/fix/Photo?$filter=userId eq '" + vPernr + "' and photoType eq '1'")
                                 .select("photo")
                                 .setAsync(true)
                                 .attachRequestCompleted(function () {
