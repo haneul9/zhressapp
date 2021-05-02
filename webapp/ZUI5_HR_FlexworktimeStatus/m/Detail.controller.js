@@ -1,11 +1,10 @@
 jQuery.sap.require("sap.m.MessageBox");
 
 sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper",
-	"../../common/PageHelper"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper) {
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper"], 
+	function (Common, CommonController, JSONModelHelper) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_FlexworktimeStatus.m.Detail", {
@@ -32,11 +31,10 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			if(oEvent.data.Data){
 				var oData = Object.assign({}, oEvent.data.Data);
-					oData.Atext = oData.Offyn == "X" ? "OFF" : (oData.Atext == "" ? oBundleText.getText("LABEL_69041") : oData.Atext); // 정상근무
+					oData.Atext = oData.Offyn == "X" ? "OFF" : (oData.Atext == "" ? oController.getBundleText("LABEL_69041") : oData.Atext); // 정상근무
 				oController._DetailJSonModel.setProperty("/Data", oData);
 			}
 			
@@ -57,7 +55,7 @@ sap.ui.define([
 				for(var i=0; i<data1.length; i++){
 					if(data1[i].Austy == "A"){
 						vData2.Data.push({
-							Text : oBundleText.getText("LABEL_69015"),  // 추가휴게시간
+							Text : oController.getBundleText("LABEL_69015"),  // 추가휴게시간
 							Value : (data1[i].Adbtm && data1[i].Adbtm != "" ? data1[i].Adbtm.substring(0,2) + ":" + data1[i].Adbtm.substring(2,4) : "")
 						});
 					} else {
@@ -83,7 +81,7 @@ sap.ui.define([
 				}
 				
 				if(vData2.Data.length == 0){
-					vData2.Data.push({Text : oBundleText.getText("LABEL_69015"), Value : ""}); // 추가휴게시간
+					vData2.Data.push({Text : oController.getBundleText("LABEL_69015"), Value : ""}); // 추가휴게시간
 				}
 				
 				var oWrktm = oController._DetailJSonModel.getProperty("/Data/Wrktm"); // 평일근로시간
@@ -93,9 +91,9 @@ sap.ui.define([
 				var oHoltm = oController._DetailJSonModel.getProperty("/Data/Holtm"); // 휴일근로시간
 					oHoltm = oHoltm && oHoltm != "" ? oHoltm.substring(0,2) + ":" + oHoltm.substring(2,4) : "";
 				
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69028"), Value : oWrktm}); // 평일근로시간
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69029"), Value : oExttm}); // 연장근로시간
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69030"), Value : oHoltm}); // 휴일근로시간
+				vData2.Data.push({Text : oController.getBundleText("LABEL_69028"), Value : oWrktm}); // 평일근로시간
+				vData2.Data.push({Text : oController.getBundleText("LABEL_69029"), Value : oExttm}); // 연장근로시간
+				vData2.Data.push({Text : oController.getBundleText("LABEL_69030"), Value : oHoltm}); // 휴일근로시간
 			}
 			
 			oJSONModel1.setData(vData1);
@@ -123,7 +121,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -132,12 +130,12 @@ sap.ui.define([
 		// 시작/종료시간 변경 시 법정휴게시간 세팅
 		onSetLnctm : function(oEvent, m){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			} else if(oEvent && m){
 				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
 					oEvent.getSource().setValue("");
 					return;
 				}
@@ -211,12 +209,12 @@ sap.ui.define([
 		// 추가휴게 시작/종료시간 변경 시 시간 계산
 		onChangeTime : function(oEvent, m){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			} else if(oEvent && m){
 				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
 					oEvent.getSource().setValue("");
 					return;
 				}
@@ -324,10 +322,10 @@ sap.ui.define([
 			
 			// validation check
 			if(oData.Monyn == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_69007")); // 변경사항이 없습니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_69007")); // 변경사항이 없습니다.
 				return;
 			} else if(oData.Beguz > oData.Enduz){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
 				return;
 			}
 			
@@ -337,7 +335,7 @@ sap.ui.define([
 				if(oData2[i].Austy == "A" || (oData2[i].Beguz == "" && oData2[i].Enduz == "")) continue;
 				
 				if(oData2[i].Beguz > oData2[i].Enduz){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
 					return;
 				}
 				
@@ -411,11 +409,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(oData.Offyn == "1"){
-				confirmMessage = oBundleText.getText("MSG_00060"); // 신청하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00061"); // 신청되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00060"); // 신청하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00061"); // 신청되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_00058"); // 저장하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00017"); // 저장되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
 			}
 			
 			sap.m.MessageBox.confirm(confirmMessage, {

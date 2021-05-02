@@ -22,7 +22,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 						height : "40px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Toolbar({
-												 	content : [new sap.m.Text({text : oBundleText.getText("LABEL_69038")}).addStyleClass("sub-title")] // 근무일정
+												 	content : [new sap.m.Text({text : "{i18n>LABEL_69038}"}).addStyleClass("sub-title")] // 근무일정
 												}).addStyleClass("toolbarNoBottomLine")],
 									 hAlign : "Begin",
 									 vAlign : "Middle",
@@ -32,22 +32,22 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69006")})], // 시작시간
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69006}"})], // 시작시간
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69007")})], // 종료시간
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69007}"})], // 종료시간
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69008")})], // 점심시간
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69008}"})], // 점심시간
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69049")})], // 변경사유
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69049}"})], // 변경사유
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label2")]
@@ -158,11 +158,11 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 			showNoData: true,
 			rowHeight: 37,
 			columnHeaderHeight: 38,
-			noData: oBundleText.getText("LABEL_00901"), // No data found
+			noData: "{i18n>LABEL_00901}", // No data found
 			extension : [new sap.m.Toolbar({
 							 height : "40px",
 							 content : [new sap.m.Text({
-										 	text : oBundleText.getText("LABEL_69015") // 추가휴게시간
+										 	text : "{i18n>LABEL_69015}" // 추가휴게시간
 										}).addStyleClass("sub-title")]
 						 }).addStyleClass("toolbarNoBottomLine")]
 		}).addStyleClass("mt-8px sapUiSizeCompact");
@@ -171,11 +171,11 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 		oTable.bindRows("/Data");
 		
 						// 시작시간, 종료시간, 시간, 비고, 삭제
-		var col_info = [{id: "Beguz", label: oBundleText.getText("LABEL_69006"), plabel: "", resize: true, span: 0, type: "timepicker2", sort: true, filter: true},
-						{id: "Enduz", label: oBundleText.getText("LABEL_69007"), plabel: "", resize: true, span: 0, type: "timepicker2", sort: true, filter: true},
-						{id: "Adbtm", label: oBundleText.getText("LABEL_69016"), plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
-						{id: "Notes", label: oBundleText.getText("LABEL_69017"), plabel: "", resize: true, span: 0, type: "note", sort: true, filter: true, width : "400px"},
-						{id: "",	  label: oBundleText.getText("LABEL_00103"), plabel: "", resize: true, span: 0, type: "delete", sort: true, filter: true, width : "60px"}];
+		var col_info = [{id: "Beguz", label: "{i18n>LABEL_69006}", plabel: "", resize: true, span: 0, type: "timepicker2", sort: true, filter: true},
+						{id: "Enduz", label: "{i18n>LABEL_69007}", plabel: "", resize: true, span: 0, type: "timepicker2", sort: true, filter: true},
+						{id: "Adbtm", label: "{i18n>LABEL_69016}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+						{id: "Notes", label: "{i18n>LABEL_69017}", plabel: "", resize: true, span: 0, type: "note", sort: true, filter: true, width : "400px"},
+						{id: "",	  label: "{i18n>LABEL_00103}", plabel: "", resize: true, span: 0, type: "delete", sort: true, filter: true, width : "60px"}];
 						
 		oController.makeTable(oController, oTable, col_info);
 		
@@ -186,7 +186,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "38px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : oBundleText.getText("LABEL_69018")})], // 합계
+									 content : [new sap.m.Text({text : "{i18n>LABEL_69018}"})], // 합계
 									 hAlign : "Center",
 									 vAlign : "Middle",
 									 colSpan : 2
@@ -222,13 +222,13 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 				path : "Offyn",
 				formatter : function(fVal){
 										// 과거근무 변경신청				   // 근무 변경
-					return fVal == "1" ? oBundleText.getText("LABEL_69047") : oBundleText.getText("LABEL_69048"); 
+					return fVal == "1" ? oController.getBundleText("LABEL_69047") : oController.getBundleText("LABEL_69048"); 
 				}
 			},
 			initialFocus : oMatrix1,
 			content : [oMatrix1, oTable],
 			buttons : [new sap.m.Button({
-						   text : oBundleText.getText("LABEL_00152"), // 신청
+						   text : "{i18n>LABEL_00152}", // 신청
 						   visible : {
 							   	path : "Offyn",
 							   	formatter : function(fVal){
@@ -238,7 +238,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 						   press : oController.onSaveWorkSchedule
 					   }).addStyleClass("button-dark"),
 					   new sap.m.Button({
-						   text : oBundleText.getText("LABEL_00133"), // 닫기
+						   text : "{i18n>LABEL_00133}", // 닫기
 						   press : function(){oDialog.close();},
 						   visible : {
 							   	path : "Offyn",
@@ -248,7 +248,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 						   }
 					   }).addStyleClass("button-default custom-button-divide"),
 					   new sap.m.Button({
-							 text : oBundleText.getText("LABEL_00133"), // 닫기
+							 text : "{i18n>LABEL_00133}", // 닫기
 							 press : function(){oDialog.close();},
 							   visible : {
 								   	path : "Offyn",

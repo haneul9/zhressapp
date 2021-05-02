@@ -1,10 +1,10 @@
 jQuery.sap.require("sap.m.MessageBox");
 
 sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper",
-	"../../common/PageHelper"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper) {
 	"use strict";
 
@@ -77,7 +77,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -128,15 +128,15 @@ sap.ui.define([
 					success: function(data, res){
 						if(data){
 							// 근무시간 현황
-							var oField = [{text : oBundleText.getText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
-										  {text : oBundleText.getText("LABEL_69027"), field : "Ctrex"},	// 연장근로시간 한도
-										  {text : oBundleText.getText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
-										  {text : oBundleText.getText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
-										  {text : oBundleText.getText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
-										  {text : oBundleText.getText("LABEL_63010"), field : "Notes"},	// 상태
-										  /*{text : oBundleText.getText("LABEL_69031"), field : "Tottm"}*/ // 근로시간 합계
-										  {text : oBundleText.getText("LABEL_69055").replace("\n", ""), field : "Tottm2"}, // 근로시간합계(월말예상)
-										  {text : oBundleText.getText("LABEL_69056").replace("\n", ""), field : "Notes2"}]; // 상태(월말예상)
+							var oField = [{text : oController.getBundleText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
+										  {text : oController.getBundleText("LABEL_69027"), field : "Ctrex"},	// 연장근로시간 한도
+										  {text : oController.getBundleText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
+										  {text : oController.getBundleText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
+										  {text : oController.getBundleText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
+										  {text : oController.getBundleText("LABEL_63010"), field : "Notes"},	// 상태
+										  /*{text : oController.getBundleText("LABEL_69031"), field : "Tottm"}*/ // 근로시간 합계
+										  {text : oController.getBundleText("LABEL_69055").replace("\n", ""), field : "Tottm2"}, // 근로시간합계(월말예상)
+										  {text : oController.getBundleText("LABEL_69056").replace("\n", ""), field : "Notes2"}]; // 상태(월말예상)
 										  
 							for(var i=0; i<oField.length; i++){ 
 								var detail = {Text : oField[i].text, Value : eval("data." + oField[i].field)};
@@ -177,7 +177,7 @@ sap.ui.define([
 							
 							oController._ListCondJSonModel.setProperty("/Data/Tottmtx", 
 								data.Tottm == "" ? "-" :
-									data.Tottm.split(":")[0] + oBundleText.getText("LABEL_69052") + " " + data.Tottm.split(":")[1] + oBundleText.getText("LABEL_69053")
+									data.Tottm.split(":")[0] + oController.getBundleText("LABEL_69052") + " " + data.Tottm.split(":")[1] + oController.getBundleText("LABEL_69053")
 																//	시간															 // 분
 							);
 							

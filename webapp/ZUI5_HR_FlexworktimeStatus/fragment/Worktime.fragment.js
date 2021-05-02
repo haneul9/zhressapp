@@ -12,7 +12,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69006")})], // 시작시간
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69006}"})], // 시작시간
 									 hAlign : "End",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label"),
@@ -35,7 +35,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69007")})], // 종료시간
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69007}"})], // 종료시간
 									 hAlign : "End",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label"),
@@ -58,7 +58,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_69008")})], // 점심시간
+									 content : [new sap.m.Label({text : "{i18n>LABEL_69008}"})], // 점심시간
 									 hAlign : "End",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label"),
@@ -81,14 +81,14 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "500px",
 			contentHeight : "",
-			title : oBundleText.getText("LABEL_69019"), // 근무일정 일괄적용
+			title : "{i18n>LABEL_69019}", // 근무일정 일괄적용
 			content : [oMatrix],
 			buttons : [new sap.m.Button({
-						   text : oBundleText.getText("LABEL_00101"), // 저장
+						   text : "{i18n>LABEL_00101}", // 저장
 						   press : oController.onSaveWorktime
 					   }).addStyleClass("button-dark"),
 					   new sap.m.Button({
-						   text : oBundleText.getText("LABEL_00133"), // 닫기
+						   text : "{i18n>LABEL_00133}", // 닫기
 						   press : function(){oDialog.close();}
 					   }).addStyleClass("button-default custom-button-divide")]
 		}).addStyleClass("custom-dialog-popup");
