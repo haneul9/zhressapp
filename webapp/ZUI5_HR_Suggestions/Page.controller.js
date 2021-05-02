@@ -242,13 +242,6 @@
 			});
 		},
 
-		onChangeData: function(oEvent) { // 비공개 CheckBox
-			var IsSelected = oEvent.getSource().getSelected();
-
-			if(IsSelected)	this.RegistModel.setProperty("/FormData/Hide", "X");
-			else this.RegistModel.setProperty("/FormData/Hide", "");
-		},
-
 		setComments: function() { // Comment Setting
 			var oController = $.app.getController();
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");

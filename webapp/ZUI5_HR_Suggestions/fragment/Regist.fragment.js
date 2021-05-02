@@ -45,7 +45,7 @@
                                     }
                                 }
                             }),
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "130px", "Right").addStyleClass("mr-8px"), // 최종변경일/시
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "130px", "Right").addStyleClass("mr-8px"), // 최종변경일시
                             new sap.m.Text({
                                 text : {
                                     parts: [{path: "Aedtm"}, {path: "Aetim"}],
@@ -72,22 +72,6 @@
 							}
 						},
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "130px", "Right"), // 비공개
-                            new sap.m.CheckBox({ 
-								select: oController.onChangeData.bind(oController),
-                                selected: {
-                                    path: "Hide",
-                                    formatter: function(v) {
-                                        return v === "X";
-                                    }
-                                },
-								editable: {
-									parts: [{path: "Sdate"}, {path: "/Gubun"}],
-									formatter: function(v1, v2) {
-										return !v1 || v2 === "X";
-									}
-								}
-                            }),
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "130px", "Right", true).addStyleClass("ml-7px mr-8px"), // 비밀번호
 							new sap.m.Input({
                                 width: "150px",

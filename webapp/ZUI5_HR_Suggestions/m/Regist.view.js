@@ -182,7 +182,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left").addStyleClass("sub-con-title"), // 최종변경일/시
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left").addStyleClass("sub-con-title"), // 최종변경일시
                                     new sap.m.Text({
                                         width: "100%",
                                         textAlign: "Begin",
@@ -211,29 +211,6 @@ sap.ui.define([
 							}
 						},
 						items: [
-                            new sap.m.HBox({
-                                height: "40px",
-                                alignItems: sap.m.FlexAlignItems.Center,
-                                items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "105px", "Left").addStyleClass("sub-con-title mr-5px"), // 비공개
-                                    new sap.m.CheckBox({ 
-                                        select: oController.onChangeData.bind(oController),
-                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                        selected: {
-                                            path: "Hide",
-                                            formatter: function(v) {
-                                                return v === "X";
-                                            }
-                                        },
-                                        editable: {
-                                            parts: [{path: "Sdate"}, {path: "/Gubun"}],
-                                            formatter: function(v1, v2) {
-                                                return !v1 || v2 === "X";
-                                            }
-                                        }
-                                    })
-                                ]
-                            }),
                             new sap.m.HBox({
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
