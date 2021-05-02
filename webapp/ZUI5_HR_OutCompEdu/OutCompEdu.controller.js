@@ -316,11 +316,11 @@ sap.ui.define([
 				oView.addDependent(oController._ReportModel);
 			}
 
-			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000") 
-				oController.ApplyModel.setProperty("/Checked", "");
-			else {
+			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000"){
 				oController.ApplyModel.setProperty("/Checked", "X");
 				oController.onDInput(true);
+			}else {
+				oController.ApplyModel.setProperty("/Checked", "");
 			}
 
 			if(oCopyRow.Edoty === "1"){
