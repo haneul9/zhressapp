@@ -132,6 +132,12 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 								return;
 							}
 
+							if ($('.evalgoal-area').length === 1) {
+								setTimeout(function() {
+									resolve();
+								}, 0);
+							}
+
 							area.toggleClass('d-none', false)
 								.find('img').attr('src', this.photoMap[e.userId]);
 
