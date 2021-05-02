@@ -23,7 +23,17 @@ sap.ui.define(
 
                 this.oController = oController;
                 this.oModel.setProperty("/IsViewMode", initData.IsViewMode);
-                this.oModel.setProperty("/Info", initData.Info || {});
+                if(initData.Info) {
+                    this.oModel.setProperty("/Info", $.extend(true, initData.Info, {
+                        Lcsco: initData.Info.Lcsco === "-" ? "0" : initData.Info.Lcsco,
+                        Rcsco: initData.Info.Rcsco === "-" ? "0" : initData.Info.Rcsco,
+                        Wcsco: initData.Info.Wcsco === "-" ? "0" : initData.Info.Wcsco,
+                        Ttsco: initData.Info.Ttsco === "-" ? "0" : initData.Info.Ttsco,
+                        Tcsco: initData.Info.Tcsco === "-" ? "0" : initData.Info.Tcsco
+                    }));
+                } else {
+                    this.oModel.setProperty("/Info", {});
+                }
 
 				return this;
 			},
@@ -289,12 +299,15 @@ sap.ui.define(
                 }.bind(this));
             },
 
-            calcTotScore: function() {
+            calcTotScore: function(oEvent) {
+                Common.setOnlyDigit(oEvent);
+
                 this.oModel.setProperty(
                     "/Info/Ttsco", 
                     parseInt(this.oModel.getProperty("/Info/Lcsco") || 0)
                     + parseInt(this.oModel.getProperty("/Info/Rcsco") || 0)
                     + parseInt(this.oModel.getProperty("/Info/Wcsco") || 0)
+                    + parseInt(this.oModel.getProperty("/Info/Tcsco") || 0)
                 );
 
                 this.onChangeInput.call(this);
