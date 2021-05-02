@@ -54,7 +54,6 @@ fill: function() {
 		});
 	}.bind(this));
 },
-
 retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01".interpolate(this._gateway.pernr());
@@ -140,6 +139,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 									resolve();
 								}, 0);
 							}
+
 							if (score > 0) {
 								area.find('.progress-bar.i' + i)
 									.addClass(goalData.groundColor)
@@ -165,6 +165,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 					}
 
 					this.spinner(false);
+					resolve();
 				}.bind(this));
 			}.bind(this), 0);
 		}.bind(this),
@@ -173,7 +174,6 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 		}.bind(this)
 	});
 },
-
 retrievePhoto: function(userId) { // 사원사진
 
 	var url3 = "/odata/v2/Photo?$filter=userId eq '${pernr}' and photoType eq '1' &$select=photo,mimeType".interpolate(userId);
@@ -193,7 +193,6 @@ retrievePhoto: function(userId) { // 사원사진
 		}.bind(this)
 	}).promise();
 },
-
 retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 
 	var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
@@ -251,6 +250,13 @@ onceAfter: function() {
 			verticalGutter: 0,
 			horizontalGutter: 0
 		});
+	}
+},
+onSlide: function() {
+
+	var list = this.$();
+	if (list.data('jsp')) {
+		list.data('jsp').reinitialise();
 	}
 },
 changeLocale: function() {

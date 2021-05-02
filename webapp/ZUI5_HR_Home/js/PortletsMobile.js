@@ -94,7 +94,7 @@ carousel: function() {
 		'<div id="portlet-carousel" class="portlet-carousel carousel slide" data-ride="carousel">',
 			'<ul class="nav nav-tabs">',
 				// '<li class="nav-item">',
-				// 	'<a class="nav-link active" href="#" data-slide-to="0">Active</a>',
+				// 	'<a class="nav-link active" href="#" data-slide="0">Active</a>',
 				// '</li>',
 			'</ul>',
 			'<div class="carousel-inner">',
@@ -187,17 +187,18 @@ generate: function() {
 				$carousel = $(this.carousel());
 				$carousel
 					.on('slide.bs.carousel', function(e) {
-						$('#portlet-carousel .nav-link[data-slide-to="${index}"]'.interpolate(e.to)).toggleClass('active', true)
-							.parent().siblings().find('.nav-link').toggleClass('active', false);
-					})
-					.carousel({
-						interval: 5000
+						var t = $('#portlet-carousel .nav-link[data-slide="${index}"]'.interpolate(e.to)).toggleClass('active', true);
+						t.parent().siblings().find('.nav-link').toggleClass('active', false);
+						var item = this.itemMap[t.data('itemKey')];
+						if (typeof item.onSlide === 'function') {
+							item.onSlide();
+						}
 					});
 
 				$(document).on('click', '#portlet-carousel .nav-link', function() {
 					var t = $(this).toggleClass('active', true);
 					t.parent().siblings().find('.nav-link').toggleClass('active', false);
-					$('#portlet-carousel').carousel(t.data('slideTo'));
+					$('#portlet-carousel').carousel(t.data('slide'));
 				});
 
 				$('.portlet-col').append($carousel);
@@ -210,13 +211,14 @@ generate: function() {
 			$.map(this.items, function(item) {
 				if (item.use()) {
 					if (item.carousel()) {
-						item.appendTo('.carousel-inner', true); // Portlet UI rendering
 						$carousel.find('.nav').append([
 							'<li class="nav-item">',
-								'<a class="nav-link" href="#" data-slide-to="${index}">${title}</a>'.interpolate(carouselIndex, item.title()),
+								'<a class="nav-link" href="#" data-slide="${index}" data-item-key="${key}">${title}</a>'.interpolate(carouselIndex, item.key(), item.title()),
 							'</li>'
 						].join(''));
 						$carousel.find('.carousel-indicators').append('<li data-target="#portlet-carousel" data-slide-to="${index}"></li>'.interpolate(carouselIndex++));
+
+						item.appendTo('.carousel-inner', true); // Portlet UI rendering
 					} else {
 						if (item.key() === 'P101') {
 							item.prependTo('.portlet-col', true); // Portlet UI rendering
@@ -228,7 +230,15 @@ generate: function() {
 			});
 
 			if (isCarousel) {
-				$('#portlet-carousel .nav-item:first-child .nav-link,#portlet-carousel .carousel-item:first-child,#portlet-carousel .carousel-indicators li:first-child').addClass('active');
+				setTimeout(function() {
+					$('#portlet-carousel .nav-item:first-child .nav-link,#portlet-carousel .carousel-item:first-child,#portlet-carousel .carousel-indicators li:first-child').addClass('active');
+				}, 0);
+
+				setTimeout(function() {
+					$carousel.carousel({
+						interval: 5000
+					});
+				}, 0);
 			}
 		}.bind(this),
 		error: function(jqXHR) {

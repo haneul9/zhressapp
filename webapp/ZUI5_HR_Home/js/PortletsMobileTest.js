@@ -187,14 +187,18 @@ generate: function() {
 				$carousel = $(this.carousel());
 				$carousel
 					.on('slide.bs.carousel', function(e) {
-						$('#portlet-carousel .nav-link[data-slide="${index}"]'.interpolate(e.to)).toggleClass('active', true)
-							.parent().siblings().find('.nav-link').toggleClass('active', false);
+						var t = $('#portlet-carousel .nav-link[data-slide="${index}"]'.interpolate(e.to)).toggleClass('active', true);
+						t.parent().siblings().find('.nav-link').toggleClass('active', false);
+						var item = this.itemMap[t.data('itemKey')];
+						if (typeof item.onSlide === 'function') {
+							item.onSlide();
+						}
 					});
 
 				$(document).on('click', '#portlet-carousel .nav-link', function() {
 					var t = $(this).toggleClass('active', true);
 					t.parent().siblings().find('.nav-link').toggleClass('active', false);
-					$('#portlet-carousel').carousel(t.data('slideTo'));
+					$('#portlet-carousel').carousel(t.data('slide'));
 				});
 
 				$('.portlet-col').append($carousel);
@@ -209,7 +213,7 @@ generate: function() {
 					if (item.carousel()) {
 						$carousel.find('.nav').append([
 							'<li class="nav-item">',
-							'<a class="nav-link" href="#" data-slide="${index}">${title}</a>'.interpolate(carouselIndex, item.title()),
+								'<a class="nav-link" href="#" data-slide="${index}" data-item-key="${key}">${title}</a>'.interpolate(carouselIndex, item.key(), item.title()),
 							'</li>'
 						].join(''));
 						$carousel.find('.carousel-indicators').append('<li data-target="#portlet-carousel" data-slide-to="${index}"></li>'.interpolate(carouselIndex++));
