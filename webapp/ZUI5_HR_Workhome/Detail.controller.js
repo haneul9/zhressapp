@@ -83,6 +83,9 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
