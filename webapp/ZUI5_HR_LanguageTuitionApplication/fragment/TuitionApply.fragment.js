@@ -305,7 +305,7 @@ sap.ui.define([
 											value: "{AcqgrdT}",
 											editable: false
 										}),
-										new sap.m.Text({ text: "{i18n>LABEL_29030}", width: "30px" }).addStyleClass("mr-5px"),
+										new sap.m.Text({ text: "{i18n>LABEL_29030}", width: "30px" }),
 										new HoverIcon({
 											src: "sap-icon://information",
 											hover: function(oEvent) {
@@ -326,7 +326,7 @@ sap.ui.define([
 													return false;
 												}
 											}
-										}).addStyleClass("button-light-sm ml-10px")
+										}).addStyleClass("button-light-sm")
 									]
 								}).addStyleClass("search-field-group"),
 								new sap.m.HBox({
