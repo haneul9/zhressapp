@@ -177,7 +177,7 @@ sap.ui.define([
 							
 							oController._ListCondJSonModel.setProperty("/Data/Tottmtx", 
 								data.Tottm == "" ? "-" :
-									data.Tottm.split(":")[0] + oController.getBundleText("LABEL_69052") + " " + data.Tottm.split(":")[1] + oController.getBundleText("LABEL_69053")
+									(data.Tottm.split(":")[0] * 1) + oController.getBundleText("LABEL_69052") + " " + (data.Tottm.split(":")[1] * 1) + oController.getBundleText("LABEL_69053")
 																//	시간															 // 분
 							);
 							

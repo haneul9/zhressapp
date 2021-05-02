@@ -414,7 +414,7 @@ sap.ui.define([
 		},
 
 		onDInput: function(oEvent) { // 직접입력 CheckBox
-			var vIs =  oEvent ? oEvent : oEvent.getSource().getSelected();
+			var vIs =  oEvent === true ? oEvent : oEvent.getSource().getSelected();
 			if(vIs){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
 			}else{
@@ -424,6 +424,7 @@ sap.ui.define([
 				this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
 				this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
 				this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
+				this.ApplyModel.setProperty("/FormData/Course", ""); // 교육코드
 			}
 			this.getTypeCombo(vIs);
 		},
