@@ -414,7 +414,7 @@ sap.ui.define([
 		},
 
 		onDInput: function(oEvent) { // 직접입력 CheckBox
-			var vIs =  oEvent ? oEvent : oEvent.getSource().getSelected();
+			var vIs =  oEvent === true ? oEvent : oEvent.getSource().getSelected();
 			if(vIs){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
 			}else{
