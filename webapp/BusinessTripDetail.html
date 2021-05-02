@@ -13,7 +13,9 @@
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
+<link rel="stylesheet" type="text/css" href="css/fontawesome-all.min.css" />
 <script src="common/AppPrefilter.js"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=u25ylguw88&submodules=geocoder"></script>
 <script id="sap-ui-bootstrap" src="resources/sap-ui-core.js"
 data-sap-ui-libs="sap.m, sap.ui.commons, sap.ui.layout, sap.ui.table, sap.uxap"
 data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
@@ -31,8 +33,7 @@ function startAppInit() {
 		CONTEXT_PATH: contextPath,
 		APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 		APP_ID: [contextPath, "Page"].join("."),
-		APP_TILE: $.app.geti18nResource().getText("LABEL_19007"), // 출장 관리 상세,
-		VIEW_STYLE_CLASSES: "",
+		APP_TILE: $.app.geti18nResource().getText("LABEL_19007"), // 출장 관리 상세
 		includeStyleSheets: [
 			"ZUI5_HR_BusinessTrip/css/business-trip.css"
 		],
