@@ -129,10 +129,21 @@ fill: function() {
 		success: function(data) {
 			this._gateway.prepareLog('EmployeePortlet.fill ${} success'.interpolate(url), arguments).log();
 
-			var TableIn1 = this._gateway.odataResults(data).TableIn1[0] || {};
+			var TableIn1 = this._gateway.odataResults(data).TableIn1[0] || {},
+				CdaysYy = String.toNumber(TableIn1.CdaysYy), CdaysMm = String.toNumber(TableIn1.CdaysMm), CdaysDd = String.toNumber(TableIn1.CdaysDd),
+				OddaysYy = String.toNumber(TableIn1.OddaysYy), OddaysMm = String.toNumber(TableIn1.OddaysMm), OddaysDd = String.toNumber(TableIn1.OddaysDd);
+
 			this.$()
-				.find('#cdays').text(String.toCurrency(TableIn1.Cdays)).end()
-				.find('#odays').text(String.toCurrency(TableIn1.Oddays));
+				.find('#cdays').text([
+					CdaysYy === 0 ? '' : CdaysYy + '년',
+					CdaysMm === 0 ? '' : CdaysMm + '개월',
+					CdaysDd === 0 ? '' : CdaysDd + '일'
+				].join('')).end()
+				.find('#odays').text([
+					OddaysYy === 0 ? '' : OddaysYy + '년',
+					OddaysMm === 0 ? '' : OddaysMm + '개월',
+					OddaysDd === 0 ? '' : OddaysDd + '일'
+				].join(''));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
