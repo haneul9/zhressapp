@@ -990,7 +990,6 @@ sap.ui.define([
 		},
 
 		onPressAddRow: function(oEvent) { // 참석자 추가
-			var oController = this;
 			SearchUser1.oController = this;
 			SearchUser1.searchAuth = "A";
 			SearchUser1.oTargetPaths = null;
