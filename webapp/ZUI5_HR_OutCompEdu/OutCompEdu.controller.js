@@ -355,6 +355,7 @@ sap.ui.define([
 			oAttTable.setVisibleRowCount(1);
 
 			this.getCodeList();
+			this.getTypeCombo(false);
 			this.onBeforeOpenDetailDialog("app");
 			this._ApplyModel.open();
 		},
