@@ -316,7 +316,7 @@ sap.ui.define([
 				oView.addDependent(oController._ReportModel);
 			}
 
-			if(Common.checkNull(oCopyRow.Course)) oController.ApplyModel.setProperty("/Checked", "");
+			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000") oController.ApplyModel.setProperty("/Checked", "");
 			else oController.ApplyModel.setProperty("/Checked", "X");
 
 			if(oCopyRow.Edoty === "1"){
