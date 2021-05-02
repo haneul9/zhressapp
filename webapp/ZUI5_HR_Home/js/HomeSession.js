@@ -180,6 +180,10 @@ S4HANA OData 호출을 위한 CSRF token 조회
 */
 retrieveSessionToken: function() {
 
+	if (sessionStorage.getItem('ehr.session.token')) {
+		return new Promise(function(v) { v(); });
+	}
+
 	return $.getJSON({
 		url: '/essproxy/sessionkey',
 		success: function(data) {

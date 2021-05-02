@@ -132,15 +132,15 @@ fill: function() {
 				OddaysYy = String.toNumber(TableIn1.OddaysYy), OddaysMm = String.toNumber(TableIn1.OddaysMm), OddaysDd = String.toNumber(TableIn1.OddaysDd);
 
 			this.$()
-				.find('#cdays').text([
-					CdaysYy === 0 ? '' : CdaysYy + '년',
-					CdaysMm === 0 ? '' : CdaysMm + '개월',
-					CdaysDd === 0 ? '' : CdaysDd + '일'
+				.find('#cdays').html([
+					CdaysYy === 0 ? '' : CdaysYy + '<span>년</span>',
+					CdaysMm === 0 ? '' : CdaysMm + '<span>개월</span>',
+					CdaysDd === 0 ? '' : CdaysDd + '<span>일</span>'
 				].join(' ')).end()
-				.find('#odays').text([
-					OddaysYy === 0 ? '' : OddaysYy + '년',
-					OddaysMm === 0 ? '' : OddaysMm + '개월',
-					OddaysDd === 0 ? '' : OddaysDd + '일'
+				.find('#odays').html([
+					OddaysYy === 0 ? '' : OddaysYy + '<span>년</span>',
+					OddaysMm === 0 ? '' : OddaysMm + '<span>개월</span>',
+					OddaysDd === 0 ? '' : OddaysDd + '<span>일</span>'
 				].join(' '));
 		}.bind(this),
 		error: function(jqXHR) {
