@@ -29,23 +29,39 @@
 	var oBundleText = $.app.geti18nResource();
 
 	$.sap.registerModulePath("common", "common");
+	sap.ui.localResources("ZUI5_HR_Dashboard");
+	
+	// function startAppInit() {
 
-	function startAppInit() {
+	// 	checkAppPrefilter();
 
-		checkAppPrefilter();
+	// 	sap.ui.getCore().attachInit(function() {
+	// 		sap.ui.localResources("ZUI5_HR_Dashboard");
 
-		sap.ui.getCore().attachInit(function() {
-			sap.ui.localResources("ZUI5_HR_Dashboard");
-
-			var oview = sap.ui.jsview("app", "ZUI5_HR_Dashboard.AppMain");
-			$("body").fadeOut("slow",function() {
-				$("#ui-body").empty();
-				$("#ui-body").removeAttr('style');
-				oview.placeAt("ui-body");
-				$(this).fadeIn("slow");
-			});
-		});
-	}
+	// 		var oview = sap.ui.jsview("app", "ZUI5_HR_Dashboard.AppMain");
+	// 		$("body").fadeOut("slow",function() {
+	// 			$("#ui-body").empty();
+	// 			$("#ui-body").removeAttr('style');
+	// 			oview.placeAt("ui-body");
+	// 			$(this).fadeIn("slow");
+	// 		});
+	// 	});
+	// }
+		function startAppInit() {
+				var contextPath = "ZUI5_HR_Dashboard";
+				$.extend(true, $.app, {
+					CONTEXT_PATH: contextPath,
+					APP_SFMAIN_ID: "ZUI5_SF.SFMain",
+					APP_ID: [contextPath, "DashboardList"].join("."),
+					APP_AUTH: $.app.Auth.MSS,
+					APP_TILE: "Dashboard",
+					LOG: {
+						ENABLE_SUCCESS: true
+					}
+				});
+		
+				$.app.init();
+		}
 	</script>
 	</head>
 	
