@@ -222,7 +222,7 @@ sap.ui.define(
                                     var vData = { User: {} };
                                     if (data && data.results.length > 0) {
                                         data.results[0].nickname = data.results[0].Ename;
-                                        data.results[0].Stext = data.results[0].Gbdat;
+                                        data.results[0].Stext = data.results[0].Fulln;
                                         data.results[0].PGradeTxt = data.results[0].ZpGradetx;
                                         data.results[0].ZtitleT = data.results[0].Ztitletx;
 
