@@ -65,7 +65,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			var empDataList = data.d.results;
 			var list = this.$();
 
-			if (!empDataList.length) {
+			if (!empDataList.length || !goalId) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
 				if (list.data('jsp')) {
@@ -118,27 +118,29 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			}.bind(this));
 
 			setTimeout(function() {
-				this.spinner(false);
 				resolve(); // 레이아웃이 완성되면 resolve를 호출하여 onceAfter가 호출되게 함
-			}.bind(this), 0);
+			}, 300);
 
 			setTimeout(function() {
 				Promise.all(
 					$.map(empDataList, function(e, i) {
 						return Promise.all([
 							this.retrievePhoto(e.userId),
-							this.retrieveGoalData(e.userId, goalId)
+							this.retrieveGoalData(e.userId, goalId, i)
 						]).then(function() {
 							var goalData = this.goalDataMap[e.userId],
-							score = parseFloat(goalData.score);
+							score = parseInt((goalData.score || 0).toFixed());
 
 							$('.evalgoal-area.i' + i).find('img').attr('src', this.photoMap[e.userId]);
 
 							if (score > 0) {
 								$('.progress-bar.i' + i)
-									.text(score + '%')
 									.addClass(goalData.groundColor)
-									.animate({ width: score + '%' }, 2000);
+									.animate({
+										width: score + '%'
+									}, 2e3, 'linear', function() {
+										$(this).text(score + '%');
+									});
 							}
 						}.bind(this));
 					}.bind(this))
@@ -146,51 +148,6 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 					this.spinner(false);
 				}.bind(this));
 			}.bind(this), 0);
-/*
-			this.photoMap = {};
-			this.goalDataMap = {};
-
-			empDataList.forEach(function(e, i) {
-				this.goalDataMap[e.userId] = {
-					nickname: e.nickname,
-					position: e.custom01 ? e.custom01.split("(")[0] : ""
-				};
-
-				Promise.all([
-					this.retrievePhoto(e.userId),
-					this.retrieveGoalData(e.userId, goalId)
-				]).then(function() {
-					setTimeout(function() {
-						var goalData = this.goalDataMap[e.userId],
-							score = parseFloat(goalData.score);
-
-						list.append([
-							'<div class="evalgoal-area">',
-								'<img src="${src}" style="width:40px; height:50px"/>'.interpolate(this.photoMap[e.userId]),
-								'<div class="evalgoal-info">',
-									'<div class="person">',
-										'<div class="name">', goalData.nickname, '</div>',
-										'<div class="position">', goalData.position, '</div>',
-									'</div>',
-									'<div class="evalgoal-statusBar">',
-										'<div class="progress">',
-											'<div style="height:auto" style="width:0" class="progress-bar i${i} ${groundColor}"'.interpolate(i, goalData.groundColor),
-												' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												score > 0 ? goalData.score + '%' : '',
-											'</div>',
-										'</div>',
-									'</div>',
-								'</div>',
-							'</div>'
-						].join(''));
-
-						if (score > 0) {
-							$('.progress-bar.i' + i).animate({ width: score + '%' }, 2000);
-						}
-					}.bind(this), 0);
-				}.bind(this));
-			}.bind(this));
-*/
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url2);
@@ -218,7 +175,7 @@ retrievePhoto: function(userId) { // 사원사진
 	}).promise();
 },
 
-retrieveGoalData: function(pernr, goalId) { // 사원목표정보
+retrieveGoalData: function(pernr, goalId, index) { // 사원목표정보
 
 	var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
 
@@ -226,6 +183,10 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 		url: url4,
 		success: function(data) {
 			var oDetailData = data.d.results;
+			if (!oDetailData.length) {
+				$('.evalgoal-area.i' + index).remove();
+				return;
+			}
 			var vDetailIndex = oDetailData.length;
 			var oGroundColor = "",
 				vScore = 0;
