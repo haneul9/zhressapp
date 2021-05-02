@@ -154,6 +154,7 @@ sap.ui.define(
                         IMolga: this.getSessionInfoByKey("Molga"),
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IAppkey1: payload.Appkey1 ? payload.Appkey1 : undefined,
+                        IExtryn: payload.Extryn ? payload.Extryn : undefined,
                         IPernr: payload.Pernr ? payload.Pernr : undefined,
                         ShiftWorkScheduleChange: payload.ShiftWorkScheduleChange
                     },
