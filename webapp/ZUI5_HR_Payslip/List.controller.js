@@ -149,11 +149,14 @@ sap.ui.define(
                 var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_PDF");
                 oLayout.destroyContent();
 
-                oController.getOcrsnList(oController, "X");
+                // oController.getOcrsnList(oController, "X");
+                oController.getOcrsnList( "X");
                 oController._DetailDialog.open();
             },
 
-            getOcrsnList: function (oController, searchDetailYn) {
+            getOcrsnList: function (searchDetailYn) {
+                var oView = sap.ui.getCore().byId("ZUI5_HR_Payslip.List");
+                var oController = oView.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
 
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");

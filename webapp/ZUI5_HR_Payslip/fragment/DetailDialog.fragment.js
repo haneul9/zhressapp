@@ -47,7 +47,9 @@ sap.ui.define([], function () {
                                     templateShareable: false,
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
                                 },
-                                change: oController.getOcrsnList
+                                change: function(){
+                                    oController.getOcrsnList();
+                                }
                             }),
                             new sap.m.Label({
                                 text: "{i18n>LABEL_54003}", // 년
@@ -61,7 +63,9 @@ sap.ui.define([], function () {
                                     templateShareable: false,
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
                                 },
-                                change: oController.getOcrsnList
+                                change: function(){
+                                    oController.getOcrsnList();
+                                }
                             }),
                             new sap.m.Label({
                                 text: "{i18n>LABEL_54004}", // 월
