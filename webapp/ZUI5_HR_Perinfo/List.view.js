@@ -207,7 +207,7 @@ sap.ui.define([], function () {
                 // ;
                 .setModel(oController._ListCondJSonModel)
                 .bindElement("/Data");
-
+            var vTitile = gAuth == "M" ? oBundleText.getText("LABEL_37109") : oBundleText.getText("LABEL_37001");
             var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
                 customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
                 showHeader: false,
@@ -219,7 +219,8 @@ sap.ui.define([], function () {
                             new sap.m.FlexBox({
                                 alignItems: "End",
                                 fitContainer: true,
-                                items: [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Header", oController), new sap.m.Text({ text: "{i18n>LABEL_37001}" }).addStyleClass("app-title")] // 사원 프로파일
+                                items: [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Header", oController), 
+                                        new sap.m.Text({ text: vTitile }).addStyleClass("app-title")] // 사원 프로파일
                             }).addStyleClass("app-title-container")
                         ]
                     }).addStyleClass("app-content-container-wide"),

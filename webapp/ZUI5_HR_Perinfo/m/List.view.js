@@ -17,6 +17,15 @@ sap.ui.define(
                     height : "130px",
                     items: [
                         new sap.m.HBox({
+                        	width : "120px",
+                            items: [
+                               new sap.m.Image({
+                               		src : "{photo}",
+                               		height : "85px"
+                               })
+                            ]
+                        }).addStyleClass("EmployeeLayoutPic"),
+                        new sap.m.HBox({
                         	width : "100%",
                             items: [
                             	new sap.m.VBox({
@@ -37,16 +46,7 @@ sap.ui.define(
                             		]
                             	})
                             ]
-                        }).addStyleClass("EmployeeLayoutPadding"),
-                        new sap.m.HBox({
-                        	width : "120px",
-                            items: [
-                               new sap.m.Image({
-                               		src : "{photo}",
-                               		height : "85px"
-                               })
-                            ]
-                        }).addStyleClass("EmployeeLayoutPic")
+                        }).addStyleClass("EmployeeLayoutPadding")
                     ]
                 }).addStyleClass("EmployeeLayout");
                 searchBox.setModel(oController._ListCondJSonModel);
@@ -120,12 +120,19 @@ sap.ui.define(
                                         new sap.m.Button({ 
                                             press: oController.moveSearch,
                                             text : "{i18n>LABEL_00205}",  //사원검색
-                                            visible: gAuth === "M" ? true : false
+                                            visible: {
+                                                path : "Chief",
+                                                formatter : function(v){
+                                                  return v === "X" ? true : false; 
+                                                }
+                                            } 
                                         }).addStyleClass("button-light")
                                     ]
                                 }).addStyleClass("app-nav-button-right")
 
-                });
+                })
+                .setModel(oController._ListCondJSonModel)
+                .bindElement("/Data");
             },
 
             loadModel: function () {
