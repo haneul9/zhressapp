@@ -132,6 +132,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-employee .employee-d-day .title {font-size:1rem; font-weight:700}
 .portlet-employee .employee-d-day h6 {margin-top:1.5rem; margin-bottom:0; padding-left:.75rem; font-size:.875rem; font-weight:400}
 .portlet-employee .employee-d-day h6:nth-of-type(2) {margin-top:1.25rem; width:280px}
+.portlet-employee .employee-d-day .cdays {color:#064975}
+.portlet-employee .employee-d-day .odays {color:#8dc63f}
 .portlet-employee .employee-d-day .d-day {font-size:2rem; font-weight:400; padding-left:.75rem}
 .portlet-employee .employee-d-day .odays .d-day {font-size:2.5rem; font-weight:700}
 [device="mobile"] .portlet-employee .employee-photo {top:1rem; left:auto; right:1rem}
