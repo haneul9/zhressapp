@@ -424,6 +424,7 @@ sap.ui.define([
 				this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
 				this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
 				this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
+				this.ApplyModel.setProperty("/FormData/Course", ""); // 교육코드
 			}
 			this.getTypeCombo(vIs);
 		},
