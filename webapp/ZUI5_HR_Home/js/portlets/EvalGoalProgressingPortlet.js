@@ -132,15 +132,14 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 								return;
 							}
 
-							if ($('.evalgoal-area').length === 1) {
+							area.toggleClass('d-none', false)
+								.find('img').attr('src', this.photoMap[e.userId]);
+
+							if ($('.evalgoal-area:visible').length === 1) {
 								setTimeout(function() {
 									resolve();
 								}, 0);
 							}
-
-							area.toggleClass('d-none', false)
-								.find('img').attr('src', this.photoMap[e.userId]);
-
 							if (score > 0) {
 								area.find('.progress-bar.i' + i)
 									.addClass(goalData.groundColor)
