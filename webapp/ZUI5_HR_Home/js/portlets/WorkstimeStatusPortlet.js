@@ -1,4 +1,4 @@
-﻿/* global AbstractPortlet moment */
+/* global AbstractPortlet moment */
 function WorkstimeStatusPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
@@ -102,14 +102,14 @@ fill: function() {
                 }
             });
 
-            var vCtrnmH = vCtrnm[0] !== "00" && this.checkNull(!vCtrnm[0]) ? vCtrnm[0] + "시간" : (this.checkNull(vCtrnm[1]) ? "0시간" : ""),
-                vCtrnmM = vCtrnm[1] !== "00" ? (this.checkNull(vCtrnm[1]) ? "" : vCtrnm[1] + "분") : "",
-                vWrktmH = vWrktm[0] !== "00" && this.checkNull(!vWrktm[0]) ? vWrktm[0] + "시간" : (this.checkNull(vWrktm[1]) ? "0시간" : ""),
-                vWrktmM = vWrktm[1] !== "00" ? (this.checkNull(vWrktm[1]) ? "" : vWrktm[1] + "분") : "",
-                vExttmH = vExttm[0] !== "00" && this.checkNull(!vExttm[0]) ? vExttm[0] + "시간" : (this.checkNull(vExttm[1]) ? "0시간" : ""),
-                vExttmM = vExttm[1] !== "00" ? (this.checkNull(vExttm[1]) ? "" : vExttm[1] + "분") : "",
-                vTottmH = vTottm[0] !== "00" && this.checkNull(!vTottm[0]) ? vTottm[0] + "시간" : (this.checkNull(vTottm[1]) ? "0시간" : ""),
-                vTottmM = vTottm[1] !== "00" ? (this.checkNull(vTottm[1]) ? "" : vTottm[1] + "분") : "";
+            var vCtrnmH = vCtrnm[0] !== "00" && this.checkNull(!vCtrnm[0]) ? parseFloat(vCtrnm[0]) + "시간" : (this.checkNull(vCtrnm[1]) ? "0시간" : ""),
+                vCtrnmM = vCtrnm[1] !== "00" ? (this.checkNull(vCtrnm[1]) ? "" : parseFloat(vCtrnm[1]) + "분") : "",
+                vWrktmH = vWrktm[0] !== "00" && this.checkNull(!vWrktm[0]) ? parseFloat(vWrktm[0]) + "시간" : (this.checkNull(vWrktm[1]) ? "0시간" : ""),
+                vWrktmM = vWrktm[1] !== "00" ? (this.checkNull(vWrktm[1]) ? "" : parseFloat(vWrktm[1]) + "분") : "",
+                vExttmH = vExttm[0] !== "00" && this.checkNull(!vExttm[0]) ? parseFloat(vExttm[0]) + "시간" : (this.checkNull(vExttm[1]) ? "0시간" : ""),
+                vExttmM = vExttm[1] !== "00" ? (this.checkNull(vExttm[1]) ? "" : parseFloat(vExttm[1]) + "분") : "",
+                vTottmH = vTottm[0] !== "00" && this.checkNull(!vTottm[0]) ? parseFloat(vTottm[0]) + "시간" : (this.checkNull(vTottm[1]) ? "0시간" : ""),
+                vTottmM = vTottm[1] !== "00" ? (this.checkNull(vTottm[1]) ? "" : parseFloat(vTottm[1]) + "분") : "";
                 
             var vWorkTime = parseInt(vTottm[0]+vTottm[1]) / parseInt(vCtrnm[0]+vCtrnm[1]) * 80;
             var vBackColor = vWorkTime > 80 ? oBackGround[0] : oBackGround[1];
