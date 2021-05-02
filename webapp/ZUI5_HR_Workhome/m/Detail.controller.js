@@ -116,7 +116,7 @@ sap.ui.define([
 			var oData = oEvent.getSource().getCustomData()[0].getValue();
 
 			var oJSONModel = sap.ui.getCore().byId(oController.PAGEID + "_Table").getModel();
-				oJSONModel.setProperty("/Data/" + oData.Idx + "/Zdate1", "");
+				oJSONModel.setProperty("/Data/" + oData.Idx + "/Begda", "");
 		},
 		
 		// 신청 (Flag : C 신청, D 삭제)
