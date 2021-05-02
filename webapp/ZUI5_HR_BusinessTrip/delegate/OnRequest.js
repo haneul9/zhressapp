@@ -1130,6 +1130,8 @@ var OnRequest = { // 출장 event handler
 	*/
 	// 신청 OData 호출
 	callRequestOData: function(Header, TableIn03, TableIn04) {
+		var vExtryn = Common.isExternalIP() === true ? "X" : "";
+
 		$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 			"/BtRequestSet",
 			{
@@ -1138,7 +1140,7 @@ var OnRequest = { // 출장 event handler
 				IPernr: this.getSessionInfoByKey("name"),
 				IBukrs: this.getSessionInfoByKey("Bukrs"),
 				ILangu: this.getSessionInfoByKey("Langu"),
-				IvExtryn: Common.isExternalIP() === true ? "X" : "",
+				IExtryn: vExtryn,
 				Export: [],
 				TableIn01: [],
 				TableIn02: [Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn02", Header)], // 출장 Header 정보
@@ -1167,13 +1169,13 @@ var OnRequest = { // 출장 event handler
 								if (this.getSessionInfoByKey("Bukrs") === "A100" && TableIn03[0].ClDmtr === "2") { // 해외 출장인 경우에만 안내 메세지 popup
 									MessageBox.information(this.getBundleText("MSG_19020"), { // ※ 출장 사전 품의시 "모인 메모품의(항공권 예약/발권 신청서)" 첨부하시기 바랍니다.
 										onClose: function() {
-											if(!Common.isExternalIP()) {
+											if(vExtryn !== "X") {
 												this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 											}
 										}.bind(this)
 									});
 								} else {
-									if(!Common.isExternalIP()) {
+									if(vExtryn !== "X") {
 										this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 									}
 								}

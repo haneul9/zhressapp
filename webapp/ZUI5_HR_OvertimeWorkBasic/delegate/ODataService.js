@@ -158,6 +158,7 @@ sap.ui.define(
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
                         IDatum: Common.adjustGMTOdataFormat(new Date()),
+                        IExtryn: payload.Extryn ? payload.Extryn : undefined,
                         NavOtApply1: payload.OvertimeApply
                     },
                     {
