@@ -1369,6 +1369,7 @@ sap.ui.define([
 					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
 					
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+					oSendData.Edoty = "2";
 
 					var sendObject = {};
 					// Header
