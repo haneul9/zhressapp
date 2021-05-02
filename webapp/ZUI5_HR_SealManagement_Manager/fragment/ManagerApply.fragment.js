@@ -1,6 +1,6 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/EmpBasicInfoBox"
+	"common/Common",	//
+	"common/EmpBasicInfoBox"
 ], function (Common, EmpBasicInfoBox) {
 	"use strict";
 
