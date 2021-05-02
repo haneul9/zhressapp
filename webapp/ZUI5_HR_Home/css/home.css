@@ -90,6 +90,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet .card-header button + button {margin-left:1rem}
 .portlet .card-header button span {font-size:1.125rem; color:#333}
 .portlet .list-group .jspVerticalBar {width:8px}
+.portlet .list-group .list-group-item.data-not-found {text-align:center; background-color:#fff; color:#495057; cursor:default}
 .portlet-0h {height:auto}
 .portlet-1h {height:206px}
 .portlet-2h {height:calc((206px * 2) + (1.5rem * 1))}
