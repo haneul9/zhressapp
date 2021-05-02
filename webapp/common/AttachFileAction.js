@@ -111,6 +111,7 @@ common.AttachFileAction = {
 					data.results.forEach(function (elem) {
 						elem.New = false;
 						elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+						elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
 
 						Datas.Data.push(elem);
 					});
