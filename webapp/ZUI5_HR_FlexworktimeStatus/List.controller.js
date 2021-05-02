@@ -396,6 +396,8 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
+			if(oController._ListCondJSonModel.getProperty("/Data/Tottm2") == "") return;
+			
 			var oControl = sap.ui.getCore().byId(oEvent.currentTarget.id);
 			if(oControl == undefined) return;
 			
