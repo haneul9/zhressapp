@@ -208,6 +208,8 @@ sap.ui.define([
 												
 												data.results[i].Ename = data.results[i].nickname;
 												
+												data.results[i].title = data.results[i].title.split(" (")[0];
+												
 												data.results[i].Count1 = 0;
 												data.results[i].Count2 = 0;
 												data.results[i].Count3 = 0;
