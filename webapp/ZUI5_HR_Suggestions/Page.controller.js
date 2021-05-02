@@ -75,7 +75,7 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if (!this.getParameterByName("Sdate") && !this.getParameterByName("Skey")) {
+			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey")) {
 				this.onSelectDetail(false);
 			}
         },
