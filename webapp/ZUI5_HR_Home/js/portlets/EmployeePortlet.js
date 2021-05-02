@@ -60,11 +60,13 @@ ui: function() {
 						'<div class="title">My D-Day</div>',
 						'<h6 data-company>${company}</h6>'.interpolate((loginInfo.Langu === '3' || loginInfo.Langu === 'KO') ? '롯데케미칼' : 'LOTTE Chemical'),
 						'<div>',
-							'<span class="d-day color-lcc-signature-blue" id="cdays"></span>',
+							'<span class="d-day color-lcc-signature-blue" id="cdays">0</span>',
+							'<span class="color-lcc-signature-blue">days</span>',
 						'</div>',
 						'<h6 data-stext>${stext}</h6>'.interpolate(loginInfo.Stext),
 						'<div>',
-							'<span class="d-day color-lcc-signature-green" id="odays"></span>',
+							'<span class="d-day color-lcc-signature-green" id="odays">0</span>',
+							'<span class="color-lcc-signature-green">days</span>',
 						'</div>',
 					'</div>',
 				'</div>',
@@ -132,16 +134,18 @@ fill: function() {
 				OddaysYy = String.toNumber(TableIn1.OddaysYy), OddaysMm = String.toNumber(TableIn1.OddaysMm), OddaysDd = String.toNumber(TableIn1.OddaysDd);
 
 			this.$()
-				.find('#cdays').html([
-					CdaysYy === 0 ? '' : CdaysYy + '<span>년</span>',
-					CdaysMm === 0 ? '' : CdaysMm + '<span>개월</span>',
-					CdaysDd === 0 ? '' : CdaysDd + '<span>일</span>'
-				].join(' ')).end()
-				.find('#odays').html([
-					OddaysYy === 0 ? '' : OddaysYy + '<span>년</span>',
-					OddaysMm === 0 ? '' : OddaysMm + '<span>개월</span>',
-					OddaysDd === 0 ? '' : OddaysDd + '<span>일</span>'
-				].join(' '));
+				.find('#cdays').text(String.toCurrency(TableIn1.Cdays)).end()
+				.find('#odays').text(String.toCurrency(TableIn1.Oddays));
+				// .find('#cdays').html([
+				// 	CdaysYy === 0 ? '' : CdaysYy + '<span>년</span>',
+				// 	CdaysMm === 0 ? '' : CdaysMm + '<span>개월</span>',
+				// 	CdaysDd === 0 ? '' : CdaysDd + '<span>일</span>'
+				// ].join(' ')).end()
+				// .find('#odays').html([
+				// 	OddaysYy === 0 ? '' : OddaysYy + '<span>년</span>',
+				// 	OddaysMm === 0 ? '' : OddaysMm + '<span>개월</span>',
+				// 	OddaysDd === 0 ? '' : OddaysDd + '<span>일</span>'
+				// ].join(' '));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
