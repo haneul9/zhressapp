@@ -151,6 +151,8 @@ sap.ui.define([
 			if(!oMenuScroll.getVisible()) oMenuScroll.setVisible(true);
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
+
+			oController.OpenHelpModel.setData({TopData: []});
 			
 			var sendObject = {};
 			// Header
@@ -175,24 +177,28 @@ sap.ui.define([
 						var rMiddleData = oData.OpenhelpTableIn2.results[1];
 						var rBottomData= oData.OpenhelpTableIn2.results[2];
 						
+						var oNoDataBox = $.app.byId(oController.PAGEID + "_NoDataBox");
 						if(Common.checkNull(rTopData) && Common.checkNull(rMiddleData) && Common.checkNull(rBottomData) && Common.checkNull(oData.OpenhelpTableIn4.results[0]) && Common.checkNull(oData.OpenhelpTableIn5.results[0])){
-							oController.OpenHelpModel.setProperty("/TopData/Zcomment", "X");
+							oNoDataBox.setVisible(true);
+							oController.OpenHelpModel.setProperty("/TopData/Zcomment", "");
 							oController.OpenHelpModel.setProperty("/MiddleData", []);
 							oController.OpenHelpModel.setProperty("/BottomData", []);
 							oController.OpenHelpModel.setProperty("/FileData", []);
 							oController.OpenHelpModel.setProperty("/PDFData", []);
+
 						}else{
+							oNoDataBox.setVisible(false);
 							oController.OpenHelpModel.setProperty("/Export", rExportData);
 							oController.OpenHelpModel.setProperty("/TopData", rTopData);
 							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
 							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
 							oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
-							oController.onBeforeOpenDetailDialog();
 							// oController.getPDFView();
 							
 							oController.openPDF(oController);
 						}
+						oController.onBeforeOpenDetailDialog();
 						
 						if(Common.checkNull(!oController.gSelectedRoute.Url)){
 							window.open("http://" + oController.gSelectedRoute.Url);
