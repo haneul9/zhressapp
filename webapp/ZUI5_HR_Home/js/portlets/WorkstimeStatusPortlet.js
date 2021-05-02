@@ -68,6 +68,11 @@ fill: function() {
                 oWorkData = data.d,
                 oMonthWorkTime = this._gateway.odataResults(data).FlexWorktime1Nav,
                 vToDate = new Date().getDate()-1;
+               
+            var today = new Date();
+            var vDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 0, 0).getTime();
+            	vDateTime = "/Date(" + vDateTime + ")/";
+               
             var oBackGround = [
                 "bg-danger",    /* bg-lcc-signature-red */
                 "bg-success"    /* bg-lcc-signature-blue */
@@ -88,11 +93,13 @@ fill: function() {
             vTottm = vTottm.split(":");
 
             oMonthWorkTime.forEach(function(e,i) {
-                if(i === vToDate){
+                // if(i === vToDate){
+                if(e.Datum == vDateTime){
                     vWorStatus = oPortlet.checkNull(e.Atext) ? "정상근무" : e.Atext,
                     vWorBTime = e.Beguz,
                     vWorETime = e.Enduz;
                     vFullTime = oPortlet.checkNull(vWorBTime) && oPortlet.checkNull(vWorETime) ? "" : "(" + vWorBTime.slice(0,2) + ":" + vWorBTime.slice(-2) + "~" + vWorETime.slice(0,2) + ":" + vWorETime.slice(-2) + ")";
+                    
                     if(e.Offyn === "X"){
                         vWorStatus = "OFF",
                         vWorBTime = "",
