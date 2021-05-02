@@ -277,7 +277,7 @@ sap.ui.define([
 				oModel.create("/WorkhomeApplySet", createData, {
 					success: function(data, res){
 						if(data){
-							if(Flag == "C" && data.EUrl != ""){
+							if(Flag == "C"){
 								if(!oController._ImageDialog){
 									oController._ImageDialog = sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Image", oController);
 									oView.addDependent(oController._ImageDialog);
