@@ -101,14 +101,14 @@ fill: function() {
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
 											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												parseFloat(v.done) + '%',
+												parseInt(v.done) + '%',
 											'</div>',
 										'</div>',
 									'</div>',
 								'</div>'
 							].join(''));
 
-							$('.progress-bar.i' + i).animate({ width: parseFloat(v.done) + '%' }, 2000);
+							$('.progress-bar.i' + i).animate({ width: parseInt(v.done) + '%' }, 2000);
 						}, 0);
 					});
 				}.bind(this),
