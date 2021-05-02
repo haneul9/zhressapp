@@ -70,9 +70,9 @@ fill: function() {
 			if (!this.items.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">즐겨찾는 메뉴가 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action text-center">즐겨찾는 메뉴가 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
 				}
 				return;
 			}
