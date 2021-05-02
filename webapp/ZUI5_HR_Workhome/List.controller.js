@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -95,7 +95,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				oController._ListCondJSonModel.setProperty("/Data/Endda", "");
 				return;
@@ -143,9 +143,9 @@ sap.ui.define([
 									
 									// 구분
 									if(data.WorkhomeNav.results[i].Cancl == ""){
-										data.WorkhomeNav.results[i].Cancltx = oBundleText.getText("LABEL_53012"); // 신규
+										data.WorkhomeNav.results[i].Cancltx = oController.getBundleText("LABEL_53012"); // 신규
 									} else {
-										data.WorkhomeNav.results[i].Cancltx = oBundleText.getText("LABEL_53013"); // 취소
+										data.WorkhomeNav.results[i].Cancltx = oController.getBundleText("LABEL_53013"); // 취소
 									}
 									
 									data.WorkhomeNav.results[i].Kaltg = parseFloat(data.WorkhomeNav.results[i].Kaltg);
@@ -214,7 +214,7 @@ sap.ui.define([
 				
 				// validation check
 				if(oData.Bigo == "" || oData.Bigo.trim() == ""){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_53010")); // 취소사유를 입력하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_53010")); // 취소사유를 입력하여 주십시오.
 					return;
 				}
 			}
@@ -302,11 +302,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(Flag == "D"){
-				confirmMessage = oBundleText.getText("MSG_00059"); // 삭제하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00021"); // 삭제되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00059"); // 삭제하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00021"); // 삭제되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_53008"); // 취소하시겠습니까?
-				successMessage = oBundleText.getText("MSG_53009"); // 취소신청되었습니다.
+				confirmMessage = oController.getBundleText("MSG_53008"); // 취소하시겠습니까?
+				successMessage = oController.getBundleText("MSG_53009"); // 취소신청되었습니다.
 			}
 			
 			var confirm = function(){
@@ -376,10 +376,6 @@ sap.ui.define([
                 Mssty: "",
             },
             callback = function(o) {
-                // oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");
-                // oModel.setProperty("/SearchConditions/Orgeh", o.Otype === "O" ? o.Objid : "");
-                // oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", o.Stext || "");
-               
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
 				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
                
@@ -432,7 +428,7 @@ sap.ui.define([
 			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 			var oJSONModel = oTable.getModel();
 			
-			var filename = oBundleText.getText("LABEL_53001"); // 재택근무 
+			var filename = oController.getBundleText("LABEL_53001"); // 재택근무 
 			
 			var oSettings = {
 				workbook: { columns: oController._Columns },
