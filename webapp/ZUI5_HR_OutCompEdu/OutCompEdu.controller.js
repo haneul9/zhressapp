@@ -484,6 +484,7 @@ sap.ui.define([
 			var oPath = oEvent.mParameters.rowBindingContext.getPath();
 			var oRowData = oController.TraningModel.getProperty(oPath);
 
+			oController.ApplyModel.setProperty("/FormData/Course", oRowData.Objid ); // 교육코드
 			oController.ApplyModel.setProperty("/FormData/Edkaj", oRowData.Stext); // 교육과정
 			oController.ApplyModel.setProperty("/FormData/Zgtype", oRowData.Zgtype); // 교육구분
 			oController.ApplyModel.setProperty("/FormData/Edgub", oRowData.Edgub); // 교육유형
