@@ -246,6 +246,7 @@ sap.ui.define(
             pressApprovalBtn: function() {
                 var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
                 var oInputData = this.oModel.getProperty("/Detail");
+				var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
                 var Process = function (fVal) {
                     if (!fVal || fVal === MessageBox.Action.NO) return;
@@ -253,6 +254,7 @@ sap.ui.define(
                     BusyIndicator.show(0);
 
                     var payload = {};
+                    payload.Extryn = vExtryn;
                     payload.OvertimeApply = [Common.copyByMetadata(oModel, "OvertimeApply", oInputData)];
 
                     ODataService.OvertimeApplySetByProcess.call(
@@ -264,7 +266,9 @@ sap.ui.define(
                     );
                 };
 
-                MessageBox.show(this.oController.getBundleText("MSG_31010"), {
+                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_42001") : this.oController.getBundleText("MSG_31010");
+
+                MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
                     title: this.oController.getBundleText("LABEL_00149"),
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],

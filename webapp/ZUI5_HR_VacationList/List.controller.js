@@ -91,7 +91,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText(""));
+				sap.m.MessageBox.error(oBundleText.getText("MSG_02047"));
 				oEvent.getSource().setValue("");
 				oController._ListCondJSonModel.setProperty("/Data/Endda", "");
 				return;

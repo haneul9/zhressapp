@@ -651,6 +651,8 @@ sap.ui.define(
 
                 var onProcess = function () {
                     var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+                    var vExtryn = Common.isExternalIP() === true ? "X" : "";
+                    
                     var createData = { PregnantApplyTableIn: [] };
                     if (Flag == "D") {
                         createData.IConType = "4";
@@ -668,6 +670,7 @@ sap.ui.define(
                     createData.ILangu = $.app.getModel("session").getData().Langu;
                     createData.IBegda = oData.Begda ? "/Date(" + Common.getTime(oData.Begda) + ")/" : null;
                     createData.IEndda = oData.Endda ? "/Date(" + Common.getTime(oData.Endda) + ")/" : null;
+                    createData.IExtryn = vExtryn;
 
                     var detail = {};
                     detail.Pernr = $.app.getModel("session").getData().Pernr;
@@ -716,20 +719,24 @@ sap.ui.define(
                     oModel.create("/PregnantApplyHeaderSet", createData, {
                         success: function (data) {
                             if (data) {
-                                if (Flag == "C" && data.EUrl != "") {
-                                    // window.open(data.EUrl);
-                                    setTimeout(function () {
-                                        var width = 1000,
-                                            height = screen.availHeight * 0.9,
-                                            left = (screen.availWidth - width) / 2,
-                                            top = (screen.availHeight - height) / 2,
-                                            popup = window.open(data.EUrl, "smoin-approval-popup", ["width=" + width, "height=" + height, "left=" + left, "top=" + top, "status=yes,resizable=yes,scrollbars=yes"].join(","));
-
-                                        setTimeout(function () {
-                                            popup.focus();
-                                        }, 500);
-                                    }, 0);
-                                }
+                                if(Flag == "C" && data.EUrl != "" && vExtryn == ""){
+									setTimeout(function() {
+					                    var width = 1000, height = screen.availHeight * 0.9,
+					                    left = (screen.availWidth - width) / 2,
+					                    top = (screen.availHeight - height) / 2,
+					                    popup = window.open(data.EUrl, "smoin-approval-popup", [
+					                        "width=" + width,
+					                        "height=" + height,
+					                        "left=" + left,
+					                        "top=" + top,
+					                        "status=yes,resizable=yes,scrollbars=yes"
+					                    ].join(","));
+					
+					                    setTimeout(function() {
+					                        popup.focus();
+					                    }, 500);
+					                }, 0);
+								}
                             }
                         },
                         error: function (oError) {

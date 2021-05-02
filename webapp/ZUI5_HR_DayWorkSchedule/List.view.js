@@ -118,7 +118,7 @@ sap.ui.define(
                 var col_info = [
                     { id: "Ename", label: "{i18n>LABEL_60013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     { id: "Orgtx", label: "{i18n>LABEL_60019}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "SchkzTx", label: "{i18n>LABEL_60020}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
+                    { id: "SchkzTx", label: "{i18n>LABEL_60020}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "15%" },
                     { id: "Datum", label: "{i18n>LABEL_60009}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true },
                     { id: "Dtext", label: "{i18n>LABEL_60021}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
                     { id: "Holck", label: "{i18n>LABEL_60022}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },

@@ -1,5 +1,4 @@
 jQuery.sap.require("sap.m.MessageBox");
-jQuery.sap.require("sap.ui.export.Spreadsheet");
 jQuery.sap.require("common.EmpBasicInfoBox");
 
 sap.ui.define([
@@ -84,8 +83,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -95,7 +97,7 @@ sap.ui.define([
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
 
             if(parseFloat(dateFormat.format(new Date(value))) < parseFloat(dateFormat.format(today))){
-            	sap.m.MessageBox.error(oBundleText.getText("MSG_53011")); // 현재일 이전 일자는 선택할 수 없습니다.
+            	sap.m.MessageBox.error(oController.getBundleText("MSG_53011")); // 현재일 이전 일자는 선택할 수 없습니다.
             	oEvent.getSource().setValue("");
             	return;
             }
@@ -252,20 +254,25 @@ sap.ui.define([
 			}
 			
 			if(createData.WorkhomeNav.length == 0){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_53006")); // 재택근무일을 하나 이상 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_53006")); // 재택근무일을 하나 이상 입력하여 주십시오.
 				return;
 			} else if(!oData.Telnum || oData.Telnum.trim() == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_53007")); // 연락처를 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_53007")); // 연락처를 입력하여 주십시오.
 				return;
 			}
 			
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
+				var oExtryn = Common.isExternalIP() === true ? "X" : "";
+
+				oController._DetailJSonModel.setProperty("/Data/Extryn", oExtryn);
+
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = $.app.getModel("session").getData().Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = Flag == "C" ? "3" : "4";
+					createData.IExtryn = oExtryn;
 					
 				oModel.create("/WorkhomeApplySet", createData, {
 					success: function(data, res){
@@ -321,11 +328,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(Flag == "C"){
-				confirmMessage = oBundleText.getText("MSG_00060"); // 신청하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00061"); // 신청되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00060"); // 신청하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00061"); // 신청되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_00059"); // 삭제하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00021"); // 삭제되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00059"); // 삭제하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00021"); // 삭제되었습니다.
 			}
 			
 			sap.m.MessageBox.confirm(confirmMessage, {
@@ -339,27 +346,30 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oUrl = oController._ImageDialog.getModel().getProperty("/Data/Url");
+			var oExtryn = oController._DetailJSonModel.getProperty("/Data/Extryn");
 			
 			oController._ImageDialog.close();
 		
-			setTimeout(function() {
-                var width = 1000, height = screen.availHeight * 0.9,
-                left = (screen.availWidth - width) / 2,
-                top = (screen.availHeight - height) / 2,
-                popup = window.open(oUrl, "smoin-approval-popup", [
-                    "width=" + width,
-                    "height=" + height,
-                    "left=" + left,
-                    "top=" + top,
-                    "status=yes,resizable=yes,scrollbars=yes"
-                ].join(","));
-
-                setTimeout(function() {
-                    popup.focus();
-                }, 500);
-            }, 0);
+			if(oExtryn == ""){
+				setTimeout(function() {
+					var width = 1000, height = screen.availHeight * 0.9,
+					left = (screen.availWidth - width) / 2,
+					top = (screen.availHeight - height) / 2,
+					popup = window.open(oUrl, "smoin-approval-popup", [
+						"width=" + width,
+						"height=" + height,
+						"left=" + left,
+						"top=" + top,
+						"status=yes,resizable=yes,scrollbars=yes"
+					].join(","));
+	
+					setTimeout(function() {
+						popup.focus();
+					}, 500);
+				}, 0);
+			}
 				
-			sap.m.MessageBox.success(oBundleText.getText("MSG_00061"), { // 신청되었습니다.
+			sap.m.MessageBox.success(oController.getBundleText("MSG_00061"), { // 신청되었습니다.
 				onClose : oController.onBack
 			});
 		},
@@ -388,7 +398,7 @@ sap.ui.define([
 				var oController = oView.getController();
 				
 				if(o.Otype == "O"){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_48016")); // 대상자를 선택하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48016")); // 대상자를 선택하여 주십시오.
 					return;
 				}
 			

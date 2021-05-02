@@ -62,8 +62,8 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 	$.getJSON({ // 평가 대상자 조회 : 조회한 사원번호의 평가대상자를 조회
 		url: url2,
 		success: function(data) {
-			var empDataList = data.d.results;
-			var list = this.$();
+			var empDataList = data.d.results,
+			list = this.$();
 
 			if (!empDataList.length || !goalId) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
@@ -94,32 +94,28 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 			$.map(empDataList, function(e, i) {
 				this.goalDataMap[e.userId] = {
+					exists: true,
 					nickname: e.nickname,
-					position: e.custom01 ? e.custom01.split("(")[0] : ""
-				};
-
-				list.append([
-					'<div class="evalgoal-area i${i}">'.interpolate(i),
-						'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
-						'<div class="evalgoal-info">',
-							'<div class="person">',
-								'<div class="name">', e.nickname, '</div>',
-								'<div class="position">', e.position, '</div>',
-							'</div>',
-							'<div class="evalgoal-statusBar">',
-								'<div class="progress">',
-									'<div style="height:auto" style="width:0" class="progress-bar i${i}"'.interpolate(i),
-										' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
+					position: e.custom01 ? e.custom01.split("(")[0] : "",
+					html: [
+						'<div class="evalgoal-area">',
+							'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
+							'<div class="evalgoal-info">',
+								'<div class="person">',
+									'<div class="name">', e.nickname, '</div>',
+									'<div class="position">', e.position, '</div>',
+								'</div>',
+								'<div class="evalgoal-statusBar">',
+									'<div class="progress">',
+										'<div style="height:auto" style="width:0" class="progress-bar i${i}"'.interpolate(i),
+											' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
+									'</div>',
 								'</div>',
 							'</div>',
-						'</div>',
-					'</div>'
-				].join(''));
+						'</div>'
+					].join('')
+				};
 			}.bind(this));
-
-			setTimeout(function() {
-				resolve(); // 레이아웃이 완성되면 resolve를 호출하여 onceAfter가 호출되게 함
-			}, 300);
 
 			setTimeout(function() {
 				Promise.all(
@@ -131,7 +127,12 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 							var goalData = this.goalDataMap[e.userId],
 							score = parseInt((goalData.score || 0).toFixed());
 
-							$('.evalgoal-area.i' + i).find('img').attr('src', this.photoMap[e.userId]);
+							if (!goalData.exists) {
+								return;
+							}
+
+							list.append(goalData.html)
+								.find('img').attr('src', this.photoMap[e.userId]).end();
 
 							if (score > 0) {
 								$('.progress-bar.i' + i)
@@ -175,7 +176,7 @@ retrievePhoto: function(userId) { // 사원사진
 	}).promise();
 },
 
-retrieveGoalData: function(pernr, goalId, index) { // 사원목표정보
+retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 
 	var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
 
@@ -184,34 +185,36 @@ retrieveGoalData: function(pernr, goalId, index) { // 사원목표정보
 		success: function(data) {
 			var oDetailData = data.d.results;
 			if (!oDetailData.length) {
-				$('.evalgoal-area.i' + index).remove();
+				this.goalDataMap[pernr].exists = false;
 				return;
 			}
-			var vDetailIndex = oDetailData.length;
-			var oGroundColor = "",
-				vScore = 0;
-			var oBackGround = [
+
+			var vDetailIndex = oDetailData.length,
+			oGroundColor = "",
+			vScore = 0,
+			oBackGround = [
 				"bg-danger",    /* bg-lcc-signature-red */
 				"bg-warning",   /* bg-signature-orange */
 				"bg-info",      /* bg-lcc-signature-green */ 
 				"bg-success"    /* bg-lcc-signature-blue */
 			];
 
-			if(vDetailIndex !== 0){
-				for(var i=0; i<vDetailIndex; i++){
+			if (vDetailIndex !== 0) {
+				for (var i = 0; i < vDetailIndex; i++) {
 					vScore += parseFloat(oDetailData[i].done);
 				}
-				vScore = vScore/vDetailIndex;
+				vScore = vScore / vDetailIndex;
 			}
-			
-			if(parseFloat(vScore) > 80)
+
+			if (parseFloat(vScore) > 80) {
 				oGroundColor= oBackGround[3];
-			else if(parseFloat(vScore) > 60)
+			} else if (parseFloat(vScore) > 60) {
 				oGroundColor= oBackGround[2];
-			else if(parseFloat(vScore) > 30)
+			} else if (parseFloat(vScore) > 30) {
 				oGroundColor= oBackGround[1];
-			else 
+			} else {
 				oGroundColor= oBackGround[0];
+			}
 
 			this.goalDataMap[pernr].score = vScore;
 			this.goalDataMap[pernr].groundColor = oGroundColor;

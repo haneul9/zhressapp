@@ -94,6 +94,9 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
+		
 			if(oEvent && oEvent.getParameters().valid == false){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
@@ -221,12 +224,15 @@ sap.ui.define([
 			
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
+				var oExtryn = Common.isExternalIP() === true ? "X" : "";
+
 				var createData = {WorkhomeNav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = Flag == "D" ? "4" : "9";
+					createData.IExtryn = oExtryn;
 					
 				var detail = {};
 					detail.Pernr = oData.Pernr;
@@ -241,7 +247,7 @@ sap.ui.define([
 				oModel.create("/WorkhomeApplySet", createData, {
 					success: function(data, res){
 						if(data){
-							if(data.EUrl != ""){
+							if(data.EUrl != "" && oExtryn == ""){
 								setTimeout(function() {
 				                    var width = 1000, height = screen.availHeight * 0.9,
 				                    left = (screen.availWidth - width) / 2,
@@ -401,6 +407,11 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();	
+			var oExtryn = Common.isExternalIP() === true ? "X" : "";
+
+			// 외부망에서 접근한 경우 
+			if(oExtryn == "X") return;
+
 			if(oData.UrlA && oData.UrlA != ""){
 				setTimeout(function() {
                     var width = 1000, height = screen.availHeight * 0.9,

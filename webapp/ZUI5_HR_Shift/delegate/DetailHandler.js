@@ -193,7 +193,9 @@ sap.ui.define(
                 switch (conType) {
                     case Shift.ProcessType.APPROVAL_REQUEST:
                         // s모인 결재창을 띄운다.
-                        this.openSmoinUrl(data.EAppurl);
+                        if(!Common.isExternalIP()) {
+                            this.openSmoinUrl(data.EAppurl);
+                        }
 
                         // 변경신청내역 탭 refresh 및 이동
                         this.oController.changeTab(Shift.Tab.APPROVAL);
@@ -326,6 +328,7 @@ sap.ui.define(
             pressApprovalBtn: function() {
                 var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
                 var oInputData = this.oModel.getProperty("/List");
+                var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
                 if (!this.DetailProcessValidation.call(this, oInputData)) return;
 
@@ -337,6 +340,7 @@ sap.ui.define(
                     var payload = {};
                     payload.Pernr = this.oController.getSessionInfoByKey("name");
                     payload.Appkey1 = this.oModel.getProperty("/Appkey") || "";
+                    payload.Extryn = vExtryn;
                     payload.ShiftWorkScheduleChange = oInputData.map(function (elem) {
                         return $.extend(true, Common.copyByMetadata(oModel, "ShiftWorkScheduleChange", elem), {
                             Begda: moment(elem.Begda).hours(10).toDate(),
@@ -353,7 +357,9 @@ sap.ui.define(
                     );
                 };
 
-                MessageBox.show(this.oController.getBundleText("MSG_30003"), {
+                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_00060") : this.oController.getBundleText("LABEL_00149");
+
+                MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
                     title: this.oController.getBundleText("LABEL_00149"),
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],

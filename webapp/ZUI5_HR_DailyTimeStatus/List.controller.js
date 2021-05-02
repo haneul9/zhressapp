@@ -132,7 +132,7 @@ sap.ui.define(
                 var oController = oView.getController();
 
                 if (oEvent && oEvent.getParameters().valid == false) {
-                    MessageBox.error(oController.getBundleText(""));
+                    MessageBox.error(oController.getBundleText("MSG_02047"));
                     oEvent.getSource().setValue("");
                     return;
                 }
