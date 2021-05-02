@@ -125,7 +125,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 									width: "400px",
 									displayFormat: Dtfmt,
 									placeholder: Dtfmt,
-									editable: "{= ${/ExpenseDetail/Edtfg} && ${/ExpenseDetail/CardPy} === '1' }",
+									editable: "{= ${/ExpenseDetail/Edtfg} && (${/ExpenseDetail/CardPy} === '1' || (${/ExpenseDetail/CardPy} === '5' && ${/ExpenseDetail/Category} === '2')) }",
 									dateValue: "{/ExpenseDetail/AppDate}"
 								})
 							]
@@ -156,7 +156,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 									design: sap.m.LabelDesign.Bold,
 									textAlign: sap.ui.core.TextAlign.Right,
 									layoutData: new sap.m.FlexItemData({ alignSelf: sap.m.FlexAlignSelf.Stretch }),
-									visible: "{= ${/VisibleFactor/Category} === '5' && ${/VisibleFactor/Subcategory} === '01' }",
+									visible: "{= ${/VisibleFactor/Category} === '5' && ${/VisibleFactor/Subcategory} === '01' }"
 								}),
 								new sap.m.RadioButtonGroup("ExpenseDetailClDmtr", {
 									visible: "{= ${/VisibleFactor/Category} === '5' && ${/VisibleFactor/Subcategory} === '01' }",
