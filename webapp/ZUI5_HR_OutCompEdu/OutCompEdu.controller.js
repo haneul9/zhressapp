@@ -316,8 +316,12 @@ sap.ui.define([
 				oView.addDependent(oController._ReportModel);
 			}
 
-			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000") oController.ApplyModel.setProperty("/Checked", "");
-			else oController.ApplyModel.setProperty("/Checked", "X");
+			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000") 
+				oController.ApplyModel.setProperty("/Checked", "");
+			else {
+				oController.ApplyModel.setProperty("/Checked", "X");
+				oController.onDInput(true);
+			}
 
 			if(oCopyRow.Edoty === "1"){
 				oController.getAttTable(oCopyRow, "1");
@@ -410,7 +414,8 @@ sap.ui.define([
 		},
 
 		onDInput: function(oEvent) { // 직접입력 CheckBox
-			if(oEvent.getSource().getSelected()){
+			var vIs = Common.checkNull(oEvent.getSource()) ? oEvent : oEvent.getSource().getSelected();
+			if(vIs){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
 			}else{
 				this.ApplyModel.setProperty("/TraningCheck", "X");
@@ -420,7 +425,7 @@ sap.ui.define([
 				this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
 				this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
 			}
-			this.getTypeCombo(oEvent.getSource().getSelected());
+			this.getTypeCombo(vIs);
 		},
 
 		RegistTraning: function() { // 교육과정 Dialog			
