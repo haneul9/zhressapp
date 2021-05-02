@@ -296,7 +296,7 @@ sap.ui.define([
 									new sap.m.Input({
 										textAlign: "Begin",
 										width: "250px",
-										maxLength: 5,
+										maxLength: 6,
 										liveChange: oController.getAttTime.bind(oController),
 										editable: {
 											path: "Status1",

@@ -6,9 +6,10 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"../common/DialogHandler",
-	"../common/OrgOfIndividualHandler"
+	"../common/OrgOfIndividualHandler",
+	"../common/SearchUser1"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, DialogHandler, OrgOfIndividualHandler, SearchUser1) {
 	"use strict";
 
 	
@@ -201,7 +202,7 @@ sap.ui.define([
 			var inputValue = oEvent.getParameter('value').trim(),
 				convertValue = inputValue.replace(/[^\d]/g, ''),
 				vTime2 = convertValue.slice(-2),
-				vTime1 = convertValue.split(vTime2)[0],
+				vTime1 = convertValue.length === 3 ? convertValue.slice(0,1) : (convertValue.length === 4 ? convertValue.slice(0,2) : (convertValue.length === 5 ? convertValue.slice(0,3) : "")),
 				vTime = convertValue.length > 2 ? vTime1 + "." + vTime2 : vTime2;
 
 			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "" : vTime);
@@ -315,8 +316,10 @@ sap.ui.define([
 				oView.addDependent(oController._ReportModel);
 			}
 
+			if(Common.checkNull(oCopyRow)) oController.ApplyModel.setProperty("/Checked", "X");
+			else oController.ApplyModel.setProperty("/Checked", "");
+
 			if(oCopyRow.Edoty === "1"){
-				oController.ApplyModel.setProperty("/Checked", "");
 				oController.getAttTable(oCopyRow, "1");
 				oController.getCodeList(oCopyRow);
 				oController.onBeforeOpenDetailDialog("app");
@@ -349,7 +352,7 @@ sap.ui.define([
 					Stext1: this.getSessionInfoByKey("Stext"),
 					PGradeTxt: this.getSessionInfoByKey("PGradeTxt"),
 					Ename: this.getSessionInfoByKey("Ename"),
-					Objid: this.getSessionInfoByKey("name")
+					Pernr: this.getSessionInfoByKey("name")
 				}]
 			});
 			oAttTable.setVisibleRowCount(1);
@@ -970,7 +973,9 @@ sap.ui.define([
 		},
 
 		onESSelectPerson: function(data) {
-                return OrgOfIndividualHandler.setSelectionTagets(data);
+			var oController = $.app.getController();
+
+                return oController.setSelectionTagets(data);
             },
 
 		displayMultiOrgSearchDialog: function(oEvent) {
@@ -979,41 +984,39 @@ sap.ui.define([
 
 		onPressAddRow: function(oEvent) { // 참석자 추가
 			var oController = this;
-			setTimeout(function() {
-				var oLoadData = {
-					Percod: this.getSessionInfoByKey("Percod"),
-					Bukrs: this.getSessionInfoByKey("Bukrs2"),
-					Langu: this.getSessionInfoByKey("Langu"),
-					Molga: this.getSessionInfoByKey("Molga"),
-					Datum: new Date(),
-					Mssty: ""
-				};
+			SearchUser1.oController = this;
+			SearchUser1.searchAuth = "A";
+			SearchUser1.oTargetPaths = null;
+
+			if (!this._AddPersonDialog) {
+				this._AddPersonDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this);
+				this.getView().addDependent(this._AddPersonDialog);
+			}
 	
-				var callback = function(o) {
-					var oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
-					var oAtt = oController.AttModel.getProperty("/Data");
-					var vLength = 5;
+			this._AddPersonDialog.open();
+		},
 
-					if(oAtt.some(function(e) {return e.Objid === o.Objid}) || oController.getUserId() === o.Objid) {
-						MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
-						return ;
-					}
-					
-					o.Stext1 = o.PupStext;
-					o.PGradeTxt = o.ZpGradeTxt;
-					o.Ename = o.Stext;
+		setSelectionTagets: function(data) {
+			var oController = $.app.getController();
 
-					oAtt.push(o);
+			var oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
+			var oAtt = oController.AttModel.getProperty("/Data");
+			var vLength = 5;
 
-					oController.AttModel.setProperty("/Data", oAtt);
-					vLength = oAtt.length;
+			if(oAtt.some(function(e) {return e.Pernr === data.Pernr}) || oController.getUserId() === data.Pernr) {
+				MessageBox.error(oController.getBundleText("MSG_40006"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+			
+			data.Stext1 = data.Fulln;
+			data.PGradeTxt = data.ZpGradetx;
+			oAtt.push(data);
+			
+			oController.AttModel.setProperty("/Data", oAtt);
+			vLength = oAtt.length;
 
-					oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
-				};
-	
-				OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, oLoadData, callback);
-				DialogHandler.open(OrgOfIndividualHandler);
-			}.bind(this), 0);
+			oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
+			oController._AddPersonDialog.close();
 		},
 
 		onPressDelRow: function(oEvent) { // 참석자 삭제
@@ -1129,7 +1132,7 @@ sap.ui.define([
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
 				if(Common.checkNull(e.__metadata))
-					oAttList1.Pernr = e.Objid;
+					oAttList1.Pernr = e.Pernr;
 				else
 					oAttList1.Pernr = e.Pernr;
 
@@ -1138,7 +1141,6 @@ sap.ui.define([
 
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
-				//신청 클릭시 발생하는 이벤트
 				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { //저장
 					
 					// 첨부파일 저장
@@ -1201,7 +1203,7 @@ sap.ui.define([
 				var oAttList1 = {};
 
 				if(Common.checkNull(e.__metadata))
-					oAttList1.Pernr = e.Objid;
+					oAttList1.Pernr = e.Pernr;
 				else
 					oAttList1.Pernr = e.Pernr;
 
@@ -1343,7 +1345,7 @@ sap.ui.define([
 				var oAttList1 = {};
 				
 				if(Common.checkNull(e.__metadata))
-					oAttList1.Pernr = e.Objid;
+					oAttList1.Pernr = e.Pernr;
 				else
 					oAttList1.Pernr = e.Pernr;
 					
@@ -1394,7 +1396,7 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40007"), {
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40009"), {
 				title: oController.getBundleText("LABEL_40001"),
 				actions: [oController.getBundleText("LABEL_40022"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessSave
