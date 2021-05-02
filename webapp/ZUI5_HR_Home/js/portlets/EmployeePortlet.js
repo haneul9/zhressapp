@@ -60,13 +60,11 @@ ui: function() {
 						'<div class="title">My D-Day</div>',
 						'<h6 data-company>${company}</h6>'.interpolate((loginInfo.Langu === '3' || loginInfo.Langu === 'KO') ? '롯데케미칼' : 'LOTTE Chemical'),
 						'<div>',
-							'<span class="d-day color-lcc-signature-blue" id="cdays">0</span>',
-							'<span class="color-lcc-signature-blue">days</span>',
+							'<span class="d-day color-lcc-signature-blue" id="cdays"></span>',
 						'</div>',
 						'<h6 data-stext>${stext}</h6>'.interpolate(loginInfo.Stext),
 						'<div>',
-							'<span class="d-day color-lcc-signature-green" id="odays">0</span>',
-							'<span class="color-lcc-signature-green">days</span>',
+							'<span class="d-day color-lcc-signature-green" id="odays"></span>',
 						'</div>',
 					'</div>',
 				'</div>',
@@ -138,12 +136,12 @@ fill: function() {
 					CdaysYy === 0 ? '' : CdaysYy + '년',
 					CdaysMm === 0 ? '' : CdaysMm + '개월',
 					CdaysDd === 0 ? '' : CdaysDd + '일'
-				].join('')).end()
+				].join(' ')).end()
 				.find('#odays').text([
 					OddaysYy === 0 ? '' : OddaysYy + '년',
 					OddaysMm === 0 ? '' : OddaysMm + '개월',
 					OddaysDd === 0 ? '' : OddaysDd + '일'
-				].join(''));
+				].join(' '));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
