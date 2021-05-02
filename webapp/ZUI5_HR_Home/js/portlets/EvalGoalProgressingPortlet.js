@@ -83,8 +83,6 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				return;
 			}
 
-			$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', false);
-
 			if (list.data('jsp')) {
 				list = list.find('.evalgoal-area,list-group-item').remove().end().data('jsp').getContentPane();
 			}
@@ -134,7 +132,8 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 								return;
 							}
 
-							area.find('img').attr('src', this.photoMap[e.userId]);
+							area.toggleClass('d-none', false)
+								.find('img').attr('src', this.photoMap[e.userId]);
 
 							if (score > 0) {
 								area.find('.progress-bar.i' + i)
@@ -156,6 +155,8 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 						} else {
 							list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가대상이 없습니다.</a>');
 						}
+					} else {
+						$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', false);
 					}
 
 					this.spinner(false);
