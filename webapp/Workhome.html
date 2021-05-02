@@ -49,6 +49,7 @@
 					APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 					APP_ID: [contextPath, "List"].join("."),
 					APP_AUTH: gAuth,
+					APP_TYPE: "M",
 					APP_TILE: oBundleText.getText("LABEL_53001"), // 재택근무
 					LOG: {
 						ENABLE_SUCCESS: true
@@ -72,6 +73,8 @@
 			.button-default .sapUiIcon{
 				line-height: 2.215rem !important;
 			}
+			
+			.mobile-custom-dialog-popup .sapMDialogScrollCont{padding: 10px !important;}
 		</style>
 	</head>
 	<body id="ui-body" class="sapUiBody" oncontextmenu='return false' ondragstart='return false' onselectstart='return false'>

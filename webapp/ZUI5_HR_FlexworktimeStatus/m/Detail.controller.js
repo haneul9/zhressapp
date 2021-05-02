@@ -401,7 +401,7 @@ sap.ui.define([
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
-					sap.m.MessageBox.error(oController.ErrorMesage);
+					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
 				}
 				
