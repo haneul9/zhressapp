@@ -389,10 +389,10 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 											 .attachRequestFailed(function(error) {
 												 if(error.getParameters() && error.getParameters().message == "error"){
 												 	 var message = JSON.parse(error.getParameters().responseText).error.message.value;
-												 	 sap.m.MessageBox.error(message);
+												 	 //sap.m.MessageBox.error(message);
 					 								 reject();
 												 } else {
-												 	 sap.m.MessageBox.error(error);
+												 	 //sap.m.MessageBox.error(error);
 					 								 reject();
 												 }
 											 })
@@ -1030,10 +1030,10 @@ sap.ui.controller("ZUI5_HR_Dashboard.DashboardList", {
 																 .attachRequestFailed(function(error) {
 																	 if(error.getParameters() && error.getParameters().message == "error"){
 																	 	 var message = JSON.parse(error.getParameters().responseText).error.message.value;
-																	 	 sap.m.MessageBox.error(message);
+																	 	 //sap.m.MessageBox.error(message);
 										 								 reject();
 																	 } else {
-																	 	 sap.m.MessageBox.error(error);
+																	 	 //sap.m.MessageBox.error(error);
 										 								 reject();
 																	 }
 																 })
