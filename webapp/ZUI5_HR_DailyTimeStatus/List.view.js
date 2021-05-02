@@ -38,7 +38,13 @@ sap.ui.define([], function () {
                                         width: "200px",
                                         showValueHelp: true,
                                         valueHelpOnly: true,
-                                        valueHelpRequest: oController.displayMultiOrgSearchDialog
+                                        valueHelpRequest: oController.displayMultiOrgSearchDialog,
+                                        editable : {
+                                        	path : "Werks",
+                                        	formatter : function(fVal){
+                                        		return (fVal && fVal.substring(0,1) == "D") ? false : true;
+                                        	}
+                                        }
                                     })
                                 ]
                             }).addStyleClass("search-field-group"),

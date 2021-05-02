@@ -577,9 +577,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
 						  	  			} else {
 						  	  				if(fVal2 == ""){
-				  	  							// 근태 신규신청 조회
+				  	  							// 근태 조회
 							  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
-							  	  					   "<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" +
+							  	  					   //"<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" + // 신규신청
 							  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
 						  	  				} else {
 						  	  					// 근태 삭제신청 조회
