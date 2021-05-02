@@ -189,11 +189,12 @@ generate: function() {
 					.on('slide.bs.carousel', function(e) {
 						var t = $('#portlet-carousel .nav-link[data-slide="${index}"]'.interpolate(e.to)).toggleClass('active', true);
 						t.parent().siblings().find('.nav-link').toggleClass('active', false);
+
 						var item = this.itemMap[t.data('itemKey')];
 						if (typeof item.onSlide === 'function') {
 							item.onSlide();
 						}
-					});
+					}.bind(this));
 
 				$(document).on('click', '#portlet-carousel .nav-link', function() {
 					var t = $(this).toggleClass('active', true);
