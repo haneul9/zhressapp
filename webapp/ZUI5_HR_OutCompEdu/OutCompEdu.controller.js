@@ -416,6 +416,7 @@ sap.ui.define([
 				this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
 				this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
 			}
+			this.getTypeCombo(oEvent.getSource().getSelected());
 		},
 
 		RegistTraning: function() { // 교육과정 Dialog			
@@ -766,6 +767,46 @@ sap.ui.define([
 			});
 		},
 
+		getTypeCombo: function(IsVal) { // 교육유형만 가져오는곳
+			var oController = $.app.getController();
+			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vPernr = oController.getUserId();
+			var vBukrs2 = oController.getUserGubun();
+
+			var sendObject = {};
+			// Header
+			sendObject.IPernr = vPernr;
+			sendObject.ICodeT = "004";
+			sendObject.IBukrs = vBukrs2;
+			sendObject.ICodty = "ZEDGUB";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 교육유형
+				success: function(oData, oResponse) {
+					if(oData && oData.NavCommonCodeList){
+						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
+
+						if(IsVal){
+							var oList2 = [];
+							
+							oData.NavCommonCodeList.results.forEach(function(e, i) {
+								if(e.Sortk !== "999"){
+									oList2.push(e);
+								}
+							});
+							oController.ApplyModel.setProperty("/TypeCombo", oList2);
+						}else
+							oController.ApplyModel.setProperty("/TypeCombo", oData.NavCommonCodeList.results);
+						
+					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+				}
+			});
+		},
+
 		getCodeList: function(oRowData) { // Dialog 공통코드호출
 			var oController = $.app.getController();
 			var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
@@ -817,11 +858,10 @@ sap.ui.define([
 						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
 
 						if((Common.checkNull(vStatus) || vStatus === "AA") && Common.checkNull(vRepstT) && (Common.checkNull(vEdoty) || vEdoty === "1")){
-							var oList = ["01", "02", "03", "04", "05"],
-								oList2 = [];
+							var oList2 = [];
 							
 							oData.NavCommonCodeList.results.forEach(function(e, i) {
-								if(oList.every(function(e1) {return e.Code !== e1})){
+								if(e.Sortk !== "999"){
 									oList2.push(e);
 								}
 							});
@@ -1284,6 +1324,19 @@ sap.ui.define([
 				MessageBox.error(oController.getBundleText("MSG_40039"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
+
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") === 0){
+				MessageBox.error(oController.getBundleText("MSG_40041"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
+			if(oSendData.Trnfb === "Null"){
+				oSendData.Trnfb = "";
+			}
+
+			if(oSendData.Evtfb === "Null"){
+				oSendData.Evtfb = "";
+			}
 			
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
@@ -1298,7 +1351,7 @@ sap.ui.define([
 
 			BusyIndicator.show(0);
 			var onProcessSave = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_40060")) { // 신청
+				if (fVal && fVal == oController.getBundleText("LABEL_40022")) { // 저장
 					
 					// 첨부파일 저장
 					var uFiles = [];
@@ -1323,7 +1376,7 @@ sap.ui.define([
 						async: true,
 						success: function(oData, oResponse) {
 							Common.log(oData);
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_40008"), { title: oController.getBundleText("MSG_08107")});
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40010"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
 							BusyIndicator.hide();
 							oController._ReportModel.close();
@@ -1342,7 +1395,7 @@ sap.ui.define([
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_40007"), {
 				title: oController.getBundleText("LABEL_40001"),
-				actions: [oController.getBundleText("LABEL_40060"), oController.getBundleText("LABEL_00119")],
+				actions: [oController.getBundleText("LABEL_40022"), oController.getBundleText("LABEL_00119")],
 				onClose: onProcessSave
 			});
 		},
@@ -1372,6 +1425,7 @@ sap.ui.define([
 				},"002");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
+					Required: true,
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,

@@ -457,7 +457,7 @@ sap.ui.define([
 					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox({
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 이수시간
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_40075}", "150px", "Right"), // 수료증
                             new sap.m.VBox({
                                 items: [
                                     new sap.m.Text({text: "{i18n>MSG_40027}", width: "auto", textAlign: "Begin"}),
@@ -654,14 +654,14 @@ sap.ui.define([
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogResultBtn.bind(oController),
-						text: "{i18n>LABEL_40060}", // 신청
+						text: "{i18n>LABEL_40022}", // 저장
 						visible: {
 							parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 							formatter: function(v1, v2, v3) {
 								return Common.checkNull(v3) && v1 === "99" && v2 === "1";
 							}
 						}
-					}).addStyleClass("button-dark"),
+					}).addStyleClass("button-light"),
 					new sap.m.Button({
 						press: function () {
 							oDialog.close();
