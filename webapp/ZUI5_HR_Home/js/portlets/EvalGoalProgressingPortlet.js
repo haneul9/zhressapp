@@ -69,7 +69,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
 				if (list.data('jsp')) {
-					list.find('.list-group-item').remove().end()
+					list.find('.evalgoal-area,list-group-item').remove().end()
 						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
 				} else {
 					list.html('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
@@ -86,7 +86,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', false);
 
 			if (list.data('jsp')) {
-				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+				list = list.find('.evalgoal-area,list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
 			this.photoMap = {};
@@ -96,25 +96,26 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				this.goalDataMap[e.userId] = {
 					exists: true,
 					nickname: e.nickname,
-					position: e.custom01 ? e.custom01.split("(")[0] : "",
-					html: [
-						'<div class="evalgoal-area">',
-							'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
-							'<div class="evalgoal-info">',
-								'<div class="person">',
-									'<div class="name">', e.nickname, '</div>',
-									'<div class="position">', e.position, '</div>',
-								'</div>',
-								'<div class="evalgoal-statusBar">',
-									'<div class="progress">',
-										'<div style="height:auto" style="width:0" class="progress-bar i${i}"'.interpolate(i),
-											' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
-									'</div>',
+					position: e.custom01 ? e.custom01.split("(")[0] : ""
+				};
+
+				list.append([
+					'<div class="evalgoal-area i${i} d-none">'.interpolate(i),
+						'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
+						'<div class="evalgoal-info">',
+							'<div class="person">',
+								'<div class="name">', e.nickname, '</div>',
+								'<div class="position">', e.position, '</div>',
+							'</div>',
+							'<div class="evalgoal-statusBar">',
+								'<div class="progress">',
+									'<div style="height:auto" style="width:0" class="progress-bar i${i}"'.interpolate(i),
+										' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
 								'</div>',
 							'</div>',
-						'</div>'
-					].join('')
-				};
+						'</div>',
+					'</div>'
+				].join(''));
 			}.bind(this));
 
 			setTimeout(function() {
@@ -125,17 +126,18 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 							this.retrieveGoalData(e.userId, goalId, i)
 						]).then(function() {
 							var goalData = this.goalDataMap[e.userId],
-							score = parseInt((goalData.score || 0).toFixed());
+							score = parseInt((goalData.score || 0).toFixed()),
+							area = $('.evalgoal-area.i' + i);
 
 							if (!goalData.exists) {
+								area.remove();
 								return;
 							}
 
-							list.append(goalData.html)
-								.find('img').attr('src', this.photoMap[e.userId]).end();
+							area.find('img').attr('src', this.photoMap[e.userId]);
 
 							if (score > 0) {
-								$('.progress-bar.i' + i)
+								area.find('.progress-bar.i' + i)
 									.addClass(goalData.groundColor)
 									.animate({
 										width: score + '%'
@@ -146,6 +148,16 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 						}.bind(this));
 					}.bind(this))
 				).then(function() {
+					if (!$('.evalgoal-area').length) {
+						$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
+
+						if (list.data('jsp')) {
+							list.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
+						} else {
+							list.html('<a href="#" class="list-group-item list-group-item-action border-0 text-center">평가대상이 없습니다.</a>');
+						}
+					}
+
 					this.spinner(false);
 				}.bind(this));
 			}.bind(this), 0);
@@ -227,7 +239,7 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp') && this.scrollable() && list.find('.list-group-item').length > 1) {
+	if (!list.data('jsp') && this.scrollable() && list.find('.evalgoal-area').length > 1) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
