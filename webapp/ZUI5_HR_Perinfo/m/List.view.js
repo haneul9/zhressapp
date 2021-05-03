@@ -110,7 +110,7 @@ sap.ui.define(
                 var oMainBox = new sap.m.VBox({
                     items:  [searchBox, tabBox]
                 })
-                .addStyleClass("vbox-form-mobile");
+                .addStyleClass("vbox-form-mobile-etc pt-16px");
                 
                 return new PageHelper({
                 	contentContainerStyleClass: "app-content-container-mobile",
