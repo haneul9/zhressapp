@@ -1170,6 +1170,7 @@ sap.ui.define([
 					// Navigation property
 					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
 					sendObject.TrainingOutApplyTableIn2 = oAttList2;
+					sendObject.TrainingOutApplyTableIn3 = [{Appnm: oSendData.Appnm}];
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
@@ -1240,6 +1241,7 @@ sap.ui.define([
 					// Navigation property
 					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
 					sendObject.TrainingOutApplyTableIn2 = oAttList2;
+					sendObject.TrainingOutApplyTableIn3 = [{Appnm: oSendData.Appnm}];
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
@@ -1386,6 +1388,7 @@ sap.ui.define([
 					// Navigation property
 					sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oSendData)];
 					sendObject.TrainingOutApplyTableIn2 = oAttList2;
+					sendObject.TrainingOutApplyTableIn3 = [{Appnm: oSendData.Appnm}];
 					
 					oModel.create("/TrainingOutApplySet", sendObject, {
 						async: true,
