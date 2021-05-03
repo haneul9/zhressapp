@@ -31,6 +31,11 @@ sap.ui.define([
 
 			return this.getView().getModel("session").getData().Bukrs2;
 		},
+
+		getUserGubun3  : function() {
+
+			return this.getView().getModel("session").getData().Bukrs3;
+		},
 		
 		onInit: function () {
 
@@ -333,16 +338,12 @@ sap.ui.define([
 		},
 
 		onPressMenuBtn: function(oEvent) { // 메뉴얼 (가이드 문서 다운로드)
-			// var oController = $.app.getController(); //http://10.97.15.103:7097/file/informations/LCC_FOREIGNLANG_MANUAL.pptx
-			//var gUrl = "/file/informations/LCC_FOREIGNLANG_MANUAL.pptx";
-			// File.save(
-			// 	"./manual/LCC_FOREIGNLANG_MANUAL.pptx",
-			// 	"LCC_FOREIGNLANG_MANUAL",
-			// 	"pptx"
-			// );
-			window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL.pptx");
-			// location.href = "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/manual/LCC_FOREIGNLANG_MANUAL.pptx";
-			// window.open("https://zhressapp-g110bc197.dispatcher.jp1.hana.ondemand.com/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/manual/LCC_FOREIGNLANG_MANUAL.pptx");
+			var vBukrs3 = this.getUserGubun3();
+
+			if(vBukrs3 === "A100")
+				window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL.pptx");
+			else
+				window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL.pptx");
         },
         onPressReqBtn: function(oEvent) { // 신청 
 			var oView = $.app.byId("ZUI5_HR_LanguageTuitionApplication.List"),

@@ -1370,6 +1370,7 @@ sap.ui.define([
 					
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
 					oSendData.Edoty = "2";
+					oSendData.Pernr = vPernr;
 
 					var sendObject = {};
 					// Header
