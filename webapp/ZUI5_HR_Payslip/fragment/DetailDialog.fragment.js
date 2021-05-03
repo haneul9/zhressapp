@@ -75,7 +75,7 @@ sap.ui.define([], function () {
                             new sap.m.Label({
                                 text: "{i18n>LABEL_02045}" // 구분
                             }).addStyleClass("mx-10px"),
-                            new sap.m.Select({
+                            new sap.m.Select(oController.PAGEID +"_Seqnr",{
                                 width: "120px",
                                 selectedKey: "{Seqnr}",
                                 items: {

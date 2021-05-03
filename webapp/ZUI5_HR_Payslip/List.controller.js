@@ -162,6 +162,9 @@ sap.ui.define(
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
 
+                var oSeqnr = $.app.byId(oController.PAGEID+"_Seqnr");
+                oSeqnr.setValue("");
+
                 var search = function () {
                     var oPath = "";
                     var createData = { PayreasonNav: [] };
@@ -183,13 +186,18 @@ sap.ui.define(
                                     for (var i = 0; i < data.PayreasonNav.results.length; i++) {
                                         vData.Data.push(data.PayreasonNav.results[i]);
                                     }
+                                    oController._DetailJSonModel.setProperty("/Data/Seqnr", data.PayreasonNav.results[0].Seqnr);
+                                }else{
+                                    oController._DetailJSonModel.setProperty("/Data/Seqnr", ""); 
                                 }
+                            }else{
+                                oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                             }
                         },
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
-
+                            oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                             if (oError.response) {
                                 Err = window.JSON.parse(oError.response.body);
                                 var msg1 = Err.error.innererror.errordetails;
@@ -230,7 +238,7 @@ sap.ui.define(
 
                 if (!vCondiData.Seqnr || vCondiData.Seqnr == "") {
                     // 조회조건을 모두 입력하시기 바랍니다.
-                    MessageBox.error(oController.getBundleText("MSG_53005"));
+                    MessageBox.error(oController.getBundleText("MSG_54001"));
                     return;
                 }
 
