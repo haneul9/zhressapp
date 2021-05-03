@@ -57,6 +57,9 @@ sap.ui.define(
                 var oPath = "";
                 var createData = { PayreasonNav: [] };
 
+                var oSeqnr = $.app.byId(oController.PAGEID+"_Seqnr");
+                oSeqnr.setValue("");
+
                 oPath = "/PayreasonPeSet";
                 createData.IPernr = vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "";
                 createData.IYear = vCondiData.Year && vCondiData.Year != "" ? vCondiData.Year : "";
@@ -76,12 +79,14 @@ sap.ui.define(
                                 }
                                 oController._DetailJSonModel.setProperty("/Data/Seqnr", data.PayreasonNav.results[0].Seqnr);
                             }
+                        }else{
+                            oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                         }
                     },
                     function (oError) {
                         var Err = {};
                         oController.Error = "E";
-
+                        oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                         if (oError.response) {
                             Err = window.JSON.parse(oError.response.body);
                             var msg1 = Err.error.innererror.errordetails;

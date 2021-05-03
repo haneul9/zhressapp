@@ -55,7 +55,7 @@ sap.ui.define([], function () {
                                     oController.getOcrsnList();
                                 }
                             }).addStyleClass("ml-4px"),
-                            new sap.m.ComboBox({
+                            new sap.m.ComboBox(oController.PAGEID+"_Seqnr",{
                                 selectedKey: "{Seqnr}",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 items: {
