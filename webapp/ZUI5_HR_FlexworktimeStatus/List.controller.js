@@ -78,7 +78,7 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
 			if(oEvent && oEvent.getParameters().valid == false){
@@ -713,7 +713,7 @@ sap.ui.define([
 		
 		// 추가휴게시간 - 시간계산
 		onChangeTime2 : function(oEvent, oTable){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
 			
 			if(oEvent && oEvent.getParameters().valid == false){
@@ -729,9 +729,6 @@ sap.ui.define([
 			}
 			
 			var calTime = function(){
-				var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
-				var oController = oView.getController();
-				
 				var oJSONModel = oTable.getModel();
 				var oData2 = oJSONModel.getProperty("/Data");
 				
