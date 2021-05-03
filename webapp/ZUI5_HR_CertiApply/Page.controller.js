@@ -110,9 +110,9 @@ sap.ui.define(
                 if (ZformType == 1) oController.ApplyModel.setProperty("/Data/ZformType", "02");
                 if (ZformType == 2) oController.ApplyModel.setProperty("/Data/ZformType", "04");
                 if (ZformType == 3) oController.ApplyModel.setProperty("/Data/ZformType", "05");
-                // 구분이 경력 증명서 이며, 수령방법이 ESS 출력이 선택시 수령방법 Clear
-                if (ZformType == 1 && Aptyp == 1) {
-                    oController.ApplyModel.setProperty("/Data/Aptyp", "");
+                // 구분이 경력 증명서 이면, 수령방법은 담당자 출력
+                if (ZformType == 1) {
+                    oController.ApplyModel.setProperty("/Data/Aptyp", "2");
                 }
             },
 

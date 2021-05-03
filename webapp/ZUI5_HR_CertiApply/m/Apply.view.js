@@ -74,7 +74,7 @@ sap.ui.define(
                     //수령방법
                     width: "100%",
                     items: [
-                        new sap.ui.core.ListItem(oController.PAGEID + "_AptypItem", { key: "1", text: "{i18n>LABEL_65011}" }), //
+                        // new sap.ui.core.ListItem(oController.PAGEID + "_AptypItem", { key: "1", text: "{i18n>LABEL_65011}" }), //
                         new sap.ui.core.ListItem({ key: "2", text: "{i18n>LABEL_65012}" }),
                         new sap.ui.core.ListItem({ key: "3", text: "{i18n>LABEL_65020}" })
                     ],

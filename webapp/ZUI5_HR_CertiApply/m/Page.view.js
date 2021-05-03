@@ -114,7 +114,7 @@ sap.ui.define(
                                                             } else if (v === "2" && v2 === "1") {
                                                                 return oController.getBundleText("LABEL_65023"); // 재발급
                                                             } else if (v === "3") {
-                                                                return oController.getBundleText("LABEL_65026"); // 다운로드
+                                                                return oController.getBundleText("LABEL_65026"); // 모바일 다운불가
                                                             }
                                                         }
                                                     },

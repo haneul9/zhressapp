@@ -134,12 +134,11 @@ sap.ui.define(
                     oModel.create("/CertiPdfSet", sendObject, {
                         success: function (oData) {
                             if (oData && oData.Export && oData.Export.results.length > 0) {
-                                // var a = document.createElement("a");
-                                // a.href = "data:application/pdf;base64," + oData.Export.results[0].EPdf;
-                                // a.download = "다운로드";
-                                // a.click(); //Downloaded file
-
-                                window.location.href =  "data:application/pdf;base64," + oData.Export.results[0].EPdf;
+                                var a = document.createElement("a");
+                                a.href = "data:application/pdf;base64," + oData.Export.results[0].EPdf;
+                                a.download = "다운로드";
+                                a.click(); //Downloaded file
+                                // location.href = "data:application/pdf;base64," + oData.Export.results[0].EPdf;
 
                                 oController.onTableSearch();
                             }
@@ -167,8 +166,8 @@ sap.ui.define(
                     oController.onPressReq(oCopiedRow);
                 } else if (oCopiedRow.Zstatus == "3") {
                     // 프린트
-                    BusyIndicator.show(0);
-                    onPrintPDF(oCopiedRow);
+                    // BusyIndicator.show(0);
+                    // onPrintPDF(oCopiedRow);
                 }
             },
 

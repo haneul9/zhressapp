@@ -92,7 +92,7 @@ sap.ui.define(
                             }
                         }),
                         new sap.m.RadioButton({
-                            text: "{i18n>LABEL_65012}", // 인사팀 발행
+                            text: "{i18n>LABEL_65012}", // 담당자 출력
                             width: "auto",
                             selected: {
                                 path: "Aptyp",
@@ -108,6 +108,14 @@ sap.ui.define(
                                 path: "Aptyp",
                                 formatter: function (v) {
                                     return v === "3";
+                                }
+                            },
+                            visible: {
+                                // 경력증명서 인 경우 메일 전송 제외
+                                path: "ZformType",
+                                formatter: function (v) {
+                                    if (v && v === "02") return false;
+                                    return true;
                                 }
                             }
                         })

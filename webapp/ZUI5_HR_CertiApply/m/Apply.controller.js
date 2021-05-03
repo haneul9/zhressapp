@@ -64,25 +64,25 @@ sap.ui.define(
 
                 // 구분
                 if (Common.checkNull(oController.ApplyModel.getProperty("/Data/ZformType"))) {
-                    MessageBox.error(oController.getBundleText("MSG_64009"), { title: oController.getBundleText("LABEL_00149") });
+                    MessageBox.error(oController.getBundleText("MSG_65009"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
                 }
 
                 // 수령방법
                 if (Common.checkNull(oController.ApplyModel.getProperty("/Data/Aptyp"))) {
-                    MessageBox.error(oController.getBundleText("MSG_64015"), { title: oController.getBundleText("LABEL_00149") });
+                    MessageBox.error(oController.getBundleText("MSG_65015"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
                 }
 
                 // 경력증명서는 인사팀 발행 또는 메일발송을 선택하여 주십시오.
-                if (oController.ApplyModel.getProperty("/Data/ZformType") == "02" && oController.ApplyModel.getProperty("/Data/Aptyp") == "1") {
-                    MessageBox.error(oController.getBundleText("MSG_64016"), { title: oController.getBundleText("LABEL_00149") });
+                if (oController.ApplyModel.getProperty("/Data/ZformType") == "02" && oController.ApplyModel.getProperty("/Data/Aptyp") != "2") {
+                    MessageBox.error(oController.getBundleText("MSG_65016"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
                 }
 
                 // 언어
                 if (Common.checkNull(oController.ApplyModel.getProperty("/Data/Zlang"))) {
-                    MessageBox.error(oController.getBundleText("MSG_64010"), { title: oController.getBundleText("LABEL_00149") });
+                    MessageBox.error(oController.getBundleText("MSG_65010"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
                 }
 
