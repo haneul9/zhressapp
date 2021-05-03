@@ -1,6 +1,7 @@
 sap.ui.define(
     [
-        "common/Common" //
+        "common/Common", //
+        "common/moment-with-locales"
     ],
     function (Common) {
         "use strict";
@@ -77,6 +78,7 @@ sap.ui.define(
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IAwart: !Common.checkNull(arg.Awart) ? arg.Awart : undefined,
+                        IBegda: !Common.checkNull(arg.Begda) ? moment(arg.Begda).toDate() : undefined,
 						OtPersonNav: []
 					},
 					{

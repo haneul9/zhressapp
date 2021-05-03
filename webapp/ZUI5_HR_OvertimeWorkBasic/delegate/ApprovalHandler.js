@@ -108,7 +108,8 @@ sap.ui.define(
                         this.oModel.setProperty("/TemplateData/Repla", "");
                         this.oModel.setProperty("/TemplateData/ReplaTx", "");
                         this.oModel.setProperty("/Replas", ODataService.OvertimePersonSet.call(this.oController, {
-                            Awart: oControlItem.getKey()
+                            Awart: oControlItem.getKey(),
+                            Begda: this.oModel.getProperty("/TemplateData/Begda")
                         }));
 
                         this.toggleIsPossibleTemplateApply();
