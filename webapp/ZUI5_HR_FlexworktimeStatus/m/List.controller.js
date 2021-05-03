@@ -208,7 +208,7 @@ sap.ui.define([
 									// 종일여부 필드값이 true 인 경우 해당 라인 비활성화 + 점심시간 코드값 0 으로 변경
 									if(data1[i].Alldf == true){
 										data1[i].Offyn = "1";
-										data1[i].Lnctm = "0";
+										// data1[i].Lnctm = "0"; // 2021-05-03 로직 주석처리
 									}
 									
 									if(oControl){
