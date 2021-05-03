@@ -172,6 +172,7 @@ sap.ui.define([
 								if(!oController._ImageDialog){
 									oController._ImageDialog = sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Image", oController);
 									oView.addDependent(oController._ImageDialog);
+									oController._ImageDialog.getContent()[0].setWidth("100%");
 								}
 								
 								oController._ImageDialog.getModel().setData({Data : {Url : data.EUrl}});
