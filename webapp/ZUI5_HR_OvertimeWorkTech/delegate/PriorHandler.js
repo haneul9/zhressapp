@@ -168,18 +168,19 @@ sap.ui.define(
             },
 
             loadApprovalDetail: function(rowData) {
-                var results = ODataService.OvertimeWorkApplySet.call(
-                    this.oController, 
-                    OvertimeWork.ProcessType.READ, 
-                    {
-                        Aftck: OvertimeWork.PRIOR,
-                        Pernr: rowData.Pernr,
-                        Begda: rowData.Begda,
-                        Endda: rowData.Endda,
-                        Datum: rowData.Begda,
-                        OtWorkTab1: [Common.copyByMetadata($.app.getModel("ZHR_WORKTIME_APPL_SRV"), "OvertimeWorkApplyTab1", rowData)]
-                    }
-                );
+                var vBukrs3 = this.oController.getSessionInfoByKey("Bukrs3"),
+                    results = ODataService.OvertimeWorkApplySet.call(
+                        this.oController, 
+                        OvertimeWork.ProcessType.READ, 
+                        {
+                            Aftck: OvertimeWork.PRIOR,
+                            Pernr: rowData.Pernr,
+                            Begda: rowData.Begda,
+                            Endda: rowData.Endda,
+                            Datum: rowData.Begda,
+                            OtWorkTab1: [Common.copyByMetadata($.app.getModel("ZHR_WORKTIME_APPL_SRV"), "OvertimeWorkApplyTab1", rowData)]
+                        }
+                    );
 
                 if(!results.OtWorkTab1.length) {
                     MessageBox.error(this.oController.getBundleText("MSG_32018"), { // 조회된 데이터가 없습니다.
@@ -193,7 +194,7 @@ sap.ui.define(
                 this.oModel.setProperty("/Detail/IsPossibleApproval", true);
                 this.oModel.setProperty("/Detail/IsPossibleDelete", true);
                 this.oModel.setProperty("/Detail/Header", $.extend(true, results.OtWorkTab1[0], {
-                    MinDate: moment().startOf("month").hours(10).toDate(),
+                    MinDate: vBukrs3 === "1000" ? moment().subtract(1, "month").startOf("month").hours(10).toDate() : moment().startOf("month").hours(10).toDate(),
                     Holick: results.OtWorkTab1[0].Holick === "X" ? true : false,
                     OtbetmT: results.OtWorkTab1[0].Otbetm.substring(0, 2),
                     OtbetmM: results.OtWorkTab1[0].Otbetm.substring(2, 4),
@@ -216,6 +217,8 @@ sap.ui.define(
              */
             pressOpenApprovalBtn: function() {
 
+                var vBukrs3 = this.oController.getSessionInfoByKey("Bukrs3");
+
                 this.oModel.setProperty("/Detail", {
                     IsViewMode: false,
                     IsPossibleSave: false,
@@ -232,7 +235,7 @@ sap.ui.define(
                         OtentmM: "00",
                         Brkhr1: "00",
                         Brkmm1: "00",
-                        MinDate: moment().startOf("month").hours(10).toDate(),
+                        MinDate: vBukrs3 === "1000" ? moment().subtract(1, "month").startOf("month").hours(10).toDate() : moment().startOf("month").hours(10).toDate(),
                         Begda: new Date()
                     },
                     List: []
