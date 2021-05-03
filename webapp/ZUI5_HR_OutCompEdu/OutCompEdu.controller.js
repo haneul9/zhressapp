@@ -1059,6 +1059,14 @@ sap.ui.define([
 			}
 		},
 
+		PassWordCheck: function(oEvent) { // PassWord Check
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
+
+			// this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "" : vTime);
+			// oEvent.getSource().setValue(Common.checkNull(vTime) ? "" : vTime);	
+		},
+
 		ErrorCheck: function() {
 			var oController = $.app.getController();
 

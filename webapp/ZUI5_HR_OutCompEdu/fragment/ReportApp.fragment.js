@@ -373,7 +373,7 @@ sap.ui.define([
 							new sap.m.Input({
 								textAlign: "Begin",
 								width: "704px",
-								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "EdstaObjid", false),
+								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edsta", false),
 								editable: {
 									path: "Status1",
 									formatter: function(v1) {
@@ -394,7 +394,7 @@ sap.ui.define([
 									new sap.m.Input({
 										textAlign: "End",
 										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzpretun", false),
+										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Costp", false),
 										liveChange: oController.getMoneyComma1.bind(oController),
 										editable: {
 											path: "Status1",
@@ -419,7 +419,7 @@ sap.ui.define([
 									new sap.m.Input({
 										textAlign: "End",
 										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzvalbt", false),
+										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Vatax", false),
 										liveChange: oController.getMoneyComma2.bind(oController),
 										editable: {
 											path: "Status1",
