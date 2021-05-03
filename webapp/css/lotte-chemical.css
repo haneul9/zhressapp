@@ -232,6 +232,12 @@ table.search-box.search-bg {table-layout:auto !important}
 .button-light-sm:hover .sapMBtnActive .sapMBtnIcon {color:#0070bd}
 /* .button-light-sm:hover .sapMBtnContent {color:#0070bd} */
 
+.button-light-smRow.sapMBtn {padding:0} /*Mobile 사용*/
+.button-light-smRow.sapMBtn,
+.button-light-smRow .sapMBtnInner {height:42px;border-radius:.1875rem;border-color:#c3c3c3;background-color:#fff;color:#333;}
+.button-light-smRow .sapMBtnInner:hover {border-color:#c3c3c3; background-color:#f2f3f4; color:#333}
+.button-light-smRow .sapMBtnContent {line-height: 18px;font-size:14px;color:#333;word-break: normal;}
+
 .button-delete.sapMBtn {padding:0}
 .button-delete.sapMBtn,
 .button-delete .sapMBtnInner {height:36px; border-radius:.1875rem; border-color:#444; background-color:#fff; color:#333}
@@ -618,10 +624,6 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 
 .app-content-container-mobile .custom-bottom-line{border-bottom:10px solid #f4f5f6;margin:0 -1rem; padding:0 1rem}
 .app-content-container-mobile .custom-top-line{border-top:10px solid #f4f5f6;margin:0 -1rem; padding:0 1rem}
-
-.app-content-container-mobile .custom-line-24 {}
-
-
     
 /* Button */
 .app-content-container-mobile .button-group {margin-left: 10px;align-items:flex-start;}
