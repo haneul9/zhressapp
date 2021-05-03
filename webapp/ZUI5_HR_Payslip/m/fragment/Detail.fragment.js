@@ -22,7 +22,7 @@ sap.ui.define([], function () {
                     new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
                     this.getNoticeInfoBox(oController)
                 ]
-            }).addStyleClass("EmployeeLayout vbox-form-mobile");
+            }).addStyleClass("EmployeeLayout");
         },
 
         getSearchHBox: function (oController) {
