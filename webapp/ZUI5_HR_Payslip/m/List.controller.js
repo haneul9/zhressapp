@@ -158,7 +158,7 @@ sap.ui.define(
                                                 width: "100%",
                                                 //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{money1}"
+                                                text: "{Bet01}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
@@ -178,7 +178,7 @@ sap.ui.define(
                                                 width: "100%",
                                                 //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{money2}"
+                                                text: "{Bet02}}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
@@ -198,7 +198,7 @@ sap.ui.define(
                                                 width: "100%",
                                                 //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{money3}"
+                                                text: "{Bet03}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
@@ -218,10 +218,8 @@ sap.ui.define(
                                         .bindElement("/Data")
                                 );
                                 if (data.PayslipForm1Nav && data.PayslipForm1Nav.results.length > 0) {
-                                    vData.money1 = 0;
                                     for (var i = 0; i < data.PayslipForm1Nav.results.length; i++) {
                                         if (data.PayslipForm1Nav.results[i].Pyitm != "") {
-                                            vData.money1 += Common.toNumber(data.PayslipForm1Nav.results[i].BetrgT) * 1;
                                             oMoney1Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
@@ -242,11 +240,8 @@ sap.ui.define(
                                 }
 
                                 if (data.PayslipForm2Nav && data.PayslipForm2Nav.results.length > 0) {
-                                    vData.money2 = 0;
-
                                     data.PayslipForm2Nav.results.forEach(function (elem) {
                                         if (elem.Pyitm != "") {
-                                            vData.money2 += Common.toNumber(elem.BetrgT) * 1;
                                             oMoney2Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
@@ -267,11 +262,8 @@ sap.ui.define(
                                 }
 
                                 if (data.PayslipForm3Nav && data.PayslipForm3Nav.results.length > 0) {
-                                    vData.money3 = 0;
-
                                     data.PayslipForm3Nav.results.forEach(function (elem) {
                                         if (elem.Pyitm != "") {
-                                            vData.money3 += Common.toNumber(elem.BetrgT) * 1;
                                             oMoney3Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
@@ -350,9 +342,6 @@ sap.ui.define(
                     oController._DetailJSonModel.setProperty("/Data/Ename", vData.Ename);
                     oController._DetailJSonModel.setProperty("/Data/Orgtx", vData.Orgtx);
                     oController._DetailJSonModel.setProperty("/Data/Zyymm", vData.Zyymm);
-                    oController._DetailJSonModel.setProperty("/Data/money1", Common.numberWithCommas(vData.money1));
-                    oController._DetailJSonModel.setProperty("/Data/money2", Common.numberWithCommas(vData.money2));
-                    oController._DetailJSonModel.setProperty("/Data/money3", Common.numberWithCommas(vData.money3));
                     oController._DetailJSonModel.setProperty("/Data/Ztitle", vData.Ztitle);
                     oController._DetailJSonModel.setProperty("/Data/Znotes", vData.Znotes);
                     oController._DetailJSonModel.setProperty("/Data/visibleYn", "X");
