@@ -61,7 +61,7 @@ sap.ui.jsfragment("ZUI5_HR_OvertimeWorkTech.fragment.priorOverWorkDialog", {
 				new sap.m.HBox({
 					items: [
 						new sap.m.Button({
-							press: PriorOverWorkDialogHandler.onBeforeOpen.bind(PriorOverWorkDialogHandler),
+							press: PriorOverWorkDialogHandler.onBeforeOpen.bind(PriorOverWorkDialogHandler, "X"),
 							text: "{i18n>LABEL_00100}" // 조회
 						})
 						.addStyleClass("button-search")
