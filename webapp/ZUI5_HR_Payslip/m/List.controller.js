@@ -52,61 +52,54 @@ sap.ui.define(
             getOcrsnList: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
+                var oPath = "";
+                var createData = { PayreasonNav: [] };
 
-                var search = function () {
-                    var oPath = "";
-                    var createData = { PayreasonNav: [] };
+                oPath = "/PayreasonPeSet";
+                createData.IPernr = vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "";
+                createData.IYear = vCondiData.Year && vCondiData.Year != "" ? vCondiData.Year : "";
+                createData.IMonth = vCondiData.Month && vCondiData.Month != "" ? vCondiData.Month : "";
+                createData.ILangu = vCondiData.Langu && vCondiData.Langu != "" ? vCondiData.Langu : "";
+                createData.IBukrs = vCondiData.Bukrs && vCondiData.Bukrs != "" ? vCondiData.Bukrs : "";
 
-                    oPath = "/PayreasonPeSet";
-                    createData.IPernr = vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "";
-                    createData.IYear = vCondiData.Year && vCondiData.Year != "" ? vCondiData.Year : "";
-                    createData.IMonth = vCondiData.Month && vCondiData.Month != "" ? vCondiData.Month : "";
-                    createData.ILangu = vCondiData.Langu && vCondiData.Langu != "" ? vCondiData.Langu : "";
-                    createData.IBukrs = vCondiData.Bukrs && vCondiData.Bukrs != "" ? vCondiData.Bukrs : "";
-
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
-                            if (data) {
-                                if (data.PayreasonNav && data.PayreasonNav.results.length > 0) {
-                                    for (var i = 0; i < data.PayreasonNav.results.length; i++) {
-                                        vData.Data.push(data.PayreasonNav.results[i]);
-                                    }
+                oModel.create(
+                    oPath,
+                    createData,
+                    null,
+                    function (data) {
+                        if (data) {
+                            if (data.PayreasonNav && data.PayreasonNav.results.length > 0) {
+                                for (var i = 0; i < data.PayreasonNav.results.length; i++) {
+                                    vData.Data.push(data.PayreasonNav.results[i]);
                                 }
-                            }
-                        },
-                        function (oError) {
-                            var Err = {};
-                            oController.Error = "E";
-
-                            if (oError.response) {
-                                Err = window.JSON.parse(oError.response.body);
-                                var msg1 = Err.error.innererror.errordetails;
-                                if (msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-                                else oController.ErrorMessage = Err.error.message.value;
-                            } else {
-                                oController.ErrorMessage = oError.toString();
+                                oController._DetailJSonModel.setProperty("/Data/Seqnr", data.PayreasonNav.results[0].Seqnr);
                             }
                         }
-                    );
+                    },
+                    function (oError) {
+                        var Err = {};
+                        oController.Error = "E";
 
-                    oController._DetailJSonModel.setProperty("/Ocrsn", vData.Data);
-                    oController._BusyDialog.close();
-
-                    if (oController.Error == "E") {
-                        oController.Error = "";
-                        MessageBox.error(oController.ErrorMessage);
-                        return;
+                        if (oError.response) {
+                            Err = window.JSON.parse(oError.response.body);
+                            var msg1 = Err.error.innererror.errordetails;
+                            if (msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                            else oController.ErrorMessage = Err.error.message.value;
+                        } else {
+                            oController.ErrorMessage = oError.toString();
+                        }
                     }
-                };
+                );
 
-                oController._BusyDialog.open();
-                setTimeout(search, 100);
+                oController._DetailJSonModel.setProperty("/Ocrsn", vData.Data);
+            
+                if (oController.Error == "E") {
+                    oController.Error = "";
+                    MessageBox.error(oController.ErrorMessage);
+                    return;
+                }
             },
 
             onPressSearchDetail: function () {
@@ -119,6 +112,7 @@ sap.ui.define(
                     oMoney2Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money2Layout"),
                     oMoney3Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money3Layout"),
                     oMoney4Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money4Layout");
+                                    
                 oController._DetailJSonModel.setProperty("/Data/visibleYn", "");
                 oMoney1Layout.destroyItems();
                 oMoney2Layout.destroyItems();
@@ -220,18 +214,18 @@ sap.ui.define(
                                     vData.money1 = 0;
                                     for (var i = 0; i < data.PayslipForm1Nav.results.length; i++) {
                                         if (data.PayslipForm1Nav.results[i].Pyitm != "") {
-                                            vData.money1 += Common.toNumber(data.PayslipForm2Nav.results[i].BetrgT) * 1;
+                                            vData.money1 += Common.toNumber(data.PayslipForm1Nav.results[i].BetrgT) * 1;
                                             oMoney1Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: data.PayslipForm1Nav.results[i].Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: data.PayslipForm1Nav.results[i].Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
                                                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                            text: data.PayslipForm2Nav.results[i].BetrgT
+                                                            text: data.PayslipForm1Nav.results[i].BetrgT
                                                         })
                                                     ]
                                                 })
@@ -251,7 +245,7 @@ sap.ui.define(
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
@@ -276,7 +270,7 @@ sap.ui.define(
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
@@ -298,7 +292,7 @@ sap.ui.define(
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",

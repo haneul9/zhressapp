@@ -40,7 +40,7 @@ sap.ui.define([], function () {
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
                                 },
                                 change: function () {
-                                    oController.getOcrsnList(oController, "");
+                                    oController.getOcrsnList();
                                 }
                             }),
                             new sap.m.ComboBox({
@@ -52,7 +52,7 @@ sap.ui.define([], function () {
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
                                 },
                                 change: function () {
-                                    oController.getOcrsnList(oController, "");
+                                    oController.getOcrsnList();
                                 }
                             }).addStyleClass("ml-4px"),
                             new sap.m.ComboBox({
