@@ -121,6 +121,13 @@ sap.ui.define(
                                                     visible: {
                                                         parts: [{ path: "Zstatus" }, { path: "Aptyp" }],
                                                         formatter: function (v, v2) {
+                                                            this.removeStyleClass("button-light-sm");
+                                                            this.removeStyleClass("button-light-smRpw");
+                                                            if(v === "3"){
+                                                                this.addStyleClass("button-light-smRow");
+                                                            }else{
+                                                                this.addStyleClass("button-light-sm");
+                                                            }
                                                             if (v === "2") {
                                                                 if (v2 === "1") return true;
                                                                 else return false;
@@ -129,7 +136,7 @@ sap.ui.define(
                                                             }
                                                         }
                                                     }
-                                                }).addStyleClass("button-light-sm")
+                                                })
                                             ]
                                         })
                                     ]
