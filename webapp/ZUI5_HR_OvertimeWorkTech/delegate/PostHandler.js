@@ -321,11 +321,11 @@ sap.ui.define(
                         callback = function(o) {
                             oModel.setProperty("/Detail/Header/Begda", o.Otdat);
                             oModel.setProperty("/Detail/Header/Otbetm", o.Otbetm);
-                            oModel.setProperty("/Detail/Header/OtbetmT", o.Otbetm ? o.Otbetm.substring(0, 2) : "00");
-                            oModel.setProperty("/Detail/Header/OtbetmM", o.Otbetm ? o.Otbetm.substring(2, 4) : "00");
+                            oModel.setProperty("/Detail/Header/OtbetmT", o.Otbetm ? o.Otbetm.split(":")[0] : "00");
+                            oModel.setProperty("/Detail/Header/OtbetmM", o.Otbetm ? o.Otbetm.split(":")[1] : "00");
                             oModel.setProperty("/Detail/Header/Otentm", o.Otentm);
-                            oModel.setProperty("/Detail/Header/OtentmT", o.Otentm ? o.Otentm.substring(0, 2) : "00");
-                            oModel.setProperty("/Detail/Header/OtentmM", o.Otentm ? o.Otentm.substring(2, 4) : "00");
+                            oModel.setProperty("/Detail/Header/OtentmT", o.Otentm ? o.Otentm.split(":")[0] : "00");
+                            oModel.setProperty("/Detail/Header/OtentmM", o.Otentm ? o.Otentm.split(":")[1] : "00");
                             oModel.setProperty("/Detail/Header/Holick", o.Holick === "X" ? true : false);
                             oModel.setProperty("/Detail/Header/Horex", o.Horex);
                             oModel.setProperty("/Detail/Header/Brkhr1", "00");
