@@ -78,6 +78,8 @@ sap.ui.define(
                                     vData.Data.push(data.PayreasonNav.results[i]);
                                 }
                                 oController._DetailJSonModel.setProperty("/Data/Seqnr", data.PayreasonNav.results[0].Seqnr);
+                            }else{
+                                oController._DetailJSonModel.setProperty("/Data/Seqnr", ""); 
                             }
                         }else{
                             oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
