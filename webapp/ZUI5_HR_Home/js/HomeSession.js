@@ -28,16 +28,20 @@ $.extend(HomeSession.prototype, {
 
 clearSessionStorage: function() {
 
+	if (this.alreadyChekckedIn()) {
+		return;
+	}
+
 	sessionStorage.removeItem('ehr.sf-user.name');
 	sessionStorage.removeItem('ehr.sf-user.photo');
 	sessionStorage.removeItem('ehr.sf-user.locale');
 	sessionStorage.removeItem('ehr.sf-user.language');
 	sessionStorage.removeItem('ehr.odata.user');
 	sessionStorage.removeItem('ehr.odata.user.percod');
-	sessionStorage.removeItem('ehr.odata.csrf-token');
 	sessionStorage.removeItem('ehr.odata.destination');
-	sessionStorage.removeItem('ehr.session.token');
 	sessionStorage.removeItem('ehr.menu-auth.state');
+	sessionStorage.removeItem('ehr.odata.csrf-token');
+	sessionStorage.removeItem('ehr.session.token');
 },
 
 init: function(callback) {
@@ -85,6 +89,10 @@ init: function(callback) {
 			});
 		}.bind(this));
 	}.bind(this));
+},
+alreadyChekckedIn: function() {
+
+	return !!sessionStorage.getItem('ehr.session.token');
 },
 /*
 DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
@@ -180,7 +188,9 @@ S4HANA OData 호출을 위한 CSRF token 조회
 */
 retrieveSessionToken: function() {
 
-	if (sessionStorage.getItem('ehr.session.token')) {
+	// sessionStorage는 브라우저 창이 살아있는 동안만 유효하므로 session token이 존재한다는 것은 이미 최초에 발급을 받은 것이므로 재발급을 받으면 안됨, popup은 자식창이므로 sessionStorage를 공유
+	// TODO : SF session timeout 이후에는 어떻게 해야할까?
+	if (this.alreadyChekckedIn()) {
 		return new Promise(function(v) { v(); });
 	}
 
