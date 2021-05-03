@@ -1,0 +1,101 @@
+Home 다국어 처리
+언어 변경 후처리
+    메뉴 재조회
+    Portlet 재조회
+    메뉴 컨텐츠 재조회
+Portlet 설정 팝업 아이콘
+Portlet 설정 변경시 저장
+Portlet 삭제 기능
+Portlet drop시 갱신 문제
+그랜드 오픈시 BusinessTripDetail SAP report 링크 고치기 : popup, mid
+
+개인정보        MainContents
+공지사항        MainContents, NoticeManage(관리)
+바로가기        MainContents
+즐겨찾는 메뉴   MainContents , MenuFavorite(관리)
+팀 달력         MainContentsCal
+날씨정보
+세계시간
+HR건의사항      MainContents, SuggestionBox(관리)
+개인별 Portlet  PortletInfo(관리)
+
+-- 메뉴 조회
+-- 메뉴 출력시 즐겨찾기 표시
+-- 메뉴 즐겨찾기 on/off
+-- 메뉴 클릭시 권한 체크
+-- 메뉴 클릭후 메가드랍 숨기기
+
+
+메뉴정보 조회 OData       : GetMnlv
+메뉴 권한 체크 OData      : GetMenuidRole
+메뉴 즐겨찾기 OData       : MenuFavorite
+Portlet 개인별 정보 OData : PortletInfo
+2차 인증                  : 
+
+
+-- 같은 column에서 portlet 이동시 저장 안되는 현상
+-- portlet이 이미 선택된 상태에서 설정 팝업에서 해제 후 선택시 또 추가되는 현상
+-- 비번입력 취소시 스크롤 사라짐 현상
+
+-- 2021-04-14
+    -- 공지사항 포틀릿에서 접근시 권한 문제 -> 포틀릿에 오는 메뉴 ID가 메뉴트리에 오는 메뉴 ID가 다름
+    -- MSS, HASS 대메뉴 색상
+    -- 권한 오류시 메세지 없이 에러 페이지로 가버리는 문제
+    IE11 QAS 로그인 문제
+
+
+-- 모바일 비밀번호 입력 후 딜레이 심함
+-- 해당 인원이 없습니다.
+포틀릿
+
+
+-- 2021-04-27
+    전이사님 폰 모바일 포틀릿 스크롤
+    사번 암호화
+    개인정보 조회 화면 로그
+
+-- 2021-04-30
+    -- 네이버 지도 계정 변경
+    -- MFA sessionStorage에 저장 -> 앱 실행시 한 번만 하면 되는데 굳이 저장할 필요가 있을까?
+    -- 출장 대근자 소스 분리
+    -- 로그아웃
+    -- 출장 수정사항
+    -- carousel 버그 수정
+    -- BusinessDetail sap report URL 변경 : 
+    --     출장 신청 index.html?popup=BusinessTripDetail.html?tab=request&id=0000000000&date=YYYYMMDD&mid=0000
+    --     출장 비용 정산 index.html?popup=BusinessTripDetail.html?tab=settlement&id=0000000000&date=YYYYMMDD&mid=0000
+    -- 운영 언어 변경 오류
+    -- 출장 비용 정산 : 거래일자 editable 수정
+    -- 
+
+    session key 오류시 에러 메세지 보여주기
+    session timeout시 에러 메세지 보여주기
+
+    2FA 400 -> 200 변조 대비
+    IE ADFS 로그인 오류
+    
+    
+    팀원 목표관리 조회 시 목표를 입력하지 않은 인원은 리스트에서 제외 - 문정식
+    진척율 정수로만 표기
+    사진, goal id문제 - 김윤석
+    스크롤
+
+    yzdueo754l
+
+1.	Hidden iframe에서 Logout.html 호출
+2.	Hidden iframe에서 SuccessFactors 페이지 호출(https://axs5k0vke.accounts.ondemand.com/saml2/idp/slo/axs5k0vke.accounts.ondemand.com)
+3.	Hidden iframe에서 index.html 호출
+4.	메인창을 Logout.html로 이동
+
+-- 2021-05-03
+    index.html, indexMobile.html meta refresh 제거
+    ADFS 인증 적용
+
+
+
+if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+    window.location = 'microsoft-edge:' + window.location;
+    setTimeout(function() {
+        window.location = 'https://go.microsoft.com/fwlink/?linkid=2135547';
+    }, 1);
+}

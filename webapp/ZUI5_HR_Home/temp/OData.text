@@ -1,0 +1,301 @@
+﻿/IWFND/MAINT_SERVICE
+/IWFND/ERROR_LOG
+/IWFND/TRACES
+
+공통 코드 RFC
+    Z_HR_RFC_CODE_TABLE
+
+출장 코드 RFC
+    Z_HR_RFC_BT_CODE
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/PernrEncodingSet
+ATKMrA==
+{
+  "Pernr" : "20090028",
+  "PernrEncodeNav" : [
+    {
+      "Pernr" : "20090028"
+    }
+  ]
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/EmpLoginInfoSet
+{
+  "$filter": "Lpmid eq 'HACTA' and Percod eq 'ATKMrA=='"
+}
+
+공통코드 목록 조회
+/sap/opu/odata/sap/ZHR_COMMON_SRV/CommonCodeListHeaderSet
+{
+    "ICodeT":"004",
+    "ICodty":"ZHRD_OK_G", // 결재상태
+    "NavCommonCodeList":[]
+}
+
+출장 // 신청내역 조회
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/BtRequestSet
+{
+    "IConType": "1",
+    "IPernr": "20001003",
+    "IBegda": "/Date(-5364692872000)/",
+    "IEndda": "/Date(253402182000000)/",
+    "TableIn01": []
+}
+
+출장 // 상세조회
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/BtRequestSet
+{
+  "IConType": "0",
+  "IPernr": "20001003",
+  "IBukrs": "1000",
+  "ILangu": "KO",
+  "TableIn01": [
+      {
+        "BtEnddat": "/Date(1606348800000)/",
+        "BtPurpose1": "1",
+        "BtPurpose1T": "",
+        "BtStartdat": "/Date(1606262400000)/",
+        "BtStat": "",
+        "BtStatT": "",
+        "Btact": true,
+        "Btbpn": "20090028",
+        "BtbpnT": "김태형",
+        "Btrpn": "20001003",
+        "BtrpnT": "김성준",
+        "Bukrs": "1000",
+        "DtRqst": "/Date(1605225600000)/",
+        "Edtfg": true,
+        "Gjahr": "2020",
+        "IOdkey": "",
+        "Status1": "AA",
+        "Status2": "",
+        "Title": "111",
+        "UrlA": "",
+        "UrlA1": "",
+        "Zzdocno": "1000001133",
+        "Zzok": "",
+        "ZzokT": "미결재"
+      }
+  ],
+  "TableIn02": [],
+  "TableIn03": [],
+  "TableIn04": [],
+  "TableIn05": [],
+  "TableIn06": []
+}
+
+출장구분 코드 목록 조회
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/BtCodeSet
+{
+    "ICodeT":"004",
+    "IBukrs":"1000",
+    "TableIn": []
+}
+
+근태유형 코드 목록 조회
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/BtCodeSet
+{
+    "ICodeT":"007",
+    "IBukrs":"1000",
+    "TableIn": []
+}
+
+출장자 조회 : 대리인 자격으로 신청시
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/DelegateCheckSet
+{
+  "IPernr": "20001003",
+  "IEmpid": "20001003",
+  "IBukrs": "1000",
+  "IVolma": "9300",
+  "TableIn": []
+}
+
+출장 비용귀속부서 Cost Center 코드 목록 조회
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/BtBaseSet
+{
+	"ICodeT": "002",
+	"ISubCode": "",
+	"ICode": "1070",
+	"IText": "",
+	"IBukrs": "1000",
+	"TableIn01": [],
+	"TableIn02": [],
+	"TableIn03": [],
+	"TableIn04": [],
+	"TableIn05": [],
+	"TableIn06": [],
+	"TableIn07": [],
+	"TableIn08": [],
+	"TableIn09": []
+}
+
+/sap/opu/odata/sap/ZHR_WORKTIME_APPL_SRV/BtBaseSet
+{
+	"ICodeT": "008",
+	"IBukrs": "1000",
+	"TableIn01": [],
+	"TableIn02": [],
+	"TableIn03": [],
+	"TableIn04": [],
+	"TableIn05": [],
+	"TableIn06": [],
+	"TableIn07": [],
+	"TableIn08": [],
+	"TableIn09": []
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/PerPasswordSet
+{
+  "Empid": "hpjt0857",
+  "Perpw": "init!2345",
+  "PernrPWNav": []
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/PerPasswordSet
+{
+  "Empid": "hpjt0857",
+  "Perpw": "init!234",
+  "PernrPWNav": []
+}
+response {
+  "d" : {
+    "__metadata" : {
+      "id" : "http://vmshppbt.lottechem.com:8000/sap/opu/odata/sap/ZHR_COMMON_SRV/PerPasswordSet('hpjt0857')",
+      "uri" : "http://vmshppbt.lottechem.com:8000/sap/opu/odata/sap/ZHR_COMMON_SRV/PerPasswordSet('hpjt0857')",
+      "type" : "ZHR_COMMON_SRV.PerPassword"
+    },
+    "Empid" : "hpjt0857",
+    "Perpw" : "init!2345",
+    "PernrPWNav" : {
+      "results" : [
+
+      ]
+    }
+  }
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/GetMnlvSet post
+{
+  "IPernr": "20090028",
+  "IBukrs": "1000",
+  "IDevice": "",
+  "TableIn1": [],
+  "TableIn2": [],
+  "TableIn3": [],
+  "TableIn4": []
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/GetMenuidRoleSet post
+{
+  "IPernr": "20001003",
+  "IBukrs": "1000",
+  "IMenid": "1111",
+  "Export": []
+}
+
+-- error example
+{
+  "error" : {
+    "code" : "SY/530",
+    "message" : {
+      "lang" : "ko",
+      "value" : "An exception was raised"
+    },
+    "innererror" : {
+      "application" : {
+        "component_id" : "",
+        "service_namespace" : "/SAP/",
+        "service_id" : "ZHR_COMMON_SRV",
+        "service_version" : "0001"
+      },
+      "transactionid" : "A409311A269F0040E0060333C9290578",
+      "timestamp" : "",
+      "Error_Resolution" : {
+        "SAP_Transaction" : "",
+        "SAP_Note" : "See SAP Note 1797736 for error analysis (https://service.sap.com/sap/support/notes/1797736)"
+      },
+      "errordetails" : [
+        {
+          "code" : "",
+          "message" : "권한이 없는 메뉴입니다.",
+          "propertyref" : "",
+          "severity" : "error",
+          "transition" : false,
+          "target" : ""
+        },
+        {
+          "code" : "/IWBEP/CX_MGW_BUSI_EXCEPTION",
+          "message" : "An exception was raised",
+          "propertyref" : "",
+          "severity" : "error",
+          "transition" : false,
+          "target" : ""
+        }
+      ]
+    }
+  }
+}
+
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/MenuFavoriteSet
+{
+  "IPernr" : "20090028",
+  "IMnid1" : "10000",
+  "IMnid2" : "15000",
+  "IMnid3" : "15100",
+  "IMnid4" : "1510",
+  "IFavor" : "X",
+  "ILangu" : "KO",
+  "Export" : []
+}
+
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/GetMnlvSet
+{
+  "IPernr" : "20090028",
+  "IBukrs" : "1000",
+  "IDevice" : "",
+  "TableIn1" : [],
+  "TableIn2" : [],
+  "TableIn3" : [],
+  "TableIn4" : []
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/PortletInfoSet
+{
+  "IMode": "R",
+  "IBukrs": "1000",
+  "IPernr": "20090028",
+  "IDatum" : "/Date(1616478472820)/",
+  "ILangu": "KO",
+  "TableIn1": [],
+  "TableIn2": []
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/MainContentsSet
+{
+  "IMode": "R",
+  "IConType": "",
+  "IPernr": "20090028",
+  "ILangu": "KO",
+  "TableIn1": [],
+  "TableIn2": [],
+  "TableIn3": [],
+  "TableIn4": []
+}
+
+/sap/opu/odata/sap/ZHR_COMMON_SRV/MainContentsCalSet
+{
+  "IConType": "",
+  "IPernr": "20090028",
+  "IBukrs": "1000",
+  "IMonth": "",
+  "ILangu": "KO",
+  "TableIn1": [],
+  "TableIn2": [],
+  "TableIn3": [],
+  "TableIn4": [],
+  "TableIn5": [],
+  "TableIn6": [],
+  "TableIn7": []
+}

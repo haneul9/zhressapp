@@ -1,0 +1,108 @@
+* 태그
+
+    remote 조회 ==> git ls-remote --tags
+    local  조회 ==> git tag -l
+
+    remote 삭제 ==> git push origin :<tag-name>
+    local  삭제 ==> git tag -d <tag-name>
+
+    remote 일괄 삭제 ==> git tag -l '8*' | xargs git push --delete origin
+    local  일괄 삭제 ==> git tag -l '8*' | xargs git tag -d
+
+* Local repository에 master branch를 복제하여 새로운 branch 생성(master branch에 checkout된 상태에서 아래 명령 실행)
+
+    git checkout -b <branch-name>
+
+
+* Remote repository에 존재하는 branch를 local repository에 복제하기
+
+    git checkout -t origin/<branch-name>
+
+
+* Local repository에서 생성한 branch를 remote repository에 올리기
+
+    git push --set-upstream origin <branch-name>
+    or
+    git push -u origin <branch-name>
+
+
+* 다른 branch로 변경하기(기존 branch에 작업중이던 내용들을 stash하거나 commit 한 후 변경할 것)
+
+    git checkout <branch-name>
+
+
+* Local repository branch 삭제하기(Remote repository에 연결되어 있는 branch는 삭제되지 않음)
+
+   git branch -D <branch-name>
+
+
+* Remote repository branch 삭제하기
+
+   git push origin --delete <branch-name>
+
+
+* 작업 완료된 local repository branch를 master branch에 병합하기
+
+    1. 작업 완료된 branch commit
+        git add .
+        git commit -am '작업 완료 코멘트'
+
+    2. master branch로 변경
+        git checkout master
+
+    3. master branch 최신 상태로 업데이트
+        git pull
+
+    4. 작업 완료된 branch를 master branch로 병합
+        git merge --squash <branch-name>
+
+    5. 병합 완료 후 master branch commit
+        git add .
+        git commit
+
+    6. 코멘트 수정 탭이 열리면 코멘트 수정 후 닫아줌
+
+    7. master branch를 다시 업데이트 (병합하는 동안 다른 개발자가 commit 했을 수 있기 때문)
+        git pull
+
+    8. Remote repository에 올리기
+        git push
+
+-----
+
+    git add .
+    git stash
+    git stash list
+    git stash pop --index
+
+-----
+
+- Branch rename
+
+    git chackout <old-name>
+    git branch -m <new-name>
+    git push origin -u <new-name>
+    git push origin --delete <old-name>
+    git branch -D <old-name>
+
+-----
+
+master --> local branch merge
+
+    git checkout master
+    git pull
+    git checkout -b hpjt0857-master-copy origin/master
+    git checkout hpjt0857-business-trip
+    git merge --squash hpjt0857-master-copy
+    git commit
+    git push
+    git branch -D hpjt0857-master-copy
+
+-----
+
+git checkout master
+git checkout hpjt0857-business-trip
+
+git checkout -b hpjt0980-business-trip origin/hpjt0857-business-trip
+git chackout -t origin/hpjt0857-business-trip
+git push origin -u origin hpjt0980-business-trip

@@ -1,0 +1,35 @@
+﻿AS-IS HR
+    http://10.97.15.103:7097/
+    ID : 사번
+    PW : 2020lcc01
+
+    기초 사번 20130126
+    첨단 사번 35132012
+
+SAP
+    메뉴 : ZHR_LCC
+
+FD    
+    업적평가 등급결정 : 문정식 팀장님
+
+86건 삭제 15.56s
+
+박중성 팀장님 951038 디지털혁신팀
+    Edward.Park@lotte.net
+    951038@lottechem.com
+
+김태형 책임님
+    20090028@lottechem.com
+    20090028
+    qwer1234@
+
+$('[name]:not(:hidden)', $('#mainFrame').contents()).wrap(function() { return '<div style="position:relative; display:inline-block"></div>'; }).parent().each(function() { var t = $('[name]', this); $(this).append('<div style="position:absolute; top:-5px; width:' + t.outerWidth() + 'px; line-height:1.2; overflow:hidden; text-align:right; font-size:11px; font-weight:bold; color:red">' + t.attr('name') + '</div>'); });
+
+홍춘기 PI팀 35124965 - 동반출장자 황정근
+김지혜 35132012 HR
+박지혜 20060040 
+추교현 20130126 법인카드사용내역
+한나리 20150129 총무담당
+홍무늬 20140121 917125
+최내봄 20140099
+윤현주 20170084

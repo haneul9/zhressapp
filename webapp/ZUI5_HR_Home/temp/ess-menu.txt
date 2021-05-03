@@ -1,0 +1,5 @@
+﻿기초 사번 20130126
+    f_clickMenuLeft('3', '7', '01', '/pt/businessTripLAM.do');
+
+첨단 사번 35132012
+    f_clickMenuLeft('A3', '7', '01', '/pt/businessTripLAM.do');

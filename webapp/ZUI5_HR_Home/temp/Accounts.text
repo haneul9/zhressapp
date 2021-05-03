@@ -1,0 +1,92 @@
+﻿hpjt0857@lottechem.com / init!2345
+hpjt0857@lottechem.com / Init!2345
+
+S0022240095
+sfdev3
+
+NCP
+    THK@lotte.net / lcc0316~!
+    X-NCP-APIGW-API-KEY-ID : swgstl6xp0
+    X-NCP-APIGW-API-KEY : nTY8BLyo2frR2mCfeSRIZWahRyuyuaKe6NUrLM9a
+
+공공
+    lcchr / lcc0316~!
+
+MOIN
+	HPJT0857
+	zpalzkf!35
+	ABKk@91$9
+
+
+SAP GUI
+	HRD07
+
+
+공유폴더
+             \\lottechem.com/nfile/99.프로젝트/103.인사시스템 구축 프로젝트
+    전이사님 \\Lcclhpjt0831a\프로젝트 공유폴더
+
+
+javascript:(function() { $('#j_username').val('S0022240095'); $('#j_password').val('zpalzkf!35'); $('#logOnFormSubmit').click(); })()
+javascript:(function() { $('#gitAuthenticationUser-inner').val('hpjt0857@lottechem.com'); $('#gitAuthenticationPassword-inner').val('zpalzkf!35'); $('#__box4-CB').prop('checked', true); $('#__button15 bdi').click(); })()
+https://api10preview.sapsf.com/odata/v2
+
+https://webidetesting6753897-g110bc197.dispatcher.jp1.hana.ondemand.com/
+https://webidecp-g110bc197.dispatcher.jp1.hana.ondemand.com/
+javascript:(function() { $('#gitAuthenticationUser-inner').val('hpjt0857@lottechem.com'); $('#gitAuthenticationPassword-inner').val('zpalzkf!35'); $('#__box4-CB').prop('checked', true); $('#__button15 bdi').click(); })()
+
+javascript:(function() { var d = document; d.getElementById('userNameInput').value='hpjt0857@lottechem.com'; d.getElementById('passwordInput').value='init!2345'; Login.submitLoginRequest(); })()
+
+=====
+
+https://hcm10preview.sapsf.com
+https://performancemanager10.successfactors.com/sf/start
+hpjt0857@lottechem.com
+$('.jmp_sub:eq(0)').append('<a href="https://performancemanager10.successfactors.com/sf/start" target="_blank">https://performancemanager10.successfactors.com/sf/start</a>')
+
+https://zhressapp-ziwz5jxar7.dispatcher.jp1.hana.ondemand.com/EvalProfile.html
+
+DEV https://hcm10preview.sapsf.com/login?company=lottechemiT1
+QAS https://performancemanager10.successfactors.com/login?company=lottechemiD
+PRD https://performancemanager10.successfactors.com/login?company=lottechemi
+
+SF Logout https://axs5k0vke.accounts.ondemand.com/saml2/idp/slo/axs5k0vke.accounts.ondemand.com 
+ADFS https://adfsprd1.lottechem.com/adfs/ls/?wa=wsignout1.0
+
+=====
+
+IAS , IPS 계정 공유 드립니다. 
+
+1)	IAS (개발계, 테스트계), 
+URL : https://axs5k0vke.accounts.ondemand.com/admin
+ID : thkim@lotte.net
+PW : init1234!
+
+2)	IAS (운영계 )
+URL : https://af0dpm2pj.accounts.ondemand.com/admin
+ID : thkim@lotte.net
+PW : init1234!
+
+3)	IPS (개발계)
+URL : https://ips-aa3827fcf.dispatcher.hana.ondemand.com
+ID : S0022091456
+PW : LThd4588!@
+
+4)	IPS (운영계)
+URL : https://ips-cd919aeeb.dispatcher.ap1.hana.ondemand.com
+ID : S0022091456
+PW : LThd4588!@
+
+spName https://www.successfactors.com/lottechemiD
+
+[新 인사시스템 구축] 
+
+hpjt0857@lottechem.com
+zpalzkf!35
+
+hpjt0832@lottechem.com
+qwer1234#
+
+lcc : lcc2021
+첨단 : lam3231
+lcc(기초) : lcc2021
