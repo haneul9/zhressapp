@@ -656,7 +656,7 @@ sap.ui.define([
 			
 			if(vData.length == 0){
 				for(var i=0; i<5; i++){
-					tableData.Data.push({Idx : (tableData.Data.length), Datum : oData.Datum, Beguz : "", Enduz : "", Offyn : oData.Offyn});
+					tableData.Data.push({Idx : tableData.Data.length, Datum : oData.Datum, Beguz : "", Enduz : "", Offyn : oData.Offyn});
 				}
 				
 				data.Data.push({Datum : oData.Datum, Austy : "A", Offyn : oData.Offyn});
@@ -666,7 +666,7 @@ sap.ui.define([
 						if(tableData.Data.length < 5){
 							var length = 5 - tableData.Data.length;
 							for(var j=0; j<length; j++){
-								tableData.Data.push({Idx : (tableData.Data.length), Datum : oData.Datum, Beguz : "", Enduz : "", Offyn : oData.Offyn});
+								tableData.Data.push({Idx : tableData.Data.length, Datum : oData.Datum, Beguz : "", Enduz : "", Offyn : oData.Offyn});
 							}
 						}
 						
@@ -674,7 +674,7 @@ sap.ui.define([
 						break;
 					}
 					
-					tableData.Data.push(Object.assign({Idx : (tableData.Data.length), Offyn : oData.Offyn}, vData[i]));
+					tableData.Data.push(Object.assign({Offyn : oData.Offyn}, vData[i], {Idx : tableData.Data.length}));
 				}
 			}
 			
@@ -762,6 +762,7 @@ sap.ui.define([
 								var data2 = data.FlexWorktime2Nav.results;
 								
 								for(var i=0; i<data2.length; i++){
+									data2[i].Idx = i;
 									data2[i].Datum = data2[i].Datum ? new Date(common.Common.setTime(data2[i].Datum)) : null;
 									data2[i].Offyn = oData2[0].Offyn;
 									
