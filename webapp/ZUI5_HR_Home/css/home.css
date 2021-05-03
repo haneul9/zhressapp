@@ -307,6 +307,9 @@ body.under-construction .ehr-logo {position:static; margin:0}
 @media (min-width:1200px) {
 	.portlet-masonry-wrapper {width:1206px}
 }
+@media (min-width:499px) and (max-width:1024px) {    
+	.ehr-gnb .navbar-nav {padding-top:20px;}
+}
 
 /* Modal Style */
 .modal-header {padding:2px 25px; background-color:#f4f5f6;border-bottom:1px solid #e4e4e4}
