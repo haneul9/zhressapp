@@ -95,6 +95,8 @@ sap.ui.define([
 			
 			oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", "0");
 			oController._ListCondJSonModel.setProperty("/Data/Tottmtx", "-");
+			oController._ListCondJSonModel.setProperty("/Data/Tottm2", "");
+			
 			var check = ""; // 총근로시간 > 소정근로시간 = X
 			
 			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
@@ -135,8 +137,14 @@ sap.ui.define([
 										  {text : oController.getBundleText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
 										  {text : oController.getBundleText("LABEL_63010"), field : "Notes"},	// 상태
 										  /*{text : oController.getBundleText("LABEL_69031"), field : "Tottm"}*/ // 근로시간 합계
-										  {text : oController.getBundleText("LABEL_69055").replace("\n", ""), field : "Tottm2"}, // 근로시간합계(월말예상)
-										  {text : oController.getBundleText("LABEL_69056").replace("\n", ""), field : "Notes2"}]; // 상태(월말예상)
+										  ];
+										  
+							// 근로시간합계(월말예상)가 없는 경우 달력 선택 불가 처리, 범례 미표시
+							oController._ListCondJSonModel.setProperty("/Data/Tottm2", data.Tottm2);
+							if(data.Tottm2 != ""){
+								oField.push({text : oController.getBundleText("LABEL_69055").replace("\n", ""), field : "Tottm2"}); // 근로시간합계(월말예상)
+								oField.push({text : oController.getBundleText("LABEL_69056").replace("\n", ""), field : "Notes2"}); // 상태(월말예상)
+							}
 										  
 							for(var i=0; i<oField.length; i++){ 
 								var detail = {Text : oField[i].text, Value : eval("data." + oField[i].field)};
@@ -417,6 +425,9 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.List");
 			var oController = oView.getController();	
 			
+			// 근로시간합계(월말예상) == '' 인 경우 선택불가 처리
+			if(oController._ListCondJSonModel.getProperty("/Data/Tottm2") == "") return;
+
 			var oControl = sap.ui.getCore().byId(oEvent.currentTarget.id);
 			if(oControl == undefined) return;
 			

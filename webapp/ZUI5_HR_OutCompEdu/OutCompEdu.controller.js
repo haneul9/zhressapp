@@ -990,7 +990,6 @@ sap.ui.define([
 		},
 
 		onPressAddRow: function(oEvent) { // 참석자 추가
-			var oController = this;
 			SearchUser1.oController = this;
 			SearchUser1.searchAuth = "A";
 			SearchUser1.oTargetPaths = null;
@@ -1058,6 +1057,14 @@ sap.ui.define([
 			}else{
 				this.ApplyModel.setProperty(vPath + "/Natio", "2");
 			}
+		},
+
+		PassWordCheck: function(oEvent) { // PassWord Check
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
+
+			// this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "" : vTime);
+			// oEvent.getSource().setValue(Common.checkNull(vTime) ? "" : vTime);	
 		},
 
 		ErrorCheck: function() {
@@ -1370,6 +1377,8 @@ sap.ui.define([
 					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
 					
 					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+					oSendData.Edoty = "2";
+					oSendData.Pernr = vPernr;
 
 					var sendObject = {};
 					// Header

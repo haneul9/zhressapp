@@ -48,6 +48,12 @@ sap.ui.define(
                             new sap.m.HBox({
                                 justifyContent : "End",
                                 fitContainer : true,
+                                visible : {
+                                    path : "Tottm2",
+                                    formatter : function(fVal){
+                                        return fVal != "" ? true : false;
+                                    }
+                                },
                                 items: [
                                         new sap.m.ToolbarSpacer(),
                                         new sap.m.Label().addStyleClass("custom-legend-color bg-signature-darkgreen"),

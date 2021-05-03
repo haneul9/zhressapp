@@ -268,7 +268,10 @@ clearResource: function() {
 
 	return new Promise(function(resolve) {
 		setTimeout(function() {
-			this.$().data('jsp').destroy();
+			var jsp = this.$().data('jsp');
+			if (jsp) {
+				jsp.destroy();
+			}
 			resolve();
 		}.bind(this), 0);
 	}.bind(this));

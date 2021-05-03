@@ -161,53 +161,57 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 									vAlign : "Middle"
 								}).addStyleClass("Label"),
 								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.DatePicker({
-												   valueFormat : "yyyy-MM-dd",
-										           displayFormat : gDtfmt,
-										           value : "{Begda}",
-												   width : "150px",
-												   textAlign : "Begin",
-												   change : oController.onChangeDate,
-											 	   editable : {
-											 	 		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
-				                               	   		}
-											 	   }
-											   }),
-											   new sap.m.DatePicker({
-												   valueFormat : "yyyy-MM-dd",
-										           displayFormat : gDtfmt,
-										           value : "{Endda}",
-												   width : "150px",
-												   textAlign : "Begin",
-												   change : oController.onChangeDate,
-											 	   editable : {
-											 	 		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
-				                               	   		}
-											 	   }
-											   }).addStyleClass("pl-5px"),
-				                               new sap.m.Button({
-				                               	   text : oBundleText.getText("LABEL_48023"), // 계산
-				                               	   visible : {
-				                               	   		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
-				                               	   		}
-				                               	   },
-				                               	   press : function(oEvent){
-				                               	   		var persa = $.app.getModel("session").getData().Persa;
-				                               	   			persa = persa.substring(0,1);
-				                               	   			
-				                               	   		if(persa == "D"){
-				                               	   			oController.onPressCheckAbsence(oEvent);
-				                               	   		} else {
-				                               	   			oController.onPressOvertimePe(oEvent);
-				                               	   		}
-				                               	   }
-				                               }).addStyleClass("button-default pt-3px pl-5px")],
+									content : [new sap.m.HBox({
+												   items : [
+													   	new sap.m.DatePicker({
+														   valueFormat : "yyyy-MM-dd",
+												           displayFormat : gDtfmt,
+												           value : "{Begda}",
+														   width : "150px",
+														   textAlign : "Begin",
+														   change : oController.onChangeDate,
+													 	   editable : {
+													 	 		path : "Status1",
+						                               	   		formatter : function(fVal){
+						                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+						                               	   		}
+													 	   }
+													   }),
+													   new sap.m.DatePicker({
+														   valueFormat : "yyyy-MM-dd",
+												           displayFormat : gDtfmt,
+												           value : "{Endda}",
+														   width : "150px",
+														   textAlign : "Begin",
+														   change : oController.onChangeDate,
+													 	   editable : {
+													 	 		path : "Status1",
+						                               	   		formatter : function(fVal){
+						                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+						                               	   		}
+													 	   }
+													   }).addStyleClass("pl-5px"),
+						                               new sap.m.Button({
+						                               	   text : oBundleText.getText("LABEL_48023"), // 계산
+						                               	   visible : {
+						                               	   		path : "Status1",
+						                               	   		formatter : function(fVal){
+						                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+						                               	   		}
+						                               	   },
+						                               	   press : function(oEvent){
+						                               	   		var persa = $.app.getModel("session").getData().Persa;
+						                               	   			persa = persa.substring(0,1);
+						                               	   			
+						                               	   		if(persa == "D"){
+						                               	   			oController.onPressCheckAbsence(oEvent);
+						                               	   		} else {
+						                               	   			oController.onPressOvertimePe(oEvent);
+						                               	   		}
+						                               	   }
+						                               }).addStyleClass("button-default pt-3px pl-5px")
+												   ]
+											   })],
 				                    hAlign : "Begin",
 				                    vAlign : "Middle"
 								}).addStyleClass("Data")]

@@ -49,6 +49,9 @@ sap.ui.define(
                    // Employee Div 정의
                     this._ListCondJSonModel.setProperty("/Data/Pernr", oEvent.data.Pernr);
                     this._ListCondJSonModel.setProperty("/Data/Ename", oEvent.data.Ename);
+                    this._ListCondJSonModel.setProperty("/Data/Stext", oEvent.data.Fulln);
+                    this._ListCondJSonModel.setProperty("/Data/PGradeTxt", oEvent.data.ZpGradetx); //직급
+                    this._ListCondJSonModel.setProperty("/Data/ZtitleT", oEvent.data.Ztitletx); // 직위
                     this.getPhoto();
                     var oIconBar = sap.ui.getCore().byId(this.PAGEID + "_IconBar");
                     oIconBar.setSelectedKey("Basic");

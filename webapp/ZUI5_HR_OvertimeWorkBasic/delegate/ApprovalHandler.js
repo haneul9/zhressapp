@@ -397,7 +397,7 @@ sap.ui.define(
                     );
                 };
 
-                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_42001") : this.oController.getBundleText("MSG_31010");
+                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_00060") : this.oController.getBundleText("MSG_31010");
 
                 MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
