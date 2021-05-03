@@ -236,7 +236,7 @@ table.search-box.search-bg {table-layout:auto !important}
 .button-light-smRow.sapMBtn,
 .button-light-smRow .sapMBtnInner {height:42px;border-radius:.1875rem;border-color:#c3c3c3;background-color:#fff;color:#333;}
 .button-light-smRow .sapMBtnInner:hover {border-color:#c3c3c3; background-color:#f2f3f4; color:#333}
-.button-light-smRow .sapMBtnContent {line-height: 18px;font-size:14px;color:#333;word-break: normal;}
+.button-light-smRow .sapMBtnContent {line-height: 18px;font-size:14px;color:#333;word-break: keep-all;}
 
 .button-delete.sapMBtn {padding:0}
 .button-delete.sapMBtn,
