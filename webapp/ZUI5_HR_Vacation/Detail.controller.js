@@ -48,6 +48,7 @@ sap.ui.define([
 					Werks : $.app.getModel("session").getData().Persa,
 					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
 					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : "",
+					Chief : $.app.getModel("session").getData().Chief
 				}
 			};
 			
@@ -1210,7 +1211,7 @@ sap.ui.define([
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
-					createData.IEmpid = oData.Pernr;
+					createData.IEmpid = $.app.getModel("session").getData().Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IMolga = oData.Molga;
