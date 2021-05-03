@@ -40,9 +40,13 @@ sap.ui.define([], function () {
                                         valueHelpOnly: true,
                                         valueHelpRequest: oController.displayMultiOrgSearchDialog,
                                         editable : {
-                                        	path : "Werks",
+                                        	path : "Chief",
                                         	formatter : function(fVal){
-                                        		return (fVal && fVal.substring(0,1) == "D") ? false : true;
+                                                if($.app.APP_AUTH == "M"){
+                                                    return (fVal == "X") ? true : false;
+                                                } else {
+                                                    return true;
+                                                }                                        		
                                         	}
                                         }
                                     })

@@ -96,7 +96,8 @@ sap.ui.define(
                             Tmdat: dateFormat.format(new Date()),
                             Pernr: $.app.getModel("session").getData().Pernr,
                             Langu: $.app.getModel("session").getData().Langu,
-                            Auth: $.app.getAuth()
+                            Auth: $.app.getAuth(),
+							Chief : $.app.getModel("session").getData().Chief
                         }
                     };
 
