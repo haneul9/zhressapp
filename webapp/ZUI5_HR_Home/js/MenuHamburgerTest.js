@@ -141,7 +141,7 @@ menuParam: function() {
 	var paramMap = {};
 	$.map(args, function(o) {
 		var map = {};
-		if (typeof o === 'string' || o instanceof String) {
+		if ((typeof o === 'string' || o instanceof String) && o.indexOf('?') > -1) { // URL에서 queryString을 분리하여 parameter map 생성
 			$.map(o.replace(/[^?]*\?/, '').split(/&/), function(v) {
 				var pair = v.split(/=/);
 				map[pair[0]] = decodeURIComponent(pair[1]);
