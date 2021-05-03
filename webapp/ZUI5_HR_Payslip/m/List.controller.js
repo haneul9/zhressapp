@@ -178,7 +178,7 @@ sap.ui.define(
                                                 width: "100%",
                                                 //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{Bet02}}"
+                                                text: "{Bet02}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
