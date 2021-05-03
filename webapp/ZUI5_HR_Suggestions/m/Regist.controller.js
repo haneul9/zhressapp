@@ -465,9 +465,9 @@
 			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.oParent.oParent.getItems()[1].getItems()[1];
 
 			// 비밀번호
-			if(Common.checkNull(this.g_RePwordInput.getValue()) || 6 > this.g_RePwordInput.getValue().length || this.g_RePwordInput.getValue().length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(this.g_RePwordInput.getValue())){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
-				return ;
+				return true;
 			}
 
 			// 대댓글
@@ -585,9 +585,9 @@
 			var oCommData = {};
 
 			// 비밀번호
-			if(Common.checkNull(this.g_HiInputPword.getValue()) || 6 > this.g_HiInputPword.getValue().length || this.g_HiInputPword.getValue().length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(this.g_HiInputPword.getValue())){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
-				return ;
+				return true;
 			}
 
 			oCommData.Sdate = oRowData.Sdate;
@@ -734,7 +734,7 @@
 			}
 
 			// 비밀번호
-			if(Common.checkNull(oFormData.Pword) || 6 > oFormData.Pword.length || oFormData.Pword.length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(oFormData.Pword)){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
@@ -943,9 +943,9 @@
 			var oCommData = this.CommentModel.getProperty("/Data");
 
 			// 비밀번호
-			if(Common.checkNull(oCommData.Pword) || 6 > oCommData.Pword.length || oCommData.Pword.length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(oCommData.Pword)){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
-				return ;
+				return true;
 			}
 
 			// 내용
