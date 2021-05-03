@@ -107,7 +107,7 @@ sap.ui.define(
                         },
                         error: function (res) {
                             Common.log(res);
-                            if(processType !== OvertimeWork.ProcessType.READ) {
+                            if(processType !== OvertimeWork.ProcessType.READ && arg.isErrorShow === true) {
                                 var errData = Common.parseError(res);
                                 if (errData.Error && errData.Error === "E") {
                                     MessageBox.error(errData.ErrorMessage, {
