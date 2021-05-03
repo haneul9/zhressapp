@@ -417,8 +417,10 @@ sap.ui.define([
 			var vIs =  oEvent === true ? oEvent : oEvent.getSource().getSelected();
 			if(vIs){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
+				this.ApplyModel.setProperty("/Checked", "X");
 			}else{
 				this.ApplyModel.setProperty("/TraningCheck", "X");
+				this.ApplyModel.setProperty("/Checked", "");
 				this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
 				this.ApplyModel.setProperty("/FormData/Zgtype", ""); // 교육구분
 				this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
@@ -1059,20 +1061,14 @@ sap.ui.define([
 			}
 		},
 
-		PassWordCheck: function(oEvent) { // PassWord Check
-			var inputValue = oEvent.getParameter('value').trim(),
-				convertValue = inputValue.replace(/[^\d]/g, '');
-
-			// this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "" : vTime);
-			// oEvent.getSource().setValue(Common.checkNull(vTime) ? "" : vTime);	
-		},
-
 		ErrorCheck: function() {
 			var oController = $.app.getController();
 
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edkaj"))){ // 교육과정
 				MessageBox.error(oController.getBundleText("MSG_40013"), { title: oController.getBundleText("MSG_08107")});
 				return true;
+			}else if(oController.ApplyModel.getProperty("/Checked") === "X"){
+				oController.ApplyModel.setProperty("/FormData/Course", "");
 			}
 
 			if(oController.ApplyModel.getProperty("/FormData/Zgtype") === "Null"){ // 교육구분
@@ -1179,7 +1175,7 @@ sap.ui.define([
 						async: true,
 						success: function(oData, oResponse) {
 							Common.log(oData);
-							sap.m.MessageBox.alert(oController.getBundleText("MSG_40008"), { title: oController.getBundleText("MSG_08107")});
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_40010"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
 							BusyIndicator.hide();
 							oController._ApplyModel.close();
@@ -1440,7 +1436,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
+					Editable: (Common.checkNull(vRepstT) && vStatus === "AA" && vEdoty === "2") ? true : false
 				},"002");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
@@ -1448,14 +1444,14 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
+					Editable: (Common.checkNull(vRepstT) && vStatus === "AA" && vEdoty === "2") ? true : false
 				},"003");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) && vStatus === "99" && vEdoty === "1") ? true : false
+					Editable: (Common.checkNull(vRepstT) && vStatus === "AA" && vEdoty === "2") ? true : false
 				},"004");
 			}
 		},

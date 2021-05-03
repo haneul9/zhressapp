@@ -72,12 +72,11 @@
 							}
 						},
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "130px", "Right", true).addStyleClass("ml-7px mr-8px"), // 비밀번호
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "130px", "Right", true), // 비밀번호
 							new sap.m.Input({
                                 width: "150px",
                                 value: "{Pword}",
 								type: sap.m.InputType.Password,
-								liveChange: oController.PassWordCheck.bind(oController),
 								maxLength: 10,
                                 editable: {
 									parts: [{path: "Sdate"}, {path: "/Gubun"}],
@@ -85,7 +84,7 @@
 										return !v1 || v2 === "X";
 									}	
 								}
-                            }),
+                            }).addStyleClass("mr-8px"),
 							new sap.m.Text({
                                 width: "auto",
                                 textAlign: "Begin",

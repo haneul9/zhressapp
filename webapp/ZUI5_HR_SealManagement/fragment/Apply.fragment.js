@@ -70,7 +70,12 @@ sap.ui.define(
                 var inputBox = new sap.m.HBox({
                     items: [
                         new sap.m.VBox({
-                            width: "79%",
+                            width: {
+                                path: "/Img",
+                                formatter: function(v) {
+                                    return Common.checkNull(v) ? "100%" : "79%";
+                                }
+                            },
                             fitContainer: true,
                             items: [
                                 new sap.m.HBox({
