@@ -190,6 +190,7 @@ sap.ui.define(
 
                 // Data setting
                 oController.DetailModel.setProperty("/Data", []);
+                oController.DetailModel.setProperty("/Img", "");
                 oController.ComboData();
 
                 oController._DetailModel.open();
@@ -229,7 +230,7 @@ sap.ui.define(
                     success: function (oData) {
                         Common.log(oData);
                         oController.DetailModel.setProperty("/Data", oData.RegalsealRTableIn1.results[0]);
-                        oController.ComboData();
+                        oController.ComboData(oRowData);
                         oController._DetailModel.open();
                     },
                     error: function (oResponse) {
@@ -241,7 +242,7 @@ sap.ui.define(
                 });
             },
 
-            ComboData: function () {
+            ComboData: function (oRowData) {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vPernr = oController.getUserId();
@@ -264,6 +265,14 @@ sap.ui.define(
 							if (oData.RegalsealRTableIn2) {
 								oController.DetailModel.setProperty("/MultiBoxData", oData.RegalsealRTableIn2.results);
 							}
+
+                            if(Common.checkNull(!oRowData)){
+                                oData.RegalsealRTableIn2.results.forEach(function(e) {
+                                    if(e.Sigbn === oRowData.Sigbn)
+                                        oController.DetailModel.setProperty("/Img", e.Imgid);
+                                });
+                            }
+
 							if (oData.RegalsealRTableIn3) {
 								oController.DetailModel.setProperty("/MultiBoxData2", oData.RegalsealRTableIn3.results);
 							}

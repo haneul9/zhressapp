@@ -31,11 +31,6 @@ sap.ui.define([
 
 			return this.getView().getModel("session").getData().Bukrs2;
 		},
-
-		getUserGubun3  : function() {
-
-			return this.getView().getModel("session").getData().Bukrs3;
-		},
 		
 		onInit: function () {
 
@@ -338,12 +333,7 @@ sap.ui.define([
 		},
 
 		onPressMenuBtn: function(oEvent) { // 메뉴얼 (가이드 문서 다운로드)
-			var vBukrs3 = this.getUserGubun3();
-
-			if(vBukrs3 === "A100")
-				window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL.pptx");
-			else
-				window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL.pptx");
+			window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL2.pptx");
         },
         onPressReqBtn: function(oEvent) { // 신청 
 			var oView = $.app.byId("ZUI5_HR_LanguageTuitionApplication.List"),
