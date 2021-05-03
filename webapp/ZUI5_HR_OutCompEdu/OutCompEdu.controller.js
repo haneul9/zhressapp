@@ -1436,7 +1436,7 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) && vStatus === "AA" && vEdoty === "2") ? true : false
+					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"002");
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
@@ -1444,14 +1444,14 @@ sap.ui.define([
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) && vStatus === "AA" && vEdoty === "2") ? true : false
+					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"003");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
 					Appnm: vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
-					Editable: (Common.checkNull(vRepstT) && vStatus === "AA" && vEdoty === "2") ? true : false
+					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"004");
 			}
 		},
