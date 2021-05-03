@@ -1,16 +1,15 @@
-﻿/* eslint-disable no-undef */
-/* global AbstractPortlet moment */
-function Vacationportlet() {
+﻿/* global AbstractPortlet moment */
+function VacationPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
 	this.$selector = '#portlet-vacationportlet-list';
 }
 
-Vacationportlet.prototype = Object.create(AbstractPortlet.prototype);
-Vacationportlet.prototype.constructor = Vacationportlet;
+VacationPortlet.prototype = Object.create(AbstractPortlet.prototype);
+VacationPortlet.prototype.constructor = VacationPortlet;
 
-$.extend(Vacationportlet.prototype, {
+$.extend(VacationPortlet.prototype, {
 
 ui: function() {
 
@@ -75,7 +74,7 @@ fill: function() {
             VacationQuotaNav : []
 		},
 		success: function(data) {
-			this._gateway.prepareLog('Vacationportlet.fill ${url} success'.interpolate(url), arguments).log();
+			this._gateway.prepareLog('VacationPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
 			var list = this.$(),
                 oVacationData = this._gateway.odataResults(data).VacationQuotaNav;
@@ -183,7 +182,7 @@ fill: function() {
             $('.ChartClass').append([chart]);
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Vacationportlet.fill ' + url);
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'VacationPortlet.fill ' + url);
 		}.bind(this),
 		complete: function() {
 			this.spinner(false);

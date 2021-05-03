@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet Vacationportlet*/
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet */
 function Portlets(_gateway) {
 
 	this._gateway = _gateway;
@@ -25,7 +25,7 @@ init: function() {
 		'P107': EvalGoalPortlet	,			// 목표관리
 		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
 		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
-		'P110': Vacationportlet				// 근태신청
+		'P110': VacationPortlet				// 근태신청
 	};
 
 	$(document)
