@@ -81,20 +81,10 @@ fill: function() {
                 oVacationData = this._gateway.odataResults(data).VacationQuotaNav;
 
             if (!oVacationData.length) {
-                if (list.data('jsp')) {
-                    list.find('.list-group-item').remove().end()
-                        .data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">휴가사용 현황 데이터가 없습니다..</a>');
-                } else {
-                    list.html('<a href="#" class="list-group-item list-group-item-action text-center">휴가사용 현황 데이터가 없습니다..</a>');
-                }
+                list.html('<a href="#" class="list-group-item list-group-item-action text-center">휴가사용 현황 데이터가 없습니다..</a>');
                 return;
             }
 
-            if (list.data('jsp')) {
-                list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-            }
-
-            
 			list.append([
                 '<canvas id="vacChart" class="ChartClass"></canvas>',
                 '<div class="vac-header">',
@@ -211,15 +201,6 @@ itemUrl: function(o) {
 		' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
 		' data-menu-id="${menu-id}"'.interpolate(this.mid())
 	].join('');
-},
-clearResource: function() {
-
-	return new Promise(function(resolve) {
-		setTimeout(function() {
-			this.$().data('jsp').destroy();
-			resolve();
-		}.bind(this), 0);
-	}.bind(this));
 }
 
 });
