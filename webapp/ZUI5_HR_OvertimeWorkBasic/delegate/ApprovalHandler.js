@@ -97,6 +97,27 @@ sap.ui.define(
                 });
             },
 
+            changeBegda: function(oEvent) {
+                var vBegda = oEvent.getSource().getDateValue();
+
+                BusyIndicator.show(0);
+                
+                Common.getPromise(
+                    function () {
+                        this.oModel.setProperty("/TemplateData/Repla", "");
+                        this.oModel.setProperty("/TemplateData/ReplaTx", "");
+                        this.oModel.setProperty("/Replas", ODataService.OvertimePersonSet.call(this.oController, {
+                            Awart: this.oModel.getProperty("/TemplateData/Awart"),
+                            Begda: vBegda
+                        }));
+
+                        this.toggleIsPossibleTemplateApply();
+                    }.bind(this)
+                ).then(function () {
+                    BusyIndicator.hide();
+                });
+            },
+
             changeAwart: function(oEvent) {
                 var oControlItem = oEvent.getSource().getSelectedItem();
 
