@@ -497,7 +497,8 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .not-display-lastweek .sapMSPCMonthWeek:nth-child(5) .sapMSPCMonthDay {border-bottom:.0625rem solid #e5e5e5}
 
 .tab-group .sapMITBContent {padding:1rem 0; border-bottom:none; background-color:#fff}
-.tab-group .sapMITHTextContent {font-size:16px; font-weight:500; padding:0 15px}
+.tab-group .sapMITHTextContent,
+.tab-group .sapUxAPAnchorBarButton .sapMBtnContent {font-size:16px !important; font-weight:500; padding:0 15px}
 
 .side-navi-group {margin-top:8px; border:1px solid #ccc; flex-grow:0 !important}
 [data-sap-ui-browser="ie11"] .side-navi-group > div:nth-child(2) {overflow: hidden;}

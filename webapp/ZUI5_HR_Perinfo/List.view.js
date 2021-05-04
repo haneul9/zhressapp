@@ -180,7 +180,7 @@ sap.ui.define([], function () {
                 ]
             });
 
-            oObjectPageLayout.addStyleClass("sapUiSizeCompact");
+            oObjectPageLayout.addStyleClass("sapUiSizeCompact tab-group mt-26px");
 
             var oScrollContainer = new sap.m.ScrollContainer({
                 vertical: true,
