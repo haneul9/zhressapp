@@ -127,7 +127,7 @@ fragment.COMMON_ATTACH_FILES = {
 					]
 				}),
 				new sap.m.Button({
-					icon: "sap-icon://sys-cancel",
+					icon: "sap-icon://decline",
 					press: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onDeleteAttachFileRow(oEvent,oController,vPage);}, oController),
 					visible: {
 						path: "/Settings/Editable",
@@ -136,7 +136,7 @@ fragment.COMMON_ATTACH_FILES = {
 							else return false;
 						}
 					}
-				})
+				}).addStyleClass("button-light-sm")
 			]
 		});
 

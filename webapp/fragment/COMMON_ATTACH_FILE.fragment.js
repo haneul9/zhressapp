@@ -130,7 +130,7 @@ sap.ui.define([
 								textAlign: "Begin",
 								href: "{Url}",
 								target: "_new"
-							}).addStyleClass("ml-5px")
+							}).addStyleClass("ml-4px")
 						] 
 					}),
 					new sap.m.Button({    
