@@ -226,7 +226,7 @@ sap.ui.define(
                         Common.log(oData);
                         oController.DetailModel.setProperty("/IMG", oData.RegalsealRTableIn2.results);
                         oController.DetailModel.setProperty("/UseMultiBox", oData.RegalsealRTableIn3.results);
-                        oController.getIMGCode(oRowData);
+                        oController.getIMGCode(oRowData.Sigbn);
                         oController._DetailModel.open();
                     },
                     error: function (oResponse) {
@@ -238,14 +238,12 @@ sap.ui.define(
                 });
             },
 
-            getIMGCode: function (rowData) {
+            getIMGCode: function (Sigbn) {
                 var oController = $.app.getController();
 
-                oController.DetailModel.setProperty("/ImgCode", "");
-
                 oController.DetailModel.getProperty("/IMG").some(function (e) {
-                    oController.DetailModel.setProperty("/ImgCode", e.Imgid);
-                    return e.Sitxt === rowData.Sitxt;
+                    oController.DetailModel.setProperty("/Img", "./ZUI5_HR_SealManagement_Manager/manual/" + e.Imgid);
+                    return e.Sigbn ===  Sigbn;
                 });
             },
 

@@ -200,13 +200,10 @@ sap.ui.define([
 
 		getAttTime: function(oEvent) {
 			var inputValue = oEvent.getParameter('value').trim(),
-				convertValue = inputValue.replace(/[^\d]/g, ''),
-				vTime2 = convertValue.slice(-2),
-				vTime1 = convertValue.length === 3 ? convertValue.slice(0,1) : (convertValue.length === 4 ? convertValue.slice(0,2) : (convertValue.length === 5 ? convertValue.slice(0,3) : "")),
-				vTime = convertValue.length > 2 ? vTime1 + "." + vTime2 : vTime2;
+				convertValue = inputValue.replace(/[^\d || ^\.]/g, '');
 
-			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(vTime) ? "" : vTime);
-			oEvent.getSource().setValue(Common.checkNull(vTime) ? "" : vTime);	
+			this.ApplyModel.setProperty("/FormData/Trtim", Common.checkNull(convertValue) ? "" : convertValue);
+			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "" : convertValue);	
 		},
 
 		getMoneyComma1: function(oEvent) {
@@ -554,11 +551,14 @@ sap.ui.define([
 							Common.log(oData);
 							oController.onTableSearch();
 							BusyIndicator.hide();
-							window.open(
-								oData.TrainingOutApplyExport.results[0].EUrl,
-								"_blank",
-								"height = 600, width = 900"
-							);
+							var vUrl = oData.TrainingOutApplyExport.results[0].EUrl;
+							if(!Common.openPopup.call(oController, vUrl)) {
+								window.open(
+									vUrl,
+									"_blank",
+									"height = 600, width = 900"
+								);
+							}
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);

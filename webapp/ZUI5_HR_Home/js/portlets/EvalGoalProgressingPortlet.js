@@ -6,6 +6,7 @@ function EvalGoalProgressingPortlet() {
 	this.$selector = '.portlet-evalgoal-progress .list-group';
 	this.photoMap = null;
 	this.goalDataMap = null;
+	this.targetList = [];
 }
 
 EvalGoalProgressingPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -44,6 +45,7 @@ fill: function() {
 		$.getJSON({ // GoalPlanTemplate id 조회
 			url: url,
 			success: function(data) {
+				this.getTargetReports();
 				this.retrieveDirectReports(this._gateway.odataResults(data).id || '', resolve);
 			}.bind(this),
 			error: function(jqXHR) {
@@ -54,16 +56,42 @@ fill: function() {
 		});
 	}.bind(this));
 },
+getTargetReports: function() { // 평가대상 확인여부
+	var url = 'ZHR_COMMON_SRV/CommonCodeListHeaderSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			ICodeT : "066",
+            NavCommonCodeList : []
+		},
+		success: function(data) {
+			this._gateway.prepareLog('EvalGoalProgressingPortlet.fill ${url} success'.interpolate(url), arguments).log();
+			var oTargetList = this._gateway.odataResults(data).NavCommonCodeList;
+			this.targetList = oTargetList;
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
+		}.bind(this)
+	});
+},
 retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
-	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01".interpolate(this._gateway.pernr());
+	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01,custom07".interpolate(this._gateway.pernr());
 
 	$.getJSON({ // 평가 대상자 조회 : 조회한 사원번호의 평가대상자를 조회
 		url: url2,
 		success: function(data) {
-			var empDataList = data.d.results,
-			list = this.$();
+			var oEmpDataList = data.d.results,
+				empDataList = [],
+				list = this.$();
 
+			oEmpDataList.forEach(function(e) {
+				if(this.targetList.some(function(ele) {return ele.Code === e.custom07;})){
+					empDataList.push(e);
+				}
+			}.bind(this));
+			
 			if (!empDataList.length || !goalId) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
@@ -90,6 +118,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			this.goalDataMap = {};
 
 			$.map(empDataList, function(e, i) {
+
 				this.goalDataMap[e.userId] = {
 					exists: true,
 					nickname: e.nickname,
@@ -97,12 +126,12 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				};
 
 				list.append([
-					'<div class="evalgoal-area i${i} d-none">'.interpolate(i),
+					'<div class="evalgoal-area.i${i} d-none">'.interpolate(i),
 						'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
 						'<div class="evalgoal-info">',
 							'<div class="person">',
 								'<div class="name">', e.nickname, '</div>',
-								'<div class="position">', e.position, '</div>',
+								'<div class="position">', e.custom01 ? e.custom01.split("(")[0] : "", '</div>',
 							'</div>',
 							'<div class="evalgoal-statusBar">',
 								'<div class="progress">',

@@ -259,8 +259,7 @@ sap.ui.define(
                 oModel.create("/RegalsealRImportSet", sendObject, {
                     success: function (oData) {
                         if (oData) {
-                            //값을 제대로 받아 왔을 때
-                            Common.log(oData);
+                            //값을 제대로 받아 왔을 때Common.log(oData);
 
 							if (oData.RegalsealRTableIn2) {
 								oController.DetailModel.setProperty("/MultiBoxData", oData.RegalsealRTableIn2.results);
@@ -269,7 +268,7 @@ sap.ui.define(
                             if(Common.checkNull(!oRowData)){
                                 oData.RegalsealRTableIn2.results.forEach(function(e) {
                                     if(e.Sigbn === oRowData.Sigbn)
-                                        oController.DetailModel.setProperty("/Img", e.Imgid);
+                                        oController.DetailModel.setProperty("/Img", "./ZUI5_HR_SealManagement/manual/" + e.Imgid);
                                 });
                             }
 
@@ -325,7 +324,7 @@ sap.ui.define(
 
                 oController.DetailModel.setProperty("/Img", "");
                 oController.DetailModel.getProperty("/MultiBoxData").some(function (elem) {
-                    oController.DetailModel.setProperty("/Img", elem.Imgid);
+                    oController.DetailModel.setProperty("/Img", "./ZUI5_HR_SealManagement/manual/" + elem.Imgid);
                     return elem.Sigbn === oEvent.getSource().getSelectedKey();
                 });
             },
@@ -371,7 +370,10 @@ sap.ui.define(
                                     oController.onTableSearch();
 
                                     if (vMobile !== "X") {
-                                        window.open(oData.RegalsealRExport.results[0].EUrl, "_blank", "height = 600, width = 900");
+                                        var vUrl = oData.RegalsealRExport.results[0].EUrl;
+                                        if(!Common.openPopup.call(oController, vUrl)){
+                                            window.open(vUrl, "_blank", "height = 600, width = 900");
+                                        }
                                     }
 
                                     BusyIndicator.hide();

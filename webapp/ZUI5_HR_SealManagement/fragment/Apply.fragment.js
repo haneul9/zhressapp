@@ -226,7 +226,7 @@ sap.ui.define(
                                     src: {
                                         path: "/Img",
                                         formatter: function (v) {
-                                            return v || "images/photoNotAvailable.gif";
+                                            return v || "";
                                         }
                                     },
                                     width: "170px",

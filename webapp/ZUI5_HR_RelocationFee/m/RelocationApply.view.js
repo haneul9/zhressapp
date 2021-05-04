@@ -2,8 +2,10 @@
 	"../../common/Common",
 	"../../common/PageHelper",
     "../../common/PickOnlyDatePicker",
-    "../delegate/ViewTemplates"
-], function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates) {
+    "../delegate/ViewTemplates",
+	"../../common/HoverIcon",
+	"sap/m/InputBase"
+], function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates, HoverIcon, InputBase) {
 "use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "RelocationApply"].join($.app.getDeviceSuffix());
@@ -188,7 +190,7 @@
                                                 if(v === "1") return true;
                                                 else return false;
                                             }
-                                        },
+                                        }
                                     }),
                                     new sap.m.RadioButton({
                                         text: "{i18n>LABEL_34009}", // 가족동반
@@ -199,10 +201,20 @@
                                                 if(v === "2") return true;
                                                 else return false;
                                             }
-                                        },
+                                        }
                                     })
                                 ]
-                            })
+                            }),
+							new HoverIcon({
+								src: "sap-icon://information",
+								hover: function(oEvent) {
+									Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_34016")); // 부임이전비 신청은 동일한 발령일에 한번 신청이 가능합니다. 가족동반 여부를 신중히 선택하시기 바랍니다.
+								},
+								leave: function(oEvent) {
+									Common.onPressTableHeaderInformation.call(oController, oEvent);
+								}
+							})
+							.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue")
 						]
 					}),
 					new sap.m.HBox({

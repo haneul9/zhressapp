@@ -32,7 +32,12 @@ sap.ui.define([
 			var inputBox = new sap.m.HBox({
 				items: [
 					new sap.m.VBox({
-						width: "79%",
+						width: {
+							path: "/Img",
+							formatter: function(v) {
+								return Common.checkNull(v) ? "100%" : "79%";
+							}
+						},
 						fitContainer: true,
 						items: [
 							new sap.m.HBox({
@@ -150,7 +155,7 @@ sap.ui.define([
 					new sap.m.FlexBox({
 						width: "21%",
 						visible:{
-							path: "/IMG/0/Imgid",
+							path: "/Img",
 							formatter: function(v) {
 								if(v) return true;
 								else return false;
@@ -159,9 +164,9 @@ sap.ui.define([
 						items: [
 							new sap.m.Image(oController.PAGEID + "_IngamIMG", {
 								src: {
-									path: "/IMG/0/Imgid",
+									path: "/Img",
 									formatter: function(v) {
-										return v || "images/photoNotAvailable.gif";
+										return v || "";
 									}
 								},
 								width: "170px",

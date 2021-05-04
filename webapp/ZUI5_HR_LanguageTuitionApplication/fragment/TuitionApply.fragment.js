@@ -4,7 +4,7 @@ sap.ui.define([
 	"../../common/PickOnlyDateRangeSelection",
 	"../delegate/ViewTemplates",
 	"../../common/HoverIcon",
-	"sap/m/InputBase",
+	"sap/m/InputBase"
 ], function (Common, PickOnlyDateRangeSelection, ViewTemplates, HoverIcon, InputBase) {
 	"use strict";
 
