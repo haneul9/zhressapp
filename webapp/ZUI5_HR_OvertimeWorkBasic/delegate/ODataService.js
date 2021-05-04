@@ -78,7 +78,7 @@ sap.ui.define(
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IAwart: !Common.checkNull(arg.Awart) ? arg.Awart : undefined,
-                        IBegda: !Common.checkNull(arg.Begda) ? moment(arg.Begda).toDate() : undefined,
+                        IBegda: !Common.checkNull(arg.Begda) ? moment(arg.Begda).hours(10).toDate() : undefined,
 						OtPersonNav: []
 					},
 					{
