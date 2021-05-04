@@ -248,6 +248,8 @@ sap.ui.define([
 						detail.Endda = "\/Date(" + common.Common.getTime(new Date(date)) + ")\/"; 
 						detail.Telnum = oData.Telnum;
 						detail.Bigo = oData.Bigo;
+						detail.Appkey = oData.Appkey ? oData.Appkey : "";
+						detail.Appkey1 = oData.Appkey1 ? oData.Appkey1 : "";
 					
 					createData.WorkhomeNav.push(detail);
 				}
@@ -277,6 +279,12 @@ sap.ui.define([
 				oModel.create("/WorkhomeApplySet", createData, {
 					success: function(data, res){
 						if(data){
+							// 2021-05-04 리턴된 결재키 세팅
+							if(data.WorkhomeNav.results && data.WorkhomeNav.results.length){
+								oController._DetailJSonModel.setProperty("/Data/Appkey", data.WorkhomeNav.results[0].Appkey);
+								oController._DetailJSonModel.setProperty("/Data/Appkey1", data.WorkhomeNav.results[0].Appkey1);
+							}
+
 							if(Flag == "C"){
 								if(!oController._ImageDialog){
 									oController._ImageDialog = sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Image", oController);
@@ -351,22 +359,9 @@ sap.ui.define([
 			oController._ImageDialog.close();
 		
 			if(oExtryn == ""){
-				setTimeout(function() {
-					var width = 1000, height = screen.availHeight * 0.9,
-					left = (screen.availWidth - width) / 2,
-					top = (screen.availHeight - height) / 2,
-					popup = window.open(oUrl, "smoin-approval-popup", [
-						"width=" + width,
-						"height=" + height,
-						"left=" + left,
-						"top=" + top,
-						"status=yes,resizable=yes,scrollbars=yes"
-					].join(","));
-	
-					setTimeout(function() {
-						popup.focus();
-					}, 500);
-				}, 0);
+				if(common.Common.openPopup.call(oController, oUrl) == false){
+					return;
+				}
 			}
 				
 			sap.m.MessageBox.success(oController.getBundleText("MSG_00061"), { // 신청되었습니다.

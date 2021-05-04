@@ -224,7 +224,7 @@ sap.ui.define([
 			
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
-				var oExtryn = Common.isExternalIP() === true ? "X" : "";
+				var oExtryn = Common.isExternalIP() === true ? "X" : "", oUrl = "";
 
 				var createData = {WorkhomeNav : []};
 					createData.IPernr = oData.Pernr;
@@ -247,24 +247,25 @@ sap.ui.define([
 				oModel.create("/WorkhomeApplySet", createData, {
 					success: function(data, res){
 						if(data){
-							if(data.EUrl != "" && oExtryn == ""){
-								setTimeout(function() {
-				                    var width = 1000, height = screen.availHeight * 0.9,
-				                    left = (screen.availWidth - width) / 2,
-				                    top = (screen.availHeight - height) / 2,
-				                    popup = window.open(data.EUrl, "smoin-approval-popup", [
-				                        "width=" + width,
-				                        "height=" + height,
-				                        "left=" + left,
-				                        "top=" + top,
-				                        "status=yes,resizable=yes,scrollbars=yes"
-				                    ].join(","));
+							oUrl = data.EUrl;
+							// if(data.EUrl != "" && oExtryn == ""){
+							// 	setTimeout(function() {
+				   //                 var width = 1000, height = screen.availHeight * 0.9,
+				   //                 left = (screen.availWidth - width) / 2,
+				   //                 top = (screen.availHeight - height) / 2,
+				   //                 popup = window.open(data.EUrl, "smoin-approval-popup", [
+				   //                     "width=" + width,
+				   //                     "height=" + height,
+				   //                     "left=" + left,
+				   //                     "top=" + top,
+				   //                     "status=yes,resizable=yes,scrollbars=yes"
+				   //                 ].join(","));
 				
-				                    setTimeout(function() {
-				                        popup.focus();
-				                    }, 500);
-				                }, 0);
-							}
+				   //                 setTimeout(function() {
+				   //                     popup.focus();
+				   //                 }, 500);
+				   //             }, 0);
+							// }
 						}
 					},
 					error: function (oError) {
@@ -283,6 +284,12 @@ sap.ui.define([
 				});
 				
 				oController._BusyDialog.close();
+				
+				if(oUrl != "" && oExtryn == ""){
+					if(common.Common.openPopup.call(oController, oUrl) == false){
+						return;
+					}
+				}
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -413,22 +420,9 @@ sap.ui.define([
 			if(oExtryn == "X") return;
 
 			if(oData.UrlA && oData.UrlA != ""){
-				setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(oData.UrlA, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
+				if(common.Common.openPopup.call(oController, oData.UrlA) == false){
+					return;
+				}
 			}
         },
 		

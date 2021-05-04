@@ -243,22 +243,9 @@ sap.ui.define([
 			oController._ImageDialog.close();
 		
 			if(oExtryn == ""){
-				setTimeout(function() {
-					var width = 1000, height = screen.availHeight * 0.9,
-					left = (screen.availWidth - width) / 2,
-					top = (screen.availHeight - height) / 2,
-					popup = window.open(oUrl, "smoin-approval-popup", [
-						"width=" + width,
-						"height=" + height,
-						"left=" + left,
-						"top=" + top,
-						"status=yes,resizable=yes,scrollbars=yes"
-					].join(","));
-	
-					setTimeout(function() {
-						popup.focus();
-					}, 500);
-				}, 0);
+				if(common.Common.openPopup.call(oController, oUrl) == false){
+					return;
+				}
 			}
 				
 			sap.m.MessageBox.success(oController.getBundleText("MSG_00061"), { // 신청되었습니다.

@@ -1081,6 +1081,8 @@ sap.ui.define([
 			
 			var onProcess = function(){
 				var vExtryn = Common.isExternalIP() === true ? "X" : "";
+				var oUrl = "";
+
 				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
 					createData.IEmpid = oData.Pernr;
@@ -1130,24 +1132,13 @@ sap.ui.define([
 				oModel.create("/VacationApplySet", createData, {
 					success: function(data, res){
 						if(data){
-							if(Flag == "C" && data.EUrl != "" && vExtryn == ""){
-								setTimeout(function() {
-				                    var width = 1000, height = screen.availHeight * 0.9,
-				                    left = (screen.availWidth - width) / 2,
-				                    top = (screen.availHeight - height) / 2,
-				                    popup = window.open(data.EUrl, "smoin-approval-popup", [
-				                        "width=" + width,
-				                        "height=" + height,
-				                        "left=" + left,
-				                        "top=" + top,
-				                        "status=yes,resizable=yes,scrollbars=yes"
-				                    ].join(","));
-				
-				                    setTimeout(function() {
-				                        popup.focus();
-				                    }, 500);
-				                }, 0);
+							// 2021-05-04 리턴된 결재키 세팅
+							if(data.VacationApply1Nav.results && data.VacationApply1Nav.results.length){
+								oController._DetailJSonModel.setProperty("/Data/Appkey", data.VacationApply1Nav.results[0].Appkey);
+								oController._DetailJSonModel.setProperty("/Data/Appkey1", data.VacationApply1Nav.results[0].Appkey1);
 							}
+
+							oUrl = data.EUrl;
 						}
 					},
 					error: function (oError) {
@@ -1166,6 +1157,13 @@ sap.ui.define([
 				});
 				
 				oController._BusyDialog.close();
+
+				// 신청 시 팝업차단 여부 확인 후 이후 프로세스 수행				
+				if(Flag == "C" && oUrl != "" && vExtyn == ""){
+					if(common.Common.openPopup.call(oController, oUrl) == false){
+						return;
+					}
+				}
 				
 				if(oController.Error == "E"){
 					oController.Error = "";

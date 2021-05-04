@@ -652,6 +652,7 @@ sap.ui.define(
                 var onProcess = function () {
                     var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                     var vExtryn = Common.isExternalIP() === true ? "X" : "";
+                    var oUrl = "";
                     
                     var createData = { PregnantApplyTableIn: [] };
                     if (Flag == "D") {
@@ -719,24 +720,7 @@ sap.ui.define(
                     oModel.create("/PregnantApplyHeaderSet", createData, {
                         success: function (data) {
                             if (data) {
-                                if(Flag == "C" && data.EUrl != "" && vExtryn == ""){
-									setTimeout(function() {
-					                    var width = 1000, height = screen.availHeight * 0.9,
-					                    left = (screen.availWidth - width) / 2,
-					                    top = (screen.availHeight - height) / 2,
-					                    popup = window.open(data.EUrl, "smoin-approval-popup", [
-					                        "width=" + width,
-					                        "height=" + height,
-					                        "left=" + left,
-					                        "top=" + top,
-					                        "status=yes,resizable=yes,scrollbars=yes"
-					                    ].join(","));
-					
-					                    setTimeout(function() {
-					                        popup.focus();
-					                    }, 500);
-					                }, 0);
-								}
+                                oUrl = data.EUrl;
                             }
                         },
                         error: function (oError) {
@@ -753,6 +737,13 @@ sap.ui.define(
                             }
                         }
                     });
+
+                    // 2021-05-04 팝업차단 확인 후 이후 프로세스 진행
+                    if(Flag == "C" && oUrl != "" && vExtryn == ""){
+                        if(common.Common.openPopup.call(oController, oUrl) == false){
+                            return;
+                        }
+                    }
 
                     oController._BusyDialog.close();
 
