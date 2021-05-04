@@ -56,11 +56,10 @@ sap.ui.define(
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/Bukrs", this.oController.getSessionInfoByKey("Bukrs").charAt(0));
                 this.oModel.setProperty("/Zflag", this.oController.getSessionInfoByKey("Zflag"));
+                // ($.app.getAuth() === $.app.Auth.MSS && this.oController.getSessionInfoByKey("Chief") !== "X") 부서장조건 제거
                 this.oModel.setProperty(
                     "/isEditOrgtree",
-                    ($.app.getAuth() === $.app.Auth.MSS && this.oController.getSessionInfoByKey("Chief") !== "X")
-                        || this.oController.getSessionInfoByKey("Bukrs").charAt(0) === "A" 
-                        || this.oController.getSessionInfoByKey("Zflag") === "X"
+                    this.oController.getSessionInfoByKey("Bukrs").charAt(0) === "A" || this.oController.getSessionInfoByKey("Zflag") === "X"
                             ? false : true
                 );
                 this.oModel.setProperty("/SearchConditions/Schkz", "ALL");
