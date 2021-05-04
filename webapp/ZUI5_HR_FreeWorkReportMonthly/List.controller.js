@@ -1,16 +1,15 @@
 jQuery.sap.require("sap.m.MessageBox");
-jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -84,8 +83,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FreeWorkReportMonthly.List");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -98,7 +100,7 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			if(!oData.Zyymm1 || !oData.Zyymm2){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_64001")); // 대상기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_64001")); // 대상기간을 입력하여 주십시오.
 				return;
 			}
 			
