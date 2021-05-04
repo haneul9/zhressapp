@@ -1,4 +1,4 @@
-﻿/* global AbstractPortlet moment */
+/* global AbstractPortlet moment */
 function VacationPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
@@ -172,7 +172,8 @@ fill: function() {
                         yAxes: [{
                             ticks: {
                                 fontColor : "rgb(153, 153, 153)",
-                                fontSize : 8
+                                fontSize : 8,
+                                beginAtZero: true
                             }
                         }]
                     }

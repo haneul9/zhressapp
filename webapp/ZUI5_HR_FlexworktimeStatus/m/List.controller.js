@@ -354,7 +354,8 @@ sap.ui.define([
 					                     scales: {
 					                        yAxes: [{
 					                            ticks: {
-					                                fontColor : "rgb(153, 153, 153)"
+					                                fontColor : "rgb(153, 153, 153)",
+					                                beginAtZero: true
 					                            }
 					                        }]
 					                    }
