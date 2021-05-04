@@ -118,7 +118,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 																 displayFormat : "HH:mm",
 													             value : "{Beguz}",
 													             minutesStep : 5,
-													             width : "95px",
+													             //width : "95px",
 													             textAlign : "Begin",
 													             change : oController.onChangeTime2,
 													             editable : {
@@ -138,7 +138,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 																 displayFormat : "HH:mm",
 													             value : "{Enduz}",
 													             minutesStep : 5,
-													             width : "95px",
+													             //width : "95px",
 													             textAlign : "Begin",
 													             change : oController.onChangeTime2,
 													             editable : {
