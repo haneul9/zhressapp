@@ -1022,8 +1022,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 	// 신청 OData 호출
 	callRequestOData: function(Header, TableIn04, TableIn05) {
-		// var vExtryn = Common.isExternalIP() === true ? "X" : "";
-		var vExtryn = "";
+		var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
 		$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 			"/BtSettlementSet",
