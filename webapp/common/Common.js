@@ -5,6 +5,7 @@
 jQuery.sap.declare("common.Common");
 jQuery.sap.require("common.JSONModelHelper");
 jQuery.sap.require("common.moment-with-locales");
+jQuery.sap.require("sap.m.MessageBox");
 
 if ((1.005).toFixed(2) !== "1.01") {
     (function (prototype) {
@@ -1066,6 +1067,31 @@ common.Common = {
     onChangeMoneyInput : function(oEvent){
 		inputValue = oEvent.getSource().getValue();
 		oEvent.getSource().setValue(common.Common.numberWithCommas(inputValue.replace(/[^\d]/g, '')));
-	}
+    },
+    
+    openPopup: function(url) {
+        if(!url) return;
+
+        var width = 1000, height = screen.availHeight * 0.9,
+        left = (screen.availWidth - width) / 2,
+        top = (screen.availHeight - height) / 2,
+        popup = window.open(url, "smoin-approval-popup", [
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top,
+            "status=yes,resizable=yes,scrollbars=yes"
+        ].join(","));
+
+        if(!popup) {
+            sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), {    // 팝업 차단 기능이 실행되고 있습니다.\n차단 해제 후 다시 실행해주세요.
+                title: this.getBundleText("LABEL_00139")    // 오류
+            });
+        } else {
+            setTimeout(function() {
+                popup.focus();
+            }, 500);
+        }
+    }
  
 };
