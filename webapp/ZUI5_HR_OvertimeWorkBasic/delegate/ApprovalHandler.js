@@ -210,27 +210,6 @@ sap.ui.define(
                 );
             },
 
-            openSmoinUrl: function(smoinUrl) {
-                if(!smoinUrl) return;
-
-                setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(smoinUrl, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
-            },
-
             ProcessOnSuccess: function (data, conType) {
                 
                 switch (conType) {
@@ -249,7 +228,7 @@ sap.ui.define(
                             );
                         } else {
                             // s모인 결재창을 띄운다.
-                            this.openSmoinUrl(data.EAppurl);
+                            Common.openPopup.call(this.oController, data.EAppurl);
 
                             // 목록 조회
                             this.oController.getPageHandler().search();

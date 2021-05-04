@@ -515,27 +515,6 @@ sap.ui.define(
                 return;
             },
 
-            openSmoinUrl: function(smoinUrl) {
-                if(!smoinUrl) return;
-
-                setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(smoinUrl, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
-            },
-
             ProcessOnSuccess: function (data, conType) {
                 var successMessage = "";
 
@@ -560,7 +539,7 @@ sap.ui.define(
                     title: this.oController.getBundleText("LABEL_00150"),
                     onClose: function () {
                         if(data.Url) {
-                            this.openSmoinUrl(data.Url);
+                            Common.openPopup.call(this.oController, data.Url);
                         }
 
                         this.search.call(this);
