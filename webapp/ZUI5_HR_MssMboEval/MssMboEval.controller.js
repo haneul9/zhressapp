@@ -737,22 +737,6 @@ sap.ui.define([
 		disableLogic : function(tData){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
 			var oController = oView.getController();
-			// var vTmp=true;
-			// for(var i=0;i<tData.length;i++){
-			// 	for(var j=0;j<tData[i].Datas.length;j++){
-			// 		if(oController.vPage=="2a"){
-			// 			if(tData[i].Datas[j].Apstu=="61"){
-			// 				vTmp=false;
-			// 				break;
-			// 			}
-			// 		}else if(oController.vPage=="3a"){						
-			// 			if(tData[i].Datas[j].Apstu=="71"){
-			// 				vTmp=false;
-			// 				break;
-			// 			}
-			// 		}					
-			// 	}
-			// }
 			$.app.byId(oController.PAGEID+"_"+oController.vPage+"_SaveFin").setVisible(oController._CompleteBtn);
 			$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Fin").setVisible(oController._CompleteBtn);
 			return oController._CompleteBtn;
