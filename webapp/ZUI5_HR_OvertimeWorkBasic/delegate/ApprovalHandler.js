@@ -98,7 +98,10 @@ sap.ui.define(
             },
 
             changeBegda: function(oEvent) {
-                var vBegda = oEvent.getSource().getDateValue();
+                var vBegda = oEvent.getSource().getDateValue(),
+                    vAwart = this.oModel.getProperty("/TemplateData/Awart");
+
+                if(!vAwart) return;
 
                 BusyIndicator.show(0);
                 
@@ -107,7 +110,7 @@ sap.ui.define(
                         this.oModel.setProperty("/TemplateData/Repla", "");
                         this.oModel.setProperty("/TemplateData/ReplaTx", "");
                         this.oModel.setProperty("/Replas", ODataService.OvertimePersonSet.call(this.oController, {
-                            Awart: this.oModel.getProperty("/TemplateData/Awart"),
+                            Awart: vAwart,
                             Begda: vBegda
                         }));
 
