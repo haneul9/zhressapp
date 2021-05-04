@@ -60,9 +60,7 @@ sap.ui.define(
             },
 
             onAfterShow: function () {
-            	// var oIconBar = sap.ui.getCore().byId(this.PAGEID + "_IconBar");
-             //       oIconBar.setSelectedKey("Basic");
-             //       oIconBar.fireSelect();
+        
             },
 
             handleTabBarSelect: function (oEvent) {
