@@ -61,11 +61,11 @@ sap.ui.define([
 
             var sfSessionModel = this.retrieveSFSessionModel(),
             sessionModelData = sfSessionModel.getData(),
-            mLoginData = Common.retrieveLoginInfo(sessionModelData.name),
-            traceInfo = Common.activeClientTrace({ async: false });
+            mLoginData = Common.retrieveLoginInfo(sessionModelData.name);
+            // traceInfo = Common.activeClientTrace({ async: false });
 
             mLoginData.Langu = Common.retrieveSFUserLocale(sessionModelData.name);
-            if ($.isEmptyObject(traceInfo) === false) mLoginData.Ipadd = traceInfo.Ipadd.split(',')[0];
+            // if ($.isEmptyObject(traceInfo) === false) mLoginData.Ipadd = traceInfo.Ipadd.split(',')[0];
 
             sfSessionModel.setData($.extend(sessionModelData, mLoginData));
 
