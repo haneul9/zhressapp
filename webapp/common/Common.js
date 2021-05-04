@@ -1072,8 +1072,6 @@ common.Common = {
     openPopup: function(url) {
         if(!url) return true;
 
-        common.Common.openPopup.call(oController, smoinUrl);
-
         var width = 1000, height = screen.availHeight * 0.9,
         left = (screen.availWidth - width) / 2,
         top = (screen.availHeight - height) / 2,
