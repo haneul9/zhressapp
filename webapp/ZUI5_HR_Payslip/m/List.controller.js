@@ -112,7 +112,6 @@ sap.ui.define(
             onPressSearchDetail: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-                // var oHeight = "450px";
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data"),
                     vData = {},
                     oMoney1Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money1Layout"),
@@ -156,7 +155,6 @@ sap.ui.define(
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
-                                                //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                                 text: "{Bet01}"
                                             }).addStyleClass("font-16px font-medium")
@@ -196,9 +194,8 @@ sap.ui.define(
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
-                                                //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{Bet03}"
+                                                text: "{Bet04}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
