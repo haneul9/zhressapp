@@ -206,9 +206,7 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
 
 		this.refreshAttachFileList(oController,null,vPage);
-		if(oController.PAGEID=="MedApply"){
-			this.hideLine(oAttachbox);
-		}
+		oController.PAGEID=="MedApply"?this.hideLine(oAttachbox):null;
 	},
 
 	hideLine : function(oAttachbox){
@@ -371,7 +369,6 @@ fragment.COMMON_ATTACH_FILES = {
 
 		sap.ui.core.util.File.save(
 			atob(vFileInfo.Mresource),
-			// vFileInfo.Mresource,
 			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
 			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
 			vFileInfo.Mimetype
@@ -430,7 +427,6 @@ fragment.COMMON_ATTACH_FILES = {
 		var oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"+vPage),
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"+vPage),
 			f1 = document.getElementById(oController.PAGEID + "_ATTACHFILE_BTN"+vPage+"-fu_input-inner"),
-			// oTable=sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
 			JSonModel = oAttachbox.getModel(),
 			vFileData = JSonModel.getProperty("/Data"),
 			aFileList = [],
@@ -478,9 +474,7 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.clear();
 		oFileUploader.setValue("");
 		if (f1) f1.setAttribute("value", "");
-		if(oController.PAGEID=="MedApply"){
-			fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
-		}		
+		oController.PAGEID=="MedApply"?fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox):null;
 	},
 
 	callDeleteFileService: function(fileInfo) {
@@ -698,7 +692,7 @@ fragment.COMMON_ATTACH_FILES = {
 		return vAppnm;
 	},
 
-	//싱글 파일일때만 쓸 것, 멀티파일 기능 추가
+	//싱글 파일일때만 쓸 것, 멀티파일도 가능 (2021.04~)
 	uploadFiles: function (vPages) {
 		var vFiles = [];
 		var dFiles = [];
