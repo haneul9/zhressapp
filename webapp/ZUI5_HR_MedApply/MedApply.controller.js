@@ -117,7 +117,7 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID + "_HeadSel").addItem();
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
-			oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,Datum:new Date(),MedicalBukrsExport:[]}, 
+			oModel.create("/MedicalBukrsImportSet", {Pernr:oSessionData.Pernr,Datum:new Date(),MedicalBukrsExport:[]},
 					{success:function(data,res){
 						if(data&&data.MedicalBukrsExport.results){
 							oController._Bukrs=data.MedicalBukrsExport.results[0].Bukrs;
@@ -163,7 +163,7 @@ sap.ui.define([
 						}					
 					},
 					error:function (oError) {
-						var Err = {};						
+						var Err = {};
 						if (oError.response) {
 							Err = window.JSON.parse(oError.response.body);
 							var msg1 = Err.error.innererror.errordetails;
@@ -914,7 +914,7 @@ sap.ui.define([
 							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 						},textAlign:oAligns[i]}).addStyleClass("FontFamily"));
 					}else{
-						oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));			
+						oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));
 					}					
 					oTable.addColumn(oCol);
 				});
@@ -986,15 +986,15 @@ sap.ui.define([
 					return;
 				}
 				sap.m.MessageBox.show(
-					oBundleText.getText("MSG_35001"), {				
-					icon: sap.m.MessageBox.Icon.INFORMATION,				
-					title: oBundleText.getText("LABEL_35023"),				
-					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
+					oBundleText.getText("MSG_35001"), {	
+					icon: sap.m.MessageBox.Icon.INFORMATION,
+					title: oBundleText.getText("LABEL_35023"),
+					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
 					onClose: function(fVal) {
 						if(fVal=="YES"){
 							onSaveProcess(oController);
 						}
-					}				
+					}
 				});
 			}
 			if (!oController.oDialog4) {
@@ -1467,7 +1467,7 @@ sap.ui.define([
 				}				
 				if(oPro.Gtz51!="C"&&oPro.Gtz51!="D"){
 					if(oPro.Inpdt==""||oPro.Inpdt==null){
-						oMsg=oBundleText.getText("MSG_47015");				
+						oMsg=oBundleText.getText("MSG_47015");
 					}
 				}
 				if(oPro.HospName.trim()==""){
@@ -1590,11 +1590,11 @@ sap.ui.define([
 								setTimeout(function(){
 									oController.changeSel2("R");
 								},100);
-								
+
 							}else{
 								var oJSON = $.app.byId(oController.PAGEID+"_Dialog2").getModel();
 								var aData={Pop1:[],Pop2:[]};
-								data.MedicalApplyTableIn.results.forEach(function(e){							
+								data.MedicalApplyTableIn.results.forEach(function(e){
 									aData.Pop2.push(e);
 								});
 								oJSON.setData(aData);
@@ -1864,16 +1864,13 @@ sap.ui.define([
 				var pair = p.split(/=/);
 				if (pair[0] === "s4hana") { return pair[1]; }
 			})[0];
-	
 			var destination = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
 			
 			return (destination + sUrl);
 		},
-		
+
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			return new JSONModelHelper({name: "991004"});
 		} : null
-		
 	});
-
 });

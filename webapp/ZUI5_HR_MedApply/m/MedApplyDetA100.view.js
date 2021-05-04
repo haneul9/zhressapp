@@ -397,7 +397,7 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oController.getTxtMobiles("LABEL_47084")]});
 			oRow.addCell(oCell);
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.m.Input({width:"45%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zdbcrl}",editable:false}),
-			new HoverIcon({            
+			new HoverIcon({
 				src: "sap-icon://information",
 				hover: function(oEvent) {
 					common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47009"));

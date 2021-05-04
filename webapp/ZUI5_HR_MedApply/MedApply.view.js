@@ -116,7 +116,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		});
 		oRow.addCell(oCell);
 		oMat.addRow(oRow);
-		
+
 		var oTable = new sap.ui.table.Table(oController.PAGEID+"_Table", {
 			selectionMode: "None",
 			enableColumnReordering: false,
