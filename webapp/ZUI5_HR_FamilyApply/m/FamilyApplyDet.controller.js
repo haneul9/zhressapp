@@ -339,16 +339,6 @@ sap.ui.define([
 			var oController = $.app.getController(),
 				reader = new FileReader(),
 				f = jQuery.sap.domById(oController.PAGEID + "_UPLOAD_BTN" + "-fu").files[0];
-
-			// reader.onload = function (e) {
-			// 	// eslint-disable-next-line no-undef
-			// 	oController.X = XLSX;
-			// 	var data = e.target.result;
-			// 	var arr = oController.fixdata(data);
-			// 	var wb = oController.X.read(btoa(arr), { type: "base64" });
-			// 	oController.to_json(wb);
-			// };
-
 			reader.readAsArrayBuffer(f);
 		},
 
@@ -388,7 +378,7 @@ sap.ui.define([
 						break;
 					}
 				}
-				sData2.sort(function(a, b) { // 한글 오름차순
+				sData2.sort(function(a, b) {
 					return a.Text < b.Text ? -1 : a.Text > b.Text ? 1 : 0;
 				});
 				for(var i=0;i<sData2.length;i++){
@@ -703,8 +693,6 @@ sap.ui.define([
 					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
 					onClose: function(fVal) {
 						if(fVal=="YES"){
-							console.log(oController._tData);
-							console.log($.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0]);
 							oController.onSaveProcess(oController,Sig);
 						}
 					}				

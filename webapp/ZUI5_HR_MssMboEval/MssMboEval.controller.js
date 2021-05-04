@@ -108,10 +108,9 @@ sap.ui.define([
 			var oController = oView.getController();
             var oTable = $.app.byId(oController.PAGEID + "_Table1");
             var aRows = oTable.getRows();
-			var byCols = [0];   // group by the cols "byCols"
-            var theCols = [0];  // the cols "theCols" (if none selected, we will use all)    
+			var byCols = [0];
+            var theCols = [0];
 			var myArray = new Array();
-            // Aggregate columns (by cols) for similar values
             if (aRows && aRows.length > 0) {
                 var pRow; 
 				var rowspan = 1;
@@ -120,7 +119,6 @@ sap.ui.define([
                     if (idx > 0) {
                         var cCells = aRow.getCells();
                         var pCells = pRow.getCells();
-                        // if theCols is empty we use aggregation for all cells in a row
                         if (theCols.length < 1) byCols = cCells.map(function(x, i) { return i; });
 						
                         if (byCols.filter(function(x) { return pCells[x].getText() == cCells[x].getText(); }).length == byCols.length) {
@@ -404,49 +402,6 @@ sap.ui.define([
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			oModel.create("/AppraisalMboFinSet", vData, {
 				success: function(data,res){
-					// if(data&&data.TableIn2.results.length){			
-					// 	var mData=data.TableIn2.results;
-					// 	var mCntArea=new Array();						
-					// 	for(var i=0;i<mData.length;i++){
-					// 		var cntData=new Array();
-					// 		for(var j=1;j<=10;j++){
-					// 			if(j<10){
-					// 				if(j<3){
-					// 					eval("cntData.push(mData[i].Cnt0"+j+");");
-					// 				}else{
-					// 					eval("cntData.push(mData[i].Cnt0"+j+".split('/')[0]);");
-					// 					eval("cntData.push(parseInt(mData[i].Cnt0"+j+".split('/')[1])+'%');");
-					// 				}
-					// 			}else{
-					// 				eval("cntData.push(mData[i].Cnt"+j+".split('/')[0]);");
-					// 				eval("cntData.push(parseInt(mData[i].Cnt"+j+".split('/')[1])+'%');");
-					// 			}
-					// 		}
-					// 		mCntArea.push(cntData);
-					// 	}
-					// 	var sDatas=new Array();
-					// 	for(var i=0;i<mCntArea.length;i++){
-					// 		var sData={};
-					// 		for(var j=0;j<mCntArea[i].length;j++){
-					// 			sData.PgccdT=data.TableIn2.results[i].PgccdT;
-					// 			sData.Gubun=data.TableIn2.results[i].Gubun;
-					// 			sData.Cal02=parseInt(parseInt(data.TableIn2.results[i].Cnt02)/parseInt(data.TableIn2.results[i].Cnt01)*100)+"%";
-					// 			if(j<9){
-					// 				eval("sData.Cnt0"+(j+1)+"=mCntArea[i][j];");
-					// 			}else{
-					// 				eval("sData.Cnt"+(j+1)+"=mCntArea[i][j];");
-					// 			}
-					// 		}
-					// 		sDatas.push(sData);
-					// 	}
-					// 	sDatas.forEach(function(e){
-					// 		e.Cal01=parseInt(e.Cnt01)-(parseInt(e.Cnt03)+parseInt(e.Cnt05)+parseInt(e.Cnt07)+parseInt(e.Cnt09)+parseInt(e.Cnt11)+parseInt(e.Cnt13)+
-					// 		parseInt(e.Cnt15)+parseInt(e.Cnt17));
-					// 	});
-					// 	oController.mTableMapping(oController,mTable,mCol,oFields,sDatas);	
-					// }else{
-					// 	oController.mTableMapping(oController,mTable,mCol,oFields,[]);	
-					// }
 					if(data&&data.Export.results.length){						
 						data.Export.results[0].Finyn=="X"?oController._CompleteBtn=false:oController._CompleteBtn=true;
 					}else{
@@ -1161,7 +1116,7 @@ sap.ui.define([
 							iDropPosition++;
 						}
 						var tHLine=oDragged.getId().split("_")[4];
-						var tVLine=oDragged.getId().split("_")[5]
+						var tVLine=oDragged.getId().split("_")[5];
 						var gHLine=oGrid.getId().split("_")[3];
 						var gVline=oGrid.getId().split("_")[4];
 						if(oDragged.getCustomData()[0].getValue("Apstu")==oController._gvApstu){
@@ -1910,82 +1865,80 @@ sap.ui.define([
 			var oTableIn2=oController._SheetData.TableIn2.results;
 			var oTableIn4=oController._SheetData.TableIn4.results;
 			function dataChecknSave(){
-//				if(oController._SheetData.TableIn2.results.length==0){
+				oTableIn2.push({
+					ApoptT: "",
+					Apopt: "28",
+					Apop: oTa1.getValue(),
+					Docid: oController._tData.Docid,
+					IOdkey: ""
+				});
+				oTableIn2.push({
+					ApoptT: "",
+					Apopt: "29",
+					Apop: oTa2.getValue(),
+					Docid: oController._tData.Docid,
+					IOdkey: ""
+				});
+				oTableIn2.push({
+					ApoptT: "",
+					Apopt: "51",
+					Apop: oTa3.getValue(),
+					Docid: oController._tData.Docid,
+					IOdkey: ""
+				});
+				oTableIn2.push({
+					ApoptT: "",
+					Apopt: "61",
+					Apop: oTa4.getValue(),
+					Docid: oController._tData.Docid,
+					IOdkey: ""
+				});
+				if(oController.vPage=="2"){
 					oTableIn2.push({
 						ApoptT: "",
-						Apopt: "28",
-						Apop: oTa1.getValue(),
+						Apopt: "52",
+						Apop: oTa5.getValue(),
 						Docid: oController._tData.Docid,
 						IOdkey: ""
 					});
 					oTableIn2.push({
 						ApoptT: "",
-						Apopt: "29",
-						Apop: oTa2.getValue(),
+						Apopt: "62",
+						Apop: oTa6.getValue(),
+						Docid: oController._tData.Docid,
+						IOdkey: ""
+					});
+				}
+				if(oController.vPage=="3"){
+					oTableIn2.push({
+						ApoptT: "",
+						Apopt: "52",
+						Apop: oTa5.getValue(),
 						Docid: oController._tData.Docid,
 						IOdkey: ""
 					});
 					oTableIn2.push({
 						ApoptT: "",
-						Apopt: "51",
-						Apop: oTa3.getValue(),
+						Apopt: "62",
+						Apop: oTa6.getValue(),
 						Docid: oController._tData.Docid,
 						IOdkey: ""
 					});
 					oTableIn2.push({
 						ApoptT: "",
-						Apopt: "61",
-						Apop: oTa4.getValue(),
+						Apopt: "53",
+						Apop: oTa7.getValue(),
 						Docid: oController._tData.Docid,
 						IOdkey: ""
 					});
-					if(oController.vPage=="2"){
-						oTableIn2.push({
-							ApoptT: "",
-							Apopt: "52",
-							Apop: oTa5.getValue(),
-							Docid: oController._tData.Docid,
-							IOdkey: ""
-						});
-						oTableIn2.push({
-							ApoptT: "",
-							Apopt: "62",
-							Apop: oTa6.getValue(),
-							Docid: oController._tData.Docid,
-							IOdkey: ""
-						});
-					}
-					if(oController.vPage=="3"){
-						oTableIn2.push({
-							ApoptT: "",
-							Apopt: "52",
-							Apop: oTa5.getValue(),
-							Docid: oController._tData.Docid,
-							IOdkey: ""
-						});
-						oTableIn2.push({
-							ApoptT: "",
-							Apopt: "62",
-							Apop: oTa6.getValue(),
-							Docid: oController._tData.Docid,
-							IOdkey: ""
-						});
-						oTableIn2.push({
-							ApoptT: "",
-							Apopt: "53",
-							Apop: oTa7.getValue(),
-							Docid: oController._tData.Docid,
-							IOdkey: ""
-						});
-						oTableIn2.push({
-							ApoptT: "",
-							Apopt: "63",
-							Apop: oTa8.getValue(),
-							Docid: oController._tData.Docid,
-							IOdkey: ""
-						});
-					}
-//				}
+					oTableIn2.push({
+						ApoptT: "",
+						Apopt: "63",
+						Apop: oTa8.getValue(),
+						Docid: oController._tData.Docid,
+						IOdkey: ""
+					});
+				}
 
 				if(oController._SheetData.TableIn4.results.length==0){
 					oTableIn4.push({
@@ -2014,40 +1967,6 @@ sap.ui.define([
 					}
 				}
 				var vTmp=false;
-				// oTableIn2.forEach(function(e){
-				// 	if(e.Apopt=="28"){
-				// 		e.Apop=oTa1.getValue();
-				// 	}
-				// 	if(e.Apopt=="29"){
-				// 		e.Apop=oTa2.getValue();
-				// 	}
-				// 	if(e.Apopt=="51"){
-				// 		e.Apop=oTa3.getValue();
-				// 	}
-				// 	if(e.Apopt=="61"){
-				// 		e.Apop=oTa4.getValue();
-				// 	}
-				// 	if(oController.vPage=="2"){						
-				// 		if(e.Apopt=="52"){
-				// 			vTmp=true;
-				// 			e.Apop=oTa5.getValue();
-				// 		}
-				// 		if(e.Apopt=="62"){
-				// 			vTmp=true;
-				// 			e.Apop=oTa6.getValue();
-				// 		}
-				// 	}
-				// 	if(oController.vPage=="3"){						
-				// 		if(e.Apopt=="53"){
-				// 			vTmp=true;
-				// 			e.Apop=oTa7.getValue();
-				// 		}
-				// 		if(e.Apopt=="63"){
-				// 			vTmp=true;
-				// 			e.Apop=oTa8.getValue();
-				// 		}
-				// 	}
-				// });
 				if(!vTmp){
 					if(oController.vPage=="2"){
 						oTableIn2.push({
@@ -2289,8 +2208,6 @@ sap.ui.define([
 		onFinishProcess : function(vSig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
 			var oController = oView.getController();
-			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
-			var oController = oView.getController();
 			var oModel=$.app.getModel("ZHR_APPRAISAL2_SRV");
 			var oPreData=oController._PreData;
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
@@ -2418,8 +2335,6 @@ sap.ui.define([
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			// return new JSONModelHelper({name: "20120220"});
-			// return new JSONModelHelper({name: "931006"});
 			return new JSONModelHelper({name: "991004"});
 		} : null
 		

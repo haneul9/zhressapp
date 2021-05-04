@@ -117,17 +117,6 @@ sap.ui.define([
                 columns : 1,
                 width : "100%",
                 rows : [
-                    // new sap.ui.commons.layout.MatrixLayoutRow({
-                    //         cells : [
-                    //             new sap.ui.commons.layout.MatrixLayoutCell({
-                    //                      content : [new sap.m.Toolbar({
-                    //                                       height : "44px",
-                    //                                       content : [new sap.m.Text({text : oBundleText.getText("LABEL_15008")}).addStyleClass("Font18 Font700")] // 역량평가
-                    //                                  }).addStyleClass("toolbarNoBottomLine padding0")],
-                    //                      hAlign : "Begin",
-                    //                      vAlign : "Middle"
-                    //                  })]
-                    //     }),
                         new sap.ui.commons.layout.MatrixLayoutRow({height : "10px"}),
                         new sap.ui.commons.layout.MatrixLayoutRow({
                             cells : [new sap.ui.commons.layout.MatrixLayoutCell({

@@ -932,8 +932,6 @@ sap.ui.define([
 					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
 					onClose: function(fVal) {
 						if(fVal=="YES"){
-							console.log(oController._tData);
-							console.log($.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0]);
 							oController.onSaveProcess(oController,Sig);
 						}
 					}				

@@ -401,35 +401,6 @@ sap.ui.define([
 					}
 				});
 			}
-
-			// function onDelProcess(){
-			// 	var vData2={
-			// 		IMode:"C",
-			// 		IBukrs:"1000",
-			// 		IPernr:oSessionData.Pernr,
-			// 		ILangu:oSessionData.Langu,
-			// 		IDatum:"\/Date("+new Date().getTime()+")\/",
-			// 		FamilyupdateTablein1:[oPro],FamilyupdateTablein2:[],FamilyupdateTablein3:[],FamilyupdateTablein4:[]
-			// 	};			
-			// 	vData2.Status!=""?vData2.FamilyupdateTablein1[0].Seqnr=oPro.Seqnr:null;	
-			// 	delete vData2.FamilyupdateTablein1[0].Opener;
-			// 	oModel.create("/FamilyupdateSet", vData2, null,
-			// 	function(data,res){
-			// 		goRealDel();
-			// 	},
-			// 	function (oError) {
-			// 		var Err = {};						
-			// 		if (oError.response) {
-			// 			Err = window.JSON.parse(oError.response.body);
-			// 			var msg1 = Err.error.innererror.errordetails;
-			// 			if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-			// 			else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-			// 		} else {
-			// 			sap.m.MessageBox.alert(oError.toString());
-			// 		}
-			// 	});				
-			// }
-//			if(!vTmp){
 				sap.m.MessageBox.show(
 					oBundleText.getText("MSG_44003"), {				
 					icon: sap.m.MessageBox.Icon.INFORMATION,				
@@ -441,7 +412,6 @@ sap.ui.define([
 						}
 					}				
 				});
-//			}
 		},
 
 		changeFile: function () {
@@ -861,8 +831,6 @@ sap.ui.define([
 					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
 					onClose: function(fVal) {
 						if(fVal=="YES"){
-							console.log(oController._tData);
-							console.log($.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0]);
 							oController.onSaveProcess(oController,Sig);
 						}
 					}				
