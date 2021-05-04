@@ -126,7 +126,7 @@ sap.ui.define(
                                 {id: "Sumoh", label: "{i18n>LABEL_64009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
                                 {id: "Sumtm", label: "{i18n>LABEL_64010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
                                 {id: "Workt2", label: "{i18n>LABEL_64011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-                                {id: "DutycT", label: "{i18n>LABEL_64012}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true}];
+                                {id: "DutycT", label: "{i18n>LABEL_64012}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "20%"}];
                 
                 MakeTable.makeColumn(oController, oTable, col_info);
                 
