@@ -438,7 +438,7 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"45%",textAlign:"Right",
 			editable:false,maxLength:13,value:{path:"Zdbcrl",formatter:function(fVal){
 				if(fVal!=""&&fVal!=null){
-					return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
+					return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim();
 				}
 			}}})});
 			oRow.addCell(oCell);
