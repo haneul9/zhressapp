@@ -121,7 +121,7 @@ ZUI5_HR_MssMboEval.fragment.content02={
 			content : [gCol],
 			width:"100%",
 			vertical : true,
-			height:"350px"
+			height:"300px"
 		});
 		oRow=new c.layout.MatrixLayoutRow();
 		oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_"+vPage+"_gContentCell",{
