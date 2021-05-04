@@ -35,12 +35,12 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
                                     showValueHelp: true,
                                     valueHelpOnly: true,
                                     valueHelpRequest: oController.searchOrgehPernr,
-                                    editable : {
-                                    	path : "Chief",
-                                    	formatter : function(fVal){
-                                    		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
-                                    	}
-                                    }
+                                    // editable : {
+                                    // 	path : "Chief",
+                                    // 	formatter : function(fVal){
+                                    // 		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                    // 	}
+                                    // } // 2021-05-04 부서장 확인 여부 주석처리
                                 }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_46002")}), // 근무구분
                                 new sap.m.ComboBox({

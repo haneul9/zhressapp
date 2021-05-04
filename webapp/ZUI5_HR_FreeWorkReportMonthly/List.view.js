@@ -77,12 +77,12 @@ sap.ui.define(
                                                     }
                                                 }
                                             },
-                                            editable : {
-                                                path : "Chief",
-                                                formatter : function(fVal){
-                                                    return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
-                                                }
-                                            }
+                                            // editable : {
+                                            //     path : "Chief",
+                                            //     formatter : function(fVal){
+                                            //         return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                            //     }
+                                            // } // 2021-05-04 부서장 확인 여부 주석처리
                                         })
                                     ]
                                 }).addStyleClass("search-field-group"),

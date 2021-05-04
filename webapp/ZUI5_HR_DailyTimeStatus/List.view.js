@@ -39,16 +39,16 @@ sap.ui.define([], function () {
                                         showValueHelp: true,
                                         valueHelpOnly: true,
                                         valueHelpRequest: oController.displayMultiOrgSearchDialog,
-                                        editable : {
-                                        	path : "Chief",
-                                        	formatter : function(fVal){
-                                                if($.app.APP_AUTH == "M"){
-                                                    return (fVal == "X") ? true : false;
-                                                } else {
-                                                    return true;
-                                                }                                        		
-                                        	}
-                                        }
+                                        // editable : {
+                                        // 	path : "Chief",
+                                        // 	formatter : function(fVal){
+                                        //         if($.app.APP_AUTH == "M"){
+                                        //             return (fVal == "X") ? true : false;
+                                        //         } else {
+                                        //             return true;
+                                        //         }                                        		
+                                        // 	}
+                                        // } // 2021-05-04 주석처리
                                     })
                                 ]
                             }).addStyleClass("search-field-group"),
