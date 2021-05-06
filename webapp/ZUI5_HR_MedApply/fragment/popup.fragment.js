@@ -529,7 +529,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
                             new sap.m.ToolbarSpacer({width:"20px"}),new sap.ui.core.HTML({content:"<span style='font-size:14px;color:red;'>"+oBundleText.getText("LABEL_47029")+"</span>"}),
                             new sap.m.ToolbarSpacer(),
                             new sap.ui.core.HTML({content:
-                                "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;'>"+oController.getBundleText("LABEL_47143")+"</a>"})
+                                "<a target='_blank' href='ZUI5_HR_MedApply/manual/테스트.xls' style='font-size:14px;color:#0070bd !important;'>"+oController.getBundleText("LABEL_47143")+"</a>"})
                             ]})],
 			expanded:true,
 			expandable:false,
