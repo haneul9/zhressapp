@@ -100,7 +100,7 @@ sap.ui.define(
                                         new sap.m.Toolbar({
                                             height: "45px",
                                             content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_37086}" }).addStyleClass("Font15 FontBold"), // 보훈 및 장애
+                                                new sap.m.Text({ text: "{i18n>LABEL_37086}" }).addStyleClass("sub-title"), // 보훈 및 장애
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_37042}", // 신규

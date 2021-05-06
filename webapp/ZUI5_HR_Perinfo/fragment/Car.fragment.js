@@ -53,8 +53,8 @@ sap.ui.define(
                                     content: [
                                         new sap.m.Toolbar({
                                             height: "45px",
-                                            content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_37029}" }).addStyleClass("Font15 FontBold"), // 차량관리
+                                            content: [                                                
+                                                new sap.m.Text({ text: "{i18n>LABEL_37029}" }).addStyleClass("sub-title"), // 차량관리
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_37042}", // 신규

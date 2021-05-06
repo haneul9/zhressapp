@@ -37,7 +37,7 @@ sap.ui.define(
                     showOverlay: false,
                     showNoData: true,
                     noData: "{i18n>LABEL_00901}" // No data found
-                }).addStyleClass("mt-8px");
+                });
 
                 oTable.attachEvent("cellClick", function (oEvent) {
                     oTable.clearSelection();
@@ -66,7 +66,7 @@ sap.ui.define(
                                     content: [
                                         new sap.m.Toolbar({
                                             content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_18008}" }).addStyleClass("Font15 FontBold"), //발령사항
+                                                new sap.m.Text({ text: "{i18n>LABEL_18008}" }).addStyleClass("sub-title"), //발령사항
                                                 new sap.m.ToolbarSpacer()
                                             ]
                                         })

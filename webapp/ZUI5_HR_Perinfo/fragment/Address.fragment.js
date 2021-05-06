@@ -37,7 +37,7 @@ sap.ui.define(
                     showOverlay: false,
                     showNoData: true,
                     noData: "{i18n>LABEL_00901}" // No data found
-                }).addStyleClass("mt-8px");
+                });
 
                 oTable.attachEvent("cellClick", function (oEvent) {
                     oTable.clearSelection();
@@ -66,8 +66,8 @@ sap.ui.define(
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [
                                         new sap.m.Toolbar({
-                                            content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_37009}" }).addStyleClass("Font15 FontBold"), // 주소
+                                            content: [                                                
+                                                new sap.m.Text({ text: "{i18n>LABEL_37009}" }).addStyleClass("sub-title"), // 주소
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_00102}",

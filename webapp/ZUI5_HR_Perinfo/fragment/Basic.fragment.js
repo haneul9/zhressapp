@@ -92,13 +92,13 @@ sap.ui.define(
                                     width: "auto"
                                 })
                             ]
-                        }).addStyleClass("mr-10px")
+                        }).addStyleClass("mr-10px mt-4px")
                     ]
                 });
 
                 var oMatrix = new sap.ui.commons.layout.MatrixLayout({
                     columns: 5,
-                    widths: ["", "", "30%", "", "30%"],
+                    widths: ["100px", "100px", "", "200px", ""],
                     width: "100%",
                     rows: [
                         new sap.ui.commons.layout.MatrixLayoutRow({
@@ -106,8 +106,8 @@ sap.ui.define(
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [
                                         new sap.m.Toolbar({
-                                            content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_37008}" }).addStyleClass("Font15 FontBold"), // 기본인적사항
+                                            content: [                                                
+                                                new sap.m.Text({ text: "{i18n>LABEL_37008}" }).addStyleClass("sub-title"), // 기본인적사항
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_37107}", // 사진저장
@@ -168,14 +168,14 @@ sap.ui.define(
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37010}" })], // 성명
                                     hAlign: "Center",
                                     vAlign: "Middle",
                                     rowSpan: 2
-                                }).addStyleClass("Label"),
+                                }).addStyleClass("Label border-r"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37011}" })], // 한글
                                     hAlign: "Center",
@@ -199,7 +199,7 @@ sap.ui.define(
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37012}" })], // 영문
@@ -209,14 +209,22 @@ sap.ui.define(
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{Ename3}" })],
                                     hAlign: "Begin",
+                                    vAlign: "Middle"                                    
+                                }).addStyleClass("Data"),                            
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Text({ text: "{i18n>LABEL_37016}" })], // 성별
+                                    hAlign: "Center",
+                                    vAlign: "Middle"                                    
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Text({ text: "{GeschTx}" })],
+                                    hAlign: "Begin",
                                     vAlign: "Middle"
-                                }).addStyleClass("Data"),
-                                new sap.ui.commons.layout.MatrixLayoutCell().addStyleClass("Label"),
-                                new sap.ui.commons.layout.MatrixLayoutCell().addStyleClass("Data")
+                                }).addStyleClass("Data")
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37014}" })], // 주민등록번호
@@ -231,7 +239,7 @@ sap.ui.define(
                                 }).addStyleClass("Data"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [
-                                        new sap.m.Label({
+                                        new sap.m.Text({
                                             text: "{i18n>LABEL_37015}",
                                             required: {
                                                 path: "disyn",
@@ -252,33 +260,33 @@ sap.ui.define(
                                 }).addStyleClass("Data")
                             ]
                         }),
+                        // new sap.ui.commons.layout.MatrixLayoutRow({
+                        //     height: "44px",
+                        //     cells: [
+                        //         new sap.ui.commons.layout.MatrixLayoutCell({
+                        //             content: [new sap.m.Text({ text: "{i18n>LABEL_37016}" })], // 성별
+                        //             hAlign: "Center",
+                        //             vAlign: "Middle",
+                        //             colSpan: 2
+                        //         }).addStyleClass("Label"),
+                        //         new sap.ui.commons.layout.MatrixLayoutCell({
+                        //             content: [new sap.m.Text({ text: "{GeschTx}" })],
+                        //             hAlign: "Begin",
+                        //             vAlign: "Middle"
+                        //         }).addStyleClass("Data"),
+                        //         new sap.ui.commons.layout.MatrixLayoutCell({
+                        //             hAlign: "Center",
+                        //             vAlign: "Middle"
+                        //         }).addStyleClass("Label"),
+                        //         new sap.ui.commons.layout.MatrixLayoutCell({
+                        //             //content : [oKonfe],
+                        //             hAlign: "Begin",
+                        //             vAlign: "Middle"
+                        //         }).addStyleClass("Data")
+                        //     ]
+                        // }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
-                            cells: [
-                                new sap.ui.commons.layout.MatrixLayoutCell({
-                                    content: [new sap.m.Text({ text: "{i18n>LABEL_37016}" })], // 성별
-                                    hAlign: "Center",
-                                    vAlign: "Middle",
-                                    colSpan: 2
-                                }).addStyleClass("Label"),
-                                new sap.ui.commons.layout.MatrixLayoutCell({
-                                    content: [new sap.m.Text({ text: "{GeschTx}" })],
-                                    hAlign: "Begin",
-                                    vAlign: "Middle"
-                                }).addStyleClass("Data"),
-                                new sap.ui.commons.layout.MatrixLayoutCell({
-                                    hAlign: "Center",
-                                    vAlign: "Middle"
-                                }).addStyleClass("Label"),
-                                new sap.ui.commons.layout.MatrixLayoutCell({
-                                    //content : [oKonfe],
-                                    hAlign: "Begin",
-                                    vAlign: "Middle"
-                                }).addStyleClass("Data")
-                            ]
-                        }),
-                        new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37018}" })], // 국적
@@ -304,7 +312,7 @@ sap.ui.define(
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37020}" })], // 결혼여부
@@ -330,7 +338,7 @@ sap.ui.define(
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_04304}" })], // 사번
@@ -356,7 +364,7 @@ sap.ui.define(
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_22004}" })], // 입사일
@@ -382,7 +390,7 @@ sap.ui.define(
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
-                            height: "45px",
+                            height: "44px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [new sap.m.Text({ text: "{i18n>LABEL_37005}" })], // Grade

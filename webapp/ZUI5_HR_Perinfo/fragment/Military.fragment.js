@@ -115,7 +115,7 @@ sap.ui.define(
                                         new sap.m.Toolbar({
                                             height: "45px",
                                             content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_02198}" }).addStyleClass("Font15 FontBold"), // 병역사항
+                                                new sap.m.Text({ text: "{i18n>LABEL_02198}" }).addStyleClass("sub-title"), // 병역사항
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_37042}", // 신규
@@ -312,6 +312,7 @@ sap.ui.define(
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [
                                         new sap.m.Toolbar({
+                                            height: "45px",
                                             content: [oJobcl]
                                         }).addStyleClass("toolbarNoBottomLine")
                                     ],

@@ -178,7 +178,7 @@ sap.ui.define([], function () {
                         }
                     })
                 ]
-            });
+            }).addStyleClass("tab-group");
 
             oObjectPageLayout.addStyleClass("sapUiSizeCompact tab-group mt-26px");
 
@@ -221,7 +221,7 @@ sap.ui.define([], function () {
                                 fitContainer: true,
                                 items: [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Header", oController), 
                                         new sap.m.Text({ text: vTitile }).addStyleClass("app-title")] // 사원 프로파일
-                            }).addStyleClass("app-title-container")
+                            }).addStyleClass("app-title-container mb-16px")
                         ]
                     }).addStyleClass("app-content-container-wide"),
                     oSplitContainer
