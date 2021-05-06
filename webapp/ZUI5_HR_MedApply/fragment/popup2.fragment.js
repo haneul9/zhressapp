@@ -346,7 +346,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
         oMat2.addRow(oRow);
 
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47042")+"</span>"})});
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span>"})});
         oRow.addCell(oCell);
         oMat2.addRow(oRow);
 
@@ -361,7 +361,9 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
         oMat2.addRow(oRow);
 
         var oPanel2 = new sap.m.Panel({
-			headerToolbar : [new sap.m.Toolbar({content:[new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47028")+"</span>"})]})],
+			headerToolbar : [new sap.m.Toolbar({content:[new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
+            new sap.m.ToolbarSpacer(),new sap.ui.core.HTML({content:
+                "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;'>"+oController.getBundleText("LABEL_47143")+"</a>"})]})],
 			expanded:true,
 			expandable:false,
 			content:oMat2

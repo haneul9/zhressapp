@@ -1486,7 +1486,7 @@ sap.ui.define([
 						MedicalApplyTableInH:[]
 						};
 			if(vSig=="1000"){
-				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""||$.app.byId(oController.PAGEID+"_dSel2").getSelectedKey()==""){
+				if($.app.byId(oController.PAGEID+"_dSel1").getSelectedKey()==""){
 					sap.m.MessageBox.alert(oController.getBundleText("MSG_47034"));
 					return;
 				}

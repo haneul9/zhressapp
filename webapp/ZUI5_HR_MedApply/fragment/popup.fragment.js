@@ -28,18 +28,27 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel0}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new common.PickOnlyDatePicker({width:"50%",
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new common.PickOnlyDatePicker({width:"50%",
         displayFormat: gDtfmt,
         placeholder: gDtfmt,
         value : {
             path : "MedDate", 
             type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
         },
-        valueFormat: "yyyy-MM-dd",editable:false})}).addStyleClass("DataCell");
+        valueFormat: "yyyy-MM-dd",editable:false}),new HoverIcon({            
+            src: "sap-icon://information",
+            hover: function(oEvent) {
+                common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47039"));
+            },
+            leave: function(oEvent) {
+                common.Common.onPressTableHeaderInformation.call(oController, oEvent);
+            }
+        })
+        .addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue")]}).addStyleClass("DataCell");
         oRow.addCell(oCell);
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel1}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oSelector1}).addStyleClass("DataCell");
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oSelector1]}).addStyleClass("DataCell");
         oRow.addCell(oCell);
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel2}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
@@ -504,7 +513,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({ 
             colSpan:9,
-            content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47038")+"<br/>"+oController.getBundleText("MSG_47039")+"</span>"})
+            content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47038")+"</span>"})
         }).addStyleClass("DataCell");
         oRow.addCell(oCell);
         oMat3.addRow(oRow);
@@ -515,8 +524,13 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
         oMat3.addRow(oRow);
 
         var oPanel2 = new sap.m.Panel({
-			headerToolbar : [new sap.m.Toolbar({content:[new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
-                            new sap.m.ToolbarSpacer({width:"20px"}),new sap.ui.core.HTML({content:"<span style='font-size:14px;color:red;'>"+oBundleText.getText("LABEL_47029")+"</span>"})]})],
+			headerToolbar : [new sap.m.Toolbar({content:[
+                            new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
+                            new sap.m.ToolbarSpacer({width:"20px"}),new sap.ui.core.HTML({content:"<span style='font-size:14px;color:red;'>"+oBundleText.getText("LABEL_47029")+"</span>"}),
+                            new sap.m.ToolbarSpacer(),
+                            new sap.ui.core.HTML({content:
+                                "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;'>"+oController.getBundleText("LABEL_47143")+"</a>"})
+                            ]})],
 			expanded:true,
 			expandable:false,
 			content:[oMat2,new sap.ui.core.HTML({content:"<div style='height:5px;'/>"}),oMat3]
