@@ -44,3 +44,6 @@
     top: 6px !important;
     right: 1rem !important;
 }
+.sapMLabel.sapMLabelRequired .sapMLabelColonAndRequired:after{
+    font-size:17px !important;
+}

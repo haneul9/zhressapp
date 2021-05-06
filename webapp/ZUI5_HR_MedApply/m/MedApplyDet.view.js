@@ -452,7 +452,7 @@ sap.ui.define([
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-				colSpan:9,
+				colSpan:2,
 				content:new sap.ui.core.HTML({content:"<div style='height:8px;'></div>"})
 			});
 			oRow.addCell(oCell);
