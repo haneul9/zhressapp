@@ -37,7 +37,7 @@ sap.ui.define(
                     showOverlay: false,
                     showNoData: true,
                     noData: "{i18n>LABEL_00901}" // No data found
-                }).addStyleClass("mt-8px");
+                });
 
                 oTable.attachEvent("cellClick", function (oEvent) {
                     oTable.clearSelection();
@@ -67,7 +67,7 @@ sap.ui.define(
                                     content: [
                                         new sap.m.Toolbar({
                                             content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_02195}" }).addStyleClass("Font15 FontBold"), // 경력사항
+                                                new sap.m.Text({ text: "{i18n>LABEL_02195}" }).addStyleClass("sub-title"), // 경력사항
                                                 new sap.m.ToolbarSpacer(),
                                                 new sap.m.Button({
                                                     text: "{i18n>LABEL_37042}", // 신규
