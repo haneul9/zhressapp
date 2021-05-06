@@ -531,6 +531,7 @@ sap.ui.define(
                             this.oController, 
                             OvertimeWork.ProcessType.CODE, 
                             {
+                                isErrorShow: true,
                                 Aftck: OvertimeWork.PRIOR,
                                 First: vFirst,
                                 Pernr: vDetailInfo.Pernr,
