@@ -460,7 +460,7 @@ sap.ui.define([
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({ 
-				colSpan:9,
+				colSpan:2,
 				content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"+oController.getBundleText("MSG_47038")+"</span>"})
 			}).addStyleClass("DataCell");
 			oRow.addCell(oCell);
