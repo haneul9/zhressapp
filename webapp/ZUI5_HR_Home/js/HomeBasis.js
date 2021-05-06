@@ -432,12 +432,12 @@ odataCsrfToken: function(o, namespace, async) {
 			'x-csrf-token': 'Fetch'
 		},
 		success: function(data, textStatus, jqXHR) {
-			this.prepareLog('HomeBasis.retrieveOdataCsrfToken success', arguments).log();
+			this.prepareLog('HomeBasis.odataCsrfToken success', arguments).log();
 
 			o['x-csrf-token'] = jqXHR.getResponseHeader('x-csrf-token');
 		}.bind(this),
 		error: function(jqXHR) {
-			this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.retrieveOdataCsrfToken');
+			this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.odataCsrfToken');
 
 			o['x-csrf-token'] = '';
 		}.bind(this)
