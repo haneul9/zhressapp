@@ -469,8 +469,8 @@ postOptions: function(o) {
 				this.copyFields(o),
 				this.odataCsrfToken(headers, namespace)
 			])
-			.then(function(copiedData) {
-				postOptions.data = JSON.stringify(copiedData);
+			.then(function(results) {
+				postOptions.data = JSON.stringify(results[0]);
 
 				return postOptions;
 			});

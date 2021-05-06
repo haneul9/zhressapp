@@ -420,12 +420,7 @@ retrieveLoginInfo: function() {
 
 	var Percod = sessionStorage.getItem('ehr.odata.user.percod'),
 	Langu = sessionStorage.getItem('ehr.sf-user.language');
-/*
-		ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 로그인 사번
-		ICusrse: sessionStorage.getItem('ehr.session.token'),		// Token
-		ICusrpn: sessionStorage.getItem('ehr.sf-user.name'),		// 로그인 사번
-		ICmenuid: mid || ''											// 메뉴 ID
-*/
+
 	return $.getJSON({
 		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
 		data: {
@@ -433,10 +428,10 @@ retrieveLoginInfo: function() {
 				"Lpmid eq 'HACTA'",
 				"Percod eq '${Percod}'",
 				"Langu eq '${Langu}'",
-				"ICusrid eq '${ICusrid}'",
-				"ICusrse eq '${ICusrse}'",
-				"ICusrpn eq '${ICusrpn}'",
-				"ICmenuid eq ''" // menu id 불필요
+				"ICusrid eq '${ICusrid}'",	// 암호화 로그인 사번
+				"ICusrse eq '${ICusrse}'",	// Token
+				"ICusrpn eq '${ICusrpn}'",	// 로그인 사번
+				"ICmenuid eq ''"			// 메뉴 ID 불필요
 			].join(' and ').interpolate(
 				Percod,
 				Langu,
