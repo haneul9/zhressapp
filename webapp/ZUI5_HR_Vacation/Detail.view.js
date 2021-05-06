@@ -49,9 +49,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 				if(fVal2 && fVal2 == "D"){
 						 	 					return true;
 						 	 				} else if(fVal3 != ""){
-						 	 					return (fVal4 == "" || fVal4 == "AA") ? true : false;	
+						 	 					return (fVal4 == "" || fVal4 == "AA" || fVal4 == "JJ") ? true : false;	
 						 	 				} else {
-						 	 					return (fVal1 == "" || fVal1 == "AA") ? true : false;
+						 	 					return (fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ") ? true : false;
 						 	 				}
 						 	 			}
 						 	 		},
@@ -66,9 +66,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 			parts : [{path : "Status1"}, {path : "Delapp"}, {path : "ListStatus"}],
 						 	 			formatter : function(fVal, fVal2, fVal3){
 						 	 				if(fVal2 && fVal2 != ""){
-						 	 					return fVal3 == "AA" ? true : false;
+						 	 					return (fVal3 == "AA" || fVal3 == "JJ") ? true : false;
 						 	 				} else {
-						 	 					return fVal == "AA" ? true : false;
+						 	 					return (fVal == "AA" || fVal == "JJ") ? true : false;
 						 	 				}
 						 	 			}
 						 	 		},
@@ -123,7 +123,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+				                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 				                               	   		}
 											 	 	}
 											 	}),
@@ -135,7 +135,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		parts : [{path : "Status1"}, {path : "Halfc"}],
 				                               	   		formatter : function(fVal1, fVal2){
-				                               	   			if(fVal1 == "" || fVal1 == "AA"){
+				                               	   			if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 				                               	   				if(fVal2 && fVal2 == "H"){
 				                               	   					return true;
 				                               	   				} else {
@@ -173,7 +173,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 													 	   editable : {
 													 	 		path : "Status1",
 						                               	   		formatter : function(fVal){
-						                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+						                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 						                               	   		}
 													 	   }
 													   }),
@@ -187,7 +187,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 													 	   editable : {
 													 	 		path : "Status1",
 						                               	   		formatter : function(fVal){
-						                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+						                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 						                               	   		}
 													 	   }
 													   }).addStyleClass("pl-5px"),
@@ -196,7 +196,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						                               	   visible : {
 						                               	   		path : "Status1",
 						                               	   		formatter : function(fVal){
-						                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+						                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 						                               	   		}
 						                               	   },
 						                               	   press : function(oEvent){
@@ -253,7 +253,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            editable : {
 										            	parts : [{path : "Status1"}, {path : "Halfc"}],
 										            	formatter : function(fVal1, fVal2){
-										            		if(fVal1 == "" || fVal1 == "AA"){
+										            		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 										            			return (fVal2 && fVal2 == "X") ? true : false;
 										            		} else {
 										            			return false;
@@ -272,7 +272,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            editable : {
 										            	parts : [{path : "Status1"}, {path : "Halfc"}],
 										            	formatter : function(fVal1, fVal2){
-										            		if(fVal1 == "" || fVal1 == "AA"){
+										            		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 										            			return (fVal2 && fVal2 == "X") ? true : false;
 										            		} else {
 										            			return false;
@@ -350,7 +350,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA") ? true : false;
+											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											 	 		}
 											 	 	}
 											 	})],
@@ -388,7 +388,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA") ? true : false;
+											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											 	 		}
 											 	 	}
 											 	}),
@@ -398,7 +398,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA") ? true : false;
+											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											 	 		}
 											 	 	},
 											 	 	visible : {
@@ -427,7 +427,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 												   editable : {
 												   		path : "Status1",
 												   		formatter : function(fVal){
-												   			return (fVal == "" || fVal == "AA") ? true : false;
+												   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 												   		}
 												   }
 											   })],
@@ -474,7 +474,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											visible : {
 												path : "Status1",
 												formatter : function(fVal){
-													return (fVal == "" || fVal == "AA") ? true : false;
+													return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 												}
 											},
 											press : oController.onPressVacationCover
@@ -576,7 +576,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 			  	  						// 근태 삭제신청
 					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48064") + "</span>";
 					  	  			} else {
-					  	  				if(fVal1 == "" || fVal1 == "AA"){
+					  	  				if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 						  	  						// 근태신청 신규등록
 						  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
 						  	  			} else {

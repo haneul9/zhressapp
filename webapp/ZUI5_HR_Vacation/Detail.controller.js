@@ -395,6 +395,12 @@ sap.ui.define([
 											customData : [new sap.ui.core.CustomData({key : "", value : data.VacationTypeNav.results[i]})]
 										})
 									);
+
+									if(oData && oData.Awart != ""){
+										if(oData.Awart == data.VacationTypeNav.results[i].Subty){
+											oController._DetailJSonModel.setProperty("/Data/Halfc", data.VacationTypeNav.results[i].Halfc);
+										}
+									}
 								}
 							}
 						}
@@ -1355,7 +1361,7 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(oData.Flag == "" && Flag == "C"){
-				confirmMessage = oController.getBundleText("MSG_48012"); // 신규신청 하시겠습니까?
+				confirmMessage = oController.getBundleText("MSG_00060"); // 신청하시겠습니까?
 				successMessage = oController.getBundleText("MSG_48013"); // 신청되었습니다.
 			} else if(oData.Flag == "D" && Flag == "C"){
 				confirmMessage = oController.getBundleText("MSG_48019"); // 삭제신청 하시겠습니까?
@@ -1555,7 +1561,7 @@ sap.ui.define([
 	                                    editable : {
 	                                    	parts : [{path : "Status1"}, {path : "Cntgb"}, {path : "Flag"}],
 	                                    	formatter : function(fVal1, fVal2, fVal3){
-	                                    		if(fVal1 == "" || fVal1 == "AA"){
+	                                    		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 	                                    			if(fVal2 == "1" || fVal2 == "2"){
 	                                    				return true;
 	                                    			} else if(fVal3 == "X"){
@@ -1582,7 +1588,7 @@ sap.ui.define([
 					                                   editable : {
 					                                    	parts : [{path : "Status1"}, {path : "Cntgb"}, {path : "Flag"}],
 					                                    	formatter : function(fVal1, fVal2, fVal3){
-					                                    		if(fVal1 == "" || fVal1 == "AA"){
+					                                    		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 					                                    			if(fVal2 == "1" || fVal2 == "2"){
 					                                    				return true;
 					                                    			} else if(fVal3 == "X"){
@@ -1608,7 +1614,7 @@ sap.ui.define([
 					                                   editable : {
 					                                    	parts : [{path : "Status1"}, {path : "Cntgb"}, {path : "Flag"}],
 					                                    	formatter : function(fVal1, fVal2, fVal3){
-					                                    		if(fVal1 == "" || fVal1 == "AA"){
+					                                    		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 					                                    			if(fVal2 == "1" || fVal2 == "2"){
 					                                    				return true;
 					                                    			} else if(fVal3 == "X"){
@@ -1641,7 +1647,7 @@ sap.ui.define([
 										editable : {
 											path : "Status1",
 											formatter : function(fVal){
-												return (fVal == "" || fVal == "AA") ? true : false;
+												return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											}
 										},
 										visible : {

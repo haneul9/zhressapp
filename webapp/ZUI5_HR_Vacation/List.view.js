@@ -87,7 +87,7 @@ sap.ui.define(
 											highlight : {
 													path : "Status1",
 													formatter : function(fVal){
-														if(fVal == "AA"){ // 작성중
+														if(fVal == "AA" || fVal == "JJ"){ // 작성중, 취소
 															return "Indication01";
 														} else if(fVal == "00"){ // 결재중
 															return "Indication02";
