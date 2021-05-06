@@ -16,6 +16,7 @@ sap.ui.define(
             createContent: function (oController) {
                 $.app.setModel("ZHR_COMMON_SRV");
                 $.app.setModel("ZHR_WORKTIME_APPL_SRV");
+                $.app.setModel("ZHR_PERS_INFO_SRV");
                 
                 var oHeader = new sap.m.HBox({
                     width : "100%",
