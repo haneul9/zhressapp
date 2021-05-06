@@ -105,6 +105,7 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 			IBukrs: loginInfo.Bukrs,
 			IMenid: this.parameterMap.mid,
 			IMobile: this._gateway.isMobile() ? 'X' : '',
+			IPcip: loginInfo.Ipadd,
 			Export: []
 		},
 		success: function(data) {
