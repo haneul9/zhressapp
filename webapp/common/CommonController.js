@@ -33,13 +33,6 @@ sap.ui.define([
                 .setModel(this.getI18nModel(), "i18n")
                 .setModel(sessionModel, "session");
 
-            // Registering to the icon pool
-            IconPool.registerFont({
-                fontFamily: "SAP-icons-TNT",
-                fontURI: sap.ui.require.toUrl("sap/tnt/themes/base/fonts/")
-            });
-            IconPool.fontLoaded("SAP-icons-TNT");
-
             this.__alreadyInitialized = true;
 
             return this;
