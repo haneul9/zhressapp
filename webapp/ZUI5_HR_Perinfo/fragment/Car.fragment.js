@@ -137,7 +137,7 @@ sap.ui.define(
                                     content: [
                                         new sap.m.Toolbar({
                                             content: [new sap.m.Text({ text: "{i18n>LABEL_37030}" }).addStyleClass("Font15")] // 기본차량
-                                        }).addStyleClass("toolbarNoBottomLine"),
+                                        }).addStyleClass("toolbarNoBottomLine mb--6px"),
                                         new sap.ui.core.HTML({ content: "<div style='height:5px' />" })
                                     ],
                                     hAlign: "Begin",
@@ -350,7 +350,7 @@ sap.ui.define(
                                         new sap.m.Toolbar({
                                             height: "45px",
                                             content: [new sap.m.Text({ text: "{i18n>LABEL_37040}" }).addStyleClass("Font15")] // 추가차량
-                                        }).addStyleClass("toolbarNoBottomLine"),
+                                        }).addStyleClass("toolbarNoBottomLine mb--12px"),
                                         new sap.ui.core.HTML({ content: "<div style='height:5px' />" })
                                     ],
                                     hAlign: "Begin",
