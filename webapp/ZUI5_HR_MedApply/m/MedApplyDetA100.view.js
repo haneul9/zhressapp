@@ -25,7 +25,7 @@ sap.ui.define([
 			oMat=new c.layout.MatrixLayout({
 				columns:2,
 				width:"100%",
-				widths:['40%','60%']
+				widths:['110px']
 			});
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
