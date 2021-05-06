@@ -138,7 +138,7 @@ sap.ui.define(
                                                     new PickOnlyDatePicker({ 
                                                         required: true,
                                                         width: "228px",
-                                                        dateValue: "{/Detail/Header/Begda}",
+                                                        dateValue: "{/Detail/Header/Otdat}",
                                                         minDate: "{/Detail/Header/MinDate}",
                                                         valueFormat: "yyyy-MM-dd",
                                                         displayFormat: "{/Dtfmt}",
