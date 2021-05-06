@@ -1257,9 +1257,7 @@ sap.ui.define([
 				vData.IComid=oInp.getValue().trim();
 			}
 			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
-			if (!oController._BusyDialog.isOpen()) {
-				oController._BusyDialog.open();
-			}
+			BusyIndicator.show(0);
 			var oCnt=0;
 			setTimeout(function(){
 			oModel.create("/MedComidList2Set", vData, 
