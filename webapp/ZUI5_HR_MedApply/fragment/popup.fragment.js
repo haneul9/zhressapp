@@ -51,16 +51,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel3}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oSelector2,new HoverIcon({            
-            src: "sap-icon://information",
-            hover: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47039"));
-            },
-            leave: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent);
-            }
-        })
-        .addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue")]}).addStyleClass("DataCell");
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oSelector2,]}).addStyleClass("DataCell");
         oRow.addCell(oCell);
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel4}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
