@@ -54,7 +54,7 @@ sap.ui.define([
 			
 			this.OpenHelpModel.setData({ TopData: {} });
 			this.onTableSearch();
-			this.getHighlight(this, true, true);
+			this.getHighlight(this, true);
 		},
 		
 		onTableSearch: function() {
@@ -143,7 +143,7 @@ sap.ui.define([
 			});
 		},
 
-		getHighlight: function(oController, isNew, isSeleted) {
+		getHighlight: function(oController, isNew) {
 			var oFullData = oController.TreeModel.getProperty("/FullData");
 			var oTree = $.app.byId(oController.PAGEID + "_Tree");
 
@@ -188,12 +188,10 @@ sap.ui.define([
 					elem.addStyleClass("color-info-black");
 				}
 
-				if(isSeleted){
-					if(isNew && elem.aCustomStyleClasses.toString() !== "color-signature-blue" && oController.TreeModel.getProperty(elem.getBindingContextPath() + "/Gubun") === "Y" && Common.checkNull(!oController.TreeModel.getProperty(elem.getBindingContextPath()).L2id)){
-						if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.length !== 0){
-							if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.every(function(e) { return e.Gubun === "Y" })){
-								oTree.collapse(Number(elem.sId.slice(elem.sId.lastIndexOf("-")+1)));
-							}
+				if(isNew && elem.aCustomStyleClasses.toString() !== "color-signature-blue" && oController.TreeModel.getProperty(elem.getBindingContextPath() + "/Gubun") === "Y" && Common.checkNull(!oController.TreeModel.getProperty(elem.getBindingContextPath()).L2id)){
+					if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.length !== 0){
+						if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.every(function(e) { return e.Gubun === "Y" })){
+							oTree.collapse(Number(elem.sId.slice(elem.sId.lastIndexOf("-")+1)));
 						}
 					}
 				}
@@ -204,7 +202,7 @@ sap.ui.define([
 		
 		onItemPress: function(oEvent) {
 			var oController = this;
-			oController.getHighlight(oController, false, true);
+			oController.getHighlight(oController, false);
 		},
 
 		onTreeSetData: function() {
@@ -266,24 +264,12 @@ sap.ui.define([
 			var oSaveBtn = $.app.byId(oController.PAGEID + "_SaveBtn"),
 				oCanBtn = $.app.byId(oController.PAGEID + "_CancelBtn");
 			var oMenuScroll = $.app.byId(oController.PAGEID + "_MenuScroll");
-			var oTree = $.app.byId(oController.PAGEID + "_Tree");
 
 			if(Common.checkNull(!oEvent)){
-				var vPath = oEvent.getParameter("listItem").getBindingContext().getPath();
+				var vPath = oEvent.mParameters.listItem.getBindingContextPath();
 			}
 
 			if(!oMenuScroll.getVisible()) oMenuScroll.setVisible(true);
-
-			var oSelectedId = oTree.getSelectedItems()[0].getId();
-
-			if($.app.byId(oSelectedId).getExpanded()){
-				oTree.collapse(parseInt(oSelectedId.split("-")[2]));
-				oController.getHighlight(oController, false, false);
-			}else{
-				oTree.expand(parseInt(oSelectedId.split("-")[2]));
-				oController.getHighlight(oController, false, false);
-			}
-
 
 			var onProcessCancel = function (fVal) {
 				if (fVal && fVal == "취소") {
