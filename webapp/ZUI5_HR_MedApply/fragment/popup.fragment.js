@@ -28,7 +28,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel0}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new common.PickOnlyDatePicker({width:"90%",
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new common.PickOnlyDatePicker({width:"50%",
         displayFormat: gDtfmt,
         placeholder: gDtfmt,
         value : {
