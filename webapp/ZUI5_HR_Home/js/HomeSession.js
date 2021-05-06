@@ -49,6 +49,7 @@ init: function(callback) {
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
+		this.retrieveClientIP(),			// 접속자 IP 조회
 		this.retrieveSFUserName(),			// 사번 조회
 		this.retrieveSessionToken(),		// Session token 조회
 		this.retrieveOdataCsrfToken()		// Odata CSRF token 조회
@@ -70,14 +71,14 @@ init: function(callback) {
 		return this.retrieveLoginInfo();	// 인사정보 조회
 	}.bind(this))
 	.then(function() {
-		if (typeof callback === 'function') {
-			callback();
-		}
-		// if (typeof HomeMFA === 'function') {
-		// 	new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
-		// } else {
-		// 	this._gateway.log('Multi Factor Authentication 모듈이 존재하지 않습니다.');
+		// if (typeof callback === 'function') {
+		// 	callback();
 		// }
+		if (typeof HomeMFA === 'function') {
+			new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
+		} else {
+			this._gateway.log('Multi Factor Authentication 모듈이 존재하지 않습니다.');
+		}
 	}.bind(this))
 	.catch(function(e) {
 		var message = (e.message ? e.message : this._gateway.handleError(this._gateway.ODataDestination.ETC, e, 'HomeSession.init').message) || '알 수 없는 오류가 발생하였습니다.';
@@ -142,6 +143,23 @@ dkdlTlqpfmffls: function(resolve) {
 	};
 
 	this._gateway.confirm(options);
+},
+
+retrieveClientIP: function() {
+
+	return $.getJSON({
+		url: '/essproxy/trace',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
+
+			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveClientIP');
+
+			sessionStorage.removeItem('ehr.client.ip');
+		}.bind(this)
+	}).promise();
 },
 
 _retrieveSFUserName: function(resolve) {
@@ -465,6 +483,7 @@ retrieveLoginInfo: function() {
 				delete result.__metadata;
 				result.Dtfmt = result.Dtfmt || 'yyyy-MM-dd';
 				result.Langu = sessionStorage.getItem('ehr.sf-user.language') || result.Langu;
+				result.Ipadd = sessionStorage.getItem('ehr.client.ip');
 				this.loginInfo(result);
 			} else {
 				sessionStorage.removeItem('ehr.odata.user');

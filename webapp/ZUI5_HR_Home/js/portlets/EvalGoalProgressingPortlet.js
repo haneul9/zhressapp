@@ -6,6 +6,7 @@ function EvalGoalProgressingPortlet() {
 	this.$selector = '.portlet-evalgoal-progress .list-group';
 	this.photoMap = null;
 	this.goalDataMap = null;
+	this.targetList = [];
 }
 
 EvalGoalProgressingPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -44,7 +45,7 @@ fill: function() {
 		$.getJSON({ // GoalPlanTemplate id 조회
 			url: url,
 			success: function(data) {
-				this.retrieveDirectReports(this._gateway.odataResults(data).id || '', resolve);
+				this.getTargetReports(this._gateway.odataResults(data).id || '', resolve);
 			}.bind(this),
 			error: function(jqXHR) {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
@@ -54,15 +55,42 @@ fill: function() {
 		});
 	}.bind(this));
 },
+getTargetReports: function(goalId, resolve) { // 평가대상 확인여부
+	var url = 'ZHR_COMMON_SRV/CommonCodeListHeaderSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			ICodeT : "066",
+            NavCommonCodeList : []
+		},
+		success: function(data) {
+			this._gateway.prepareLog('EvalGoalProgressingPortlet.fill ${url} success'.interpolate(url), arguments).log();
+			var oTargetList = this._gateway.odataResults(data).NavCommonCodeList;
+			this.targetList = oTargetList;
+			this.retrieveDirectReports(goalId, resolve);
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
+		}.bind(this)
+	});
+},
 retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
-	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01".interpolate(this._gateway.pernr());
+	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01,custom07".interpolate(this._gateway.pernr());
 
 	$.getJSON({ // 평가 대상자 조회 : 조회한 사원번호의 평가대상자를 조회
 		url: url2,
 		success: function(data) {
-			var empDataList = data.d.results,
-			list = this.$();
+			var oEmpDataList = data.d.results,
+				empDataList = [],
+				list = this.$();
+
+			oEmpDataList.forEach(function(e) {
+				if(this.targetList.some(function(ele) {return ele.Code === e.custom07;})){
+					empDataList.push(e);
+				}
+			}.bind(this));
 
 			if (!empDataList.length || !goalId) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
@@ -91,7 +119,6 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 			$.map(empDataList, function(e, i) {
 				this.goalDataMap[e.userId] = {
-					exists: true,
 					nickname: e.nickname,
 					position: e.custom01 ? e.custom01.split("(")[0] : ""
 				};
@@ -126,10 +153,6 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 							score = parseInt((goalData.score || 0).toFixed()),
 							area = $('.evalgoal-area.i' + i);
 
-							if (!goalData.exists) {
-								area.remove();
-								return;
-							}
 
 							area.toggleClass('d-none', false)
 								.find('img').attr('src', this.photoMap[e.userId]);
@@ -201,10 +224,6 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 		url: url4,
 		success: function(data) {
 			var oDetailData = data.d.results;
-			if (!oDetailData.length) {
-				this.goalDataMap[pernr].exists = false;
-				return;
-			}
 
 			var vDetailIndex = oDetailData.length,
 			oGroundColor = "",

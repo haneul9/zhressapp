@@ -265,6 +265,7 @@ sap.ui.define([
 			// Navigation property
 			sendObject.TrainingOutApplyExport = [];
 			sendObject.TrainingOutApplyTableIn1 = [];
+			sendObject.TrainingOutApplyTableIn3 = [];
 			
 			oModel.create("/TrainingOutApplySet", sendObject, {
 				success: function(oData, oResponse) {
@@ -346,7 +347,7 @@ sap.ui.define([
 			var oAttTable = $.app.byId(this.PAGEID + "_AttTable");
 			
 			this.ApplyModel.setProperty("/FormData/Planx", this.getBundleText("MSG_40004"));
-			this.ApplyModel.setProperty("/FormData/Natio", "1");
+			this.ApplyModel.setProperty("/FormData/Natio", "01");
 			this.ApplyModel.setProperty("/Checked", "");
 			this.AttModel.setData({
 				Data: [{
@@ -610,6 +611,7 @@ sap.ui.define([
 			// Navigation property
 			sendObject.TrainingOutApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOutApplyTableIn1", oRowData)];
 			sendObject.TrainingOutApplyTableIn2 = [];
+			sendObject.TrainingOutApplyTableIn3 = [];
 			
 			oModel.create("/TrainingOutApplySet", sendObject, {
 				success: function(oData, oResponse) {
@@ -632,6 +634,7 @@ sap.ui.define([
 						}
 						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
 					}
+					oController.ApplyModel.setProperty("/FileData", oData.TrainingOutApplyTableIn3.results);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -1055,9 +1058,9 @@ sap.ui.define([
 			var vPath = oEvent.getSource().getBindingContext().getPath();
 
 			if(oEvent.mParameters.selectedIndex === 0){
-				this.ApplyModel.setProperty(vPath + "/Natio", "1");
+				this.ApplyModel.setProperty(vPath + "/Natio", "01");
 			}else{
-				this.ApplyModel.setProperty(vPath + "/Natio", "2");
+				this.ApplyModel.setProperty(vPath + "/Natio", "02");
 			}
 		},
 
@@ -1427,16 +1430,29 @@ sap.ui.define([
 				vInfoMessage = oController.getBundleText("MSG_40025");
 
 			if(AppType === "app") {
+				var vAppnm1 = oController.ApplyModel.getProperty("/FileData/0/Cntnm");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 교육안내문
 					Required: true,
-					Appnm: vAppnm,
+					Appnm: vAppnm1 === "001" && Common.checkNull(!vAppnm1) ? vAppnm1 : vAppnm,
 					Mode: "S",
 					InfoMessage: vInfoMessage,
 					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"001");
 			}else {
+				var vAppnm2 = "",
+					vAppnm3 = "",
+					vAppnm4 = "";
+
+				oController.ApplyModel.getProperty("/FileData").forEach(function(e) {
+					switch(e.Cntnm) {
+						case "002" : vAppnm2 = e.Appnm; break;
+						case "003" : vAppnm3 = e.Appnm; break;
+						case "004" : vAppnm4 = e.Appnm; break;
+					}
+				});
+
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 내용요약
-					Appnm: vAppnm,
+					Appnm: Common.checkNull(!vAppnm2) ? vAppnm2 : vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
@@ -1444,14 +1460,14 @@ sap.ui.define([
 				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 방안요약
 					Required: true,
-					Appnm: vAppnm,
+					Appnm: Common.checkNull(!vAppnm3) ? vAppnm3 : vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"003");
 	
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수료증
-					Appnm: vAppnm,
+					Appnm: Common.checkNull(!vAppnm4) ? vAppnm4 : vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false

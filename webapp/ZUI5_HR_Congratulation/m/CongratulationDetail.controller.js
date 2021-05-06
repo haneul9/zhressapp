@@ -40,13 +40,6 @@ sap.ui.define(
 						onAfterShow: this.onAfterShow
 					}, this);
 				
-				//Registering to the icon pool
-				IconPool.registerFont({
-					fontFamily: "SAP-icons-TNT",
-					fontURI: sap.ui.require.toUrl("sap/tnt/themes/base/fonts/")
-				});
-				IconPool.fontLoaded("SAP-icons-TNT");
-
 				Common.log("onInit session", this.getView().getModel("session").getData());
 			},
 

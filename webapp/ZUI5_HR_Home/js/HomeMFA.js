@@ -126,7 +126,7 @@ handleCodeRequest: function(e) {
 
 	// 코드 발송 요청
 	setTimeout(function() {
-		this.showMessage('.valid-feedback', '인증코드 발급요청을 하였습니다. 잠시 후 이메일을 확인하시기 바랍니다.');
+		this.showMessage('.valid-feedback', '인증코드 발급요청을 하였습니다. 잠시 후 Hi HR어플 푸시알림을 확인하시기 바랍니다.');
 		this.requestCode(this.CODE.REQUEST);
 	}.bind(this), 0);
 
@@ -200,16 +200,19 @@ requestCode: function(type) {
 
 		this._gateway.post({
 			url: url,
+			async: false,
 			data: {
 				Ttype: type,
 				Cernm: code,
 				Percod: sessionStorage.getItem('ehr.odata.user.percod')
 			},
-			success: function() {
+			success: function(data) {
 				this._gateway.prepareLog('HomeMFA.requestCode success', arguments).log();
 
-				this.setStatus(this.STATUS.DONE, type);
-				if (type === this.CODE.CONFIRM) {
+				if(type === this.CODE.REQUEST) {
+					this.sendPush(data.d, type);
+				} else {
+					this.setStatus(this.STATUS.DONE, type);
 					this.done();
 				}
 			}.bind(this),
@@ -218,9 +221,37 @@ requestCode: function(type) {
 
 				this.showMessage('.invalid-feedback', errorMessage);
 				this.setStatus(this.STATUS.ERROR, type);
+
+				setTimeout(function() {
+					clearInterval(this.mfaCodeTimer);
+					$('#code-mfa-timer').val('5:00');
+				}.bind(this), 300);
 			}.bind(this)
 		});
 	}.bind(this), 0);
+},
+
+sendPush: function(notification, type) {
+	$.post({
+		url: '/essproxy/twofactor',
+		async: false,
+		dataType: 'text',
+		data: {
+			token: notification.Token,
+			body: notification.Zbigo
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeMFA.sendPush success', arguments).log();
+
+			this.setStatus(this.STATUS.DONE, type);
+		}.bind(this),
+		error: function(jqXHR) {
+			var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeMFA.requestCode').message;
+
+			this.showMessage('.invalid-feedback', errorMessage);
+			this.setStatus(this.STATUS.ERROR, type);
+		}.bind(this)
+	});
 },
 
 showMessage: function(selector, message) {
