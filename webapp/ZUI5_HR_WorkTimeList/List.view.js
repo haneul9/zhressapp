@@ -108,7 +108,7 @@ sap.ui.jsview("ZUI5_HR_WorkTimeList.List", {
 		
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,
-			            contentItems: [oFilter, new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Layout5").addStyleClass("pb-10px")]
+			            contentItems: [oFilter, new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Layout5").addStyleClass("pt-10px pb-10px")]
 			        });
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");
