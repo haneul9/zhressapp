@@ -1,24 +1,5 @@
 function AppPrefilter() {
 
-	// 그랜드 오픈 이후 AppPrefilter를 적용하므로 그전까지 운영은 bypass 로직 적용
-	// if ((location.host.split('.').shift() || '').split('-').pop() === 'yzdueo754l') {
-	// 	try {
-	// 		if (parent && parent._gateway) {
-	// 			parent._gateway.successAppPrefilter();
-	// 		}
-	// 	} catch(e) {
-	// 		// SF에서 평가 메뉴 접속시
-	// 	}
-	// 	window._menu_prefilter = this;
-	// 	this._menu_authorized = true;
-
-	// 	document.addEventListener("DOMContentLoaded", function() {
-	// 		window.startAppInit();
-	// 	});
-
-	// 	return this;
-	// }
-
 	try {
 		if (!parent || !parent._gateway) {
 			alert("잘못된 메뉴 접속입니다.\nHome 화면에서 접속해주시기 바랍니다.");

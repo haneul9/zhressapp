@@ -80,7 +80,7 @@ fill: function() {
                 oVacationData = this._gateway.odataResults(data).VacationQuotaNav;
 
             if (!oVacationData.length) {
-                list.html('<a href="#" class="list-group-item list-group-item-action text-center">휴가사용 현황 데이터가 없습니다..</a>');
+                list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">휴가사용 현황 데이터가 없습니다.</a>');
                 return;
             }
 
