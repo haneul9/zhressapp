@@ -177,7 +177,7 @@ sap.ui.define(
                             Pernr: rowData.Pernr,
                             Begda: rowData.Begda,
                             Endda: rowData.Endda,
-                            Datum: rowData.Begda,
+                            Datum: rowData.Otdat,
                             OtWorkTab1: [Common.copyByMetadata($.app.getModel("ZHR_WORKTIME_APPL_SRV"), "OvertimeWorkApplyTab1", rowData)]
                         }
                     );
@@ -236,7 +236,9 @@ sap.ui.define(
                         Brkhr1: "00",
                         Brkmm1: "00",
                         MinDate: vBukrs3 === "1000" ? moment().subtract(1, "month").startOf("month").hours(10).toDate() : moment().startOf("month").hours(10).toDate(),
-                        Begda: new Date()
+                        Otdat: new Date(),
+                        Begda: new Date(),
+                        Endda: new Date()
                     },
                     List: []
                 });
@@ -362,11 +364,11 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.PRIOR;
                     payload.Reqes = "";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Otdat);
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : "",
-                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Begda),
+                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Otdat),
                             Otbetm: oInputData.Header.OtbetmT + oInputData.Header.OtbetmM,
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
@@ -410,11 +412,11 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.PRIOR;
                     payload.Reqes = "X";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Otdat);
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : "",
-                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Begda),
+                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Otdat),
                             Otbetm: oInputData.Header.OtbetmT + oInputData.Header.OtbetmM,
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
@@ -463,7 +465,7 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.PRIOR;
                     payload.Reqes = "";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Otdat);
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : ""
@@ -533,11 +535,11 @@ sap.ui.define(
                                 First: vFirst,
                                 Pernr: vDetailInfo.Pernr,
                                 Begda: vDetailInfo.Begda,
-                                Endda: vDetailInfo.Begda,
-                                Datum: vDetailInfo.Begda,
+                                Endda: vDetailInfo.Endda,
+                                Datum: vDetailInfo.Otdat,
                                 OtWorkTab1: [{
                                     Pernr: vDetailInfo.Pernr,
-                                    Otdat: Common.adjustGMTOdataFormat(vDetailInfo.Begda),
+                                    Otdat: Common.adjustGMTOdataFormat(vDetailInfo.Otdat),
                                     Otbetm: Common.nvl(vDetailInfo.OtbetmT, "00") + Common.nvl(vDetailInfo.OtbetmM, "00"),
                                     Otentm: Common.nvl(vDetailInfo.OtentmT, "00") + Common.nvl(vDetailInfo.OtentmM, "00"),
                                     Brkhr1: Common.nvl(vDetailInfo.Brkhr1, "00"),
