@@ -136,7 +136,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			createData.IStatus = vCondiData.Status && vCondiData.Status != "" ? vCondiData.Status : "" ;
 			createData.IBegda =  vCondiData.Begda && vCondiData.Begda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Begda)) + ")\/" : null;
 			createData.IEndda =  vCondiData.Endda && vCondiData.Endda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Endda)) + ")\/" : null;
-			
+			createData.IEmpid =  oController.getView().getModel("session").getData().Pernr;
+
 			oModel.create(oPath, createData, null,
 				function(data, res){
 					if(data){
@@ -277,7 +278,11 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			if (detailData.Status == "ZZ"){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_50004")); // 진행상태가 중복인 것은 저장된 데이터가 아니라 삭제가 불가능합니다. 
 				return;
-			}		
+			}
+			if(detailData.Apernr != oController.getView().getModel("session").getData().Pernr){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_50005")); // 타인이 신청한 건은 삭제가 불가능합니다.  
+				return;
+			}
 	
 			delete detailData.Idx;
 			createData.TempPayDeductionTableIn1.push(detailData);

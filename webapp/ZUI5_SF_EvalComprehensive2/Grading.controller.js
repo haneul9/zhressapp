@@ -445,6 +445,7 @@ return CommonController.extend(SUB_APP_ID, { // 종합평가 : 수행
 		  canvas.style.height = svgSize.height;
 		  var ctx = canvas.getContext( "2d" );
 		  ctx.scale(3,3);
+		  var doc = new jsPDF('l', 'mm', 'a4');
 		
 		  var img = document.createElement( "img" );
 		  img.setAttribute( "src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData))) );
@@ -452,7 +453,7 @@ return CommonController.extend(SUB_APP_ID, { // 종합평가 : 수행
 		  img.onload = function() {
 		      ctx.drawImage( img, 0, 0 );
 		      var canvasdata = canvas.toDataURL("image/png",1);
-		
+
 		      //var pngimg = '<img src="'+canvasdata+'">';
 		      //d3.select("#pngdataurl").html(pngimg);
 		
@@ -461,11 +462,33 @@ return CommonController.extend(SUB_APP_ID, { // 종합평가 : 수행
 		      //a.href = canvasdata;
 		      //document.body.appendChild(a);
 		      //a.click();
-  			  var doc = new jsPDF('l', 'mm', 'a4');
-			  var position = 0;
-	          doc.addImage(canvasdata, "PNG", 150, 20, 120, 100);
+			//   var doc = new jsPDF('l', 'mm', 'a4');
+			//   var position = 0;
+	          doc.addImage(canvasdata, "PNG", 150, 20, 120, 100);  // 시작 x, 시작 y, 넓이, 높이
 	          doc.save('file-name.pdf')
 		  };
+
+		  var vHeader = document.getElementById('EvalResultObjectPageLayout-OPHeaderContent')
+		  Html2canvas(document.getElementById("EvalResultObjectPageLayout-OPHeaderContent"), {
+				// scale based on quality value input
+				scale: 1,
+				// logging for debugging
+				logging: true,
+				letterRendering: 1,
+				// allows for cross origin images
+				allowTaint: true,
+				useCORS: true
+			}).then(function (canvas) {
+				setTimeout(function () {
+					var img = canvas.toDataURL('image/png');
+					const pdfWidth = "600px";
+					const pdfHeight = "1000px"
+					doc.addImage(img, 'PNG', 2, 2, pdfWidth, pdfHeight);
+				}, 3000);
+			});	
+
+
+
 		  
 		  //var doc = new jsPDF('p', 'mm');
 		  //var position = 0;
