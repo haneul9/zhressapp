@@ -1430,10 +1430,11 @@ sap.ui.define([
 				vInfoMessage = oController.getBundleText("MSG_40025");
 
 			if(AppType === "app") {
-				var vAppnm1 = oController.ApplyModel.getProperty("/FileData/0/Cntnm");
+				var vCntnm = oController.ApplyModel.getProperty("/FileData/0/Cntnm");
+				var vAppnm1 = oController.ApplyModel.getProperty("/FileData/0/Appnm");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 교육안내문
 					Required: true,
-					Appnm: vAppnm1 === "001" && Common.checkNull(!vAppnm1) ? vAppnm1 : vAppnm,
+					Appnm: vCntnm === "001" && Common.checkNull(!vAppnm1) ? vAppnm1 : vAppnm,
 					Mode: "S",
 					InfoMessage: vInfoMessage,
 					Editable: (!vStatus || vStatus === "AA") ? true : false

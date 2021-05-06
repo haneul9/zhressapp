@@ -152,6 +152,14 @@ sap.ui.define([
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
 
+			var oSelectedId = oTree.getSelectedItems()[0].getId();
+
+			if($.app.byId(oSelectedId).getExpanded()){
+				oTree.collapse(parseInt(oSelectedId.split("-")[2]));
+			}else{
+				oTree.expand(parseInt(oSelectedId.split("-")[2]));
+			}
+
 			oController.OpenHelpModel.setData({TopData: []});
 			
 			var sendObject = {};
@@ -177,9 +185,9 @@ sap.ui.define([
 						var rMiddleData = oData.OpenhelpTableIn2.results[1];
 						var rBottomData= oData.OpenhelpTableIn2.results[2];
 						
-						var oNoDataBox = $.app.byId(oController.PAGEID + "_NoDataBox");
+						// var oNoDataBox = $.app.byId(oController.PAGEID + "_NoDataBox");
 						if(Common.checkNull(rTopData) && Common.checkNull(rMiddleData) && Common.checkNull(rBottomData) && Common.checkNull(oData.OpenhelpTableIn4.results[0]) && Common.checkNull(oData.OpenhelpTableIn5.results[0])){
-							oNoDataBox.setVisible(true);
+							// oNoDataBox.setVisible(true);
 							oController.OpenHelpModel.setProperty("/TopData/Zcomment", "");
 							oController.OpenHelpModel.setProperty("/MiddleData", []);
 							oController.OpenHelpModel.setProperty("/BottomData", []);
@@ -187,7 +195,7 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/PDFData", []);
 
 						}else{
-							oNoDataBox.setVisible(false);
+							// oNoDataBox.setVisible(false);
 							oController.OpenHelpModel.setProperty("/Export", rExportData);
 							oController.OpenHelpModel.setProperty("/TopData", rTopData);
 							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);

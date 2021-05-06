@@ -143,6 +143,14 @@ sap.ui.define(
                 
                 this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
                 
+                var oSelectedId = oTree.getSelectedItems()[0].getId();
+
+                if($.app.byId(oSelectedId).getExpanded()){
+                    oTree.collapse(parseInt(oSelectedId.split("-")[2]));
+                }else{
+                    oTree.expand(parseInt(oSelectedId.split("-")[2]));
+                }
+                
                 var sendObject = {};
                 // Header
                 sendObject.IPernr = vPernr;

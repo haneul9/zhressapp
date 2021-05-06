@@ -75,17 +75,17 @@ sap.ui.define([
 							})
 						]
 					}).addStyleClass("custom-OpenHelp-field"),
-					new sap.m.HBox(oController.PAGEID + "_NoDataBox", {
-						fitContainer: true,
-						visible: false,
-						items: [
-							new sap.m.Text({
-								width: "100%",
-								text: "{i18n>MSG_28001}", // 저장된 내용이 없습니다.
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 })
-							})
-						]
-					}),
+					// new sap.m.HBox(oController.PAGEID + "_NoDataBox", {
+					// 	fitContainer: true,
+					// 	visible: false,
+					// 	items: [
+					// 		new sap.m.Text({
+					// 			width: "100%",
+					// 			text: "{i18n>MSG_28001}", // 저장된 내용이 없습니다.
+					// 			layoutData: new sap.m.FlexItemData({ growFactor: 1 })
+					// 		})
+					// 	]
+					// }),
 					// new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
 					// 	fitContainer: true,
 					// 	width: "auto",

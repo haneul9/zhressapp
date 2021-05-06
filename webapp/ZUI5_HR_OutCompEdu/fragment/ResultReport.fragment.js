@@ -312,7 +312,7 @@ sap.ui.define([
 										selected: {
 											path: "Natio",
 											formatter: function(v) {
-												return v === "1";
+												return v === "01";
 											}
 										}
 									}),
@@ -322,7 +322,7 @@ sap.ui.define([
 										selected: {
 											path: "Natio",
 											formatter: function(v) {
-												return v === "2";
+												return v === "02";
 											}
 										}
 									})
