@@ -191,8 +191,14 @@ sap.ui.define([
 							return false;
 						}
 					}}})});
-						oRow.addCell(oCell);
-						oMat.addRow(oRow);
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new sap.ui.core.HTML({content:
+				"<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;'>"+oController.getBundleText("LABEL_47143")+"</a>"})],colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
 	//급여 내역
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
