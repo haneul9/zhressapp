@@ -126,7 +126,7 @@ handleCodeRequest: function(e) {
 
 	// 코드 발송 요청
 	setTimeout(function() {
-		this.showMessage('.valid-feedback', '인증코드 발급요청을 하였습니다. 잠시 후 이메일을 확인하시기 바랍니다.');
+		this.showMessage('.valid-feedback', '인증코드 발급요청을 하였습니다. 잠시 후 Hi HR어플 푸시알림을 확인하시기 바랍니다.');
 		this.requestCode(this.CODE.REQUEST);
 	}.bind(this), 0);
 
