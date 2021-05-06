@@ -51,6 +51,7 @@ homeSession: function(_session) {
 		loginInfo: _session.loginInfo.bind(_session),
 		usePrivateLog: _session.usePrivateLog.bind(_session),
 		confirmADPW: _session.confirmADPW.bind(_session),
+		retrieveOdataCsrfToken: _session.retrieveOdataCsrfToken.bind(_session),
 		addLocaleChangeCallbackOwner: _session.addLocaleChangeCallbackOwner.bind(_session),
 		removeLocaleChangeCallbackOwner: _session.removeLocaleChangeCallbackOwner.bind(_session)
 	});

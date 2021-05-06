@@ -8,7 +8,6 @@ function HomeSession(_gateway, callback) {
 		ehr.sf-user.locale
 		ehr.odata.user
 		ehr.odata.user.percod
-		ehr.odata.csrf-token
 		ehr.odata.destination
 		ehr.session.token
 		ehr.menu-auth.state
@@ -40,7 +39,6 @@ clearSessionStorage: function() {
 	sessionStorage.removeItem('ehr.odata.user.percod');
 	sessionStorage.removeItem('ehr.odata.destination');
 	sessionStorage.removeItem('ehr.menu-auth.state');
-	sessionStorage.removeItem('ehr.odata.csrf-token');
 	sessionStorage.removeItem('ehr.session.token');
 },
 
@@ -51,8 +49,7 @@ init: function(callback) {
 	Promise.all([
 		this.retrieveClientIP(),			// 접속자 IP 조회
 		this.retrieveSFUserName(),			// 사번 조회
-		this.retrieveSessionToken(),		// Session token 조회
-		this.retrieveOdataCsrfToken()		// Odata CSRF token 조회
+		this.retrieveSessionToken()			// Session token 조회
 	])
 	.then(function() {
 		return Promise.all([
@@ -228,33 +225,6 @@ retrieveSessionToken: function() {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveSessionToken');
 
 			sessionStorage.removeItem('ehr.session.token');
-		}.bind(this)
-	}).promise();
-},
-/*
-S4HANA OData 호출을 위한 CSRF token 조회
-*/
-retrieveOdataCsrfToken: function() {
-
-	return $.getJSON({
-		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV'),
-		headers: {
-			'x-csrf-token': 'Fetch'
-		},
-		success: function(data, textStatus, jqXHR) {
-			this._gateway.prepareLog('HomeSession.retrieveOdataCsrfToken success', arguments).log();
-
-			var token = jqXHR.getResponseHeader('x-csrf-token');
-			if (token) {
-				sessionStorage.setItem('ehr.odata.csrf-token', token);
-			} else {
-				sessionStorage.removeItem('ehr.odata.csrf-token');
-			}
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveOdataCsrfToken');
-
-			sessionStorage.removeItem('ehr.odata.csrf-token');
 		}.bind(this)
 	}).promise();
 },

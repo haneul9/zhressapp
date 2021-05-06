@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 $.sap.require("sap.ui.model.resource.ResourceModel");
 
 $.extend(String, {

@@ -419,27 +419,43 @@ openWindow: function(o) {
 		}, 500);
 	}
 },
-post: function(o) {
+/*
+S4HANA OData 호출을 위한 CSRF token 조회
+ZHR_COMMON_SRV
+*/
+odataCsrfToken: function(o, namespace, async) {
 
-	o = o || {};
+	return $.getJSON({
+		async: typeof async !== 'undefined' ? async : true,
+		url: this.s4hanaURL(namespace),
+		headers: {
+			'x-csrf-token': 'Fetch'
+		},
+		success: function(data, textStatus, jqXHR) {
+			this.prepareLog('HomeBasis.retrieveOdataCsrfToken success', arguments).log();
 
-	if (!o.url) {
-		this.alert({ title: '오류', html: '<p>대상 서비스 model 및 entity type이 명시된 URL이 없습니다.</p>' });
-		return;
-	}
+			o['x-csrf-token'] = jqXHR.getResponseHeader('x-csrf-token');
+		}.bind(this),
+		error: function(jqXHR) {
+			this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.retrieveOdataCsrfToken');
 
-	var postOptions = {
+			o['x-csrf-token'] = '';
+		}.bind(this)
+	}).promise();
+},
+postOptions: function(o) {
+
+	var async = typeof o.async !== 'undefined' ? o.async : true,
+	namespace = (o.url || '').split('/')[0],
+	headers = o.headers ? o.headers : {},
+	postOptions = {
+		async: async,
 		url: this.s4hanaURL(o.url),
 		dataType: 'json',
 		contentType: 'application/json',
-		headers: {
-			'x-csrf-token': sessionStorage.getItem('ehr.odata.csrf-token')
-		}
+		headers: headers
 	};
 
-	if (typeof o.async !== 'undefined') {
-		postOptions.async = o.async;
-	}
 	if (o.success) {
 		postOptions.success = o.success;
 	}
@@ -449,67 +465,155 @@ post: function(o) {
 	if (o.complete) {
 		postOptions.complete = o.complete;
 	}
-	if (o.data) {
-		// postOptions.data = JSON.stringify(o.data);
-		o.data = this.mix(o.data);
 
-		return this.copyFields(o)
+	if (o.data) {
+		o.data = this.mix(o.data); // sync
+
+		if (async) {
+			return Promise.all([
+				this.copyFields(o),
+				this.odataCsrfToken(headers, namespace)
+			])
 			.then(function(copiedData) {
 				postOptions.data = JSON.stringify(copiedData);
 
-				return $.post(postOptions);
+				return postOptions;
 			});
+		} else {
+			postOptions.data = JSON.stringify(this.copyFields(o));
+
+			this.odataCsrfToken(headers, namespace, false);
+
+			return postOptions;
+		}
+	} else {
+		postOptions.data = JSON.stringify(this.mix({}));
+
+		if (async) {
+			return this.odataCsrfToken(headers, namespace)
+				.then(function() {
+					return postOptions;
+				});
+		} else {
+			this.odataCsrfToken(headers, namespace, false);
+
+			return postOptions;
+		}
+	}
+},
+post: function(o) {
+
+	o = o || {};
+
+	if (!o.url) {
+		this.alert({ title: '오류', html: '<p>대상 서비스 model 및 entity type이 명시된 URL이 없습니다.</p>' });
+		return;
 	}
 
-	return $.post(postOptions).promise();
+	var async = typeof o.async !== 'undefined' ? o.async : true;
+	if (async) {
+		return this.postOptions(o)
+			.then(function(postOptions) {
+				return $.post(postOptions).promise();
+			});
+	} else {
+		return $.post(this.postOptions(o)).promise();
+	}
 },
 copyFields: function(o) {
 
-	var url = o.url.split('/');
-	return this.metadata(url[0], url[1])
-		.then(function(fieldNames) {
-			var data = {};
-			$.map(fieldNames, function(name) {
-				if (typeof o.data[name] !== 'undefined') {
-					data[name] = o.data[name];
-				}
+	var url = o.url.split('/'),
+	async = typeof o.async !== 'undefined' ? o.async : true;
+
+	if (async) {
+		return this.metadata(url[0], url[1], async)
+			.then(function(fieldNames) {
+				var data = {};
+				$.map(fieldNames, function(name) {
+					if (typeof o.data[name] !== 'undefined') {
+						data[name] = o.data[name];
+					}
+				});
+				return data;
 			});
-			return data;
+	} else {
+		var data = {};
+		$.map(this.metadata(url[0], url[1], async), function(name) {
+			if (typeof o.data[name] !== 'undefined') {
+				data[name] = o.data[name];
+			}
 		});
+		return data;
+	}
 },
-metadata: function(namespace, entityType) {
+metadata: function(namespace, entityType, async) {
 
 	entityType = entityType.replace(/\(.*|\W/g, "").replace(/Set$/, '');
+	async = async !== 'undefined' ? async : true;
 
 	var metadata = this.metadataMap[namespace],
 	finder = 'EntityType[Name="${entityType}"] Property,EntityType[Name="${entityType}"] NavigationProperty'.interpolate(entityType, entityType);
 
-	if (metadata) {
-		return new Promise(function(resolve) {
-			resolve($.map(metadata.find(finder), function(o) {
+	if (metadata) { // 이미 조회해둔 metadata가 있는 경우
+		if (async) {
+			return new Promise(function(resolve) {
+				resolve($.map(metadata.find(finder), function(o) {
+					return o.attributes.Name.nodeValue;
+				}));
+			});
+		} else {
+			return $.map(metadata.find(finder), function(o) {
 				return o.attributes.Name.nodeValue;
-			}));
-		});
+			});
+		}
 	}
 
+	// metadata 조회
 	var url = this.s4hanaURL(namespace + '/$metadata');
-	return $.get({
-		url: url,
-		success: function() {
-			this._gateway.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
-		}.bind(this)
-	}).then(function(data) {
-		var metadata = $(data);
+	if (async) {
+		return $.get({
+			async: async,
+			url: url,
+			dataType: 'xml',
+			success: function() {
+				this.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
+			}.bind(this),
+			error: function(jqXHR) {
+				this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
+			}.bind(this)
+		}).then(function(data) {
+			var metadata = $(data);
 
-		this.metadataMap[namespace] = metadata;
+			this.metadataMap[namespace] = metadata;
 
-		return $.map(metadata.find(finder), function(o) {
-			return o.attributes.Name.nodeValue;
+			return $.map(metadata.find(finder), function(o) {
+				return o.attributes.Name.nodeValue;
+			});
+		}.bind(this));
+
+	} else {
+		var fieldNames;
+		$.get({ // metadata 조회
+			async: false,
+			url: url,
+			dataType: 'xml',
+			success: function(data) {
+				this.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
+
+				this.metadataMap[namespace] = metadata;
+
+				fieldNames = $.map(metadata.find(finder), function(o) {
+					return o.attributes.Name.nodeValue;
+				});
+			}.bind(this),
+			error: function(jqXHR) {
+				this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.metadata ' + url);
+			}.bind(this)
 		});
-	}.bind(this));
+
+		return fieldNames || [];
+
+	}
 },
 odataResults: function(data) {
 

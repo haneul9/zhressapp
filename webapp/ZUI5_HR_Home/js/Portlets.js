@@ -259,6 +259,8 @@ renderSwitchModal: function() {
 			var t = $(e.currentTarget), toBeUsed = !t.prop('checked');
 			this.switch(toBeUsed, t.prop('checked', toBeUsed).parents('.portlet-switch').toggleClass('active', toBeUsed).data('key'));
 		}.bind(this));
+
+	$('#portlet-personalization .btn-primary').prop('disabled', false);
 },
 
 initSwitchModal: function() {
@@ -290,7 +292,10 @@ initSwitchModal: function() {
 			'</div>',
 		'</div>'
 	].join(''))
-	.on('click', '.btn-primary', function() { // 적용 button click event handler
+	.find('.btn-primary').prop('disabled', true).end()
+	.on('click', '.btn-primary', function(e) { // 적용 button click event handler
+		$(e.currentTarget).prop('disabled', true);
+
 		this._gateway.spinner(true);
 
 		var save = false;
