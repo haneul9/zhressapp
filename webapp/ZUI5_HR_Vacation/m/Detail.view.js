@@ -16,7 +16,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 			columns : 2,
 			width : "100%",
-			widths : ["105px", ""],
+			widths : ["100px", ""],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
