@@ -419,29 +419,24 @@ openWindow: function(o) {
 		}, 500);
 	}
 },
-/*
-S4HANA OData 호출을 위한 CSRF token 조회
-ZHR_COMMON_SRV
-*/
-odataCsrfToken: function(o, namespace, async) {
+post: function(o) {
 
-	return $.getJSON({
-		async: typeof async !== 'undefined' ? async : true,
-		url: this.s4hanaURL(namespace),
-		headers: {
-			'x-csrf-token': 'Fetch'
-		},
-		success: function(data, textStatus, jqXHR) {
-			this.prepareLog('HomeBasis.odataCsrfToken success', arguments).log();
+	o = o || {};
 
-			o['x-csrf-token'] = jqXHR.getResponseHeader('x-csrf-token');
-		}.bind(this),
-		error: function(jqXHR) {
-			this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.odataCsrfToken');
+	if (!o.url) {
+		this.alert({ title: '오류', html: '<p>대상 서비스 model 및 entity type이 명시된 URL이 없습니다.</p>' });
+		return;
+	}
 
-			o['x-csrf-token'] = '';
-		}.bind(this)
-	}).promise();
+	var async = typeof o.async !== 'undefined' ? o.async : true;
+	if (async) {
+		return this.postOptions(o)
+			.then(function(postOptions) {
+				return $.post(postOptions).promise();
+			});
+	} else {
+		return $.post(this.postOptions(o)).promise();
+	}
 },
 postOptions: function(o) {
 
@@ -499,25 +494,6 @@ postOptions: function(o) {
 
 			return postOptions;
 		}
-	}
-},
-post: function(o) {
-
-	o = o || {};
-
-	if (!o.url) {
-		this.alert({ title: '오류', html: '<p>대상 서비스 model 및 entity type이 명시된 URL이 없습니다.</p>' });
-		return;
-	}
-
-	var async = typeof o.async !== 'undefined' ? o.async : true;
-	if (async) {
-		return this.postOptions(o)
-			.then(function(postOptions) {
-				return $.post(postOptions).promise();
-			});
-	} else {
-		return $.post(this.postOptions(o)).promise();
 	}
 },
 copyFields: function(o) {
@@ -600,9 +576,9 @@ metadata: function(namespace, entityType, async) {
 			success: function(data) {
 				this.prepareLog('HomeBasis.metadata ${url} success'.interpolate(url), arguments).log();
 
-				this.metadataMap[namespace] = metadata;
+				this.metadataMap[namespace] = data;
 
-				fieldNames = $.map(metadata.find(finder), function(o) {
+				fieldNames = $.map(data.find(finder), function(o) {
 					return o.attributes.Name.nodeValue;
 				});
 			}.bind(this),
@@ -614,6 +590,30 @@ metadata: function(namespace, entityType, async) {
 		return fieldNames || [];
 
 	}
+},
+/*
+S4HANA OData 호출을 위한 CSRF token 조회
+ZHR_COMMON_SRV
+*/
+odataCsrfToken: function(o, namespace, async) {
+
+	return $.getJSON({
+		async: typeof async !== 'undefined' ? async : true,
+		url: this.s4hanaURL(namespace),
+		headers: {
+			'x-csrf-token': 'Fetch'
+		},
+		success: function(data, textStatus, jqXHR) {
+			this.prepareLog('HomeBasis.odataCsrfToken success', arguments).log();
+
+			o['x-csrf-token'] = jqXHR.getResponseHeader('x-csrf-token');
+		}.bind(this),
+		error: function(jqXHR) {
+			this.handleError(this.ODataDestination.S4HANA, jqXHR, 'HomeBasis.odataCsrfToken');
+
+			o['x-csrf-token'] = '';
+		}.bind(this)
+	}).promise();
 },
 odataResults: function(data) {
 
