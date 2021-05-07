@@ -185,6 +185,8 @@
 .calendar-text{min-height: 20px !important; line-height: 20px !important;}
 .calendar-legend{background-color:#f3f4f4;}
 
+.calendar-atext{background-color: #0070bd;}
+
 #signature-pad {border: 1px solid black}
 
 .table-footer{background-color:#f5f5f5;}

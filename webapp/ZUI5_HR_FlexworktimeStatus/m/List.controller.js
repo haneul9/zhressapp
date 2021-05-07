@@ -280,8 +280,8 @@ sap.ui.define([
 																				  	  	    		"font-11px FontWhite calendar-text" :
 																				  	  	    		"font-11px FontWhite calendar-background-atext calendar-text"))],
 																		  	  	   hAlign : "Center",
-																		  	  	   vAlign : "Middle"
-																		  	   })]
+																		  	  	   vAlign : "Bottom"
+																		  	   }).addStyleClass((data1[i].Atext == "" ? "" : "calendar-atext"))]
 																  })]
 													  });
 													  
