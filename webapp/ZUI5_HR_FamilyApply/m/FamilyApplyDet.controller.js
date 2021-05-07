@@ -76,8 +76,8 @@ sap.ui.define([
 
 		getMobileTxt:function(vTxt,vNo){  
 			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
-			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?new sap.m.Label({required:true,text:oController.getBundleText(vTxt)}):
-			new sap.m.Label({required:false,text:oController.getBundleText(vTxt)});
+			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?new sap.m.Label({required:true,text:oController.getBundleText(vTxt),width:"100%"}):
+			new sap.m.Label({required:false,text:oController.getBundleText(vTxt),width:"100%"});
 		},
 
 		initTdata:function(){
