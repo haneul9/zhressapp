@@ -319,7 +319,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 								 	 content : [new sap.m.Input({
 												    value : "{Bigo}",
 												    width : "100%",
-												    maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Telnum"),
+												    maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Bigo"),
 												    editable : {
 												   		path : "Status1",
 												   		formatter : function(fVal){
