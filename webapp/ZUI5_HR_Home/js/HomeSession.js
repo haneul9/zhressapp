@@ -48,25 +48,26 @@ init: function(callback) {
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
-		this.retrieveClientIP(),			// 접속자 IP 조회
-		this.retrieveSFUserName(),			// 사번 조회
-		this.retrieveSessionToken()			// Session token 조회
+		this.retrieveClientIP(),							// 접속자 IP 조회
+		this.retrieveSFUserName(),							// 사번 조회
+		this.retrieveSessionToken(),						// Session token 조회
+		this._gateway.odataCsrfToken({}, 'ZHR_COMMON_SRV')	// 최초 CSRF token fetch 호출 이후 간헐적으로 발생하는 token validation failed 오류방지를 위해 encodePernr 호출전 미리 한 번 호출
 	])
 	.then(function() {
 		return Promise.all([
-			this.retrieveSFUserPhoto(),		// SF 사진 조회
-			this.retrieveSFUserLocale(),	// SF 언어 조회
-			this.encodePernr()				// 암호화 사번 조회
+			this.retrieveSFUserPhoto(),						// SF 사진 조회
+			this.retrieveSFUserLocale(),					// SF 언어 조회
+			this.encodePernr()								// 암호화 사번 조회
 		]);
 	}.bind(this))
 	.then(function() {
 		return Promise.all([
-			this.sessionToken(),			// Session token 등록
-			this.registerToken()			// Mobile token 등록
+			this.sessionToken(),							// Session token 등록
+			this.registerToken()							// Mobile token 등록
 		]);
 	}.bind(this))
 	.then(function() {
-		return this.retrieveLoginInfo();	// 인사정보 조회
+		return this.retrieveLoginInfo();					// 인사정보 조회
 	}.bind(this))
 	.then(function() {
 		if (typeof callback === 'function') {
