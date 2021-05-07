@@ -95,9 +95,12 @@ sap.ui.define([
 		},
 
 		navBack:function(){
-			sap.ui.getCore().getEventBus().publish("nav", "to", {
-				id: [$.app.CONTEXT_PATH, "MedApply"].join($.app.getDeviceSuffix())
-			});
+			BusyIndicator.show(0);
+			setTimeout(function(){
+				sap.ui.getCore().getEventBus().publish("nav", "to", {
+					id: [$.app.CONTEXT_PATH, "MedApply"].join($.app.getDeviceSuffix())
+				});
+			},1);
 		},
 
 		onAfterShow:function(){
