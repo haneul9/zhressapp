@@ -47,7 +47,7 @@ sap.ui.define([
 			oMat=new c.layout.MatrixLayout(oController.PAGEID+"_Mat",{
 				columns:2,
 				width:"100%",
-				widths:['40%','60%']
+				widths:['130px']
 			});
 
 			oRow=new c.layout.MatrixLayoutRow();
