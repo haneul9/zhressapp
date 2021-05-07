@@ -435,6 +435,12 @@ sap.ui.define([
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:new sap.ui.core.HTML({content:"<div style='height:10px;' />"})});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
+
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"
+			+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span>"})}).addStyleClass("DataCell");
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
 	
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:fragment.COMMON_ATTACH_FILES.renderer(oController,"008")});
