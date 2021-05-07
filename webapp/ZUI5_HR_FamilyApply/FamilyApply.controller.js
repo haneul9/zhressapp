@@ -6,8 +6,9 @@ sap.ui.define([
 	"../common/JSONModelHelper",
 	"../common/PageHelper",
 	"../common/AttachFileAction",
-	"../common/EmployeeModel"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel) {
+	"../common/EmployeeModel",
+	"sap/ui/core/BusyIndicator"], 
+	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel, BusyIndicator) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_FamilyApply.FamilyApply", {
@@ -148,16 +149,7 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID+"_Dialog").bindElement("/oData/0");
 			var vAppnm = oJSON.getProperty("/oData")[0].Appnm;
 			var vStatus = oJSON.getProperty("/oData")[0].Opener;
-			if (!oController._BusyDialog) {
-				oController._BusyDialog = new sap.m.Dialog({showHeader:false}).addStyleClass("centerAlign");
-				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
-				oController._BusyDialog.addContent(new sap.m.BusyIndicator({ text: "{i18n>MSG_44017}" }));	// 검색중입니다. 잠시만 기다려주십시오.
-				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
-				oController.getView().addDependent(oController._BusyDialog);
-			}
-			if (!oController._BusyDialog.isOpen()) {
-				oController._BusyDialog.open();
-			}			
+			BusyIndicator.show(0);		
 			if(oController._onDialog=="N"){
 				oController.initTdata();
 				$.app.byId(oController.PAGEID+"_Dialog").setTitle(oBundleText.getText("LABEL_44037"));
@@ -224,9 +216,7 @@ sap.ui.define([
 					vSetFileData.InfoMessage=oBundleText.getText("LABEL_44030");
 					oController.setAttachFile(oController,vSetFileData);
 				}
-				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
-					oController._BusyDialog.close();
-				}
+				BusyIndicator.hide();
 			},10);
 		},
 		
