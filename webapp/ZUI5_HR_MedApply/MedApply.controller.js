@@ -30,6 +30,7 @@ sap.ui.define([
 		"Znijcd","Znijcm","Zniiwd","Zniiwm","Znisdd","Znisdm","Znoctd","Znoctm","Znomrd","Znomrm","Znocud","Znocum","Znobcd","Znobcm"],
 		_vArr2:["Ptamt","Medsp","Oiamt","Znobcm","Medpp","Insnp","Znobcd","Medmp","Inspp","Zdbcrl","Ziftrl","Framt"],
 		_FirstTime:"X",
+		_vC:null,
 		onInit: function () {
 			this.setupView()
 				.getView()
@@ -55,12 +56,12 @@ sap.ui.define([
 						ILangu:oSessionData.Langu,
 						IDatum:"\/Date("+new Date().getTime()+")\/",
 						MedicalApplyExport:[],
-						MedicalApplyTableIn:[],
+	//					MedicalApplyTableIn:[],
 						MedicalApplyTableIn0:[],
-						MedicalApplyTableIn3:[],
-						MedicalApplyTableIn4:[],
-						MedicalApplyTableIn5:[],
-						MedicalApplyTableInH:[]
+	//					MedicalApplyTableIn3:[],
+	//					MedicalApplyTableIn4:[],
+						MedicalApplyTableIn5:[]
+	//					MedicalApplyTableInH:[]
 						};
 			$.app.byId(oController.PAGEID + "_HeadSel").removeAllItems();
 			$.app.byId(oController.PAGEID + "_HeadSel").addItem(
@@ -191,7 +192,18 @@ sap.ui.define([
 			oController._DataModel.setData({Pop1:[oController._tData],Pop2:[]});
 			oController._vArr1.forEach(function(e){
 				var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
-				eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
+				eval("oPro."+e+"=parseInt(oPro."+e+");");
+				if(e=="Zmedrl"){
+					if(oPro.Zmedrl>100000000){
+						oController._vC=oPro.Zmedrl;
+						oPro.Zmedrl=oController.getBundleText("MSG_47044");
+						eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',oPro."+e+");");
+					}else{
+						eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+					}
+				}else{
+					eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+				}					
 			});
 			$.app.byId(oController.PAGEID+"_Dialog").bindElement("/Pop1/0");
 			if(oController._onDialog!="M"){
@@ -676,7 +688,7 @@ sap.ui.define([
 					   IPernr:oSessionData.Pernr,
 					   IBukrs:oController._Bukrs,
 					   NavCommonCodeList:[],
-					   ICodty:"ZHOSP_TYPE"};
+					   ICodty:"ZHOSP_TYPE",ILangu:"3"};
 			oModel.create("/CommonCodeListHeaderSet", vData, 
 				{success:function(data,res){
 					if(data&&data.NavCommonCodeList.results.length){
@@ -706,7 +718,7 @@ sap.ui.define([
 			var	oController = $.app.getController();
 			var oSessionData=oController._SessionData;	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
-			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[]};				
+			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[],ILangu:"3"};				
 			if(oController._SelData.Sel3.length==0){
 				oModel.create("/CommonCodeListHeaderSet", vData, 
 					{success:function(data,res){
@@ -1144,7 +1156,7 @@ sap.ui.define([
 			var oSel3=$.app.byId(oController.PAGEID+"_dSel3");
 			var oSel4=$.app.byId(oController.PAGEID+"_dSel4");
 			var oSessionData=oController._SessionData;	
-			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[]};	
+			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[],ILangu:"3"};	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			oController._SelData.Sel4=new Array();
 			oModel.create("/CommonCodeListHeaderSet", vData, 
@@ -1491,6 +1503,9 @@ sap.ui.define([
 					return;
 				}
 				var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
+				if(oPro.Zmedrl==oController.getBundleText("MSG_47044")){
+				   oPro.Zmedrl=common.Common.numberWithCommas(oController._vC);
+				}
 				vData.MedicalApplyTableIn.push(oPro);	
 				if(oPro.Begda!=""&&oPro.Begda!=null&&oPro.Begda!="Invalid Date"){
 					vData.MedicalApplyTableIn[0].Begda=dateFormat.format(vData.MedicalApplyTableIn[0].Begda);
@@ -1590,7 +1605,17 @@ sap.ui.define([
 				oController._vArr1.forEach(function(e){
 					var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
 					eval("oPro."+e+"=parseInt(oPro."+e+");");
-					eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+					if(e=="Zmedrl"){
+						if(oPro.Zmedrl>100000000){
+							oController._vC=oPro.Zmedrl;
+							oPro.Zmedrl=oController.getBundleText("MSG_47044");
+							eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',oPro."+e+");");
+						}else{
+							eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+						}
+					}else{
+						eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+					}					
 				});
 			}else{
 				oController._vArr2.forEach(function(e){
@@ -1627,6 +1652,9 @@ sap.ui.define([
 				vSig=="1000"?vData.IMedDate=$.app.getController()._DataModel.getProperty("/Pop1")[0].MedDate:vData.IMedDate=$.app.getController()._DataModel.getProperty("/Pop2")[0].MedDate;
 				if(vSig=="1000"){
 					var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
+					if(oPro.Zmedrl==oController.getBundleText("MSG_47044")){
+						oPro.Zmedrl=common.Common.numberWithCommas(oController._vC);
+					 }
 					vData.MedicalApplyTableIn.push(oPro);
 					if(oPro.Begda!=""&&oPro.Begda!=null&&oPro.Begda!="Invalid Date"){
 						vData.MedicalApplyTableIn[0].Begda=dateFormat.format(vData.MedicalApplyTableIn[0].Begda);
@@ -1704,7 +1732,18 @@ sap.ui.define([
 					$.app.getController()._DataModel.getProperty("/Pop1")[0].Chk2=false;
 					oController._vArr1.forEach(function(e){
 						var oPro=$.app.getController()._DataModel.getProperty("/Pop1")[0];
-						eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"))");
+						eval("oPro."+e+"=parseInt(oPro."+e+");");
+						if(e=="Zmedrl"){
+							if(oPro.Zmedrl>100000000){
+								oController._vC=oPro.Zmedrl;
+								oPro.Zmedrl=oController.getBundleText("MSG_47044");
+								eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',oPro."+e+");");
+							}else{
+								eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+							}
+						}else{
+							eval("$.app.getController()._DataModel.setProperty('/Pop1/0/"+e+"',common.Common.numberWithCommas(oPro."+e+"));");
+						}					
 					});					
 				}else{
 					oController._vArr2.forEach(function(e){

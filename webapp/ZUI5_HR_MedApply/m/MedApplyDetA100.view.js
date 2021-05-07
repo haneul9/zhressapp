@@ -25,7 +25,7 @@ sap.ui.define([
 			oMat=new c.layout.MatrixLayout({
 				columns:2,
 				width:"100%",
-				widths:['130px']
+				widths:['130px','']
 			});
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
@@ -131,7 +131,7 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel6});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",colSpan:3,content:new sap.m.Input({width:"99%",value:"{HospName}",maxLength:50,editable:{parts:[{path:"Close"},{path:"Status"}],
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"99%",value:"{HospName}",maxLength:50,editable:{parts:[{path:"Close"},{path:"Status"}],
 			formatter:function(fVal,fVal2){
 				if(fVal2==""){
 					return fVal=="X"?false:true;
@@ -159,7 +159,7 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oLabel8]});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",colSpan:3,content:new sap.m.Input({width:"99%",value:"{DiseName}",maxLength:50,editable:{parts:[{path:"Close"},{path:"Status"}],
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"99%",value:"{DiseName}",maxLength:50,editable:{parts:[{path:"Close"},{path:"Status"}],
 			formatter:function(fVal,fVal2){
 				if(fVal2==""){
 					return fVal=="X"?false:true;
@@ -187,7 +187,7 @@ sap.ui.define([
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:oLabel10});
 			oRow.addCell(oCell);
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",colSpan:3,content:new sap.m.Input({width:"99%",value:"{Remark}",maxLength:100,editable:{parts:[{path:"Close"},{path:"Status"}],
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"99%",value:"{Remark}",maxLength:100,editable:{parts:[{path:"Close"},{path:"Status"}],
 			formatter:function(fVal,fVal2){
 				if(fVal2==""){
 					return fVal=="X"?false:true;
@@ -433,6 +433,12 @@ sap.ui.define([
 	
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:new sap.ui.core.HTML({content:"<div style='height:10px;' />"})});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"
+			+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span>"})}).addStyleClass("DataCell");
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 	
