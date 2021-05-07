@@ -42,15 +42,19 @@ sap.ui.define(
                     var oWerks = sap.ui.getCore().byId(oController.PAGEID + "_Werks");
                     oWerks.destroyItems();
 
-                    var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-                    var oPath = "/WerksListAuthSet?$filter=Percod eq '" + encodeURIComponent(oLoginData.Percod) + "' and Bukrs eq '" + oLoginData.Bukrs + "'";
+                    var oModel = $.app.getModel("ZHR_COMMON_SRV");
 
-                    oModel.read(
-                        oPath,
-                        null,
-                        null,
-                        false,
-                        function (data) {
+                    oModel.read("/WerksListAuthSet", {
+                        async: false,
+                        filters: [
+                            new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+                            new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+                            new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+                            new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
+                            new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oLoginData.Percod),
+                            new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oLoginData.Bukrs)
+                        ],
+                        success: function (data) {
                             if (data && data.results.length) {
                                 for (var i = 0; i < data.results.length; i++) {
                                     if (data.results[i].Persa == "0AL1") continue; // 전체 제외
@@ -59,7 +63,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (Res) {
+                        error: function (Res) {
                             oController.Error = "E";
                             if (Res.response.body) {
                                 var ErrorMessage = Res.response.body;
@@ -71,7 +75,7 @@ sap.ui.define(
                                 }
                             }
                         }
-                    );
+                    });
 
                     if (oController.Error == "E") {
                         oController.Error = "";
@@ -92,7 +96,8 @@ sap.ui.define(
                             Tmdat: dateFormat.format(new Date()),
                             Pernr: $.app.getModel("session").getData().Pernr,
                             Langu: $.app.getModel("session").getData().Langu,
-                            Auth: $.app.getAuth()
+                            Auth: $.app.getAuth(),
+							Chief : $.app.getModel("session").getData().Chief
                         }
                     };
 
@@ -128,7 +133,7 @@ sap.ui.define(
                 var oController = oView.getController();
 
                 if (oEvent && oEvent.getParameters().valid == false) {
-                    MessageBox.error(oController.getBundleText(""));
+                    MessageBox.error(oController.getBundleText("MSG_02047"));
                     oEvent.getSource().setValue("");
                     return;
                 }
@@ -162,7 +167,7 @@ sap.ui.define(
                 };
 
                 var search = function () {
-                    var oModel = sap.ui.getCore().getModel("ZHR_WORKSCHEDULE_SRV");
+                    var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
 
                     var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
                     var oJSONModel1 = oTable1.getModel();
@@ -198,11 +203,8 @@ sap.ui.define(
                         createData1.IOrgeh = oOrgeh.getTokens()[0].getKey();
                     }
 
-                    oModel.create(
-                        "/TimeGroupStatusSet",
-                        createData1,
-                        null,
-                        function (data) {
+                    oModel.create("/TimeGroupStatusSet", createData1, {
+                        success: function (data) {
                             if (data) {
                                 if (data.TimeGroupStatNav && data.TimeGroupStatNav.results) {
                                     var field = ["Empcnt", "Attcnt", "Cnt01", "Cnt02", "Cnt03", "Cnt04", "Cnt05", "Cnt06", "Cnt07", "Cnt08", "Cnt09", "Cnt10", "Cnt11", "Cnt12"];
@@ -227,7 +229,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -240,7 +242,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oJSONModel1.setData(vData1);
                     oTable1.bindRows("/Data");
@@ -415,7 +417,7 @@ sap.ui.define(
                     oColumns[i].setFiltered(false);
                 }
 
-                var oModel = sap.ui.getCore().getModel("ZHR_WORKSCHEDULE_SRV");
+                var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
                 var createData = { TimeGroupStatDetailNav: [] };
                 createData.IWerks = oFilter.Werks;
                 createData.IBukrs = oFilter.Werks;
@@ -431,11 +433,8 @@ sap.ui.define(
                     createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
                 }
 
-                oModel.create(
-                    "/TimeGroupStatusDetailSet",
-                    createData,
-                    null,
-                    function (data) {
+                oModel.create("/TimeGroupStatusDetailSet", createData, {
+                    success: function (data) {
                         if (data) {
                             if (data.TimeGroupStatDetailNav && data.TimeGroupStatDetailNav.results) {
                                 for (var i = 0; i < data.TimeGroupStatDetailNav.results.length; i++) {
@@ -451,7 +450,7 @@ sap.ui.define(
                             }
                         }
                     },
-                    function (oError) {
+                    error: function (oError) {
                         var Err = {};
                         oController.Error = "E";
 
@@ -464,7 +463,7 @@ sap.ui.define(
                             oController.ErrorMessage = oError.toString();
                         }
                     }
-                );
+                });
 
                 oJSONModel.setData(vData);
                 oTable.bindRows("/Data");
@@ -532,7 +531,7 @@ sap.ui.define(
                 var oJSONModel = oTable.getModel();
                 var vData = { Data: [] };
 
-                var oModel = sap.ui.getCore().getModel("ZHR_WORKSCHEDULE_SRV");
+                var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
                 var createData = { OvertimeStatDetailNav: [] };
 	                createData.IWerks = oFilter.Werks;
 	                createData.IBukrs = oFilter.Werks;
@@ -547,11 +546,8 @@ sap.ui.define(
                         createData.IOrgeh = oOrgeh.getTokens()[0].getKey();
                     }
                     
-                oModel.create(
-                    "/OvertimeStatusDetailSet",
-                    createData,
-                    null,
-                    function (data) {
+                oModel.create("/OvertimeStatusDetailSet", createData, {
+                    success: function (data) {
                         if (data) {
                             if (data.OvertimeStatDetailNav && data.OvertimeStatDetailNav.results) {
                                 var field = ["Hrs20", "Hrs21", "Hrs22", "Hrs30", "Hrs31", "Hrs32", "Hrs40", "Hrs41", "Hrs42", "Hrs10", "Hrs11", "Hrs50"];
@@ -571,7 +567,7 @@ sap.ui.define(
                             }
                         }
                     },
-                    function (oError) {
+                    error: function (oError) {
                         var Err = {};
                         oController.Error = "E";
 
@@ -584,7 +580,7 @@ sap.ui.define(
                             oController.ErrorMessage = oError.toString();
                         }
                     }
-                );
+                });
 
                 if (oController.Error == "E") {
                     oController.Error = "";

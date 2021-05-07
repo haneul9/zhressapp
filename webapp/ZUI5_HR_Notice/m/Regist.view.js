@@ -40,7 +40,8 @@
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_57008}", "105px", "Left").addStyleClass("sub-con-title"), // 제목
                             new sap.m.Input({
-                                width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                width: "100%",
                                 value: "{Title}",
                                 editable: false
                             })
@@ -63,7 +64,8 @@
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_57004}", "105px", "Left").addStyleClass("sub-con-title"), // 등록일
 							new sap.m.Text({
-                                width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                width: "100%",
                                 textAlign: "Begin",
                                 text: {
                                     path: "Sdate",
@@ -110,13 +112,15 @@
                             })
 						]
 					}),
-                    new sap.m.HBox({
-						alignItems: sap.m.FlexAlignItems.Center,
+                    new sap.m.VBox({
+						fitContainer: true,
+						// alignItems: sap.m.FlexAlignItems.Center,
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_57016}", "105px", "Left").addStyleClass("sub-con-title"), // 내용
                             new sap.m.TextArea({
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 rows: 10,
-								width: "250px",
+								width: "100%",
 								value:"{Detail}",
 								editable: false
 							}).addStyleClass("mt-8px mb-8px")

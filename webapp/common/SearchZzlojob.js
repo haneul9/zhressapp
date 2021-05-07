@@ -153,8 +153,6 @@ common.SearchZzlojob = {
 	},
 
 	setStellValue: function (vCode, vText) {
-		var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-
 		if (vCode == "" || vCode == "00000000") return;
 
 		var oStell = sap.ui.getCore().byId(common.SearchZzlojob.oController.PAGEID + "_Stell");

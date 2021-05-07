@@ -33,7 +33,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -114,15 +114,15 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {WorkSchedule1Nav : [], WorkSchedule2Nav : []};
 					createData.IYear = oData.Zyymm.substring(0,4);
 					createData.IMonth = oData.Zyymm.substring(4,6);
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;
 					
-				oModel.create("/WorkScheduleSet", createData, null,
-					function(data, res){
+				oModel.create("/WorkScheduleSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WorkSchedule1Nav && data.WorkSchedule1Nav.results){
 								var data1 = data.WorkSchedule1Nav.results[0];
@@ -183,7 +183,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -196,7 +196,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");

@@ -1,16 +1,15 @@
 jQuery.sap.require("sap.m.MessageBox");
-jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -34,7 +33,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -55,7 +54,8 @@ sap.ui.define([
 						Bukrs : oLoginData.Bukrs,
 						Molga : oLoginData.Molga,
 						Langu : oLoginData.Langu,
-						Werks : oLoginData.Persa
+						Werks : oLoginData.Persa,
+						Chief : $.app.getModel("session").getData().Chief
 					}
 				};
 				
@@ -83,8 +83,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FreeWorkReportMonthly.List");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -97,7 +100,7 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			if(!oData.Zyymm1 || !oData.Zyymm2){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_64001")); // 대상기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_64001")); // 대상기간을 입력하여 주십시오.
 				return;
 			}
 			
@@ -114,7 +117,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {FreeWorkRpt2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
@@ -124,8 +127,8 @@ sap.ui.define([
 					createData.IMolga = oData.Molga;
 					createData.ILangu = oData.Langu;
 
-				oModel.create("/FreeWorkReport2Set", createData, null,
-					function(data, res){
+				oModel.create("/FreeWorkReport2Set", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.FreeWorkRpt2Nav && data.FreeWorkRpt2Nav.results){
 								var data1 = data.FreeWorkRpt2Nav.results;
@@ -151,7 +154,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -164,7 +167,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -195,7 +198,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

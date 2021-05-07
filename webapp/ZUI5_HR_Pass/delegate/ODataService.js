@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 sap.ui.define(
 	[
-		"common/Common",
-        "common/moment-with-locales"
+		"common/Common"
 	], 
 	function (Common) {
 		"use strict";

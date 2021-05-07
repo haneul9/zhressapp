@@ -2,9 +2,10 @@
 sap.ui.define(
     [
         "common/Common", //
+        "common/AttachFileAction",
         "common/PickOnlyDatePicker"
     ],
-    function (Common, PickOnlyDatePicker) {
+    function (Common, AttachFileAction, PickOnlyDatePicker) {
         "use strict";
 
         var DIALOG_DETAIL_ID = [$.app.CONTEXT_PATH, "Detail"].join(".fragment.");
@@ -46,6 +47,7 @@ sap.ui.define(
                         new sap.m.Button({
                             text: oController.getBundleText("LABEL_00133"), // 닫기
                             press: function () {
+                                AttachFileAction.callDeleteSelectedFiles.call(oController);
                                 oDialog.close();
                             }
                         }).addStyleClass("button-default custom-button-divide")
@@ -260,21 +262,21 @@ sap.ui.define(
                                     new sap.m.Input({
                                         required: true,
                                         width: "100px",
-                                        type: sap.m.InputType.Number,
+                                        // type: sap.m.InputType.Number,
                                         maxLength: 4,
                                         value: "{/Info/Lcsco}",
                                         editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                        liveChange: DetailHandler.calcTotScore.bind(DetailHandler),
                                         layoutData: new sap.m.FlexItemData({minWidth: "29.3%"})
                                     }),
                                     this.getLabel("R/C", true),
                                     new sap.m.Input({
                                         required: true,
                                         width: "100px",
-                                        type: sap.m.InputType.Number,
+                                        // type: sap.m.InputType.Number,
                                         maxLength: 4,
                                         editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                        liveChange: DetailHandler.calcTotScore.bind(DetailHandler),
                                         value: "{/Info/Rcsco}"
                                     }).addStyleClass("ml-8px")
                                 ],
@@ -285,7 +287,7 @@ sap.ui.define(
                                     this.getLabel("{i18n>LABEL_51009}", false), // 총점
                                     new sap.m.Input({
                                         width: "100px",
-                                        type: sap.m.InputType.Number,
+                                        // type: sap.m.InputType.Number,
                                         maxLength: 4,
                                         editable: false,
                                         value: "{/Info/Ttsco}",
@@ -295,10 +297,10 @@ sap.ui.define(
                                     new sap.m.Input({
                                         required: true,
                                         width: "100px",
-                                        type: sap.m.InputType.Number,
+                                        // type: sap.m.InputType.Number,
                                         maxLength: 4,
                                         editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                        liveChange: DetailHandler.calcTotScore.bind(DetailHandler),
                                         value: "{/Info/Wcsco}",
                                         visible: "{= ${/Info/IsHSK} === true ? true : false }"
                                     }).addStyleClass("ml-8px")
@@ -311,11 +313,11 @@ sap.ui.define(
                                     new sap.m.Input({
                                         required: true,
                                         width: "100px",
-                                        type: sap.m.InputType.Number,
+                                        // type: sap.m.InputType.Number,
                                         maxLength: 4,
                                         value: "{/Info/Tcsco}",
                                         editable: "{= !${/IsViewMode} || ${/Info/Status} === 'AA' }",
-                                        change: DetailHandler.calcTotScore.bind(DetailHandler),
+                                        liveChange: DetailHandler.calcTotScore.bind(DetailHandler),
                                         layoutData: new sap.m.FlexItemData({minWidth: "29.3%"})
                                     })
                                 ],

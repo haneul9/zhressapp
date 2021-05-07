@@ -1,8 +1,10 @@
 sap.ui.define([
     "../../common/Common",
     "../delegate/ViewTemplates",
-	"../../common/ZHR_TABLES"
-], function (Common, ViewTemplates, ZHR_TABLES) {
+	"../../common/ZHR_TABLES",
+	"../../common/HoverIcon",
+	"sap/m/InputBase"
+], function (Common, ViewTemplates, ZHR_TABLES, HoverIcon, InputBase) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_RelocationFee.fragment.Apply", {
@@ -197,6 +199,16 @@ sap.ui.define([
                         width: "100%",
                         items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_34004}", "150px", "Right", true ),  // 가족동반 여부
+							new HoverIcon({
+								src: "sap-icon://information",
+								hover: function(oEvent) {
+									Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_34016")); // 부임이전비 신청은 동일한 발령일에 한번 신청이 가능합니다. 가족동반 여부를 신중히 선택하시기 바랍니다.
+								},
+								leave: function(oEvent) {
+									Common.onPressTableHeaderInformation.call(oController, oEvent);
+								}
+							})
+							.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
 							new sap.m.RadioButtonGroup(oController.PAGEID + "_RadioGroup", {
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
 								width: "250px",

@@ -2,7 +2,6 @@
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/moment-with-locales",
 	"../ZUI5_HR_BusinessTrip/delegate/OnRequest",
 	"../ZUI5_HR_BusinessTrip/delegate/OnSettlement",
 	"sap/base/util/UriParameters",
@@ -11,7 +10,6 @@ sap.ui.define([
 ], function(
 	Common,
 	CommonController,
-	momentjs,
 	OnRequest,
 	OnSettlement,
 	UriParameters,

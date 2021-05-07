@@ -36,7 +36,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -54,7 +54,8 @@ sap.ui.define([
 						Orgeh : "",
 						Ename : oLoginData.Ename,
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
-						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))
+						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
+						Chief : $.app.getModel("session").getData().Chief
 						// Tmdat : dateFormat.format(new Date()),
 					}
 				};
@@ -90,7 +91,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText(""));
+				sap.m.MessageBox.error(oBundleText.getText("MSG_02047"));
 				oEvent.getSource().setValue("");
 				oController._ListCondJSonModel.setProperty("/Data/Endda", "");
 				return;
@@ -116,7 +117,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {VacationNav : []};
 					createData.IPernr = (oData.Pernr && oData.Pernr != "" ? oData.Pernr : "");
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
@@ -125,8 +126,8 @@ sap.ui.define([
 					createData.IBukrs = $.app.getModel("session").getData().Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 
-				oModel.create("/VacationListSet", createData, null,
-					function(data, res){
+				oModel.create("/VacationListSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationNav && data.VacationNav.results){
 								var data1 = data.VacationNav.results;
@@ -152,7 +153,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -165,7 +166,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -231,7 +232,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 // oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");

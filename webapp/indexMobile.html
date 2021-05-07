@@ -2,7 +2,10 @@
 <html lang="ko-KR" locale="ko_KR" device="mobile">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!--
+	<meta http-equiv="refresh" content="0; url=UnderConstruction.html" />
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
 <title>Hi HR</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -21,6 +24,7 @@
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane.css" media="all" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
+<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/Chart.min.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
 <script src="common/PromisePolyfillNpm.min.js"></script>
 <script src="common/moment-with-locales.js"></script>
@@ -30,6 +34,7 @@
 <script src="ZUI5_HR_Home/js/lib/jquery.mousewheel.js"></script>
 <script src="ZUI5_HR_Home/js/lib/jquery.jscrollpane.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/Chart.bundle.min.js"></script>
 <script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
@@ -37,13 +42,18 @@
 <script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
 <script src="ZUI5_HR_Home/js/MenuHamburger.js"></script>
 <script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
-<script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--		P101 개인정보 -->
-<script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--		P102 공지사항 -->
-<script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--		P105 팀 달력 -->
-<script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--	P108 하이톡톡 -->
-<script src="ZUI5_HR_Home/js/portlets/TempPortlet.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--				P101 개인정보 -->
+<script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--				P102 공지사항 -->
+<script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--				P105 팀 달력 -->
+<script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--			P108 하이톡톡 -->
+<script src="ZUI5_HR_Home/js/portlets/EvalGoalPortlet.js"></script><!--				P107 목표관리 -->
+<script src="ZUI5_HR_Home/js/portlets/EvalGoalProgressingPortlet.js"></script><!--	P108 팀원 목표 진척율 -->
+<script src="ZUI5_HR_Home/js/portlets/WorkstimeStatusPortlet.js"></script><!--		P109 자율출퇴근 관리 -->
+<script src="ZUI5_HR_Home/js/portlets/VacationPortlet.js"></script><!--				P110 근태신청 -->
 <script src="ZUI5_HR_Home/js/PortletsMobile.js"></script>
 <script>
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event) { history.pushState(null, document.title, location.href); });
 function initHome() {
 
 	var _gateway = window._gateway,
@@ -64,12 +74,6 @@ function initHome() {
 	});
 
 	if (popup) {
-		setTimeout(function() {
-			$('.navbar-mobile .button-logout').click(function() {
-				
-			});
-		}, 0);
-
 		$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
 		$('.ehr-body').addClass('menu-loaded').find('.container-fluid').addClass('p-0');
 		new MenuHamburger(_gateway).goToLink(_gateway.parameter('mid'), _gateway.parameter('popup'));
@@ -88,6 +92,7 @@ function initHome() {
 	}, 0);
 
 	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
+	$(document).on('click', '.fn-logout-confirm', _gateway.logout.bind(_gateway));
 
 	$('.ehr-body .menu-spinner-wrapper').toggleClass('d-none', true);
 }
@@ -106,14 +111,13 @@ window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 	<button class="navbar-toggler pl-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand ehr-logo" href="#"><img src="images/m-hihr.png" style="width:auto; height:28px" alt="" /></a>
-	<button class="navbar-toggler pr-0 button-logout" type="button">
+	<a class="navbar-brand ehr-logo" href="javascript:;"></a>
+	<button class="navbar-toggler pr-0 fn-logout-confirm" type="button">
 		<svg width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
 			<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
 			<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
 		</svg>
 	</button>
-
 	<div class="collapse navbar-collapse" id="navbarCollapse">
 <!--
 		<ul class="navbar-nav mr-auto">

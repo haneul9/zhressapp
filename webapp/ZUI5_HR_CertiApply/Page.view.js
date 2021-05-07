@@ -66,9 +66,9 @@ sap.ui.define(
                 // ZHR_TABLES.makeColumn(oController, oTable, this._BaseModel);
                 ZHR_TABLES.makeColumn(oController, oTable, [
                     { id: "Begda", label: "{i18n>LABEL_38003}" /* 신청일 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "8%" },
-                    { id: "Typetxt", label: "{i18n>LABEL_65002}" /* 구분 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "8%" },
+                    { id: "Typetxt", label: "{i18n>LABEL_65002}" /* 구분 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "15%" },
                     { id: "Langtxt", label: "{i18n>LABEL_65003}" /* 언어 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto" },
-                    { id: "Zyear", label: "{i18n>LABEL_65004}" /* 기준년도 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto" },
+                    { id: "Zyear", label: "{i18n>LABEL_65004}" /* 기준년도 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "8%" },
                     { id: "Zsubmit", label: "{i18n>LABEL_65005}" /* 제출처 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "10%" },
                     { id: "Zuse", label: "{i18n>LABEL_65006}" /* 용도 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "13%", align: sap.ui.core.HorizontalAlign.Left },
                     { id: "Zcount", label: "{i18n>LABEL_65007}" /* 수량 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "5%" },

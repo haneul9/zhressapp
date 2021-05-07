@@ -2,14 +2,13 @@
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/moment-with-locales",
     "../common/SearchUser1",
     "../common/SearchOrg",
     "../common/DialogHandler",
     "../common/OrgOfIndividualHandler",
 	"sap/base/util/UriParameters",
 	"sap/ui/model/json/JSONModel"
-], function(Common, CommonController, momentjs, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, UriParameters, JSONModel) {
+], function(Common, CommonController, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, UriParameters, JSONModel) {
 "use strict";
 
 return CommonController.extend($.app.APP_ID, { // 출장
@@ -136,7 +135,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			createData.IStatus = vCondiData.Status && vCondiData.Status != "" ? vCondiData.Status : "" ;
 			createData.IBegda =  vCondiData.Begda && vCondiData.Begda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Begda)) + ")\/" : null;
 			createData.IEndda =  vCondiData.Endda && vCondiData.Endda != "" ? "\/Date(" + common.Common.getTime(new Date(vCondiData.Endda)) + ")\/" : null;
-			
+			createData.IEmpid =  oController.getView().getModel("session").getData().Pernr;
+
 			oModel.create(oPath, createData, null,
 				function(data, res){
 					if(data){
@@ -205,14 +205,15 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			detailData.Betrg = detailData.Betrg ? common.Common.toNumber(detailData.Betrg) : "";
 			detailData.Betrg = "" + detailData.Betrg;
 			createData.TempPayDeductionTableIn1.push(detailData);
-			var oModel = sap.ui.getCore().getModel("ZHR_PAY_RESULT_SRV");
-			oModel.create(oPath, createData, null,
-				function(data, res){
+			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
+			
+			oModel.create(oPath, createData, {
+				success: function(data, res){
 					if(data){
 			
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 						
@@ -225,7 +226,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			)
+			});
 			
 			oController._BusyDialog.close();
 			
@@ -251,7 +252,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				oController._BusyDialog.open();
 				setTimeout(create, 100);
 			}
-		}	
+		};
 		
 		sap.m.MessageBox.confirm( oController.getBundleText("MSG_17003"),{ // 신청하시겠습니까?
 			title : oController.getBundleText("LABEL_02053") ,	// 확인
@@ -276,7 +277,11 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			if (detailData.Status == "ZZ"){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_50004")); // 진행상태가 중복인 것은 저장된 데이터가 아니라 삭제가 불가능합니다. 
 				return;
-			}		
+			}
+			if(detailData.Apernr != oController.getView().getModel("session").getData().Pernr){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_50005")); // 타인이 신청한 건은 삭제가 불가능합니다.  
+				return;
+			}
 	
 			delete detailData.Idx;
 			createData.TempPayDeductionTableIn1.push(detailData);
@@ -284,20 +289,18 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		
 
 		var create = function(){
-			var oPath = "";
-			oPath = "/TempPayDeductionSet";
+			var oPath = "/TempPayDeductionSet";
+			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
+			
 			createData.IMode = "D";
-			
-			
-			
-			var oModel = sap.ui.getCore().getModel("ZHR_PAY_RESULT_SRV");
-			oModel.create(oPath, createData, null,
-				function(data, res){
+
+			oModel.create(oPath, createData, {
+				success: function(data, res){
 					if(data){
 			
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 						
@@ -310,7 +313,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			)
+			});
 			
 			oController._BusyDialog.close();
 			
@@ -328,14 +331,14 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				}
 			});
 			
-		}
+		};
 		
 		var CreateProcess = function(fVal){
 			if(fVal && fVal == sap.m.MessageBox.Action.YES) {
 				oController._BusyDialog.open();
 				setTimeout(create, 100);
 			}
-		}	
+		};
 		
 		sap.m.MessageBox.confirm( oController.getBundleText("MSG_00051"),{ // 선택된 행을 삭제하시겠습니까?
 			title : oController.getBundleText("LABEL_02053") ,	// 확인
@@ -400,7 +403,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		var oView = sap.ui.getCore().byId("ZUI5_HR_PayDeductionRequest.Tabs"),
 			oController = oView.getController(),
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_EXCEL_UPLOAD_BTN"), 
-			oModel = sap.ui.getCore().getModel("ZHR_PAY_RESULT_SRV"),
+			oModel = $.app.getModel("ZHR_PAY_RESULT_SRV"),
 			Datas = {Data : []},
 		    vData = {Data : []},
 			createData = {TempPayDeductionTableIn1 : []},
@@ -436,8 +439,9 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			createData.TempPayDeductionTableIn1 = rowDatas;
 			createData.TempPayDeductionExport = [];
 			var errData ={}, errYn = true ;
-			oModel.create(oPath, createData, null,
-				function(data, res){
+			
+			oModel.create(oPath, createData, {
+				success: function(data, res){
 					if(data){
 						if(data.TempPayDeductionExport && data.TempPayDeductionExport.results){
 							if(data.TempPayDeductionExport.results[0].ESucc && 
@@ -462,7 +466,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 						
@@ -475,7 +479,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			)
+			});
 			
 			oController._ListJSonModel.setProperty("/Data",vData.Data);
 			Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));	

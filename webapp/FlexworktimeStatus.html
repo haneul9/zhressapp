@@ -15,16 +15,23 @@
 	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
 	<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
 	<link rel="stylesheet" type="text/css" href="css/matrixenhance.css">
+	
+	<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
+	<link rel="stylesheet" href="ZUI5_HR_Home/css/lib/Chart.min.css" />
+	<script src="ZUI5_HR_Home/js/lib/Chart.bundle.min.js"></script>
+	
 	<script src="common/AppPrefilter.js"></script>
 	<script id="sap-ui-bootstrap"
-			src="resources/sap-ui-core.js"
+			src="resources/sap-ui-cachebuster/sap-ui-core.js"
 			data-sap-ui-theme="sap_fiori_3"
+			data-sap-ui-appCacheBuster="./"
 			data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 			data-sap-ui-compatVersion="edge"
 			data-sap-ui-async="true"
 			data-sap-ui-frameOptions="allow"
-			data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.core">
+			data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap">
 	</script>
+	<script src="common/moment-with-locales.js"></script>
 		<script src="common/AppBasis.js"></script>
 		<script>	
 			var gDtfmt = "yyyy-MM-dd",
@@ -73,6 +80,12 @@
 			.button-default .sapUiIcon{
 				line-height: 2.215rem !important;
 			}
+			
+			.progress{border-radius: 1rem;background-color:#F0F0F0;height: 20px; width: 100%; display: flex; position: relative;}
+			.bg-success{background-color:#8DC63F !important;}
+			.bg-error{background-color:#da291c !important;}
+			
+			.app-content-container-mobile .sapMListTblCell {padding: 0 !important;}
 		</style>
 	</head>
 	<body id="ui-body" class="sapUiBody" oncontextmenu='return false' ondragstart='return false' onselectstart='return false'>

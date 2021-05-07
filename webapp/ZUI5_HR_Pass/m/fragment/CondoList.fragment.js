@@ -14,7 +14,7 @@ sap.ui.define([
 				items: [
 					this.getResvMyInfoBox(),
 					this.getResvMyList(oController),
-					this.getRequestInfoBox(),
+					this.getRequestInfoBox(oController),
 					this.getRequestList(oController)
 				]
 			})
@@ -48,7 +48,7 @@ sap.ui.define([
 				rememberSelections: false,
 				noDataText: "{i18n>LABEL_00901}",
 				growing: true,
-				growingThreshold: 2,
+				growingThreshold: 5,
 				mode: sap.m.ListMode.SingleSelectMaster,
 				itemPress: CondoHandler.onPressResvRow.bind(CondoHandler),
 				columns: [
@@ -118,7 +118,9 @@ sap.ui.define([
 			});
 		},	// --end getResvMyList
 
-		getRequestInfoBox: function() {
+		getRequestInfoBox: function(oController) {
+			var CondoHandler = oController.CondoHandler;
+
 			return new sap.m.FlexBox({
 				justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 				alignContent: sap.m.FlexAlignContent.End,
@@ -132,7 +134,21 @@ sap.ui.define([
 							//	design: "Bold"
 							}).addStyleClass("sub-title") // 이용신청
 						]
-					})
+					}),
+					new sap.m.HBox({
+						items: [
+							// new sap.m.Label({ text: "{i18n>LABEL_09033}" }),	// 콘도
+							new sap.m.ComboBox({
+								width: "200px",
+								selectedKey: "{/filter/Condo}",
+								items: {
+									path: "/filter/CondoItems",
+									template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
+								},
+								change: CondoHandler.setFilter.bind(CondoHandler)
+							})
+						]
+					}).addStyleClass("search-field-group")
 				]
 			}).addStyleClass("info-box");
 		},

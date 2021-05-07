@@ -14,14 +14,16 @@
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
 <script src="common/AppPrefilter.js"></script>
-<script id="sap-ui-bootstrap" src="resources/sap-ui-core.js"
+<script id="sap-ui-bootstrap" src="resources/sap-ui-cachebuster/sap-ui-core.js"
 data-sap-ui-libs="sap.m, sap.ui.commons, sap.ui.layout, sap.ui.table, sap.uxap"
 data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 data-sap-ui-theme="sap_fiori_3"
+data-sap-ui-appCacheBuster="./"
 data-sap-ui-async="true"
 data-sap-ui-compatVersion="edge"
 data-sap-ui-frameOptions="allow">
 </script>
+<script src="common/moment-with-locales.js"></script>
 <script src="common/AppBasis.js"></script>
 <script src="plugin/jspdf/jspdf.js"></script>
 <script src="plugin/jspdf/bluebird.js"></script>
@@ -41,6 +43,12 @@ function startAppInit() {
 	$.app.init();
 }
 </script>
+<style>
+ .sapUiTableRowFirstFixedBottom{
+ 	background : #f3f6c1 !important;
+ }	
+	
+</style>
 </head>
 <body id="ui-body" class="sapUiBody" oncontextmenu="return false">
 <div class="app-preparing">

@@ -7,8 +7,7 @@ sap.ui.define(
 		"common/SearchEmpProfile",
 		"sap/ui/core/BusyIndicator",
 		"sap/m/MessageBox",
-		"sap/ui/export/Spreadsheet",
-        "common/moment-with-locales"
+		"sap/ui/export/Spreadsheet"
 	],
 	function (Common, CommonController, JSONModelHelper, SearchEmpProfile, BusyIndicator, MessageBox, Spreadsheet) {
 		"use strict";

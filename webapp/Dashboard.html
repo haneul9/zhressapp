@@ -15,8 +15,9 @@
 	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
 	<script src="common/AppPrefilter.js"></script>
 	<script id="sap-ui-bootstrap"
-		src="resources/sap-ui-core.js"
+		src="resources/sap-ui-cachebuster/sap-ui-core.js"
 		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-appCacheBuster="./"
 		data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 		data-sap-ui-compatVersion="edge"
 		data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
@@ -24,28 +25,45 @@
 		data-sap-ui-frameOptions="allow"
 		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.suite.ui.commons, sap.f, sap.viz">
 	</script>
+	<script src="common/moment-with-locales.js"></script>
 	<script src="common/AppBasis.js"></script>
 	<script>
 	var oBundleText = $.app.geti18nResource();
 
 	$.sap.registerModulePath("common", "common");
+	sap.ui.localResources("ZUI5_HR_Dashboard");
+	
+	// function startAppInit() {
 
-	function startAppInit() {
+	// 	checkAppPrefilter();
 
-		checkAppPrefilter();
+	// 	sap.ui.getCore().attachInit(function() {
+	// 		sap.ui.localResources("ZUI5_HR_Dashboard");
 
-		sap.ui.getCore().attachInit(function() {
-			sap.ui.localResources("ZUI5_HR_Dashboard");
-
-			var oview = sap.ui.jsview("app", "ZUI5_HR_Dashboard.AppMain");
-			$("body").fadeOut("slow",function() {
-				$("#ui-body").empty();
-				$("#ui-body").removeAttr('style');
-				oview.placeAt("ui-body");
-				$(this).fadeIn("slow");
-			});
-		});
-	}
+	// 		var oview = sap.ui.jsview("app", "ZUI5_HR_Dashboard.AppMain");
+	// 		$("body").fadeOut("slow",function() {
+	// 			$("#ui-body").empty();
+	// 			$("#ui-body").removeAttr('style');
+	// 			oview.placeAt("ui-body");
+	// 			$(this).fadeIn("slow");
+	// 		});
+	// 	});
+	// }
+		function startAppInit() {
+				var contextPath = "ZUI5_HR_Dashboard";
+				$.extend(true, $.app, {
+					CONTEXT_PATH: contextPath,
+					APP_SFMAIN_ID: "ZUI5_SF.SFMain",
+					APP_ID: [contextPath, "DashboardList"].join("."),
+					APP_AUTH: $.app.Auth.MSS,
+					APP_TILE: "Dashboard",
+					LOG: {
+						ENABLE_SUCCESS: true
+					}
+				});
+		
+				$.app.init();
+		}
 	</script>
 	</head>
 	

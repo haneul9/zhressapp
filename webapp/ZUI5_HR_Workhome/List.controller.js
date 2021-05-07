@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -36,7 +36,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -50,7 +50,8 @@ sap.ui.define([
 				var	vData = {
 					Data : {
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
-						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))
+						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
+						Persa : oLoginData.Persa
 						// Tmdat : dateFormat.format(new Date()),
 					}
 				};
@@ -93,8 +94,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
+		
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				oController._ListCondJSonModel.setProperty("/Data/Endda", "");
 				return;
@@ -120,7 +124,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_WORKTIME_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 				var createData = {WorkhomeNav : []};
 					createData.IEmpid = (oData.Pernr && oData.Pernr != "" ? oData.Pernr : "");
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
@@ -130,8 +134,8 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = "1";
 
-				oModel.create("/WorkhomeApplySet", createData, null,
-					function(data, res){
+				oModel.create("/WorkhomeApplySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WorkhomeNav && data.WorkhomeNav.results){
 								for(var i=0; i<data.WorkhomeNav.results.length; i++){   
@@ -142,9 +146,9 @@ sap.ui.define([
 									
 									// 구분
 									if(data.WorkhomeNav.results[i].Cancl == ""){
-										data.WorkhomeNav.results[i].Cancltx = oBundleText.getText("LABEL_53012"); // 신규
+										data.WorkhomeNav.results[i].Cancltx = oController.getBundleText("LABEL_53012"); // 신규
 									} else {
-										data.WorkhomeNav.results[i].Cancltx = oBundleText.getText("LABEL_53013"); // 취소
+										data.WorkhomeNav.results[i].Cancltx = oController.getBundleText("LABEL_53013"); // 취소
 									}
 									
 									data.WorkhomeNav.results[i].Kaltg = parseFloat(data.WorkhomeNav.results[i].Kaltg);
@@ -154,7 +158,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -167,12 +171,12 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
 				
-				var row = parseInt((window.innerHeight - 400) / 37);
+				var row = parseInt((window.innerHeight - 450) / 37);
 				oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
 				
 				if(oController.Error == "E"){
@@ -213,19 +217,22 @@ sap.ui.define([
 				
 				// validation check
 				if(oData.Bigo == "" || oData.Bigo.trim() == ""){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_53010")); // 취소사유를 입력하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_53010")); // 취소사유를 입력하여 주십시오.
 					return;
 				}
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_WORKTIME_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
+				var oExtryn = Common.isExternalIP() === true ? "X" : "", oUrl = "";
+
 				var createData = {WorkhomeNav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = Flag == "D" ? "4" : "9";
+					createData.IExtryn = oExtryn;
 					
 				var detail = {};
 					detail.Pernr = oData.Pernr;
@@ -237,30 +244,31 @@ sap.ui.define([
 					detail.Bigo = oData.Bigo;
 				createData.WorkhomeNav.push(detail);
 				
-				oModel.create("/WorkhomeApplySet", createData, null,
-					function(data, res){
+				oModel.create("/WorkhomeApplySet", createData, {
+					success: function(data, res){
 						if(data){
-							if(data.EUrl != ""){
-								setTimeout(function() {
-				                    var width = 1000, height = screen.availHeight * 0.9,
-				                    left = (screen.availWidth - width) / 2,
-				                    top = (screen.availHeight - height) / 2,
-				                    popup = window.open(data.EUrl, "smoin-approval-popup", [
-				                        "width=" + width,
-				                        "height=" + height,
-				                        "left=" + left,
-				                        "top=" + top,
-				                        "status=yes,resizable=yes,scrollbars=yes"
-				                    ].join(","));
+							oUrl = data.EUrl;
+							// if(data.EUrl != "" && oExtryn == ""){
+							// 	setTimeout(function() {
+				   //                 var width = 1000, height = screen.availHeight * 0.9,
+				   //                 left = (screen.availWidth - width) / 2,
+				   //                 top = (screen.availHeight - height) / 2,
+				   //                 popup = window.open(data.EUrl, "smoin-approval-popup", [
+				   //                     "width=" + width,
+				   //                     "height=" + height,
+				   //                     "left=" + left,
+				   //                     "top=" + top,
+				   //                     "status=yes,resizable=yes,scrollbars=yes"
+				   //                 ].join(","));
 				
-				                    setTimeout(function() {
-				                        popup.focus();
-				                    }, 500);
-				                }, 0);
-							}
+				   //                 setTimeout(function() {
+				   //                     popup.focus();
+				   //                 }, 500);
+				   //             }, 0);
+							// }
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -273,9 +281,15 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
+				
+				if(oUrl != ""){
+					if(common.Common.openPopup.call(oController, oUrl) == false){
+						return;
+					}
+				}
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -301,11 +315,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(Flag == "D"){
-				confirmMessage = oBundleText.getText("MSG_00059"); // 삭제하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00021"); // 삭제되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00059"); // 삭제하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00021"); // 삭제되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_53008"); // 취소하시겠습니까?
-				successMessage = oBundleText.getText("MSG_53009"); // 취소신청되었습니다.
+				confirmMessage = oController.getBundleText("MSG_53008"); // 취소하시겠습니까?
+				successMessage = oController.getBundleText("MSG_53009"); // 취소신청되었습니다.
 			}
 			
 			var confirm = function(){
@@ -375,10 +389,6 @@ sap.ui.define([
                 Mssty: "",
             },
             callback = function(o) {
-                // oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");
-                // oModel.setProperty("/SearchConditions/Orgeh", o.Otype === "O" ? o.Objid : "");
-                // oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", o.Stext || "");
-               
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
 				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
                
@@ -404,23 +414,11 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();	
-			if(oData.UrlA && oData.UrlA != ""){
-				setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(oData.UrlA, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
 
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
+			if(oData.UrlA && oData.UrlA != ""){
+				if(common.Common.openPopup.call(oController, oData.UrlA) == false){
+					return;
+				}
 			}
         },
 		
@@ -431,7 +429,7 @@ sap.ui.define([
 			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 			var oJSONModel = oTable.getModel();
 			
-			var filename = oBundleText.getText("LABEL_53001"); // 재택근무 
+			var filename = oController.getBundleText("LABEL_53001"); // 재택근무 
 			
 			var oSettings = {
 				workbook: { columns: oController._Columns },

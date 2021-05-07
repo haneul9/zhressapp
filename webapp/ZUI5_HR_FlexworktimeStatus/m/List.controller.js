@@ -1,10 +1,10 @@
 jQuery.sap.require("sap.m.MessageBox");
 
 sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper",
-	"../../common/PageHelper"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper) {
 	"use strict";
 
@@ -28,7 +28,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -77,7 +77,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -90,8 +90,14 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			var oCalendar = sap.ui.getCore().byId(oController.PAGEID + "_Calendar");
-				oCalendar.destroyContent();
-				oCalendar.addContent(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", oController));
+				oCalendar.destroyItems();
+				oCalendar.addItem(sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", oController));
+			
+			oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", "0");
+			oController._ListCondJSonModel.setProperty("/Data/Tottmtx", "-");
+			oController._ListCondJSonModel.setProperty("/Data/Tottm2", "");
+			
+			var check = ""; // 총근로시간 > 소정근로시간 = X
 			
 			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
 			var oJSONModel1 = oTable1.getModel();
@@ -110,30 +116,78 @@ sap.ui.define([
 				var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
 				var today = new Date();
 				
-				var vData = [];
+				var vData = [], vData5 = [];
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : []};
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
+				var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime3Nav : [], FlexWorktime4Nav : [], FlexWorktime5Nav : []};
 					createData.Werks = oData.Werks;
 					createData.Pernr = oData.Pernr;
 					createData.Zyymm = (oData.Year + (oData.Month < 10 ? ("0"+oData.Month) : (oData.Month + "")));
 					createData.Langu = oData.Langu;
 					createData.Prcty = "1";
 
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
-							// 자율출퇴근 현황
-							var oField = [{text : oBundleText.getText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
-										  {text : oBundleText.getText("LABEL_69027"), field : "Ctrex"},	// 연장근로시간 한도
-										  {text : oBundleText.getText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
-										  {text : oBundleText.getText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
-										  {text : oBundleText.getText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
-										  {text : oBundleText.getText("LABEL_69031"), field : "Tottm"}]; // 근로시간 합계
+							// 근무시간 현황
+							var oField = [{text : oController.getBundleText("LABEL_69026"), field : "Ctrnm"},	// 소정근로시간 한도
+										  {text : oController.getBundleText("LABEL_69027"), field : "Ctrex"},	// 연장근로시간 한도
+										  {text : oController.getBundleText("LABEL_69028"), field : "Wrktm"},	// 평일근로시간
+										  {text : oController.getBundleText("LABEL_69029"), field : "Exttm"},	// 연장근로시간
+										  {text : oController.getBundleText("LABEL_69030"), field : "Holtm"},	// 휴일근로시간
+										  {text : oController.getBundleText("LABEL_63010"), field : "Notes"},	// 상태
+										  /*{text : oController.getBundleText("LABEL_69031"), field : "Tottm"}*/ // 근로시간 합계
+										  ];
+										  
+							// 근로시간합계(월말예상)가 없는 경우 달력 선택 불가 처리, 범례 미표시
+							oController._ListCondJSonModel.setProperty("/Data/Tottm2", data.Tottm2);
+							if(data.Tottm2 != ""){
+								oField.push({text : oController.getBundleText("LABEL_69055").replace("\n", ""), field : "Tottm2"}); // 근로시간합계(월말예상)
+								oField.push({text : oController.getBundleText("LABEL_69056").replace("\n", ""), field : "Notes2"}); // 상태(월말예상)
+							}
 										  
 							for(var i=0; i<oField.length; i++){ 
-								vData3.Data.push({Text : oField[i].text, Value : eval("data." + oField[i].field)});
+								var detail = {Text : oField[i].text, Value : eval("data." + oField[i].field)};
+								
+								var oCtrnm = "", oTottm = "";
+								switch(oField[i].field){
+									case "Notes":
+										oCtrnm = data.Ctrnm;
+										oTottm = data.Tottm;
+										break;
+									case "Tottm2":
+									case "Notes2":
+										oCtrnm = data.Ctrnm;
+										oTottm = data.Tottm2;
+										break;
+								}
+								
+								if(oCtrnm != "" && oTottm != ""){
+        			 				if(oCtrnm.replace(":", "") > oTottm.replace(":", "")){
+        			 					detail.Style = "color-blue";
+        			 				} else if(oCtrnm.replace(":", "") < oTottm.replace(":", "")) {
+        			 					detail.Style = "color-info-red";
+        			 				} else {
+        			 					detail.Style = "color-darkgreen";
+        			 				}
+        			 			}
+								
+								vData3.Data.push(detail);
 							}
+							
+							// 총근로시간
+							oController._ListCondJSonModel.setProperty("/Data/CtrnmHH", data.Ctrnm.split(":")[0]);
+							$('.progress-bar').animate({ width: ((parseInt(data.Tottm.split(":")[0]) / parseInt(data.Ctrnm.split(":")[0])) * 80) + '%' }, 2000);
+							
+							if(parseInt(data.Tottm.split(":")[0]) > parseInt(data.Ctrnm.split(":")[0])){
+								check = "X";
+							}
+							
+							oController._ListCondJSonModel.setProperty("/Data/Tottmtx", 
+								data.Tottm == "" ? "-" :
+									(data.Tottm.split(":")[0] * 1) + oController.getBundleText("LABEL_69052") + " " + (data.Tottm.split(":")[1] * 1) + oController.getBundleText("LABEL_69053")
+																//	시간															 // 분
+							);
 							
 							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results){
 								var data1 = data.FlexWorktime1Nav.results;
@@ -151,11 +205,34 @@ sap.ui.define([
 										}
 									}
 									
+									// 종일여부 필드값이 true 인 경우 해당 라인 비활성화 + 점심시간 코드값 0 으로 변경
+									if(data1[i].Alldf == true){
+										data1[i].Offyn = "1";
+										// data1[i].Lnctm = "0"; // 2021-05-03 로직 주석처리
+									}
+									
 									if(oControl){
-										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-regular font-11px");
+										var title = new sap.m.Text({text : dateFormat2.format(oDatum)}).addStyleClass("font-11px font-bold calendar-text");
 										
 										if(data1[i].Offyn == "X"){
 											title.addStyleClass("color-info-red");
+										}
+										
+										var titleStyle = "";
+										switch(data1[i].Status){
+											case "99": // 결재완료
+												titleStyle = "calendar-background-blue";
+												break;
+											case "88": // 반려
+												titleStyle = "calendar-background-orange";
+												break;
+											case "00": // 결재중
+												titleStyle = "calendar-background-green";
+												break;
+											case "CC": // 조정대상
+												titleStyle = "bg-yellow";
+												break;
+											default:
 										}
 										
 										var oMatrix = new sap.ui.commons.layout.MatrixLayout({
@@ -167,15 +244,15 @@ sap.ui.define([
 																		  	  	   content : [title],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
-																		  	   })] 
-																  }), // .addStyleClass("calendar-datum")
+																		  	   }).addStyleClass(titleStyle)] 
+																  }),
 																  new sap.ui.commons.layout.MatrixLayoutRow({
 																  	  height : "20px",
 																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 																		  	  	   content : [new sap.m.Text({
 																					  	  		  text : (data1[i].Offyn == "X" ? "OFF" : 
 																					  	  					data1[i].Beguz == "" ? "" : (data1[i].Beguz.substring(0,2) + ":" + data1[i].Beguz.substring(2,4)))
-																					  	  	  }).addStyleClass("font-regular font-11px")],
+																					  	  	  }).addStyleClass("font-11px calendar-text")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
@@ -186,7 +263,7 @@ sap.ui.define([
 																		  	  	   content : [new sap.m.Text({
 																					  	  		  text : (data1[i].Offyn == "X" ? "" : 
 																					  	  					data1[i].Enduz == "" ? "" : (data1[i].Enduz.substring(0,2) + ":" + data1[i].Enduz.substring(2,4)))
-																					  	  	  }).addStyleClass("font-regular font-11px")],
+																					  	  	  }).addStyleClass("font-11px calendar-text")],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Middle"
 																		  	   })]
@@ -196,8 +273,12 @@ sap.ui.define([
 																  	  cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 																		  	  	   content : [new sap.m.Text({
 																					  	  	   	  text : data1[i].Atext, 
+																					  	  	   	  width : "100%",
+																					  	  	   	  textAlign : "Center",
 																					  	  	   	  maxLines : 1
-																				  	  	      }).addStyleClass("font-regular font-11px FontWhite")],
+																				  	  	      }).addStyleClass((data1[i].Atext == "" ? 
+																				  	  	    		"font-11px FontWhite calendar-text" :
+																				  	  	    		"font-11px FontWhite calendar-background-atext calendar-text"))],
 																		  	  	   hAlign : "Center",
 																		  	  	   vAlign : "Bottom"
 																		  	   }).addStyleClass((data1[i].Atext == "" ? "" : "calendar-atext"))]
@@ -216,6 +297,7 @@ sap.ui.define([
 								}
 							}
 							
+							// 추가휴게
 							if(data.FlexWorktime2Nav && data.FlexWorktime2Nav.results){
 								var data2 = data.FlexWorktime2Nav.results;
 								
@@ -226,12 +308,65 @@ sap.ui.define([
 								}
 							}
 							
+							// 휴가쿼터 현황
 							if(data.FlexWorktime3Nav && data.FlexWorktime3Nav.results){
 								var data3 = data.FlexWorktime3Nav.results;
-								
+								var oKtext = [], oCrecnt = [], oUsecnt = [], oBalcnt = [];
+
 								for(var i=0; i<data3.length; i++){
+									oKtext.push(data3[i].Ktext);
+									oCrecnt.push(parseFloat(data3[i].Crecnt));
+									oUsecnt.push(parseFloat(data3[i].Usecnt));
+									oBalcnt.push(parseFloat(data3[i].Balcnt));
+									
 									vData1.Data.push(data3[i]);
 								}
+								
+								Chart.defaults.global.defaultFontColor = 'rgb(153, 153, 153)';
+							    Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
+							    Chart.defaults.global.legend.labels.boxWidth = 20;
+							    Chart.defaults.global.legend.align = 'end';
+							    
+								var chart = new Chart(document.getElementById('vacChart').getContext('2d'), {
+					                type: 'bar',
+					                data: { 
+					                    labels: oKtext, 
+					                    datasets: [
+					                        { 
+					                            label: '사용',
+					                            barPercentage: 0.6,
+					                            categoryPercentage: 0.6,
+					                            barThickness: oKtext.length == 1 ? 40 : 20,
+					                            backgroundColor: "rgb(141, 198, 63)",
+					                            data: oUsecnt
+					                        },
+					                        {
+					                            label: '잔여',
+					                            barPercentage: 0.6,
+					                            categoryPercentage: 0.6,
+					                            barThickness: oKtext.length == 1 ? 40 : 20,
+					                            backgroundColor: "rgb(221, 238, 197)",
+					                            data: oBalcnt
+					                        }
+					                    ]
+					                },
+					                options: {
+					                     scales: {
+					                        yAxes: [{
+					                            ticks: {
+					                                fontColor : "rgb(153, 153, 153)",
+					                                beginAtZero: true
+					                            }
+					                        }]
+					                    }
+					                }
+					            });
+					            
+					            $('.ChartClass').append([chart]);
+					            
+					            if(check == "X"){
+					            	$("#bar").addClass("bg-error");
+					            }
 							}
 							
 							if(data.FlexWorktime4Nav && data.FlexWorktime4Nav.results){
@@ -241,9 +376,18 @@ sap.ui.define([
 									vData2.Data.push(data4[i]);
 								}
 							}
+							
+							// 추가휴게 신청내역
+							if(data.FlexWorktime5Nav && data.FlexWorktime5Nav.results){
+								var data5 = data.FlexWorktime5Nav.results;
+								
+								for(var i=0; i<data5.length; i++){
+									vData5.push(data5[i]);
+								}
+							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -256,13 +400,14 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel1.setData(vData1);
 				oJSONModel2.setData(vData2);
 				oJSONModel3.setData(vData3);
 				
 				oController._ListCondJSonModel.setProperty("/Data2", vData);
+				oController._ListCondJSonModel.setProperty("/Data5", vData5);
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -281,13 +426,26 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.List");
 			var oController = oView.getController();	
 			
+			// 근로시간합계(월말예상) == '' 인 경우 선택불가 처리
+			if(oController._ListCondJSonModel.getProperty("/Data/Tottm2") == "") return;
+
 			var oControl = sap.ui.getCore().byId(oEvent.currentTarget.id);
 			if(oControl == undefined) return;
 			
 			var oJSONModel = oControl.getModel();
 			var oData = oJSONModel.getProperty("/Data");
 			
-			var breakdata = oController._ListCondJSonModel.getProperty("/Data2"), oData2 = [];
+			if(oData.Alldf == true || oData.Offyn == "X") return;
+			
+			var breakdata = null;
+			if(oData.Status == "00"){ // 결재중 데이터의 경우 추가휴게신청내역 데이터에서 선택일과 동일한 일자 데이터 검색
+				breakdata = oController._ListCondJSonModel.getProperty("/Data5");
+			} else {
+				breakdata = oController._ListCondJSonModel.getProperty("/Data2");
+			}
+			
+			var oData2 = [];
+			
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			for(var i=0; i<breakdata.length; i++){
 				if(dateFormat.format(breakdata[i].Datum) == dateFormat.format(oData.Datum)){
@@ -295,11 +453,18 @@ sap.ui.define([
 				}
 			}
 			
+			var oData1;
+			if(oData.Status == "00"){
+				oData1 = Object.assign({}, oData, {Beguz : oData.Beguz2, Enduz : oData.Enduz2, Lnctm : oData.Lnctm2}, oController._ListCondJSonModel.getProperty("/Data"));
+ 			} else {
+ 				oData1 = Object.assign({}, oData, oController._ListCondJSonModel.getProperty("/Data"));
+ 			}
+			
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : "ZUI5_HR_FlexworktimeStatus.m.Detail",
 			      data : {
 			    	  FromPageId : "ZUI5_HR_FlexworktimeStatus.m.List",
-			    	  Data : Object.assign({}, oData, oController._ListCondJSonModel.getProperty("/Data")),
+			    	  Data : oData1,
 			    	  Data2 : oData2
 			      }
 			});

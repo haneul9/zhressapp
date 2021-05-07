@@ -52,73 +52,73 @@ sap.ui.define(
             getOcrsnList: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
+                var oPath = "";
+                var createData = { PayreasonNav: [] };
 
-                var search = function () {
-                    var oPath = "";
-                    var createData = { PayreasonNav: [] };
+                var oSeqnr = $.app.byId(oController.PAGEID+"_Seqnr");
+                oSeqnr.setValue("");
 
-                    oPath = "/PayreasonPeSet";
-                    createData.IPernr = vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "";
-                    createData.IYear = vCondiData.Year && vCondiData.Year != "" ? vCondiData.Year : "";
-                    createData.IMonth = vCondiData.Month && vCondiData.Month != "" ? vCondiData.Month : "";
-                    createData.ILangu = vCondiData.Langu && vCondiData.Langu != "" ? vCondiData.Langu : "";
-                    createData.IBukrs = vCondiData.Bukrs && vCondiData.Bukrs != "" ? vCondiData.Bukrs : "";
+                oPath = "/PayreasonPeSet";
+                createData.IPernr = vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "";
+                createData.IYear = vCondiData.Year && vCondiData.Year != "" ? vCondiData.Year : "";
+                createData.IMonth = vCondiData.Month && vCondiData.Month != "" ? vCondiData.Month : "";
+                createData.ILangu = vCondiData.Langu && vCondiData.Langu != "" ? vCondiData.Langu : "";
+                createData.IBukrs = vCondiData.Bukrs && vCondiData.Bukrs != "" ? vCondiData.Bukrs : "";
 
-                    oModel.create(
-                        oPath,
-                        createData,
-                        null,
-                        function (data) {
-                            if (data) {
-                                if (data.PayreasonNav && data.PayreasonNav.results.length > 0) {
-                                    for (var i = 0; i < data.PayreasonNav.results.length; i++) {
-                                        vData.Data.push(data.PayreasonNav.results[i]);
-                                    }
+                oModel.create(
+                    oPath,
+                    createData,
+                    null,
+                    function (data) {
+                        if (data) {
+                            if (data.PayreasonNav && data.PayreasonNav.results.length > 0) {
+                                for (var i = 0; i < data.PayreasonNav.results.length; i++) {
+                                    vData.Data.push(data.PayreasonNav.results[i]);
                                 }
+                                oController._DetailJSonModel.setProperty("/Data/Seqnr", data.PayreasonNav.results[0].Seqnr);
+                            }else{
+                                oController._DetailJSonModel.setProperty("/Data/Seqnr", ""); 
                             }
-                        },
-                        function (oError) {
-                            var Err = {};
-                            oController.Error = "E";
-
-                            if (oError.response) {
-                                Err = window.JSON.parse(oError.response.body);
-                                var msg1 = Err.error.innererror.errordetails;
-                                if (msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-                                else oController.ErrorMessage = Err.error.message.value;
-                            } else {
-                                oController.ErrorMessage = oError.toString();
-                            }
+                        }else{
+                            oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                         }
-                    );
-
-                    oController._DetailJSonModel.setProperty("/Ocrsn", vData.Data);
-                    oController._BusyDialog.close();
-
-                    if (oController.Error == "E") {
-                        oController.Error = "";
-                        MessageBox.error(oController.ErrorMessage);
-                        return;
+                    },
+                    function (oError) {
+                        var Err = {};
+                        oController.Error = "E";
+                        oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
+                        if (oError.response) {
+                            Err = window.JSON.parse(oError.response.body);
+                            var msg1 = Err.error.innererror.errordetails;
+                            if (msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                            else oController.ErrorMessage = Err.error.message.value;
+                        } else {
+                            oController.ErrorMessage = oError.toString();
+                        }
                     }
-                };
+                );
 
-                oController._BusyDialog.open();
-                setTimeout(search, 100);
+                oController._DetailJSonModel.setProperty("/Ocrsn", vData.Data);
+            
+                if (oController.Error == "E") {
+                    oController.Error = "";
+                    MessageBox.error(oController.ErrorMessage);
+                    return;
+                }
             },
 
             onPressSearchDetail: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-                // var oHeight = "450px";
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data"),
                     vData = {},
                     oMoney1Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money1Layout"),
                     oMoney2Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money2Layout"),
                     oMoney3Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money3Layout"),
                     oMoney4Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money4Layout");
+                                    
                 oController._DetailJSonModel.setProperty("/Data/visibleYn", "");
                 oMoney1Layout.destroyItems();
                 oMoney2Layout.destroyItems();
@@ -151,13 +151,12 @@ sap.ui.define(
                                         height: "55px",
                                         alignItems: sap.m.FlexAlignItems.Center,
                                         items: [
-                                            new sap.m.Label({ width: "150px", text: oController.getBundleText("LABEL_54006"), textAlign: "Left" }).addStyleClass("sub-title"),
+                                            new sap.m.Label({ width: "100%", text: oController.getBundleText("LABEL_54006"), textAlign: "Left" }).addStyleClass("sub-title"),
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
-                                                //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{money1}"
+                                                text: "{Bet01}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
@@ -171,13 +170,13 @@ sap.ui.define(
                                         height: "55px",
                                         alignItems: sap.m.FlexAlignItems.Center,
                                         items: [
-                                            new sap.m.Label({ width: "150px", text: oController.getBundleText("LABEL_54007"), textAlign: "Left" }).addStyleClass("sub-title"),
+                                            new sap.m.Label({ width: "100%", text: oController.getBundleText("LABEL_54007"), textAlign: "Left" }).addStyleClass("sub-title"),
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
                                                 //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{money2}"
+                                                text: "{Bet02}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
@@ -191,13 +190,12 @@ sap.ui.define(
                                         height: "55px",
                                         alignItems: sap.m.FlexAlignItems.Center,
                                         items: [
-                                            new sap.m.Label({ width: "150px", text: oController.getBundleText("LABEL_54015"), textAlign: "Left" }).addStyleClass("sub-title"),
+                                            new sap.m.Label({ width: "180px", text: oController.getBundleText("LABEL_54015"), textAlign: "Left" }).addStyleClass("sub-title"),
                                             new sap.m.Label({
                                                 textAlign: "End",
                                                 width: "100%",
-                                                //	design: "Bold",
                                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                text: "{money3}"
+                                                text: "{Bet04}"
                                             }).addStyleClass("font-16px font-medium")
                                         ]
                                     })
@@ -217,21 +215,19 @@ sap.ui.define(
                                         .bindElement("/Data")
                                 );
                                 if (data.PayslipForm1Nav && data.PayslipForm1Nav.results.length > 0) {
-                                    vData.money1 = 0;
                                     for (var i = 0; i < data.PayslipForm1Nav.results.length; i++) {
                                         if (data.PayslipForm1Nav.results[i].Pyitm != "") {
-                                            vData.money1 += Common.toNumber(data.PayslipForm2Nav.results[i].BetrgT) * 1;
                                             oMoney1Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: data.PayslipForm1Nav.results[i].Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: data.PayslipForm1Nav.results[i].Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
                                                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                                            text: data.PayslipForm2Nav.results[i].BetrgT
+                                                            text: data.PayslipForm1Nav.results[i].BetrgT
                                                         })
                                                     ]
                                                 })
@@ -241,17 +237,14 @@ sap.ui.define(
                                 }
 
                                 if (data.PayslipForm2Nav && data.PayslipForm2Nav.results.length > 0) {
-                                    vData.money2 = 0;
-
                                     data.PayslipForm2Nav.results.forEach(function (elem) {
                                         if (elem.Pyitm != "") {
-                                            vData.money2 += Common.toNumber(elem.BetrgT) * 1;
                                             oMoney2Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
@@ -266,17 +259,14 @@ sap.ui.define(
                                 }
 
                                 if (data.PayslipForm3Nav && data.PayslipForm3Nav.results.length > 0) {
-                                    vData.money3 = 0;
-
                                     data.PayslipForm3Nav.results.forEach(function (elem) {
                                         if (elem.Pyitm != "") {
-                                            vData.money3 += Common.toNumber(elem.BetrgT) * 1;
                                             oMoney3Layout.addItem(
                                                 new sap.m.HBox({
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
@@ -298,7 +288,7 @@ sap.ui.define(
                                                     height: "40px",
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
-                                                        new sap.m.Label({ width: "150px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                                        new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
                                                         new sap.m.Label({
                                                             textAlign: "End",
                                                             width: "100%",
@@ -349,9 +339,6 @@ sap.ui.define(
                     oController._DetailJSonModel.setProperty("/Data/Ename", vData.Ename);
                     oController._DetailJSonModel.setProperty("/Data/Orgtx", vData.Orgtx);
                     oController._DetailJSonModel.setProperty("/Data/Zyymm", vData.Zyymm);
-                    oController._DetailJSonModel.setProperty("/Data/money1", Common.numberWithCommas(vData.money1));
-                    oController._DetailJSonModel.setProperty("/Data/money2", Common.numberWithCommas(vData.money2));
-                    oController._DetailJSonModel.setProperty("/Data/money3", Common.numberWithCommas(vData.money3));
                     oController._DetailJSonModel.setProperty("/Data/Ztitle", vData.Ztitle);
                     oController._DetailJSonModel.setProperty("/Data/Znotes", vData.Znotes);
                     oController._DetailJSonModel.setProperty("/Data/visibleYn", "X");

@@ -22,7 +22,7 @@ sap.ui.define([], function () {
                     new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
                     this.getNoticeInfoBox(oController)
                 ]
-            });
+            }).addStyleClass("EmployeeLayout vbox-form-mobile-etc");
         },
 
         getSearchHBox: function (oController) {
@@ -30,9 +30,6 @@ sap.ui.define([], function () {
                 fitContainer: true,
                 items: [
                     new sap.m.FlexBox({
-                        // 검색
-                        //	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                        //	justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
                         items: [
                             new sap.m.ComboBox({
                                 width: "85px",
@@ -43,7 +40,7 @@ sap.ui.define([], function () {
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
                                 },
                                 change: function () {
-                                    oController.getOcrsnList(oController, "");
+                                    oController.getOcrsnList();
                                 }
                             }),
                             new sap.m.ComboBox({
@@ -55,11 +52,10 @@ sap.ui.define([], function () {
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
                                 },
                                 change: function () {
-                                    oController.getOcrsnList(oController, "");
+                                    oController.getOcrsnList();
                                 }
                             }).addStyleClass("ml-4px"),
-                            new sap.m.ComboBox({
-                                // width: "100px",
+                            new sap.m.ComboBox(oController.PAGEID+"_Seqnr",{
                                 selectedKey: "{Seqnr}",
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 items: {

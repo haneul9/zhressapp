@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet TempPortlet */
+/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet */
 function Portlets(_gateway) {
 
 	this._gateway = _gateway;
@@ -16,12 +16,16 @@ init: function() {
 	this.items = null;
 	this.itemMap = null;
 	this.portletTypeMap = {
-		'P101': EmployeePortlet,		// 개인정보
-		'P102': NoticePortlet,			// 공지사항
-		'P103': QuickLinkPortlet,		// 바로가기
-		'P104': FavoriteMenuPortlet,	// 즐겨찾는 메뉴
-		'P105': CalendarPortlet,		// 팀 달력
-		'P106': HiTalkTalkPortlet		// 하이톡톡
+		'P101': EmployeePortlet,			// 개인정보
+		'P102': NoticePortlet,				// 공지사항
+		'P103': QuickLinkPortlet,			// 바로가기
+		'P104': FavoriteMenuPortlet,		// 즐겨찾는 메뉴
+		'P105': CalendarPortlet,			// 팀 달력
+		'P106': HiTalkTalkPortlet,			// 하이톡톡
+		'P107': EvalGoalPortlet	,			// 목표관리
+		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
+		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
+		'P110': VacationPortlet				// 근태신청
 	};
 
 	$(document)
@@ -255,6 +259,8 @@ renderSwitchModal: function() {
 			var t = $(e.currentTarget), toBeUsed = !t.prop('checked');
 			this.switch(toBeUsed, t.prop('checked', toBeUsed).parents('.portlet-switch').toggleClass('active', toBeUsed).data('key'));
 		}.bind(this));
+
+	$('#portlet-personalization .btn-primary').prop('disabled', false);
 },
 
 initSwitchModal: function() {
@@ -286,7 +292,10 @@ initSwitchModal: function() {
 			'</div>',
 		'</div>'
 	].join(''))
-	.on('click', '.btn-primary', function() { // 적용 button click event handler
+	.find('.btn-primary').prop('disabled', true).end()
+	.on('click', '.btn-primary', function(e) { // 적용 button click event handler
+		$(e.currentTarget).prop('disabled', true);
+
 		this._gateway.spinner(true);
 
 		var save = false;
@@ -552,8 +561,6 @@ generate: function() {
 					item.appendTo('[data-position="${column}"].portlet-col'.interpolate(item.column()), true); // Portlet UI rendering
 				}
 			});
-
-			$(document).on('click', '.portlet [data-url]', this._gateway.handleUrl);
 
 			$('.portlet-col').sortable({
 				containment: '.portlet-masonry',

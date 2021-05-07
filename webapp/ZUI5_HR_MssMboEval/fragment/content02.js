@@ -26,7 +26,8 @@ ZUI5_HR_MssMboEval.fragment.content02={
 			oLabels.push({Label:"LABEL_360"+i,rowspan:1,colspan:2});
 		}
 		for(var i=2;i<=5;i++){
-			oLabels.push({Label:"LABEL_3605"+i,rowspan:1,colspan:1});
+			i!=4?oLabels.push({Label:"LABEL_3605"+i,rowspan:1,colspan:1}):
+			oLabels.push({Label:"LABEL_36072",rowspan:1,colspan:1});
 		}
 		oLabels.push({Label:"LABEL_36053",rowspan:1,colspan:1});
 		oLabels.push({Label:"LABEL_36054",rowspan:1,colspan:1});
@@ -120,7 +121,7 @@ ZUI5_HR_MssMboEval.fragment.content02={
 			content : [gCol],
 			width:"100%",
 			vertical : true,
-			height:"350px"
+			height:"300px"
 		});
 		oRow=new c.layout.MatrixLayoutRow();
 		oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_"+vPage+"_gContentCell",{

@@ -1,16 +1,18 @@
 ﻿sap.ui.define([
 	"../../common/Common",
 	"../../common/CommonController",
-	"../../common/JSONModelHelper"
+	"../../common/JSONModelHelper",
+	"sap/base/util/UriParameters"
 	], 
-	function (Common, CommonController, JSONModelHelper) {
+	function (Common, CommonController, JSONModelHelper, UriParameters) {
 	"use strict";
 
 	
 	return CommonController.extend($.app.APP_ID, {
 		
 		PAGEID: "Page",
-		
+		alreadyDetailShown: false,
+
 		TableModel: new JSONModelHelper(),
 
 		getUserId: function() {
@@ -23,20 +25,16 @@
 			return this.getSessionInfoByKey("Bukrs2");
         },
 		
-		onInit: function () {
+		onInit: function() {
 
 			this.setupView()
 				.getView()
 				.addEventDelegate({
-					onBeforeShow : this.onBeforeShow
-				}, this);
-				
-			this.getView()
-				.addEventDelegate({
+					onBeforeShow : this.onBeforeShow,
 					onAfterShow: this.onAfterShow
 				}, this);
 		},
-		
+
 		onBeforeShow: function() {
 			Common.log("onBeforeShow");
 		},
@@ -47,10 +45,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey"))){
+			var Sdate = this.getParameterByName("Sdate"),
+				Skey = this.getParameterByName("Skey");
+
+			if (!this.alreadyDetailShown && Sdate && Skey) {
 				var oList = {
-					Sdate: this.getParameterByName("Sdate"),
-					Seqnr: this.getParameterByName("Skey")
+					Sdate: Sdate,
+					Seqnr: Skey
 				};
 
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
@@ -59,13 +60,13 @@
 						RowData: oList
 					}
 				});
+
+				this.alreadyDetailShown = true;
 			}
         },
 
 		getParameterByName: function(name) {
-			var regex = parent._gateway.parameter(name);
-			
-			return Common.checkNull(regex)? "" : regex;
+			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
 		},
 		
 		onTableSearch: function() {

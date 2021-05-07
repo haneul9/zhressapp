@@ -110,13 +110,6 @@ sap.ui.define(
                     .setModel(oController._ApplyJSonModel)
                     .bindRows("/Data");
 
-                // ZHR_TABLES.makeColumn(oController, oTable, [
-                // 	{ id: "Idx",      label: oController.getBundleText("LABEL_66008") /* 번호     */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "8%" },
-                // 	{ id: "ColName",  label: oController.getBundleText("LABEL_66009")/* 컬럼명 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "33%" },
-                // 	{ id: "AppBefore", label: oController.getBundleText("LABEL_66010") /* 신청전 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width:  "33%" },
-                // 	{ id: "AppAfter",  label: oController.getBundleText("LABEL_66011")/* 신청후     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "33%" }
-                // ]);
-
                 ZHR_TABLES.makeColumn(oController, oTable, [
                     { id: "Idx", label: "{i18n>LABEL_66008}" /* 번호     */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "8%" },
                     { id: "ReqName", label: "{i18n>LABEL_66009}" /* 신청내용 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "15%" },

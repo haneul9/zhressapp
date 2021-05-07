@@ -4,7 +4,7 @@
 /* global common:true moment:true Promise:true */
 jQuery.sap.declare("common.Common");
 jQuery.sap.require("common.JSONModelHelper");
-jQuery.sap.require("common.moment-with-locales");
+jQuery.sap.require("sap.m.MessageBox");
 
 if ((1.005).toFixed(2) !== "1.01") {
     (function (prototype) {
@@ -540,6 +540,9 @@ common.Common = {
                 }).join("");
                 map[p.name] = p;
             });
+            $.map(o.navigationProperty, function (p) {
+                map[p.name] = p;
+            });
         });
 
         var core = sap.ui.getCore();
@@ -563,28 +566,7 @@ common.Common = {
      */
     copyByMetadata: function (oModel, entityName, originalObj) {
         var copyData = {};
-        if (oModel instanceof sap.ui.model.Model) {
-            $.each(oModel.getServiceMetadata().dataServices.schema[0].entityType, function (i, entity) {
-                if (entity.name == entityName) {
-                    entity.property.forEach(function (prop) {
-                        if (prop.type === "Edm.DateTime") {
-                            copyData[prop.name] = originalObj[prop.name] ? common.Common.adjustGMTOdataFormat(originalObj[prop.name]) : originalObj[prop.name];
-                        } else if (prop.type === "Edm.Time") {
-                            copyData[prop.name] = originalObj[prop.name] ? originalObj[prop.name] : "P00DT00H00M00S";
-                        } else if (prop.type === "Edm.Byte") {
-                            copyData[prop.name] = originalObj[prop.name] ? Number(originalObj[prop.name]) : 0;
-                        } else if (prop.type === "Edm.Decimal") {
-                            copyData[prop.name] = originalObj[prop.name] || originalObj[prop.name] === 0 ? String(originalObj[prop.name]) : originalObj[prop.name];
-                        } else if (prop.type === "Edm.Boolean") {
-                            copyData[prop.name] = typeof originalObj[prop.name] === "boolean" ? originalObj[prop.name] : undefined;
-                        } else {
-                            copyData[prop.name] = originalObj[prop.name];
-                        }
-                    });
-                    return false;
-                }
-            });
-        } else {
+        if (typeof oModel === 'string' || oModel instanceof String) {
             var args = [].slice.call(arguments),
                 modelName = args[0],
                 type = args[1];
@@ -612,6 +594,29 @@ common.Common = {
                     copyData[name] = typeof v === "number" ? String(v) : (v || "");
                 }
             });
+        } else {
+            if (oModel instanceof sap.ui.model.Model || $.isPlainObject(oModel)) {
+                $.each(oModel.getServiceMetadata().dataServices.schema[0].entityType, function (i, entity) {
+                    if (entity.name == entityName) {
+                        entity.property.forEach(function (prop) {
+                            if (prop.type === "Edm.DateTime") {
+                                copyData[prop.name] = originalObj[prop.name] ? common.Common.adjustGMTOdataFormat(originalObj[prop.name]) : originalObj[prop.name];
+                            } else if (prop.type === "Edm.Time") {
+                                copyData[prop.name] = originalObj[prop.name] ? originalObj[prop.name] : "P00DT00H00M00S";
+                            } else if (prop.type === "Edm.Byte") {
+                                copyData[prop.name] = originalObj[prop.name] ? Number(originalObj[prop.name]) : 0;
+                            } else if (prop.type === "Edm.Decimal") {
+                                copyData[prop.name] = originalObj[prop.name] || originalObj[prop.name] === 0 ? String(originalObj[prop.name]) : originalObj[prop.name];
+                            } else if (prop.type === "Edm.Boolean") {
+                                copyData[prop.name] = typeof originalObj[prop.name] === "boolean" ? originalObj[prop.name] : undefined;
+                            } else {
+                                copyData[prop.name] = originalObj[prop.name];
+                            }
+                        });
+                        return false;
+                    }
+                });
+            }
         }
         return copyData;
     },
@@ -667,6 +672,65 @@ common.Common = {
         }).promise();
 
         return p.async ? promise : traceInfo;
+    },
+    isExternalIP: function () {
+        if (window._init_sequence_logging) {
+            $.app.log("common.Common.checkProxyIP called.");
+        }
+
+        var result;
+
+        $.post({
+            url: common.Common.getJavaOrigin($.app.getController(), "/check2FA"),
+            data: {},
+            async: false,
+            success: function (data) {
+                result = JSON.parse(data).result;
+            },
+            error: function () {
+                common.Common.log([].slice.call(arguments));
+            }
+        });
+
+        return result === "E" ? true : false;
+    },
+    usePrivateLog: function (p) {
+
+        setTimeout(function() {
+            if (window._init_sequence_logging) {
+                $.app.log("common.Common.usePrivateLog called.");
+            }
+
+            // IP조회
+            var vIP = "",
+                vIPs = common.Common.activeClientTrace({async:false});
+            if(vIPs.Ipadd && vIPs.Ipadd != "" ){
+                vIP = vIPs.Ipadd.split(",")[0];
+            }
+            $.app.getModel("ZHR_COMMON_SRV").create(
+                "/SaveConnEhrLogSet",
+                {
+                    ILangu: this.getSessionInfoByKey("Langu"),
+                    TableIn: [{
+                        Usrid: this.getSessionInfoByKey("Pernr"),
+                        Menid: $.app.getMenuId(),
+                        Pernr: p.pernr ? p.pernr : "",
+                        Func: p.func ? p.func : "",
+                        Mobile: p.mobile ? p.mobile : "",
+                        Pcip : vIP,
+                        Action : p.action
+                    }]
+                },
+                {
+                    success: function (data) {
+                        common.Common.log(data);
+                    },
+                    error: function (res) {
+                        common.Common.log(res);
+                    }
+                }
+            );
+        }.bind($.app.getController()), 0);
     },
     encryptPernr: function (vPernr) {
         if (!vPernr) return "";
@@ -1002,6 +1066,35 @@ common.Common = {
     onChangeMoneyInput : function(oEvent){
 		inputValue = oEvent.getSource().getValue();
 		oEvent.getSource().setValue(common.Common.numberWithCommas(inputValue.replace(/[^\d]/g, '')));
-	}
+    },
+    
+    openPopup: function(url) {
+        if(!url) return true;
+
+        var width = 1000, height = screen.availHeight * 0.9,
+        left = (screen.availWidth - width) / 2,
+        top = (screen.availHeight - height) / 2,
+        popup = window.open(url, "smoin-approval-popup", [
+            "width=" + width,
+            "height=" + height,
+            "left=" + left,
+            "top=" + top,
+            "status=yes,resizable=yes,scrollbars=yes"
+        ].join(","));
+
+        if(!popup) {
+            sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), {    // 팝업 차단 기능이 실행되고 있습니다.\n차단 해제 후 다시 실행해주세요.
+                title: this.getBundleText("LABEL_00139")    // 오류
+            });
+
+            return false;
+        } else {
+            setTimeout(function() {
+                popup.focus();
+            }, 500);
+        }
+
+        return true;
+    }
  
 };

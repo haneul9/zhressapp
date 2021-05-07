@@ -138,6 +138,7 @@ sap.ui.define(
                                 a.href = "data:application/pdf;base64," + oData.Export.results[0].EPdf;
                                 a.download = "다운로드";
                                 a.click(); //Downloaded file
+                                // location.href = "data:application/pdf;base64," + oData.Export.results[0].EPdf;
 
                                 oController.onTableSearch();
                             }
@@ -165,8 +166,8 @@ sap.ui.define(
                     oController.onPressReq(oCopiedRow);
                 } else if (oCopiedRow.Zstatus == "3") {
                     // 프린트
-                    BusyIndicator.show(0);
-                    onPrintPDF(oCopiedRow);
+                    // BusyIndicator.show(0);
+                    // onPrintPDF(oCopiedRow);
                 }
             },
 

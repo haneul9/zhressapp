@@ -26,7 +26,7 @@ sap.ui.define([
 				contentItems: [
 					this.getMenuBox(oController)
 				]
-			})
+			});
 		},   
 
 		getMenuBox: function(oController) {
@@ -59,45 +59,57 @@ sap.ui.define([
 				fitContainer: true,
 				items: [
 					new sap.m.HBox({
+						visible: {
+							path: "/TopData/Zcomment",
+							formatter: function(v) {
+								return Common.checkNull(!v);
+							}
+						},
 						fitContainer: true,
 						items: [
 							// 머리글
 							new sap.m.Text(oController.PAGEID + "_TopText", {
 								width: "100%",
-								text: {
-									path: "/TopData/Zcomment",
-									formatter: function(v) {
-										if(v === "X" || Common.checkNull(v)) return oController.getBundleText("MSG_28001");
-										else return v;
-									}
-								},
+								text: "{/TopData/Zcomment}",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 })
 							})
 						]
 					}).addStyleClass("custom-OpenHelp-field"),
-					new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
-						fitContainer: true,
-						width: "auto",
-						height: "600px",
-						visible: {
-							path: "/PDFData/Url",
-							formatter: function(v) {
-								if(v) return true;
-								else return false;
-							}
-						},
-						items: [
-							new sap.m.PDFViewer(oController.PAGEID + "_PDFView", {
-								displayType: sap.m.PDFViewerDisplayType.Embedded,
-								sourceValidationFailed: function(oEvent) {
-									oEvent.preventDefault();
-								},
-								layoutData: new sap.m.FlexItemData({
-									growFactor: 1
-								})
-							})
-						]
-					}).addStyleClass("mt-20px"),
+					// new sap.m.HBox(oController.PAGEID + "_NoDataBox", {
+					// 	fitContainer: true,
+					// 	visible: false,
+					// 	items: [
+					// 		new sap.m.Text({
+					// 			width: "100%",
+					// 			text: "{i18n>MSG_28001}", // 저장된 내용이 없습니다.
+					// 			layoutData: new sap.m.FlexItemData({ growFactor: 1 })
+					// 		})
+					// 	]
+					// }),
+					// new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
+					// 	fitContainer: true,
+					// 	width: "auto",
+					// 	height: "600px",
+					// 	visible: {
+					// 		path: "/PDFData/Url",
+					// 		formatter: function(v) {
+					// 			if(v) return true;
+					// 			else return false;
+					// 		}
+					// 	},
+					// 	items: [
+					// 		new sap.m.PDFViewer({
+					// 			displayType: sap.m.PDFViewerDisplayType.Embedded,
+					// 			source: "{/PDFData/Url}",
+					// 			sourceValidationFailed: function(oEvent) {
+					// 				oEvent.preventDefault();
+					// 			},
+					// 			layoutData: new sap.m.FlexItemData({
+					// 				growFactor: 1
+					// 			})
+					// 		})
+					// 	]
+					// }).addStyleClass("mt-20px"),
 					new sap.m.HBox(oController.PAGEID + "_FileUploadBox", {
 						alignItems: sap.m.FlexAlignItems.Center,
 						fitContainer: true,

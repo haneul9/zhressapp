@@ -13,8 +13,10 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content01", {
 			visibleRowCount: 1,
 			showOverlay: false,
 			showNoData: true,
-			noData: oBundleText.getText("LABEL_00901"), // No data found
+			noData: "{i18n>LABEL_00901}", // No data found
 			cellClick : oController.onPressTable,	
+			rowHeight: 37,
+			columnHeaderHeight: 38,
 			rowActionCount : 1,
 			rowActionTemplate : [new sap.ui.table.RowAction({
 									 items : [new sap.ui.table.RowActionItem({
@@ -43,14 +45,14 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content01", {
 		oTable.bindRows("/Data");
 		
 						// 대상연도, 평가유형, 성명, 대리평가자, 평가그룹, 1차점수, 단계, 평가기간
-		var col_info = [{id: "Apyear", label: oBundleText.getText("LABEL_26003"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Aptypet", label: oBundleText.getText("LABEL_26004"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "EeEname", label: oBundleText.getText("LABEL_26005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+		var col_info = [{id: "Apyear", label: "{i18n>LABEL_26003}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Aptypet", label: "{i18n>LABEL_26004}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "EeEname", label: "{i18n>LABEL_26005}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						// {id: "EdEname", label: oBundleText.getText("LABEL_26006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Apgupt", label: oBundleText.getText("LABEL_26007"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "CalcP", label: oBundleText.getText("LABEL_26008"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Apstatt", label: oBundleText.getText("LABEL_26009"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Period", label: oBundleText.getText("LABEL_26010"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
+						{id: "Apgupt", label: "{i18n>LABEL_26007}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "CalcP", label: "{i18n>LABEL_26008}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Apstatt", label: "{i18n>LABEL_26009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+						{id: "Period", label: "{i18n>LABEL_26010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 				
 		common.makeTable.makeColumn(oController, oTable, col_info);
 		

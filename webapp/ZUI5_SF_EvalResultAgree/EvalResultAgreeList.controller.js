@@ -190,76 +190,76 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 			}
 		};
 			
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {TableIn2 : []};
 			createData.IConType = "3";
 			createData.IAppye = oController._ListCondJSonModel.getProperty("/Data/Appye");
 			createData.IEmpid = oController._ListCondJSonModel.getProperty("/Data/userId");
 			
-		oModel.create("/EvaResultAgreeSet", createData, null,
-				function(data,res){
-					if(data && data.TableIn2) {
-						if(data.TableIn2.results && data.TableIn2.results.length){
-							oController._ListCondJSonModel.setProperty("/Data/Btn01", data.TableIn2.results[0].Btn01);
-							oController._ListCondJSonModel.setProperty("/Data/Btn02", data.TableIn2.results[0].Btn02);
-							oController._ListCondJSonModel.setProperty("/Data/Btn07", data.TableIn2.results[0].Btn07);
-							oController._ListCondJSonModel.setProperty("/Data/Btn08", data.TableIn2.results[0].Btn08);
-							
-							if(data.TableIn2.results[0].Btn01 == "X"){ // 업적평가
-								col_info.push({id: "Pepnt", label : oBundleText.getText("LABEL_15007"), plabel : "", span : 0, type : "string", sort : false, filter : false});
-								addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail01", oController));
-							}
-							
-							if(data.TableIn2.results[0].Btn02 == "X"){ // 역량평가
-								col_info.push({id: "Cepnt", label : oBundleText.getText("LABEL_15008"), plabel : "", span : 0, type : "string", sort : false, filter : false});
-								addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail02", oController));
-							}
-							
-							if(data.TableIn2.results[0].Btn03 == "X"){ // 다면평가
-								col_info.push({id: "Mepnt", label : oBundleText.getText("LABEL_15009"), plabel : "", span : 0, type : "string", sort : false, filter : false});
-							}
-							
-							if(data.TableIn2.results[0].Btn04 == "X"){ // 1차평가
-								col_info.push({id: "Pegrade", label : oBundleText.getText("LABEL_15010"), plabel : "", span : 0, type : "string", sort : false, filter : false});
-							}
-							
-							if(data.TableIn2.results[0].Btn05 == "X"){ // 2차평가
-								col_info.push({id: "Pegrade2", label : oBundleText.getText("LABEL_15011"), plabel : "", span : 0, type : "string", sort : false, filter : false});
-							}
-							
-							if(data.TableIn2.results[0].Btn06 == "X"){ // 종합등급
-								col_info.push({id: "Cograde", label : oBundleText.getText("LABEL_15012"), plabel : "", span : 0, type : "string", sort : false, filter : false});
-							}
-							
-							if(data.TableIn2.results[0].Btn07 == "X"){ // 업적평가 1차평가자 의견
-								addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail03", oController), "3");
-							}
-							
-							if(data.TableIn2.results[0].Btn08 == "X"){ // 역량평가 1차평가자 의견
-								addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail04", oController), "4");
-							}
+		oModel.create("/EvaResultAgreeSet", createData, {
+			success: function(data,res){
+				if(data && data.TableIn2) {
+					if(data.TableIn2.results && data.TableIn2.results.length){
+						oController._ListCondJSonModel.setProperty("/Data/Btn01", data.TableIn2.results[0].Btn01);
+						oController._ListCondJSonModel.setProperty("/Data/Btn02", data.TableIn2.results[0].Btn02);
+						oController._ListCondJSonModel.setProperty("/Data/Btn07", data.TableIn2.results[0].Btn07);
+						oController._ListCondJSonModel.setProperty("/Data/Btn08", data.TableIn2.results[0].Btn08);
+						
+						if(data.TableIn2.results[0].Btn01 == "X"){ // 업적평가
+							col_info.push({id: "Pepnt", label : oBundleText.getText("LABEL_15007"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+							addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail01", oController));
 						}
-					} 
-				},
-				function (oError) {
-			    	var Err = {};
-			    	oController.Error = "E";
-			    	
-			    	oController._ListCondJSonModel.setProperty("/Data/Btn01", "");
-					oController._ListCondJSonModel.setProperty("/Data/Btn02", "");
-					oController._ListCondJSonModel.setProperty("/Data/Btn07", "");
-					oController._ListCondJSonModel.setProperty("/Data/Btn08", "");                                                         
-							
-					if (oError.response) {
-						Err = window.JSON.parse(oError.response.body);
-						var msg1 = Err.error.innererror.errordetails;
-						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-						else oController.ErrorMessage = Err.error.message.value;
-					} else {
-						oController.ErrorMessage = oError.toString();
+						
+						if(data.TableIn2.results[0].Btn02 == "X"){ // 역량평가
+							col_info.push({id: "Cepnt", label : oBundleText.getText("LABEL_15008"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+							addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail02", oController));
+						}
+						
+						if(data.TableIn2.results[0].Btn03 == "X"){ // 다면평가
+							col_info.push({id: "Mepnt", label : oBundleText.getText("LABEL_15009"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+						}
+						
+						if(data.TableIn2.results[0].Btn04 == "X"){ // 1차평가
+							col_info.push({id: "Pegrade", label : oBundleText.getText("LABEL_15010"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+						}
+						
+						if(data.TableIn2.results[0].Btn05 == "X"){ // 2차평가
+							col_info.push({id: "Pegrade2", label : oBundleText.getText("LABEL_15011"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+						}
+						
+						if(data.TableIn2.results[0].Btn06 == "X"){ // 종합등급
+							col_info.push({id: "Cograde", label : oBundleText.getText("LABEL_15012"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+						}
+						
+						if(data.TableIn2.results[0].Btn07 == "X"){ // 업적평가 1차평가자 의견
+							addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail03", oController), "3");
+						}
+						
+						if(data.TableIn2.results[0].Btn08 == "X"){ // 역량평가 1차평가자 의견
+							addContent(sap.ui.jsfragment("ZUI5_SF_EvalResultAgree.fragment.Detail04", oController), "4");
+						}
 					}
+				} 
+			},
+			error: function (oError) {
+				var Err = {};
+				oController.Error = "E";
+				
+				oController._ListCondJSonModel.setProperty("/Data/Btn01", "");
+				oController._ListCondJSonModel.setProperty("/Data/Btn02", "");
+				oController._ListCondJSonModel.setProperty("/Data/Btn07", "");
+				oController._ListCondJSonModel.setProperty("/Data/Btn08", "");                                                         
+						
+				if (oError.response) {
+					Err = window.JSON.parse(oError.response.body);
+					var msg1 = Err.error.innererror.errordetails;
+					if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+					else oController.ErrorMessage = Err.error.message.value;
+				} else {
+					oController.ErrorMessage = oError.toString();
 				}
-		);
+			}
+		});
 		
 		common.makeTable.makeColumn(oController, oTable, col_info);
 		
@@ -281,48 +281,48 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		var oJSONModel = oTable.getModel();
 		var vData = {Data : []};
 		
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {TableIn : []};
 			createData.IConType = "2";
 			createData.IAppye = oController._ListCondJSonModel.getProperty("/Data/Appye");
 			createData.IEmpid = oController._ListCondJSonModel.getProperty("/Data/userId");
 			
-		oModel.create("/EvaResultAgreeSet", createData, null,
-				function(data,res){
-					if(data && data.TableIn) {
-						if(data.TableIn.results && data.TableIn.results.length){
-							for(var i=0; i<data.TableIn.results.length; i++){
-								data.TableIn.results[i].Pepnt = parseFloat(data.TableIn.results[i].Pepnt) == 0 ? "-" : parseFloat(data.TableIn.results[i].Pepnt); 
-								data.TableIn.results[i].Cepnt = parseFloat(data.TableIn.results[i].Cepnt) == 0 ? "-" : parseFloat(data.TableIn.results[i].Cepnt); 
-								data.TableIn.results[i].Mepnt = parseFloat(data.TableIn.results[i].Mepnt) == 0 ? "-" : parseFloat(data.TableIn.results[i].Mepnt); 
-								data.TableIn.results[i].Pegrade = data.TableIn.results[i].Pegrade == "" ? "-" : data.TableIn.results[i].Pegrade;
-								data.TableIn.results[i].Cograde = data.TableIn.results[i].Cograde == "" ? "-" : data.TableIn.results[i].Cograde;
-								
-								vData.Data.push(data.TableIn.results[i]);
-							}
+		oModel.create("/EvaResultAgreeSet", createData, {
+			success: function(data,res){
+				if(data && data.TableIn) {
+					if(data.TableIn.results && data.TableIn.results.length){
+						for(var i=0; i<data.TableIn.results.length; i++){
+							data.TableIn.results[i].Pepnt = parseFloat(data.TableIn.results[i].Pepnt) == 0 ? "-" : parseFloat(data.TableIn.results[i].Pepnt); 
+							data.TableIn.results[i].Cepnt = parseFloat(data.TableIn.results[i].Cepnt) == 0 ? "-" : parseFloat(data.TableIn.results[i].Cepnt); 
+							data.TableIn.results[i].Mepnt = parseFloat(data.TableIn.results[i].Mepnt) == 0 ? "-" : parseFloat(data.TableIn.results[i].Mepnt); 
+							data.TableIn.results[i].Pegrade = data.TableIn.results[i].Pegrade == "" ? "-" : data.TableIn.results[i].Pegrade;
+							data.TableIn.results[i].Cograde = data.TableIn.results[i].Cograde == "" ? "-" : data.TableIn.results[i].Cograde;
 							
-							oController._ListCondJSonModel.setProperty("/Data/Evstaus", vData.Data[0].Evstaus);
-							oController._ListCondJSonModel.setProperty("/Data/Isstxt", vData.Data[0].Isstxt);
+							vData.Data.push(data.TableIn.results[i]);
 						}
-					} 
-				},
-				function (oError) {
-			    	var Err = {};
-			    	oController.Error = "E";
-			    	
-			    	oController._ListCondJSonModel.setProperty("/Data/Evstaus", "");
-					oController._ListCondJSonModel.setProperty("/Data/Isstxt", "");
-							
-					if (oError.response) {
-						Err = window.JSON.parse(oError.response.body);
-						var msg1 = Err.error.innererror.errordetails;
-						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-						else oController.ErrorMessage = Err.error.message.value;
-					} else {
-						oController.ErrorMessage = oError.toString();
+						
+						oController._ListCondJSonModel.setProperty("/Data/Evstaus", vData.Data[0].Evstaus);
+						oController._ListCondJSonModel.setProperty("/Data/Isstxt", vData.Data[0].Isstxt);
 					}
+				} 
+			},
+			error: function (oError) {
+				var Err = {};
+				oController.Error = "E";
+				
+				oController._ListCondJSonModel.setProperty("/Data/Evstaus", "");
+				oController._ListCondJSonModel.setProperty("/Data/Isstxt", "");
+						
+				if (oError.response) {
+					Err = window.JSON.parse(oError.response.body);
+					var msg1 = Err.error.innererror.errordetails;
+					if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+					else oController.ErrorMessage = Err.error.message.value;
+				} else {
+					oController.ErrorMessage = oError.toString();
 				}
-		);
+			}
+		});
 		
 		oJSONModel.setData(vData);
 		oTable.bindRows("/Data");
@@ -604,13 +604,13 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		var oJSONModel2 = oChart.getModel();
 		var vData2 = {Data : []};
 	
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {CompResultsNav : []};
 			createData.Pernr = oController._ListCondJSonModel.getProperty("/Data/userId");
 			createData.Appye = oController._ListCondJSonModel.getProperty("/Data/Appye");
 		
-		oModel.create("/CompResultsSet", createData, null,
-			function(data,res){
+		oModel.create("/CompResultsSet", createData, {
+			success: function(data,res){
 				if(data && data.CompResultsNav) {
 					if(data.CompResultsNav.results && data.CompResultsNav.results.length){
 						for(var i=0; i<data.CompResultsNav.results.length; i++){
@@ -622,7 +622,7 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 					}
 				} 
 			},
-			function (oError) {
+			error: function (oError) {
 		    	var Err = {};
 		    	oController.Error = "E";
 						
@@ -635,7 +635,7 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 					oController.ErrorMessage = oError.toString();
 				}
 			}
-		);
+		});
 		
 		oJSONModel2.setData(vData2);
 		
@@ -660,7 +660,7 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		}
 		
 		var onProcess = function(){
-			var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+			var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 			var createData = {TableIn : []};
 				createData.IConType = "1";
 				createData.IAppye = oController._ListCondJSonModel.getProperty("/Data/Appye");
@@ -671,26 +671,26 @@ sap.ui.controller("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 				createData.TableIn.push({Isstxt : oIsstxt});
 			}
 			
-			oModel.create("/EvaResultAgreeSet", createData, null,
-					function(data,res){
-						if(data) {
-							
-						} 
-					},
-					function (oError) {
-				    	var Err = {};
-				    	oController.Error = "E";
-				    	
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-							else oController.ErrorMessage = Err.error.message.value;
-						} else {
-							oController.ErrorMessage = oError.toString();
-						}
+			oModel.create("/EvaResultAgreeSet", createData, {
+				success: function(data,res){
+					if(data) {
+						
+					} 
+				},
+				error: function (oError) {
+					var Err = {};
+					oController.Error = "E";
+					
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
 					}
-			);
+				}
+			});
 			
 			oController._BusyDialog.close();
 			

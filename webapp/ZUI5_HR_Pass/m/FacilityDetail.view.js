@@ -19,18 +19,58 @@ sap.ui.define([
                 idPrefix: "FacilityDetail-",
                 title: "{i18n>LABEL_09064}",    // 시설이용
                 showNavButton: true,
-                navBackFunc: FacilityHandler.navBack,
-                headerButton: new sap.m.Button({					
-                    text: "{i18n>LABEL_09023}", // 신청
-                    press: FacilityHandler.onPressApprovalBtn.bind(FacilityHandler)
-                }).addStyleClass("button-light app-nav-button-right"),
+				navBackFunc: FacilityHandler.navBack,
+				headerButton: new sap.m.FlexBox({
+					items: [
+						new sap.m.Button({
+                            text: "{i18n>LABEL_09023}", // 신청
+                            press: FacilityHandler.onPressApprovalBtn.bind(FacilityHandler),
+                            visible: {
+                                path: "isNew",
+                                formatter: function(v) {
+                                    if(v === true) return true;
+                                    else return false;
+                                }
+                            }
+						}).addStyleClass("button-dark"),
+						new sap.m.Button({
+                            text: "{i18n>LABEL_00101}", // 저장
+                            press: FacilityHandler.onPressSaveBtn.bind(FacilityHandler),
+                            visible: {
+                                parts: [
+                                    {path: "isNew"},
+                                    {path: "Status"}
+                                ],
+                                formatter: function(v1, v2) {
+                                    if(v1 === false && v2 === "AA") return true;
+                                    else return false;
+                                }
+                            }
+                        }).addStyleClass("button-light"),
+                        new sap.m.Button({
+                            text: "{i18n>LABEL_00119}", // 취소
+                            press: FacilityHandler.onPressCancelBtn.bind(FacilityHandler),
+                            visible: {
+                                parts: [
+                                    {path: "isNew"},
+                                    {path: "Status"}
+                                ],
+                                formatter: function(v1, v2) {
+                                    if(v1 === false && v2 === "AA") return true;
+                                    else return false;
+                                }
+                            }
+                        }).addStyleClass("button-light")
+					]
+				}).addStyleClass("app-nav-button-right"),
                 contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
                 contentItems: [
                     this.getInputBox()	// Input 영역
                 ]
 			})
-			.setModel(FacilityHandler.Model());
+			.setModel(FacilityHandler.Model())
+            .bindElement("/Detail");
         },
 
         getInputBox: function() {
@@ -42,7 +82,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_09011}" }).addStyleClass("sub-con-title"), // 이용시설
 							new sap.m.Input({
-								width: "80%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: false,
 								value: "{FactyT}"
@@ -62,7 +102,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_09001}" }).addStyleClass("sub-con-title"), // 사용일
 							new sap.m.Input({
-								width: "80%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: false,
 								value: {
@@ -153,7 +193,7 @@ sap.ui.define([
 						items: [
 							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_09005}" }).addStyleClass("sub-con-title"), // 회신사항
 							new sap.m.TextArea({
-								width: "95%",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								editable: false,
 								value: "{Rettx}",

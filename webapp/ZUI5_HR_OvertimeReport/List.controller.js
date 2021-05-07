@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -34,7 +34,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -49,12 +49,19 @@ sap.ui.define([
 					Data : {
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Orgeh : oLoginData.Orgeh,
-						Ename : oLoginData.Stext,
-						Bukrs : oLoginData.Bukrs2,
-						Langu : oLoginData.Langu
+						Bukrs : oLoginData.Bukrs, // 2021-05-07 Bukrs2
+						Langu : oLoginData.Langu,
+						Persa : oLoginData.Persa
 					}
 				};
+				
+				if(oLoginData.Persa.substring(0,1) == "D"){
+					vData.Data.Pernr = oLoginData.Pernr;
+					vData.Data.Ename = oLoginData.Ename;
+				} else {
+					vData.Data.Orgeh = oLoginData.Orgeh;
+					vData.Data.Ename = oLoginData.Stext;
+				}
 				
 				oController._ListCondJSonModel.setData(vData);
 			}
@@ -86,8 +93,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_OvertimeReport.List");
+			var oController = oView.getController();
+			
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -100,7 +110,7 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_61001")); // 대상기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_61001")); // 대상기간을 입력하여 주십시오.
 				return;
 			}
 			
@@ -117,7 +127,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {OvertimeRepNav : []};
 					createData.IPernr = (oData.Pernr && oData.Pernr != "" ? oData.Pernr : "");
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
@@ -126,8 +136,8 @@ sap.ui.define([
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;
 
-				oModel.create("/OvertimeReportSet", createData, null,
-					function(data, res){
+				oModel.create("/OvertimeReportSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.OvertimeRepNav && data.OvertimeRepNav.results){
 								var data1 = data.OvertimeRepNav.results;
@@ -146,7 +156,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -159,12 +169,12 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
 				
-				var row = parseInt((window.innerHeight - 200) / 37);
+				var row = parseInt((window.innerHeight - 260) / 37);
 				oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
 				
 				if(oController.Error == "E"){
@@ -216,6 +226,26 @@ sap.ui.define([
 		getOrgOfIndividualHandler: function() {
             return this.OrgOfIndividualHandler;
         },
+        
+        onExport : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_OvertimeReport.List");
+			var oController = oView.getController();
+			
+			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
+			var oJSONModel = oTable.getModel();
+			
+			var filename = oController.getBundleText("LABEL_61001"); // 근태신청
+			
+			var oSettings = {
+				workbook: { columns: oController._Columns },
+				dataSource: oJSONModel.getProperty("/Data"),
+				worker: false, // We need to disable worker because we are using a MockServer as OData Service
+			    fileName: filename + ".xlsx"
+			};
+	
+			var oSpreadsheet = new sap.ui.export.Spreadsheet(oSettings);
+				oSpreadsheet.build();		
+		},
         
 		getLastDate : function(y, m) {
 			var last = [31,28,31,30,31,30,31,31,30,31,30,31];

@@ -8,8 +8,7 @@ sap.ui.define(
 		"sap/ui/core/BusyIndicator",
 		"sap/m/MessageBox",
 		"sap/ui/core/util/Export",
-		"sap/ui/core/util/ExportTypeCSV",
-        "common/moment-with-locales"
+		"sap/ui/core/util/ExportTypeCSV"
 	],
     function (Common, CommonController, JSONModel, BusyIndicator, MessageBox, Export, ExportTypeCSV) {
         "use strict";
@@ -417,7 +416,11 @@ sap.ui.define(
                             var aFilters = [
 								new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, oController._vPersa),
 								new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(oController._vActda)),
-								new sap.ui.model.Filter("Massg", sap.ui.model.FilterOperator.EQ, oMassg.getSelectedKey())
+                                new sap.ui.model.Filter("Massg", sap.ui.model.FilterOperator.EQ, oMassg.getSelectedKey()),
+                                new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+                                new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+                                new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+                                new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 							];
 
                             if (oMassn.getSelectedKey() != "" && oMassn.getSelectedKey() != "0000") {

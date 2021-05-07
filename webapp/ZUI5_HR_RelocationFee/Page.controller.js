@@ -27,7 +27,7 @@ sap.ui.define([
 		
 		getUserGubun  : function() {
 
-			return this.getView().getModel("session").getData().Bukrs;
+			return this.getView().getModel("session").getData().Bukrs3;
         },
 		
 		onInit: function () {
@@ -68,6 +68,10 @@ sap.ui.define([
 				success: function(oData, oResponse) {
 					var LogData = oData.NewPostExport.results[0];
 					oController.LogModel.setData({LogData: LogData});
+
+					if(LogData.EClose === "X"){
+						sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107")});
+					}
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -95,8 +99,8 @@ sap.ui.define([
 			
 			oModel.create("/NewPostImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					if (oData && oData.NewPostTableIn1) {
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.NewPostTableIn1.results;
 						dataLength = rDatas1.length;

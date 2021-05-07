@@ -92,7 +92,7 @@ sap.ui.define(
                             }
                         }),
                         new sap.m.RadioButton({
-                            text: "{i18n>LABEL_65012}", // 인사팀 발행
+                            text: "{i18n>LABEL_65012}", // 담당자 출력
                             width: "auto",
                             selected: {
                                 path: "Aptyp",
@@ -108,6 +108,14 @@ sap.ui.define(
                                 path: "Aptyp",
                                 formatter: function (v) {
                                     return v === "3";
+                                }
+                            },
+                            visible: {
+                                // 경력증명서 인 경우 메일 전송 제외
+                                path: "ZformType",
+                                formatter: function (v) {
+                                    if (v && v === "02") return false;
+                                    return true;
                                 }
                             }
                         })
@@ -312,33 +320,53 @@ sap.ui.define(
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_65001}"
-                        }).addStyleClass("lineHeight30 font-14px"),
+                            text: "{i18n>MSG_65020}"
+                        }).addStyleClass("font-bold lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_65002}"
+                            text: "{i18n>MSG_65021}"
                         }).addStyleClass("px-20px lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_65003}"
-                        }).addStyleClass("lineHeight30 font-14px"),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65004}"
-                        }).addStyleClass("lineHeight30 font-14px"),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65005}"
+                            text: "{i18n>MSG_65022}"
                         }).addStyleClass("px-20px lineHeight30 font-14px"),
                         new sap.m.Text({
                             textAlign: "Begin",
                             width: "100%",
-                            text: "{i18n>MSG_65006}"
-                        }).addStyleClass("px-20px lineHeight30 font-14px")
+                            text: "{i18n>MSG_65023}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65024}"
+                        }).addStyleClass("font-bold lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65025}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65026}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65027}"
+                        }).addStyleClass("font-bold lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65028}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
+                        new sap.m.Text({
+                            textAlign: "Begin",
+                            width: "100%",
+                            text: "{i18n>MSG_65029}"
+                        }).addStyleClass("px-20px lineHeight30 font-14px"),
                     ],
                     visible: {
                         // 재신청일 경우 보이지 않음
@@ -363,7 +391,7 @@ sap.ui.define(
                             width: "100%",
                             text: "{i18n>MSG_65018}"
                         }).addStyleClass("px-20px lineHeight30 font-14px")
-                    ],
+                    ], 
                     visible: {
                         // 재신청일 경우 보임
                         path: "actmode",

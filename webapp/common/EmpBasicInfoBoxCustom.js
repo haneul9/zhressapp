@@ -21,12 +21,12 @@ common.EmpBasicInfoBoxCustom={
 							items: [
 								new sap.m.Text({text: "{Ename}"}).addStyleClass("employee-basic-info-nickname"),
 								new sap.m.Text({text: "({Pernr})"}).addStyleClass("employee-basic-info-title ml-5px"),
-								new sap.m.Text({text: "{Btrtx} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
+								new sap.m.Text({text: "{Pbtxt} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
 							]
 						})
 						// new sap.m.HBox({
 						// 	items: [
-						// 		new sap.m.Text({text: "{Btrtx} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
+						// 		new sap.m.Text({text: "{Pbtxt} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
 						// 	]
 						// })En
 					]

@@ -12,6 +12,10 @@ sap.ui.define([], function () {
         getInfoHBox: function (oController) {
             return new sap.m.VBox({
                 items: [
+                	 new sap.m.HBox({
+                        height: "10px",
+                        alignItems: sap.m.FlexAlignItems.Center,
+                    }),
                     new sap.m.HBox({
                         height: "40px",
                         alignItems: sap.m.FlexAlignItems.Center,

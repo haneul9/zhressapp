@@ -33,13 +33,6 @@ sap.ui.define([
                 .setModel(this.getI18nModel(), "i18n")
                 .setModel(sessionModel, "session");
 
-            // Registering to the icon pool
-            IconPool.registerFont({
-                fontFamily: "SAP-icons-TNT",
-                fontURI: sap.ui.require.toUrl("sap/tnt/themes/base/fonts/")
-            });
-            IconPool.fontLoaded("SAP-icons-TNT");
-
             this.__alreadyInitialized = true;
 
             return this;
@@ -60,19 +53,12 @@ sap.ui.define([
             }
 
             var sfSessionModel = this.retrieveSFSessionModel(),
-                sessionModelData = sfSessionModel.getData(),
-				mLoginData = Common.retrieveLoginInfo(sessionModelData.name),
-				traceInfo = Common.activeClientTrace({ async: false });
+            sessionModelData = sfSessionModel.getData(),
+            mLoginData = Common.retrieveLoginInfo(sessionModelData.name);
+            // traceInfo = Common.activeClientTrace({ async: false });
 
-            // mLoginData.encryptedPernrByJava = Common.encryptByJava({ input: sessionModelData.name, async: false });
             mLoginData.Langu = Common.retrieveSFUserLocale(sessionModelData.name);
-            if ($.isEmptyObject(traceInfo) === false) mLoginData.Ipadd = traceInfo.Ipadd.split(',')[0];
-
-            // mLoginData.ADAuth = Common.activeDirectoryAuth({
-            //     ad_user: sessionModelData.name,
-            //     ad_password: "1",
-            //     async: false
-            // });
+            // if ($.isEmptyObject(traceInfo) === false) mLoginData.Ipadd = traceInfo.Ipadd.split(',')[0];
 
             sfSessionModel.setData($.extend(sessionModelData, mLoginData));
 
@@ -122,7 +108,7 @@ sap.ui.define([
                     }
                 });
 
-            sfSessionModel.loadData("/services/userapi/currentUser", null, false) // sync
+            sfSessionModel.loadData("/services/userapi/currentUser", null, false); // sync
 
             return sfSessionModel;
         },

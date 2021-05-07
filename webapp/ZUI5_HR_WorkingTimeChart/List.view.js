@@ -26,21 +26,22 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
                                     selectedKey: "{Werks}",
                                     editable : (gAuth == "H" ? true : false)
                                 }),
-                                new sap.m.Label({text: oBundleText.getText("LABEL_00122")}), // 소속부서
-                                new sap.m.MultiInput(oController.PAGEID + "_Orgeh",{
-                                	width : "200px",
-									showValueHelp : true,
-									valueHelpOnly: true,
-									valueHelpRequest : oController.displayMultiOrgSearchDialog
+                                new sap.m.Label({
+							    	text: oBundleText.getText("LABEL_48002"), // 부서/사원
 							    }),
-							    new sap.m.Label({text: oBundleText.getText("LABEL_41002")}), // 대상자
-                                new sap.m.MultiInput(oController.PAGEID + "_Ename", {
-                                	width : "150px",
-									showValueHelp: true,
-					        	    valueHelpOnly: true,
-					        	    enableMultiLineMode : true,
-									valueHelpRequest : oController.onSearchUser
-							    }),
+                                new sap.m.Input({
+                                    width: "200px",
+                                    value: "{Ename}",
+                                    showValueHelp: true,
+                                    valueHelpOnly: true,
+                                    valueHelpRequest: oController.searchOrgehPernr,
+                                    // editable : {
+                                    // 	path : "Chief",
+                                    // 	formatter : function(fVal){
+                                    // 		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                    // 	}
+                                    // } // 2021-05-04 부서장 확인 여부 주석처리
+                                }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_46002")}), // 근무구분
                                 new sap.m.ComboBox({
                                 	width : "150px",
@@ -260,6 +261,7 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
 		
 		// 근무시간 상세현황
 		var oToolbar2 = new sap.m.Toolbar(oController.PAGEID + "_Detail", { 
+			width : "100%",
 			height : "40px",
 			visible : {
 				path : "Key",
@@ -337,12 +339,58 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
 			}
 		});
 		
+		var titleitem = [
+			new sap.m.FlexBox({
+			  	 justifyContent : "Start",
+				 alignItems: "End",
+				 fitContainer: true,
+			  	 items : [
+			  	  	new sap.m.Button({
+					  	  icon : "sap-icon://nav-back",
+					  	  type : "Default",
+					  	  press : oController.onBack,
+					  	  visible : {
+						  	  	path : "FromPageId",
+						  	  	formatter : function(fVal){
+						  	  		return (fVal && fVal != "") ? true : false;
+						  	  	}
+					  	  }
+					  }),
+					  new sap.ui.core.HTML({
+					  	  content : "<div style='width:10px' />",
+					  	  visible : {
+					  	  		path : "FromPageId",
+					  	  		formatter : function(fVal){
+					  	  			return (fVal && fVal != "") ? true : false;
+					  	  		}
+					  	  }
+					  }),
+					  new sap.m.Text({text: oBundleText.getText("LABEL_46001")}).addStyleClass("app-title") // 근로시간현황
+			  	  ]
+			  })
+		];
+			  
+		if((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true) {
+			window._CommonEmployeeModel = new common.EmployeeModel();
+			window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
+
+			titleitem.push(new common.EmpBasicInfoBox(window._CommonEmployeeModel));
+		};
+		
+		var title = new sap.m.FlexBox({
+			justifyContent : "SpaceBetween",
+			alignContent : "Start",
+			alignItems : "Center",
+			fitContainer: true,
+			items : titleitem
+		}).addStyleClass("app-title-container");
+			
 		var oContent = new sap.m.FlexBox({
 			  justifyContent: "Center",
 			  fitContainer: true,
 			  items: [new sap.m.FlexBox({
 						  direction: sap.m.FlexDirection.Column,
-						  items: [new sap.m.FlexBox({
+						  items: [/*new sap.m.FlexBox({
 									  alignItems: "End",
 									  fitContainer: true,
 									  items: [new sap.m.Button({
@@ -366,15 +414,35 @@ sap.ui.jsview("ZUI5_HR_WorkingTimeChart.List", {
 											  	  }
 											  }),
 											  new sap.m.Text({text: oBundleText.getText("LABEL_46001")}).addStyleClass("app-title")] // 근로시간현황
-								  }).addStyleClass("app-title-container"),
+								  }).addStyleClass("app-title-container")*/,
+								  title,
 								  oFilter,
 								  //new sap.ui.core.HTML({content : "<div style='height:20px' />"}),
 								  new sap.ui.layout.VerticalLayout({
+								  	  width : "100%",
 									  content : [oContent1, oLayout]
 								  }),
 								  new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
 					  }).addStyleClass("app-content-container-wide")]
 		}).addStyleClass("app-content-body");
+		
+		// var oContent = new sap.m.FlexBox({
+		// 	  justifyContent: "Center",
+		// 	  fitContainer: true,
+		// 	  items: [new sap.m.FlexBox({
+		// 				  justifyContent : "Center",
+		// 				  fitContainer: true,
+		// 				  items: [
+		// 				  	new sap.m.FlexBox(oController.PAGEID + "app-content-container", {
+		// 						direction: "Column",
+		// 						items: [title, oFilter, 
+		// 								new sap.ui.layout.VerticalLayout({
+		// 								  	width : "100%",
+		// 									content : [oContent1, oLayout]
+		// 								})]
+		// 					}).addStyleClass("app-content-container-wide")]
+		// 			  })]
+		// }).addStyleClass("app-content-body");
 				
 		/////////////////////////////////////////////////////////
 

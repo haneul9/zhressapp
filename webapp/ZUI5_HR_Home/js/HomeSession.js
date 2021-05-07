@@ -8,8 +8,8 @@ function HomeSession(_gateway, callback) {
 		ehr.sf-user.locale
 		ehr.odata.user
 		ehr.odata.user.percod
-		ehr.odata.csrf-token
 		ehr.odata.destination
+		ehr.session.token
 		ehr.menu-auth.state
 	}
 	*/
@@ -18,18 +18,38 @@ function HomeSession(_gateway, callback) {
 	this._gateway = _gateway;
 	_gateway.homeSession(this);
 
+	this.clearSessionStorage();
+
 	this.init(callback);
 }
 
 $.extend(HomeSession.prototype, {
+
+clearSessionStorage: function() {
+
+	if (this.alreadyChekckedIn()) {
+		return;
+	}
+
+	sessionStorage.removeItem('ehr.sf-user.name');
+	sessionStorage.removeItem('ehr.sf-user.photo');
+	sessionStorage.removeItem('ehr.sf-user.locale');
+	sessionStorage.removeItem('ehr.sf-user.language');
+	sessionStorage.removeItem('ehr.odata.user');
+	sessionStorage.removeItem('ehr.odata.user.percod');
+	sessionStorage.removeItem('ehr.odata.destination');
+	sessionStorage.removeItem('ehr.menu-auth.state');
+	sessionStorage.removeItem('ehr.session.token');
+},
 
 init: function(callback) {
 
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
+		this.retrieveClientIP(),			// 접속자 IP 조회
 		this.retrieveSFUserName(),			// 사번 조회
-		this.retrieveOdataCsrfToken()		// Odata CSRF token 조회
+		this.retrieveSessionToken()			// Session token 조회
 	])
 	.then(function() {
 		return Promise.all([
@@ -40,16 +60,21 @@ init: function(callback) {
 	}.bind(this))
 	.then(function() {
 		return Promise.all([
-			this.retrieveLoginInfo(),		// 인사정보 조회
+			this.sessionToken(),			// Session token 등록
 			this.registerToken()			// Mobile token 등록
 		]);
 	}.bind(this))
 	.then(function() {
-		callback();
+		return this.retrieveLoginInfo();	// 인사정보 조회
+	}.bind(this))
+	.then(function() {
+		if (typeof callback === 'function') {
+			callback();
+		}
 		// if (typeof HomeMFA === 'function') {
 		// 	new HomeMFA(this._gateway).check(callback);	// Multi Factor Authentication
 		// } else {
-		// 	throw new Error('Multi Factor Authentication 모듈이 존재하지 않습니다.');
+		// 	this._gateway.log('Multi Factor Authentication 모듈이 존재하지 않습니다.');
 		// }
 	}.bind(this))
 	.catch(function(e) {
@@ -63,7 +88,13 @@ init: function(callback) {
 		}.bind(this));
 	}.bind(this));
 },
+alreadyChekckedIn: function() {
 
+	return !!sessionStorage.getItem('ehr.session.token');
+},
+/*
+DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
+*/
 dkdlTlqpfmffls: function(resolve) {
 
 	var options = {
@@ -111,6 +142,23 @@ dkdlTlqpfmffls: function(resolve) {
 	this._gateway.confirm(options);
 },
 
+retrieveClientIP: function() {
+
+	return $.getJSON({
+		url: '/essproxy/trace',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
+
+			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveClientIP');
+
+			sessionStorage.removeItem('ehr.client.ip');
+		}.bind(this)
+	}).promise();
+},
+
 _retrieveSFUserName: function(resolve) {
 
 	$.getJSON({
@@ -130,7 +178,9 @@ _retrieveSFUserName: function(resolve) {
 		}
 	});
 },
-
+/*
+SF의 사번 조회
+*/
 retrieveSFUserName: function() {
 
 	var pernr = this._gateway.parameter('pernr');
@@ -141,39 +191,46 @@ retrieveSFUserName: function() {
 
 	return new Promise(function(resolve) {
 
-		if (this._gateway.isMobile()) {
+		if (!this._gateway.isPRD() && this._gateway.isMobile()) {
 			this.dkdlTlqpfmffls(resolve);
 		} else {
 			this._retrieveSFUserName(resolve);
 		}
 	}.bind(this));
 },
+/*
+S4HANA OData 호출을 위한 CSRF token 조회
+*/
+retrieveSessionToken: function() {
 
-retrieveOdataCsrfToken: function() {
+	// sessionStorage는 브라우저 창이 살아있는 동안만 유효하므로 session token이 존재한다는 것은 이미 최초에 발급을 받은 것이므로 재발급을 받으면 안됨, popup은 자식창이므로 sessionStorage를 공유
+	// TODO : SF session timeout 이후에는 어떻게 해야할까?
+	if (this.alreadyChekckedIn()) {
+		return new Promise(function(v) { v(); });
+	}
 
 	return $.getJSON({
-		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV'),
-		headers: {
-			'x-csrf-token': 'Fetch'
-		},
-		success: function(data, textStatus, jqXHR) {
-			this._gateway.prepareLog('HomeSession.retrieveOdataCsrfToken success', arguments).log();
+		url: '/essproxy/sessionkey',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.retrieveSessionToken success', arguments).log();
 
-			var token = jqXHR.getResponseHeader('x-csrf-token');
+			var token = data.result;
 			if (token) {
-				sessionStorage.setItem('ehr.odata.csrf-token', token);
+				sessionStorage.setItem('ehr.session.token', token);
 			} else {
-				sessionStorage.removeItem('ehr.odata.csrf-token');
+				sessionStorage.removeItem('ehr.session.token');
 			}
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveOdataCsrfToken');
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveSessionToken');
 
-			sessionStorage.removeItem('ehr.odata.csrf-token');
+			sessionStorage.removeItem('ehr.session.token');
 		}.bind(this)
 	}).promise();
 },
-
+/*
+SF의 개인 사진 조회
+*/
 retrieveSFUserPhoto: function() {
 
 	return $.getJSON({
@@ -199,7 +256,9 @@ retrieveSFUserPhoto: function() {
 		}.bind(this)
 	}).promise();
 },
-
+/*
+SF의 언어를 조회하여 Home 화면에 적용
+*/
 retrieveSFUserLocale: function() {
 
 	return $.getJSON({
@@ -228,13 +287,15 @@ retrieveSFUserLocale: function() {
 		}.bind(this)
 	}).promise();
 },
-
+/*
+Home 화면에서 언어 변경시 API를 통해 SF의 언어도 변경
+*/
 changeSFUserLocale: function() {
 
 	this._gateway.spinner(true);
 
 	return $.post({
-		url: "/odata/v2/User('${pernr}')".interpolate(this.pernr()),
+		url: "/odata/fix/User('${pernr}')".interpolate(this.pernr()),
 		data: JSON.stringify({
 			defaultLocale: $('#sf-locale option:selected').val()
 		}),
@@ -252,7 +313,10 @@ changeSFUserLocale: function() {
 		}.bind(this)
 	});
 },
-
+/*
+Home 화면에서 언어 변경 후처리 작업 function
+아래 addLocaleChangeCallbackOwner function으로 등록된 callbackOwner 들의 changeLocale function이 각각 호출됨
+*/
 afterChangeLocale: function() {
 
 	var sfLocale = $('#sf-locale option:selected'),
@@ -284,9 +348,8 @@ afterChangeLocale: function() {
 			}.bind(this));
 		}.bind(this));
 },
-
 /*
-Home 화면에서 언어 변경시 언어 변경 작업을 해야하는 모듈(callbackOwner) 등록 function
+Home 화면에서 언어 변경시 언어 변경 작업을 해야하는 모듈(callbackOwner)을 등록하는 function
 callbackOwner는 반드시 changeLocale function을 구현해야함
 */
 addLocaleChangeCallbackOwner: function(callbackOwner) {
@@ -350,7 +413,7 @@ encodePernr: function() {
 
 			sessionStorage.removeItem('ehr.odata.user.percod');
 		}.bind(this)
-	}).promise();
+	});
 },
 
 retrieveLoginInfo: function() {
@@ -361,7 +424,21 @@ retrieveLoginInfo: function() {
 	return $.getJSON({
 		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
 		data: {
-			$filter: "Lpmid eq 'HACTA' and Percod eq '${Percod}' and Langu eq '${Langu}'".interpolate(Percod, Langu)
+			$filter: [
+				"Lpmid eq 'HACTA'",
+				"Percod eq '${Percod}'",
+				"Langu eq '${Langu}'",
+				"ICusrid eq '${ICusrid}'",	// 암호화 로그인 사번
+				"ICusrse eq '${ICusrse}'",	// Token
+				"ICusrpn eq '${ICusrpn}'",	// 로그인 사번
+				"ICmenuid eq ''"			// 메뉴 ID 불필요
+			].join(' and ').interpolate(
+				Percod,
+				Langu,
+				sessionStorage.getItem('ehr.odata.user.percod'),
+				sessionStorage.getItem('ehr.session.token'),
+				sessionStorage.getItem('ehr.sf-user.name')
+			)
 		},
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();
@@ -371,6 +448,7 @@ retrieveLoginInfo: function() {
 				delete result.__metadata;
 				result.Dtfmt = result.Dtfmt || 'yyyy-MM-dd';
 				result.Langu = sessionStorage.getItem('ehr.sf-user.language') || result.Langu;
+				result.Ipadd = sessionStorage.getItem('ehr.client.ip');
 				this.loginInfo(result);
 			} else {
 				sessionStorage.removeItem('ehr.odata.user');
@@ -384,10 +462,32 @@ retrieveLoginInfo: function() {
 	}).promise();
 },
 
+sessionToken: function() {
+
+	var url = 'ZHR_COMMON_SRV/SessionInfoSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
+			ICusrse: sessionStorage.getItem('ehr.session.token'),		// Token
+			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
+			Export: []
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeSession.sessionToken ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + url);
+		}.bind(this)
+	});
+},
+
 registerToken: function() {
+
 	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
-		token = this._gateway.parameter("token"),
-		percod = sessionStorage.getItem('ehr.odata.user.percod');
+	token = this._gateway.parameter("token"),
+	percod = sessionStorage.getItem('ehr.odata.user.percod');
 
 	if (token === undefined || token === null || token === '') {
 		// throw new Error("Token is blank.");
@@ -406,7 +506,66 @@ registerToken: function() {
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);
 		}.bind(this)
-	}).promise();
+	});
+},
+
+logout: function() {
+
+	$([	'<div class="modal fade" style="display:none" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-logout-modal">',
+			'<div class="modal-dialog" role="document">',
+				'<div class="modal-content">',
+					'<div class="modal-header">',
+						'<h4 class="modal-title">로그아웃 확인</h4>',
+						'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
+					'</div>',
+					'<div class="modal-body">',
+						'<div class="d-flex flex-column align-items-center">',
+							'<p>로그아웃하시겠습니까?</p>',
+							'<button type="button" class="btn btn-primary fn-logout">로그아웃</button>',
+						'</div>',
+					'</div>',
+					'<div class="modal-footer">',
+						'<button type="button" class="btn btn-light" data-dismiss="modal">취소</button>',
+					'</div>',
+				'</div>',
+			'</div>',
+		'</div>'
+	].join('')).appendTo('body')
+	.on('click', '.fn-logout', function(e) {
+		$(e.currentTarget).prop('disabled', true);
+
+		this._gateway.spinner();
+
+		$('#ehr-logout-modal .modal-body').append([
+			'<iframe class="d-none" name="logout-page-iframe"></iframe>',
+			'<iframe class="d-none" name="logout-action-iframe"></iframe>',
+			'<iframe class="d-none" name="logout-index-iframe"></iframe>'
+		]);
+
+		this.callLogoutPage();
+	}.bind(this))
+	.on('hidden.bs.modal', function() {
+		$(this).remove();
+	})
+	.modal();
+},
+
+callLogoutPage: function() {
+
+	$('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', '/Logout.html');
+},
+
+callLogoutActionPage: function() {
+
+	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke',
+	logoutAction = 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
+
+	$('iframe[name="logout-action-iframe"]').on('load', this.callLogoutIndexPage.bind(this)).attr('src', logoutAction);
+},
+
+callLogoutIndexPage: function() {
+
+	$('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; }).attr('src', '/index.html');
 },
 
 pernr: function() {
@@ -482,35 +641,52 @@ confirmADPW: function(o) {
 					adpw.siblings('.value-required').hide();
 				}
 
-				if ((this._gateway.isDEV() && pw === '1') || (this._gateway.isQAS() && pw === '2')) {
-					setTimeout(function() {
-						this._gateway.confirm('hide');
-					}.bind(this), 0);
+				setTimeout(function() {
+					this.authenticateADAccount(pw)
+						.then(function() {
+							setTimeout(function() {
+								this._gateway.confirm('hide');
+							}.bind(this), 0);
 
-					o.confirm();
-				} else {
-					setTimeout(function() {
-						this.authenticateADAccount(pw)
-							.then(function() {
-								setTimeout(function () {
-									this._gateway.confirm('hide');
-								}.bind(this), 0);
+							o.confirm();
+						}.bind(this))
+						.catch(function(jqXHR) {
+							var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
 
-								o.confirm();
-							}.bind(this))
-							.catch(function(jqXHR) {
-								var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount').message;
-
-								adpw.siblings('.value-invalid').text(errorMessage).show();
-							}.bind(this));
-					}.bind(this), 0);
-				}
+							adpw.siblings('.value-invalid').text(errorMessage).show();
+						}.bind(this));
+				}.bind(this), 0);
 			}.bind(this), 0);
 		}.bind(this),
 		cancel: o.cancel
 	};
 
 	this._gateway.confirm(options);
+},
+
+usePrivateLog: function(o) {
+
+	var url = 'ZHR_COMMON_SRV/SaveConnEhrLogSet';
+
+	return this._gateway.post({
+		url: url,
+		data: {
+			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
+			TableIn: [{
+				Usrid: sessionStorage.getItem('ehr.odata.user.percod'),
+				Menid: this._gateway.currentMid(),
+				Pernr: o.pernr || '',
+				Func: o.func || '',
+				Mobile: this._gateway.isMobile() ? 'X' : ''
+			}]
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeSession.usePrivateLog ${url} success'.interpolate(url), arguments).log();
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.usePrivateLog ' + url);
+		}.bind(this)
+	});
 }
 
 });

@@ -38,17 +38,12 @@ sap.ui.define(
 						onAfterShow: this.onAfterShow
 					}, this);
 				
-				//Registering to the icon pool
-				IconPool.registerFont({
-					fontFamily: "SAP-icons-TNT",
-					fontURI: sap.ui.require.toUrl("sap/tnt/themes/base/fonts/")
-				});
-				IconPool.fontLoaded("SAP-icons-TNT");
-
 				Common.log("onInit session", this.getView().getModel("session").getData());
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
+				
 				this.onBeforeOpenFileUpload();
 				
 				Common.log("onBeforeShow");
@@ -74,6 +69,7 @@ sap.ui.define(
 					oRewirteBtn.setVisible(true);
 				
 				Common.log("onAfterShow");
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {

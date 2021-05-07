@@ -148,13 +148,16 @@ sap.ui.define(
 					oModel.create("/AptSet", oSearchData, {
 						async: true,
 						success: function (data, res) {
+							var dataLength = 10;
+
 							if (data.AptPayTabNav) {
 								var rDatas = data.AptPayTabNav.results;
 								BusyIndicator.hide();
-								var dataLength = rDatas.length;
+								dataLength = rDatas.length;
 								oController.FeeModelTable.setData({Data: rDatas});
-								oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만(rDatas);
 							}
+							
+							oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만(rDatas);
 						},
 						error: function (res) {
 							BusyIndicator.hide();

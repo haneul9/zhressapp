@@ -1,12 +1,10 @@
 /* global moment:true */
 sap.ui.define([
 	"common/Common",
-	"common/moment-with-locales",
 	"sap/m/MessageBox",
 	"sap/ui/model/json/JSONModel"
 ], function(
 	Common,
-	momentjs,
 	MessageBox,
 	JSONModel
 ) {

@@ -16,14 +16,16 @@
 	<script src="common/AppPrefilter.js"></script>
 	<script
 		id="sap-ui-bootstrap"
-		src="resources/sap-ui-core.js"
+		src="resources/sap-ui-cachebuster/sap-ui-core.js"
 		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-appCacheBuster="./"
 		data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 		data-sap-ui-compatVersion="edge"
 		data-sap-ui-async="true"
 		data-sap-ui-frameOptions="allow"
-		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.core"
+		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap"
 	></script>
+	<script src="common/moment-with-locales.js"></script>
 	<script src="common/AppBasis.js"></script>
 	<script>
 	var oBundleText = $.app.geti18nResource();
@@ -36,6 +38,7 @@
 			APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 			APP_ID: [contextPath, "Page"].join("."),
 			APP_TYPE: "W",
+			APP_AUTH: $.app.Auth.MSS,
 			APP_TILE: $.app.geti18nResource().getText("LABEL_49001"), // 어학 성적
 			LOG: {
 				ENABLE_SUCCESS: true

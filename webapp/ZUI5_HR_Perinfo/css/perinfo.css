@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+/* Tab */
+.tab-group .sapUxAPAnchorBar .sapMITBContent {padding:1rem 0; border-bottom:none; background-color:#fff;} /* 확인요 */
+.tab-group .sapUxAPAnchorBar .sapMBtnContent {font-size:16px !important; font-weight:500; padding:0 10px;}
+.tab-group .sapUxAPAnchorBar .sapMBtnContent bdi {}
+.tab-group .sapUxAPAnchorBar {height:2.9375rem}
+.tab-group .sapUxAPAnchorBar .sapUxAPAnchorBarButton.sapUxAPAnchorBarButtonSelected .sapMBtnDefault .sapMBtnContent::after 
+{height:.25rem;border-top-left-radius:0;border-top-right-radius:0;top:2.4375rem}
+
+/* Table */
+.sapMTB.toolbarNoBottomLine.h-40px {align-items:flex-end;padding:0}
+td.Label{font-weight:500;background-color:#f3f4f4;border:1px solid #e4e4e4;border-left:0;border-right:0}
+td.Label.border-r{border-right:1px solid #e4e4e4}
+td.Data {border-left:0;border-right:0;border-bottom:1px solid #e4e4e4}
+.sapUiSizeCompact .sapMInputBase,.sapUiSizeCompact .sapMInputBaseContentWrapper {line-height:2rem;height:2.25rem}
+.sapUiSizeCompact .sapMInputBaseIcon {line-height:2rem }

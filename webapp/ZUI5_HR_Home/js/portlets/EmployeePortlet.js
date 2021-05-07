@@ -31,9 +31,9 @@ ui: function() {
 				'<div class="d-flex">',
 					'<div class="employee-photo${nobody}">'.interpolate(photoNotAvailable ? ' nobody': ''),
 						'<img src="${src}" />'.interpolate(photoNotAvailable ? 'images/photoNotAvailable.gif' : photo),
-						'<svg viewBox="0 0 64 64">',
-							'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 0 H64 V32 H63 Q63 28 60 25 L39 4 Q36 1 32 1 Q28 1 25 4 L4 25 Q1 28 1 32 H0 Z" />',
-							'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 64 H64 V32 H63 Q63 36 60 39 L39 60 Q36 63 32 63 Q28 63 25 60 L4 39 Q1 36 1 32 H0 Z" />',
+						'<svg viewBox="0 0 73 100">',
+							'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 0H73H15Q0 0 0 15V100Z" />',
+							'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M73 100V0V81Q73 100 49 100H0Z" />',
 						'</svg>',
 					'</div>',
 					'<div class="employee-information">',
@@ -59,22 +59,16 @@ ui: function() {
 					'<div class="employee-d-day">',
 						'<div class="title">My D-Day</div>',
 						'<h6 data-company>${company}</h6>'.interpolate((loginInfo.Langu === '3' || loginInfo.Langu === 'KO') ? '롯데케미칼' : 'LOTTE Chemical'),
-						'<div>',
-							'<span class="d-day color-lcc-signature-blue" id="cdays">0</span>',
-							'<span class="color-lcc-signature-blue">days</span>',
-						'</div>',
+						'<div id="cdays" class="cdays"></div>',
 						'<h6 data-stext>${stext}</h6>'.interpolate(loginInfo.Stext),
-						'<div>',
-							'<span class="d-day color-lcc-signature-green" id="odays">0</span>',
-							'<span class="color-lcc-signature-green">days</span>',
-						'</div>',
+						'<div id="odays" class="odays"></div>',
 					'</div>',
 				'</div>',
 				'<div class="employee-photo${nobody}">'.interpolate(photoNotAvailable ? ' nobody': ''),
 					'<img src="${src}" />'.interpolate(photoNotAvailable ? 'images/photoNotAvailable.gif' : photo),
-					'<svg viewBox="0 0 64 64">',
-						'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 0 H64 V32 H63 Q63 28 60 25 L39 4 Q36 1 32 1 Q28 1 25 4 L4 25 Q1 28 1 32 H0 Z" />',
-						'<path stroke="#cccccc" stroke-width=".5" fill="#ffffff" d="M0 64 H64 V32 H63 Q63 36 60 39 L39 60 Q36 63 32 63 Q28 63 25 60 L4 39 Q1 36 1 32 H0 Z" />',
+					'<svg viewBox="0 0 64 96">',
+						'<path stroke="#064975" stroke-width=".5" fill="#064975" d="M0 0H64H15Q0 0 0 15V96Z" />',
+						'<path stroke="#cccccc" stroke-width=".5" fill="#ffffff" d="M64 96V0V81Q64 96 49 96H0Z" />',
 					'</svg>',
 				'</div>',
 				'<div class="portlet-spinner-background">',
@@ -129,10 +123,21 @@ fill: function() {
 		success: function(data) {
 			this._gateway.prepareLog('EmployeePortlet.fill ${} success'.interpolate(url), arguments).log();
 
-			var TableIn1 = this._gateway.odataResults(data).TableIn1[0] || {};
+			var TableIn1 = this._gateway.odataResults(data).TableIn1[0] || {},
+				CdaysYy = String.toNumber(TableIn1.CdaysYy), CdaysMm = String.toNumber(TableIn1.CdaysMm), CdaysDd = String.toNumber(TableIn1.CdaysDd),
+				OddaysYy = String.toNumber(TableIn1.OddaysYy), OddaysMm = String.toNumber(TableIn1.OddaysMm), OddaysDd = String.toNumber(TableIn1.OddaysDd);
+
 			this.$()
-				.find('#cdays').text(String.toCurrency(TableIn1.Cdays)).end()
-				.find('#odays').text(String.toCurrency(TableIn1.Oddays));
+				.find('#cdays').html([
+					CdaysYy === 0 ? '' : '<span class="d-day">${CdaysYy}</span><span>년</span>'.interpolate(CdaysYy),
+					CdaysMm === 0 ? '' : '<span class="d-day">${CdaysMm}</span><span>개월</span>'.interpolate(CdaysMm),
+					CdaysDd === 0 ? '' : '<span class="d-day">${CdaysDd}</span><span>일</span>'.interpolate(CdaysDd)
+				].join('')).end()
+				.find('#odays').html([
+					OddaysYy === 0 ? '' : '<span class="d-day">${OddaysYy}</span><span>년</span>'.interpolate(OddaysYy),
+					OddaysMm === 0 ? '' : '<span class="d-day">${OddaysMm}</span><span>개월</span>'.interpolate(OddaysMm),
+					OddaysDd === 0 ? '' : '<span class="d-day">${OddaysDd}</span><span>일</span>'.interpolate(OddaysDd)
+				].join(''));
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);

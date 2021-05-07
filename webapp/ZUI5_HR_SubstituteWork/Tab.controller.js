@@ -67,6 +67,7 @@ sap.ui.define(
                 });
 
                 this.StatusListHandler.load();
+                this.ApprovalHandler.load();
             },
 
             onAfterShow: function () {

@@ -54,34 +54,35 @@ sap.ui.define(
 				var	oController = $.app.getController();
 				var vData = { Data : {} };
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				var createData = {TableIn2 : []};
 					createData.IConType = "3";
 					createData.IAppye = oController.Appye;
 					createData.IEmpid = oController.Pernr;
 					
-				oModel.create("/EvaResultAgreeSet", createData, null,
-						function(data,res){
-							if(data && data.TableIn2) {
-								if(data.TableIn2.results && data.TableIn2.results.length){
-									Object.assign(vData.Data, data.TableIn2.results[0]);         
-								}
-							} 
-						},
-						function (oError) {
-					    	var Err = {};
-					    	oController.Error = "E";
-									
-							if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-								else oController.ErrorMessage = Err.error.message.value;
-							} else {
-								oController.ErrorMessage = oError.toString();
+				oModel.create("/EvaResultAgreeSet", createData, {
+					success: function(data,res){
+						if(data && data.TableIn2) {
+							if(data.TableIn2.results && data.TableIn2.results.length){
+								Object.assign(vData.Data, data.TableIn2.results[0]);         
 							}
+						} 
+					},
+					error: function (oError) {
+						var Err = {};
+						oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
 						}
-				);
+					}
+				});
+				
 				vData.Data.Appye = oController.Appye;
 				oController._ResultModel.setData(vData);
 				
@@ -102,39 +103,40 @@ sap.ui.define(
 				var vData = {Data : {}},
 				    vOData = oController._ResultModel.getData();
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				var createData = {TableIn : []};
 					createData.IConType = "2";
 					createData.IAppye = oController.Appye;
 					createData.IEmpid = oController.Pernr;
 					
-				oModel.create("/EvaResultAgreeSet", createData, null,
-						function(data,res){
-							if(data && data.TableIn) {
-								if(data.TableIn.results && data.TableIn.results.length){
-									data.TableIn.results[0].Pepnt = parseFloat(data.TableIn.results[0].Pepnt) == 0 ? "-" : parseFloat(data.TableIn.results[0].Pepnt); 
-									data.TableIn.results[0].Cepnt = parseFloat(data.TableIn.results[0].Cepnt) == 0 ? "-" : parseFloat(data.TableIn.results[0].Cepnt); 
-									data.TableIn.results[0].Mepnt = parseFloat(data.TableIn.results[0].Mepnt) == 0 ? "-" : parseFloat(data.TableIn.results[0].Mepnt); 
-									data.TableIn.results[0].Pegrade = data.TableIn.results[0].Pegrade == "" ? "-" : data.TableIn.results[0].Pegrade;
-									data.TableIn.results[0].Cograde = data.TableIn.results[0].Cograde == "" ? "-" : data.TableIn.results[0].Cograde;
-									Object.assign(vData.Data, data.TableIn.results[0]);
-								}
-							} 
-						},
-						function (oError) {
-					    	var Err = {};
-					    	oController.Error = "E";
-					    	
-					    	if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-								else oController.ErrorMessage = Err.error.message.value;
-							} else {
-								oController.ErrorMessage = oError.toString();
+				oModel.create("/EvaResultAgreeSet", createData, {
+					success: function(data,res){
+						if(data && data.TableIn) {
+							if(data.TableIn.results && data.TableIn.results.length){
+								data.TableIn.results[0].Pepnt = parseFloat(data.TableIn.results[0].Pepnt) == 0 ? "-" : parseFloat(data.TableIn.results[0].Pepnt); 
+								data.TableIn.results[0].Cepnt = parseFloat(data.TableIn.results[0].Cepnt) == 0 ? "-" : parseFloat(data.TableIn.results[0].Cepnt); 
+								data.TableIn.results[0].Mepnt = parseFloat(data.TableIn.results[0].Mepnt) == 0 ? "-" : parseFloat(data.TableIn.results[0].Mepnt); 
+								data.TableIn.results[0].Pegrade = data.TableIn.results[0].Pegrade == "" ? "-" : data.TableIn.results[0].Pegrade;
+								data.TableIn.results[0].Cograde = data.TableIn.results[0].Cograde == "" ? "-" : data.TableIn.results[0].Cograde;
+								Object.assign(vData.Data, data.TableIn.results[0]);
 							}
+						} 
+					},
+					error: function (oError) {
+						var Err = {};
+						oController.Error = "E";
+						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
 						}
-				);
+					}
+				});
+				
 				$.extend(true, vOData.Data, vData.Data);
 				oController._ResultModel.setData(vOData);
 				
@@ -164,9 +166,9 @@ sap.ui.define(
 					createData.IAppye = oController.Appye;
 					createData.IEmpid = oController.Pernr;        
 					
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
-				oModel.create("/EvaSurveySet", createData, null,
-					function(data,res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
+				oModel.create("/EvaSurveySet", createData, {
+					success: function(data,res){
 						if(data && data.TableIn) {
 							if(data.TableIn.results && data.TableIn.results.length){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -175,7 +177,7 @@ sap.ui.define(
 							}
 						} 
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 				    	
@@ -188,7 +190,7 @@ sap.ui.define(
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				    
 				if(vData.Data.length == 0){ 
 					sap.m.MessageBox.error(oController.getBundleText("MSG_16004"), { // 설문 데이터가 존재하지 않습니다. 
@@ -253,7 +255,7 @@ sap.ui.define(
 				}
 				
 				var onProcess = function(){
-					var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+					var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 					var createData = {TableIn : []};
 						createData.IConType = "1";
 						createData.IAppye = oController._ResultModel.getProperty("/Data/Appye");
@@ -264,26 +266,26 @@ sap.ui.define(
 						createData.TableIn.push({Isstxt : oIsstxt});
 					}
 					
-					oModel.create("/EvaResultAgreeSet", createData, null,
-							function(data,res){
-								if(data) {
-									
-								} 
-							},
-							function (oError) {
-						    	var Err = {};
-						    	oController.Error = "E";
-						    	
-								if (oError.response) {
-									Err = window.JSON.parse(oError.response.body);
-									var msg1 = Err.error.innererror.errordetails;
-									if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-									else oController.ErrorMessage = Err.error.message.value;
-								} else {
-									oController.ErrorMessage = oError.toString();
-								}
+					oModel.create("/EvaResultAgreeSet", createData, {
+						success: function(data,res){
+							if(data) {
+								
+							} 
+						},
+						error: function (oError) {
+							var Err = {};
+							oController.Error = "E";
+							
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+								else oController.ErrorMessage = Err.error.message.value;
+							} else {
+								oController.ErrorMessage = oError.toString();
 							}
-					);
+						}
+					});
 					
 					oController._BusyDialog.close();
 					if(oController.Error == "E"){

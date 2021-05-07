@@ -165,7 +165,7 @@ sap.ui.define(
             },
 
             pressSmoinLink: function(oEvent) {
-                this.openSmoinUrl(oEvent.getSource().data("url"));
+                Common.openPopup.call(this.oController, oEvent.getSource().data("url"));
             },
             
             /**
@@ -201,7 +201,9 @@ sap.ui.define(
                             });
                         } else {
                             // s모인 결재창을 띄운다.
-                            this.openSmoinUrl(data.EAppurl);
+                            if(data.EAppurl) {
+                                Common.openPopup.call(this.oController, data.EAppurl);
+                            }
 
                             // 목록 조회
                             this.search();
@@ -246,6 +248,7 @@ sap.ui.define(
             pressApprovalBtn: function() {
                 var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
                 var oInputData = this.oModel.getProperty("/Detail");
+				var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
                 var Process = function (fVal) {
                     if (!fVal || fVal === MessageBox.Action.NO) return;
@@ -253,6 +256,7 @@ sap.ui.define(
                     BusyIndicator.show(0);
 
                     var payload = {};
+                    payload.Extryn = vExtryn;
                     payload.OvertimeApply = [Common.copyByMetadata(oModel, "OvertimeApply", oInputData)];
 
                     ODataService.OvertimeApplySetByProcess.call(
@@ -264,7 +268,9 @@ sap.ui.define(
                     );
                 };
 
-                MessageBox.show(this.oController.getBundleText("MSG_31010"), {
+                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_00060") : this.oController.getBundleText("MSG_31010");
+
+                MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
                     title: this.oController.getBundleText("LABEL_00149"),
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],
@@ -302,27 +308,6 @@ sap.ui.define(
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: Process.bind(this)
                 });
-            },
-
-            openSmoinUrl: function(smoinUrl) {
-                if(!smoinUrl) return;
-
-                setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(smoinUrl, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
             },
 
             /**

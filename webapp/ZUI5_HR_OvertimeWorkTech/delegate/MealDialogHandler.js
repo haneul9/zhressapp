@@ -2,8 +2,7 @@
 sap.ui.define([
 	"common/Common",
     "./ODataService",
-	"sap/ui/model/json/JSONModel",
-	"common/moment-with-locales"
+	"sap/ui/model/json/JSONModel"
 ], function(Common, ODataService, JSONModel) {
 "use strict";
 

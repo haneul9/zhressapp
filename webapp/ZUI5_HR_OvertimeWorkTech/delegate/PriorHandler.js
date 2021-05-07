@@ -12,8 +12,7 @@ sap.ui.define(
 		"sap/m/MessageBox",
         "sap/ui/core/BusyIndicator",
 		"sap/ui/export/Spreadsheet",
-        "sap/ui/model/json/JSONModel",
-        "common/moment-with-locales"
+        "sap/ui/model/json/JSONModel"
     ],
     function (Common, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, OvertimeWork, ODataService, MessageBox, BusyIndicator, Spreadsheet, JSONModel) {
         "use strict";
@@ -54,8 +53,8 @@ sap.ui.define(
                         Aftck: OvertimeWork.PRIOR
                     },
                     List: [],
-                    Hours: [{ Code: "", Text: "HH"}].concat(Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; })),
-                    Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
+                    Hours: Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; }),
+                    Minutes: Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; }),
                     Minutes30: null, 
                     Detail: {
                         IsViewMode: false,    // 조회모드 여부
@@ -76,18 +75,17 @@ sap.ui.define(
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/SearchConditions/Begda", new Date(currDate.getFullYear(), currDate.getMonth(), 1));
                 this.oModel.setProperty("/SearchConditions/Endda", new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0));
-                if($.app.getAuth() === $.app.Auth.MSS) {
-                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
-                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
-                } else {
+                if($.app.getAuth() === $.app.Auth.ESS) {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Ename"));
                     this.oModel.setProperty("/SearchConditions/Pernr", this.oController.getSessionInfoByKey("name"));
                     this.oModel.setProperty("/SearchConditions/Bukrs3", this.oController.getSessionInfoByKey("Bukrs3"));
+                } else {
+                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
+                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
                 }
                 if(this.oController.getSessionInfoByKey("Bukrs3") === "1000") {
                     this.oModel.setProperty("/Minutes30", [
-                        { Code: "", Text: "mm"},    //
-                        { Code: "00", Text: "00"},
+                        { Code: "00", Text: "00"},  //
                         { Code: "30", Text: "30"}
                     ]);
                 } else {
@@ -168,18 +166,19 @@ sap.ui.define(
             },
 
             loadApprovalDetail: function(rowData) {
-                var results = ODataService.OvertimeWorkApplySet.call(
-                    this.oController, 
-                    OvertimeWork.ProcessType.READ, 
-                    {
-                        Aftck: OvertimeWork.PRIOR,
-                        Pernr: rowData.Pernr,
-                        Begda: rowData.Begda,
-                        Endda: rowData.Endda,
-                        Datum: rowData.Begda,
-                        OtWorkTab1: [Common.copyByMetadata($.app.getModel("ZHR_WORKTIME_APPL_SRV"), "OvertimeWorkApplyTab1", rowData)]
-                    }
-                );
+                var vBukrs3 = this.oController.getSessionInfoByKey("Bukrs3"),
+                    results = ODataService.OvertimeWorkApplySet.call(
+                        this.oController, 
+                        OvertimeWork.ProcessType.READ, 
+                        {
+                            Aftck: OvertimeWork.PRIOR,
+                            Pernr: rowData.Pernr,
+                            Begda: rowData.Begda,
+                            Endda: rowData.Endda,
+                            Datum: rowData.Otdat,
+                            OtWorkTab1: [Common.copyByMetadata($.app.getModel("ZHR_WORKTIME_APPL_SRV"), "OvertimeWorkApplyTab1", rowData)]
+                        }
+                    );
 
                 if(!results.OtWorkTab1.length) {
                     MessageBox.error(this.oController.getBundleText("MSG_32018"), { // 조회된 데이터가 없습니다.
@@ -193,11 +192,11 @@ sap.ui.define(
                 this.oModel.setProperty("/Detail/IsPossibleApproval", true);
                 this.oModel.setProperty("/Detail/IsPossibleDelete", true);
                 this.oModel.setProperty("/Detail/Header", $.extend(true, results.OtWorkTab1[0], {
-                    MinDate: moment().startOf("month").hours(10).toDate(),
+                    MinDate: vBukrs3 === "1000" ? moment().subtract(1, "month").startOf("month").hours(10).toDate() : moment().startOf("month").hours(10).toDate(),
                     Holick: results.OtWorkTab1[0].Holick === "X" ? true : false,
-                    OtbetmT: results.OtWorkTab1[0].Otbetm.substring(0, 2),
+                    OtbetmT: results.OtWorkTab1[0].Otbetm.substring(0, 2) === "24" ? "00" : results.OtWorkTab1[0].Otbetm.substring(0, 2),
                     OtbetmM: results.OtWorkTab1[0].Otbetm.substring(2, 4),
-                    OtentmT: results.OtWorkTab1[0].Otentm.substring(0, 2),
+                    OtentmT: results.OtWorkTab1[0].Otentm.substring(0, 2) === "24" ? "00" : results.OtWorkTab1[0].Otentm.substring(0, 2),
                     OtentmM: results.OtWorkTab1[0].Otentm.substring(2, 4)
                 }));
                 this.oModel.setProperty("/Detail/List", results.OtWorkTab2.map(function(elem) {
@@ -216,6 +215,8 @@ sap.ui.define(
              */
             pressOpenApprovalBtn: function() {
 
+                var vBukrs3 = this.oController.getSessionInfoByKey("Bukrs3");
+
                 this.oModel.setProperty("/Detail", {
                     IsViewMode: false,
                     IsPossibleSave: false,
@@ -232,13 +233,16 @@ sap.ui.define(
                         OtentmM: "00",
                         Brkhr1: "00",
                         Brkmm1: "00",
-                        MinDate: moment().startOf("month").hours(10).toDate(),
-                        Begda: new Date()
+                        MinDate: vBukrs3 === "1000" ? moment().subtract(1, "month").startOf("month").hours(10).toDate() : moment().startOf("month").hours(10).toDate(),
+                        Otdat: new Date(),
+                        Begda: new Date(),
+                        Endda: new Date()
                     },
                     List: []
                 });
 
                 this.openDetailDialog();
+                this.calculationOverWork("X");
             },
 
             /**
@@ -358,11 +362,11 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.PRIOR;
                     payload.Reqes = "";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Otdat);
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : "",
-                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Begda),
+                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Otdat),
                             Otbetm: oInputData.Header.OtbetmT + oInputData.Header.OtbetmM,
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
@@ -406,11 +410,11 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.PRIOR;
                     payload.Reqes = "X";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Otdat);
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : "",
-                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Begda),
+                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Otdat),
                             Otbetm: oInputData.Header.OtbetmT + oInputData.Header.OtbetmM,
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
@@ -459,7 +463,7 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.PRIOR;
                     payload.Reqes = "";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Otdat);
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : ""
@@ -525,15 +529,16 @@ sap.ui.define(
                             this.oController, 
                             OvertimeWork.ProcessType.CODE, 
                             {
+                                isErrorShow: true,
                                 Aftck: OvertimeWork.PRIOR,
                                 First: vFirst,
                                 Pernr: vDetailInfo.Pernr,
                                 Begda: vDetailInfo.Begda,
-                                Endda: vDetailInfo.Begda,
-                                Datum: vDetailInfo.Begda,
+                                Endda: vDetailInfo.Endda,
+                                Datum: vDetailInfo.Otdat,
                                 OtWorkTab1: [{
                                     Pernr: vDetailInfo.Pernr,
-                                    Otdat: Common.adjustGMTOdataFormat(vDetailInfo.Begda),
+                                    Otdat: Common.adjustGMTOdataFormat(vDetailInfo.Otdat),
                                     Otbetm: Common.nvl(vDetailInfo.OtbetmT, "00") + Common.nvl(vDetailInfo.OtbetmM, "00"),
                                     Otentm: Common.nvl(vDetailInfo.OtentmT, "00") + Common.nvl(vDetailInfo.OtentmM, "00"),
                                     Brkhr1: Common.nvl(vDetailInfo.Brkhr1, "00"),

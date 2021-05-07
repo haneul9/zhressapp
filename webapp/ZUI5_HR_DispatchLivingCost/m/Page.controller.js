@@ -22,7 +22,7 @@
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs2");
+			return this.getSessionInfoByKey("Bukrs3");
         },
 		
 		onInit: function () {
@@ -88,6 +88,9 @@
 					}
                     
                     oController.LogModel.setData({Data: oData.DispatchApplyExport.results[0]});
+					if(oData.DispatchApplyExport.results[0].EClose === "X"){
+						sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107")});
+					}
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);

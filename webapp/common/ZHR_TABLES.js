@@ -2,8 +2,6 @@
 /* global common:true */
 jQuery.sap.declare("common.ZHR_TABLES");
 
-jQuery.sap.require("common.moment-with-locales");
-
 common.ZHR_TABLES = {
 	/*
 	 *

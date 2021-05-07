@@ -5,8 +5,7 @@ sap.ui.define(
 		"./ODataService",
 		"sap/m/MessageBox",
 		"sap/ui/core/BusyIndicator",
-		"sap/ui/model/json/JSONModel",
-        "common/moment-with-locales"
+		"sap/ui/model/json/JSONModel"
 	],
 	function (Common, ODataService, MessageBox, BusyIndicator, JSONModel) {
 		"use strict";

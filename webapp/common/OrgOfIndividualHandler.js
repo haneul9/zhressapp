@@ -105,7 +105,11 @@ sap.ui.define(
 							new sap.ui.model.Filter("ILangu", sap.ui.model.FilterOperator.EQ, Langu),	//
 							new sap.ui.model.Filter("IMolga", sap.ui.model.FilterOperator.EQ, Molga),	//
 							new sap.ui.model.Filter("IDatum", sap.ui.model.FilterOperator.EQ, Datum),	//
-							new sap.ui.model.Filter("IMssty", sap.ui.model.FilterOperator.EQ, Mssty)	//
+							new sap.ui.model.Filter("IMssty", sap.ui.model.FilterOperator.EQ, Mssty),	//
+							new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+							new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+							new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+							new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 						],
 						success: function(data) {
 							if(data.results.length) {
@@ -154,7 +158,11 @@ sap.ui.define(
 						new sap.ui.model.Filter("IMolga", sap.ui.model.FilterOperator.EQ, Molga),	//
 						new sap.ui.model.Filter("IDatum", sap.ui.model.FilterOperator.EQ, Datum),	//
 						new sap.ui.model.Filter("IOrgAll", sap.ui.model.FilterOperator.EQ, ""),		//
-						new sap.ui.model.Filter("INoP", sap.ui.model.FilterOperator.EQ, "")			//
+						new sap.ui.model.Filter("INoP", sap.ui.model.FilterOperator.EQ, ""),		//
+						new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId())
 					],
 					success: function(data) {
 						if(data.results) {

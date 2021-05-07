@@ -2,7 +2,6 @@
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/moment-with-locales",
     "../common/SearchUser1",
     "../common/SearchOrg",
     "../common/DialogHandler",
@@ -10,7 +9,7 @@ sap.ui.define([
 	"sap/base/util/UriParameters",
 	"sap/ui/model/json/JSONModel",
 	"../common/EmployeeModel",
-], function(Common, CommonController, momentjs, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, UriParameters, JSONModel,EmployeeModel) {
+], function(Common, CommonController, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, UriParameters, JSONModel,EmployeeModel) {
 "use strict";
 
 return CommonController.extend($.app.APP_ID, { // 
@@ -163,14 +162,15 @@ return CommonController.extend($.app.APP_ID, { //
 			detailData.Apbeg = "\/Date(" + common.Common.getTime(new Date(oController._DetailJSonModel.getProperty("/Data/Apbeg"))) + ")\/";
 			detailData.Apend = "\/Date(" + common.Common.getTime(new Date(oController._DetailJSonModel.getProperty("/Data/Apend"))) + ")\/";
 			createData.IncomeTax1Nav.push(detailData);
-			var oModel = sap.ui.getCore().getModel("ZHR_PAY_RESULT_SRV");
-			oModel.create(oPath, createData, null,
-				function(data, res){
+			
+			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
+			oModel.create(oPath, createData, {
+				success: function(data, res){
 					if(data){
 						
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 						
@@ -183,7 +183,7 @@ return CommonController.extend($.app.APP_ID, { //
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			)
+			});
 			
 			oController._BusyDialog.close();
 			
@@ -201,14 +201,14 @@ return CommonController.extend($.app.APP_ID, { //
 				}
 			});
 			
-		}
+		};
 		
 		var CreateProcess = function(fVal){
 			if(fVal && fVal == sap.m.MessageBox.Action.YES) {
 				oController._BusyDialog.open();
 				setTimeout(create, 100);
 			}
-		}	
+		};
 		
 		sap.m.MessageBox.confirm( oController.getBundleText("MSG_17003"),{ // 신청하시겠습니까?
 			title : oController.getBundleText("LABEL_02053") ,	// 확인

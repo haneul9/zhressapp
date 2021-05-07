@@ -16,14 +16,16 @@
 	<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
 	<script src="common/AppPrefilter.js"></script>
 	<script id="sap-ui-bootstrap"
-		src="resources/sap-ui-core.js"
+		src="resources/sap-ui-cachebuster/sap-ui-core.js"
 		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-appCacheBuster="./"
 		data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 		data-sap-ui-compatVersion="edge"
 		data-sap-ui-async="true"
 		data-sap-ui-frameOptions="allow"
-		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.core, sap.ui.unified">
+		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.unified">
 	</script>
+	<script src="common/moment-with-locales.js"></script>
 	<script src="common/AppBasis.js"></script>
 	<script>	
 	var gDtfmt = "yyyy-MM-dd",
@@ -46,7 +48,8 @@
 			APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 			APP_ID: [contextPath, "List"].join("."),
 			APP_AUTH: $.app.Auth.MSS,
-			APP_TILE: oBundleText.getText("LABEL_37001"), // 사원 프로파일
+			APP_TILE: oBundleText.getText("LABEL_37109"), // 부서원 인사정보
+			APP_TYPE: "M",
 			LOG: {
 				ENABLE_SUCCESS: true
 			}
@@ -89,6 +92,28 @@
 	}
 	.AlignEnd{
 		text-align : End;
+	}
+	.EmployeeLayoutPadding {
+		padding-left: 24px;
+	}
+	.EmployeeLayoutHeader {
+		font-size : 1rem !important;
+		font-weight : 500 !important;
+		letter-spacing : 0.5px !important;
+		padding-bottom : 0.25rem !important;
+		line-height:24px !important;
+		min-height : auto !important; 
+	}
+	.EmployeeLayoutText {
+		font-size : 14px !important;
+		line-height : 1.2 !important;
+		min-height : auto !important;
+	}
+	.EmployeeLayoutText span{
+		line-height:20px !important;
+	}
+	.EmployeeLayoutPic {
+		padding-left: 20px;
 	}
 	</style>
 	</head>

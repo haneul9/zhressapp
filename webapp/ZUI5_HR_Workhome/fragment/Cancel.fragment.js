@@ -16,18 +16,20 @@ sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Cancel", {
 			contentWidth : "500px",
 			draggable : true,
 			content : [oTextArea],
-			title : oBundleText.getText("LABEL_53015"), // 취소사유
+			title : "{i18n>LABEL_53015}", // 취소사유
 			beginButton : [new sap.m.Button({
-							   text : oBundleText.getText("LABEL_53007"), // 취소처리
+							   text : "{i18n>LABEL_53007}", // 취소처리
 							   press : function(){
 							   		oController.onPressDelete(null, "E");
 							   }
 						   }).addStyleClass("button-dark")],
 			endButton : [new sap.m.Button({
-							 text : oBundleText.getText("LABEL_00133"), // 닫기
+							 text : "{i18n>LABEL_00133}", // 닫기
 							 press : function(){oDialog.close();}
 						 }).addStyleClass("button-default custom-button-divide")]
-		}).addStyleClass("custom-dialog-popup");
+		});
+		
+		oDialog.addStyleClass($.app.getDeviceSystem() == "phone" ? "mobile-custom-dialog-popup" : "custom-dialog-popup");
 		
 		oDialog.setModel(new sap.ui.model.json.JSONModel());
 		oDialog.bindElement("/Data");

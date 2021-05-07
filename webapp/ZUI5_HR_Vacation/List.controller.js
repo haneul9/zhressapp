@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -36,7 +36,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -53,7 +53,8 @@ sap.ui.define([
 						Pernr : oLoginData.Pernr,
 						Ename : oLoginData.Ename,
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
-						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))
+						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
+						Persa : oLoginData.Persa
 						// Tmdat : dateFormat.format(new Date()),
 					}
 				};
@@ -115,7 +116,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {VacationNav : []};
 					createData.IPernr = (oData.Pernr && oData.Pernr != "" ? oData.Pernr : "");
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
@@ -124,11 +125,12 @@ sap.ui.define([
 					createData.IBukrs = $.app.getModel("session").getData().Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 
-				oModel.create("/VacationListSet", createData, null,
-					function(data, res){
+				oModel.create("/VacationListSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationNav && data.VacationNav.results){
-								for(var i=0; i<data.VacationNav.results.length; i++){   
+								for(var i=0; i<data.VacationNav.results.length; i++){  
+									data.VacationNav.results[i].Idx = i;
 									data.VacationNav.results[i].Begda = data.VacationNav.results[i].Begda ? dateFormat.format(new Date(common.Common.setTime(data.VacationNav.results[i].Begda))) : "";
 									data.VacationNav.results[i].Endda = data.VacationNav.results[i].Endda ? dateFormat.format(new Date(common.Common.setTime(data.VacationNav.results[i].Endda))) : "";
 									
@@ -144,7 +146,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -157,7 +159,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -201,7 +203,7 @@ sap.ui.define([
 			var oIndices = oTable.getSelectedIndices();
 			
 			if(oIndices.length != 1){
-				sap.m.MessageBox.error(oBundleTExt.getText("MSG_48021")); // 삭제신청할 데이터를 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48021")); // 삭제신청할 데이터를 선택하여 주십시오.
 				return;
 			}
 			
@@ -209,11 +211,22 @@ sap.ui.define([
 			var oData = oTable.getModel().getProperty(sPath);
 			
 			if(oData.Status1 != "99"){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48022")); // 승인된 데이터만 삭제신청 가능합니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48022")); // 승인된 데이터만 삭제신청 가능합니다.
 				return;
 			} else if(oData.Delapp != ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48023")); // 신규신청 데이터만 삭제신청 가능합니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48023")); // 신규신청 데이터만 삭제신청 가능합니다.
 				return;
+			}
+			
+			// 2021-05-06 선택된 데이터를 제외하고 동일한 근태기간,유형이 존재하면 에러처리
+			var oTableData = oTable.getModel().getProperty("/Data");
+			for(var i=0; i<oTableData.length; i++){
+				if(oData.Idx != oTableData[i].Idx){
+					if((oData.Period == oTableData[i].Period && oData.Awart == oTableData[i].Awart) && oTableData[i].Status1 != "99"){
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48025")); // 진행중인 삭제신청 건이 존재합니다.
+						return;
+					}
+				}
 			}
 			
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
@@ -239,7 +252,7 @@ sap.ui.define([
 			
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : "ZUI5_HR_Vacation.Detail",
-			      data : Object.assign({FromPageId : "ZUI5_HR_Vacation.List"}, oData)
+			      data : Object.assign({FromPageId : "ZUI5_HR_Vacation.List", Flag : (oData.Delapp == "X" ? "D" : "")}, oData)
 			});
 		},
 		

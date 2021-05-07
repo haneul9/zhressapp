@@ -283,13 +283,6 @@ sap.ui.define([
 					}).addStyleClass("search-field-group"),
 
 					new sap.m.FlexBox(oController.PAGEID + "_BasicBox", {
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if(vBukrs === "A100") return false;
-								return true;
-							}
-						},
 						items: [
 							new sap.m.Label({
 								// 기본급
@@ -330,13 +323,6 @@ sap.ui.define([
 					}).addStyleClass("search-field-group"),
 
 					new sap.m.FlexBox(oController.PAGEID + "_AmountTBox", {
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if(vBukrs === "A100") return false;
-								return true;
-							}
-						},
 						items: [
 							new sap.m.Label({
 								// 경조 금액
@@ -349,33 +335,6 @@ sap.ui.define([
 								text: "{AmountT}",
 								textAlign: "End",
 								width: "200px"
-							})
-						]
-					}).addStyleClass("search-field-group"),
-	
-					new sap.m.FlexBox(oController.PAGEID + "_CopayTBox", {
-						visible: {
-							path: vBukrs,
-							formatter: function () {
-								if(vBukrs === "A100") return true;
-								return false;
-							}
-						},
-						items: [
-							new sap.m.FlexBox(oController.PAGEID + "_CopayTBox1", {
-								items: [
-									new sap.m.Label({
-										text: "{i18n>LABEL_08013}", // 회사 경조금
-										layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
-										width: "120px",
-										textAlign: "End"
-									}),
-									new sap.m.Text(oController.PAGEID + "_CopayT", {
-										text: "{CopayT}",
-										textAlign: "End",
-										width: "200px"
-									})
-								]
 							})
 						]
 					}).addStyleClass("search-field-group"),

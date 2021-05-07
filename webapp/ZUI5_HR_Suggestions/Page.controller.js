@@ -3,14 +3,14 @@
 	"../common/CommonController",
 	"../common/JSONModelHelper",
     "../common/AttachFileAction",
+	"sap/base/util/UriParameters",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"./delegate/ViewTemplates"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ViewTemplates) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, UriParameters, MessageBox, BusyIndicator, ViewTemplates) {
 	"use strict";
 
-	
 	return CommonController.extend($.app.APP_ID, {
 		
 		PAGEID: "Page",
@@ -75,14 +75,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey")))
+			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey")) {
 				this.onSelectDetail(false);
+			}
         },
 
 		getParameterByName: function(name) {
-			var regex = parent._gateway.parameter(name);
-			
-			return Common.checkNull(regex)? "" : regex;
+			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
 		},
 
         getChangeDate: function() {
@@ -127,8 +126,9 @@
 			
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
+					
 					if (oData && oData.TableIn1) {
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas = oData.TableIn1.results;
 						dataLength = rDatas.length;
@@ -242,13 +242,6 @@
 			});
 		},
 
-		onChangeData: function(oEvent) { // 비공개 CheckBox
-			var IsSelected = oEvent.getSource().getSelected();
-
-			if(IsSelected)	this.RegistModel.setProperty("/FormData/Hide", "X");
-			else this.RegistModel.setProperty("/FormData/Hide", "");
-		},
-
 		setComments: function() { // Comment Setting
 			var oController = $.app.getController();
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
@@ -272,6 +265,7 @@
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
 												width: "150px",
+												maxLength: 10,
 												value: e.Pword,
 												type: sap.m.InputType.Password
 											})
@@ -292,9 +286,10 @@
 										items: [
 											new sap.m.Text({ 
 												text: Common.DateFormatter(e.Adatl)
-											}),
+											}).addStyleClass("pt-6px"),
 											new sap.m.Button({
 												press: oController.onCommentSubBtn.bind(oController),
+												icon: "sap-icon://comment",
 												text: "{i18n>LABEL_56017}" // 대댓글
 											}).addStyleClass("button-light-sm"),
 											new sap.m.Button({
@@ -317,7 +312,7 @@
 											}).addStyleClass("button-light-sm")
 										]
 									})
-									.addStyleClass("button-group")
+									.addStyleClass("button-group mt-10px")
 								]
 							}),
 							new sap.m.HBox({
@@ -376,6 +371,7 @@
 													ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 													new sap.m.Input({
 														width: "150px",
+														maxLength: 10,
 														value: e.Pword,
 														type: sap.m.InputType.Password
 													})
@@ -396,7 +392,7 @@
 												items: [
 													new sap.m.Text({ 
 														text: Common.DateFormatter(e.Adatl)
-													}),
+													}).addStyleClass("pt-6px"),
 													new sap.m.Button({
 														press: oController.onSubCommentReBtn.bind(oController),
 														text: "{i18n>LABEL_56013}" // 수정
@@ -417,13 +413,14 @@
 													}).addStyleClass("button-light-sm")
 												]
 											})
-											.addStyleClass("button-group")
+											.addStyleClass("button-group mt-10px")
 										]
 									}),
 									new sap.m.HBox({
 										fitContainer: true,
 										items: [
 											new sap.m.TextArea({ 
+
 												width: "755px",
 												value: e.Detail,
 												growing: true,
@@ -461,6 +458,7 @@
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
 												width: "150px",
+												maxLength: 10,
 												type: sap.m.InputType.Password
 											})
 										]
@@ -474,7 +472,7 @@
 										items: [
 											new sap.m.Text({
 												text: ""
-											}),
+											}).addStyleClass("pt-6px"),
 											new sap.m.Button({
 												press: oController.onSubCommentReBtn.bind(oController),
 												visible: false,
@@ -496,13 +494,13 @@
 											}).addStyleClass("button-light-sm")
 										]
 									})
-									.addStyleClass("button-group")
+									.addStyleClass("button-group mt-10px")
 								]
 							}),
 							new sap.m.HBox({
 								fitContainer: true,
 								items: [
-									new sap.m.TextArea({ 
+									new sap.m.TextArea({ 										
 										width: "755px",
 										growing: true
 									}),
@@ -558,9 +556,9 @@
 			this.g_HiSeqnr2 = oEvent.getSource().oParent.oParent.oParent.oParent.oParent.getItems()[1].getItems()[1];
 
 			// 비밀번호
-			if(Common.checkNull(this.g_RePwordInput.getValue()) || 6 > this.g_RePwordInput.getValue().length || this.g_RePwordInput.getValue().length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(this.g_RePwordInput.getValue())){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
-				return ;
+				return true;
 			}
 
 			// 대댓글
@@ -680,9 +678,9 @@
 			var oCommData = {};
 
 			// 비밀번호
-			if(Common.checkNull(this.g_HiInputPword.getValue()) || 6 > this.g_HiInputPword.getValue().length || this.g_HiInputPword.getValue().length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(this.g_HiInputPword.getValue())){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
-				return ;
+				return true;
 			}
 
 			oCommData.Sdate = oRowData.Sdate;
@@ -830,7 +828,7 @@
 			}
 
 			// 비밀번호
-			if(Common.checkNull(oFormData.Pword) || 6 > oFormData.Pword.length || oFormData.Pword.length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(oFormData.Pword)){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
@@ -1039,9 +1037,9 @@
 			var oCommData = this.CommentModel.getProperty("/Data");
 
 			// 비밀번호
-			if(Common.checkNull(oCommData.Pword) || 6 > oCommData.Pword.length || oCommData.Pword.length > 10){
+			if(!/(?=.*\d{1,10})(?=.*[~`!@#$%\^&*()-+=]{1,10})(?=.*[a-zA-Z]{1,10}).{6,10}$/.test(oCommData.Pword)){
 				MessageBox.error(oController.getBundleText("MSG_56007"), { title: oController.getBundleText("LABEL_00149")});
-				return ;
+				return true;
 			}
 
 			// 내용

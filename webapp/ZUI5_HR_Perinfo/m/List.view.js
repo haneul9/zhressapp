@@ -12,36 +12,43 @@ sap.ui.define(
 
             createContent: function (oController) {
                 this.loadModel();
-                var searchBox = new sap.m.FlexBox({
+                var searchBox = new sap.m.HBox({
                     fitContainer: true,
+                    height : "130px",
                     items: [
-                        new sap.m.FlexBox({
+                        new sap.m.HBox({
+                        	width : "120px",
                             items: [
-                                new sap.m.Button({
-                                    press: oController.moveSearch,
-                                    icon: "sap-icon://search"
-                                }).addStyleClass("button-search")
+                               new sap.m.Image({
+                               		src : "{photo}",
+                               		height : "85px"
+                               })
                             ]
-                        }).addStyleClass("button-group pl-0"),
-                        new sap.m.FlexBox({
-                            // 검색
+                        }).addStyleClass("EmployeeLayoutPic"),
+                        new sap.m.HBox({
+                        	width : "100%",
                             items: [
-                                new sap.m.Input({
-                                    value: "{Ename}",
-                                    editable: false,
-                                    width: "200px"
-                                })
+                            	new sap.m.VBox({
+                            		items : [new sap.m.Text({ text: "{Ename}" }).addStyleClass("EmployeeLayoutHeader"), 
+                            				 new sap.m.Text({ 
+                            				 	layoutData : new sap.m.FlexItemData({ lineHeight: "16px" }),
+                            				 	text: "{Stext}" 
+                            				 }).addStyleClass("EmployeeLayoutText"),
+                            				 new sap.m.Text({ 
+                            				 	text : {
+                                                    parts: [{ path: "Pernr" },{ path: "PGradeTxt" },{ path: "ZtitleT" } ],
+                                                    formatter: function (v1, v2, v3) {
+                                                        if (v3 != "") return v1+ " / " + v2 + " / " + v3;
+                                                        else return  v1+ " / " + v2 ;
+                                                    }
+                                                 }
+                            				 }).addStyleClass("EmployeeLayoutText")
+                            		]
+                            	})
                             ]
-                        }).addStyleClass("search-field-group pl-0")
+                        }).addStyleClass("EmployeeLayoutPadding")
                     ]
-                    // visible: {
-                    //     path: "Auth",
-                    // 	formatter: function(v) {
-                    // 		if(v == "E" ) return false;
-                    // 		else return true;
-                    // 	}
-                    // 	        }
-                }).addStyleClass("search-box-mobile h-auto");
+                }).addStyleClass("EmployeeLayout");
                 searchBox.setModel(oController._ListCondJSonModel);
                 searchBox.bindElement("/Data");
                 var tabBox = new sap.m.IconTabBar(oController.PAGEID + "_IconBar", {
@@ -86,21 +93,46 @@ sap.ui.define(
                         })
                     ]
                 }).addStyleClass("tab-group");
-
+				
                 tabBox.addEventDelegate(
                     {
                         onAfterRendering: function () {
-                            this.setSelectedKey("Basic");
-                            this.fireSelect();
+                        	if(oController.doubleRendering == "X"){
+	                        	this.setSelectedKey("Basic");
+	                            this.fireSelect();	
+                        	}
+                            oController.doubleRendering = "X";
                         }
                     },
                     tabBox
                 );
-
+                
+                var oMainBox = new sap.m.VBox({
+                    items:  [searchBox, tabBox]
+                })
+                .addStyleClass("vbox-form-mobile-etc pt-16px");
+                
                 return new PageHelper({
-                    contentContainerStyleClass: "app-content-container-mobile",
-                    contentItems: [searchBox, tabBox]
-                });
+                	contentContainerStyleClass: "app-content-container-mobile",
+                    contentItems: [oMainBox],
+                    headerButton : new sap.m.FlexBox({
+                                    items: [ 
+                                        new sap.m.Button({ 
+                                            press: oController.moveSearch,
+                                            text : "{i18n>LABEL_00205}",  //사원검색
+                                            visible: {
+                                                path : "Chief",
+                                                formatter : function(v){
+                                                  return v === "X" ? true : false; 
+                                                }
+                                            } 
+                                        }).addStyleClass("button-light")
+                                    ]
+                                }).addStyleClass("app-nav-button-right")
+
+                })
+                .setModel(oController._ListCondJSonModel)
+                .bindElement("/Data");
             },
 
             loadModel: function () {

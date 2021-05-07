@@ -26,14 +26,22 @@ check: function(callback) {
 		this.isTargetPernr()	// MFA 대상 사번인지 확인
 	])
 	.then(function() {
-		if (this.targetIP && this.targetPernr) {
-			if (this._gateway.isLOCAL()) {
-				this.callback();
-			} else {
-				this.confirm();
-			}
+		if (this._gateway.parameter('dlswmddlvlfdygkqslek') === 'true') {
+			this.confirm();
 		} else {
-			this.callback();
+			if (this._gateway.parameter('xptmxmwhagkrpTtmqslek') !== 'true') {
+				if (this.targetIP && this.targetPernr) {
+					this.confirm();
+				} else {
+					if (typeof callback === 'function') {
+						this.callback();
+					}
+				}
+			} else {
+				if (typeof callback === 'function') {
+					this.callback();
+				}
+			}
 		}
 	}.bind(this))
 	.catch(function(e) {
@@ -54,9 +62,9 @@ isTargetIP: function() {
 	return $.getJSON({
 		url: '/essproxy/check2FA',
 		success: function(data) {
-			this._gateway.prepareLog('HomeMFA.isTargetIP success.', arguments).log();
-
 			this.targetIP = (data || {}).result === 'E';
+
+			this._gateway.prepareLog('HomeMFA.isTargetIP success : ' + this.targetIP, arguments).log();
 		}.bind(this)
 	}).promise();
 },
@@ -68,12 +76,12 @@ isTargetPernr: function() {
 	return $.getJSON({
 		url: this._gateway.s4hanaURL(url),
 		data: {
-			$filter: "Percod eq '${Percod}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'))
+			$filter: "Percod eq '${Percod}' and Device eq '${Device}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'), this._gateway.isMobile() ? 'M' : '')
 		},
 		success: function(data) {
-			this._gateway.prepareLog('HomeMFA.isTargetPernr success', arguments).log();
-
 			this.targetPernr = this._gateway.odataResults(data).Authyn === 'Y';
+
+			this._gateway.prepareLog('HomeMFA.isTargetPernr success : ' + this.targetPernr, arguments).log();
 		}.bind(this)
 	}).promise();
 },
@@ -118,7 +126,7 @@ handleCodeRequest: function(e) {
 
 	// 코드 발송 요청
 	setTimeout(function() {
-		this.showMessage('.valid-feedback', '인증코드 발급요청을 하였습니다. 잠시 후 이메일을 확인하시기 바랍니다.');
+		this.showMessage('.valid-feedback', '인증코드 발급요청을 하였습니다. 잠시 후 Hi HR어플 푸시알림을 확인하시기 바랍니다.');
 		this.requestCode(this.CODE.REQUEST);
 	}.bind(this), 0);
 
@@ -183,27 +191,28 @@ requestCode: function(type) {
 	}
 
 	setTimeout(function() {
-		if (this._gateway.parameter('mfa') === 'true' && type === this.CODE.CONFIRM) {
-			if ((this._gateway.isDEV() && code === '1') || (this._gateway.isQAS() && code === '2')) {
-				this.done();
-				return;
-			}
+		if (type === this.CODE.CONFIRM && (((this._gateway.isLOCAL() || this._gateway.isDEV()) && code === '1') || (this._gateway.isQAS() && code === '2'))) {
+			this.done();
+			return;
 		}
 
 		var url = 'ZHR_COMMON_SRV/TwoFactorAuthNumberSet';
 
 		this._gateway.post({
 			url: url,
+			async: false,
 			data: {
 				Ttype: type,
 				Cernm: code,
 				Percod: sessionStorage.getItem('ehr.odata.user.percod')
 			},
-			success: function() {
+			success: function(data) {
 				this._gateway.prepareLog('HomeMFA.requestCode success', arguments).log();
 
-				this.setStatus(this.STATUS.DONE, type);
-				if (type === this.CODE.CONFIRM) {
+				if(type === this.CODE.REQUEST) {
+					this.sendPush(data.d, type);
+				} else {
+					this.setStatus(this.STATUS.DONE, type);
 					this.done();
 				}
 			}.bind(this),
@@ -212,9 +221,37 @@ requestCode: function(type) {
 
 				this.showMessage('.invalid-feedback', errorMessage);
 				this.setStatus(this.STATUS.ERROR, type);
+
+				setTimeout(function() {
+					clearInterval(this.mfaCodeTimer);
+					$('#code-mfa-timer').val('5:00');
+				}.bind(this), 300);
 			}.bind(this)
 		});
 	}.bind(this), 0);
+},
+
+sendPush: function(notification, type) {
+	$.post({
+		url: '/essproxy/twofactor',
+		async: false,
+		dataType: 'text',
+		data: {
+			token: notification.Token,
+			body: notification.Zbigo
+		},
+		success: function() {
+			this._gateway.prepareLog('HomeMFA.sendPush success', arguments).log();
+
+			this.setStatus(this.STATUS.DONE, type);
+		}.bind(this),
+		error: function(jqXHR) {
+			var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeMFA.requestCode').message;
+
+			this.showMessage('.invalid-feedback', errorMessage);
+			this.setStatus(this.STATUS.ERROR, type);
+		}.bind(this)
+	});
 },
 
 showMessage: function(selector, message) {

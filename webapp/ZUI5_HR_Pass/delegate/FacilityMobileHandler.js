@@ -1,8 +1,10 @@
 sap.ui.define(
 	[
-		"./ODataService"
+		"common/Common",
+		"./ODataService",
+		"sap/ui/core/BusyIndicator"
 	],
-	function (ODataService) {
+	function (Common, ODataService, BusyIndicator) {
 		"use strict";
 
 		/**
@@ -11,9 +13,10 @@ sap.ui.define(
 		 */
 		var FacilityHandler = {
 
-			navBack: function() {
+			navBack: function(isRefresh) {
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "PassList"].join($.app.getDeviceSuffix())
+					id: [$.app.CONTEXT_PATH, "PassList"].join($.app.getDeviceSuffix()),
+					data: { isResvRefresh: isRefresh || false }
 				});
 			},
 
@@ -26,6 +29,7 @@ sap.ui.define(
 				});
 
 				this.oModel.setProperty("/MyList", results);
+				$.app.byId(this.oController.PAGEID + "_MyResv2List").removeSelections();
 			},
 
 			buildRequestTable: function () {
@@ -35,27 +39,62 @@ sap.ui.define(
 			},
 
 			onPressRowRequest: function (oEvent) {
+				BusyIndicator.show(0);
+
 				var vSpath = oEvent.getSource().getParent().getBindingContext().getPath(),
 					oRowData = $.extend(true, {}, this.oModel.getProperty(vSpath));
-	
-				// Set data
-				delete oRowData.Reqno;
-				delete oRowData.Cellp;
-				delete oRowData.Email;
-				delete oRowData.Zbigo;
-	
-				// Display control
-				oRowData.isNew = true;
 
-				this.oModel.setProperty("/Detail", oRowData);
-	
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix())
+				Common.getPromise(
+					function () {
+						// Set data
+						delete oRowData.Reqno;
+						delete oRowData.Cellp;
+						delete oRowData.Email;
+						delete oRowData.Zbigo;
+			
+						// Display control
+						oRowData.isNew = true;
+
+						this.oModel.setProperty("/Detail", oRowData);
+			
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
 				});
 			},
 
+			onPressHistoryRow: function(oEvent) {
+				BusyIndicator.show(0);
+
+				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
+				Common.log(oRowData);
+
+				Common.getPromise(
+					function () {
+						// Display control
+						oRowData.isNew = false;
+
+						this.oModel.setProperty("/Detail", oRowData);
+
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "FacilityDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
+				});
+			},
+
+			onPressCancelBtn: function () {
+
+				this.FacilityDeleteProcess(this.oModel.getProperty("/Detail"));
+			},
+
 			ProcessAfterNavigation: function() {
-				this.navBack();
+				this.navBack(true);
 			}
 		};
 

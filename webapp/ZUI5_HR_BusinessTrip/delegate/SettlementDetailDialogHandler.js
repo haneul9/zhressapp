@@ -1,13 +1,11 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
 	"common/Common",
-	"common/moment-with-locales",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/model/json/JSONModel"
 ], function(
 	Common,
-	momentjs,
 	MessageBox,
 	BusyIndicator,
 	JSONModel
@@ -52,6 +50,8 @@ var Handler = {
 	// DialogHandler 호출 function
 	once: function() {
 
+		this.oModel.setProperty("/EmpLoginInfo", this.oController.getSessionModel().getData());
+		this.oModel.setProperty("/EmpLoginInfo/Today", new Date());
 		this.oModel.setProperty("/CardPyTextMap", {
 			"1": this.oController.getBundleText("LABEL_19574"), // 현금/기타
 			"5": this.oController.getBundleText("LABEL_19573")  // 법인카드
@@ -85,7 +85,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EnameList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -108,7 +109,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/BtPurpose1SelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this))
@@ -242,8 +244,14 @@ var Handler = {
 							}
 						});
 						if (this.oRowData.isFromAbsence) {
-							TableIn04[0].BtStartdat = Common.getUTCDateTime(this.oRowData.BtStartdat);
-							TableIn04[0].BtEnddat = Common.getUTCDateTime(this.oRowData.BtEnddat);
+							var BtStartdat = Common.getUTCDateTime(this.oRowData.BtStartdat),
+							BtEnddat = Common.getUTCDateTime(this.oRowData.BtEnddat);
+
+							TableIn04[0].BtStartdat = BtStartdat;
+							TableIn04[0].BtEnddat = BtEnddat;
+
+							this.oModel.setProperty("/Header/BtStartdat", BtStartdat);
+							this.oModel.setProperty("/Header/BtEnddat", BtEnddat);
 						}
 						this.oModel.setProperty("/SettlementTableIn04", TableIn04);
 						Common.adjustVisibleRowCount($.app.byId("SettlementTableIn04"), 5, TableIn04.length);

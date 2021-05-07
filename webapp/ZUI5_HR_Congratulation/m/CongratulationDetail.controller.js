@@ -18,6 +18,8 @@ sap.ui.define(
 			PAGEID: "CongratulationDetail",
 
 			DetailModel: new JSONModelHelper(), 
+			g_BDate: "",
+			g_EDate: "",
 
 			getUserId: function() {
 				
@@ -38,17 +40,12 @@ sap.ui.define(
 						onAfterShow: this.onAfterShow
 					}, this);
 				
-				//Registering to the icon pool
-				IconPool.registerFont({
-					fontFamily: "SAP-icons-TNT",
-					fontURI: sap.ui.require.toUrl("sap/tnt/themes/base/fonts/")
-				});
-				IconPool.fontLoaded("SAP-icons-TNT");
-
 				Common.log("onInit session", this.getView().getModel("session").getData());
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
+
 				var	oController = this.getView().getController();
 				var oIconText = $.app.byId(oController.PAGEID + "_IconText");
 				
@@ -76,6 +73,8 @@ sap.ui.define(
 				
 				if(oController.DetailModel.getProperty("/FormData").Fgbdt) oBirthDayDate.setVisible(true);
 				else oBirthDayDate.setVisible(false);
+				
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {
@@ -112,15 +111,36 @@ sap.ui.define(
 			
 			onStartDatePicker: function() {
 				var oController = this.getView().getController();
+				var vBurks = oController.getUserGubun();
 				var vStartDate = $.app.byId(oController.PAGEID + "_StartDatePicker");
-				var vYear1 = new Date().getFullYear()-1;
-				var vYear2 = new Date().getFullYear()+1;
-				var vMonth = new Date().getMonth();
-				var vDate1 = new Date().getDate();
-				var vDate2 = new Date().getDate()-1;
+				var vYear1 = "",
+					vYear2 = "",
+					vMonth1 = "",
+					vMonth2 = "",
+					vDate1 = "",
+					vDate2 = "";
 				
-				vStartDate.setMinDate(new Date(vYear1, vMonth, vDate1));
-				vStartDate.setMaxDate(new Date(vYear2, vMonth, vDate2));
+				if(vBurks !== "A100"){
+					vYear1 = new Date().getFullYear()-1;
+					vYear2 = new Date().getFullYear()+1;
+					vMonth1 = new Date().getMonth();
+					vDate1 = new Date().getDate();
+					vDate2 = new Date().getDate()-1;
+					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
+					vStartDate.setMaxDate(new Date(vYear2, vMonth1, vDate2));
+				}else {
+					var Bdate = parseInt(oController.g_BDate),
+						Edate = parseInt(oController.g_EDate);
+					vYear1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getFullYear();
+					vMonth1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getMonth();
+					vDate1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getDate();
+					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
+					
+					vYear2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getFullYear();
+					vMonth2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getMonth();
+					vDate2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getDate();
+					vStartDate.setMaxDate(new Date(vYear1, vMonth2, vDate2));
+				}
 			},
 			
 			setTypeCombo: function (oController) { //경조유형을 받아오는곳
@@ -132,6 +152,28 @@ sap.ui.define(
 				var oBirthDayBox = $.app.byId(oController.PAGEID + "_BirthDayBox");
 				oBirthDayBox.setVisible(false);
 				
+				if(vBukrs === "A100"){
+					oCodeHeaderParams.ICodeT = "018";
+					oCodeHeaderParams.ICodty = "PB120";
+					oCodeHeaderParams.IPernr = vPernr;
+					oCodeHeaderParams.ISubCode = "DATE";
+					oCodeHeaderParams.NavCommonCodeList = [];
+					
+					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
+						success: function (oData, oResponse) {
+							if (oData && oData.NavCommonCodeList.results) {
+								//값을 제대로 받아 왔을 때
+								var rDatas = oData.NavCommonCodeList.results;
+								oController.g_BDate = rDatas[0].Cvalu;
+								oController.g_EDate = rDatas[1].Cvalu;
+							}
+						},
+						error: function (oResponse) {
+							common.Common.log(oResponse);
+						}
+					});
+				}
+
 				oCodeHeaderParams = {
 					ICodeT: "018",
 					IPernr: vPernr,
@@ -283,6 +325,57 @@ sap.ui.define(
 				sap.m.MessageBox.confirm(oController.getBundleText("LABEL_08002") + oController.getBundleText("LABEL_08024"), {
 					title: oController.getBundleText("LABEL_08022"),
 					actions: ["저장", "취소"],
+					onClose: onProcessSave
+				});
+			},
+			
+			onDialogDelBtn: function () { // 삭제
+				var oController = this;
+				var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+				var vDetailData = oController.DetailModel.getProperty("/FormData");
+				var vPernr = oController.getUserId();
+				
+				delete vDetailData.FilePlaceholder //필요없는 값이므로 key 삭제
+				delete vDetailData.TextA; //필요없는 값이므로 key 삭제
+				delete vDetailData.isVisibleType;
+				delete vDetailData.isVisibleVehicle; 
+				delete vDetailData.Dtfmt; 
+
+				BusyIndicator.show(0);
+				var onProcessSave = function (fVal) {
+					if (fVal && fVal == "삭제") {
+						
+						var sendObject = {
+							IConType: "4",
+							ILangu: "3",
+							IPernr: vPernr,
+							IBukrs: "1000",
+							TableIn: [vDetailData] //넘길 값들을 담아놓음
+						};
+						
+						oModel.create("/CongratulationApplySet", sendObject, {
+							success: function (oData, response) {
+								sap.m.MessageBox.alert(oController.getBundleText("LABEL_08003") + oController.getBundleText("LABEL_08023"));
+								oController.onTableSearch();
+								oController.navBack();
+								Common.log(oData);
+								BusyIndicator.hide();
+							},
+							error: function (oError) {
+								sap.m.MessageBox.alert(Common.parseError(oError).ErrorMessage, {
+									title: oController.getBundleText("LABEL_09030")
+								});
+								oController.onTableSearch();
+								Common.log(oError);
+								BusyIndicator.hide();
+							}
+						});
+					}
+					BusyIndicator.hide();
+				};
+				sap.m.MessageBox.confirm(oController.getBundleText("LABEL_08003") + oController.getBundleText("LABEL_08024"), {
+					title: oController.getBundleText("LABEL_08022"),
+					actions: ["삭제", "취소"],
 					onClose: onProcessSave
 				});
 			},
@@ -517,13 +610,12 @@ sap.ui.define(
 						if (oController.getUserGubun() === "A100") {
 							//첨단일 경우 CopayT에 값이 들어있지 않아 기본급으로 측정되기에 BasicT에서 그대로 받아서 넣어줌.
 							oController.DetailModel.setProperty("/FormData/CopayT", oData.TableIn.results[0].AmountT);
-						} else {
-							//기초일 경우
-							oController.DetailModel.setProperty("/FormData/BasicT", oData.TableIn.results[0].BasicT);
-							oController.DetailModel.setProperty("/FormData/Rate", oData.TableIn.results[0].Rate);
-							oController.DetailModel.setProperty("/FormData/AmountT", oData.TableIn.results[0].AmountT);
-							oController.onCheckPress();
 						}
+						//기초일 경우
+						oController.DetailModel.setProperty("/FormData/BasicT", oData.TableIn.results[0].BasicT);
+						oController.DetailModel.setProperty("/FormData/Rate", oData.TableIn.results[0].Rate);
+						oController.DetailModel.setProperty("/FormData/AmountT", oData.TableIn.results[0].AmountT);
+						oController.onCheckPress();
 						Common.log(oData);
 					},
 					error: function (oResponse) {

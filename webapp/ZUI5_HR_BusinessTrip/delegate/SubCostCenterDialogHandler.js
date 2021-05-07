@@ -107,7 +107,7 @@ var Handler = {
 						this.oModel.setProperty("/SubCostCenter/List", []);
 
 						Common.adjustVisibleRowCount($.app.byId("SubCostCenterTable").setBusy(false), 1, 1);
-					}
+					}.bind(this)
 				}
 			);
 		}.bind(this));
@@ -116,7 +116,7 @@ var Handler = {
 	clickTableCell: function(oEvent) {
 
 		var p = oEvent.getParameter("rowBindingContext").getProperty();
-		return Common.getPromise(function () {
+		return Common.getPromise(function() {
 			if (this.callback) {
 				this.callback({
 					code: p.Kostl,

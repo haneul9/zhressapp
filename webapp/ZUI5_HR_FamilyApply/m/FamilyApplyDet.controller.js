@@ -6,8 +6,9 @@ sap.ui.define([
 	"../../common/JSONModelHelper",
 	"../../common/PageHelper",
 	"../../common/AttachFileAction",
-	"../../common/EmployeeModel"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel) {
+	"../../common/EmployeeModel",
+	"sap/ui/core/BusyIndicator"], 
+	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel, BusyIndicator) {
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "FamilyApplyDet"].join($.app.getDeviceSuffix());
 	return CommonController.extend(SUB_APP_ID, {
 
@@ -70,6 +71,12 @@ sap.ui.define([
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
 		},
 
+		getMobileTxt:function(vTxt,vNo){  
+			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
+			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?new sap.m.Label({required:true,text:oController.getBundleText(vTxt)}):
+			new sap.m.Label({required:false,text:oController.getBundleText(vTxt)});
+		},
+
 		initTdata:function(){
 			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
 			oController._tData={
@@ -96,7 +103,6 @@ sap.ui.define([
 				Fasar:"",
 				Lnmhg:"",
 				Fnmhg:"",
-				Emetl:"",
 				Regno:"",
 				Zzclass:"1",
 				Appnm:"",
@@ -124,7 +130,7 @@ sap.ui.define([
 
 		onRe : function(){  
 			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
-			var oJSON=$.app.byId(oController.PAGEID+"_Mat").getModel();
+			var oJSON=$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel();
 			oJSON.setProperty("/oData/0/Opener","X");
 			var vAppnm = oJSON.getProperty("/oData")[0].Appnm;
 			var vStatus = oJSON.getProperty("/oData")[0].Opener;
@@ -147,30 +153,21 @@ sap.ui.define([
 			oController._tData.Regno!=""&&
 			oController._tData.Regno.search("-")==-1?oController._tData.Regno=oController._tData.Regno.substring(0,6)+"-"+oController._tData.Regno.substring(6):null;
 			oJSON.setData(aData);
-			$.app.byId(oController.PAGEID+"_Mat").setModel(oJSON);
-			$.app.byId(oController.PAGEID+"_Mat").bindElement("/oData/0");
+			$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").setModel(oJSON);
+			$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").bindElement("/oData/0");
 			oController.onChange("B");
-			$.app.byId(oController.PAGEID+"_Mat").bindElement("/oData/0");
+			$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").bindElement("/oData/0");
 			var vAppnm = oJSON.getProperty("/oData")[0].Appnm;
 			var vStatus = oJSON.getProperty("/oData")[0].Opener;
-			if (!oController._BusyDialog) {
-				oController._BusyDialog = new sap.m.Dialog({showHeader:false}).addStyleClass("centerAlign");
-				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
-				oController._BusyDialog.addContent(new sap.m.BusyIndicator({ text: "{i18n>MSG_44017}" }));	// 검색중입니다. 잠시만 기다려주십시오.
-				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
-				oController.getView().addDependent(oController._BusyDialog);
-			}
-			if (!oController._BusyDialog.isOpen()) {
-				oController._BusyDialog.open();
-			}			
+			BusyIndicator.show(0);			
 			if(oController._onDialog=="N"){
 				oController.initTdata();
-				$.app.byId(oController.PAGEID+"app-title").setText(oBundleText.getText("LABEL_44037"));
+				$.app.byId(oController.PAGEID+"-app-title").setText(oBundleText.getText("LABEL_44037"));
 			}else if(oController._onDialog=="M"){
 				if(oController._tData.Opener=="X"){
-					$.app.byId(oController.PAGEID+"app-title").setText(oBundleText.getText("LABEL_44038"));
+					$.app.byId(oController.PAGEID+"-app-title").setText(oBundleText.getText("LABEL_44038"));
 				}else{
-					$.app.byId(oController.PAGEID+"app-title").setText(oBundleText.getText("LABEL_44039"));
+					$.app.byId(oController.PAGEID+"-app-title").setText(oBundleText.getText("LABEL_44039"));
 				}
 				if(oController._tData.Status==""){
 					$.app.byId(oController.PAGEID+"_Sel1").setEditable(false);
@@ -229,9 +226,7 @@ sap.ui.define([
 					vSetFileData.Editable=true;
 					oController.setAttachFile(oController,vSetFileData);
 				}
-				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
-					oController._BusyDialog.close();
-				}
+				BusyIndicator.hide();
 			},10);
 		},
 		
@@ -333,16 +328,6 @@ sap.ui.define([
 			var oController = $.app.getController(),
 				reader = new FileReader(),
 				f = jQuery.sap.domById(oController.PAGEID + "_UPLOAD_BTN" + "-fu").files[0];
-
-			// reader.onload = function (e) {
-			// 	// eslint-disable-next-line no-undef
-			// 	oController.X = XLSX;
-			// 	var data = e.target.result;
-			// 	var arr = oController.fixdata(data);
-			// 	var wb = oController.X.read(btoa(arr), { type: "base64" });
-			// 	oController.to_json(wb);
-			// };
-
 			reader.readAsArrayBuffer(f);
 		},
 
@@ -382,7 +367,7 @@ sap.ui.define([
 						break;
 					}
 				}
-				sData2.sort(function(a, b) { // 한글 오름차순
+				sData2.sort(function(a, b) {
 					return a.Text < b.Text ? -1 : a.Text > b.Text ? 1 : 0;
 				});
 				for(var i=0;i<sData2.length;i++){
@@ -478,7 +463,7 @@ sap.ui.define([
 		onAutoInputReg : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet");
 			var oController = oView.getController();
-			var oPro=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/oData")[0];
+			var oPro=$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0];
 			var s = oEvent.getParameter("value");
 			var oId=oEvent.getSource().getId();
 			if(s.length>0&&s.length<7&&isNaN(s)){
@@ -528,16 +513,16 @@ sap.ui.define([
 			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
 			maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/([0-9]{6})$/gi,"******")); }
 			else{ return originStr; } } 
-			$.app.byId(oController.PAGEID+"_Mat").getModel().setProperty("/oData/0/Regno",originStr);
+			$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().setProperty("/oData/0/Regno",originStr);
 			return maskingStr;
 		},
 
 		onValid : function(oController){ 
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet");
 			var oController = oView.getController();
-			var oPro=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/oData")[0];
+			var oPro=$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0];
 			var oMsg="";
-			var vStatus = $.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/oData")[0].Status;
+			var vStatus = $.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0].Status;
 			if(oPro.Famsa==""){
 				oMsg=oBundleText.getText("MSG_44005");				
 			}
@@ -558,7 +543,7 @@ sap.ui.define([
 			if(oPro.Regno.length!=14){
 				oMsg=oBundleText.getText("MSG_44019");
 			}
-			if($.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/oData")[0].Opener=="X"&&oController._onDialog=="N"){
+			if($.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0].Opener=="X"&&oController._onDialog=="N"){
 				if(AttachFileAction.getFileLength(oController) === 0) {
 					oMsg=oController.getBundleText("MSG_21007");
 				}
@@ -615,9 +600,9 @@ sap.ui.define([
 		onSaveProcess : function(oController,Sig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet");
 			var oController = oView.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._SessionData;
-			var oPro=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/oData")[0];
+			var oPro=$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0];
 			oPro.Pernr=oSessionData.Pernr;
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
 			oPro.Appnm=AttachFileAction.uploadFile.call(oController);
@@ -654,8 +639,9 @@ sap.ui.define([
 			}			
 			vData2.FamilyupdateTablein1[0].Regno.search("-")!=-1?vData2.FamilyupdateTablein1[0].Regno=vData2.FamilyupdateTablein1[0].Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]:null;
 			delete vData2.FamilyupdateTablein1[0].Opener;
-			oModel.create("/FamilyupdateSet", vData2, null,
-				function(data,res){
+			
+			oModel.create("/FamilyupdateSet", vData2, {
+				success: function(data,res){
 					var vMsg="";
 					if(data&&data.FamilyupdateExport.results.length){
 						vMsg=data.FamilyupdateExport.results[0].EMsg;
@@ -667,7 +653,7 @@ sap.ui.define([
 					});
 					oPro.Regno.search("-")==-1?oPro.Regno=oPro.Regno.substring(0,6)+"-"+oPro.Regno.substring(6):null;
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -679,7 +665,8 @@ sap.ui.define([
 					}
 					oPro.Regno.search("-")==-1?oPro.Regno=oPro.Regno.substring(0,6)+"-"+oPro.Regno.substring(6):null;
 					oPro.Opener="X";
-				});	
+				}
+			});
 		},
 
 		onSave : function(Sig){
@@ -695,8 +682,6 @@ sap.ui.define([
 					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
 					onClose: function(fVal) {
 						if(fVal=="YES"){
-							console.log(oController._tData);
-							console.log($.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/oData")[0]);
 							oController.onSaveProcess(oController,Sig);
 						}
 					}				

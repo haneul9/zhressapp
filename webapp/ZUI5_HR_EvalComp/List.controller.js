@@ -36,22 +36,22 @@ sap.ui.define([
 			if(!oController._ListCondJSonModel.getProperty("/Data")){
 				var oPhoto = "";
 				
-				new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + oController.getView().getModel("session").getData().Pernr + "' and photoType eq '1'")
-									 .select("photo")
-									 .setAsync(false)
-									 .attachRequestCompleted(function(){
-											var data = this.getData().d;
+				// new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + oController.getView().getModel("session").getData().Pernr + "' and photoType eq '1'")
+				// 					 .select("photo")
+				// 					 .setAsync(false)
+				// 					 .attachRequestCompleted(function(){
+				// 							var data = this.getData().d;
 											
-											if(data && data.results.length){
-												oPhoto = "data:text/plain;base64," + data.results[0].photo;
-											} else {
-												oPhoto = "images/male.jpg";
-											}
-									 })
-									 .attachRequestFailed(function() {
-											oPhoto = "images/male.jpg";
-									 })
-									 .load();
+				// 							if(data && data.results.length){
+				// 								oPhoto = "data:text/plain;base64," + data.results[0].photo;
+				// 							} else {
+				// 								oPhoto = "images/male.jpg";
+				// 							}
+				// 					 })
+				// 					 .attachRequestFailed(function() {
+				// 							oPhoto = "images/male.jpg";
+				// 					 })
+				// 					 .load();
 							 
 				var vData = {
 					Data : Object.assign({photo : oPhoto, Apyear : new Date().getFullYear() + ""}, oController.getView().getModel("session").getData())
@@ -108,9 +108,9 @@ sap.ui.define([
 					createData.IContType = "1";
 					createData.IScore = "X";
 
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApHeaderSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApHeaderSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.TableIn1 && data.TableIn1.results && data.TableIn1.results.length){
 								for(var i=0; i<data.TableIn1.results.length; i++){
@@ -124,7 +124,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error:function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -137,7 +137,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -150,7 +150,7 @@ sap.ui.define([
 					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
 				}
-			}
+			};
 			
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
@@ -165,7 +165,7 @@ sap.ui.define([
 			var oIndices = oTable1.getSelectedIndices();
 			
 			if(oIndices.length == 0){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_26001")); // 대리평가자를 지정할 피평가자를 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_26001")); // 대리평가자를 지정할 피평가자를 선택하여 주십시오.
 				return;
 			}
 			
@@ -220,7 +220,7 @@ sap.ui.define([
 			
 			var oData = oController._SearchDialog.getModel().getProperty("/Data");
 			if(oData.Text.trim() == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_00037")); // 검색어를 입력해 주시기 바랍니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_00037")); // 검색어를 입력해 주시기 바랍니다.
 				return;
 			}
 			
@@ -241,9 +241,9 @@ sap.ui.define([
 					createData.IOrgtx = oData.Text;
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-				oModel.create("/F4PernrAuthSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_COMMON_SRV");
+				oModel.create("/F4PernrAuthSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.TableIn && data.TableIn.results && data.TableIn.results.length){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -252,7 +252,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -265,7 +265,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -295,7 +295,7 @@ sap.ui.define([
 			var oIndices = oTable.getSelectedIndices();
 			
 			if(oIndices.length != 1){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_26005")); // 대리평가자를 한명만 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_26005")); // 대리평가자를 한명만 선택하여 주십시오.
 				return;
 			}
 			
@@ -314,14 +314,14 @@ sap.ui.define([
 					createData.TableIn.push(detail);
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApSubappSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApSubappSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -334,7 +334,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -344,7 +344,7 @@ sap.ui.define([
 					return;
 				}
 				
-				sap.m.MessageBox.success(oBundleText.getText("MSG_26002"), { // 대리평가자를 지정하였습니다.
+				sap.m.MessageBox.success(oController.getBundleText("MSG_26002"), { // 대리평가자를 지정하였습니다.
 					onClose : function(){
 						oController._SearchDialog.close();
 						oController.onPressSearch1();
@@ -359,7 +359,7 @@ sap.ui.define([
 				}
 			}
 			
-			sap.m.MessageBox.confirm(oBundleText.getText("MSG_26006"),{ // 대리평가자를 지정하시겠습니까?
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_26006"),{ // 대리평가자를 지정하시겠습니까?
 				actions : ["YES", "NO"],
 				onClose : beforeSave
 			});
@@ -374,7 +374,7 @@ sap.ui.define([
 			var oIndices = oTable.getSelectedIndices();
 			
 			if(oIndices.length == 0){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_26003")); // 대리평가자를 삭제할 피평가자를 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_26003")); // 대리평가자를 삭제할 피평가자를 선택하여 주십시오.
 				return;
 			}
 			
@@ -396,14 +396,14 @@ sap.ui.define([
 					createData.TableIn.push(detail);
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApSubappSet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApSubappSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error:function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -416,7 +416,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -426,7 +426,7 @@ sap.ui.define([
 					return;
 				}
 				
-				sap.m.MessageBox.success(oBundleText.getText("MSG_26011"), { // 대리평가자를 삭제하였습니다.
+				sap.m.MessageBox.success(oController.getBundleText("MSG_26011"), { // 대리평가자를 삭제하였습니다.
 					onClose : oController.onPressSearch1
 				});
 			}
@@ -438,7 +438,7 @@ sap.ui.define([
 				}
 			}
 			
-			sap.m.MessageBox.confirm(oBundleText.getText("MSG_26010"), { // 대리평가자를 삭제하시겠습니까?
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_26010"), { // 대리평가자를 삭제하시겠습니까?
 				actions : ["YES", "NO"],
 				onClose : beforeSave
 			});
@@ -499,9 +499,9 @@ sap.ui.define([
 					createData.IApgup = "50";
 					createData.IApcnt = "3";
 					
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApGrade2Set", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApGrade2Set", createData, {
+					success: function(data, res){
 						if(data){
 							// 평가인원 summary
 							if(data.TableIn2 && data.TableIn2.results && data.TableIn2.results.length){
@@ -525,7 +525,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -538,7 +538,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel2.setData(vData2);
 				// oTable2.bindRows("/Data");
@@ -620,7 +620,7 @@ sap.ui.define([
 				createData.TableIn1.push(detail);	
 				
 				if(Flag == "C" && oData[i].CalcD == ""){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_26012")); // 평가등급을 선택하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_26012")); // 평가등급을 선택하여 주십시오.
 					return;
 				}	
 			}
@@ -634,7 +634,7 @@ sap.ui.define([
 					var field2 = eval("oData2." + (field[i].substring(0, field[i].length-1))); // 배분율인원
 					
 					if(field1 > field2){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_26013")); // 등급별 부여 인원을 확인하시기 바랍니다.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_26013")); // 등급별 부여 인원을 확인하시기 바랍니다.
 						return;
 					}
 				}
@@ -649,14 +649,14 @@ sap.ui.define([
 				createData.IApgup = "50";
 				createData.IApcnt = "3";
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL2_SRV");
-				oModel.create("/ApGrade2Set", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_APPRAISAL2_SRV");
+				oModel.create("/ApGrade2Set", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -669,7 +669,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -686,11 +686,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(Flag == "S"){
-				confirmMessage = oBundleText.getText("MSG_00058"); // 저장하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00017"); // 저장되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_26008"); // 완료하시겠습니까?
-				successMessage = oBundleText.getText("MSG_26009"); // 완료되었습니다.
+				confirmMessage = oController.getBundleText("MSG_26008"); // 완료하시겠습니까?
+				successMessage = oController.getBundleText("MSG_26009"); // 완료되었습니다.
 			}
 			
 			var beforeSave = function(fVal){
@@ -744,7 +744,7 @@ sap.ui.define([
 						oTemplate = new sap.m.Select({
 										selectedKey : "{" + col_info[i].id +"}",
 										width : "100%",
-										items : [new sap.ui.core.Item({key : "", text : oBundleText.getText("LABEL_00181")}), // 선택
+										items : [new sap.ui.core.Item({key : "", text : oController.getBundleText("LABEL_00181")}), // 선택
 												 new sap.ui.core.Item({key : "0005", text : "S"}),
 												 new sap.ui.core.Item({key : "0004", text : "A"}),
 												 new sap.ui.core.Item({key : "0003", text : "B"}),

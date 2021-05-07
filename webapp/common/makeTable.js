@@ -398,7 +398,7 @@ common.makeTable = {
 											customData : [new sap.ui.core.CustomData({key : "", value : "{}"})]
 										});
 										
-							var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
+							var oModel = $.app.getModel("ZHR_COMMON_SRV");
 							var createData = {NavCommonCodeList : []};
 								createData.ICodeT = "022";
 								createData.IPernr = $.app.getModel("session").getData().Pernr;

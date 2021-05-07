@@ -3,18 +3,53 @@ sap.ui.define([
 	"../../common/Formatter",
 	"../../common/PageHelper",
 	"../../common/EmpBasicInfoBox",
-	"../../control/ODataFileUploader"
-], function (Common, Formatter, PageHelper, EmpBasicInfoBox,ODataFileUploader) {
+	"../../control/ODataFileUploader",
+	"../../common/PickOnlyDateRangeSelection"
+], function (Common, Formatter, PageHelper, EmpBasicInfoBox,ODataFileUploader,PickOnlyDateRangeSelection) {
 	sap.ui.jsview($.app.APP_ID, {
 		
 		getControllerName: function () {
 			return $.app.APP_ID;
 		},
 
+		getFilter : function(oController){
+			var vYear = new Date().getFullYear();
+			return new sap.m.FlexBox({
+			fitContainer: true,
+				items: [
+					new sap.m.FlexBox({
+						// 검색
+						items: [
+							new sap.m.FlexBox({
+								items: [
+									new PickOnlyDateRangeSelection(oController.PAGEID + "_ApplyDate", {
+										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+										width : "162px",
+										delimiter: "~",
+										dateValue: new Date(vYear, 0, 1),
+										secondDateValue: new Date()
+									}),
+									new sap.m.Select(oController.PAGEID + "_HeadSel",{
+									}).addStyleClass("height42px ml-10px")
+								]
+							}).addStyleClass("search-field-group"),
+							new sap.m.FlexBox({
+								items: [
+									new sap.m.Button({	
+										press : oController.onSearch,							
+										icon: "sap-icon://search" // 조회
+									}).addStyleClass("button-search")
+								]
+							}).addStyleClass("button-group")
+						]
+					}) // 검색
+				]
+			}).addStyleClass("search-box-mobile h-auto");
+		},
+
 		createContent: function (oController) {
 			jQuery.sap.includeStyleSheet("ZUI5_HR_MedApply/css/MyCssMobile.css");
 			this.loadModel();
-
 			var oInfoBox = new sap.m.FlexBox({
 				justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 				alignContent: sap.m.FlexAlignContent.End,
@@ -42,8 +77,15 @@ sap.ui.define([
 							new sap.m.Button(oController.PAGEID+"_NewBtn",{
 								press: function(){oController.onDialog(null,"N3")},
 								text: "{i18n>LABEL_47006}", // 신청
-							}).addStyleClass("button-light")]
-					}).addStyleClass("button-group")
+							}).addStyleClass("button-light"),
+							new sap.ui.commons.layout.HorizontalLayout(oController.PAGEID+"_NewIcon",{
+								visible:false,
+								content:[
+									new sap.ui.core.Icon({src:"sap-icon://message-information",color:"red",size:"15px"}),
+									new sap.ui.core.HTML({content:"<span style='font-size:14px;color:red;line-height:0px;'>&nbsp;"+oController.getBundleText('MSG_47040')+"</span>"})]
+							})
+						]
+					}).addStyleClass("button-group"),
 				]
 			}).addStyleClass("info-box");
 			
@@ -61,11 +103,11 @@ sap.ui.define([
 					}),
 					new sap.m.Column({
 						width: "40%",
-						hAlign: sap.ui.core.TextAlign.Center
+						hAlign: sap.ui.core.TextAlign.Begin
 					}),
 					new sap.m.Column({
 						width: "30%",
-						hAlign: sap.ui.core.TextAlign.End
+						hAlign: sap.ui.core.TextAlign.Begin
 					})
 				]
 			}).addStyleClass("mt-4px");
@@ -81,11 +123,11 @@ sap.ui.define([
 							new sap.m.Text({
 								text: "{PatiName}",
 								textAlign: "Begin"
-							}).addStyleClass("L2P13FontCustom"),
+							}),
 							new sap.m.Text({
 								text: "{HospName}",
 								textAlign: "Begin"
-							}).addStyleClass("L2P13Font")
+							})
 						]
 					}),
 					new sap.m.FlexBox({
@@ -94,7 +136,7 @@ sap.ui.define([
 							new sap.m.Text({
 								text: "{Regnot}",
 								textAlign: "Begin"
-							}).addStyleClass("L2P13Font")
+							})
 						]
 					}),
 					new sap.m.FlexBox({
@@ -105,12 +147,12 @@ sap.ui.define([
 									path : "MedDate", 
 									type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
 								},
-								textAlign: "End"
-							}).addStyleClass("L2P13Font"),
+								textAlign: "Begin"
+							}),
 							new sap.m.Text({
 								text: "{StatusText}",
-								textAlign: "End"
-							}).addStyleClass("L2P13Font")
+								textAlign: "Begin"
+							})
 						]
 					})
 				]
@@ -122,6 +164,7 @@ sap.ui.define([
 				contentContainerStyleClass: "app-content-container-mobile",
 				contentItems: [
 					oInfoBox,
+					this.getFilter(oController),
 					oTable
 				]
 			});

@@ -33,7 +33,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -99,15 +99,15 @@ sap.ui.define([
 				oLayout.addContent(sap.ui.jsfragment("ZUI5_HR_WorkScheduleBasic.fragment.Calendar", oController));
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {WScheduleBasicNav : []};
 					createData.IPernr = oData.Pernr;
 					createData.ILangu = oData.Langu;
 					createData.IYear = oData.Zyymm.substring(0,4);
 					createData.IMonth = oData.Zyymm.substring(4,6);
 				
-				oModel.create("/WorkScheduleBasicSet", createData, null,
-					function(data, res){
+				oModel.create("/WorkScheduleBasicSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WScheduleBasicNav && data.WScheduleBasicNav.results){
 								var data1 = data.WScheduleBasicNav.results;
@@ -175,7 +175,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -188,7 +188,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
