@@ -256,7 +256,8 @@ sap.ui.define([
 			setTimeout(function(){
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
-					Required: true,
+					Required: false,
+					Label: "",
 					Mode: "M",
 					Max: "15",
 					Editable: vEdit,

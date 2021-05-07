@@ -72,6 +72,7 @@ getTargetReports: function(goalId, resolve) { // 평가대상 확인여부
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url);
+			this.spinner(false);
 		}.bind(this)
 	});
 },
@@ -124,8 +125,8 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				};
 
 				list.append([
-					'<div class="evalgoal-area i${i} d-none">'.interpolate(i),
-						'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px"/>',
+					'<div class="evalgoal-area i${i}">'.interpolate(i),
+						'<img src="images/photoNotAvailable.gif" style="width:40px; height:50px" />',
 						'<div class="evalgoal-info">',
 							'<div class="person">',
 								'<div class="name">', e.nickname, '</div>',
@@ -143,6 +144,10 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			}.bind(this));
 
 			setTimeout(function() {
+				resolve();
+			}, 0);
+
+			setTimeout(function() {
 				Promise.all(
 					$.map(empDataList, function(e, i) {
 						return Promise.all([
@@ -153,11 +158,9 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 							score = parseInt((goalData.score || 0).toFixed()),
 							area = $('.evalgoal-area.i' + i);
 
+							area.find('img').attr('src', this.photoMap[e.userId]);
 
-							area.toggleClass('d-none', false)
-								.find('img').attr('src', this.photoMap[e.userId]);
-
-							if ($('.evalgoal-area:visible').length === 1) {
+							if ($('.evalgoal-area').length === 1) {
 								setTimeout(function() {
 									resolve();
 								}, 0);
@@ -188,12 +191,12 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 					}
 
 					this.spinner(false);
-					resolve();
 				}.bind(this));
 			}.bind(this), 0);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url2);
+			this.spinner(false);
 		}.bind(this)
 	});
 },
@@ -218,47 +221,56 @@ retrievePhoto: function(userId) { // 사원사진
 },
 retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 
-	var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
-
-	return $.getJSON({ // 목표조회
-		url: url4,
-		success: function(data) {
-			var oDetailData = data.d.results;
-
-			var vDetailIndex = oDetailData.length,
-			oGroundColor = "",
-			vScore = 0,
-			oBackGround = [
-				"bg-danger",    /* bg-lcc-signature-red */
-				"bg-warning",   /* bg-signature-orange */
-				"bg-info",      /* bg-lcc-signature-green */ 
-				"bg-success"    /* bg-lcc-signature-blue */
-			];
-
-			if (vDetailIndex !== 0) {
-				for (var i = 0; i < vDetailIndex; i++) {
-					vScore += parseFloat(oDetailData[i].done);
+	if(this.checkNull(goalId)){
+		this.goalDataMap[pernr].score = 0;
+		this.goalDataMap[pernr].groundColor = "bg-danger";
+	}else {
+		var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
+	
+		return $.getJSON({ // 목표조회
+			url: url4,
+			success: function(data) {
+				var oDetailData = data.d.results;
+	
+				var vDetailIndex = oDetailData.length,
+				oGroundColor = "",
+				vScore = 0,
+				oBackGround = [
+					"bg-danger",    /* bg-lcc-signature-red */
+					"bg-warning",   /* bg-signature-orange */
+					"bg-info",      /* bg-lcc-signature-green */ 
+					"bg-success"    /* bg-lcc-signature-blue */
+				];
+	
+				if (vDetailIndex !== 0) {
+					for (var i = 0; i < vDetailIndex; i++) {
+						vScore += parseFloat(oDetailData[i].done);
+					}
+					vScore = vScore / vDetailIndex;
 				}
-				vScore = vScore / vDetailIndex;
-			}
+	
+				if (parseFloat(vScore) > 80) {
+					oGroundColor= oBackGround[3];
+				} else if (parseFloat(vScore) > 60) {
+					oGroundColor= oBackGround[2];
+				} else if (parseFloat(vScore) > 30) {
+					oGroundColor= oBackGround[1];
+				} else {
+					oGroundColor= oBackGround[0];
+				}
+	
+				this.goalDataMap[pernr].score = vScore;
+				this.goalDataMap[pernr].groundColor = oGroundColor;
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
+			}.bind(this)
+		}).promise();
+	}
 
-			if (parseFloat(vScore) > 80) {
-				oGroundColor= oBackGround[3];
-			} else if (parseFloat(vScore) > 60) {
-				oGroundColor= oBackGround[2];
-			} else if (parseFloat(vScore) > 30) {
-				oGroundColor= oBackGround[1];
-			} else {
-				oGroundColor= oBackGround[0];
-			}
-
-			this.goalDataMap[pernr].score = vScore;
-			this.goalDataMap[pernr].groundColor = oGroundColor;
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalProgressingPortlet.fill ' + url4);
-		}.bind(this)
-	}).promise();
+},
+checkNull: function (v) {
+	return v === undefined || v === null || v == "" ? true : false;
 },
 onceAfter: function() {
 
@@ -273,10 +285,12 @@ onceAfter: function() {
 },
 onSlide: function() {
 
-	var list = this.$();
-	if (list.data('jsp')) {
-		list.data('jsp').reinitialise();
-	}
+	setTimeout(function() {
+		var list = this.$();
+		if (list.data('jsp')) {
+			list.data('jsp').reinitialise();
+		}
+	}.bind(this), 300);
 },
 changeLocale: function() {
 

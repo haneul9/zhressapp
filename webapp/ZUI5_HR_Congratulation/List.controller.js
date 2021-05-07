@@ -277,6 +277,7 @@ sap.ui.define(
 					oCodeHeaderParams.ICodty = "PB120";
 					oCodeHeaderParams.IPernr = vPernr;
 					oCodeHeaderParams.ISubCode = "DATE";
+					oCodeHeaderParams.ILangu = "3";
 					oCodeHeaderParams.NavCommonCodeList = [];
 					
 					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
@@ -299,6 +300,7 @@ sap.ui.define(
 					IPernr: vPernr,
 					IBukrs: vBurks,
 					IBegda: vBegda,
+					ILangu: "3",
 					NavCommonCodeList: []
 				};
 				
@@ -326,6 +328,7 @@ sap.ui.define(
 				oCodeHeaderParams = {};
 				oCodeHeaderParams.ICodeT = "018";
 				oCodeHeaderParams.ICodty = "PB120";
+				oCodeHeaderParams.ILangu =  "3";
 				oCodeHeaderParams.NavCommonCodeList = [];
 				
 				oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
@@ -771,6 +774,7 @@ sap.ui.define(
 					oCodeHeaderParams.IPernr = vPernr;
 					oCodeHeaderParams.IDatum = vFullDate;
 					oCodeHeaderParams.ISubCode = "FMADM";
+					oCodeHeaderParams.ILangu =  "3";
 					oCodeHeaderParams.NavCommonCodeList = [];
 					
 					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {

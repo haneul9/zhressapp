@@ -216,6 +216,7 @@
                 sendObject.IBukrs = vBukrs;
                 sendObject.ICodeT = "001";
                 sendObject.ICodty = "PA100";
+                sendObject.ILangu =  "3";
                 // Navigation property
                 sendObject.NavCommonCodeList = [];
                 // 휴/복직 구분
@@ -272,6 +273,7 @@
                 sendObject.ICodeT = "002";
                 sendObject.ICodty = "PA100";
                 sendObject.ICode = vKeyValue;
+                sendObject.ILangu =  "3";
                 // Navigation property
                 sendObject.NavCommonCodeList = [];
                 //휴/복직 사유
@@ -538,6 +540,7 @@
                 sendObject.IBukrs = vBukrs;
                 sendObject.ICodeT = "002";
                 sendObject.ICodty = "PA102";
+                sendObject.ILangu =  "3";
                 sendObject.ICode = "KDSVH";
                 // Navigation property
                 sendObject.NavCommonCodeList = [];
