@@ -395,7 +395,9 @@ sap.ui.define([
 			
 			oController._ImageDialog.close();
 		
-			if(oExtryn == ""){
+			// 2021-05-07 리턴된url이 있는 경우 결재창 오픈
+			// if(oExtryn == ""){
+			if(oUrl != ""){
 				if(common.Common.openPopup.call(oController, oUrl) == false){
 					return;
 				}

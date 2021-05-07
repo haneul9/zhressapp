@@ -739,7 +739,7 @@ sap.ui.define(
                     });
 
                     // 2021-05-04 팝업차단 확인 후 이후 프로세스 진행
-                    if(Flag == "C" && oUrl != "" && vExtryn == ""){
+                    if(Flag == "C" && oUrl != ""){ //  && vExtryn == ""
                         if(common.Common.openPopup.call(oController, oUrl) == false){
                             return;
                         }
