@@ -190,7 +190,9 @@ fragment.COMMON_ATTACH_FILES = {
 					Required: false,
 					HelpButton: false,
 					HelpTextList: [],
-					UseMultiCategories: false
+					UseMultiCategories: false,
+					CntnmDifferent: false,
+					CntnmDifferentData: []
 				},
 				opt
 			),
@@ -257,6 +259,8 @@ fragment.COMMON_ATTACH_FILES = {
 			vAttachFileDatas = JSonModel.getProperty("/Data"),
 			vAppnm = JSonModel.getProperty("/Settings/Appnm"),
 			vUse = JSonModel.getProperty("/Settings/UseMultiCategories"),
+			vDif = JSonModel.getProperty("/Settings/CntnmDifferent"),
+			vDifData = JSonModel.getProperty("/Settings/CntnmDifferentData"),
 			Datas = { Data: [] };
 
 		if(!vAppnm) {
@@ -271,44 +275,53 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.setValue("");
 		oAttachFileList.removeSelections(true);
 
-		oModel.read("/FileListSet", {
-			async: false,
-			filters: [
-				new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
-			],
-			success: function (data) {
-				if (data && data.results.length) {
-					data.results.forEach(function (elem) {
-						if(vUse){
-							if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
-								if(vPage==elem.Cntnm){
-									elem.New = false;
-									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-									Datas.Data.push(elem);
-								}
-							}else if(vPage=="009"){
-								elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
-							}else{
-								if(elem.Cntnm =="009"){
-									elem.New = false;
-									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-									Datas.Data.push(elem);
-								}
-							}
-						}else{
-							elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
-						}
-					});
-				}
-			},
-			error: function (res) {
-				common.Common.log(res);
+		if(vDif){
+			if(vPage==vDifData.Cntnm){
+				vDifData.New = false;
+				vDifData.Type = vDifData.Fname.substring(vDifData.Fname.lastIndexOf(".") + 1);
+				Datas.Data.push(vDifData);
 			}
-		});
+		} else{
+			oModel.read("/FileListSet", {
+				async: false,
+				filters: [
+					new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
+				],
+				success: function (data) {
+					if (data && data.results.length) {
+						data.results.forEach(function (elem) {
+							if(vUse){
+								if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
+									if(vPage==elem.Cntnm){
+										elem.New = false;
+										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+										Datas.Data.push(elem);
+									}
+								}else if(vPage=="009"){
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}else{
+									if(elem.Cntnm =="009"){
+										elem.New = false;
+										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+										Datas.Data.push(elem);
+									}
+								}
+							}else{
+								elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+							}
+							
+						});
+					}
+				},
+				error: function (res) {
+					common.Common.log(res);
+				}
+			});
+		}
 
 		// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
 		if (vExistDataFlag == "X" && vAttachFileDatas) {

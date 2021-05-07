@@ -553,12 +553,9 @@ sap.ui.define([
 							oController.onTableSearch();
 							BusyIndicator.hide();
 							var vUrl = oData.TrainingOutApplyExport.results[0].EUrl;
-							if(!Common.openPopup.call(oController, vUrl)) {
-								window.open(
-									vUrl,
-									"_blank",
-									"height = 600, width = 900"
-								);
+
+							if(vUrl) {
+								Common.openPopup.call(oController, vUrl);
 							}
 						},
 						error: function(oResponse) {
@@ -1443,13 +1440,16 @@ sap.ui.define([
 			}else {
 				var vAppnm2 = "",
 					vAppnm3 = "",
-					vAppnm4 = "";
+					vAppnm4 = "",
+					vList2 = {},
+					vList3 = {},
+					vList4 = {};
 
 				oController.ApplyModel.getProperty("/FileData").forEach(function(e) {
 					switch(e.Cntnm) {
-						case "002" : vAppnm2 = e.Appnm; break;
-						case "003" : vAppnm3 = e.Appnm; break;
-						case "004" : vAppnm4 = e.Appnm; break;
+						case "002" : vAppnm2 = e.Appnm; vList2 = e; break;
+						case "003" : vAppnm3 = e.Appnm; vList3 = e; break;
+						case "004" : vAppnm4 = e.Appnm; vList4 = e; break;
 					}
 				});
 
@@ -1457,6 +1457,8 @@ sap.ui.define([
 					Appnm: Common.checkNull(!vAppnm2) ? vAppnm2 : vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
+					CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
+					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList2 : {},
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"002");
 				
@@ -1465,6 +1467,8 @@ sap.ui.define([
 					Appnm: Common.checkNull(!vAppnm3) ? vAppnm3 : vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
+					CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
+					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList3 : {},
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"003");
 	
@@ -1472,6 +1476,8 @@ sap.ui.define([
 					Appnm: Common.checkNull(!vAppnm4) ? vAppnm4 : vAppnm,
 					Mode: "S",
 					UseMultiCategories: true,
+					CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
+					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList4 : {},
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"004");
 			}

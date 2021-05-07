@@ -285,7 +285,7 @@ sap.ui.define([
 				
 				oController._BusyDialog.close();
 				
-				if(oUrl != "" && oExtryn == ""){
+				if(oUrl != ""){
 					if(common.Common.openPopup.call(oController, oUrl) == false){
 						return;
 					}
@@ -414,10 +414,6 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();	
-			var oExtryn = Common.isExternalIP() === true ? "X" : "";
-
-			// 외부망에서 접근한 경우 
-			if(oExtryn == "X") return;
 
 			if(oData.UrlA && oData.UrlA != ""){
 				if(common.Common.openPopup.call(oController, oData.UrlA) == false){

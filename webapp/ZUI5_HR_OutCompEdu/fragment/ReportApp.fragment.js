@@ -555,19 +555,6 @@ sap.ui.define([
 							})
 						]
 					})
-					.addStyleClass("mt-3px"),
-					new sap.m.HBox({
-						items: [
-							new sap.ui.core.Icon({
-								src: "sap-icon://information"
-							})
-							.addStyleClass("color-icon-blue mr-5px pt-5px"),
-							new sap.m.Text({
-								text: "{i18n>MSG_40003}",
-								textAlign: "Begin"
-							})
-						]
-					})
 					.addStyleClass("mt-3px")
 				]
 			})

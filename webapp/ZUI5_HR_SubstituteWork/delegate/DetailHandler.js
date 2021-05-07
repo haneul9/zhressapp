@@ -209,7 +209,9 @@ sap.ui.define(
                         this.oController.oDetailDialog.close();
 
                         // s모인 결재창을 띄운다.
-                        Common.openPopup.call(this.oController, data.EAppurl);
+                        if(data.EAppurl) {
+                            Common.openPopup.call(this.oController, data.EAppurl);
+                        }
 
                         break;
                     case SubstituteWork.ProcessType.APPROVAL_CANCEL:

@@ -49,8 +49,8 @@ sap.ui.define(
                         Repla: null,    // 대상자(부서)
                         Jobco: null     // 작업내용
                     },
-                    Hours: [{ Code: "", Text: "HH"}].concat(Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; })),
-                    Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
+                    Hours: Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; }),
+                    Minutes: Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; }),
                     Awarts: [],         // OT종류 Combobox items
                     Replas: [],         // 대상자(부서) Combobox items
                     List: []
@@ -251,7 +251,9 @@ sap.ui.define(
                             );
                         } else {
                             // s모인 결재창을 띄운다.
-                            Common.openPopup.call(this.oController, data.EAppurl);
+                            if(data.EAppurl) {
+                                Common.openPopup.call(this.oController, data.EAppurl);
+                            }
 
                             // 목록 조회
                             this.oController.getPageHandler().search();

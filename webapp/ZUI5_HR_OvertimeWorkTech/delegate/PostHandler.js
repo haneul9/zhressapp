@@ -54,8 +54,8 @@ sap.ui.define(
                         Aftck: OvertimeWork.POST
                     },
                     List: [],
-                    Hours: [{ Code: "", Text: "HH"}].concat(Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; })),
-                    Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
+                    Hours: Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; }),
+                    Minutes: Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; }),
                     Minutes30: null, 
                     Detail: {
                         IsViewMode: false,    // 조회모드 여부
@@ -76,18 +76,17 @@ sap.ui.define(
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/SearchConditions/Begda", new Date(currDate.getFullYear(), currDate.getMonth(), 1));
                 this.oModel.setProperty("/SearchConditions/Endda", new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0));
-                if($.app.getAuth() === $.app.Auth.MSS) {
-                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
-                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
-                } else {
+                if($.app.getAuth() === $.app.Auth.ESS) {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Ename"));
                     this.oModel.setProperty("/SearchConditions/Pernr", this.oController.getSessionInfoByKey("name"));
                     this.oModel.setProperty("/SearchConditions/Bukrs3", this.oController.getSessionInfoByKey("Bukrs3"));
+                } else {
+                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
+                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
                 }
                 if(this.oController.getSessionInfoByKey("Bukrs3") === "1000") {
                     this.oModel.setProperty("/Minutes30", [
-                        { Code: "", Text: "mm"},    //
-                        { Code: "00", Text: "00"},
+                        { Code: "00", Text: "00"},  //
                         { Code: "30", Text: "30"}
                     ]);
                 } else {
@@ -194,9 +193,9 @@ sap.ui.define(
                 this.oModel.setProperty("/Detail/IsPossibleDelete", true);
                 this.oModel.setProperty("/Detail/Header", $.extend(true, results.OtWorkTab1[0], {
                     Holick: results.OtWorkTab1[0].Holick === "X" ? true : false,
-                    OtbetmT: results.OtWorkTab1[0].Otbetm.substring(0, 2),
+                    OtbetmT: results.OtWorkTab1[0].Otbetm.substring(0, 2) === "24" ? "00" : results.OtWorkTab1[0].Otbetm.substring(0, 2),
                     OtbetmM: results.OtWorkTab1[0].Otbetm.substring(2, 4),
-                    OtentmT: results.OtWorkTab1[0].Otentm.substring(0, 2),
+                    OtentmT: results.OtWorkTab1[0].Otentm.substring(0, 2) === "24" ? "00" : results.OtWorkTab1[0].Otentm.substring(0, 2),
                     OtentmM: results.OtWorkTab1[0].Otentm.substring(2, 4)
                 }));
                 this.oModel.setProperty("/Detail/List", results.OtWorkTab2.map(function(elem) {

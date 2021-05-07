@@ -369,11 +369,9 @@ sap.ui.define(
                                     oController._DetailModel.close();
                                     oController.onTableSearch();
 
-                                    if (vMobile !== "X") {
-                                        var vUrl = oData.RegalsealRExport.results[0].EUrl;
-                                        if(!Common.openPopup.call(oController, vUrl)){
-                                            window.open(vUrl, "_blank", "height = 600, width = 900");
-                                        }
+                                    var vUrl = oData.RegalsealRExport.results[0].EUrl;
+                                    if(vUrl) {
+                                        Common.openPopup.call(oController, vUrl);
                                     }
 
                                     BusyIndicator.hide();

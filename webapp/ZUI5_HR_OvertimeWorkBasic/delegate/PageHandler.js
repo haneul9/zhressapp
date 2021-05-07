@@ -201,7 +201,9 @@ sap.ui.define(
                             });
                         } else {
                             // s모인 결재창을 띄운다.
-                            Common.openPopup.call(this.oController, data.EAppurl);
+                            if(data.EAppurl) {
+                                Common.openPopup.call(this.oController, data.EAppurl);
+                            }
 
                             // 목록 조회
                             this.search();

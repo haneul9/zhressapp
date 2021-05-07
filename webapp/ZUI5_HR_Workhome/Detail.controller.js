@@ -391,7 +391,6 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oUrl = oController._ImageDialog.getModel().getProperty("/Data/Url");
-			var oExtryn = oController._DetailJSonModel.getProperty("/Data/Extryn");
 			
 			oController._ImageDialog.close();
 		
