@@ -759,70 +759,82 @@ common.Common = {
 
         return vReturnPercod;
     },
-    retrieveLoginInfo: function (vPernr) {
+    retrieveLoginInfo: function () {
         if (window._init_sequence_logging) {
             $.app.log("common.Common.retrieveLoginInfo called.");
         }
-        if (!vPernr) return {};
+
+        var oRetrunLoginData = {};
 
         try {
-            var oCommonModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
-                oRetrunLoginData = {},
-                vPercod = "";
-
-            vPercod = common.Common.encryptPernr(vPernr);
-
-            oCommonModel.read("/EmpLoginInfoSet", {
-                async: false,
-                filters: [
-					new sap.ui.model.Filter("Lpmid", sap.ui.model.FilterOperator.EQ, "HACTA"),
-					new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, vPercod)
-				],
-                success: function (data) {
-                    if (data && data.results && data.results.length) {
-                        oRetrunLoginData = data.results[0];
-                        oRetrunLoginData.Dtfmt = oRetrunLoginData.Dtfmt || "yyyy-MM-dd";
-                        oRetrunLoginData.Pernr = (oRetrunLoginData.Pernr || "").replace(/^0+/g, "");
-                        oRetrunLoginData.Percod = vPercod;
-                    }
-                },
-                error: function (res) {
-                    common.Common.log(res);
-                }
-            });
-
+            oRetrunLoginData = $.extend(true, JSON.parse(sessionStorage.getItem("ehr.odata.user")), {Percod: sessionStorage.getItem("ehr.odata.user.percod")});
+    
             return oRetrunLoginData;
-
-        } catch (e) {
+        } catch(e) {
             return {};
-
         }
+
+        // if (!vPernr) return {};
+
+        // try {
+        //     var oCommonModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
+        //         oRetrunLoginData = {},
+        //         vPercod = "";
+
+        //     vPercod = common.Common.encryptPernr(vPernr);
+
+        //     oCommonModel.read("/EmpLoginInfoSet", {
+        //         async: false,
+        //         filters: [
+		// 			new sap.ui.model.Filter("Lpmid", sap.ui.model.FilterOperator.EQ, "HACTA"),
+		// 			new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, vPercod)
+		// 		],
+        //         success: function (data) {
+        //             if (data && data.results && data.results.length) {
+        //                 oRetrunLoginData = data.results[0];
+        //                 oRetrunLoginData.Dtfmt = oRetrunLoginData.Dtfmt || "yyyy-MM-dd";
+        //                 oRetrunLoginData.Pernr = (oRetrunLoginData.Pernr || "").replace(/^0+/g, "");
+        //                 oRetrunLoginData.Percod = vPercod;
+        //             }
+        //         },
+        //         error: function (res) {
+        //             common.Common.log(res);
+        //         }
+        //     });
+
+        //     return oRetrunLoginData;
+
+        // } catch (e) {
+        //     return {};
+
+        // }
     },
     retrieveSFUserLocale: function (pernr) {
         if (window._init_sequence_logging) {
             $.app.log("common.Common.activeClientTrace called.");
         }
 
-        var Langu;
-        new JSONModelHelper()
-            .select("defaultLocale")
-            .url("/odata/v2/User('${pernr}')".interpolate(pernr))
-            .setAsync(false)
-            .attachRequestCompleted(function () {
-                common.Common.log("common.Common.retrieveSFUserLocale complete.", arguments);
+        var Langu = sessionStorage.getItem("ehr.sf-user.locale");
+        Langu = Langu ? Langu.replace(/^([a-zA-Z]{2}).*$/, "$1").toUpperCase() : "KO";
+        // new JSONModelHelper()
+        //     .select("defaultLocale")
+        //     .url("/odata/v2/User('${pernr}')".interpolate(pernr))
+        //     .setAsync(false)
+        //     .attachRequestCompleted(function () {
+        //         common.Common.log("common.Common.retrieveSFUserLocale complete.", arguments);
 
-                if(this.getData() && this.getData().d && this.getData().d.defaultLocale) {
-                    Langu = (this.getData().d.defaultLocale || "").replace(/^([a-zA-Z]{2}).*$/, "$1").toUpperCase();
-                } else {
-                    Langu = "KO";
-                }
-            })
-            .attachRequestFailed(function () {
-                common.Common.log("common.Common.retrieveSFUserLocale fail.", arguments);
+        //         if(this.getData() && this.getData().d && this.getData().d.defaultLocale) {
+        //             Langu = (this.getData().d.defaultLocale || "").replace(/^([a-zA-Z]{2}).*$/, "$1").toUpperCase();
+        //         } else {
+        //             Langu = "KO";
+        //         }
+        //     })
+        //     .attachRequestFailed(function () {
+        //         common.Common.log("common.Common.retrieveSFUserLocale fail.", arguments);
 
-                Langu = "KO";
-            })
-            .load();
+        //         Langu = "KO";
+        //     })
+        //     .load();
         return Langu;
     },
     DateFormatter: function (fVal, mask) {

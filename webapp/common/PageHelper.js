@@ -81,7 +81,7 @@ new common.PageHelper({
 			try {
 				if ((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true) {
 					window._CommonEmployeeModel = new EmployeeModel();
-					window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
+					window._CommonEmployeeModel.retrieve();
 
 					titleItems.push(new EmpBasicInfoBox(window._CommonEmployeeModel));
 				}

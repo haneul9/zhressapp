@@ -54,7 +54,7 @@ sap.ui.define([
 
             var sfSessionModel = this.retrieveSFSessionModel(),
             sessionModelData = sfSessionModel.getData(),
-            mLoginData = Common.retrieveLoginInfo(sessionModelData.name);
+            mLoginData = Common.retrieveLoginInfo();
             // traceInfo = Common.activeClientTrace({ async: false });
 
             mLoginData.Langu = Common.retrieveSFUserLocale(sessionModelData.name);
