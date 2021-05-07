@@ -553,12 +553,9 @@ sap.ui.define([
 							oController.onTableSearch();
 							BusyIndicator.hide();
 							var vUrl = oData.TrainingOutApplyExport.results[0].EUrl;
-							if(!Common.openPopup.call(oController, vUrl)) {
-								window.open(
-									vUrl,
-									"_blank",
-									"height = 600, width = 900"
-								);
+
+							if(vUrl) {
+								Common.openPopup.call(oController, vUrl);
 							}
 						},
 						error: function(oResponse) {

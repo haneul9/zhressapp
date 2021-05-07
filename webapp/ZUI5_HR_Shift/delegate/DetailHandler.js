@@ -171,7 +171,7 @@ sap.ui.define(
                 switch (conType) {
                     case Shift.ProcessType.APPROVAL_REQUEST:
                         // s모인 결재창을 띄운다.
-                        if(!Common.isExternalIP()) {
+                        if(data.EAppurl) {
                             Common.openPopup.call(this.oController, data.EAppurl);
                         }
 

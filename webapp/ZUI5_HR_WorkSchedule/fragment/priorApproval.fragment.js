@@ -34,7 +34,7 @@ sap.ui.define(
                                         new sap.m.Input({
                                             width: "140px",
                                             value: "{EnameOrOrgehTxt}",
-                                            editable: false,
+                                            editable: "{= ${/Auth} === 'H' }",
                                             showValueHelp: true,
                                             valueHelpOnly: true,
                                             valueHelpRequest: PriorHandler.searchOrgehPernrByList.bind(PriorHandler)
