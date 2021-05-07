@@ -373,6 +373,7 @@ sap.ui.define([
 			sendObject.ICodeT = "998";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "16";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -397,6 +398,7 @@ sap.ui.define([
 			sendObject.ICodeT = "998";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "17";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -672,6 +674,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZHRD_TEPAS";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			

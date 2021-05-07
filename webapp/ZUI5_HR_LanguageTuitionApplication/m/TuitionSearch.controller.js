@@ -170,6 +170,7 @@
                 sendObject.ICodeT = "004";
                 sendObject.IBukrs = vBukrs2;
                 sendObject.ICodty = "ZHRD_TEPAS";
+                sendObject.ILangu =  "3";
                 // Navigation property
                 sendObject.NavCommonCodeList = [];
                 

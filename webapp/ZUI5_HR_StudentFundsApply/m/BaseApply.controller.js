@@ -109,6 +109,7 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.ICodeT = "001";
 			sendObject.ICodty = "BT740";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			//학교구분
@@ -133,6 +134,7 @@
             sendObject.IBukrs = vBukrs;
             sendObject.ICodeT = "004";
             sendObject.ICodty = "ZGRADE";
+			sendObject.ILangu =  "3";
             // Navigation property
             sendObject.NavCommonCodeList = [];
             // 학년
@@ -156,6 +158,7 @@
             sendObject.IPernr = vPernr;
             sendObject.IBukrs = vBukrs;
             sendObject.ICodeT = "019";
+			sendObject.ILangu =  "3";
             // Navigation property
             sendObject.NavCommonCodeList = [];
             // 구분
@@ -179,6 +182,7 @@
             sendObject.IPernr = vPernr;
             sendObject.IBukrs = vBukrs;
             sendObject.ICodeT = "004";
+			sendObject.ILangu =  "3";
             sendObject.ICodty = "ZQUART";
             // Navigation property
             sendObject.NavCommonCodeList = [];

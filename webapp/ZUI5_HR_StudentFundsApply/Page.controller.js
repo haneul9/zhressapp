@@ -398,6 +398,7 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.ICodeT = "001";
 			sendObject.ICodty = "BT740";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			//학교구분
@@ -439,6 +440,7 @@
 				sendObject.IBukrs = vBukrs;
 				sendObject.ICodeT = "004";
 				sendObject.ICodty = "ZGRADE";
+				sendObject.ILangu =  "3";
 				// Navigation property
 				sendObject.NavCommonCodeList = [];
 				// 학년
@@ -462,6 +464,7 @@
 				sendObject.IPernr = vPernr;
 				sendObject.IBukrs = vBukrs;
 				sendObject.ICodeT = "019";
+				sendObject.ILangu =  "3";
 				// Navigation property
 				sendObject.NavCommonCodeList = [];
 				// 구분
@@ -486,6 +489,7 @@
 				sendObject.IBukrs = vBukrs;
 				sendObject.ICodeT = "004";
 				sendObject.ICodty = "ZQUART";
+				sendObject.ILangu =  "3";
 				// Navigation property
 				sendObject.NavCommonCodeList = [];
 				// 등록학기/분기
@@ -510,6 +514,7 @@
 				sendObject.IBukrs = vBukrs;
 				sendObject.ICodeT = "002";
 				sendObject.ICodty = "BT710";
+				sendObject.ILangu =  "3";
 				// Navigation property
 				sendObject.NavCommonCodeList = [];
 				// 등록학기/분기
@@ -547,6 +552,7 @@
 					sendObject.ICodeT = "004";
 					sendObject.ISubCode = oController.HighApplyModel.getProperty("/FormData/SchoolType");
 					sendObject.ICodty = "ZGRADE";
+					sendObject.ILangu =  "3";
 					// Navigation property
 					sendObject.NavCommonCodeList = [];
 					// 학년
@@ -578,6 +584,7 @@
 						sendObject.ICodeT = "001";
 						sendObject.ISubCode = oController.HighApplyModel.getProperty("/FormData/SchoolType");
 						sendObject.ICodty = "BT705";
+						sendObject.ILangu =  "3";
 						// Navigation property
 						sendObject.NavCommonCodeList = [];
 						//학년제
@@ -629,6 +636,7 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.ISubCode = vKey;
 			sendObject.ICodeT = "019";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			// 지원유형 
@@ -654,6 +662,7 @@
 			sendObject.ICodeT = "004";
 			sendObject.ISubCode = vKey;
 			sendObject.ICodty = "ZGRADE";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			// 학년
@@ -744,6 +753,7 @@
 				sendObject.ICodeT = "001";
 				sendObject.ISubCode = vKey;
 				sendObject.ICodty = "BT705";
+				sendObject.ILangu =  "3";
 				// Navigation property
 				sendObject.NavCommonCodeList = [];
 				//학년제
@@ -1324,6 +1334,7 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.ICodeT = "009";
 			sendObject.IText = oEvent.mParameters.value ? oEvent.mParameters.value : "";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			// 국가 검색

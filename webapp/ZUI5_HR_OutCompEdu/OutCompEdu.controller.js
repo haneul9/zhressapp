@@ -716,6 +716,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZHRD_EDOTY";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -741,6 +742,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZHRD_REPST";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -763,6 +765,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZHRD_EDSTA";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -792,6 +795,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZEDGUB";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -832,6 +836,7 @@ sap.ui.define([
 			sendObject.ICodeT = "036";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZGTYPE";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -858,6 +863,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZEDGUB";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -897,6 +903,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZOPTIN";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -920,6 +927,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZRULES";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			
@@ -950,6 +958,7 @@ sap.ui.define([
 			sendObject.ICodeT = "004";
 			sendObject.IBukrs = vBukrs2;
 			sendObject.ICodty = "ZHRD_ESCAL";
+			sendObject.ILangu =  "3";
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			

@@ -125,6 +125,7 @@
                     ICodeT: "998",
                     IBukrs: vBukrs2,
                     ICodty: "16",
+					ILangu:  "3",
                     NavCommonCodeList: []
                 };
                 
@@ -148,6 +149,7 @@
                     ICodeT: "998",
                     IBukrs: vBukrs2,
                     ICodty: "17",
+					ILangu:  "3",
                     NavCommonCodeList: []
                 };
                 
