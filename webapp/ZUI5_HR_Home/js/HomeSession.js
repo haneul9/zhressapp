@@ -6,11 +6,12 @@ function HomeSession(_gateway, callback) {
 		ehr.sf-user.name
 		ehr.sf-user.photo
 		ehr.sf-user.locale
+		ehr.sf-user.language
 		ehr.odata.user
 		ehr.odata.user.percod
 		ehr.odata.destination
 		ehr.session.token
-		ehr.menu-auth.state
+		ehr.mfa.done
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -38,8 +39,8 @@ clearSessionStorage: function() {
 	sessionStorage.removeItem('ehr.odata.user');
 	sessionStorage.removeItem('ehr.odata.user.percod');
 	sessionStorage.removeItem('ehr.odata.destination');
-	sessionStorage.removeItem('ehr.menu-auth.state');
 	sessionStorage.removeItem('ehr.session.token');
+	sessionStorage.removeItem('ehr.mfa.done');
 },
 
 init: function(callback) {
