@@ -1437,6 +1437,7 @@ sap.ui.define([
 					Appnm: vCntnm === "001" && Common.checkNull(!vAppnm1) ? vAppnm1 : vAppnm,
 					Mode: "S",
 					InfoMessage: vInfoMessage,
+					UseMultiCategories: true,
 					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"001");
 			}else {
