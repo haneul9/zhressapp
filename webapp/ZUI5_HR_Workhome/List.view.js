@@ -153,7 +153,7 @@ sap.ui.define(
                         oController._Columns = [];
                         for(var i=0; i<col_info.length-2; i++){
                             var column = {};
-                                column.label = common.Common.stripI18nExpression(col_info[i].label);
+                                column.label = oController.getBundleText(common.Common.stripI18nExpression(col_info[i].label));
                                 column.property = col_info[i].id;
                                 column.type = "string";
                                 column.width = 20;
