@@ -59,7 +59,7 @@ sap.ui.define([
 				oData.Data.Subty = oEvent.data.Subty;
 				oData.Data.Pernr = oEvent.data.Pernr;
 				oData.Data.Delapp = oEvent.data.Delapp;
-				oData.Data.Sprps = oEvent.data.Sprps;
+				oData.Data.Seqnr = oEvent.data.Seqnr;
 			}
 			
 			if(oEvent.data.Delapp != ""){
@@ -308,7 +308,7 @@ sap.ui.define([
 						detail.Endda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/";
 						detail.Awart = oData.Awart;
 						detail.Subty = oData.Subty; 
-						detail.Sprps = oData.Sprps;
+						detail.Seqnr = oData.Seqnr;
 						
 						createData.VacationApply1Nav.push(detail);
 						
