@@ -213,7 +213,7 @@ sap.ui.define([
 			// oController._DetailJSonModel.setProperty("/Data/ZtitleT", vData.ZtitleT);
 			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs);
 			oController._DetailJSonModel.setProperty("/Data/Molga", vData.Molga);
-			oController._DetailJSonModel.setProperty("/Data/Werks", vData.Persa);
+			// oController._DetailJSonModel.setProperty("/Data/Werks", vData.Persa);
 			
 			if(oController.Error == "E"){
 				oController.Error = "";
