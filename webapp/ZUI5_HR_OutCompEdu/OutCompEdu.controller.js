@@ -1429,12 +1429,16 @@ sap.ui.define([
 			if(AppType === "app") {
 				var vCntnm = oController.ApplyModel.getProperty("/FileData/0/Cntnm");
 				var vAppnm1 = oController.ApplyModel.getProperty("/FileData/0/Appnm");
+				var vList1 = oController.ApplyModel.getProperty("/FileData/0");
+				
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 교육안내문
 					Required: true,
 					Appnm: vCntnm === "001" && Common.checkNull(!vAppnm1) ? vAppnm1 : vAppnm,
 					Mode: "S",
 					InfoMessage: vInfoMessage,
 					UseMultiCategories: true,
+					CntnmDifferent: vCntnm === "001" && Common.checkNull(!vAppnm1) ? true : false,
+					CntnmDifferentData: vCntnm === "001" && Common.checkNull(!vAppnm1) ? vList1 : {},
 					Editable: (!vStatus || vStatus === "AA") ? true : false
 				},"001");
 			}else {

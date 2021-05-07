@@ -129,7 +129,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 						'<div class="evalgoal-info">',
 							'<div class="person">',
 								'<div class="name">', e.nickname, '</div>',
-								'<div class="position">', e.position, '</div>',
+								'<div class="position">', e.custom01, '</div>',
 							'</div>',
 							'<div class="evalgoal-statusBar">',
 								'<div class="progress">',
