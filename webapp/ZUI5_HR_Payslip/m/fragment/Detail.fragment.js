@@ -90,12 +90,12 @@ sap.ui.define([], function () {
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             new sap.m.Label({ width: "150px", text: "{i18n>LABEL_54012}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 지급년월
-                            new sap.m.Label({
+                            new sap.m.Text({
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 text: "{Zyymm}",
                                 textAlign: "End",
                                 width: "100%"
-                            })
+                            }).addStyleClass("sub-conRead-title")
                         ]
                     }),
                     new sap.m.HBox({
@@ -103,12 +103,12 @@ sap.ui.define([], function () {
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             new sap.m.Label({ width: "150px", text: "{i18n>LABEL_54013}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 소속
-                            new sap.m.Label({
+                            new sap.m.Text({
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 text: "{Orgtx}",
                                 textAlign: "End",
                                 width: "100%"
-                            })
+                            }).addStyleClass("font-regular font-14px custom_conRead-title")
                         ]
                     }),
                     new sap.m.HBox({
@@ -116,12 +116,12 @@ sap.ui.define([], function () {
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             new sap.m.Label({ width: "150px", text: "{i18n>LABEL_01303}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 성명
-                            new sap.m.Label({
+                            new sap.m.Text({
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 text: "{Ename}",
                                 textAlign: "End",
                                 width: "100%"
-                            })
+                            }).addStyleClass("sub-conRead-title")
                         ]
                     }),
                     new sap.m.HBox({
@@ -129,7 +129,7 @@ sap.ui.define([], function () {
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             new sap.m.Label({ width: "150px", text: "{i18n>LABEL_54008}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 차감지급액
-                            new sap.m.Label({
+                            new sap.m.Text({
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 text: "{Bet03}",
                                 textAlign: "End",
@@ -170,12 +170,12 @@ sap.ui.define([], function () {
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             new sap.m.Label({ width: "100px", text: "{i18n>LABEL_54017}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 은행명
-                            new sap.m.Label({
+                            new sap.m.Text({
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 textAlign: "End",
                                 width: "100%",
                                 text: "{Banka}"
-                            })
+                            }).addStyleClass("font-regular font-14px custom_conRead-title")
                         ]
                     }),
                     new sap.m.HBox({
@@ -183,12 +183,12 @@ sap.ui.define([], function () {
                         alignItems: sap.m.FlexAlignItems.Center,
                         items: [
                             new sap.m.Label({ width: "100px", text: "{i18n>LABEL_54018}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 계좌번호
-                            new sap.m.Label({
+                            new sap.m.Text({
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 textAlign: "End",
                                 width: "100%",
                                 text: "{Bankn}"
-                            })
+                            }).addStyleClass("sub-conRead-title")
                         ]
                     })
                 ],

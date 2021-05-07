@@ -36,6 +36,10 @@ function startAppInit() {
 		CONTEXT_PATH: contextPath,
 		APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 		APP_ID: [contextPath, "List"].join("."),
+		includeStyleSheets: [
+			"ZUI5_HR_Payslip/css/payslip.css",
+			"ZUI5_HR_Payslip/m/css/payslip.css"
+		],
 		APP_TILE: $.app.geti18nResource().getText("LABEL_54999"), // 급여명세서 조회
 		APP_TYPE: "M"	// W, M
 	});

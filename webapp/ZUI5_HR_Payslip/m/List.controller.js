@@ -223,12 +223,12 @@ sap.ui.define(
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
                                                         new sap.m.Label({ width: "180px", text: data.PayslipForm1Nav.results[i].Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
-                                                        new sap.m.Label({
+                                                        new sap.m.Text({
                                                             textAlign: "End",
                                                             width: "100%",
                                                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                                             text: data.PayslipForm1Nav.results[i].BetrgT
-                                                        })
+                                                        }).addStyleClass("sub-conRead-title")
                                                     ]
                                                 })
                                             );
@@ -245,12 +245,12 @@ sap.ui.define(
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
                                                         new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
-                                                        new sap.m.Label({
+                                                        new sap.m.Text({
                                                             textAlign: "End",
                                                             width: "100%",
                                                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                                             text: elem.BetrgT
-                                                        })
+                                                        }).addStyleClass("sub-conRead-title")
                                                     ]
                                                 })
                                             );
@@ -267,12 +267,12 @@ sap.ui.define(
                                                     alignItems: sap.m.FlexAlignItems.Center,
                                                     items: [
                                                         new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
-                                                        new sap.m.Label({
+                                                        new sap.m.Text({
                                                             textAlign: "End",
                                                             width: "100%",
                                                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                                             text: elem.BetrgT
-                                                        })
+                                                        }).addStyleClass("sub-conRead-title")
                                                     ]
                                                 })
                                             );
@@ -294,7 +294,7 @@ sap.ui.define(
                                                             width: "100%",
                                                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                                             text: elem.BetrgT
-                                                        })
+                                                        }).addStyleClass("sub-conRead-title")
                                                     ]
                                                 })
                                             );
