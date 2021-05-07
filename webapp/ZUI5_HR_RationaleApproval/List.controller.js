@@ -179,6 +179,9 @@ sap.ui.define([
 									data1[i].Break = (data1[i].Brkbg != "" && data1[i].Brken != "") ? (data1[i].Brkbg + data1[i].Brken) : "";
 									data1[i].Break = data1[i].Break == "0000" ? "" : data1[i].Break;
 									
+									// 2021-05-07 기본값 '승인'으로 세팅
+									data1[i].Status = "99";
+									
 									vData.Data.push(data1[i]);
 								}
 							}

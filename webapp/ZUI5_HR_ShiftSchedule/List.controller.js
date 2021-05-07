@@ -100,6 +100,10 @@ sap.ui.define([
 				
 				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
 				var oPath = "/ShiftScheduleSet?$filter=IBukrs eq '" + oData.Bukrs + "'";
+					oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
+					oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "'";
+					oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
+					oPath += " and ICmenuid eq '" + $.app.getMenuId() + "'";
 				
 				oModel.read(oPath, null, null, false,
 					function(data,res){
