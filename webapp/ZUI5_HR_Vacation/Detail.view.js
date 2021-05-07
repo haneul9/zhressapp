@@ -30,7 +30,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 	    visible : {
 						 	 	    	parts : [{path : "Status1"}, {path : "Werks"}],
 						 	 	    	formatter : function(fVal1, fVal2){
-						 	 	    		if(fVal2 && fVal2.substring(0,1) == "D"){
+						 	 	    		if($.app.APP_AUTH == $.app.Auth.HASS && fVal1 == ""){
+						 	 	    			return true;
+						 	 	    		} else if(fVal2 && fVal2.substring(0,1) == "D"){
 						 	 	    			return false;
 						 	 	    		} else {
 						 	 	    			return fVal1 == "" ? true : false;

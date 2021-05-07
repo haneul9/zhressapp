@@ -1329,7 +1329,7 @@ sap.ui.define([
 				oController._BusyDialog.close();
 
 				// 신청 시 팝업차단 여부 확인 후 이후 프로세스 수행				
-				if(Flag == "C" && oUrl != "" && vExtyn == ""){
+				if(Flag == "C" && oUrl != ""){ //  && vExtyn == ""
 					if(common.Common.openPopup.call(oController, oUrl) == false){
 						return;
 					}

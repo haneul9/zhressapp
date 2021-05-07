@@ -33,7 +33,8 @@ sap.ui.define(
 											editable : {
 												path : "Persa",
 												formatter : function(fVal){
-													return (fVal && fVal.substring(0,1) == "D") ? false : true;
+													if($.app.APP_AUTH == $.app.Auth.HASS) return true;
+													else return (fVal && fVal.substring(0,1) == "D") ? false : true;
 												}
 											}
 										}),
