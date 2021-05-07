@@ -35,8 +35,8 @@ sap.ui.define([
 					onAfterShow: this.onAfterShow
 				}, this);
 				
-			this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().addStyleClass("sapUiSizeCompact");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -48,31 +48,39 @@ sap.ui.define([
 			var oWerks = sap.ui.getCore().byId(oController.PAGEID + "_Werks");
 				oWerks.destroyItems();
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-			var oPath = "/WerksListAuthSet?$filter=Percod eq '" + encodeURIComponent(oLoginData.Percod) + "' and Bukrs eq '" + oLoginData.Bukrs + "'";
-			
-			oModel.read(oPath, null, null, false,
-						function(data, oResponse) {
-							if(data && data.results.length) {
-								for(var i=0; i<data.results.length; i++){
-									oWerks.addItem(new sap.ui.core.Item({key : data.results[i].Persa, text : data.results[i].Pbtxt}));
-								}					
-							}
-						},
-						function(Res) {
-							oController.Error = "E";
-							if(Res.response.body){
-								ErrorMessage = Res.response.body;
-								var ErrorJSON = JSON.parse(ErrorMessage);
-								if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
-									oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
-								} else {
-									oController.ErrorMessage = ErrorMessage;
-								}
-							}
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+
+			oModel.read("/WerksListAuthSet", {
+				async: false,
+				filters: [
+					new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+					new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+					new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+					new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
+					new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oLoginData.Percod),
+					new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oLoginData.Bukrs)
+				],
+				success: function(data, oResponse) {
+					if(data && data.results.length) {
+						for(var i=0; i<data.results.length; i++){
+							oWerks.addItem(new sap.ui.core.Item({key : data.results[i].Persa, text : data.results[i].Pbtxt}));
+						}					
+					}
+				},
+				error: function(Res) {
+					oController.Error = "E";
+					if(Res.response.body){
+						ErrorMessage = Res.response.body;
+						var ErrorJSON = JSON.parse(ErrorMessage);
+						if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+							oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+						} else {
+							oController.ErrorMessage = ErrorMessage;
 						}
-			);
-			
+					}
+				}
+			});
+
 			if(oController.Error == "E"){
 				oController.Error = "";
 				sap.m.MessageBox.error(oController.ErrorMessage);
@@ -92,7 +100,8 @@ sap.ui.define([
 						Zyymm : oZyymm,
 						Key : "1",
 						Disty : "1",
-						Pernr : ""
+						Pernr : "",
+						Chief : $.app.getModel("session").getData().Chief
 					}
 				};
 				
@@ -168,7 +177,7 @@ sap.ui.define([
 					
 					oScrollContainer.setHeight(height + "px");
 					oChart.setHeight((height - 40) + "px");
-					oScrollContainer2.setHeight((height - 30) + "px");
+					oScrollContainer2.setHeight((height - 20) + "px");
 	
 					var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 					var count = parseInt((height - 95) / 38);
@@ -222,9 +231,9 @@ sap.ui.define([
 					createData.IPernr = oData.Pernr;
 					createData.IOrgeh = oData.Orgeh;
 					
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
-				oModel.create("/LeaveUseHistorySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
+				oModel.create("/LeaveUseHistorySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.LeaveuseHistoryNav && data.LeaveuseHistoryNav.results){
 								for(var i=0; i<data.LeaveuseHistoryNav.results.length; i++){
@@ -237,7 +246,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -250,7 +259,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				
@@ -288,7 +297,7 @@ sap.ui.define([
 			var oJSONModel = oTable.getModel();
 			var vData = {Data : []};
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+			var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 			var createData = {LeaveuseBoardNav : []};
 				createData.IEmpid = $.app.getModel("session").getData().Pernr;
 				createData.IActty = gAuth;
@@ -313,8 +322,8 @@ sap.ui.define([
 						 "Usecnt01", "Usecnt02", "Usecnt03", "Usecnt04", "Usecnt05", "Usecnt06", "Usecnt07", "Usecnt08", "Usecnt09", "Usecnt10", "Usecnt11", "Usecnt12",
 						 "Crecnt", "Usecnt", "Balcnt", "Userte"];
 			
-			oModel.create("/LeaveUseBoardSet", createData, null,
-				function(data, res){
+			oModel.create("/LeaveUseBoardSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.LeaveuseBoardNav && data.LeaveuseBoardNav.results){
 							for(var i=0; i<data.LeaveuseBoardNav.results.length; i++){
@@ -337,7 +346,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -350,7 +359,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			oJSONModel.setData(vData);
 			oTable.bindRows("/Data");
@@ -396,7 +405,7 @@ sap.ui.define([
 				oColumn[i].setSorted(false);
 			}
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+			var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 			
 			var createData = {LeaveuseBoardNav : []};
 				createData.IWerks = oData.Werks;
@@ -432,8 +441,8 @@ sap.ui.define([
 				
 			var field = ["Crecnt", "Curcnt", "Currte", "Usecnt", "Userte", "Balcnt"];
 			
-			oModel.create("/LeaveUseBoardSet", createData, null,
-				function(data, res){
+			oModel.create("/LeaveUseBoardSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.LeaveuseBoardNav && data.LeaveuseBoardNav.results){
 							for(var i=0; i<data.LeaveuseBoardNav.results.length; i++){
@@ -456,7 +465,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -469,7 +478,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			oJSONModel.setData(vData);
 			oTable.bindRows("/Data");
@@ -521,7 +530,7 @@ sap.ui.define([
 				oDisty = (oId == "Curcnt" || oId == "Currte" ? "1" : "2");
 			}
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+			var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 			var createData = {PersLeaveuseListNav : []};
 				createData.IWerks = oData.Werks;
 				createData.IBukrs = oData.Werks;
@@ -529,8 +538,8 @@ sap.ui.define([
 				createData.IDisty = oDisty;
 				createData.IPernr = oData.Pernr;
 			
-			oModel.create("/PersLeaveUseListSet", createData, null,
-				function(data, res){
+			oModel.create("/PersLeaveUseListSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.PersLeaveuseListNav && data.PersLeaveuseListNav.results){
 							for(var i=0; i<data.PersLeaveuseListNav.results.length; i++){
@@ -553,7 +562,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -566,7 +575,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			oJSONModel.setData(vData);
 			oTable.bindRows("/Data");
@@ -750,7 +759,7 @@ sap.ui.define([
                 Langu: $.app.getModel("session").getData().Langu,
                 Molga: $.app.getModel("session").getData().Molga,
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");

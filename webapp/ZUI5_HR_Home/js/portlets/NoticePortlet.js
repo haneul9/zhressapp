@@ -54,15 +54,19 @@ fill: function() {
 			if (!TableIn2.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">공지사항이 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action text-center">공지사항이 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
 				}
 				return;
 			}
 
 			if (list.data('jsp')) {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+			}
+
+			if (this.mobile()) {
+				TableIn2 = TableIn2.splice(0, 8);
 			}
 
 			list.prepend($.map(TableIn2, function(o) {
@@ -92,7 +96,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && this.scrollable()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
@@ -107,10 +111,17 @@ changeLocale: function() {
 },
 itemUrl: function(o) {
 
-	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
-		' data-menu-id="${menu-id}"'.interpolate(this.mid())
-	].join('');
+	if (this.mobile()) {
+		return [
+			' data-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
+			' data-menu-id="${menu-id}"'.interpolate(this.mid())
+		].join('');
+	} else {
+		return [
+			' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
+			' data-menu-id="${menu-id}"'.interpolate(this.mid())
+		].join('');
+	}
 },
 clearResource: function() {
 

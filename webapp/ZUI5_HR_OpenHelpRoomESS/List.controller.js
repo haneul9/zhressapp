@@ -42,7 +42,7 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -151,6 +151,8 @@ sap.ui.define([
 			if(!oMenuScroll.getVisible()) oMenuScroll.setVisible(true);
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
+
+			oController.OpenHelpModel.setData({TopData: []});
 			
 			var sendObject = {};
 			// Header
@@ -175,22 +177,28 @@ sap.ui.define([
 						var rMiddleData = oData.OpenhelpTableIn2.results[1];
 						var rBottomData= oData.OpenhelpTableIn2.results[2];
 						
+						// var oNoDataBox = $.app.byId(oController.PAGEID + "_NoDataBox");
 						if(Common.checkNull(rTopData) && Common.checkNull(rMiddleData) && Common.checkNull(rBottomData) && Common.checkNull(oData.OpenhelpTableIn4.results[0]) && Common.checkNull(oData.OpenhelpTableIn5.results[0])){
-							oController.OpenHelpModel.setProperty("/TopData/Zcomment", "X");
+							// oNoDataBox.setVisible(true);
+							oController.OpenHelpModel.setProperty("/TopData/Zcomment", "");
 							oController.OpenHelpModel.setProperty("/MiddleData", []);
 							oController.OpenHelpModel.setProperty("/BottomData", []);
 							oController.OpenHelpModel.setProperty("/FileData", []);
 							oController.OpenHelpModel.setProperty("/PDFData", []);
+
 						}else{
+							// oNoDataBox.setVisible(false);
 							oController.OpenHelpModel.setProperty("/Export", rExportData);
 							oController.OpenHelpModel.setProperty("/TopData", rTopData);
 							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
 							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
 							oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
-							oController.onBeforeOpenDetailDialog();
-							oController.getPDFView();
+							// oController.getPDFView();
+							
+							oController.openPDF(oController);
 						}
+						oController.onBeforeOpenDetailDialog();
 						
 						if(Common.checkNull(!oController.gSelectedRoute.Url)){
 							window.open("http://" + oController.gSelectedRoute.Url);
@@ -204,6 +212,29 @@ sap.ui.define([
 					});
 				}
 			});
+		},
+
+		openPDF: function(oController) {
+			var vUrl = oController.OpenHelpModel.getProperty("/PDFData/Url");
+			
+			if(!vUrl) return;
+
+			setTimeout(function() {
+				var width = 1000, height = screen.availHeight * 0.9,
+				left = (screen.availWidth - width) / 2,
+				top = (screen.availHeight - height) / 2,
+				popup = window.open(vUrl, "hi-pdf-popup", [
+					"width=" + width,
+					"height=" + height,
+					"left=" + left,
+					"top=" + top,
+					"status=yes,resizable=yes,scrollbars=yes"
+				].join(","));
+
+				setTimeout(function() {
+					popup.focus();
+				}, 500);
+			}, 0);
 		},
 
 		getPDFView: function() {
@@ -227,7 +258,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L4txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L4id === ele.L4id
+				return ele.L4txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L4id === ele.L4id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -238,7 +269,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L3txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L3id === ele.L3id
+				return ele.L3txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L3id === ele.L3id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -249,7 +280,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L2txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L2id === ele.L2id
+				return ele.L2txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L2id === ele.L2id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -260,7 +291,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L1txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L1id === ele.L1id
+				return ele.L1txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L1id === ele.L1id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -380,7 +411,7 @@ sap.ui.define([
 				Mode: "M",
 				Max: "10",
 				Editable: false,
-				FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+				FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"]
 			});
 		},
 		

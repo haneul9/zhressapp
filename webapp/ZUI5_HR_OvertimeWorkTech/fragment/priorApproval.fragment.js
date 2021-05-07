@@ -162,7 +162,7 @@ sap.ui.define(
                 return [
                     { id: "Pernr", label: "{i18n>LABEL_00191}" /* 사번 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "8%" },
                     { id: "Ename", label: "{i18n>LABEL_00121}" /* 성명 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "8%" },
-                    { id: "Begda", label: "{i18n>LABEL_32009}" /* 근무일 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "10%" },
+                    { id: "Otdat", label: "{i18n>LABEL_32009}" /* 근무일 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "10%" },
                     { id: "Holick", label: "{i18n>LABEL_32021}" /* 휴일 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "8%", templateGetter: "getCheckboxTemplate", templateGetterOwner: this },
                     { id: "Otbet", label: "{i18n>LABEL_32010}" /* 시작 시간 */, plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width: "10%" },
                     { id: "Otent", label: "{i18n>LABEL_32011}" /* 종료 시간 */, plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width: "10%" },

@@ -18,6 +18,7 @@ sap.ui.define(
                 });
             },
 
+          
             getSearchHBox: function (oController) {
                 return new sap.m.HBox({
                     fitContainer: true,

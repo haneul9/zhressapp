@@ -2,8 +2,7 @@
 sap.ui.define(
     [
         "common/Common", //
-        "./SubstituteWork",
-        "common/moment-with-locales"
+        "./SubstituteWork"
     ],
     function (Common, SubstituteWork) {
         "use strict";
@@ -158,6 +157,7 @@ sap.ui.define(
                         IMolga: this.getSessionInfoByKey("Molga"),
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IAppkey1: payload.Appkey1 ? payload.Appkey1 : undefined,
+                        IExtryn: payload.Extryn ? payload.Extryn : undefined,
                         IPernr: payload.Pernr ? payload.Pernr : undefined,
                         AlterWorkApply: payload.AlterWorkApply
                     },

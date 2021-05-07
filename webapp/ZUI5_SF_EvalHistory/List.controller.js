@@ -4,9 +4,8 @@ jQuery.sap.require("sap.ui.export.Spreadsheet");
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper) {
+	"../common/JSONModelHelper"], 
+	function (Common, CommonController, JSONModelHelper) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_SF_EvalHistory.List", {
@@ -27,12 +26,12 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 				
 			this.getView().addStyleClass("sapUiSizeCompact");
 		},
 
-		onBeforeShow: function(oEvent){
+		onBeforeShow: function(){
 			// var oController = this;
 			
 			// var vData = {
@@ -47,7 +46,7 @@ sap.ui.define([
 			common.SearchEvalHistory.onBeforeOpen();
 		},
 		
-		onAfterShow: function(oEvent){
+		onAfterShow: function(){
 			// var oController = this;
 			
 			// oController.onSearchUser(oEvent);
@@ -58,13 +57,12 @@ sap.ui.define([
 		
 		/** 2020-12-16 공통 로직 처리로 인해 이하 로직 사용안함 **/
 		
-		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_SF_EvalHistory.List");
-			var oController = oView.getController();
-			
+		SmartSizing : function(){
+			// var oView = sap.ui.getCore().byId("ZUI5_SF_EvalHistory.List");
+			// var oController = oView.getController();
 		},
 		
-		onSearchUser : function(oEvent){
+		onSearchUser : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_SF_EvalHistory.List");
 			var oController = oView.getController();
 			
@@ -119,7 +117,7 @@ sap.ui.define([
 				oController._ListCondJSonModel.setProperty("/Data", oData);
 		},
 		
-		onPressSearch : function(oEvent){
+		onPressSearch : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_SF_EvalHistory.List");
 			var oController = oView.getController();
 			
@@ -137,15 +135,15 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				
 				var createData = {TableIn : []};
 					createData.IEmpid = oData.userId;
 					createData.IAppye = oData.Appye;
 					createData.IConType = "3";
 					
-				oModel.create("/EvalResultsSet", createData, null,
-					function(data,res){
+				oModel.create("/EvalResultsSet", createData, {
+					success: function(data){
 						if(data && data.TableIn) {
 							if(data.TableIn.results && data.TableIn.results.length){
 								for(var i=0; i<data.TableIn.results.length; i++){
@@ -156,7 +154,7 @@ sap.ui.define([
 							}
 						} 
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 				    	
@@ -169,7 +167,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oTable.setVisibleRowCount((vData.Data.length >= 10 ? 10 : vData.Data.length));
 				oJSONModel.setData(vData);
@@ -182,7 +180,7 @@ sap.ui.define([
 					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
 				}
-			}
+			};
 			
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
@@ -207,7 +205,7 @@ sap.ui.define([
 				common.SearchEvalResultAgree.userId = oData.Pernr;
 				common.SearchEvalResultAgree.Flag = "X";
 				
-				oController._DetailDialog.setTitle(oBundleText.getText("LABEL_07001")); // 평가이력
+				oController._DetailDialog.setTitle(oController.getBundleText("LABEL_07001")); // 평가이력
 				
 				oController._DetailDialog.open();
 			}

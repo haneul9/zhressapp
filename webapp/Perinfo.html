@@ -16,14 +16,16 @@
 	<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
 	<script src="common/AppPrefilter.js"></script>
 	<script id="sap-ui-bootstrap"
-		src="resources/sap-ui-core.js"
+		src="resources/sap-ui-cachebuster/sap-ui-core.js"
 		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-appCacheBuster="./"
 		data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 		data-sap-ui-compatVersion="edge"
 		data-sap-ui-async="true"
 		data-sap-ui-frameOptions="allow"
-		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.core, sap.ui.unified">
+		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.unified">
 	</script>
+	<script src="common/moment-with-locales.js"></script>
 	<script src="common/AppBasis.js"></script>
 	<script>	
 	var gDtfmt = "yyyy-MM-dd",
@@ -47,6 +49,9 @@
 			APP_ID: [contextPath, "List"].join("."),
 			APP_AUTH: $.app.Auth.ESS,
 			APP_TILE: oBundleText.getText("LABEL_37001"), // 사원 프로파일
+			includeStyleSheets: [
+			"ZUI5_HR_Perinfo/css/perinfo.css"
+			],
 			APP_TYPE: "M",	// W, M
 			LOG: {
 				ENABLE_SUCCESS: true
@@ -85,6 +90,63 @@
 	}
 	.AlignEnd{
 		text-align : End;
+	}
+	.EmployeePic {
+		border-radius : 100% !important; 
+		/*border : 0.2rem solid #4f667a !important;*/
+	}
+	/* .EmployeeLayout {
+		background-color : #064975 !important;
+		min-height: 130px !important;
+		border-radius : 0.5rem;
+	}
+	.EmployeeLayoutPadding {
+		padding-top: 20px;
+		padding-left: 24px;
+	}
+	.EmployeeLayoutHeader {
+		font-size : 1rem !important;
+		color : #fff !important;
+		font-weight : 500 !important;
+		letter-spacing : 0.5px !important;
+		padding-bottom : 0.25rem !important;
+		line-height:24px !important;
+		min-height : auto !important;
+	}
+	.EmployeeLayoutText {
+		font-size : 14px !important;
+		color : rgba(255, 255, 255, 0.8) !important;
+		line-height : 1.2 !important;
+		min-height : auto !important;
+	}
+	.EmployeeLayoutText span{
+		line-height:20px !important;
+	}
+	.EmployeeLayoutPic {
+		padding-top: 20px;
+		padding-right : 16px;
+	} */
+	.EmployeeLayoutPadding {
+		padding-left: 24px;
+	}
+	.EmployeeLayoutHeader {
+		font-size : 1rem !important;
+		font-weight : 500 !important;
+		letter-spacing : 0.5px !important;
+		padding-bottom : 0.25rem !important;
+		line-height:24px !important;
+		min-height : auto !important; 
+	}
+	.EmployeeLayoutText {
+		font-size : 14px !important;
+		line-height : 1.2 !important;
+		min-height : auto !important;
+	}
+	.EmployeeLayoutText span{
+		line-height:20px !important;
+	}
+	.EmployeeLayoutPic {
+		padding-left: 20px;
 	}
 	</style>
 	</head>

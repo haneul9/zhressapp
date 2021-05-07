@@ -34,7 +34,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -109,7 +109,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {MonthlyNav : []};
 					createData.IPernr = (oData.Pernr && oData.Pernr != "" ? oData.Pernr : "");
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
@@ -117,8 +117,8 @@ sap.ui.define([
 					createData.IMonth = oData.Zyymm.split(".")[1];
 					createData.IBukrs = oData.Bukrs;
 
-				oModel.create("/MonthlyReportSet", createData, null,
-					function(data, res){
+				oModel.create("/MonthlyReportSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.MonthlyNav && data.MonthlyNav.results && data.MonthlyNav.results.length){
 								var data1 = data.MonthlyNav.results[0];
@@ -137,7 +137,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -150,7 +150,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(oController.Error == "E"){
 					oController.Error = "";

@@ -81,35 +81,42 @@ sap.ui.define([
 						height: "40px",
 						justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
 						items: [
-                            new sap.m.HBox({
-								fitContainer: true,
-								items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left"), // 댓글
-                                    new HoverIcon({
-                                        src: "sap-icon://information",
-                                        hover: function(oEvent) {
-                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_56006")); // ※ 알파벳,숫자,특수기호를 포함해 6~10자리로 입력하세요.
-                                        },
-                                        leave: function(oEvent) {
-                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
-                                        }
-                                    })
-                                    .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true).addStyleClass("mr-5px"), // 비밀번호
-                                    new sap.m.Input({
-										width: "100%",
-                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-										value: "{Pword}",
-										type: sap.m.InputType.Password
-									})
-                                ]
-                            })
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left").addStyleClass("sub-title") // 댓글                                 
 						]
 					}),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
-						fitContainer: true,
+                        fitContainer: true,
 						items: []
-					}),
+					}).addStyleClass("mt--24px"),
+                    new sap.m.HBox({
+                        justifyContent: sap.m.FlexJustifyContent.End,
+                        fitContainer: true,
+						items: [
+                            new HoverIcon({
+                                src: "sap-icon://information",
+                                hover: function(oEvent) {
+                                    Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_56006")); // ※ 알파벳,숫자,특수기호를 포함해 6~10자리로 입력하세요.
+                                },
+                                leave: function(oEvent) {
+                                    Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                }
+                            })
+                            .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue mt-10px"),
+                            new sap.m.Input({
+                                width: "170px",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                maxLength: 10,
+                                value: "{Pword}",
+                                type: sap.m.InputType.Password,
+                                placeholder: "{i18n>MSG_56013}"
+                            }).addStyleClass("mr-8px"),
+                            new sap.m.Button({
+								press: oController.onDialogSaveBtn.bind(oController),
+								text: "{i18n>LABEL_56016}" // 저장
+							}).addStyleClass("button-dark mt-4px")
+                        ]
+                    })
+                    .addStyleClass("custom-comment"),
                     new sap.m.HBox({
 						fitContainer: true,
 						items: [
@@ -119,11 +126,7 @@ sap.ui.define([
                                 layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								value:"{Detail}",
 								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							}).addStyleClass("mt-15px"),
-							new sap.m.Button({
-								press: oController.onDialogSaveBtn.bind(oController),
-								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-light h-101px ml-8px")
+							})
 						]
 					})
 				]
@@ -139,7 +142,7 @@ sap.ui.define([
 						height: "40px",
 						alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "105px", "Left", true), // 제목
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "105px", "Left", true).addStyleClass("sub-con-title"), // 제목
                             new sap.m.Input({
                                 width: "100%",
                                 value: "{Title}",
@@ -161,7 +164,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56003}", "105px", "Left"), // 등록일
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56003}", "105px", "Left").addStyleClass("sub-con-title"), // 등록일
                                     new sap.m.Text({
                                         width: "100%",
                                         textAlign: "Begin",
@@ -179,7 +182,7 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left"), // 최종변경일/시
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "105px", "Left").addStyleClass("sub-con-title"), // 최종변경일시
                                     new sap.m.Text({
                                         width: "100%",
                                         textAlign: "Begin",
@@ -212,35 +215,13 @@ sap.ui.define([
                                 height: "40px",
                                 alignItems: sap.m.FlexAlignItems.Center,
                                 items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "105px", "Left").addStyleClass("mr-8px"), // 비공개
-                                    new sap.m.CheckBox({ 
-                                        select: oController.onChangeData.bind(oController),
-                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                        selected: {
-                                            path: "Hide",
-                                            formatter: function(v) {
-                                                return v === "X";
-                                            }
-                                        },
-                                        editable: {
-                                            parts: [{path: "Sdate"}, {path: "/Gubun"}],
-                                            formatter: function(v1, v2) {
-                                                return !v1 || v2 === "X";
-                                            }
-                                        }
-                                    })
-                                ]
-                            }),
-                            new sap.m.HBox({
-                                height: "40px",
-                                alignItems: sap.m.FlexAlignItems.Center,
-                                items: [
-                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true), // 비밀번호
+                                    ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "105px", "Left", true).addStyleClass("sub-con-title"), // 비밀번호
                                     new sap.m.Input({
                                         width: "80%",
                                         layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         value: "{Pword}",
                                         type: sap.m.InputType.Password,
+                                        maxLength: 10,
                                         editable: {
                                             parts: [{path: "Sdate"}, {path: "/Gubun"}],
                                             formatter: function(v1, v2) {
@@ -262,10 +243,11 @@ sap.ui.define([
                             })
                         ]
                     }),
-                    new sap.m.HBox({
-						alignItems: sap.m.FlexAlignItems.Center,
+                    new sap.m.VBox({
+                        fitContainer: true,
+					//	alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true), // 내용
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title"), // 내용
                             new sap.m.TextArea({
                                 rows: 10,
 								width: "100%",
@@ -278,7 +260,7 @@ sap.ui.define([
 										return !v1 || v2 === "X";
 									}
 								}
-							}).addStyleClass("mt-8px mb-8px")
+							})
 						]
 					}),
 					new sap.m.HBox({

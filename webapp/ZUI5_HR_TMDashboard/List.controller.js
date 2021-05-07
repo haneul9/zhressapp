@@ -168,15 +168,15 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {WorkSchedule1Nav : [], WorkSchedule2Nav : []};
 					createData.IYear = oData.Zyymm.split(".")[0];
 					createData.IMonth = oData.Zyymm.split(".")[1];
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;
 					
-				oModel.create("/WorkScheduleSet", createData, null,
-					function(data, res){
+				oModel.create("/WorkScheduleSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WorkSchedule1Nav && data.WorkSchedule1Nav.results){
 								var data1 = data.WorkSchedule1Nav.results[0];
@@ -237,7 +237,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -250,7 +250,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -348,7 +348,7 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {ChangeWorkNav : []};
 					createData.IBukrs = oData.Bukrs;
 					createData.IPernr = oData.Pernr;
@@ -357,8 +357,8 @@ sap.ui.define([
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
 					createData.ILangu = oData.Langu;
 
-				oModel.create("/ChangeWorkListSet", createData, null,
-					function(data, res){
+				oModel.create("/ChangeWorkListSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.ChangeWorkNav && data.ChangeWorkNav.results){
 								var data1 = data.ChangeWorkNav.results;
@@ -372,7 +372,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -385,7 +385,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -426,7 +426,7 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {DWorkScheduleNav : []};
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oData.Langu;
@@ -436,8 +436,8 @@ sap.ui.define([
 					createData.IOrgeh = oData.Orgeh;
 					createData.IEmpid = oData.Pernr;
 				
-				oModel.create("/DayWorkScheduleSet", createData, null,
-					function(data, res){
+				oModel.create("/DayWorkScheduleSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.DWorkScheduleNav && data.DWorkScheduleNav.results){
 								var data1 = data.DWorkScheduleNav.results;
@@ -453,7 +453,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -466,7 +466,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -506,7 +506,7 @@ sap.ui.define([
 			var vData = [];
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {};
 				eval('createData.Worktime' + oData.Type + "Nav = [];");
 				
@@ -518,8 +518,8 @@ sap.ui.define([
 					createData.IOrgeh = oData.Orgeh;
 					createData.IEmpid = oData.Pernr;
 				
-				oModel.create("/WorktimeListSet", createData, null,
-					function(data, res){
+				oModel.create("/WorktimeListSet", createData, {
+					success: function(data, res){
 						if(data){
 							var data1 = eval("data.Worktime" + oData.Type + "Nav");
 							
@@ -547,7 +547,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -560,7 +560,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 					
 				eval("oController.makeContent" + oData.Type + "(oController, oLayout, vData);");
 
@@ -1026,15 +1026,15 @@ sap.ui.define([
 				oLayout.addContent(sap.ui.jsfragment("ZUI5_HR_TMDashboard.fragment.Calendar", oController));
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+				var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
 				var createData = {WScheduleBasicNav : []};
 					createData.IPernr = oData.Pernr;
 					createData.ILangu = oData.Langu;
 					createData.IYear = oData.Zyymm.split(".")[0];
 					createData.IMonth = oData.Zyymm.split(".")[1];
 				
-				oModel.create("/WorkScheduleBasicSet", createData, null,
-					function(data, res){
+				oModel.create("/WorkScheduleBasicSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.WScheduleBasicNav && data.WScheduleBasicNav.results){
 								var data1 = data.WScheduleBasicNav.results;
@@ -1102,7 +1102,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -1115,7 +1115,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				

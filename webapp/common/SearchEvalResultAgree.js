@@ -420,7 +420,7 @@ common.SearchEvalResultAgree = {
 		
 		if(id == ""){
 			$(".spinner-evalresult")["hide"]();
-			sap.m.MessageBox.error(common.SearchEvalResultAgree.oBundleText.getText("MSG_12001")); // 평가문서가 존재하지 않습니다.
+			sap.m.MessageBox.error(oBundleText.getText("MSG_12001")); // 평가문서가 존재하지 않습니다.
 			return;	
 		}
 		

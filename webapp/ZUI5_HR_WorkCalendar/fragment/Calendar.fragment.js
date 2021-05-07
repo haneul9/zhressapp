@@ -7,14 +7,14 @@ sap.ui.jsfragment("ZUI5_HR_WorkCalendar.fragment.Calendar", {
 	createContent : function(oController) {
 		
 		var oRow, oCell;
-		var vHeader = [{title:oBundleText.getText("LABEL_48057"), width:"", noCalDay:"", sunday:"", saturday:""}, // 월
-		               {title:oBundleText.getText("LABEL_48058"), width:"", noCalDay:"", sunday:"", saturday:""}, // 화
-		               {title:oBundleText.getText("LABEL_48059"), width:"", noCalDay:"", sunday:"", saturday:""}, // 수
-		               {title:oBundleText.getText("LABEL_48060"), width:"", noCalDay:"", sunday:"", saturday:""}, // 목
-		               {title:oBundleText.getText("LABEL_48061"), width:"", noCalDay:"", sunday:"", saturday:""}, // 금
-		               {title:oBundleText.getText("LABEL_48062"), width:"", noCalDay:"", sunday:"", saturday:"X"}, // 토
-		               {title:oBundleText.getText("LABEL_48056"), width:"", noCalDay:"", sunday:"X", saturday:""}, // 일
-		               {title:oBundleText.getText("LABEL_63019"), width:"", noCalDay:"X", sunday:"", saturday:""}] // 주간합계
+		var vHeader = [{title:"{i18n>LABEL_48057}", width:"", noCalDay:"", sunday:"", saturday:""}, // 월
+		               {title:"{i18n>LABEL_48058}", width:"", noCalDay:"", sunday:"", saturday:""}, // 화
+		               {title:"{i18n>LABEL_48059}", width:"", noCalDay:"", sunday:"", saturday:""}, // 수
+		               {title:"{i18n>LABEL_48060}", width:"", noCalDay:"", sunday:"", saturday:""}, // 목
+		               {title:"{i18n>LABEL_48061}", width:"", noCalDay:"", sunday:"", saturday:""}, // 금
+		               {title:"{i18n>LABEL_48062}", width:"", noCalDay:"", sunday:"", saturday:"X"}, // 토
+		               {title:"{i18n>LABEL_48056}", width:"", noCalDay:"", sunday:"X", saturday:""}, // 일
+		               {title:"{i18n>LABEL_63019}", width:"", noCalDay:"X", sunday:"", saturday:""}] // 주간합계
 		
 		var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern: "yyyyMMdd"});
 		var currDate = dateFormat.format(new Date()); 

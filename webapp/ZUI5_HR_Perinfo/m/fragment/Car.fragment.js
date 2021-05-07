@@ -12,15 +12,6 @@ sap.ui.define([], function () {
         getInfoHBox: function (oController) {
             return new sap.m.VBox({
                 items: [
-                    // 	 new sap.m.HBox({
-                    //         height: "55px",
-                    //         alignItems: sap.m.FlexAlignItems.Center,
-                    //         items: [
-                    //             new sap.m.Label({ layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                    //width: "100%", text: "{i18n>LABEL_37030}" }).addStyleClass("sub-title"), // 기본차량
-                    //         ]
-                    //     }).addStyleClass("sub-con-titleBar-both"),
-
                     new sap.m.HBox({
                         height: "40px",
                         alignItems: sap.m.FlexAlignItems.Center,

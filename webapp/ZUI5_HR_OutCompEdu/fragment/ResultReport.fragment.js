@@ -92,52 +92,12 @@ sap.ui.define([
 				}
             }, oNomalCombo);
 
-            var oTimeCombo = new sap.m.ComboBox({ // 학습시간 (시)
-				width: "70px",
-				editable: false,
-				items: {
-					path: "/TimeCombo",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{hTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo);
-
-            var oTimeCombo2 = new sap.m.ComboBox({ // 학습시간 (분)
-				width: "70px",
-				editable: false,
-				items: {
-					path: "/TimeCombo2",
-					template: new sap.ui.core.ListItem({
-						key: "{Code}",
-						text: "{Text}"
-					})
-				},
-				selectedKey: "{mTime}"
-			});
-			
-			// 키보드 입력 방지
-			oTimeCombo2.addDelegate({
-				onAfterRendering: function () {
-					oTimeCombo2.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oTimeCombo2);
-
             var oSatisCombo = new sap.m.ComboBox({ // 학습자만족도
 				width: "250px",
 				editable: {
-					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
+					parts : [{path: "Status1"}, {path: "Edoty"}, {path: "RepstT"}],
 					formatter: function(v1, v2, v3) {
-						return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+						return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 					}
 				},
 				items: {
@@ -162,7 +122,7 @@ sap.ui.define([
 				editable: {
 					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 					formatter: function(v1, v2, v3) {
-						return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+						return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 					}
 				},
 				items: {
@@ -315,9 +275,12 @@ sap.ui.define([
 								width: "100%",
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40036}", "150px", "Right", true), // 학습시간
-									oTimeCombo,
-									new sap.m.Text({ text: " : " }).addStyleClass("ml-15px mr-5px"),
-									oTimeCombo2
+									new sap.m.Input({
+										textAlign: "Begin",
+										width: "250px",
+										editable: false,
+										value: "{Trtim}"
+									})
 								]
 							})
 							.addStyleClass("search-field-group")
@@ -349,7 +312,7 @@ sap.ui.define([
 										selected: {
 											path: "Natio",
 											formatter: function(v) {
-												return v === "1";
+												return v === "01";
 											}
 										}
 									}),
@@ -359,7 +322,7 @@ sap.ui.define([
 										selected: {
 											path: "Natio",
 											formatter: function(v) {
-												return v === "2";
+												return v === "02";
 											}
 										}
 									})
@@ -398,7 +361,7 @@ sap.ui.define([
                                                 editable: {
                                                     parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 													formatter: function(v1, v2, v3) {
-														return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+														return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 													}
                                                 },
                                                 value: "{Pltgt}"
@@ -418,7 +381,7 @@ sap.ui.define([
                                                 editable: {
                                                     parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 													formatter: function(v1, v2, v3) {
-														return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+														return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 													}
                                                 }
                                             })
@@ -435,7 +398,7 @@ sap.ui.define([
                                                 editable: {
                                                     parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 													formatter: function(v1, v2, v3) {
-														return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+														return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 													}
                                                 },
                                                 value: "{Plloc}"
@@ -460,11 +423,11 @@ sap.ui.define([
                                         editable: {
                                             parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 											formatter: function(v1, v2, v3) {
-												return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+												return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 											}
                                         }
                                     }),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
                                 ]
                             })
 						]
@@ -482,11 +445,11 @@ sap.ui.define([
                                         editable: {
                                             parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 											formatter: function(v1, v2, v3) {
-												return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+												return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 											}
                                         }
                                     }),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
                                 ]
                             })
 						]
@@ -494,13 +457,13 @@ sap.ui.define([
 					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox({
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_40049}", "150px", "Right"), // 이수시간
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_40075}", "150px", "Right"), // 수료증
                             new sap.m.VBox({
                                 items: [
                                     new sap.m.Text({text: "{i18n>MSG_40027}", width: "auto", textAlign: "Begin"}),
                                     new sap.m.Text({text: "{i18n>MSG_40028}", width: "auto", textAlign: "Begin"}),
                                     new sap.m.Text({text: "{i18n>MSG_40029}", width: "auto", textAlign: "Begin"}),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
+                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
                                 ]
                             })
 						]
@@ -627,7 +590,7 @@ sap.ui.define([
 								editable: {
 									parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 									formatter: function(v1, v2, v3) {
-										return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+										return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 									}
 								}
 							})
@@ -691,14 +654,14 @@ sap.ui.define([
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogResultBtn.bind(oController),
-						text: "{i18n>LABEL_40060}", // 신청
+						text: "{i18n>LABEL_40022}", // 저장
 						visible: {
 							parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 							formatter: function(v1, v2, v3) {
-								return Common.checkNull(v3) && v1 === "99" && v2 === "1";
+								return Common.checkNull(v3) && ((v1 === "AA" && v2 === "2") || (v1 === "99" && v2 === "1"));
 							}
 						}
-					}).addStyleClass("button-dark"),
+					}).addStyleClass("button-light"),
 					new sap.m.Button({
 						press: function () {
 							oDialog.close();

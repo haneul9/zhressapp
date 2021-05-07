@@ -2,7 +2,6 @@
 sap.ui.define([
 	"common/Common",
 	"common/CommonController",
-	"common/moment-with-locales",
 	"./delegate/OnRequest",
 	"./delegate/OnSettlement",
 	"sap/base/util/UriParameters",
@@ -10,7 +9,6 @@ sap.ui.define([
 ], function(
 	Common,
 	CommonController,
-	momentjs,
 	OnRequest,
 	OnSettlement,
 	UriParameters,
@@ -27,6 +25,8 @@ return CommonController.extend($.app.APP_ID, { // 출장
 	SettlementSearchModel: new JSONModel(),
 	SettlementListModel: new JSONModel(),
 	SettlementDetailModel: new JSONModel(),
+	SetPerSon:"",
+	SetAddLine:"",
 
 	onInit: function() {
 		Common.log("onInit");
@@ -101,10 +101,14 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				success: function(oData) {
 					if (oData && oData.NavCommonCodeList.results) {
 						oModel.setProperty("/ApprovalStatusList", oData.NavCommonCodeList.results);
+					} else {
+						oModel.setProperty("/ApprovalStatusList", []);
 					}
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
+
+					oModel.setProperty("/ApprovalStatusList", []);
 				}
 			}
 		);
@@ -155,7 +159,12 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		}, 0);
 	},
 
-	onESSelectPerson: OnRequest.setAccompanier,
+	onESSelectPerson: function(oEvent) {
+
+		this.RequestDetailDialogHandler.flag == "5"
+			? OnRequest.setAdded.call($.app.getController(), oEvent)
+			: OnRequest.setAccompanier.call($.app.getController(), oEvent);
+	},
 
 	displayMultiOrgSearchDialog: OnRequest.searchOrg,
 

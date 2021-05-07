@@ -100,7 +100,7 @@ sap.ui.define([
 			.addStyleClass("mt-10px")
 			.attachCellClick(oController.onHighSelectedRow)
 			.setModel(oController.ChildrenModel)
-			.bindRows("/Data")
+			.bindRows("/Data");
 			
 			ZHR_TABLES.makeColumn(oController, oHighTable, this._HighTargetModel);
 

@@ -4,7 +4,6 @@ sap.ui.define([
 	"common/Common",
 	"common/Formatter",
 	"common/HoverIcon",
-	"common/moment-with-locales",
 	"common/PickOnlyDatePicker",
 	"common/ZHR_TABLES",
 	"../delegate/OnSettlement",
@@ -15,7 +14,6 @@ sap.ui.define([
 	Common,
 	Formatter,
 	HoverIcon,
-	momentjs,
 	PickOnlyDatePicker,
 	ZHR_TABLES,
 	OnSettlement,
@@ -695,7 +693,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 			editable: "{/Header/Edtfg}",
 			secondDateValue: "{BtEnddat}",
 			dateValue: "{BtStartdat}",
-			maxDate: new Date(),
+			minDate: "{= ${/EmpLoginInfo/Bukrs} === 'A100' ? ${/Header/BtStartdat} : null }",
+			maxDate: "{= ${/EmpLoginInfo/Bukrs} === 'A100' ? ${/Header/BtEnddat} : ${/EmpLoginInfo/Today} }",
 			delimiter: "~",
 			width: "100%"
 		});

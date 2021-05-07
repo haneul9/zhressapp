@@ -34,7 +34,7 @@ sap.ui.define(
                     IBegda = new Date(curDate.getFullYear(), curDate.getMonth(), 1),
                     IEndda = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate());
 
-                oController._ListCondJSonModel.setProperty("/Data", { Begda: IBegda, Endda: IEndda, Apsta: "0" });
+                oController._ListCondJSonModel.setProperty("/Data", { Begda: IBegda, Endda: IEndda, Apsta: "0", Dtfmt: oController.getView().getModel("session").getData().Dtfmt  });
                 oController._ListJSonModel.setProperty("/Data", []);
                 oController.onPressSearch();
             },

@@ -50,7 +50,7 @@ sap.ui.define(
             onPressSearch: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-
+				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
                 var vCondiData = oController._ListCondJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
 
@@ -97,7 +97,11 @@ sap.ui.define(
                     );
 
                     oController._ListJSonModel.setProperty("/Data", vData.Data);
-                    Common.adjustAutoVisibleRowCount.call($.app.byId(oController.PAGEID + "_Table"));
+                    var row = parseInt((window.innerHeight - 170) / 38);
+					oTable.setVisibleRowCount(vData.Data.length < row ? vData.Data.length : row);
+                    // Common.adjustAutoVisibleRowCount.call(oTable);
+                    oTable.setFixedBottomRowCount(1);
+                    
                     oController._BusyDialog.close();
 
                     if (oController.Error == "E") {
@@ -145,15 +149,21 @@ sap.ui.define(
                 var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_PDF");
                 oLayout.destroyContent();
 
-                oController.getOcrsnList(oController, "X");
+                // oController.getOcrsnList(oController, "X");
+                oController.getOcrsnList( "X");
                 oController._DetailDialog.open();
             },
 
-            getOcrsnList: function (oController, searchDetailYn) {
+            getOcrsnList: function (searchDetailYn) {
+                var oView = sap.ui.getCore().byId("ZUI5_HR_Payslip.List");
+                var oController = oView.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
 
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
+
+                var oSeqnr = $.app.byId(oController.PAGEID+"_Seqnr");
+                oSeqnr.setValue("");
 
                 var search = function () {
                     var oPath = "";
@@ -176,13 +186,18 @@ sap.ui.define(
                                     for (var i = 0; i < data.PayreasonNav.results.length; i++) {
                                         vData.Data.push(data.PayreasonNav.results[i]);
                                     }
+                                    oController._DetailJSonModel.setProperty("/Data/Seqnr", data.PayreasonNav.results[0].Seqnr);
+                                }else{
+                                    oController._DetailJSonModel.setProperty("/Data/Seqnr", ""); 
                                 }
+                            }else{
+                                oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                             }
                         },
                         function (oError) {
                             var Err = {};
                             oController.Error = "E";
-
+                            oController._DetailJSonModel.setProperty("/Data/Seqnr", "");
                             if (oError.response) {
                                 Err = window.JSON.parse(oError.response.body);
                                 var msg1 = Err.error.innererror.errordetails;
@@ -215,8 +230,6 @@ sap.ui.define(
             onPressSearchDetail: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
-                // 		var oHeight = sap.ui.getCore().byId(oController.PAGEID + "_DetailDialog").getContentHeight();
-                // var oHeight = "380px";
                 var vCondiData = oController._DetailJSonModel.getProperty("/Data");
                 var vZpdf = "";
 
@@ -225,7 +238,7 @@ sap.ui.define(
 
                 if (!vCondiData.Seqnr || vCondiData.Seqnr == "") {
                     // 조회조건을 모두 입력하시기 바랍니다.
-                    MessageBox.error(oController.getBundleText("MSG_53005"));
+                    MessageBox.error(oController.getBundleText("MSG_54001"));
                     return;
                 }
 
@@ -282,8 +295,8 @@ sap.ui.define(
                     );
 
                     oController._DetailJSonModel.setProperty("/Data/Zpdf", vZpdf);
-                    oController._BusyDialog.close();
-
+                    // oController._BusyDialog.close();
+                    oController._DetailDialog.setBusy(false);    
                     if (oController.Error == "E") {
                         oController.Error = "";
                         MessageBox.error(oController.ErrorMessage);
@@ -291,7 +304,9 @@ sap.ui.define(
                     }
                 };
 
-                oController._BusyDialog.open();
+                // oController._BusyDialog.open();
+                oController._DetailDialog.setBusyIndicatorDelay(0);
+                oController._DetailDialog.setBusy(true);
                 setTimeout(search, 100);
             },
 

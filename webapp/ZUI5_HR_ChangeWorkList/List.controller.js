@@ -46,13 +46,22 @@ sap.ui.define(
                         Data: {
                             Bukrs: $.app.getModel("session").getData().Bukrs2,
                             Pernr: "",
-                            Orgeh: $.app.getModel("session").getData().Orgeh,
-                            Ename: $.app.getModel("session").getData().Stext,
+                            Orgeh: "",
+                            Ename: "",
                             Langu: $.app.getModel("session").getData().Langu,
                             Begda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
-                            Endda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), oController.getLastDate(today.getFullYear(), today.getMonth())))
+                            Endda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), oController.getLastDate(today.getFullYear(), today.getMonth()))),
+                            Persa : $.app.getModel("session").getData().Persa
                         }
                     };
+                    
+                    if(vData.Data.Persa.substring(0,1) == "D"){
+						vData.Data.Pernr = $.app.getModel("session").getData().Pernr;
+						vData.Data.Ename = $.app.getModel("session").getData().Ename;
+					} else {
+						vData.Data.Orgeh = $.app.getModel("session").getData().Orgeh;
+                        vData.Data.Ename = $.app.getModel("session").getData().Stext;
+					}
 
                     oController._ListCondJSonModel.setData(vData);
                 }
@@ -112,7 +121,7 @@ sap.ui.define(
                 }
 
                 var search = function () {
-                    var oModel = sap.ui.getCore().getModel("ZHR_DASHBOARD_SRV");
+                    var oModel = $.app.getModel("ZHR_DASHBOARD_SRV");
                     var createData = { ChangeWorkNav: [] };
                     createData.IBukrs = oData.Bukrs;
                     createData.IPernr = oData.Pernr;
@@ -121,11 +130,8 @@ sap.ui.define(
                     createData.IEndda = "/Date(" + Common.getTime(new Date(oData.Endda)) + ")/";
                     createData.ILangu = oData.Langu;
 
-                    oModel.create(
-                        "/ChangeWorkListSet",
-                        createData,
-                        null,
-                        function (data) {
+                    oModel.create("/ChangeWorkListSet", createData, {
+                        success: function (data) {
                             if (data) {
                                 if (data.ChangeWorkNav && data.ChangeWorkNav.results) {
                                     var data1 = data.ChangeWorkNav.results;
@@ -139,7 +145,7 @@ sap.ui.define(
                                 }
                             }
                         },
-                        function (oError) {
+                        error: function (oError) {
                             var Err = {};
                             oController.Error = "E";
 
@@ -152,7 +158,7 @@ sap.ui.define(
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
-                    );
+                    });
 
                     oJSONModel.setData(vData);
                     oTable.bindRows("/Data");

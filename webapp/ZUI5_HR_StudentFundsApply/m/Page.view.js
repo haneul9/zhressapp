@@ -31,7 +31,7 @@
                                 else return false;
                             }
                         }
-                    }).addStyleClass("button-light-sm")
+                    }).addStyleClass("button-light")
                 ]
             })
             .addStyleClass("info-box mb-10px")

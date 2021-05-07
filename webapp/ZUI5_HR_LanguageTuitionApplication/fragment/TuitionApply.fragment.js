@@ -3,7 +3,9 @@ sap.ui.define([
 	"../../common/Common",
 	"../../common/PickOnlyDateRangeSelection",
 	"../delegate/ViewTemplates",
-], function (Common, PickOnlyDateRangeSelection, ViewTemplates) {
+	"../../common/HoverIcon",
+	"sap/m/InputBase"
+], function (Common, PickOnlyDateRangeSelection, ViewTemplates, HoverIcon, InputBase) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_LanguageTuitionApplication.fragment.TuitionApply", {
@@ -304,6 +306,16 @@ sap.ui.define([
 											editable: false
 										}),
 										new sap.m.Text({ text: "{i18n>LABEL_29030}", width: "30px" }),
+										new HoverIcon({
+											src: "sap-icon://information",
+											hover: function(oEvent) {
+												Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_29022")); // 어학성적 버튼을 클릭하여 수강하시고자하는 유효한 어학성적을 선택하시기 바랍니다.
+											},
+											leave: function(oEvent) {
+												Common.onPressTableHeaderInformation.call(oController, oEvent);
+											}
+										})
+										.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue"),
 										new sap.m.Button({
 											press: oController.onGradeVal.bind(oController),
 											text: "{i18n>LABEL_29023}", // 어학성적
@@ -314,7 +326,7 @@ sap.ui.define([
 													return false;
 												}
 											}
-										}).addStyleClass("button-light-sm ml-10px")
+										}).addStyleClass("button-light-sm")
 									]
 								}).addStyleClass("search-field-group"),
 								new sap.m.HBox({

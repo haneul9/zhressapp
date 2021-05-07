@@ -105,7 +105,7 @@ sap.ui.define([
 					new sap.m.HBox({
 						items: [	
 							new sap.m.Button(oController.PAGEID + "_onMenuBtn", {
-								press: oController.onPressMenuBtn,
+								press: oController.onPressMenuBtn.bind(oController),
 								text: "{i18n>LABEL_29006}", // 메뉴얼
 							}).addStyleClass("button-light"),						
 							new sap.m.Button(oController.PAGEID + "_onReqBtn", {

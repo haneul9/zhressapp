@@ -66,19 +66,23 @@ fill: function() {
 
 			this.items = this._gateway.odataResults(data).TableIn4;
 
-			var list = this.$(), jspPane;
+			var list = this.$(), jspPane; // 메뉴 즐겨찾기 추가/제거를 반복하다보면 scroll이 없어졌다가 다시 생성되어야하는 시점에 생성되지 않는 버그가 있어 따로 jspPane 변수를 사용함
 			if (!this.items.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">즐겨찾는 메뉴가 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action text-center">즐겨찾는 메뉴가 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
 				}
 				return;
 			}
 
 			if (list.data('jsp')) {
 				jspPane = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+			}
+
+			if (this._gateway.isMobile()) {
+				this.items = this.items.splice(0, 8);
 			}
 
 			(jspPane || list).prepend($.map(this.items, function(o) {
@@ -104,7 +108,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && !this._gateway.isMobile()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,

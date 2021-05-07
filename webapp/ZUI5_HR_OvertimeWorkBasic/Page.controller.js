@@ -1,13 +1,13 @@
+/* eslint-disable no-undef */
 sap.ui.define(
     [
         "common/Common", //
         "common/CommonController",
         "common/JSONModelHelper",
-        "./delegate/OvertimeWork",
         "./delegate/PageHandler",
         "./delegate/ApprovalHandler"
     ],
-    function (Common, CommonController, JSONModelHelper, OvertimeWork, PageHandler, ApprovalHandler) {
+    function (Common, CommonController, JSONModelHelper, PageHandler, ApprovalHandler) {
         "use strict";
 
         return CommonController.extend($.app.APP_ID, {

@@ -1,9 +1,10 @@
 sap.ui.define(
 	[
 		"common/Common",
-		"./ODataService"
+		"./ODataService",
+		"sap/ui/core/BusyIndicator"
 	],
-	function (Common, ODataService) {
+	function (Common, ODataService, BusyIndicator) {
 		"use strict";
 
 		/**
@@ -23,7 +24,22 @@ sap.ui.define(
 				var results = ODataService.CondoUseBookTotSet.call(this.oController);
 
 				this.oModel.setProperty("/RequestList", results);
+				this.oModel.setProperty("/RequestList-origin", results);
 				$.app.byId(this.oController.PAGEID + "_RequestList").removeSelections();
+
+				var filterItems = [{ Code: "ALL", Text: this.oController.getBundleText("LABEL_00131") }];	// 전체
+				results.map(function(elem) {
+					return { Code: elem.Condo, Text: elem.Contx };
+				}).forEach(function(elem) {
+					if(!filterItems.some(function(item) { return item.Code === elem.Code; })) {
+						filterItems.push(elem);
+					}
+				});
+
+				this.oModel.setProperty("/filter", {
+					Condo: "ALL",
+					CondoItems: filterItems
+				});
 			},
 
 			navBack: function(isRefresh) {
@@ -34,44 +50,75 @@ sap.ui.define(
 			},
 
 			onPressResvRow: function(oEvent) {
+				BusyIndicator.show(0);
+
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
 
-				// Set data
-				oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
-				oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);
+				Common.getPromise(
+					function () {
+						// Set data
+						oRowData.Usepn = String(parseInt(oRowData.Usepn, 10));
+						oRowData.Rangeda = "${Night}박${Days}일".interpolate(parseInt(oRowData.Stano, 10), parseInt(oRowData.Stano, 10) + 1);
 
-				// Display control
-				oRowData.isNew = false;
+						// Display control
+						oRowData.isNew = false;
 
-				this.oModel.setProperty("/Detail/Data", oRowData);
+						this.oModel.setProperty("/Detail/Data", oRowData);
 
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
 				});
 			},
 
 			onPressRequestRow: function(oEvent) {
 				var oRowData = $.extend(true, {}, oEvent.getParameter("listItem").getBindingContext().getProperty());
 	
-				// Set data
-				oRowData.Compcd = this.getBasicTechCode(oRowData.Werks);
-				oRowData.Appbg = oRowData.Begda;
-				oRowData.Appen = oRowData.Endda;
-				oRowData.Romno = "01";
+				BusyIndicator.show(0);
 
-				delete oRowData.__metadata;
-				delete oRowData.Begda;
-				delete oRowData.Endda;
-				delete oRowData.Usepn;
+				Common.getPromise(
+					function () {
+						// Set data
+						oRowData.Compcd = this.getBasicTechCode(oRowData.Werks);
+						oRowData.Appbg = oRowData.Begda;
+						oRowData.Appen = oRowData.Endda;
+						oRowData.Romno = "01";
 
-				// Display control
-				oRowData.isNew = true;
+						delete oRowData.__metadata;
+						delete oRowData.Begda;
+						delete oRowData.Endda;
+						delete oRowData.Usepn;
 
-				this.oModel.setProperty("/Detail/Data", oRowData);
-	
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						// Display control
+						oRowData.isNew = true;
+
+						this.oModel.setProperty("/Detail/Data", oRowData);
+			
+						sap.ui.getCore().getEventBus().publish("nav", "to", {
+							id: [$.app.CONTEXT_PATH, "CondoDetail"].join($.app.getDeviceSuffix())
+						});
+					}.bind(this)
+				).then(function () {
+					BusyIndicator.hide();
 				});
+			},
+
+			setFilter: function(oEvent) {
+				var vCondoKey = oEvent.getSource().getSelectedKey();
+
+				if(vCondoKey === "ALL") {
+					this.oModel.setProperty("/RequestList", this.oModel.getProperty("/RequestList-origin"));
+				} else {
+					this.oModel.setProperty(
+						"/RequestList",
+						this.oModel.getProperty("/RequestList-origin").filter(function(elem) {
+							return elem.Condo === vCondoKey;
+						})
+					);
+				}
 			},
 
 			ProcessAfterNavigation: function() {

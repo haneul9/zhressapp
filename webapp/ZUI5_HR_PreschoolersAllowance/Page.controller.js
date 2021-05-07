@@ -42,6 +42,7 @@ sap.ui.define([
 		},
 
 		retrieveTable: function() {
+			var oController = this;
 			var oPayload = {};
 			
 			this.initModels.call(this);
@@ -49,7 +50,7 @@ sap.ui.define([
 			// Header
 			oPayload.IGubun = "L";
 			oPayload.IPernr = this.getSessionInfoByKey("name");
-			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs2");
+			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs3");
 			
 			// Navigation property
 			oPayload.ChildExport = [];
@@ -60,6 +61,9 @@ sap.ui.define([
 				success: function(data) {
 					if(data.ChildExport) {
 						this.PageModel.setData({ChildExport: data.ChildExport.results});
+						if(data.ChildExport.results[0].EClose === "X"){
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107")});
+						}
 					}
 					
 					if(data.ChildTableIn2) {
@@ -160,7 +164,7 @@ sap.ui.define([
 			// Header
 			oPayload.IGubun = "L";
 			oPayload.IPernr = this.getSessionInfoByKey("name");
-			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs2");
+			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs3");
 			oPayload.IZname = oEvent.getSource().getSelectedKey();
 			
 			// Navigation property
@@ -269,7 +273,7 @@ sap.ui.define([
 			// Header
 			oPayload.IGubun = vGubun;
 			oPayload.IPernr = this.getSessionInfoByKey("name");
-			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs2");
+			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs3");
 			oPayload.IZname = oDetailData.Zname;
 			
 			// Navigation property

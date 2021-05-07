@@ -1,8 +1,9 @@
 sap.ui.define(
     [
-        "common/ZHR_TABLES" //
+        "common/ZHR_TABLES", //
+         "common/makeTable"
     ],
-    function (ZHR_TABLES) {
+    function (ZHR_TABLES, makeTable) {
         "use strict";
 
         sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
@@ -27,12 +28,19 @@ sap.ui.define(
                                         path: "/Year",
                                         templateShareable: false,
                                         template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
-                                    },
-                                    change: oController.onPressSearch
+                                    }
                                 }),
                                 new sap.m.Label({ text: "{i18n>LABEL_54003}", textAlign: sap.ui.core.HorizontalAlign.Center }).addStyleClass("mx-10px") // 년
                             ]
-                        }).addStyleClass("search-field-group")
+                        }).addStyleClass("search-field-group"),
+                        new sap.m.FlexBox({
+                            items: [
+                                new sap.m.Button({
+                                    press: oController.onPressSearch.bind(oController),
+                                    text: "{i18n>LABEL_09012}" // 조회
+                                }).addStyleClass("button-search")
+                            ]
+                        }).addStyleClass("button-group")
                     ]
                 })
                     .addStyleClass("search-box search-bg pb-7px mt-16px")
@@ -48,25 +56,35 @@ sap.ui.define(
                     enableColumnFreeze: false,
                     enableBusyIndicator: true,
                     busyIndicatorDelay: 0,
-                    visibleRowCount: 1,
+                    visibleRowCount: 10,
                     showOverlay: false,
                     showNoData: true,
                     width: "100%",
                     rowHeight: 37,
                     columnHeaderHeight: 38,
                     noData: "{i18n>LABEL_00901}",
-                    cellClick: oController.clickListCell
+                    cellClick: oController.clickListCell,
+                    sort : makeTable.onTableSort
+                    
                 })
                     .addStyleClass("mt-10px")
                     .setModel(oController._ListJSonModel)
                     .bindRows("/Data");
-
+                    
+                oTable.addDelegate({
+					onAfterRendering: function() {
+						$("#" + oController.PAGEID + "_Table").find('BUTTON > span')
+						.removeClass('sapMBtnDefault sapMBtnHoverable')
+						.addClass('sapMBtnGhost');
+					}
+				});
+				
                 ZHR_TABLES.makeColumn(oController, oTable, [
                     { id: "Zyymm", label: "{i18n>LABEL_54002}" /* 대상년월     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "14%", templateGetter: "getYYYYMMTemplate", templateGetterOwner: this },
                     { id: "Ocrtx", label: "{i18n>LABEL_54005}" /* 급여구분 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "14%" },
-                    { id: "Bet01", label: "{i18n>LABEL_54006}" /* 지급총액     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%", templateGetter: "getMoneyTemplate1", templateGetterOwner: this },
-                    { id: "Bet02", label: "{i18n>LABEL_54007}" /* 공제총액     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%", templateGetter: "getMoneyTemplate2", templateGetterOwner: this },
-                    { id: "Bet03", label: "{i18n>LABEL_54008}" /* 차감지급액     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%", templateGetter: "getMoneyTemplate3", templateGetterOwner: this },
+                    { id: "Bet01", label: "{i18n>LABEL_54006}" /* 지급총액     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%", align: "End", templateGetter: "getMoneyTemplate1", templateGetterOwner: this },
+                    { id: "Bet02", label: "{i18n>LABEL_54007}" /* 공제총액     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%", align: "End", templateGetter: "getMoneyTemplate2", templateGetterOwner: this },
+                    { id: "Bet03", label: "{i18n>LABEL_54008}" /* 차감지급액     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%", align: "End", templateGetter: "getMoneyTemplate3", templateGetterOwner: this },
                     { id: "Bet04", label: "{i18n>LABEL_54009}" /* 기지급액   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "18%" }
                 ]);
 

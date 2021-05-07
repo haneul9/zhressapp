@@ -1,16 +1,15 @@
 jQuery.sap.require("sap.m.MessageBox");
-jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -34,7 +33,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -49,6 +48,7 @@ sap.ui.define([
 					Werks : $.app.getModel("session").getData().Persa,
 					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
 					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : "",
+					Chief : $.app.getModel("session").getData().Chief
 				}
 			};
 			
@@ -97,8 +97,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
+			var oController = oView.getController();
+		
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -115,8 +118,11 @@ sap.ui.define([
 		},
 		
 		onChangeTime2 : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
+			var oController = oView.getController();
+		
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -149,41 +155,81 @@ sap.ui.define([
 				vData.photo = oPhoto;
 				 
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
-			var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-			var oPath = "/EmpSearchResultSet?$filter=Percod eq '" + encodeURIComponent(common.Common.encryptPernr($.app.getModel("session").getData().Pernr)) + "'";
-				oPath += " and Actty eq '" + gAuth + "'";
-				oPath += " and Actda eq datetime'" + dateFormat.format(new Date()) + "T00:00:00'";
-				oPath += " and Ename eq '" + Pernr + "'";
-				oPath += " and Persa eq '0AL1' and Stat2 eq '3'";
-				oPath += " and BukrsOld eq '" + $.app.getModel("session").getData().Bukrs + "'";
+			// var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			// var oPath = "/EmpSearchResultSet?$filter=Percod eq '" + encodeURIComponent(common.Common.encryptPernr($.app.getModel("session").getData().Pernr)) + "'";
+			// 	oPath += " and Actty eq '" + gAuth + "'";
+			// 	oPath += " and Actda eq datetime'" + dateFormat.format(new Date()) + "T00:00:00'";
+			// 	oPath += " and Ename eq '" + Pernr + "'";
+			// 	oPath += " and Persa eq '0AL1' and Stat2 eq '3'";
+			// 	oPath += " and BukrsOld eq '" + $.app.getModel("session").getData().Bukrs + "'";
+			// 	oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
+			// 	oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "'";
+			// 	oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
+			// 	oPath += " and ICmenuid eq '" + $.app.getMenuId() + "'";
 				
-			oModel.read(oPath, null, null, false,
-						function(data, oResponse) {
-							if(data && data.results.length) {
-								data.results[0].nickname = data.results[0].Ename;
-								data.results[0].Stext = data.results[0].Fulln;
-	                        	data.results[0].PGradeTxt = data.results[0].ZpGradetx;
-	                        	data.results[0].ZtitleT = data.results[0].Ztitletx;
+			// oModel.read(oPath, null, null, false,
+			// 			function(data, oResponse) {
+			// 				if(data && data.results.length) {
+			// 					data.results[0].nickname = data.results[0].Ename;
+			// 					data.results[0].Stext = data.results[0].Fulln;
+	  //                      	data.results[0].PGradeTxt = data.results[0].ZpGradetx;
+	  //                      	data.results[0].ZtitleT = data.results[0].Ztitletx;
 	                        	
-								Object.assign(vData, data.results[0]);
-							}
-						},
-						function(Res) {
-							oController.Error = "E";
-							if(Res.response.body){
-								ErrorMessage = Res.response.body;
-								var ErrorJSON = JSON.parse(ErrorMessage);
-								if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
-									oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+			// 					Object.assign(vData, data.results[0]);
+			// 				}
+			// 			},
+			// 			function(Res) {
+			// 				oController.Error = "E";
+			// 				if(Res.response.body){
+			// 					ErrorMessage = Res.response.body;
+			// 					var ErrorJSON = JSON.parse(ErrorMessage);
+			// 					if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+			// 						oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+			// 					} else {
+			// 						oController.ErrorMessage = ErrorMessage;
+			// 					}
+			// 				}
+			// 			}
+			// );
+			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+			var createData = {TableIn : []};
+				createData.IPernr = Pernr;
+				createData.ILangu = $.app.getModel("session").getData().Langu;
+				
+			oModel.create("/HeaderSet", createData, {
+				success: function(data, res){
+					if(data){
+						if(data.TableIn && data.TableIn.results){
+								var data1 = data.TableIn.results[0];
+								
+								if(data1){
+									Object.assign(vData, data1);
 								} else {
-									oController.ErrorMessage = ErrorMessage;
+									sap.m.MessageBox.error(oController.getBundleText("MSG_48015"), { // 데이터 조회 중 오류가 발생하였습니다.
+										onClose : oController.onBack
+									});
+									return;
 								}
 							}
-						}
-			);
+					}
+				},
+				error: function (oError) {
+			    	var Err = {};
+			    	oController.Error = "E";
+							
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			});
 			
 			oController._DetailJSonModel.setProperty("/User", vData);
-			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.BukrsOld);
+			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs);
 			oController._DetailJSonModel.setProperty("/Data/Molga", vData.Molga);
 			
 			if(oController.Error == "E"){
@@ -223,7 +269,7 @@ sap.ui.define([
 			resetTable(oTable3, oJSONModel3, vData3);
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
 				if(oData.Status1 == "" || (pernr && pernr != "")){
 					// 대상자
@@ -266,8 +312,8 @@ sap.ui.define([
 						
 						createData.VacationApply1Nav.push(detail);
 						
-					oModel.create("/VacationApplySet", createData, null,
-						function(data, res){
+					oModel.create("/VacationApplySet", createData, {
+						success: function(data, res){
 							if(data){
 								// 근태신청
 								if(data.VacationApply1Nav && data.VacationApply1Nav.results){
@@ -291,7 +337,7 @@ sap.ui.define([
 										
 										oController._DetailJSonModel.setProperty("/Data", Object.assign(oController._DetailJSonModel.getProperty("/Data"), data1));
 									} else {
-										sap.m.MessageBox.error(oBundleText.getText("MSG_48015"), { // 데이터 조회 중 오류가 발생하였습니다.
+										sap.m.MessageBox.error(oController.getBundleText("MSG_48015"), { // 데이터 조회 중 오류가 발생하였습니다.
 											onClose : oController.onBack
 										});
 										return;
@@ -333,7 +379,7 @@ sap.ui.define([
 								}
 							}
 						},
-						function (oError) {
+						error: function (oError) {
 					    	var Err = {};
 					    	oController.Error = "E";
 									
@@ -346,7 +392,7 @@ sap.ui.define([
 								oController.ErrorMessage = oError.toString();
 							}
 						}
-					);
+					});
 					
 					oJSONModel2.setData(vData2);
 					oTable2.bindRows("/Data");
@@ -373,8 +419,8 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IMolga = oData.Molga;
 				
-				oModel.create("/VacationTypePeSet", createData, null,
-					function(data, res){
+				oModel.create("/VacationTypePeSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationTypeNav && data.VacationTypeNav.results){
 								for(var i=0; i<data.VacationTypeNav.results.length; i++){   
@@ -385,11 +431,17 @@ sap.ui.define([
 											customData : [new sap.ui.core.CustomData({key : "", value : data.VacationTypeNav.results[i]})]
 										})
 									);
+
+									if(oData && oData.Awart != ""){
+										if(oData.Awart == data.VacationTypeNav.results[i].Subty){
+											oController._DetailJSonModel.setProperty("/Data/Halfc", data.VacationTypeNav.results[i].Halfc);
+										}
+									}
 								}
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -402,7 +454,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				if(oController.Error == "E"){
 					oController._BusyDialog.close();
@@ -425,8 +477,8 @@ sap.ui.define([
 					createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
 					createData2.ICorre = "X";
 		
-				oModel.create("/VacationQuotaSet", createData2, null,
-					function(data, res){
+				oModel.create("/VacationQuotaSet", createData2, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationQuotaNav && data.VacationQuotaNav.results){
 								for(var i=0; i<data.VacationQuotaNav.results.length; i++){   
@@ -440,7 +492,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -453,7 +505,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel3.setData(vData3);
 				oTable3.bindRows("/Data");
@@ -492,6 +544,9 @@ sap.ui.define([
 				oController._DetailJSonModel.setProperty("/Data/Holyt", "");
 				// 대근신청 비활성화
 				oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
+				// 근태시간 초기화
+				oController._DetailJSonModel.setProperty("/Data/Beguz", "");
+				oController._DetailJSonModel.setProperty("/Data/Enduz", "");
 			}
 			
 			if(oController._DetailJSonModel.getProperty("/Data/Awart")){
@@ -522,15 +577,15 @@ sap.ui.define([
 					case "1705":
 					case "1715":
 					case "1720":
-						sap.m.MessageBox.information(oBundleText.getText("MSG_48004"), { // 남직원이시면 '자녀출생'으로 신청하셔야 합니다. 여성인재는 계속 진행하세요.
-							title : oBundleText.getText("LABEL_00149")
+						sap.m.MessageBox.information(oController.getBundleText("MSG_48004"), { // 남직원이시면 '자녀출생'으로 신청하셔야 합니다. 여성인재는 계속 진행하세요.
+							title : oController.getBundleText("LABEL_00149")
 						});
 						break;
 					case "1424": // 출장(근로미포함) 선택 시 출입카드신청 리스트 생성
 						var oEncard = sap.ui.getCore().byId(oController.PAGEID + "_Encard");
 							oEncard.destroyItems();
 							
-						var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+						var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 						var createData = {BztrCodeListNav : []};
 							createData.IPernr = oData.Pernr;
 							createData.IBukrs = oData.Bukrs;
@@ -538,8 +593,8 @@ sap.ui.define([
 							createData.IMolga = oData.Molga;
 							createData.IInpType = "04";
 						
-						oModel.create("/BztrCodeTextSet", createData, null,
-							function(data, res){
+						oModel.create("/BztrCodeTextSet", createData, {
+							success: function(data, res){
 								if(data){
 									if(data.BztrCodeListNav && data.BztrCodeListNav.results){
 										for(var i=0; i<data.BztrCodeListNav.results.length; i++){   
@@ -553,7 +608,7 @@ sap.ui.define([
 									}
 								}
 							},
-							function (oError) {
+							error: function (oError) {
 						    	var Err = {};
 						    	oController.Error = "E";
 										
@@ -566,7 +621,7 @@ sap.ui.define([
 									oController.ErrorMessage = oError.toString();
 								}
 							}
-						);
+						});
 						
 						if(oController.Error == "E"){
 							oController.Error = "";
@@ -623,13 +678,13 @@ sap.ui.define([
 			
 			// validation check
 			if(!oData.Awart || oData.Awart == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48005")); // 근태코드를 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48005")); // 근태코드를 선택하여 주십시오.
 				return;
 			} else if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48006")); // 근태기간을 입력하여 주십시오.
 				return;
 			} else if(oData.Begda > oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48018")); // 시작일이 종료일 이후입니다. 일자를 확인하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48018")); // 시작일이 종료일 이후입니다. 일자를 확인하여 주십시오.
 				return;
 			}
 			
@@ -641,7 +696,7 @@ sap.ui.define([
 				// 대근신청 비활성화
 				oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {OvertimePe1Nav : [], OvertimePe2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
@@ -651,8 +706,8 @@ sap.ui.define([
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
 					createData.IAwart = oData.Awart;
 				
-				oModel.create("/OvertimePeSet", createData, null,
-					function(data, res){
+				oModel.create("/OvertimePeSet", createData, {
+					success: function(data, res){
 						if(data){
 							// 근태일수
 							oController._DetailJSonModel.setProperty("/Data/Kaltg", (parseFloat(data.EKaltg) + ""));
@@ -719,7 +774,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -732,7 +787,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -757,13 +812,13 @@ sap.ui.define([
 			
 			// validation check
 			if(!oData.Awart || oData.Awart == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48005")); // 근태코드를 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48005")); // 근태코드를 선택하여 주십시오.
 				return;
 			} else if(!oData.Begda || !oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48006")); // 근태기간을 입력하여 주십시오.
 				return;
 			} else if(oData.Begda > oData.Endda){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48018")); // 시작일이 종료일 이후입니다. 일자를 확인하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48018")); // 시작일이 종료일 이후입니다. 일자를 확인하여 주십시오.
 				return;
 			} 
 				
@@ -778,8 +833,8 @@ sap.ui.define([
 				oController._DetailJSonModel.setProperty("/Data/EAbshr", "");
 				oController._DetailJSonModel.setProperty("/Data/EAbsmm", "");
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
-				var createData = {ChkAbsenceNav : []};
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
+				var createData = {ChkAbsenceNav : [], ChkAbsence2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
@@ -791,8 +846,8 @@ sap.ui.define([
 					createData.IEnduz = oData.Enduz;
 					createData.IVtken = oData.Vtken ? oData.Vtken : false;
 				
-				oModel.create("/CheckAbsenceSet", createData, null,
-					function(data, res){
+				oModel.create("/CheckAbsenceSet", createData, {
+					success: function(data, res){
 						if(data){
 							// 근태일수
 							oController._DetailJSonModel.setProperty("/Data/Kaltg", (parseFloat(data.EKaltg) + ""));
@@ -806,6 +861,27 @@ sap.ui.define([
 							} else {
 								oController._DetailJSonModel.setProperty("/Data/EAbshr", data.EAbshr);
 								oController._DetailJSonModel.setProperty("/Data/EAbsmm", data.EAbsmm);
+							}
+							
+							if(data.ChkAbsence2Nav && data.ChkAbsence2Nav.results){
+								var data1 = data.ChkAbsence2Nav.results;
+								
+								var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
+								var oHolyt = "";
+								
+								for(var i=0; i<data1.length; i++){
+									if(i==0){
+										oHolyt = "(";
+									} else {
+										oHolyt += ", ";
+									}
+									
+									oHolyt += dateFormat.format(new Date(common.Common.getTime(data1[i].Mldda)));
+								}
+								
+								oHolyt = (oHolyt == "" ? "" : oHolyt + ")");
+								
+								oController._DetailJSonModel.setProperty("/Data/Holyt", oHolyt);
 							}
 							
 							if(data.ChkAbsenceNav && data.ChkAbsenceNav.results){
@@ -846,7 +922,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -859,7 +935,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -891,17 +967,17 @@ sap.ui.define([
 			for(var i=0; i<oData.length; i++){
 				if(oData[i].Offck == "" && oData[i].Cntgb != "0"){
 					if(!oData[i].Awper || oData[i].Awper == ""){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48002")); // 대근자를 모두 지정하십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48002")); // 대근자를 모두 지정하십시오.
 						return;
 					} else if(!oData[i].Beguz || !oData[i].Enduz){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48014")); // OT시간을 입력하여 주십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48014")); // OT시간을 입력하여 주십시오.
 						return;
 					}
 				}
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				var createData = {VacationCovNav : []};
 					createData.IProType = "2";
 					createData.IPernr = vData.Pernr;
@@ -926,8 +1002,8 @@ sap.ui.define([
 					createData.VacationCovNav.push(detail);
 				}
 				
-				oModel.create("/VacationCoverSet", createData, null,
-					function(data, res){
+				oModel.create("/VacationCoverSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.VacationCovNav && data.VacationCovNav.results){
 								var datas = data.VacationCovNav.results;
@@ -958,7 +1034,7 @@ sap.ui.define([
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -971,7 +1047,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -989,7 +1065,7 @@ sap.ui.define([
 				}
 			}
 			
-			sap.m.MessageBox.confirm(oBundleText.getText("MSG_48001"), { // 한도체크 하시겠습니까?
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_48001"), { // 한도체크 하시겠습니까?
 				actions : ["YES", "NO"],
 				onClose : beforeSave
 			});
@@ -1086,7 +1162,7 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			if(oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_48017")); // 잘못된 시간형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 			}
 			
@@ -1108,27 +1184,32 @@ sap.ui.define([
 			var oData2 = sap.ui.getCore().byId(oController.PAGEID + "_Table2").getModel().getProperty("/Data");
 			
 			var createData = {VacationApply1Nav : [], VacationApply2Nav : []};
+			var vExtyn = Common.isExternalIP() === true ? "X" : "";
+			var oUrl = "";
 			
 			// validation check
 			if(Flag == "C" && oData.Flag == ""){
 				if(oData.Delapp == ""){
 					if(!oData.Awart || oData.Awart == ""){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48005")); // 근태코드를 선택하여 주십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48005")); // 근태코드를 선택하여 주십시오.
 						return;
 					} else if(oData.Halfc == "H" && !oData.Half){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48008")); // 오전/오후 구분을 선택하여 주십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48008")); // 오전/오후 구분을 선택하여 주십시오.
+						return;
+					} else if(oData.Halfc == "X" && (oData.Beguz == "" || oData.Enduz == "")){
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48024")); // 근태시간을 입력하여 주십시오.
 						return;
 					} else if(!oData.Begda || !oData.Endda){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48006")); // 근태기간을 입력하여 주십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48006")); // 근태기간을 입력하여 주십시오.
 						return;
 					} else if(oData.Kaltg == ""){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48007")); // 먼저 휴일계산을 실행하시기 바랍니다.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48007")); // 먼저 휴일계산을 실행하시기 바랍니다.
 						return;
 					} else if(!oData.Telnum || oData.Telnum.trim() == ""){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48009")); // 연락처를 입력하여 주십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48009")); // 연락처를 입력하여 주십시오.
 						return;
 					} else if(!oData.Desti || oData.Desti.trim() == ""){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_48010")); // 행선지를 입력하여 주십시오.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_48010")); // 행선지를 입력하여 주십시오.
 						return;
 					}
 				}
@@ -1139,14 +1220,14 @@ sap.ui.define([
 				for(var i=0; i<oData2.length; i++){
 					if(oData2[i].Offck == ""){
 						if(oData2[i].Ligbn == "" && oData2[i].Cntgb != "0"){
-							sap.m.MessageBox.error(oBundleText.getText("MSG_48011")); // 먼저 한도체크를 실행하시기 바랍니다.
+							sap.m.MessageBox.error(oController.getBundleText("MSG_48011")); // 먼저 한도체크를 실행하시기 바랍니다.
 							return;
 						} else if(oData2[i].Cntgb != "0"){
 							if(!oData2[i].Awper){
-								sap.m.MessageBox.error(oBundleText.getText("MSG_48002")); // 대근자를 모두 지정하십시오.
+								sap.m.MessageBox.error(oController.getBundleText("MSG_48002")); // 대근자를 모두 지정하십시오.
 								return;
 							} else if(!oData2[i].Beguz || !oData2[i].Enduz){
-								sap.m.MessageBox.error(oBundleText.getText("MSG_48014")); // OT시간을 입력하여 주십시오.
+								sap.m.MessageBox.error(oController.getBundleText("MSG_48014")); // OT시간을 입력하여 주십시오.
 								return;
 							}
 						}
@@ -1171,13 +1252,14 @@ sap.ui.define([
 			}
 			
 			var onProcess = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
-					createData.IEmpid = oData.Pernr;
+					createData.IEmpid = $.app.getModel("session").getData().Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IMolga = oData.Molga;
-					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
+					createData.IExtryn = vExtyn;
 					
 					// 신청구분값에 따라 구분값 변경
 					// 신규신청 3, 삭제 4, 삭제신청 5
@@ -1205,6 +1287,7 @@ sap.ui.define([
 					detail.Desti = oData.Desti;
 					detail.Encard = oData.Encard;
 					detail.Bigo = oData.Bigo;
+					detail.Abrtg = oData.Abrtg;
 					
 					if(oData.Delapp != "" && Flag == "D"){
 						detail.Appkey = oData.ListAppkey;
@@ -1216,30 +1299,19 @@ sap.ui.define([
 				
 					createData.VacationApply1Nav.push(detail);
 				
-				oModel.create("/VacationApplySet", createData, null,
-					function(data, res){
+				oModel.create("/VacationApplySet", createData, {
+					success: function(data, res){
 						if(data){
-							if(Flag == "C" && data.EUrl != ""){
-								setTimeout(function() {
-				                    var width = 1000, height = screen.availHeight * 0.9,
-				                    left = (screen.availWidth - width) / 2,
-				                    top = (screen.availHeight - height) / 2,
-				                    popup = window.open(data.EUrl, "smoin-approval-popup", [
-				                        "width=" + width,
-				                        "height=" + height,
-				                        "left=" + left,
-				                        "top=" + top,
-				                        "status=yes,resizable=yes,scrollbars=yes"
-				                    ].join(","));
-				
-				                    setTimeout(function() {
-				                        popup.focus();
-				                    }, 500);
-				                }, 0);
+							// 2021-05-04 리턴된 결재키 세팅
+							if(data.VacationApply1Nav.results && data.VacationApply1Nav.results.length){
+								oController._DetailJSonModel.setProperty("/Data/Appkey", data.VacationApply1Nav.results[0].Appkey);
+								oController._DetailJSonModel.setProperty("/Data/Appkey1", data.VacationApply1Nav.results[0].Appkey1);
 							}
+
+							oUrl = data.EUrl;
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -1252,9 +1324,16 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
+
+				// 신청 시 팝업차단 여부 확인 후 이후 프로세스 수행				
+				if(Flag == "C" && oUrl != ""){ //  && vExtyn == "" // 2021-05-07 결재 url이 리턴된 경우만 체크하여 결재창 오픈
+					if(common.Common.openPopup.call(oController, oUrl) == false){
+						return;
+					}
+				}
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
@@ -1289,7 +1368,7 @@ sap.ui.define([
 						case "1555": // 고희(배우자모)
 						case "1557": // 외조부사망
 						case "1558": // 외조모사망
-							sap.m.MessageBox.success(oBundleText.getText("MSG_48020"), { // 신청되었습니다. 경조금 신청을 위해 해당 화면으로 이동하시겠습니까?
+							sap.m.MessageBox.success(oController.getBundleText("MSG_48020"), { // 신청되었습니다. 경조금 신청을 위해 해당 화면으로 이동하시겠습니까?
 								actions : ["YES", "NO"],
 								onClose : function(fVal){
 									if(fVal && fVal == "YES"){
@@ -1319,14 +1398,14 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(oData.Flag == "" && Flag == "C"){
-				confirmMessage = oBundleText.getText("MSG_48012"); // 신규신청 하시겠습니까?
-				successMessage = oBundleText.getText("MSG_48013"); // 신청되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00060"); // 신청하시겠습니까?
+				successMessage = oController.getBundleText("MSG_48013"); // 신청되었습니다.
 			} else if(oData.Flag == "D" && Flag == "C"){
-				confirmMessage = oBundleText.getText("MSG_48019"); // 삭제신청 하시겠습니까?
-				successMessage = oBundleText.getText("MSG_48013"); // 신청되었습니다.
+				confirmMessage = oController.getBundleText("MSG_48019"); // 삭제신청 하시겠습니까?
+				successMessage = oController.getBundleText("MSG_48013"); // 신청되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_00059"); // 삭제하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00021"); // 삭제되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00059"); // 삭제하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00021"); // 삭제되었습니다.
 			}
 			
 			sap.m.MessageBox.confirm(confirmMessage, {
@@ -1388,7 +1467,7 @@ sap.ui.define([
 			oController._WorkScheduleDialog.destroyContent();
 			oController._WorkScheduleDialog.addContent(sap.ui.jsfragment("ZUI5_HR_Vacation.fragment.Calendar", oController));
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
+			var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 			var createData = {PerScheduleNav : []};
 				createData.IPernr = oData.Pernr;
 				createData.IBukrs = oData.Bukrs;
@@ -1397,8 +1476,8 @@ sap.ui.define([
 				createData.IYear = oData.Year + "";
 				createData.IMonth = (oData.Month >= 10 ? (oData.Month + "") : ("0" + oData.Month));
 			
-			oModel.create("/PernrScheduleSet", createData, null,
-				function(data, res){
+			oModel.create("/PernrScheduleSet", createData, {
+				success: function(data, res){
 					if(data){
 						if(data.PerScheduleNav && data.PerScheduleNav.results){
 							var data1 = data.PerScheduleNav.results;
@@ -1440,7 +1519,7 @@ sap.ui.define([
 						}
 					}
 				},
-				function (oError) {
+				error: function (oError) {
 			    	var Err = {};
 			    	oController.Error = "E";
 							
@@ -1453,7 +1532,7 @@ sap.ui.define([
 						oController.ErrorMessage = oError.toString();
 					}
 				}
-			);
+			});
 			
 			if(oController.Error == "E"){
 				oController.Error = "";
@@ -1519,7 +1598,7 @@ sap.ui.define([
 	                                    editable : {
 	                                    	parts : [{path : "Status1"}, {path : "Cntgb"}, {path : "Flag"}],
 	                                    	formatter : function(fVal1, fVal2, fVal3){
-	                                    		if(fVal1 == "" || fVal1 == "AA"){
+	                                    		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 	                                    			if(fVal2 == "1" || fVal2 == "2"){
 	                                    				return true;
 	                                    			} else if(fVal3 == "X"){
@@ -1546,7 +1625,7 @@ sap.ui.define([
 					                                   editable : {
 					                                    	parts : [{path : "Status1"}, {path : "Cntgb"}, {path : "Flag"}],
 					                                    	formatter : function(fVal1, fVal2, fVal3){
-					                                    		if(fVal1 == "" || fVal1 == "AA"){
+					                                    		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 					                                    			if(fVal2 == "1" || fVal2 == "2"){
 					                                    				return true;
 					                                    			} else if(fVal3 == "X"){
@@ -1572,7 +1651,7 @@ sap.ui.define([
 					                                   editable : {
 					                                    	parts : [{path : "Status1"}, {path : "Cntgb"}, {path : "Flag"}],
 					                                    	formatter : function(fVal1, fVal2, fVal3){
-					                                    		if(fVal1 == "" || fVal1 == "AA"){
+					                                    		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 					                                    			if(fVal2 == "1" || fVal2 == "2"){
 					                                    				return true;
 					                                    			} else if(fVal3 == "X"){
@@ -1605,7 +1684,7 @@ sap.ui.define([
 										editable : {
 											path : "Status1",
 											formatter : function(fVal){
-												return (fVal == "" || fVal == "AA") ? true : false;
+												return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											}
 										},
 										visible : {
@@ -1616,9 +1695,9 @@ sap.ui.define([
 										},
 										customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
 										change : oController.onChangeCntgb,
-										items : [new sap.ui.core.Item({key : "1", text : oBundleText.getText("LABEL_48042")}), // 1명
-												 new sap.ui.core.Item({key : "2", text : oBundleText.getText("LABEL_48043")}), // 2명
-												 new sap.ui.core.Item({key : "0", text : oBundleText.getText("LABEL_48044")})] // 없음
+										items : [new sap.ui.core.Item({key : "1", text : oController.getBundleText("LABEL_48042")}), // 1명
+												 new sap.ui.core.Item({key : "2", text : oController.getBundleText("LABEL_48043")}), // 2명
+												 new sap.ui.core.Item({key : "0", text : oController.getBundleText("LABEL_48044")})] // 없음
 									});
 						break;
 					default:
@@ -1657,7 +1736,7 @@ sap.ui.define([
 				var oController = oView.getController();
 				
 				if(o.Otype == "O"){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_48016")); // 대상자를 선택하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48016")); // 대상자를 선택하여 주십시오.
 					return;
 				}
 			

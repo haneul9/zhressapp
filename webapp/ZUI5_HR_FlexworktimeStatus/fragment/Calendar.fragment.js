@@ -7,13 +7,13 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 	createContent : function(oController) {
 		
 		var oRow, oCell;
-		var vHeader = [{title:oBundleText.getText("LABEL_48057"), width:"", noCalDay:"", sunday:"", saturday:""}, // 월
-		               {title:oBundleText.getText("LABEL_48058"), width:"", noCalDay:"", sunday:"", saturday:""}, // 화
-		               {title:oBundleText.getText("LABEL_48059"), width:"", noCalDay:"", sunday:"", saturday:""}, // 수
-		               {title:oBundleText.getText("LABEL_48060"), width:"", noCalDay:"", sunday:"", saturday:""}, // 목
-		               {title:oBundleText.getText("LABEL_48061"), width:"", noCalDay:"", sunday:"", saturday:""}, // 금
-		               {title:oBundleText.getText("LABEL_48062"), width:"", noCalDay:"", sunday:"", saturday:"X"}, // 토
-		               {title:oBundleText.getText("LABEL_48056"), width:"", noCalDay:"", sunday:"X", saturday:""}]; // 일
+		var vHeader = [{title:"{i18n>LABEL_48057}", width:"", noCalDay:"", sunday:"", saturday:""}, // 월
+		               {title:"{i18n>LABEL_48058}", width:"", noCalDay:"", sunday:"", saturday:""}, // 화
+		               {title:"{i18n>LABEL_48059}", width:"", noCalDay:"", sunday:"", saturday:""}, // 수
+		               {title:"{i18n>LABEL_48060}", width:"", noCalDay:"", sunday:"", saturday:""}, // 목
+		               {title:"{i18n>LABEL_48061}", width:"", noCalDay:"", sunday:"", saturday:""}, // 금
+		               {title:"{i18n>LABEL_48062}", width:"", noCalDay:"", sunday:"", saturday:"X"}, // 토
+		               {title:"{i18n>LABEL_48056}", width:"", noCalDay:"", sunday:"X", saturday:""}]; // 일
 		
 		var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern: "yyyyMMdd"});
 		var currDate = dateFormat.format(new Date()); 
@@ -71,18 +71,18 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 			oCell = new sap.ui.commons.layout.MatrixLayoutCell(oController.PAGEID + "_CalHeadCell_" + i, {
 				hAlign : "Center",
 				vAlign : "Middle",
-				content : [new sap.m.Text({text:vHeader[i].title})]
+				content : [new sap.m.Text({text:vHeader[i].title}).addStyleClass("calendar-text")]
 			});
 			
-			if(i == 0) oCell.addStyleClass("calendar-TableHeader2-Start"); 
-			else oCell.addStyleClass("calendar-TableHeader2");
+			if(i == 0) oCell.addStyleClass("calendar-TableHeader2-Start-mobile"); 
+			else oCell.addStyleClass("calendar-TableHeader2-mobile");
 			
 			oRow.addCell(oCell);
 		}
 		oMatrix.addRow(oRow);
 		
 		for(var i=0; i<row; i++) {
-			oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "80px"});
+			oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "84px"});
 			
 			for (var j=0; j<vHeader.length; j++) {
 				var vCellId = oController.PAGEID;
@@ -118,8 +118,8 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Calendar", {
 					content : oCellid
 				}).addStyleClass("calendar-Padding0");
 				
-				if(j==0) oCell.addStyleClass("calendar-TableData-Start");
-				else oCell.addStyleClass("calendar-TableData");
+				if(j==0) oCell.addStyleClass("calendar-TableData-Start-mobile");
+				else oCell.addStyleClass("calendar-TableData-mobile");
 				
 				if(vHeader[j].noCalDay) {
 					// 달력날짜 이외의 필드

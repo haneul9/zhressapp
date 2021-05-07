@@ -2,8 +2,7 @@
 sap.ui.define(
     [
         "common/Common", //
-        "sap/m/MessageBox",
-        "common/moment-with-locales"
+        "sap/m/MessageBox"
     ],
     function (Common, MessageBox) {
         "use strict";

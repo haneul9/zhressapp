@@ -29,6 +29,11 @@ init: function() {
 		EN: 'Portlets',
 		ZH: 'Portlets'
 	});
+	this.set('home.text.logout', {
+		KO: '로그아웃',
+		EN: 'Logout',
+		ZH: 'Logout'
+	});
 	this.set('home.text.portlets.calendar.vacation', {
 		KO: '휴가',
 		EN: 'Vacation',
@@ -103,6 +108,9 @@ changeLocale: function() {
 	}.bind(this), 0);
 	setTimeout(function() {
 		$('#text-portlet-personalization').text(this.get('home.text.portlets.personalization'));
+	}.bind(this), 0);
+	setTimeout(function() {
+		$('#text-logout').text(this.get('home.text.logout'));
 	}.bind(this), 0);
 }
 

@@ -12,6 +12,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 	createContent: function(oController) {
 		$.app.setModel("ZHR_COMMON_SRV");
 		$.app.setModel("ZHR_LEAVE_APPL_SRV");
+		$.app.setModel("ZHR_PERS_INFO_SRV");
 		
 		var oHeader = new sap.m.HBox({
 			width : "100%",
@@ -29,7 +30,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 	    visible : {
 						 	 	    	parts : [{path : "Status1"}, {path : "Werks"}],
 						 	 	    	formatter : function(fVal1, fVal2){
-						 	 	    		if(fVal2 && fVal2.substring(0,1) == "D"){
+						 	 	    		if($.app.APP_AUTH == $.app.Auth.HASS && fVal1 == ""){
+						 	 	    			return true;
+						 	 	    		} else if(fVal2 && fVal2.substring(0,1) == "D"){
 						 	 	    			return false;
 						 	 	    		} else {
 						 	 	    			return fVal1 == "" ? true : false;
@@ -49,9 +52,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 				if(fVal2 && fVal2 == "D"){
 						 	 					return true;
 						 	 				} else if(fVal3 != ""){
-						 	 					return (fVal4 == "" || fVal4 == "AA") ? true : false;	
+						 	 					return (fVal4 == "" || fVal4 == "AA" || fVal4 == "JJ") ? true : false;	
 						 	 				} else {
-						 	 					return (fVal1 == "" || fVal1 == "AA") ? true : false;
+						 	 					return (fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ") ? true : false;
 						 	 				}
 						 	 			}
 						 	 		},
@@ -66,9 +69,9 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 			parts : [{path : "Status1"}, {path : "Delapp"}, {path : "ListStatus"}],
 						 	 			formatter : function(fVal, fVal2, fVal3){
 						 	 				if(fVal2 && fVal2 != ""){
-						 	 					return fVal3 == "AA" ? true : false;
+						 	 					return (fVal3 == "AA" || fVal3 == "JJ") ? true : false;
 						 	 				} else {
-						 	 					return fVal == "AA" ? true : false;
+						 	 					return (fVal == "AA" || fVal == "JJ") ? true : false;
 						 	 				}
 						 	 			}
 						 	 		},
@@ -123,7 +126,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
+				                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 				                               	   		}
 											 	 	}
 											 	}),
@@ -135,7 +138,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		parts : [{path : "Status1"}, {path : "Halfc"}],
 				                               	   		formatter : function(fVal1, fVal2){
-				                               	   			if(fVal1 == "" || fVal1 == "AA"){
+				                               	   			if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 				                               	   				if(fVal2 && fVal2 == "H"){
 				                               	   					return true;
 				                               	   				} else {
@@ -161,53 +164,57 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 									vAlign : "Middle"
 								}).addStyleClass("Label"),
 								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.DatePicker({
-												   valueFormat : "yyyy-MM-dd",
-										           displayFormat : gDtfmt,
-										           value : "{Begda}",
-												   width : "150px",
-												   textAlign : "Begin",
-												   change : oController.onChangeDate,
-											 	   editable : {
-											 	 		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
-				                               	   		}
-											 	   }
-											   }),
-											   new sap.m.DatePicker({
-												   valueFormat : "yyyy-MM-dd",
-										           displayFormat : gDtfmt,
-										           value : "{Endda}",
-												   width : "150px",
-												   textAlign : "Begin",
-												   change : oController.onChangeDate,
-											 	   editable : {
-											 	 		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
-				                               	   		}
-											 	   }
-											   }).addStyleClass("pl-5px"),
-				                               new sap.m.Button({
-				                               	   text : oBundleText.getText("LABEL_48023"), // 계산
-				                               	   visible : {
-				                               	   		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA") ? true : false;
-				                               	   		}
-				                               	   },
-				                               	   press : function(oEvent){
-				                               	   		var persa = $.app.getModel("session").getData().Persa;
-				                               	   			persa = persa.substring(0,1);
-				                               	   			
-				                               	   		if(persa == "D"){
-				                               	   			oController.onPressCheckAbsence(oEvent);
-				                               	   		} else {
-				                               	   			oController.onPressOvertimePe(oEvent);
-				                               	   		}
-				                               	   }
-				                               }).addStyleClass("button-default pt-3px pl-5px")],
+									content : [new sap.m.HBox({
+												   items : [
+													   	new sap.m.DatePicker({
+														   valueFormat : "yyyy-MM-dd",
+												           displayFormat : gDtfmt,
+												           value : "{Begda}",
+														   width : "150px",
+														   textAlign : "Begin",
+														   change : oController.onChangeDate,
+													 	   editable : {
+													 	 		path : "Status1",
+						                               	   		formatter : function(fVal){
+						                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+						                               	   		}
+													 	   }
+													   }),
+													   new sap.m.DatePicker({
+														   valueFormat : "yyyy-MM-dd",
+												           displayFormat : gDtfmt,
+												           value : "{Endda}",
+														   width : "150px",
+														   textAlign : "Begin",
+														   change : oController.onChangeDate,
+													 	   editable : {
+													 	 		path : "Status1",
+						                               	   		formatter : function(fVal){
+						                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+						                               	   		}
+													 	   }
+													   }).addStyleClass("pl-5px"),
+						                               new sap.m.Button({
+						                               	   text : oBundleText.getText("LABEL_48023"), // 계산
+						                               	   visible : {
+						                               	   		path : "Status1",
+						                               	   		formatter : function(fVal){
+						                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+						                               	   		}
+						                               	   },
+						                               	   press : function(oEvent){
+						                               	   		var persa = $.app.getModel("session").getData().Persa;
+						                               	   			persa = persa.substring(0,1);
+						                               	   			
+						                               	   		if(persa == "D"){
+						                               	   			oController.onPressCheckAbsence(oEvent);
+						                               	   		} else {
+						                               	   			oController.onPressOvertimePe(oEvent);
+						                               	   		}
+						                               	   }
+						                               }).addStyleClass("button-default pt-3px pl-5px")
+												   ]
+											   })],
 				                    hAlign : "Begin",
 				                    vAlign : "Middle"
 								}).addStyleClass("Data")]
@@ -247,10 +254,10 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            textAlign : "Begin",
 										            change : oController.onChangeTime2,
 										            editable : {
-										            	parts : [{path : "Status1"}, {path : "Awart"}],
+										            	parts : [{path : "Status1"}, {path : "Halfc"}],
 										            	formatter : function(fVal1, fVal2){
-										            		if(fVal1 == "" || fVal1 == "AA"){
-										            			return (fVal2 && fVal2 == "1A2") ? true : false; // 반차
+										            		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+										            			return (fVal2 && fVal2 == "X") ? true : false;
 										            		} else {
 										            			return false;
 										            		}
@@ -266,10 +273,10 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 										            textAlign : "Begin",
 										            change : oController.onChangeTime2,
 										            editable : {
-										            	parts : [{path : "Status1"}, {path : "Awart"}],
+										            	parts : [{path : "Status1"}, {path : "Halfc"}],
 										            	formatter : function(fVal1, fVal2){
-										            		if(fVal1 == "" || fVal1 == "AA"){
-										            			return (fVal2 && fVal2 == "1A2") ? true : false; // 반차
+										            		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+										            			return (fVal2 && fVal2 == "X") ? true : false;
 										            		} else {
 										            			return false;
 										            		}
@@ -346,7 +353,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA") ? true : false;
+											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											 	 		}
 											 	 	}
 											 	})],
@@ -384,7 +391,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA") ? true : false;
+											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											 	 		}
 											 	 	}
 											 	}),
@@ -394,7 +401,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											 	 	editable : {
 											 	 		path : "Status1",
 											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA") ? true : false;
+											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 											 	 		}
 											 	 	},
 											 	 	visible : {
@@ -423,7 +430,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 												   editable : {
 												   		path : "Status1",
 												   		formatter : function(fVal){
-												   			return (fVal == "" || fVal == "AA") ? true : false;
+												   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 												   		}
 												   }
 											   })],
@@ -470,7 +477,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 											visible : {
 												path : "Status1",
 												formatter : function(fVal){
-													return (fVal == "" || fVal == "AA") ? true : false;
+													return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
 												}
 											},
 											press : oController.onPressVacationCover
@@ -572,14 +579,14 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 			  	  						// 근태 삭제신청
 					  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48064") + "</span>";
 					  	  			} else {
-					  	  				if(fVal1 == "" || fVal1 == "AA"){
+					  	  				if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
 						  	  						// 근태신청 신규등록
 						  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48013") + "</span>";
 						  	  			} else {
 						  	  				if(fVal2 == ""){
-				  	  							// 근태 신규신청 조회
+				  	  							// 근태 조회
 							  	  				return "<span class='app-title'>" + oBundleText.getText("LABEL_48006") + "</span>" +
-							  	  					   "<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" +
+							  	  					   //"<span class='app-title color-signature-blue'> " + oBundleText.getText("LABEL_48045") + "</span>" + // 신규신청
 							  	  					   "<span class='app-title'> " + oBundleText.getText("LABEL_48055") + "</span>";
 						  	  				} else {
 						  	  					// 근태 삭제신청 조회
@@ -596,7 +603,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 			  })
 		];
 			  
-		if(parent && window._use_emp_info_box === true) {
+		if((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true) {
 			window._CommonEmployeeModel = new common.EmployeeModel();
 			window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
 

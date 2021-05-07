@@ -1,9 +1,8 @@
 sap.ui.define([
 	"common/PageHelper",
 	"common/ZHR_TABLES",
-	"common/EmpBasicInfoBox",
 	"./delegate/OutLang"
-], function (PageHelper, ZHR_TABLES, EmpBasicInfoBox, OutLang) {
+], function (PageHelper, ZHR_TABLES, OutLang) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -19,7 +18,6 @@ sap.ui.define([
 
 			return new PageHelper({
 				contentItems: [
-					new EmpBasicInfoBox(StatusListHandler.EmployeeModel),
 					this.buildInfoBox(StatusListHandler),
 					this.buildTable(oController, StatusListHandler)
 				]

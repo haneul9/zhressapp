@@ -34,7 +34,13 @@ sap.ui.jsview("ZUI5_HR_LeaveUseChart.List", {
                                     value: "{Ename}",
                                     showValueHelp: true,
                                     valueHelpOnly: true,
-                                    valueHelpRequest: oController.searchOrgehPernr
+                                    valueHelpRequest: oController.searchOrgehPernr,
+                                    // editable : {
+                                    // 	path : "Chief",
+                                    // 	formatter : function(fVal){
+                                    // 		return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                    // 	}
+                                    // }// 2021-05-04 부서장 확인 여부 주석처리
                                 }),
 							    new sap.m.Label({text: oBundleText.getText("LABEL_41003")}), // 조회연월
                                 new sap.m.DatePicker({

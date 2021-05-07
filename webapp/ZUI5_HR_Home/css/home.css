@@ -1,7 +1,7 @@
 html, body {height:100%; overflow:hidden}
-html *:not(i) {font-family:NotoSansKR !important}
+html *:not(.sapUiIcon):not(i) {font-family:NotoSansKR !important}
 body {min-width:576px; font-size:14px}
-[device="mobile"] body {min-width:100%}
+[device="mobile"] body, body.under-construction {min-width:100%}
 
 .font-preload {color:transparent}
 .font-preload-100 {font-weight:100}
@@ -17,7 +17,11 @@ body {min-width:576px; font-size:14px}
 .ehr-header {position:relative; width:100%; padding:0; margin:0; border-bottom:1px solid #ccc}
 .ehr-header .navbar {padding:0 30px}
 .ehr-header .ehr-logo-container {height:46px}
-.ehr-header .ehr-logo {width:81px; height:28px; background:url('../../images/w-hihr.png') no-repeat}
+[device="mobile"] .ehr-header .ehr-logo-container {height:3.5625rem}
+body.under-construction .ehr-header .ehr-logo-container {justify-content:space-between; height:5.625rem}
+.ehr-header .ehr-logo {position:absolute; top:15px; left:40px; width:92px; height:62px; background:url('../../images/w-hihr-smile.png') no-repeat}
+[device="mobile"] .ehr-logo {position:static; margin:.5625rem 0 .375rem 0; width:3.9375rem; height:2.625rem; background:url('../../images/hihr-smile.png') no-repeat; background-size:3.9375rem 2.625rem}
+body.under-construction .ehr-logo {position:static; margin:0}
 .ehr-header .custom-select-locale {margin-top:-2px; height:auto; border:0; font-size:14px; color:#777; background:#fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23777777' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px; cursor:pointer}
 .ehr-header .container-fluid {min-height:46px; padding-left:0; padding-right:0}
 
@@ -60,7 +64,7 @@ body {min-width:576px; font-size:14px}
 .col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none; font-weight:500}
 .col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}
 .col-mega-menu i.far.fa-star {color:#b2b2b2}
-.menu-mss > .nav-link, .menu-mss .col-mega-menu li a {color:#8a4144 !important}
+.menu-mss > .nav-link, .menu-mss .col-mega-menu li a {color:#783936 !important}
 .menu-hass > .nav-link, .menu-hass .col-mega-menu li a {color:#137826 !important}
 
 .ehr-body {position:relative; overflow-y:hidden}
@@ -86,6 +90,8 @@ body {min-width:576px; font-size:14px}
 .portlet .card-header button + button {margin-left:1rem}
 .portlet .card-header button span {font-size:1.125rem; color:#333}
 .portlet .list-group .jspVerticalBar {width:8px}
+.portlet .list-group .list-group-item.data-not-found {text-align:center; background-color:#fff; color:#495057; cursor:default}
+.portlet-0h {height:auto}
 .portlet-1h {height:206px}
 .portlet-2h {height:calc((206px * 2) + (1.5rem * 1))}
 .portlet-3h {height:calc((206px * 3) + (1.5rem * 2))}
@@ -95,15 +101,12 @@ body {min-width:576px; font-size:14px}
 .portlet-7h {height:calc((206px * 7) + (1.5rem * 6))}
 .portlet-8h {height:calc((206px * 8) + (1.5rem * 7))}
 .portlet-9h {height:calc((206px * 9) + (1.5rem * 8))}
-[device="mobile"] .portlet-1h {height:186px}
-[device="mobile"] .portlet-2h {height:calc((186px * 2) + (.5rem * 1))}
-[device="mobile"] .portlet-3h {height:calc((186px * 3) + (.5rem * 2))}
-[device="mobile"] .portlet-4h {height:calc((186px * 4) + (.5rem * 3))}
-[device="mobile"] .portlet-5h {height:calc((186px * 5) + (.5rem * 4))}
-[device="mobile"] .portlet-6h {height:calc((186px * 6) + (.5rem * 5))}
-[device="mobile"] .portlet-7h {height:calc((186px * 7) + (.5rem * 6))}
-[device="mobile"] .portlet-8h {height:calc((186px * 8) + (.5rem * 7))}
-[device="mobile"] .portlet-9h {height:calc((186px * 9) + (.5rem * 8))}
+
+.portlet-carousel {margin-top:.75rem; padding-bottom:1.5rem}
+.portlet-carousel .nav-tabs .nav-link {border-radius:0;border:0;font-size:1rem;color:#777}
+.portlet-carousel .nav-tabs .nav-link.active {border-bottom:4px solid #064975;color:#064975;font-weight:500}
+.portlet-carousel .carousel-indicators {margin:0}
+.portlet-carousel .carousel-indicators li {width:.5rem;height:.5rem;border-radius:50%;background-color:#064975}
 
 .portlet-spinner-background {position:absolute; display:block; top:4.25rem; width:100%; height:calc(100% - 4.25rem); background:rgba(255,255,255,.8)}
 .portlet-spinner {display:block; top:4rem; left:calc(50% - 4px)}
@@ -118,31 +121,36 @@ body {min-width:576px; font-size:14px}
 .portlet-employee .employee-information div:nth-of-type(2) {line-height:1.2}
 .portlet-employee .employee-information div:nth-of-type(3) {width:225px; line-height:1.2; padding-top:.25rem}
 [device="mobile"] .portlet-employee .employee-information div:nth-of-type(3) {width:70%}
-.portlet-employee .employee-photo {position:absolute; top:76px; right:18px; width:106px; height:106px; overflow:hidden; background-color:#fff}
-[device="mobile"] .portlet-employee .employee-photo {width:82px; height:82px}
-.portlet-employee .employee-photo img {position:absolute; top:0; left:0; z-index:1; width:100%}
+.portlet-employee .employee-photo {display:flex; justify-content:center; position:absolute; top:61px; right:20px; width:90px; height:135px; overflow:hidden; background-color:#fff}
+/* .portlet-employee .employee-photo {position:absolute; top:76px; right:18px; width:106px; height:106px; overflow:hidden; background-color:#fff} */
+/* [device="mobile"] .portlet-employee .employee-photo {width:64px; height:91px} */
+[device="mobile"] .portlet-employee .employee-photo {width:73px; height:100px}
+.portlet-employee .employee-photo img {z-index:1; height:100%}
 .portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
-.portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:70%}
+.portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:100%}
 .portlet-employee .employee-photo svg {position:absolute; top:-1px; left:-1px; z-index:2; width:calc(100% + 2px); height:calc(100% + 2px)}
 .portlet-employee .employee-d-day {display:flex; flex-direction:column; padding:1.5rem 1.25rem 1.25rem}
 .portlet-employee .employee-d-day .title {font-size:1rem; font-weight:700}
-.portlet-employee .employee-d-day h6 {margin-top:1rem; margin-bottom:0; font-size:.875rem; font-weight:400; padding-left:.75rem}
-.portlet-employee .employee-d-day h6:nth-of-type(2) {padding-top:.5rem; width:280px}
-.portlet-employee .employee-d-day .d-day {font-size:2.25rem; font-weight:400; padding-left:.75rem}
-.portlet-employee .employee-d-day .d-day.color-lcc-signature-green {font-size:2.875rem; font-weight:700; padding-left:.75rem}
-.portlet-employee .employee-d-day span + span {margin-left:.5rem}
-[device="mobile"] .portlet-employee .employee-photo {top:1.25rem; left:auto; right:1rem}
+.portlet-employee .employee-d-day h6 {margin-top:1.5rem; margin-bottom:0; padding-left:.75rem; font-size:.875rem; font-weight:400}
+.portlet-employee .employee-d-day h6:nth-of-type(2) {margin-top:1.25rem; width:280px}
+.portlet-employee .employee-d-day .cdays {color:#064975}
+.portlet-employee .employee-d-day .odays {color:#8dc63f}
+.portlet-employee .employee-d-day .d-day {font-size:2rem; font-weight:400; padding-left:.75rem}
+.portlet-employee .employee-d-day .odays .d-day {font-size:2.5rem; font-weight:700}
+[device="mobile"] .portlet-employee .employee-photo {top:1rem; left:auto; right:1rem}
 [device="mobile"] .portlet-employee .employee-information {width:100%; height:130px; border-radius:.5rem; padding-left:1.5rem; background-color:#064975}
 [device="mobile"] .portlet-1h.portlet-employee {height:130px}
+
 .portlet-bbs .list-group {height:100%; overflow:auto}
 .portlet-bbs .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
 .portlet-bbs .list-group-item:hover {color:#0070bd; background:transparent}
 .portlet-bbs-item {display:flex; justify-content:space-between; align-items:center; width:100%}
 .portlet-bbs-item .portlet-bbs-date {font-size:100%; color:#888; padding-right:.5rem}
 .portlet-bbs-title {display:flex; align-items:center; width:239px}
+[device="mobile"] .portlet-bbs-title {width:221px}
 .portlet-bbs-title .portlet-bbs-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .portlet-bbs-title span + span, .portlet-bbs-title span + i {margin-left:3px}
-.portlet-bbs-title i {vertical-align:middle; font-size:15.25px}
+.portlet-bbs-title i {vertical-align:middle; font-size:1.1rem}
 .portlet-bbs .badge {font-weight:500}
 .portlet-bbs .badge-pill {padding-left:.25rem; padding-right:.25rem; border-radius:.25rem}
 .portlet-bbs .badge.badge-primary {font-weight:500; background-color:#0070BD} 
@@ -164,7 +172,7 @@ body {min-width:576px; font-size:14px}
 .portlet-favorite-menu .list-group-item > div {display:inline-block; max-width:315px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 
 [device="mobile"] .card-body {padding:1rem}
-[device="mobile"] .portlet-calendar .card-body {padding:1rem 0 0 0}
+[device="mobile"] .portlet-calendar .card-body {padding:1rem 0}
 .portlet-calendar-inline .ui-datepicker-inline {width:100%}
 .portlet-calendar-inline .ui-datepicker-calendar {margin:0 auto; width:322px; border:0; border-spacing:0; table-layout:fixed}
 [device="mobile"] .portlet-calendar-inline .ui-datepicker-calendar {width:100%}
@@ -186,26 +194,26 @@ body {min-width:576px; font-size:14px}
 .portlet-calendar-inline .ui-datepicker td.absence-start a.ui-state-default {margin-right:0; width:41px; border-top-right-radius:0; border-bottom-right-radius:0; padding-right:5px}
 .portlet-calendar-inline .ui-datepicker td.absence-between a.ui-state-default {margin-right:0; margin-left:0; width:100%; border-radius:0}
 .portlet-calendar-inline .ui-datepicker td.absence-end a.ui-state-default {margin-left:0; width:41px; border-top-left-radius:0; border-bottom-left-radius:0; padding-left:5px}
-.portlet-calendar-inline .ui-datepicker td a {margin:6px 5px}
-[device="mobile"] .portlet-calendar-inline .ui-datepicker td a {margin:4px 5px}
+.portlet-calendar-inline .ui-datepicker td a {margin:6px auto}
+[device="mobile"] .portlet-calendar-inline .ui-datepicker td a {margin:4px auto}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {top:5px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-prev {left:14px}
 .portlet-calendar-inline .ui-datepicker .ui-datepicker-next {right:14px}
 .portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
 .portlet-calendar-inline .ui-widget-header {background-color:transparent}
-.portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto 0; width:295px;margin-top: 1.5rem; margin-bottom:1rem}
+.portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto .8rem; width:295px}
 [device="mobile"] .portlet-calendar-inline + .d-flex {width:100%;padding:0 1rem;margin-top:1rem}
 .portlet-calendar-inline + .d-flex .btn-outline-dark.button-today {border-radius: 20px;background-color: #8dc63f;border:0;color: #fff;padding: .125rem .5rem}
 .portlet-calendar-date {margin:0; font-weight:700}
 .portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:.5rem 0rem .25rem; text-align:center}
 .portlet-calendar-daily-report .list-group-item h6 {font-weight:400; font-size:15px; margin-bottom:0; padding-top:.25rem}
-.portlet-calendar-daily-report .list-group-item span {font-size:2.25rem; font-weight:700; color:#064975; letter-spacing:-2px}
+.portlet-calendar-daily-report .list-group-item span {font-size:2rem; font-weight:700; color:#064975; letter-spacing:-2px}
 .portlet-calendar-daily-report .list-group-item span.unit {font-weight:400; font-size:14px; display:inline-block; padding-left:4px}
 .portlet-calendar .tooltip.show {opacity:1}
-.portlet-calendar .tooltip .arrow:before {border-bottom-color:#064975; border-top-color:#064975}
-.portlet-calendar .tooltip .tooltip-inner {max-width:none; background-color:#064975; border:1px solid #064975; box-shadow:rgba(23,25,29,0.3) 0 2px 10px; color:rgba(255,255,255,0.8); font-size:.875rem}
-.portlet-calendar .tooltip .tooltip-inner th {font-weight:500}
-.portlet-calendar .tooltip .tooltip-inner td {padding:.125rem .375rem}
+.portlet-calendar .tooltip .arrow:before {border-bottom-color:#b8cddb; border-top-color:#b8cddb}
+.portlet-calendar .tooltip .tooltip-inner {max-width:none; background-color:#ebf5fe; /*box-shadow:rgba(23,25,29,0.3) 0 2px 10px;*/ color:#002D51; font-size:.75rem;border:1px solid #b8cddb}
+.portlet-calendar .tooltip .tooltip-inner th {font-weight:400; color:#002D51}
+.portlet-calendar .tooltip .tooltip-inner td {font-weight:400; padding:.125rem .375rem}
 
 .portlet-switch {margin-top:.75rem; cursor:pointer}
 .portlet-switch.active {border-color:rgba(0,112,189,.7); background-color:#ebf5fe}
@@ -226,6 +234,56 @@ body {min-width:576px; font-size:14px}
 .portlet-data-not-found a:hover {color:#333}
 .custom-control-input:checked~.custom-control-label::before {background-color:#0070bd; border-color:#0070bd}
 .card.portlet-switch {border-radius:.375rem}
+
+.portlet-worktime .today {display:flex; align-items:flex-end; justify-content:space-between; font-weight:400}
+.portlet-worktime .today .title {font-size:.875rem; padding-left:14px; padding-right:5px}
+.portlet-worktime .today .state {font-size:1rem; color:#0070bd; letter-spacing:-0.5px}
+.portlet-worktime .worktime {background-color:#ebf5fe; margin-top:10px; color:#064975; display:flex; justify-content:space-between; align-items:flex-end; padding:15px}
+.portlet-worktime .worktime .title {font-size:.875rem; font-weight:500; padding-bottom:5px}
+.portlet-worktime .worktime .total {font-size:1.625rem; font-weight:700; letter-spacing:-0.5px}
+.portlet-worktime .statusBar {display:flex; flex-direction:column; align-items:center; width:100%; margin-top:25px}
+.portlet-worktime .statusBar .progress {border-radius:1rem; background-color:#f0f0f0; height:20px; width:100%; display:flex; position:relative}
+.portlet-worktime .statusBar .progress .progress-bar.bg-success {height:100%; position:absolute}
+.portlet-worktime .statusBar .bg-success {background-color:#8dc63f !important}
+.portlet-worktime .statusBar .hour-unit {display:flex; align-items:center; justify-content:space-between; width:100%}
+.portlet-worktime .statusBar .unit {font-size:.6875rem; color:#888; padding-top:5px}
+.portlet-worktime .statusBar .progress-line{height:100%; position:absolute; background-color:transparent; border-right:2px solid #333; width:80%}
+.portlet-worktime .worktime-list {display:flex; flex-direction:column; width:100%; margin-top:30px}
+.portlet-worktime .worktime-list .worktime-type {display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #f0f0f0; padding:6px 0}
+.portlet-worktime .worktime-list .sub-title {font-size:.875rem}
+.portlet-worktime .worktime-list .time {font-size:1.125rem; font-weight:500}
+
+.portlet-vacation .vac-header, .portlet-vacation .vac-body {display:flex; justify-content:space-between; padding:6px 8px}
+.portlet-vacation .vac-header {background-color:#f3f4f4; border-top:1px solid #e4e4e4; border-bottom:1px solid #e4e4e4; margin-top:10px}
+.portlet-vacation .vac-body {border-bottom:1px solid #f0f0f0}
+
+.portlet-evalgoal-progress .evalgoal-legend {display:flex; justify-content:flex-end; height:1.1rem; font-size:.75rem}
+.portlet-evalgoal-progress .list-group {height:calc(100% - 1.1rem)}
+.portlet-evalgoal-progress .evalgoal-area {display:flex; height:auto; margin-bottom:15px}
+.portlet-evalgoal-progress .evalgoal-area img {border:1px solid #e4e4e4}
+
+.portlet-evalgoal-progress .evalgoal-info {height:auto; display:flex; flex-direction:column; width:100%; padding:0 20px}
+.portlet-evalgoal-progress .evalgoal-info .person {display:flex; justify-content:flex-start; padding:0 0 5px 4px}
+.portlet-evalgoal-progress .evalgoal-info .name {font-weight:500; margin-top:auto}
+.portlet-evalgoal-progress .evalgoal-info .position {font-size:.75rem; padding-left:5px; padding-bottom:2px; margin-top:auto}
+
+.portlet-evalgoal .evalgoal-statusBar, 
+.portlet-evalgoal-progress .evalgoal-statusBar {display:flex; align-items:center; width:100%; padding-top:5px}
+.portlet-evalgoal .evalgoal-statusBar .progress,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress {display:flex; border-radius:1rem; background-color:#f0f0f0; height:18px; width:100%; font-weight:300 !important}
+.portlet-evalgoal .evalgoal-statusBar .progress-bar,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress-bar {text-align:right}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-danger,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-danger {padding-right:5px; background-color:#da291c !important}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-warning,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-warning {padding-right:5px; background-color:#ffb400 !important}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-info,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-info {padding-right:5px; background-color:#8dc63f !important}
+.portlet-evalgoal .evalgoal-statusBar .progress .progress-bar.bg-success,
+.portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-success {padding-right:5px; background-color:#064975 !important}
+
+.portlet-evalgoal .my-evalgoal-info {height: auto; margin-bottom: 15px; display: flex; flex-direction: column}
+.portlet-evalgoal .my-evalgoal-info .myList{font-size: 14px; height: 25px;color:#333}
 
 .color-lcc-signature-blue {color:#064975 !important}
 .color-lcc-signature-green {color:#8dc63f !important}
@@ -249,6 +307,9 @@ body {min-width:576px; font-size:14px}
 @media (min-width:1200px) {
 	.portlet-masonry-wrapper {width:1206px}
 }
+@media (min-width:499px) and (max-width:1024px) {    
+	.ehr-gnb .navbar-nav {padding-top:20px;}
+}
 
 /* Modal Style */
 .modal-header {padding:2px 25px; background-color:#f4f5f6;border-bottom:1px solid #e4e4e4}
@@ -256,8 +317,8 @@ body {min-width:576px; font-size:14px}
 .modal-header h4 {font-size:1rem}
 .modal-header .close {font-size:2rem;font-weight:400; padding:.25rem; margin:0}
 .modal-footer {border-top:1px solid #d9d9d9; padding:0 20px 0 0}
-.modal-footer .btn {height:36px; border-radius:.1875rem; padding:0 20px; font-size:.875rem} 
-.modal-footer .btn.btn-primary {background-color:#0070bd; color:#fff; border:1px solid #0070bd}
+.modal-body .btn, .modal-footer .btn {height:36px; border-radius:.1875rem; padding:0 20px; font-size:.875rem} 
+.modal-body .btn.btn-primary, .modal-footer .btn.btn-primary {background-color:#0070bd; color:#fff; border:1px solid #0070bd}
 .modal-footer .btn.btn-primary:hover {background-color:#064975; border:1px solid #064975}
 .modal-footer .btn.btn-light {background-color:#fff; color:#0070bd; border:1px solid #0070bd}
 .modal-footer .btn.btn-light:hover {background-color:#ebf5fe}
@@ -283,16 +344,16 @@ body {min-width:576px; font-size:14px}
 @media all and (min-width:499px) {
 	.navbar.navbar-mobile .navbar-nav {flex-direction:column}
 }
-.navbar.navbar-mobile {border-bottom:1px solid #ccc; font-size:1rem; background-color:#fff !important; padding:0 1rem}
-.navbar.navbar-mobile .navbar-brand  {padding-top:.75rem; padding-bottom:.75rem; margin-right:0}
+.navbar.navbar-mobile {height:3.5625rem; border-bottom:1px solid #ccc; font-size:1rem; background-color:#fff !important; padding:0 1rem}
+.navbar.navbar-mobile .navbar-brand {padding-top:.5625rem; padding-bottom:.375rem; margin-right:0}
 .navbar-mobile .navbar-nav .dropdown-menu {border-radius:0; font-size:1rem; background-color:#fff; border:0; margin:0 -1rem; padding:.5rem 1rem}
 .navbar-mobile .navbar-toggler {border:none}
-.navbar-mobile .navbar-collapse {position:absolute; z-index:3; top:57px; left:16px; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7;border-bottom:1px solid #d2d2d2;}
+.navbar-mobile .navbar-collapse {position:absolute; z-index:3; top:3.5625rem; left:1rem; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7; border-bottom:1px solid #d2d2d2;}
 .navbar-mobile .nav-item {font-weight:700; color:#333} /*1depth*/
 .navbar-mobile .navbar-nav .nav-link {padding:.75rem 1rem; margin:0 -1rem; font-size:17px; border-bottom:1px solid #d2d2d2}
 .navbar-mobile .navbar-nav li.nav-item:last-child .nav-link {border-bottom:none}
 .navbar-mobile .navbar-nav .nav-item.dropdown.show .nav-link {border-bottom:none; color:#0854a0}
-.navbar-mobile .dropdown-item.dropdown.show .dropdown-toggle {color:#0854a0;font-weight:500}
+.navbar-mobile .dropdown-item.dropdown.show .dropdown-toggle {color:#0854a0; font-weight:500}
 .navbar-mobile .navbar-nav .active>.nav-link {color:#333}
 .navbar-mobile .navbar-nav .nav-link:hover {color:#0854a0}
 .navbar-mobile .dropdown-toggle::after {content:' '; display:block; position:absolute; top:1rem; right:0; width:10px; height:10px; border:2px solid #7f7f7f; border-bottom:none; border-left:none; -webkit-transform:rotate(135deg); -ms-transform:rotate(135deg); transform:rotate(135deg);}
@@ -302,7 +363,6 @@ body {min-width:576px; font-size:14px}
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown ul {background-color:#fff; padding:.5rem 0; margin-left:0; margin-right:0} /*3depth 영역*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a {color:#777; font-size:1rem; font-weight:400; text-decoration:none} /*3depth*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a::before{content:'ㄴ'; font-size:12px; padding-right:6px}
-.navbar-mobile .button-logout {visibility:hidden}
 
 /* Mobile 설치안내 */
 .app-wrap-download {width:100%; height:100%;padding:2rem;}
@@ -316,4 +376,8 @@ body {min-width:576px; font-size:14px}
 .app-wrap-download .flex-item .android-info .des {text-align: left;letter-spacing: -0.5px;font-size:.875rem}
 .app-wrap-download .flex-item .android-info img {max-width:100%;padding-top:1rem}
 
-/* 0422-3 */
+/* Error Page */
+.custom-system-message {padding:0 3rem }
+.custom-system-message img {width:83px;height:auto}
+.custom-system-message .title {font-size:2.625rem; font-weight: 700;}
+.custom-system-message .message {font-size:1rem; padding-top:2rem;line-height: 1.2;}  

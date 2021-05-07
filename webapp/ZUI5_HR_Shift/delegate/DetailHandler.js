@@ -9,8 +9,7 @@ sap.ui.define(
         "sap/m/MessageBox",
         "sap/m/MessageToast",
         "sap/ui/core/BusyIndicator",
-        "sap/ui/model/json/JSONModel",
-        "common/moment-with-locales"
+        "sap/ui/model/json/JSONModel"
     ],
     function (Common, DialogHandler, OrgOfIndividualHandler, Shift, ODataService, MessageBox, MessageToast, BusyIndicator, JSONModel) {
         "use strict";
@@ -167,33 +166,14 @@ sap.ui.define(
                 );
             },
 
-            openSmoinUrl: function(smoinUrl) {
-                if(!smoinUrl) return;
-
-                setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(smoinUrl, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
-            },
-
             ProcessOnSuccess: function (data, conType) {
                 
                 switch (conType) {
                     case Shift.ProcessType.APPROVAL_REQUEST:
                         // s모인 결재창을 띄운다.
-                        this.openSmoinUrl(data.EAppurl);
+                        if(data.EAppurl) {
+                            Common.openPopup.call(this.oController, data.EAppurl);
+                        }
 
                         // 변경신청내역 탭 refresh 및 이동
                         this.oController.changeTab(Shift.Tab.APPROVAL);
@@ -317,7 +297,7 @@ sap.ui.define(
              * @param {sap.ui.base.Event} oEvent - object of the Appkey link
              */
             pressAppkeyLink: function(oEvent) {
-                this.openSmoinUrl(oEvent.getSource().data("Url"));
+                Common.openPopup.call(this.oController, oEvent.getSource().data("Url"));
             },
 
             /**
@@ -326,6 +306,7 @@ sap.ui.define(
             pressApprovalBtn: function() {
                 var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
                 var oInputData = this.oModel.getProperty("/List");
+                var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
                 if (!this.DetailProcessValidation.call(this, oInputData)) return;
 
@@ -337,6 +318,7 @@ sap.ui.define(
                     var payload = {};
                     payload.Pernr = this.oController.getSessionInfoByKey("name");
                     payload.Appkey1 = this.oModel.getProperty("/Appkey") || "";
+                    payload.Extryn = vExtryn;
                     payload.ShiftWorkScheduleChange = oInputData.map(function (elem) {
                         return $.extend(true, Common.copyByMetadata(oModel, "ShiftWorkScheduleChange", elem), {
                             Begda: moment(elem.Begda).hours(10).toDate(),
@@ -353,7 +335,9 @@ sap.ui.define(
                     );
                 };
 
-                MessageBox.show(this.oController.getBundleText("MSG_30003"), {
+                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_00060") : this.oController.getBundleText("MSG_31010");
+
+                MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
                     title: this.oController.getBundleText("LABEL_00149"),
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],

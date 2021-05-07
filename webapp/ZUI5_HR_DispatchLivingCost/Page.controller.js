@@ -28,7 +28,7 @@ sap.ui.define([
 		
 		getUserGubun  : function() {
 
-			return this.getSessionInfoByKey("Bukrs2");
+			return this.getSessionInfoByKey("Bukrs3");
         },
 		
 		onInit: function () {
@@ -216,9 +216,9 @@ sap.ui.define([
 			
 			oModel.create("/DispatchApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
-
+					
 					if (oData && oData.DispatchApplyTableIn1) {
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas = oData.DispatchApplyTableIn1.results;
 						dataLength = rDatas.length;
@@ -226,6 +226,10 @@ sap.ui.define([
 					}
                     
                     oController.LogModel.setData({Data: oData.DispatchApplyExport.results[0]});
+					if(oData.DispatchApplyExport.results[0].EClose === "X"){
+						sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107")});
+					}
+
 					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
 				},
 				error: function(oResponse) {

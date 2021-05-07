@@ -46,7 +46,7 @@ sap.ui.define(
 
 			onAfterShow: function () {
 				if(this._vCurrentTabKey === "Condo") this.initCondoTabView.call(this);
-				else this.FacilityHandler.load();
+				else this.initFacilityTabView.call(this);
 			},
 
 			initCondoTabView: function(oEvent) {
@@ -56,6 +56,14 @@ sap.ui.define(
 					this.CondoHandler.load();
 				}
 			},
+			
+			initFacilityTabView: function(oEvent) {
+				if(oEvent && oEvent.data && typeof oEvent.data.isResvRefresh === "boolean") {
+					if(oEvent.data.isResvRefresh === true) this.FacilityHandler.buildMyApprTable();
+				} else {
+					this.FacilityHandler.load();
+				}
+			},
 
 			handleTabBarSelect: function(oEvent) {
 				var sKey = oEvent.getParameter("selectedKey");
@@ -63,7 +71,7 @@ sap.ui.define(
 				if (this._vCurrentTabKey === sKey) return;
 				else this._vCurrentTabKey = sKey;
 
-				if (this._vCurrentTabKey === "Facility") this.FacilityHandler.load();
+				if (this._vCurrentTabKey === "Facility") this.initFacilityTabView.call(this);
 				else this.initCondoTabView.call(this);
 			},
 

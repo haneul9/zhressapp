@@ -14,9 +14,9 @@ sap.ui.define([
             var oEduCombo = new sap.m.ComboBox(oController.PAGEID + "_EduCombo", { // 교육구분
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -39,9 +39,9 @@ sap.ui.define([
             var oTypeCombo = new sap.m.ComboBox(oController.PAGEID + "_TypeCombo", { // 교육유형
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -64,9 +64,9 @@ sap.ui.define([
             var oSelectCombo = new sap.m.ComboBox(oController.PAGEID + "_SelectCombo", { // 필수/선택
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -89,9 +89,9 @@ sap.ui.define([
             var oNomalCombo = new sap.m.ComboBox(oController.PAGEID + "_NomalCombo", { // 법정/일반
 				width: "250px",
 				editable: {
-					path: "Status1",
-					formatter: function(v1) {
-						return !v1 || v1 === "AA";
+					parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+					formatter: function(v1, v2) {
+						return (!v1 || v1 === "AA") && v2 === "Y";
 					}
 				},
 				items: {
@@ -143,18 +143,46 @@ sap.ui.define([
 							new sap.m.HBox({
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_40024}", "150px", "Right", true ), // 교육과정
-                                    new sap.m.Input({
+                                    new sap.m.Input(oController.PAGEID + "TrainingInput", {
                                         textAlign: "Begin",
-                                        width: "704px",
+                                        width: "550px",
                                         maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edkaj", false),
+                                        editable: {
+                                            parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+                                            formatter: function(v1, v2) {
+                                                return (!v1 || v1 === "AA") && v2 === "Y";
+                                            }
+                                        },
+                                        value: "{Edkaj}"
+                                    }),
+									new sap.m.Button({
+										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+										icon: "sap-icon://search",
+										press: oController.RegistTraning.bind(oController),
+										visible: {
+											parts: [{path: "Status1"}, {path: "/TraningCheck"}],
+                                            formatter: function(v1, v2) {
+                                                return (!v1 || v1 === "AA") && (!v2 || v2 === "X");
+                                            }
+										}
+									}).addStyleClass("button-search-icon mx-5px"),
+									new sap.m.CheckBox(oController.PAGEID + "_CheckBox", { 
+                                        select: oController.onDInput.bind(oController),
+										selected: {
+											path: "/Checked",
+											formatter: function(v) {
+												return v === "X";
+											}
+										},
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         editable: {
                                             path: "Status1",
                                             formatter: function(v1) {
                                                 return !v1 || v1 === "AA";
                                             }
-                                        },
-                                        value: "{Edkaj}"
-                                    })
+                                        }
+                                    }),
+									new sap.m.Text({ text: "{i18n>LABEL_40072}", textAlign: "Begin" })
 								]
 							})
 							.addStyleClass("search-field-group")
@@ -268,7 +296,7 @@ sap.ui.define([
 									new sap.m.Input({
 										textAlign: "Begin",
 										width: "250px",
-										maxLength: 5,
+										maxLength: 6,
 										liveChange: oController.getAttTime.bind(oController),
 										editable: {
 											path: "Status1",
@@ -319,7 +347,7 @@ sap.ui.define([
 										selected: {
 											path: "Natio",
 											formatter: function(v) {
-												return v === "1";
+												return v === "01";
 											}
 										}
 									}),
@@ -329,7 +357,7 @@ sap.ui.define([
 										selected: {
 											path: "Natio",
 											formatter: function(v) {
-												return v === "2";
+												return v === "02";
 											}
 										}
 									})
@@ -345,7 +373,7 @@ sap.ui.define([
 							new sap.m.Input({
 								textAlign: "Begin",
 								width: "704px",
-								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "EdstaObjid", false),
+								maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Edsta", false),
 								editable: {
 									path: "Status1",
 									formatter: function(v1) {
@@ -366,7 +394,7 @@ sap.ui.define([
 									new sap.m.Input({
 										textAlign: "End",
 										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzpretun", false),
+										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Costp", false),
 										liveChange: oController.getMoneyComma1.bind(oController),
 										editable: {
 											path: "Status1",
@@ -380,7 +408,7 @@ sap.ui.define([
 												if(v) return Common.numberWithCommas(v);
 												else return "0";
 											}
-										},
+										}
 									})
 								]
 							})
@@ -391,7 +419,7 @@ sap.ui.define([
 									new sap.m.Input({
 										textAlign: "End",
 										width: "250px",
-										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Zzvalbt", false),
+										maxLength: Common.getODataPropertyLength("ZHR_TRAINING_SRV", "TrainingOutApplyTableIn1", "Vatax", false),
 										liveChange: oController.getMoneyComma2.bind(oController),
 										editable: {
 											path: "Status1",
@@ -405,7 +433,7 @@ sap.ui.define([
 												if(v) return Common.numberWithCommas(v);
 												else return "0";
 											}
-										},
+										}
 									})
 								]
 							})
@@ -527,19 +555,6 @@ sap.ui.define([
 							})
 						]
 					})
-					.addStyleClass("mt-3px"),
-					new sap.m.HBox({
-						items: [
-							new sap.ui.core.Icon({
-								src: "sap-icon://information"
-							})
-							.addStyleClass("color-icon-blue mr-5px pt-5px"),
-							new sap.m.Text({
-								text: "{i18n>MSG_40003}",
-								textAlign: "Begin"
-							})
-						]
-					})
 					.addStyleClass("mt-3px")
 				]
 			})
@@ -548,7 +563,7 @@ sap.ui.define([
 			var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
 				fitContainer: true,
 				items: [
-					fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
+					fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
 				]
 			});
 				
@@ -559,14 +574,14 @@ sap.ui.define([
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogApplyBtn.bind(oController),
-						text: "{i18n>LABEL_40060}", // 신청,
+						text: "{i18n>LABEL_40022}", // 신규저장,
 						visible: {
 							path: "Status1",
 							formatter: function(v) {
 								return !v;
 							}
 						}
-					}).addStyleClass("button-dark"),
+					}).addStyleClass("button-light"),
 					new sap.m.Button({
 						press: oController.onDialogSaveBtn.bind(oController),
 						text: "{i18n>LABEL_40022}", // 저장,

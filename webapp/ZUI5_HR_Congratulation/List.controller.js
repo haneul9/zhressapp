@@ -16,6 +16,8 @@ sap.ui.define(
 
 			TableModel: new JSONModelHelper(),
 			DetailModel: new JSONModelHelper(),
+			g_BDate: "",
+			g_EDate: "",
 
 			getUserId: function() {
 
@@ -44,21 +46,6 @@ sap.ui.define(
 			},
 
 			onAfterShow: function () {
-				var oController = this;
-				var oTable = $.app.byId(oController.PAGEID + "_Table");
-
-				if (oController.getUserGubun() === "A100") {
-					//기초 첨단에 의해 출력필드 제한하는곳
-					// 첨단
-					oTable.getColumns()[5].destroyTemplate();
-					oTable.getColumns()[6].destroyTemplate();
-					oTable.getColumns()[7].destroyTemplate();
-				} else {
-					// 기초
-					oTable.getColumns()[8].destroyTemplate();
-					oTable.getColumns()[9].destroyTemplate();
-				}
-
 				this.onTableSearch();
 			},
 
@@ -86,8 +73,7 @@ sap.ui.define(
 							visible : {
 								path : "Status", 
 								formatter : function(fVal){
-									if(fVal === "99") return true;
-									else return false;
+									return fVal !== "AA";
 								}
 							}
 						})
@@ -109,8 +95,7 @@ sap.ui.define(
 							visible : {
 								path : "Status", 
 								formatter : function(fVal){
-									if(fVal !== "99") return true;
-									else return false;
+									return fVal === "AA"; 
 								}
 							}
 						})
@@ -124,6 +109,8 @@ sap.ui.define(
 				var oTable = $.app.byId(oController.PAGEID + "_Table");
 				var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 				var vPernr = oController.getUserId();
+
+				oController.TableModel.setData({Data: []});
 
 				var sendObject = {};
 				
@@ -141,20 +128,20 @@ sap.ui.define(
 				oModel.create("/CongratulationApplySet", sendObject, {
 					async: true,
 					success: function (oData, oResponse) {
+						
 						if (oData && oData.TableIn.results) {
+							var dataLength = 10;
 							//값을 제대로 받아 왔을 때
 							var rDatas = oData.TableIn.results;
-							var dataLength = rDatas.length;
+							dataLength = rDatas.length;
 							oController.TableModel.setData({ Data: rDatas }); //직접적으로 화면 테이블에 셋팅하는 작업
-						}else oController.TableModel.setData({Data: []});
+						}
 						
 						oTable.setVisibleRowCount(dataLength > 10 ? 10 : rDatas.length); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 						BusyIndicator.hide();
 					},
 					error: function (oResponse) {
 						Common.log(oResponse);
-						oController.TableModel.setData({Data: []});
-						oTable.setVisibleRowCount(10);
 						BusyIndicator.hide();
 					}
 				});
@@ -162,15 +149,37 @@ sap.ui.define(
 			
 			onStartDatePicker: function() {
 				var oController = $.app.getController();
+				var vBurks = oController.getUserGubun();
 				var vStartDate = $.app.byId(oController.PAGEID + "_StartDatePicker");
-				var vYear1 = new Date().getFullYear()-1;
-				var vYear2 = new Date().getFullYear()+1;
-				var vMonth = new Date().getMonth();
-				var vDate1 = new Date().getDate();
-				var vDate2 = new Date().getDate()-1;
+				var vYear1 = "",
+					vYear2 = "",
+					vMonth1 = "",
+					vMonth2 = "",
+					vDate1 = "",
+					vDate2 = "";
 				
-				vStartDate.setMinDate(new Date(vYear1, vMonth, vDate1));
-				vStartDate.setMaxDate(new Date(vYear2, vMonth, vDate2));
+				if(vBurks !== "A100"){
+					vYear1 = new Date().getFullYear()-1;
+					vYear2 = new Date().getFullYear()+1;
+					vMonth1 = new Date().getMonth();
+					vDate1 = new Date().getDate();
+					vDate2 = new Date().getDate()-1;
+					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
+					vStartDate.setMaxDate(new Date(vYear2, vMonth1, vDate2));
+				}else {
+					var Bdate = parseInt(oController.g_BDate),
+						Edate = parseInt(oController.g_EDate);
+
+					vYear1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getFullYear();
+					vMonth1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getMonth();
+					vDate1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getDate();
+					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
+
+					vYear2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getFullYear();
+					vMonth2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getMonth();
+					vDate2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getDate();
+					vStartDate.setMaxDate(new Date(vYear1, vMonth2, vDate2));
+				}
 			},
 			
 			onPressCancel: function (oEvent) {
@@ -233,9 +242,7 @@ sap.ui.define(
 					oView.addDependent(oController._DetailModel);
 				}
 
-				if(!oController.DetailModel.getProperty("/MultiBoxData")) {
-					oController.setTypeCombo(false); //경조유형 function
-				}
+				oController.setTypeCombo(false); //경조유형 function
 
 				vSelectedType = oController.DetailModel.getProperty("/MultiBoxData/0/Code");
 				
@@ -258,9 +265,6 @@ sap.ui.define(
 				var oController = $.app.getController();
 				var oCommonModel = $.app.getModel("ZHR_COMMON_SRV"),
 					oCodeHeaderParams = {};
-				var oBasicBox = $.app.byId(oController.PAGEID + "_BasicBox");
-				var oAmountBox = $.app.byId(oController.PAGEID + "_AmountTBox");
-				var oCopayBox = $.app.byId(oController.PAGEID + "_CopayTBox");
 				var vPernr = oController.getUserId();
 				var vBurks = oController.getUserGubun();
 				var oWarningMsg = $.app.byId(oController.PAGEID + "_WarningMsg");
@@ -268,6 +272,28 @@ sap.ui.define(
 				
 				oWarningMsg.setVisible(false);
 				
+				if(vBurks === "A100"){
+					oCodeHeaderParams.ICodeT = "018";
+					oCodeHeaderParams.ICodty = "PB120";
+					oCodeHeaderParams.IPernr = vPernr;
+					oCodeHeaderParams.ISubCode = "DATE";
+					oCodeHeaderParams.NavCommonCodeList = [];
+					
+					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
+						success: function (oData, oResponse) {
+							if (oData && oData.NavCommonCodeList.results) {
+								//값을 제대로 받아 왔을 때
+								var rDatas = oData.NavCommonCodeList.results;
+								oController.g_BDate = rDatas[0].Cvalu;
+								oController.g_EDate = rDatas[1].Cvalu;
+							}
+						},
+						error: function (oResponse) {
+							common.Common.log(oResponse);
+						}
+					});
+				}
+
 				oCodeHeaderParams = {
 					ICodeT: "018",
 					IPernr: vPernr,
@@ -276,14 +302,9 @@ sap.ui.define(
 					NavCommonCodeList: []
 				};
 				
-				if(oController.getUserGubun() === "A100"){ //들어오는 사람에 따라서 column의 변화
-					oBasicBox.destroyItems();
-					oAmountBox.destroyItems();
-					
+				if(vBurks === "A100"){ //들어오는 사람에 따라서 column의 변화
 					delete oCodeHeaderParams.IBegda;
-				}else{
-					oCopayBox.destroyItems();
-					
+				}else{		
 					if(!isBegda) delete oCodeHeaderParams.IBegda;
 				}
 				
@@ -424,8 +445,10 @@ sap.ui.define(
 							IConType: "2",
 							ILangu: "3",
 							IPernr: vPernr,
+							IEmpid: vPernr,
 							IBukrs: "1000",
 							IOdkey: "",
+							IDatum: new Date(),
 							TableIn: [vDetailData] //넘길 값들을 담아놓음
 						};
 						
@@ -525,8 +548,10 @@ sap.ui.define(
 							IConType: "3",
 							ILangu: "3",
 							IPernr: vPernr,
+							IEmpid: vPernr,
 							IBukrs: "1000",
 							IOdkey: "",
+							IDatum: new Date(),
 							TableIn: [oCopiedData] //넘길 값들을 담아놓음
 						};
 						
@@ -710,13 +735,12 @@ sap.ui.define(
 						if (oController.getUserGubun() === "A100") {
 							//첨단일 경우 CopayT에 값이 들어있지 않아 기본급으로 측정되기에 BasicT에서 그대로 받아서 넣어줌.
 							oController.DetailModel.setProperty("/FormData/CopayT", oData.TableIn.results[0].AmountT);
-						} else {
-							//기초일 경우
-							oController.DetailModel.setProperty("/FormData/BasicT", oData.TableIn.results[0].BasicT);
-							oController.DetailModel.setProperty("/FormData/Rate", oData.TableIn.results[0].Rate);
-							oController.DetailModel.setProperty("/FormData/AmountT", oData.TableIn.results[0].AmountT);
-							oController.onCheckPress();
-						}
+						} 
+
+						oController.DetailModel.setProperty("/FormData/BasicT", oData.TableIn.results[0].BasicT);
+						oController.DetailModel.setProperty("/FormData/Rate", oData.TableIn.results[0].Rate);
+						oController.DetailModel.setProperty("/FormData/AmountT", oData.TableIn.results[0].AmountT);
+						oController.onCheckPress();
 						Common.log(oData);
 					},
 					error: function (oResponse) {

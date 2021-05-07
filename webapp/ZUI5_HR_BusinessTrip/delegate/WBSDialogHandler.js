@@ -103,7 +103,7 @@ var Handler = {
 						this.oModel.setProperty("/WBS/List", []);
 
 						Common.adjustVisibleRowCount($.app.byId("WBSTable").setBusy(false), 1, 1);
-					}
+					}.bind(this)
 				}
 			);
 		}.bind(this));

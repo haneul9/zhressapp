@@ -3,9 +3,10 @@ sap.ui.define(
 		"../../common/Common",
 		"../../common/CommonController",
 		"../../common/JSONModelHelper",
-		"sap/ui/core/IconPool"
+		"sap/ui/core/IconPool",
+		"sap/ui/core/BusyIndicator"
 	],
-	function (Common, CommonController, JSONModelHelper, IconPool) {
+	function (Common, CommonController, JSONModelHelper, IconPool, BusyIndicator) {
 		"use strict";
 
 		var SUB_APP_ID = [$.app.CONTEXT_PATH, "ClubApplyInfo"].join($.app.getDeviceSuffix());
@@ -29,17 +30,12 @@ sap.ui.define(
 						onAfterShow: this.onAfterShow
 					}, this);
 				
-				//Registering to the icon pool
-				IconPool.registerFont({
-					fontFamily: "SAP-icons-TNT",
-					fontURI: sap.ui.require.toUrl("sap/tnt/themes/base/fonts/")
-				});
-				IconPool.fontLoaded("SAP-icons-TNT");
-
 				Common.log("onInit session", this.getView().getModel("session").getData());
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
+
 				this.DetailModel.setData({ FormData: {} });
 				
 				if(oEvent.data)
@@ -50,6 +46,7 @@ sap.ui.define(
 
 			onAfterShow: function () {
 				Common.log("onAfterShow");
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {

@@ -69,7 +69,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 																   size : "14px",
 																   color : "#0a6ed1"
 															   }).addStyleClass("paddingTop4 paddingRight10"),
-															   new sap.m.Text({text : oBundleText.getText("MSG_26004")})] // 등급부여기준 : 아래와 같은 기준으로 인원수를 분배하여 부여해 주시기 바랍니다.
+															   new sap.m.Text({text : "{i18n>MSG_26004}"})] // 등급부여기준 : 아래와 같은 기준으로 인원수를 분배하여 부여해 주시기 바랍니다.
 												}).addStyleClass("custom-messagestrip")],
 									 hAlign : "Begin",
 									 vAlign : "Middle",
@@ -77,29 +77,29 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 								})]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : oBundleText.getText("LABEL_26023")})], // 평가대상인원
+									 content : [new sap.m.Text({text : "{i18n>LABEL_26023}"})], // 평가대상인원
 									 hAlign : "Center",
 									 vAlign : "Middle",
 									 rowSpan : 2
- 								 }).addStyleClass("Label border_left0"),
+ 								 }).addStyleClass("Label2"),
  								 new sap.ui.commons.layout.MatrixLayoutCell({
- 								 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_26024")})], // 기준 인원
+ 								 	 content : [new sap.m.Text({text : "{i18n>LABEL_26024}"})], // 기준 인원
  								 	 hAlign : "Center",
  								 	 vAlign : "Middle",
  								 	 colSpan : 5
- 								 }).addStyleClass("Label"),
+ 								 }).addStyleClass("Label2"),
  								 new sap.ui.commons.layout.MatrixLayoutCell({
- 								 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_26025")})], // 현재 인원
+ 								 	 content : [new sap.m.Text({text : "{i18n>LABEL_26025}"})], // 현재 인원
  								 	 hAlign : "Center",
  								 	 vAlign : "Middle",
  								 	 colSpan : 5
- 								 }).addStyleClass("Label border_right0 evalcomp_label")]
+ 								 }).addStyleClass("Label2 evalcomp_label")]
 					})]
 		});
 		
-		oMatrix.setModel(new sap.ui.model.json.JSONModel);
+		oMatrix.setModel(new sap.ui.model.json.JSONModel());
 		oMatrix.bindElement("/Data/0");
 		
 		var oRow, oCell;
@@ -110,10 +110,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 							content : [new sap.m.Text({text : label[i]})],
 							hAlign : "Center",
 							vAlign : "Middle"
-						}).addStyleClass("Label");
-			if(i==label.length-1){
-				oCell.addStyleClass("border_right0");
-			}
+						}).addStyleClass("Label2");
 			
 			if(i>4){
 				oCell.addStyleClass("evalcomp_label");
@@ -123,7 +120,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 		}
 		oMatrix.addRow(oRow);
 		
-		oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "35px"});
+		oRow = new sap.ui.commons.layout.MatrixLayoutRow({height : "45px"});
 		var field = ["Percn", "Clas5", "Clas4", "Clas3", "Clas2", "Clas1", "Clas5A", "Clas4A", "Clas3A", "Clas2A", "Clas1A"];
 		for(var i=0; i<field.length; i++){
 			var oTemplate;
@@ -185,12 +182,6 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 						hAlign : "Center",
 						vAlign : "Middle"
 					}).addStyleClass("Data");
-					
-			if(i==0){
-				oCell.addStyleClass("border_left0");
-			} else if(i==field.length-1){
-				oCell.addStyleClass("border_right0");
-			}
 			
 			oRow.addCell(oCell);
 		}
@@ -204,11 +195,13 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 			visibleRowCount: 1,
 			showOverlay: false,
 			showNoData: true,
-			noData: oBundleText.getText("LABEL_00901"), // No data found
+			rowHeight: 37,
+			columnHeaderHeight: 38,
+			noData: "{i18n>LABEL_00901}", // No data found
 			extension : [new sap.m.Toolbar({
 							 height : "50px",
 							 content : [new sap.m.Text({
-										 	text : oBundleText.getText("LABEL_26017") + " : {Begda}  ~ {Endda}", // 평가실시기간
+										 	text : oController.getBundleText("LABEL_26017") + " : {Begda}  ~ {Endda}", // 평가실시기간
 										 	visible : {
 										 		parts : [{path : "Begda"}, {path : "Endda"}],
 										 		formatter : function(fVal1, fVal2){
@@ -218,7 +211,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 										}),
 										new sap.m.ToolbarSpacer(),
 										new sap.m.Button({
-											text : oBundleText.getText("LABEL_00101"), // 저장
+											text : "{i18n>LABEL_00101}", // 저장
 											press : function(oEvent){
 												oController.onPressSave2(oEvent, "S");
 											},
@@ -230,7 +223,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 											}
 										}).addStyleClass("button-dark"),
 										new sap.m.Button({
-											text : oBundleText.getText("LABEL_00138"), // 완료
+											text : "{i18n>LABEL_00138}", // 완료
 											press : function(oEvent){
 												oController.onPressSave2(oEvent, "C");
 											},
@@ -244,7 +237,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content02", {
 						 }).addStyleClass("toolbarNoBottomLine")
 						   .setModel(oController._ListCondJSonModel)
 						   .bindElement("/Data")]
-		}).addStyleClass("mt-8px");
+		}).addStyleClass("mt-10px");
 		
 		oTable2.setModel(new sap.ui.model.json.JSONModel());
 		oTable2.bindRows("/Data");

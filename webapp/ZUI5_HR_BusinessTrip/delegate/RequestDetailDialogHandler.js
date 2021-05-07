@@ -1,16 +1,16 @@
 /* global moment:true Promise:true */
 sap.ui.define([
 	"common/Common",
-	"common/moment-with-locales",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"sap/ui/model/json/JSONModel"
+	"sap/ui/model/json/JSONModel",
+	"../../common/SearchUser1"
 ], function(
 	Common,
-	momentjs,
 	MessageBox,
 	BusyIndicator,
-	JSONModel
+	JSONModel,
+	SearchUser1
 ) {
 "use strict";
 
@@ -20,16 +20,23 @@ var Handler = {
 	oRowData: null,
 	oDialog: null,
 	//대근자
-	dArr: new Array(),
+	flag : "",
+	_dArr: new Array(),
+	_AddPersonDialog:null,
+	_addDatas:{id:""},
+	oDatas: null,
+	_Peridx:0,
+	_Daegun:"",
+	_Hando:"",
 	//
 	oModel: new JSONModel({
 		Header: null,
 		BtPurpose1SelectList: null, // 출장구분 코드 목록
 		SubtySelectList: null,      // 근태유형 코드 목록
 		EncardSelectList: null,     // 출입카드 신청 코드 목록
-		EnameList: null             // 출장자 popup 목록 : 대리인 자격으로 신청시
+		EnameList: null,             // 출장자 popup 목록 : 대리인 자격으로 신청시
+		addData: new Array()		// 대근자 목록
 	}),
-
 	// DialogHandler 호출 function
 	get: function(oController, oRowData) {
 
@@ -39,7 +46,6 @@ var Handler = {
 		Common.removeProperties(this.oRowData, "__metadata");
 
 		oController.RequestDetailDialogHandler = this;
-
 		return this;
 	},
 
@@ -79,7 +85,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EnameList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -102,7 +109,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/BtPurpose1SelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this)),
@@ -125,7 +133,8 @@ var Handler = {
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
-						}
+							this.oModel.setProperty("/EncardSelectList", []);
+						}.bind(this)
 					}
 				);
 			}.bind(this))
@@ -191,7 +200,10 @@ var Handler = {
 					TableIn03: [], // 출장 일정 목록
 					TableIn04: [], // 동반출장자 목록
 					TableIn05: [], // 코스트센터 소속부서
-					TableIn06: []  // 근태유형 코드 목록
+					TableIn06: [],  // 근태유형 코드 목록
+					/*대근자
+					TableIn07: []
+					*/
 				},
 				{
 					success: function(oData) {
@@ -214,6 +226,9 @@ var Handler = {
 							if (!Header.BtPurpose1) {
 								var BtPurpose1SelectList = this.oModel.getProperty("/BtPurpose1SelectList");
 								Header.BtPurpose1 = BtPurpose1SelectList.length === 1 ? this.oModel.getProperty("/BtPurpose1SelectList/0/Code") : this.oModel.getProperty("/BtPurpose1SelectList/1/Code");
+							}
+							if (!Header.Subty) {
+								Header.Subty = SubtySelectList.length === 1 ? this.oModel.getProperty("/SubtySelectList/0/Subty") : this.oModel.getProperty("/SubtySelectList/1/Subty");
 							}
 							if (this.oRowData.isReportPopup) {
 								Header.Edtfg = false;
@@ -285,6 +300,15 @@ var Handler = {
 						this.oModel.setProperty("/MainCostCenterList", Common.getTableInResults(oData, "TableIn05")); // 코스트센터 소속부서
 
 						this.toggleAdvanceAmtState(); // 가지급금 입력 활성화 여부 결정
+						/* 대근자
+						var TableIn07 = Common.getTableInResults(oData, "TableIn07");
+						this.oModel.getProperty("/Header").Status1=="AA"?TableIn07=new Array():null;
+						this._dArr=TableIn07;					
+						this.renderAdded.call(this,$.app.getController(),TableIn07);
+						this.onShow.call(this,TableIn07,"V");
+						this.oModel.getProperty("/Header").Status1!="AA"?this.afterTable(TableIn07):null;
+						$.app.byId($.app.getController().PAGEID+"_aTable").getModel().setProperty("/addData", TableIn07);
+						*/
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.onBeforeOpen error", oResponse);
@@ -556,128 +580,321 @@ var Handler = {
 		}.bind(this));
 	},
 
-	
-	//대근자 지정 관련
-	sizingAdded : function(oController,oMat,dLength){
-		var c=sap.ui.commons;
-		var oRow,oCell;
-		var oCnt1=11;
-		var oCnt2=10;
-		if(dLength>8){
-			var width1=new Array();
-			for(var i=0;i<10;i++){
-				width1.push("");
-			}
-			width1.push("13px");
-			oMat.setWidths(width1);
-			oMat.setColumns(oCnt1);
-			$.app.byId(oController.PAGEID+"_Cell").setColSpan(oCnt1);
-		}else{
-			var width1=new Array();
-			for(var i=0;i<10;i++){
-				width1.push("");
-			}
-			oMat.setWidths(width1);
-			oMat.setColumns(oCnt2);
-			$.app.byId(oController.PAGEID+"_Cell").setColSpan(oCnt2);
+	openPersonDial: function(oEvent) {
+		var oEventSource = oEvent.getSource();
+		var target = oEventSource.data("target");
+		this.RequestDetailDialogHandler.flag="5";
+		var rowIndex = oEventSource.getParent().getParent().getIndex();
+		SearchUser1.oController = this;
+		SearchUser1.searchAuth = "A";
+		SearchUser1.dialogContentHeight = 480;
+		SearchUser1.oTargetPaths = {
+			pernr: target.pernr.interpolate(rowIndex),
+			ename: target.ename.interpolate(rowIndex)
+		};
+
+		if (!this._AddPersonDialog) {
+			this._AddPersonDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this);
+			this.getView().addDependent(this._AddPersonDialog);
 		}
+		this._AddPersonDialog.open();
 	},
 
-	initAdded : function(){ 
-		var oRow,oCell;
-		var c=sap.ui.commons,oCol=$.app.byId(this.PAGEID+"_Col");
-		oCol.removeAllRows();
-		oRow=new c.layout.MatrixLayoutRow();
-		oCell=new c.layout.MatrixLayoutCell({
-			colSpan:10,
-			hAlign:"Center",
-			content:[new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"}),
-			new sap.m.Text({text:this.getBundleText("MSG_05001")}),
-			new sap.ui.core.HTML({preferDOM:false,content:"<div style='height:5px;'>"})]
-		}).addStyleClass("UnderBar");
-		oRow.addCell(oCell);
-		oCol.addRow(oRow);
+	changeSel : function(oEvent){
+		var oController=$.app.getController();
+		var oEventSource = oEvent.getSource();
+		var oId=oEventSource.getId();
+		var s=oEventSource.getSelectedKey();
+		var idx=oEventSource.getCustomData()[0].getValue("Seqno");
+		var oTable=$.app.byId(oController.PAGEID+"_aTable");
+		var oModel=this.RequestDetailDialogHandler.oModel;
+		var aData=oModel.getProperty("/addData");
+		var selData={
+			Awper: "",
+			Awtxt: "",
+			Beguz: null,
+			Beguzenduz: "",
+			Cntgb: "",
+			Datum: null,
+			Ename: "",
+			Enduz: null,
+			Flag: "X",
+			IOdkey: "",
+			Ligbn: "",
+			LigbnTx: "",
+			Lttim: "",
+			Offck: "",
+			Ovtim: "",
+			Pernr: "",
+			Seqnr: "",
+			Tprog: "",
+			Wt12: "",
+			Wt40: "",
+			Wtsum: ""
+		}
+		var sData=null;
+
+		switch (s) {
+			case "0":
+				if(aData[idx+1].Flag=="X"){
+					aData.splice(parseInt(idx)+1,1);
+				}
+				aData[parseInt(idx)].Awper="";
+				aData[parseInt(idx)].Awtxt="";
+				aData[parseInt(idx)].Beguz=null;
+				aData[parseInt(idx)].Enduz=null;
+				aData[parseInt(idx)].Flag="A";
+				aData[parseInt(idx)].IOdkey="";
+				aData[parseInt(idx)].Ligbn="";
+				aData[parseInt(idx)].LigbnTx="";
+				aData[parseInt(idx)].Lttim="";
+				aData[parseInt(idx)].Offck="";
+				aData[parseInt(idx)].Ovtim="";
+				aData[parseInt(idx)].Tprog="";
+				aData[parseInt(idx)].Wt12="";
+				aData[parseInt(idx)].Wt40="";
+				aData[parseInt(idx)].Wtsum="";
+				break;
+			case "1":
+				if(aData[idx+1].Flag=="X"){
+					aData.splice(parseInt(idx)+1,1);
+				}
+				break;
+			case "2":
+				selData.Pernr=aData[parseInt(idx)].Pernr;
+				selData.Ename=aData[parseInt(idx)].Ename;
+				selData.Datum=aData[parseInt(idx)].Datum;
+				aData.splice(parseInt(idx)+1,0,selData);
+			break;
+			default:
+				break;
+		}
+		var oPro=oModel.getProperty("/addData");
+		this.RequestDetailDialogHandler.afterTable(oPro);
+		this.oDatas=oPro;
+		oModel.refresh();
+		var oFficialLength=10;
+		oPro.length>oFficialLength?oTable.setVisibleRowCount(oFficialLength):oTable.setVisibleRowCount(oPro.length);
 	},
 
 	renderAdded : function(oController,pData){
-		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons,
-		oRow,oCell,oMat=$.app.byId(oController.PAGEID+"_Col"),oFields=["Ename","Datum","Awtxt","Beguzenduz","Ovtim","Wt40","Wt12","Wtsum","LigbnTx","Cntgb"];
-		oMat.removeAllRows();	
-		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
-		for(var i=0;i<100;i++){
-			var oId=$.app.byId(oController.PAGEID+"_Row_"+i);
-			for(var j=0;j<100;j++){
-				var oId2=$.app.byId(oController.PAGEID+"_Cell_"+j+"_"+i);
-				if(oId2){
-					oId2.destroy();
-				}
-			}
-			if(oId){
-				oId.destroy();
-			}
+		var	oController = $.app.getController();
+		var c=sap.ui.commons;
+		var oTable=$.app.byId(oController.PAGEID+"_aTable");
+		oTable.destroyColumns();
+		var oFields=["Ename","Datum","Ename","Beguzenduz","Ovtim","Wt40","Wt12","Wtsum","LigbnTx","Cntgb"];
+		var oWidths=['','','','240px','','','','','',''];			
+		var oLabels=new Array();
+		var oFficialLength=10;
+		pData.length>oFficialLength?oTable.setVisibleRowCount(oFficialLength):oTable.setVisibleRowCount(pData.length);
+		for(var i=3;i<13;i++){
+			i<10?i="0"+i:null;
+			oLabels.push({Label:"LABEL_198"+i,Width:oWidths[i-3],Align:"Center"});
 		}
+		oLabels.forEach(function(e,i){
+			var oCol=new sap.ui.table.Column({
+				flexible : false,
+				autoResizable : true,
+				resizable : true,
+				showFilterMenuEntry : true,
+				filtered : false,
+				sorted : false
+			});
+			oCol.setWidth(e.Width);
+			oCol.setHAlign(e.Align);
+			oCol.setLabel(new sap.m.Text({text:oController.getBundleText(e.Label),textAlign:e.Align}));
+			
+			switch (i) {
+				case 0:
+					var oText=new sap.m.Text({
+						text:"{"+oFields[i]+"}",
+						textAlign : "Center"
+					}).addStyleClass("FontFamily")
+					oCol.setTemplate(oText);
+					break;
+				case 1:
+					var oText1=new sap.m.Text({
+						text : {
+							path : oFields[i], 
+							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
+						},
+						visible:{path:"Offck",formatter:function(fVal){
+							return fVal=="X"?false:true;
+						}},
+						textAlign : "Center"
+					}).addStyleClass("FontFamily");
+					var oText2=new sap.m.Text({
+						text : {
+							path : oFields[i], 
+							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
+						},
+						visible:{path:"Offck",formatter:function(fVal){
+							return fVal=="X"?true:false;
+						}},
+						textAlign : "Center"
+					}).addStyleClass("Red Bold");		
+					var oHori=new sap.ui.commons.layout.HorizontalLayout({
+						content:[oText1,oText2]
+					});
+					oCol.setTemplate(oHori);
+					break;
+				case 2:
+					var oText=new sap.m.Text({
+						text:"{Awtxt}",
+						visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
+							if(fVal=="X"){
+								return true;									
+							}else{
+								return false;
+							}
+						}}
+					}).addStyleClass("Red Bold");
+					var oInput = new sap.m.Input({
+						valueHelpRequest: function(oEvent){oController.RequestDetailDialogHandler.openPersonDial.call(oController,oEvent);},
+						editable: "{/Header/Edtfg}",
+						customData: new sap.ui.core.CustomData({
+							key: "target",
+							value: {
+								pernr: "/addData/${rowIndex}/Awper",
+								ename: "/addData/${rowIndex}/Awtxt"
+							}
+						}),
+						value: "{Awtxt}",
+						valueHelpOnly: true,
+						visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
+							if(fVal!="X"){
+								return fVal2=="0"?false:true;
+							}else{
+								return false;
+							}
+						}},
+						showValueHelp: true,
+						width: "100%"
+					});			
+					var oHori=new sap.ui.commons.layout.HorizontalLayout({
+						content:[oText,oInput]
+					});
+					oCol.setTemplate(oHori);
+					break;
 
-		for(var j=0;j<pData.length;j++){
-			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_Row_"+j);	
-			for(var i=0;i<10;i++){
-				if(pData[j].Awtxt=="휴일"){
-					oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i,{hAlign:"Center"}).addStyleClass("datacell");
-					oRow.addCell(oCell);
-					switch (i) {
-						case 0:
-							oCell.addContent(new sap.m.Text({text:pData[j].Ename}));
-							break;
-						case 1:
-							oCell.addContent(new sap.ui.core.HTML({preferDOM:false,content:"<span style='font-weight:bold;color:red;font-size:14px;'>"+dateFormat.format(pData[j].Datum)+"</span>"}));
-							break;
-						case 2:
-							oCell.addContent(new sap.ui.core.HTML({preferDOM:false,content:"<span style='font-weight:bold;color:red;font-size:14px;'>"+pData[j].Awtxt+"</span>"}));
-							break;
-						default:
-							break;
-					}
-				}else{
-					oCell=new c.layout.MatrixLayoutCell(oController.PAGEID+"_Cell_"+j+"_"+i,{hAlign:"Center"}).addStyleClass("datacell");
-					oRow.addCell(oCell);
-					switch (i) {
-						case 1:
-							oCell.addContent(
-								new sap.m.Text({
-									text: dateFormat.format(pData[j].Datum)
-								})						
-							);
-						break;
-						case 2:
-							oCell.addContent();
-							break;
-						case 3:
-							oCell.addContent();
-						break;
-						case oFields.length-1:
-							oCell.addContent();
-						break;
-						default:
-							eval("oCell.addContent(new sap.m.Text({text:pData[j]."+oFields[i]+"}))");
-						break;
-					}
-				}
-			}
-			oMat.addRow(oRow);
+				case 3:
+				var oBeguz=new sap.m.TimePicker({
+					valueFormat : "HHmm",
+					displayFormat : "HH:mm",
+					value : "{Beguz}",
+					minutesStep : 10,
+					editable: "{/Header/Edtfg}",
+					width : "100px", 
+					textAlign : "Begin",
+					visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
+						if(fVal!="X"){
+							return fVal2=="0"?false:true;
+						}else{
+							return false;
+						}
+					}}
+				}).addStyleClass("pl-5px");
+				var oEnduz = new sap.m.TimePicker({
+					valueFormat : "HHmm",
+					displayFormat : "HH:mm",
+					value : "{Enduz}",
+					editable: "{/Header/Edtfg}",
+					minutesStep : 10,
+					width : "100px", 
+					textAlign : "Begin",
+					visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
+						if(fVal!="X"){
+							return fVal2=="0"?false:true;
+						}else{
+							return false;
+						}
+					}}
+				}).addStyleClass("pl-5px");			
+				var oHori=new sap.ui.commons.layout.HorizontalLayout({
+					content:[oBeguz,oEnduz]
+				});
+				oCol.setTemplate(oHori);
+				break;
+
+				case oFields.length-1:
+					var oSel=new sap.m.Select({change: function(oEvent){oController.RequestDetailDialogHandler.changeSel.call(oController,oEvent);},
+					visible:{parts:[{path:"Offck"},{path:"Flag"}],
+					formatter:function(fVal,fVal2){
+						if(fVal2=="A"){
+							return fVal=="X"?false:true;
+						}else{
+							return false;
+						}
+					}},selectedKey:"{"+oFields[i]+"}",customData : new sap.ui.core.CustomData({value:"{Seqno}",key:"Seqno"}),
+					editable: "{/Header/Edtfg}"});
+					oSel.addItem(new sap.ui.core.Item({
+						text:'',
+						key:''
+					}));
+					oSel.addItem(new sap.ui.core.Item({
+						text:oController.getBundleText('LABEL_19814'),
+						key:'0'
+					}));
+					oSel.addItem(new sap.ui.core.Item({
+						text:oController.getBundleText('LABEL_19815'),
+						key:'1'
+					}));
+					oSel.addItem(new sap.ui.core.Item({
+						text:oController.getBundleText('LABEL_19816'),
+						key:'2'
+					}));
+					oCol.setTemplate(oSel);
+					break;
+			
+				default:
+					oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:"Center",visible:{path:"Offck",formatter:function(fVal){
+						return fVal=="X"?false:true;
+					}}}).addStyleClass("FontFamily"));
+					break;
+			}			
+			
+			oTable.addColumn(oCol);
+		});
+		this.bindAdded.call(oController,pData);
+	}, 
+
+	bindAdded : function(pData){
+		function timeForm(time){
+			time="PT"+time.substring(0,2)+"H"+time.substring(2,4)+"M00S";
+			return time;
 		}
-		this.sizingAdded(oController,$.app.byId(oController.PAGEID+"_Mat"),pData.length,$.app.byId(oController.PAGEID+"_Cell"),$.app.byId(oController.PAGEID+"_Col"));
-		if(pData.length==0){
-			this.initAdded.call(oController);
-		}
+		var	oController = $.app.getController();
+		var c=sap.ui.commons;
+		var oTable=$.app.byId(oController.PAGEID+"_aTable");
+		var oJSON=this.RequestDetailDialogHandler.oModel;
+		var aData=oJSON.getData().addData=new Array();
+		pData.forEach(function(e){
+			aData.push(e);
+		});
+		oJSON.refresh();
+		oTable.setModel(null);
+		oTable.setModel(oJSON);
+		oTable.bindRows("/addData");
 	},
 
-	onShow : function(){
+	onShow : function(oPro,vSig){
+		this._Hando="";
 		var jModel=this.oModel;
+		var oController=$.app.getController();
 		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
 		var oData3=this.oModel.getProperty("/TableIn03");
 		var oData4=this.oModel.getProperty("/TableIn04");
 		var tArr=new Array();
 		var dArr=new Array();
 		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
+		var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern: "KK:mm"});
+		var oTable=$.app.byId(oController.PAGEID+"_aTable");
+		var oPro=this.oModel.getProperty("/addData");
+		function timeForm(time){
+			time="PT"+time.substring(0,2)+"H"+time.substring(2,4)+"M00S";
+			return time;
+		}
+		//대근자 체크
 		function chkCover(vStrs){
 			for(var i=0;i<vStrs.length;i++){
 				var _Awchk="";
@@ -710,14 +927,18 @@ var Handler = {
 					}
 				);
 			}
-		}
+		}		
 		if(oData3&&oData3.length){
 			if(oData3.length>0){
 				for(var i=0;i<oData3.length;i++){
-					tArr.push({IPernr:this.oController.getSessionInfoByKey("Pernr"),IBegda:oData3[i].BtStartdat,IEndda:oData3[i].BtEnddat});
-					if(oData4&&oData4.length){
-						for(var j=0;j<oData4.length;j++){
-							tArr.push({IPernr:oData4[j].Pernr,IBegda:oData3[i].BtStartdat,IEndda: oData3[i].BtEnddat});
+					if(oData3[i].BtStartdat!=undefined){
+						tArr.push({IPernr:this.oController.getSessionInfoByKey("Pernr"),IBegda:oData3[i].BtStartdat,IEndda:oData3[i].BtEnddat});
+						if(oData4&&oData4.length){
+							for(var j=0;j<oData4.length;j++){
+								if(oData4[j].Pernr!=undefined){
+									tArr.push({IPernr:oData4[j].Pernr,IBegda:oData3[i].BtStartdat,IEndda: oData3[i].BtEnddat});
+								}
+							}
 						}
 					}
 				}				
@@ -738,9 +959,202 @@ var Handler = {
 				}
 			}
 		}
-		chkCover.call(this,fArray);
+		chkCover.call(this,fArray);	
+		var vArr=new Array();
+		var vArr2=new Array();
+		var vTmps=new Array();
+		var vSame="";
+		if(this._dArr.length!=0){
+			if(dArr.length<this._dArr.length){
+				vSame="D";
+				for(var i=0;i<this._dArr.length;i++){
+					var vTmp=false;
+					for(var j=0;j<dArr.length;j++){
+						if((this._dArr[i].IBegda==dArr[j].IBegda)&&(this._dArr[i].IEndda==dArr[j].IEndda)&&(this._dArr[i].IPernr==dArr[j].IPernr)){
+							vTmp=true;
+							break;
+						}
+					}
+					if(!vTmp){
+						vArr.push(this._dArr[i]);
+					}
+				}
+			}else if(dArr.length>this._dArr.length){
+				vSame="A";
+				for(var i=0;i<dArr.length;i++){
+					var vTmp=false;
+					for(var j=0;j<this._dArr.length;j++){
+						if((dArr[i].IBegda==this._dArr[j].IBegda)&&(dArr[i].IEndda==this._dArr[j].IEndda)&&(dArr[i].IPernr==this._dArr[j].IPernr)){
+							vTmp=true;
+							break;
+						}
+					}
+					if(!vTmp){
+						vArr.push(dArr[i]);
+					}
+				}
+			}else if(dArr.length==this._dArr.length){
+				vSame="M";
+				for(var i=0;i<dArr.length;i++){
+					var vTmp=false;
+					for(var j=0;j<this._dArr.length;j++){
+						if((dArr[i].IBegda==this._dArr[j].IBegda)&&(dArr[i].IEndda==this._dArr[j].IEndda)&&(dArr[i].IPernr==this._dArr[j].IPernr)){
+							vTmp=true;
+							break;
+						}
+					}
+					if(!vTmp){
+						vArr.push(dArr[i]);
+					}
+				}
+				for(var i=0;i<this._dArr.length;i++){
+					var vTmp=false;
+					for(var j=0;j<dArr.length;j++){
+						if((dArr[j].IBegda==this._dArr[i].IBegda)&&(dArr[j].IEndda==this._dArr[i].IEndda)&&(dArr[j].IPernr==this._dArr[i].IPernr)){
+							vTmp=true;
+							break;
+						}
+					}
+					if(!vTmp){
+						vArr2.push(this._dArr[i]);
+					}
+				}
+			}
+			if(vArr.length!=0){
+				if(vSame=="A"){
+					var vStructure=this.onSearchDG.call(this,vArr,vSame);
+					vStructure.forEach(function(e){
+						oPro.push(e);
+					});				
+					this.afterTable(oPro);
+				}else if(vSame=="M"){
+					if(vSig=="S"){
+						vTmps=new Array();
+						for(var i=0;i<oPro.length;i++){
+							var vSignal=false;
+							for(var j=0;j<vArr2.length;j++){
+								if(new Date(oPro[i].Datum).getTime()>=new Date(vArr2[j].IBegda).getTime()&&new Date(oPro[i].Datum).getTime()<=new Date(vArr2[j].IEndda).getTime()){
+									vSignal=true;
+									break;
+								}
+							}
+							if(!vSignal){
+								vTmps.push(oPro[i]);
+							}
+						}
+					}else if(vSig=="X"){
+						vTmps=new Array();
+						for(var i=0;i<oPro.length;i++){
+							var vSignal=false;
+							for(var j=0;j<vArr2.length;j++){
+								if(oPro[i].Pernr==vArr2[j].IPernr){
+									vSignal=true;
+									break;
+								}
+							}
+							if(!vSignal){
+								vTmps.push(oPro[i]);
+							}
+						}
+					}
+					var vStructure=this.onSearchDG.call(this,vArr,vSame);
+					vStructure.forEach(function(e){
+						vTmps.push(e);
+					});				
+					this.afterTable(vTmps);
+				}else if(vSame=="D"){
+					if(vSig=="D1"){
+						vTmps=new Array();
+						for(var i=0;i<oPro.length;i++){
+							var vSignal=false;
+							for(var j=0;j<vArr.length;j++){
+								if(new Date(oPro[i].Datum).getTime()>=new Date(vArr[j].IBegda).getTime()&&new Date(oPro[i].Datum).getTime()<=new Date(vArr[j].IEndda).getTime()){
+									vSignal=true;
+									break;
+								}
+							}
+							if(!vSignal){
+								vTmps.push(oPro[i]);
+							}
+						}
+					}else if(vSig=="D2"){
+						vTmps=new Array();
+						for(var i=0;i<oPro.length;i++){
+							var vSignal=false;
+							for(var j=0;j<vArr.length;j++){
+								if(oPro[i].Pernr==vArr[j].IPernr){
+									vSignal=true;
+									break;
+								}
+							}
+							if(!vSignal){
+								vTmps.push(oPro[i]);
+							}
+						}
+					}
+					this.afterTable(vTmps);
+				}
+			}
+		}else{
+			this.onSearchDG.call(this,dArr,vSig);
+		}
+		this._dArr=dArr;
+		if(dArr.length!=0){
+			if(vSig!="V"){
+				sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19042"));
+			}
+		}
+	},
+
+	afterTable : function(oDatas){
+		function timeDec(fValue) {
+			if(typeof(fValue)!="string"){
+				if (fValue) {			
+					var date = new Date(fValue.ms);			
+					var timeinmiliseconds = date.getTime();			
+					var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({			
+					pattern: "kk:mm"});			
+					var TZOffsetMs = new Date(0).getTimezoneOffset() * 60 * 1000;			
+					var timeStr = timeFormat.format(new Date(timeinmiliseconds + TZOffsetMs));			
+					return timeStr;			
+				}else{			
+					return fValue;		
+				}
+			}else{
+				return fValue;
+			}
+		};
+		var oController=$.app.getController();
+		var oTable=$.app.byId(oController.PAGEID+"_aTable");
+		if(oDatas.length>0){
+			oDatas.sort(function(a,b){
+				return a.Datum < b.Datum ? -1 : a.Datum > b.Datum ? 1 : 0;
+			});
+		}
+		oDatas.forEach(function(e,i){
+			e.Beguz=timeDec(e.Beguz);
+			e.Enduz=timeDec(e.Enduz);
+			e.Seqno=i;
+		});
+		this.oDatas=oDatas;
+		var oFficialLength=10;
+		oDatas.length>oFficialLength?oTable.setVisibleRowCount(oFficialLength):oTable.setVisibleRowCount(oDatas.length);
+		this.bindAdded.call(oController,oDatas);
+		this.oModel.refresh();
+	},
+
+	onSearchDG : function(dArr,vSig){
+		var jModel=this.oModel;
+		var oController=$.app.getController();
+		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
+		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
+		function timeForm(time){
+			time="PT"+time.substring(0,2)+"H"+time.substring(2,4)+"M00S";
+			return time;
+		}
 		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
 		var oDatas=new Array();
+		var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern: "KK:mm"});
 		for(var i=0;i<dArr.length;i++){
 			var vData={IConType: "1",
 					IAwart: this.oModel.getProperty("/Header").BtPurpose1,
@@ -751,10 +1165,12 @@ var Handler = {
 					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
 					ILangu: this.oController.getSessionInfoByKey("Langu"),
 					TableIn: []};
+		
 			oModel.create("/VacationCoverSet", vData, null,
 				function(data,res){
 					if(data&&data.TableIn.results.length){
 						for(var j=0;j<data.TableIn.results.length;j++){
+							data.TableIn.results[j].Flag="A";
 							oDatas.push(data.TableIn.results[j]); 
 						}					
 					}				
@@ -772,13 +1188,21 @@ var Handler = {
 				}
 			);
 		}
-		this.renderAdded.call(this,this.oController,oDatas);
-	},
-
-	onLimit : function(){
 		
+		if(vSig=="A"||vSig=="M"){
+			return oDatas;
+		}else{
+			oDatas.sort(function(a,b){
+				return a.Datum < b.Datum ? -1 : a.Datum > b.Datum ? 1 : 0;
+			});
+			oDatas.forEach(function(e,i){
+				e.Seqno=i;
+			});
+			this.oDatas=oDatas;
+			this.bindAdded.call(this.oController,oDatas);
+			this.afterTable(oDatas);
+		}
 	}
-
 };
 
 return Handler;

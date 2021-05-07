@@ -46,7 +46,7 @@ sap.ui.define(
                     { id: "Dtrsn", label: "{i18n>LABEL_43065}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align: "Begin", width: "250px" }
                 ];
                 // 대휴발생일
-                // {id: "1", label: oBundleText.getText("LABEL_43066"), plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true}
+                // {id: "1", label: "{i18n>LABEL_43066}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true}
 
                 MakeTable.makeColumn(oController, oTable, col_info);
 

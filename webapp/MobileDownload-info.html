@@ -15,9 +15,25 @@
 <link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
 <script src="ZUI5_HR_Home/js/lib/jquery-3.5.1.min.js"></script>
 <script>
+	function getParameterByName(name) {
+		console.log(location.search);
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+		return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+
 	$(function() {
 		$(document).on('click', '.btn.android', function() {
-			location.href = "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/application/app-dev.apk";
+			var _target = getParameterByName("target");
+
+			if(_target.toUpperCase() === "PDH") {
+				location.href = "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/application/app-dev.apk";
+			} else if(_target.toUpperCase() === "PTH") {
+				location.href = "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/application/app-qas.apk";
+			} else {
+				location.href = "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/application/app-prd.apk";
+			}
 		});
 	});
 </script>

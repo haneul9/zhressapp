@@ -263,6 +263,10 @@ common.SearchUser1 = {
 
 		var filterString = "/?$filter=Persa%20eq%20%27" + oController._vPersa + "%27";
 		filterString += "%20and%20Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
+		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
+		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
+		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
 		var mEmpCodeList = sap.ui.getCore().getModel("EmpSearchCodeList");
 		var vEmpCodeList = { EmpCodeListSet: [] };
@@ -433,6 +437,10 @@ common.SearchUser1 = {
 
 		var filterString = "/?$filter=Persa%20eq%20%27" + oItem.getKey() + "%27";
 		filterString += "%20and%20Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
+		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
+		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
+		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
 		var mEmpCodeList = sap.ui.getCore().getModel("EmpSearchCodeList");
 		var vEmpCodeList = { EmpCodeListSet: [] };
@@ -508,6 +516,10 @@ common.SearchUser1 = {
 		filterString += "%20and%20Actda%20eq%20datetime%27" + vActda + "T00%3a00%3a00%27";
 		filterString += "%20and%20Field%20eq%20%27" + "Persk" + "%27";
 		filterString += "%20and%20Excod%20eq%20%27" + oItem.getKey() + "%27";
+		filterString += "%20and%20ICusrid%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "%27";
+		filterString += "%20and%20ICusrse%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "%27";
+		filterString += "%20and%20ICusrpn%20eq%20%27" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "%27";
+		filterString += "%20and%20ICmenuid%20eq%20%27" + $.app.getMenuId() + "%27";
 
 		oPersk.addItem(new sap.ui.core.Item({ key: "0000", text: "-- 선택 --" }));
 

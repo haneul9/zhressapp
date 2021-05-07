@@ -111,6 +111,7 @@ common.AttachFileAction = {
 					data.results.forEach(function (elem) {
 						elem.New = false;
 						elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+						elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
 
 						Datas.Data.push(elem);
 					});
@@ -277,6 +278,20 @@ common.AttachFileAction = {
 		if (f1) f1.setAttribute("value", "");
 
 		if(typeof common.AttachFileAction.fnChange === "function") common.AttachFileAction.fnChange.call(this);
+	},
+
+	callDeleteSelectedFiles: function() {
+		var oController = this,
+			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
+			oJSonModel = oAttachbox.getModel(),
+			aDeleteFiles = oJSonModel.getProperty("/DelelteDatas") || [];
+			
+		// 파일 삭제
+		if(aDeleteFiles.length) {
+			aDeleteFiles.forEach(function(elem) {
+				common.AttachFileAction.callDeleteFileService(elem);
+			});
+		}
 	},
 
 	callDeleteFileService: function(fileInfo) {

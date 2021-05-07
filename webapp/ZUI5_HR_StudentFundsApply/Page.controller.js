@@ -22,6 +22,7 @@
 		SupportModel: new JSONModelHelper(),
 
 		g_ClickRow: "",
+		g_HighChildMap: {},
 		
 		getUserId: function() {
 
@@ -71,6 +72,8 @@
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 			
+			oController.ChildrenModel.setData({Data: []}); 
+
 			var sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;
@@ -81,14 +84,13 @@
 			
 			oModel.create("/EducationfundApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 5;
+					
 					if (oData && oData.EducationFundApplyTableIn0) {
+						var dataLength = 5;
 						Common.log(oData);
 						var rDatas = oData.EducationFundApplyTableIn0.results;
 						dataLength = rDatas.length;
 						oController.ChildrenModel.setData({Data: rDatas}); 
-					}else{
-						oController.ChildrenModel.setData({Data: []}); 
 					}
 
 					oHighTable.setVisibleRowCount(dataLength > 5 ? 5 : dataLength);
@@ -125,8 +127,9 @@
 			
 			oModel.create("/EducationfundApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
+					
 					if (oData && oData.EducationfundApplyTableIn) {
+						var dataLength = 10; 
 						Common.log(oData);
 						var rDatas = oData.EducationfundApplyTableIn.results;
 						dataLength = rDatas.length;
@@ -137,9 +140,7 @@
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
-					});
+					oTable.setVisibleRowCount(0);
 				}
 			});
         },
@@ -263,13 +264,18 @@
             var vBukrs = oController.getUserGubun();
 			
 			oController.SupportModel.setData({Data: []});
+
 			if(vBukrs !== "A100"){ 
 				oController.ApplyModel.setData({FormData: []});
 				oController.getChildInfo();
 			}else {
-				if(Common.checkNull(oController.HighApplyModel.getProperty("/FormData/NameKor")) || oController.g_ClickRow === "N")
+				oController.HighApplyModel.setData({FormData: []});
+				if(Common.checkNull(oController.g_HighChildMap.NameKor) || oController.g_ClickRow === "N")
 					return sap.m.MessageBox.alert(oController.getBundleText("MSG_38018"), { title: oController.getBundleText("MSG_08107")});
 				else{
+					oController.HighApplyModel.setProperty("/FormData/Relation", oController.g_HighChildMap.Relation);
+					oController.HighApplyModel.setProperty("/FormData/NameKor", oController.g_HighChildMap.NameKor);
+					oController.HighApplyModel.setProperty("/FormData/RelationTx", oController.g_HighChildMap.RelationTx);
 					oController.HighApplyModel.setProperty("/FormData/SchcoT", oController.getBundleText("LABEL_38051"));
 					oController.HighApplyModel.setProperty("/FormData/Schco", "KR");
 					oController.HighApplyModel.setProperty("/FormData/Reccn", "1");
@@ -326,7 +332,8 @@
 			var oCopiedRow = $.extend(true, {}, oRowData);
 
 			if(oCopiedRow.Bukrs !== "A100"){
-            	oController.ApplyModel.setData({FormData: oCopiedRow});
+				oController.ApplyModel.setData({FormData: []});
+				oController.ApplyModel.setData({FormData: oCopiedRow});
 				oController.getChildInfo(oCopiedRow);
 				oController.getComboCodeList(oCopiedRow.Bukrs);
 				oController.getBaseSupportList();
@@ -354,16 +361,18 @@
 			var oRowData = oController.ChildrenModel.getProperty(vPath);
 
 			oController.g_ClickRow = "Y";
-			oController.HighApplyModel.setData({FormData: []});
 			oController.ChildrenModel.getProperty("/Data").forEach(function(ele,index) {
 				if(oController.ChildrenModel.getProperty(vPath) === ele)
 					oController.ChildrenModel.setProperty("/Data/" + index + "/Gubun", "Y");
 				else
 					oController.ChildrenModel.setProperty("/Data/" + index + "/Gubun", "X");
 			});
-			oController.HighApplyModel.setProperty("/FormData/Relation", oRowData.Relation);
-			oController.HighApplyModel.setProperty("/FormData/NameKor", oRowData.Fname);
-			oController.HighApplyModel.setProperty("/FormData/RelationTx", oRowData.KdsvhT);
+
+			oController.g_HighChildMap = {
+				Relation: oRowData.Relation,
+				NameKor: oRowData.Fname,
+				RelationTx: oRowData.KdsvhT
+			};
 		},
 
 		changeRelation: function(oEvent) { // 성명Combo
@@ -395,11 +404,24 @@
 			oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
 				success: function(oData, oResponse) {
 					if (oData && oData.NavCommonCodeList) {
-						Common.log(oData);
+						var oCodeList = [];
+						var oSchoolType = null;
+
+						if(vBukrs !== "A100"){
+							oSchoolType = $.app.byId(oController.PAGEID + "_BSchoolType"); 
+
+							oData.NavCommonCodeList.results.forEach(function(e) {
+								if(e.Code !== "00" && e.Code !== "05")
+									oCodeList.push(e);
+							});
+						}
+
 						if((!RowBukrs && vBukrs !== "A100") || (RowBukrs !== "A100" && vBukrs !== "A100"))
-                        	oController.ApplyModel.setProperty("/SchoolCombo", oData.NavCommonCodeList.results);
+							oController.ApplyModel.setProperty("/SchoolCombo", oSchoolType.getEditable() ? oCodeList : oData.NavCommonCodeList.results);
 						else
 							oController.HighApplyModel.setProperty("/SchoolCombo", oData.NavCommonCodeList.results);
+							
+						Common.log(oData);
 					}
 				},
 				error: function(oResponse) {

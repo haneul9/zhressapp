@@ -1,13 +1,11 @@
 sap.ui.define([
 	"common/Common",
 	"common/Formatter",
-	"common/moment-with-locales",
 	"common/PickOnlyDatePicker",
 	"common/ZHR_TABLES"
 ], function(
 	Common,
 	Formatter,
-	momentjs,
 	PickOnlyDatePicker,
 	ZHR_TABLES
 ) {

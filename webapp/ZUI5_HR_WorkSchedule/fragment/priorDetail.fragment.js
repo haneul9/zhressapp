@@ -5,8 +5,7 @@ sap.ui.define(
         "common/ZHR_TABLES",
         "common/HoverIcon",
         "common/PickOnlyDatePicker",
-        "sap/m/InputBase",
-        "common/moment-with-locales"
+        "sap/m/InputBase"
     ],
     function (Common, ZHR_TABLES, HoverIcon, PickOnlyDatePicker, InputBase) {
         "use strict";

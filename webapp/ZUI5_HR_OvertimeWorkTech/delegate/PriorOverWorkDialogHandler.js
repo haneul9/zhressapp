@@ -68,7 +68,7 @@ sap.ui.define([
             return this;
         },
 
-        onBeforeOpen: function() {
+        onBeforeOpen: function(isShowError) {
 
             $.app.byViewId("PriorOverWorkTable").setBusy(true, 0);
 
@@ -76,7 +76,7 @@ sap.ui.define([
                 var results = ODataService.OvertimeWorkApplySet.call(
                     this.oController,
                     OvertimeWork.ProcessType.PRIOR,
-                    this.oModel.getProperty("/SearchConditions")
+                    $.extend(true, this.oModel.getProperty("/SearchConditions"), { isErrorShow: isShowError === "X" ? true : false })
                 );
 
                 this.oModel.setProperty("/List", results.OtWorkTab1.map(function(elem) {

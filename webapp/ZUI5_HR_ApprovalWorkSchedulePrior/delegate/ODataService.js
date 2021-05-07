@@ -2,8 +2,7 @@
 sap.ui.define(
     [
         "common/Common", //
-        "./WorkSchedule",
-        "common/moment-with-locales"
+        "./WorkSchedule"
     ],
     function (Common, WorkSchedule) {
         "use strict";

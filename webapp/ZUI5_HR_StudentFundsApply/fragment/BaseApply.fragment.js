@@ -84,7 +84,7 @@
 				}
             }, oGubunCombo);
 
-            var oSchoolCombo = new sap.m.ComboBox({ // 학교구분
+            var oSchoolCombo = new sap.m.ComboBox(oController.PAGEID + "_BSchoolType", { // 학교구분
 				width: "180px",
 				change: oController.getBaseSupportList.bind(oController),
 				editable: {

@@ -21,10 +21,6 @@ sap.ui.define([], function () {
                         hAlign: sap.ui.core.TextAlign.Begin
                     }),
                     new sap.m.Column({
-                        width: "50%",
-                        hAlign: sap.ui.core.TextAlign.Begin
-                    }),
-                    new sap.m.Column({
                         hAlign: sap.ui.core.TextAlign.Begin
                     })
                 ],
@@ -35,16 +31,20 @@ sap.ui.define([], function () {
                         cells: [
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Stext}" }), new sap.m.Text({ text: "{Pstlz}" })]
+                                items: [new sap.m.Text({ text: "{Stext}" })]
                             }),
                             new sap.m.FlexBox({
                                 direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Addrs}" })]
+                                items: [
+                                	new sap.m.VBox({
+		            					 items: [
+			            					 new sap.m.Text({text : "{Addrs}", textAlign : "Begin", maxLines : 3}), 	// 주소
+			            					 new sap.m.Text({text : "{Telnr}", textAlign : "Begin"}),   // 전화번호
+			            					 new sap.m.Text({text : "{Usrid}", textAlign : "Begin"})   // 핸드폰 번호
+		            					 ]
+			                        })
+			                    ]
                             }),
-                            new sap.m.FlexBox({
-                                direction: sap.m.FlexDirection.Column,
-                                items: [new sap.m.Text({ text: "{Telnr}" }), new sap.m.Text({ text: "{Usrid}" })]
-                            })
                         ]
                     })
                 }

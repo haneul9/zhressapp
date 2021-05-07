@@ -6,8 +6,9 @@ sap.ui.define([
 	"../../common/JSONModelHelper",
 	"../../common/PageHelper",
 	"../../common/AttachFileAction",
-	"../../common/EmployeeModel"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel) {
+	"../../common/EmployeeModel",
+	"sap/ui/core/BusyIndicator"], 
+	function (Common, CommonController, JSONModelHelper, PageHelper,AttachFileAction, EmployeeModel, BusyIndicator) {
 
 	return CommonController.extend("ZUI5_HR_FamilyApply.FamilyApply", {
 
@@ -63,6 +64,12 @@ sap.ui.define([
 			var redStar="<span style='color:red;font-weight:bold;font-size:14px;'>*</span>";
 			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>"+redStar:
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
+		},
+
+		getMobileTxt:function(vTxt,vNo){ 
+			var oController=sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getController();
+			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?new sap.m.Label({required:true,text:oController.getBundleText(vTxt)}):
+			new sap.m.Label({required:false,text:oController.getBundleText(vTxt)});
 		},
 
 		initTdata:function(){
@@ -152,16 +159,7 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID+"_Dialog").bindElement("/oData/0");
 			var vAppnm = oJSON.getProperty("/oData")[0].Appnm;
 			var vStatus = oJSON.getProperty("/oData")[0].Opener;
-			if (!oController._BusyDialog) {
-				oController._BusyDialog = new sap.m.Dialog({showHeader:false}).addStyleClass("centerAlign");
-				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
-				oController._BusyDialog.addContent(new sap.m.BusyIndicator({ text: "{i18n>MSG_44017}" }));	// 검색중입니다. 잠시만 기다려주십시오.
-				oController._BusyDialog.addContent(new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}));
-				oController.getView().addDependent(oController._BusyDialog);
-			}
-			if (!oController._BusyDialog.isOpen()) {
-				oController._BusyDialog.open();
-			}			
+			BusyIndicator.show(0);			
 			if(oController._onDialog=="N"){
 				oController.initTdata();
 				$.app.byId(oController.PAGEID+"_Dialog").setTitle(oBundleText.getText("LABEL_44037"));
@@ -212,9 +210,7 @@ sap.ui.define([
 					vSetFileData.Editable=true;
 					oController.setAttachFile(oController,vSetFileData);
 				}
-				if (oController._BusyDialog && oController._BusyDialog.isOpen()) {
-					oController._BusyDialog.close();
-				}
+				BusyIndicator.hide();	
 			},10);
 		},
 		
@@ -230,7 +226,6 @@ sap.ui.define([
 		onModLines : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.FamilyApply");
 			var oController = $.app.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oTable=$.app.byId(oController.PAGEID+"_Table");		
 			var oPro=false;
@@ -344,10 +339,11 @@ sap.ui.define([
 		onDeleteLines : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.FamilyApply");
 			var oController = $.app.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oTable=$.app.byId(oController.PAGEID+"_Table");		
 			var oPro=false;
+			
 			if(oTable.getSelectedItem()!=null){
 				oPro=oTable.getSelectedItem().getBindingContext().getProperty();
 			}
@@ -374,54 +370,27 @@ sap.ui.define([
 				};	
 				vData2.Status!=""?vData2.FamilyupdateTablein1[0].Seqnr=oPro.Seqnr:null;		
 				delete vData2.FamilyupdateTablein1[0].Opener;
-				oModel.create("/FamilyupdateSet", vData2, null,
-				function(data,res){
-					new sap.m.MessageBox.alert(oBundleText.getText("MSG_44004"),{
-						title:oBundleText.getText("LABEL_35023"),
-						onClose:function(){oController.onSearch();}
-					}); 
-				},
-				function (oError) {
-					var Err = {};						
-					if (oError.response) {
-						Err = window.JSON.parse(oError.response.body);
-						var msg1 = Err.error.innererror.errordetails;
-						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-					} else {
-						sap.m.MessageBox.alert(oError.toString());
+				
+				oModel.create("/FamilyupdateSet", vData2, {
+					success: function(data,res){
+						new sap.m.MessageBox.alert(oBundleText.getText("MSG_44004"),{
+							title:oBundleText.getText("LABEL_35023"),
+							onClose:function(){oController.onSearch();}
+						}); 
+					},
+					error: function (oError) {
+						var Err = {};						
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						} else {
+							sap.m.MessageBox.alert(oError.toString());
+						}
 					}
 				});
 			}
-
-			// function onDelProcess(){
-			// 	var vData2={
-			// 		IMode:"C",
-			// 		IBukrs:"1000",
-			// 		IPernr:oSessionData.Pernr,
-			// 		ILangu:oSessionData.Langu,
-			// 		IDatum:"\/Date("+new Date().getTime()+")\/",
-			// 		FamilyupdateTablein1:[oPro],FamilyupdateTablein2:[],FamilyupdateTablein3:[],FamilyupdateTablein4:[]
-			// 	};			
-			// 	vData2.Status!=""?vData2.FamilyupdateTablein1[0].Seqnr=oPro.Seqnr:null;	
-			// 	delete vData2.FamilyupdateTablein1[0].Opener;
-			// 	oModel.create("/FamilyupdateSet", vData2, null,
-			// 	function(data,res){
-			// 		goRealDel();
-			// 	},
-			// 	function (oError) {
-			// 		var Err = {};						
-			// 		if (oError.response) {
-			// 			Err = window.JSON.parse(oError.response.body);
-			// 			var msg1 = Err.error.innererror.errordetails;
-			// 			if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-			// 			else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-			// 		} else {
-			// 			sap.m.MessageBox.alert(oError.toString());
-			// 		}
-			// 	});				
-			// }
-//			if(!vTmp){
 				sap.m.MessageBox.show(
 					oBundleText.getText("MSG_44003"), {				
 					icon: sap.m.MessageBox.Icon.INFORMATION,				
@@ -433,7 +402,6 @@ sap.ui.define([
 						}
 					}				
 				});
-//			}
 		},
 
 		changeFile: function () {
@@ -585,7 +553,7 @@ sap.ui.define([
 			oController.initTdata();
 			var oTable=$.app.byId(oController.PAGEID+"_Table");
 			var oCol=$.app.byId(oController.PAGEID+"_Column");
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");	
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");	
 			var oSessionData=oController._SessionData;		
 			var vData={
 				IMode:"L",
@@ -598,66 +566,69 @@ sap.ui.define([
 			var oJSON=new sap.ui.model.json.JSONModel();
 			var aData={oData:[]};
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
-			oModel.create("/FamilyupdateSet", vData, null,
-					function(data,res){
-						if(data){
-							oController._ViewData=data;
-							if(data&&data.FamilyupdateTablein1.results.length){
-								data.FamilyupdateTablein1.results.forEach(function(e){
-									if(e.Zzbdatet!="0000-00-00"){		
-										e.Zzclass=="2"?e.Zzbdatet=e.Zzbdatet+" ("+oBundleText.getText("LABEL_44033")+")":
-										e.Zzbdatet=e.Zzbdatet+" ("+oBundleText.getText("LABEL_44036")+")";
-									}else{
-										e.Zzbdatet="";
-									}
-									aData.oData.push(e);
-								});
-								// data.FamilyupdateTablein1.results.length>10?oTable.setVisibleRowCount(10):
-								// 	oTable.setVisibleRowCount(data.FamilyupdateTablein1.results.length);
-							}	
-							oJSON.setData(aData);					
-						}					
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
+			
+			oModel.create("/FamilyupdateSet", vData, {
+				success: function(data,res){
+					if(data){
+						oController._ViewData=data;
+						if(data&&data.FamilyupdateTablein1.results.length){
+							data.FamilyupdateTablein1.results.forEach(function(e){
+								if(e.Zzbdatet!="0000-00-00"){		
+									e.Zzclass=="2"?e.Zzbdatet=e.Zzbdatet+" ("+oBundleText.getText("LABEL_44033")+")":
+									e.Zzbdatet=e.Zzbdatet+" ("+oBundleText.getText("LABEL_44036")+")";
+								}else{
+									e.Zzbdatet="";
+								}
+								aData.oData.push(e);
+							});
+							// data.FamilyupdateTablein1.results.length>10?oTable.setVisibleRowCount(10):
+							// 	oTable.setVisibleRowCount(data.FamilyupdateTablein1.results.length);
+						}	
+						oJSON.setData(aData);					
+					}					
+				},
+				error: function (oError) {
+					var Err = {};						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+					} else {
+						sap.m.MessageBox.alert(oError.toString());
 					}
-				);
-				oTable.setModel(oJSON);
-				oTable.bindItems("/oData",oCol);
+				}
+			});
+			
+			oTable.setModel(oJSON);
+			oTable.bindItems("/oData",oCol);
 
-				var vData2={
-					ICodeT:"009",
-					IPernr:oSessionData.Pernr,
+			var vData2={
+				ICodeT:"009",
+				IPernr:oSessionData.Pernr,
 //					ICodty:"",
-					NavCommonCodeList:[],
-					IMolga:oSessionData.Molga};
-				var oModel2=sap.ui.getCore().getModel("ZHR_COMMON_SRV");
-				oModel2.create("/CommonCodeListHeaderSet", vData2, null,
-					function(data,res){
-						if(data){
-							oController._SelectData=data;												
-						}					
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
+				NavCommonCodeList:[],
+				IMolga:oSessionData.Molga};
+			var oModel2=$.app.getModel("ZHR_COMMON_SRV");
+			
+			oModel2.create("/CommonCodeListHeaderSet", vData2, {
+				success: function(data,res){
+					if(data){
+						oController._SelectData=data;												
+					}					
+				},
+				error: function (oError) {
+					var Err = {};						
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
+					} else {
+						sap.m.MessageBox.alert(oError.toString());
 					}
-				);
+				}
+			});
 		},
 
 		onSelectedRow: function(oEvent) {
@@ -780,7 +751,7 @@ sap.ui.define([
 		onSaveProcess : function(oController,Sig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.FamilyApply");
 			var oController = $.app.getController();
-			var oModel=sap.ui.getCore().getModel("ZHR_BENEFIT_SRV");
+			var oModel=$.app.getModel("ZHR_BENEFIT_SRV");
 			var oSessionData=oController._ListCondJSonModel.getProperty("/Data");
 			var oPro=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0];
 			oPro.Pernr=oSessionData.Pernr;
@@ -815,14 +786,15 @@ sap.ui.define([
 			oController._onDialog=="M"?vData2.FamilyupdateTablein1[0].Seqnr=oPro.Seqnr:vData2.FamilyupdateTablein1[0].Seqnr="";				
 			vData2.FamilyupdateTablein1[0].Regno.search("-")!=-1?vData2.FamilyupdateTablein1[0].Regno=oPro.Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]:null;
 			delete vData2.FamilyupdateTablein1[0].Opener;
-			oModel.create("/FamilyupdateSet", vData2, null,
-				function(data,res){
+			
+			oModel.create("/FamilyupdateSet", vData2, {
+				success: function(data,res){
 					new sap.m.MessageBox.alert(oBundleText.getText("MSG_44002"),{
 						title:oBundleText.getText("LABEL_35023"),
 						onClose:function(){oController.onCloseDialog();oController.onSearch();}
 					});
 				},
-				function (oError) {
+				error: function (oError) {
 					var Err = {};						
 					if (oError.response) {
 						Err = window.JSON.parse(oError.response.body);
@@ -832,7 +804,8 @@ sap.ui.define([
 					} else {
 						sap.m.MessageBox.alert(oError.toString());
 					}
-				});
+				}
+			});
 		},
 
 		onSave : function(Sig){
@@ -848,8 +821,6 @@ sap.ui.define([
 					actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
 					onClose: function(fVal) {
 						if(fVal=="YES"){
-							console.log(oController._tData);
-							console.log($.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0]);
 							oController.onSaveProcess(oController,Sig);
 						}
 					}				

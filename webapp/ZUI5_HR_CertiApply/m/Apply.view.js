@@ -42,7 +42,7 @@ sap.ui.define(
             ApplyingBox: function (oController) {
                 var oZformType = new sap.m.ComboBox({
                     //구분
-                    width: "180px",
+                    width: "100%",
                     items: [
                         new sap.ui.core.ListItem({ key: "01", text: "{i18n>LABEL_65013}" }), //
                         new sap.ui.core.ListItem({ key: "02", text: "{i18n>LABEL_65014}" }),
@@ -72,9 +72,9 @@ sap.ui.define(
 
                 var oAptyp = new sap.m.ComboBox({
                     //수령방법
-                    width: "180px",
+                    width: "100%",
                     items: [
-                        new sap.ui.core.ListItem(oController.PAGEID + "_AptypItem", { key: "1", text: "{i18n>LABEL_65011}" }), //
+                        // new sap.ui.core.ListItem(oController.PAGEID + "_AptypItem", { key: "1", text: "{i18n>LABEL_65011}" }), //
                         new sap.ui.core.ListItem({ key: "2", text: "{i18n>LABEL_65012}" }),
                         new sap.ui.core.ListItem({ key: "3", text: "{i18n>LABEL_65020}" })
                     ],
@@ -92,7 +92,7 @@ sap.ui.define(
                 );
 
                 var oZLang = new sap.m.ComboBox({
-                    width: "150px",
+                    width: "100%",
                     items: [
                         new sap.ui.core.ListItem({ key: "1", text: "{i18n>LABEL_65018}" }), //
                         new sap.ui.core.ListItem({ key: "2", text: "{i18n>LABEL_65019}" })
@@ -142,7 +142,7 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65004}", "105px", "Left", true), // 기준년도
                                 new sap.m.Input({
-                                    width: "180px",
+                                    width: "50%",
                                     value: "{Zyear}",
                                     textAlign: "Begin",
                                     editable: {
@@ -162,9 +162,10 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65006}", "105px", "Left", true), // 용도
                                 new sap.m.Input({
-                                    width: "180px",
+                                    width: "100%",
                                     value: "{Zuse}",
                                     textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zuse", false)
                                 })
                             ],
@@ -184,7 +185,7 @@ sap.ui.define(
                                     width: "100%",
                                     text: "{i18n>MSG_65007}",
                                     textAlign: "Begin"
-                                }).addStyleClass("px-20px lineHeight30")
+                                }).addStyleClass("pl-105px lineHeight24 mt--6px")
                             ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.
@@ -201,9 +202,10 @@ sap.ui.define(
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65005}", "105px", "Left", true), // 제출처
                                 new sap.m.Input({
-                                    width: "180px",
+                                    width: "100%",
                                     value: "{Zsubmit}",
-                                    textAlign: "Begin"
+                                    textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 })
                                 })
                             ],
                             visible: {
@@ -223,7 +225,7 @@ sap.ui.define(
                                     width: "100%",
                                     text: "{i18n>MSG_65008}",
                                     textAlign: "Begin"
-                                }).addStyleClass("px-20px")
+                                }).addStyleClass("pl-105px lineHeight24 mt--6px")
                             ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.
@@ -241,7 +243,7 @@ sap.ui.define(
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65007}", "105px", "Left", true), // 수량
                                 new sap.m.Input({
                                     textAlign: "Begin",
-                                    width: "120px",
+                                    width: "50%",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcount", false),
                                     value: "{Zcount}"
                                 })
@@ -262,6 +264,7 @@ sap.ui.define(
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_65010}", "105px", "Left"), // 비고
                                 new sap.m.Input({
                                     textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     width: "100%",
                                     maxLength: Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zcomment", false),
                                     value: "{Zcomment}"
@@ -313,10 +316,60 @@ sap.ui.define(
                                 }
                             }
                         }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65001}",
+                        new sap.m.VBox({
+                            alignItems: sap.m.FlexAlignItems.Begin,
+                            items: [
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65020}"
+                                }).addStyleClass("font-medium mt-16px"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65021}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65022}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65023}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65024}"
+                                }).addStyleClass("font-medium"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65025}"
+                                }).addStyleClass("lineHeight24"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65026}"
+                                }),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65027}"
+                                }).addStyleClass("font-medium"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65028}"
+                                }).addStyleClass("lineHeight24"),
+                                new sap.m.Text({
+                                    textAlign: "Begin",
+                                    width: "100%",
+                                    text: "{i18n>MSG_65029}"
+                                }).addStyleClass("lineHeight24")
+                            ],
                             visible: {
                                 // 재신청일 경우 보이지 않음.
                                 path: "actmode",
@@ -326,71 +379,6 @@ sap.ui.define(
                                 }
                             }
                         }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65002}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }).addStyleClass("px-20px"),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65003}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65004}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65005}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }).addStyleClass("px-20px"),
-                        new sap.m.Text({
-                            textAlign: "Begin",
-                            width: "100%",
-                            text: "{i18n>MSG_65006}",
-                            visible: {
-                                // 재신청일 경우 보이지 않음.
-                                path: "actmode",
-                                formatter: function (v) {
-                                    if (v && v === "X") return false;
-                                    return true;
-                                }
-                            }
-                        }).addStyleClass("px-20px"),
                         new sap.m.Text({
                             width: "100%",
                             text: "{i18n>MSG_65017}",
@@ -418,7 +406,7 @@ sap.ui.define(
                             }
                         }).addStyleClass("px-20px")
                     ]
-                });
+                }).addStyleClass("vbox-form-mobile");
             }
         });
     }

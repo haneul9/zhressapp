@@ -3,8 +3,7 @@ sap.ui.define(
     [
         "common/Common", //
         "common/ZHR_TABLES",
-        "common/PickOnlyDatePicker",
-        "common/moment-with-locales"
+        "common/PickOnlyDatePicker"
     ],
     function (Common, ZHR_TABLES, PickOnlyDatePicker) {
         "use strict";
@@ -64,7 +63,7 @@ sap.ui.define(
                                                 valueFormat: "yyyy-MM-dd",
                                                 displayFormat: "{/Dtfmt}",
                                                 width: "300px",
-                                                change: ApprovalHandler.checkTemplateControl.bind(ApprovalHandler)
+                                                change: ApprovalHandler.changeBegda.bind(ApprovalHandler)
                                             }),
                                             this.getLabel("{i18n>LABEL_32014}", false), // 근무시간
                                             new sap.m.Select({

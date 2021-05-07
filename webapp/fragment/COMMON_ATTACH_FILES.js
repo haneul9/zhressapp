@@ -127,7 +127,7 @@ fragment.COMMON_ATTACH_FILES = {
 					]
 				}),
 				new sap.m.Button({
-					icon: "sap-icon://sys-cancel",
+					icon: "sap-icon://decline",
 					press: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onDeleteAttachFileRow(oEvent,oController,vPage);}, oController),
 					visible: {
 						path: "/Settings/Editable",
@@ -136,7 +136,7 @@ fragment.COMMON_ATTACH_FILES = {
 							else return false;
 						}
 					}
-				})
+				}).addStyleClass("button-light-sm")
 			]
 		});
 
@@ -190,7 +190,9 @@ fragment.COMMON_ATTACH_FILES = {
 					Required: false,
 					HelpButton: false,
 					HelpTextList: [],
-					UseMultiCategories: false
+					UseMultiCategories: false,
+					CntnmDifferent: false,
+					CntnmDifferentData: []
 				},
 				opt
 			),
@@ -206,9 +208,7 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
 
 		this.refreshAttachFileList(oController,null,vPage);
-		if(oController.PAGEID=="MedApply"){
-			this.hideLine(oAttachbox);
-		}
+		oController.PAGEID=="MedApply"?this.hideLine(oAttachbox):null;
 	},
 
 	hideLine : function(oAttachbox){
@@ -259,6 +259,8 @@ fragment.COMMON_ATTACH_FILES = {
 			vAttachFileDatas = JSonModel.getProperty("/Data"),
 			vAppnm = JSonModel.getProperty("/Settings/Appnm"),
 			vUse = JSonModel.getProperty("/Settings/UseMultiCategories"),
+			vDif = JSonModel.getProperty("/Settings/CntnmDifferent"),
+			vDifData = JSonModel.getProperty("/Settings/CntnmDifferentData"),
 			Datas = { Data: [] };
 
 		if(!vAppnm) {
@@ -273,44 +275,53 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.setValue("");
 		oAttachFileList.removeSelections(true);
 
-		oModel.read("/FileListSet", {
-			async: false,
-			filters: [
-				new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
-			],
-			success: function (data) {
-				if (data && data.results.length) {
-					data.results.forEach(function (elem) {
-						if(vUse){
-							if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
-								if(vPage==elem.Cntnm){
-									elem.New = false;
-									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-									Datas.Data.push(elem);
-								}
-							}else if(vPage=="009"){
-								elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
-							}else{
-								if(elem.Cntnm =="009"){
-									elem.New = false;
-									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-									Datas.Data.push(elem);
-								}
-							}
-						}else{
-							elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
-						}
-					});
-				}
-			},
-			error: function (res) {
-				common.Common.log(res);
+		if(vDif){
+			if(vPage==vDifData.Cntnm){
+				vDifData.New = false;
+				vDifData.Type = vDifData.Fname.substring(vDifData.Fname.lastIndexOf(".") + 1);
+				Datas.Data.push(vDifData);
 			}
-		});
+		} else{
+			oModel.read("/FileListSet", {
+				async: false,
+				filters: [
+					new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
+				],
+				success: function (data) {
+					if (data && data.results.length) {
+						data.results.forEach(function (elem) {
+							if(vUse){
+								if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
+									if(vPage==elem.Cntnm){
+										elem.New = false;
+										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+										Datas.Data.push(elem);
+									}
+								}else if(vPage=="009"){
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}else{
+									if(elem.Cntnm =="009"){
+										elem.New = false;
+										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+										Datas.Data.push(elem);
+									}
+								}
+							}else{
+								elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+							}
+							
+						});
+					}
+				},
+				error: function (res) {
+					common.Common.log(res);
+				}
+			});
+		}
 
 		// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
 		if (vExistDataFlag == "X" && vAttachFileDatas) {
@@ -371,7 +382,6 @@ fragment.COMMON_ATTACH_FILES = {
 
 		sap.ui.core.util.File.save(
 			atob(vFileInfo.Mresource),
-			// vFileInfo.Mresource,
 			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
 			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
 			vFileInfo.Mimetype
@@ -430,7 +440,6 @@ fragment.COMMON_ATTACH_FILES = {
 		var oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"+vPage),
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"+vPage),
 			f1 = document.getElementById(oController.PAGEID + "_ATTACHFILE_BTN"+vPage+"-fu_input-inner"),
-			// oTable=sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
 			JSonModel = oAttachbox.getModel(),
 			vFileData = JSonModel.getProperty("/Data"),
 			aFileList = [],
@@ -453,6 +462,16 @@ fragment.COMMON_ATTACH_FILES = {
 				return;
 			}
 
+			if(vMode === "S" && (vFileData.length + files.length) > 1) {
+				oFileUploader.clear();
+				oFileUploader.setValue("");
+				if (f1) f1.setAttribute("value", "");
+
+				sap.m.MessageToast.show(oController.getBundleText("MSG_00036").interpolate(1), { my: "center center", at: "center center"});
+
+				return;
+			}
+
 			for (var i = 0; i < files.length; i++) {
 				files[i].New = true;
 				files[i].Fname = files[i].name;
@@ -468,9 +487,7 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.clear();
 		oFileUploader.setValue("");
 		if (f1) f1.setAttribute("value", "");
-		if(oController.PAGEID=="MedApply"){
-			fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
-		}		
+		oController.PAGEID=="MedApply"?fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox):null;
 	},
 
 	callDeleteFileService: function(fileInfo) {
@@ -688,7 +705,7 @@ fragment.COMMON_ATTACH_FILES = {
 		return vAppnm;
 	},
 
-	//싱글 파일일때만 쓸 것, 멀티파일 기능 추가
+	//싱글 파일일때만 쓸 것, 멀티파일도 가능 (2021.04~)
 	uploadFiles: function (vPages) {
 		var vFiles = [];
 		var dFiles = [];

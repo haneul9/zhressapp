@@ -1,11 +1,10 @@
 jQuery.sap.require("sap.m.MessageBox");
 
 sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper",
-	"../../common/PageHelper"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper) {
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper"], 
+	function (Common, CommonController, JSONModelHelper) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_FlexworktimeStatus.m.Detail", {
@@ -27,16 +26,15 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			if(oEvent.data.Data){
 				var oData = Object.assign({}, oEvent.data.Data);
-					oData.Atext = oData.Offyn == "X" ? "OFF" : (oData.Atext == "" ? oBundleText.getText("LABEL_69041") : oData.Atext); // 정상근무
+					oData.Atext = oData.Offyn == "X" ? "OFF" : (oData.Atext == "" ? oController.getBundleText("LABEL_69041") : oData.Atext); // 정상근무
 				oController._DetailJSonModel.setProperty("/Data", oData);
 			}
 			
@@ -57,7 +55,7 @@ sap.ui.define([
 				for(var i=0; i<data1.length; i++){
 					if(data1[i].Austy == "A"){
 						vData2.Data.push({
-							Text : oBundleText.getText("LABEL_69015"),  // 추가휴게시간
+							Text : oController.getBundleText("LABEL_69015"),  // 추가휴게시간
 							Value : (data1[i].Adbtm && data1[i].Adbtm != "" ? data1[i].Adbtm.substring(0,2) + ":" + data1[i].Adbtm.substring(2,4) : "")
 						});
 					} else {
@@ -68,7 +66,7 @@ sap.ui.define([
 				}
 				// 추가휴게는 5개까지 입력할 수 있음
 				var oOffyn = oController._DetailJSonModel.getProperty("/Data/Offyn");
-				if((oOffyn == "" || oOffyn == "2") && vData1.Data.length != 5){
+				if((oOffyn == "" || oOffyn == "1" || oOffyn == "2") && vData1.Data.length != 5){
 					for(var i=vData1.Data.length; i<5; i++){
 						var detail = {};
 							detail.Idx = vData1.Data.length;
@@ -83,7 +81,7 @@ sap.ui.define([
 				}
 				
 				if(vData2.Data.length == 0){
-					vData2.Data.push({Text : oBundleText.getText("LABEL_69015"), Value : ""}); // 추가휴게시간
+					vData2.Data.push({Text : oController.getBundleText("LABEL_69015"), Value : ""}); // 추가휴게시간
 				}
 				
 				var oWrktm = oController._DetailJSonModel.getProperty("/Data/Wrktm"); // 평일근로시간
@@ -93,9 +91,9 @@ sap.ui.define([
 				var oHoltm = oController._DetailJSonModel.getProperty("/Data/Holtm"); // 휴일근로시간
 					oHoltm = oHoltm && oHoltm != "" ? oHoltm.substring(0,2) + ":" + oHoltm.substring(2,4) : "";
 				
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69028"), Value : oWrktm}); // 평일근로시간
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69029"), Value : oExttm}); // 연장근로시간
-				vData2.Data.push({Text : oBundleText.getText("LABEL_69030"), Value : oHoltm}); // 휴일근로시간
+				vData2.Data.push({Text : oController.getBundleText("LABEL_69028"), Value : oWrktm}); // 평일근로시간
+				vData2.Data.push({Text : oController.getBundleText("LABEL_69029"), Value : oExttm}); // 연장근로시간
+				vData2.Data.push({Text : oController.getBundleText("LABEL_69030"), Value : oHoltm}); // 휴일근로시간
 			}
 			
 			oJSONModel1.setData(vData1);
@@ -122,10 +120,80 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oController = oView.getController();	
+			
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
+			}
+		},
+		
+		// 시작/종료시간 변경 시 법정휴게시간 세팅
+		onSetLnctm : function(oEvent, m){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
+			var oController = oView.getController();	
+			
+			if(oEvent && oEvent.getParameters().valid == false){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
+				oEvent.getSource().setValue("");
+				return;
+			} else if(oEvent && m){
+				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					oEvent.getSource().setValue("");
+					return;
+				}
+			}
+			
+			var oData = oController._DetailJSonModel.getProperty("/Data");
+			if(oData.Beguz && oData.Enduz){
+				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
+				var createData = {FlexWorktime1Nav : []};
+					createData.Werks = oData.Werks;
+					createData.Pernr = oData.Pernr;
+					createData.Zyymm = ((oData.Year + "") + (oData.Month < 10 ? ("0"+oData.Month) : (oData.Month+"")));
+					createData.Langu = oData.Langu;
+					createData.Prcty = "4";
+					
+				var detail = {};
+					detail.Datum = "\/Date(" + common.Common.getTime(oData.Datum) + ")\/";
+					detail.Beguz = oData.Beguz;
+					detail.Enduz = oData.Enduz;
+					detail.Lnctm = oData.Lnctm;
+				createData.FlexWorktime1Nav.push(detail);
+				
+				oModel.create("/FlexworktimeSummarySet", createData, null,
+					function(data, res){
+						if(data){
+							if(data.FlexWorktime1Nav && data.FlexWorktime1Nav.results && data.FlexWorktime1Nav.results.length){
+								var data1 = data.FlexWorktime1Nav.results[0];
+								
+								oController._DetailJSonModel.setProperty("/Data/Lnctm", data1.Lnctm);
+							}
+						}
+					},
+					function (oError) {
+				    	var Err = {};
+				    	oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				);
+				
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
 			}
 		},
 		
@@ -142,9 +210,21 @@ sap.ui.define([
 		},
 		
 		// 추가휴게 시작/종료시간 변경 시 시간 계산
-		onChangeTime : function(oEvent){
+		onChangeTime : function(oEvent, m){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.m.Detail");
 			var oController = oView.getController();	
+			
+			if(oEvent && oEvent.getParameters().valid == false){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
+				oEvent.getSource().setValue("");
+				return;
+			} else if(oEvent && m){
+				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
+					oEvent.getSource().setValue("");
+					return;
+				}
+			}
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();
 			
@@ -181,9 +261,9 @@ sap.ui.define([
 					createData.FlexWorktime2Nav.push(detail);
 				}
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.FlexWorktime2Nav && data.FlexWorktime2Nav.results){
 								var data2 = data.FlexWorktime2Nav.results;
@@ -207,7 +287,7 @@ sap.ui.define([
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -220,13 +300,13 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel1.setData(vData);
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
-					sap.m.MessageBox.error(oController.ErrorMesage);
+					sap.m.MessageBox.error(oController.ErrorMessage);
 					oJSONModel2.setProperty("/Data/0/Value", "");
 					return;
 				}
@@ -245,20 +325,20 @@ sap.ui.define([
 			
 			// validation check
 			if(oData.Monyn == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_69007")); // 변경사항이 없습니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_69007")); // 변경사항이 없습니다.
 				return;
 			} else if(oData.Beguz > oData.Enduz){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
 				return;
 			}
 			
-			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : []}; 
+			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime5Nav : []}; 
 			
 			for(var i=0; i<oData2.length; i++){
 				if(oData2[i].Austy == "A" || (oData2[i].Beguz == "" && oData2[i].Enduz == "")) continue;
 				
 				if(oData2[i].Beguz > oData2[i].Enduz){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
 					return;
 				}
 				
@@ -268,15 +348,19 @@ sap.ui.define([
 					detail.Enduz = oData2[i].Enduz;
 					detail.Adbtm = oData2[i].Adbtm;
 					detail.Notes = oData2[i].Notes;
-					
-				createData.FlexWorktime2Nav.push(detail);
+				
+				if(oData.Offyn == "1"){
+					createData.FlexWorktime5Nav.push(detail);
+				} else {
+					createData.FlexWorktime2Nav.push(detail);
+				}
 			}
-			
+			// Prcty Monyn 5 : 과거근무 변경신청
 			var onProcess = function(){
 				createData.Werks = oData.Werks;
 				createData.Pernr = oData.Pernr;
 				createData.Zyymm = (oData.Year + "") + (oData.Month < 10 ? ("0" + oData.Month) : (oData.Month + ""));
-				createData.Prcty = "2";
+				createData.Prcty = oData.Offyn == "1" ? "5" : "2";
 				
 				var oAdbtm = sap.ui.getCore().byId(oController.PAGEID + "_Table2").getModel().getProperty("/Data/0/Value");
 				
@@ -285,18 +369,20 @@ sap.ui.define([
 					Beguz : oData.Beguz,
 					Enduz : oData.Enduz,
 					Lnctm : oData.Lnctm,
+					Chgrsn : oData.Chgrsn,
 					Adbtm : oAdbtm == "" ? "" : oAdbtm.replace(":", ""),
-					Monyn : oData.Monyn
+					Monyn : oData.Offyn == "1" ? "5" : oData.Monyn,
+					Appkey1 : oData.Appkey1
 				});
 				
-				var oModel = sap.ui.getCore().getModel("ZHR_FLEX_TIME_SRV");
-				oModel.create("/FlexworktimeSummarySet", createData, null,
-					function(data, res){
+				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
+				oModel.create("/FlexworktimeSummarySet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -309,22 +395,31 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
 				if(oController.Error == "E"){
 					oController.Error = "";
-					sap.m.MessageBox.error(oController.ErrorMesage);
+					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
 				}
 				
-				sap.m.MessageBox.success(oBundleText.getText("MSG_00017"), { // 저장되었습니다.
+				sap.m.MessageBox.success(successMessage, {
 					onClose : oController.onBack
 				});
 			};
 			
-			sap.m.MessageBox.confirm(oBundleText.getText("MSG_00058"), { // 저장하시겠습니까?
+			var confirmMessage = "", successMessage = "";
+			if(oData.Offyn == "1"){
+				confirmMessage = oController.getBundleText("MSG_00060"); // 신청하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00061"); // 신청되었습니다.
+			} else {
+				confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
+			}
+			
+			sap.m.MessageBox.confirm(confirmMessage, {
 				actions : ["YES", "NO"],
 				onClose : function(fVal){
 					if(fVal && fVal == "YES"){

@@ -28,7 +28,7 @@ sap.ui.define([
 				}, this);
 				
 			// this.getView().addStyleClass("sapUiSizeCompact");
-			this.getView().setModel($.app.getModel("i18n"), "i18n");
+			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
@@ -49,6 +49,47 @@ sap.ui.define([
 				};
 				
 				oController._ListCondJSonModel.setData(vData);
+				
+				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
+				
+				if($.app.getModel("session").getData().Persa.substring(0,1) != "D"){
+									// No,  상태, 근무일자, 사번, 성명, 근무형태
+					var col_info = [{id: "No", label: "No.", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
+									{id: "Status", label: "{i18n>LABEL_67004}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "160px"},
+									{id: "Begda", label: "{i18n>LABEL_67005}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width : "100px"},
+									{id: "Pernr", label: "{i18n>LABEL_00191}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
+									{id: "Ename", label: "{i18n>LABEL_00121}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
+									{id: "Rtext", label: "{i18n>LABEL_67006}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "160px"},
+									// 출근시간, 퇴근시간, 법정휴게, 추가휴게
+									{id: "Enfbg", label: "{i18n>LABEL_67011}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Enfen", label: "{i18n>LABEL_67012}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Lnctm", label: "{i18n>LABEL_67021}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Break", label: "{i18n>LABEL_67022}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									//  반려사유
+									{id: "Retrn", label: "{i18n>LABEL_67014}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "30%"}];
+				} else {
+									// No,  상태, 근무일자, 사번, 성명, 근무형태
+					var col_info = [{id: "No", label: "No.", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
+									{id: "Status", label: "{i18n>LABEL_67004}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "160px"},
+									{id: "Begda", label: "{i18n>LABEL_67005}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width : "100px"},
+									{id: "Pernr", label: "{i18n>LABEL_00191}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
+									{id: "Ename", label: "{i18n>LABEL_00121}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "100px"},
+									{id: "Rtext", label: "{i18n>LABEL_67006}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "160px"},
+									// 입문시간, 출문시간, 근태여부, 신청유형
+									{id: "Entbg", label: "{i18n>LABEL_67007}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Enten", label: "{i18n>LABEL_67008}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Tprog1", label: "{i18n>LABEL_67009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "85px"},
+									{id: "Tprog1", label: "{i18n>LABEL_67010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "85px"},
+									// 출근시간, 퇴근시간
+									{id: "Enfbg", label: "{i18n>LABEL_67011}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Enfen", label: "{i18n>LABEL_67012}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									// 인정시간, 비근무시간, 반려사유
+									{id: "Lnctm", label: "{i18n>LABEL_67013}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Break", label: "{i18n>LABEL_67023}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width : "85px"},
+									{id: "Retrn", label: "{i18n>LABEL_67014}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "30%"}];
+				}
+				
+				common.makeTable.makeColumn(oController, oTable, col_info);
 			}
 		},
 		
@@ -78,8 +119,11 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_RationaleApproval.List");
+			var oController = oView.getController();
+		
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -105,7 +149,7 @@ sap.ui.define([
 			}
 			
 			var search = function(){
-				var oModel = sap.ui.getCore().getModel("ZHR_BATCHAPPROVAL_SRV");
+				var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
 				var createData = {RationaleAppNav : []};
 					createData.IConType = "1";
 					createData.IBukrs = oData.Bukrs;
@@ -116,8 +160,8 @@ sap.ui.define([
 					createData.ILangu = oData.Langu;
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
 
-				oModel.create("/RationaleApprovalSet", createData, null,
-					function(data, res){
+				oModel.create("/RationaleApprovalSet", createData, {
+					success: function(data, res){
 						if(data){
 							if(data.RationaleAppNav && data.RationaleAppNav.results){
 								var data1 = data.RationaleAppNav.results;
@@ -128,12 +172,19 @@ sap.ui.define([
 									
 									data1[i].Begda = new Date(common.Common.getTime(data1[i].Begda));
 									
+									// 법정휴게
+									data1[i].Lnctm = (data1[i].Combg != "" && data1[i].Comen != "" ) ? (data1[i].Combg + data1[i].Comen) : "";
+									data1[i].Lnctm = data1[i].Lnctm == "0000" ? "" : data1[i].Lnctm;
+									// 추가휴게
+									data1[i].Break = (data1[i].Brkbg != "" && data1[i].Brken != "") ? (data1[i].Brkbg + data1[i].Brken) : "";
+									data1[i].Break = data1[i].Break == "0000" ? "" : data1[i].Break;
+									
 									vData.Data.push(data1[i]);
 								}
 							}
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -146,7 +197,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oJSONModel.setData(vData);
 				oTable.bindRows("/Data");
@@ -203,11 +254,11 @@ sap.ui.define([
 			var oIndices = oTable.getSelectedIndices();
 			
 			if(oIndices.length == 0){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_67001")); // 일괄결재 대상 데이터를 선택하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_67001")); // 일괄결재 대상 데이터를 선택하여 주십시오.
 				return;
 			}
 			
-			var oModel = sap.ui.getCore().getModel("ZHR_BATCHAPPROVAL_SRV");
+			var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
 			var createData = {RationaleAppNav : []};
 			
 			// validation check
@@ -216,10 +267,10 @@ sap.ui.define([
 				
 				var data = oJSONModel.getProperty(sPath);
 				if(!data.Status || data.Status == "" || data.Status == "00"){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_67002")); //상태를 선택하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_67002")); //상태를 선택하여 주십시오.
 					return;
 				} else if(data.Status == "88" && (!data.Retrn || data.Retrn.trim() == "")){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_67003")); // 반려인 경우 반려사유를 입력하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_67003")); // 반려인 경우 반려사유를 입력하여 주십시오.
 					return;
 				}
 				
@@ -236,13 +287,13 @@ sap.ui.define([
 				createData.ILangu = oData.Langu;
 				createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
 				
-				oModel.create("/RationaleApprovalSet", createData, null,
-					function(data, res){
+				oModel.create("/RationaleApprovalSet", createData, {
+					success: function(data, res){
 						if(data){
 							
 						}
 					},
-					function (oError) {
+					error: function (oError) {
 				    	var Err = {};
 				    	oController.Error = "E";
 								
@@ -255,7 +306,7 @@ sap.ui.define([
 							oController.ErrorMessage = oError.toString();
 						}
 					}
-				);
+				});
 				
 				oController._BusyDialog.close();
 				
@@ -265,12 +316,12 @@ sap.ui.define([
 					return;
 				}
 				
-				sap.m.MessageBox.success(oBundleText.getText("MSG_67005"), { // 일괄결재가 완료되었습니다.
+				sap.m.MessageBox.success(oController.getBundleText("MSG_67005"), { // 일괄결재가 완료되었습니다.
 					onClose : oController.onPressSearch
 				});
 			};
 			
-			sap.m.MessageBox.confirm(oBundleText.getText("MSG_67004"), { // 일괄결재하시겠습니까?
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_67004"), { // 일괄결재하시겠습니까?
 				actions : ["YES", "NO"],
 				onClose : function(fVal){
 					if(fVal && fVal == "YES"){

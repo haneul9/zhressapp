@@ -12,8 +12,7 @@ sap.ui.define(
 		"sap/m/MessageBox",
         "sap/ui/core/BusyIndicator",
 		"sap/ui/export/Spreadsheet",
-        "sap/ui/model/json/JSONModel",
-        "common/moment-with-locales"
+        "sap/ui/model/json/JSONModel"
     ],
     function (Common, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, WorkSchedule, ODataService, MessageBox, BusyIndicator, Spreadsheet, JSONModel) {
         "use strict";
@@ -55,9 +54,9 @@ sap.ui.define(
                     },
                     ApprStats: [],  // 진행상태
                     List: [],
-                    Hours: [{ Code: "", Text: "HH"}].concat(Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; })),
+                    Hours: Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; }),
                     // Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
-                    Minutes: [{ Code: "", Text: "mm"}, { Code: "00", Text: "00"}, { Code: "30", Text: "30"}],
+                    Minutes: [{ Code: "00", Text: "00"}, { Code: "30", Text: "30"}],
                     Tprogs: [],
                     Faprss: [],
                     Weeks: ["LABEL_55028","LABEL_55029","LABEL_55030","LABEL_55031","LABEL_55032","LABEL_55033","LABEL_55034"],
@@ -515,27 +514,6 @@ sap.ui.define(
                 return;
             },
 
-            openSmoinUrl: function(smoinUrl) {
-                if(!smoinUrl) return;
-
-                setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(smoinUrl, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
-            },
-
             ProcessOnSuccess: function (data, conType) {
                 var successMessage = "";
 
@@ -560,7 +538,7 @@ sap.ui.define(
                     title: this.oController.getBundleText("LABEL_00150"),
                     onClose: function () {
                         if(data.Url) {
-                            this.openSmoinUrl(data.Url);
+                            Common.openPopup.call(this.oController, data.Url);
                         }
 
                         this.search.call(this);

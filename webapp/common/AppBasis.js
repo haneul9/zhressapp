@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 $.sap.require("sap.ui.model.resource.ResourceModel");
 
 $.extend(String, {
@@ -149,7 +148,7 @@ getDestination: function() {
 	if (!$.app.DEST) {
 		var param = $.map(location.search.replace(/\?/, "").split(/&/), function(p) {
 			var pair = p.split(/=/);
-			if (pair[0] === "s4hana") { return pair[1]; }
+			if (pair[0] === "s4hana") { return decodeURIComponent(pair[1]); }
 		})[0];
 
 		$.app.DEST = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
@@ -160,7 +159,7 @@ getDestination: function() {
 setModel: function(modelName) {
 	try {
 		var serviceURL = $.app.getDestination() + "/sap/opu/odata/sap/" + modelName,
-			oModel = new sap.ui.model.odata.ODataModel(serviceURL, true, undefined, undefined, undefined, undefined, undefined, false);
+		oModel = new sap.ui.model.odata.ODataModel(serviceURL, true, undefined, undefined, undefined, undefined, undefined, false);
 
 		oModel.setCountSupported(false);
 		sap.ui.getCore().setModel(oModel, modelName);
@@ -173,7 +172,54 @@ setModel: function(modelName) {
 	}
 },
 getModel: function(id, viewId) {
-	return $.app.getView(viewId).getModel(id) || sap.ui.getCore().getModel(id);
+	var model = $.app.getView(viewId).getModel(id) || sap.ui.getCore().getModel(id);
+	return {
+		create: function() {
+			var args = [].slice.call(arguments);
+
+			if (args.length >= 2 && $.isPlainObject(args[1])) {
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\(.*|\W/g, "").replace(/Set$/, ''), this.mix(args[1]));
+			}
+
+			return model.create.apply(model, args);
+		}.bind(this),
+		createKey: function() {
+			return model.createKey.apply(model, [].slice.call(arguments));
+		},
+		update: function() {
+			var args = [].slice.call(arguments);
+
+			if (args.length >= 2 && $.isPlainObject(args[1])) {
+				args[1] = this.copyFields(id, (args[0] || "").replace(/\(.*|\W/g, "").replace(/Set$/, ''), this.mix(args[1]));
+			}
+
+			return model.update.apply(model, args);
+		}.bind(this),
+		remove: function() {
+			return model.remove.apply(model, [].slice.call(arguments));
+		},
+		read: function() {
+			return model.read.apply(model, [].slice.call(arguments));
+		},
+		getData: function() {
+			return model.getData.apply(model, [].slice.call(arguments));
+		},
+		setProperty: function() {
+			return model.setProperty.apply(model, [].slice.call(arguments));
+		},
+		getProperty: function() {
+			return model.getProperty.apply(model, [].slice.call(arguments));
+		},
+		getResourceBundle: function() {
+			return model.getResourceBundle.apply(model, [].slice.call(arguments));
+		},
+		getServiceMetadata: function() {
+			return model.getServiceMetadata.apply(model, [].slice.call(arguments));
+		},
+		refresh: function() {
+			return model.refresh.apply(model, [].slice.call(arguments));
+		}
+	};
 },
 getView: function(id) {
 	return $.app.byId(id || $.app.APP_ID);
@@ -206,11 +252,6 @@ getDeviceSystem: function() {
 			: (sap.ui.Device.system.tablet === true) ? sap.ui.Device.system.SYSTEMTYPE.PHONE
 			: "";
 },
-spinner: function(show) {
-	setTimeout(function() {
-		$(".spinner-container em")[show ? "show" : "hide"]();
-	}, 0);
-},
 getViewInitStyleClasses: function() {
 	var s = $.app.VIEW_STYLE_CLASSES;
 	if (typeof s === "string") {
@@ -220,6 +261,53 @@ getViewInitStyleClasses: function() {
 	} else {
 		return "sapUiSizeCompact";
 	}
+},
+getMenuUrl: function() {
+
+	return (document.location.pathname || "").replace(/.*\/([^/]+\.html).*/, "$1");
+},
+getMenuId: function() {
+	try {
+		var mid;
+		if (parent && parent._gateway && typeof parent._gateway.mid === "function") {
+			mid = parent._gateway.mid(this.getMenuUrl());
+		}
+		if (mid) {
+			return mid;
+		}
+		throw new Error("No mid.");
+	} catch(e) {
+		var paramMap = {};
+		$.map(location.search.replace(/\?/, "").split(/&/), function(v) {
+			var pair = v.split(/=/);
+			paramMap[pair[0]] = decodeURIComponent(pair[1]);
+		});
+		return paramMap.mid || "";
+	}
+},
+mix: function(o) {
+
+	return $.extend(o, {
+		ICusrid: sessionStorage.getItem("ehr.odata.user.percod"),	// 암호화 로그인 사번
+		ICusrse: sessionStorage.getItem("ehr.session.token"),		// Token
+		ICusrpn: sessionStorage.getItem("ehr.sf-user.name"),		// 로그인 사번
+		ICmenuid: this.getMenuId()									// 메뉴 ID
+	});
+},
+copyFields: function(modelName, entityType, o) {
+
+	var data = {};
+	$.each(sap.ui.getCore().getModel("_MetadataModel_").getProperty("/" + modelName).entityType[entityType], function(name) {
+		if (typeof o[name] !== "undefined") {
+			data[name] = o[name];
+		}
+	});
+	return data;
+},
+spinner: function(show) {
+	setTimeout(function() {
+		$(".spinner-container em")[show ? "show" : "hide"]();
+	}, 0);
 }
 
 });

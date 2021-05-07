@@ -45,7 +45,7 @@
                                     }
                                 }
                             }),
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "130px", "Right").addStyleClass("mr-8px"), // 최종변경일/시
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56008}", "130px", "Right").addStyleClass("mr-8px"), // 최종변경일시
                             new sap.m.Text({
                                 text : {
                                     parts: [{path: "Aedtm"}, {path: "Aetim"}],
@@ -72,27 +72,12 @@
 							}
 						},
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "130px", "Right"), // 비공개
-                            new sap.m.CheckBox({ 
-								select: oController.onChangeData.bind(oController),
-                                selected: {
-                                    path: "Hide",
-                                    formatter: function(v) {
-                                        return v === "X";
-                                    }
-                                },
-								editable: {
-									parts: [{path: "Sdate"}, {path: "/Gubun"}],
-									formatter: function(v1, v2) {
-										return !v1 || v2 === "X";
-									}
-								}
-                            }),
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "130px", "Right", true).addStyleClass("ml-7px mr-8px"), // 비밀번호
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "130px", "Right", true), // 비밀번호
 							new sap.m.Input({
                                 width: "150px",
                                 value: "{Pword}",
 								type: sap.m.InputType.Password,
+								maxLength: 10,
                                 editable: {
 									parts: [{path: "Sdate"}, {path: "/Gubun"}],
 									formatter: function(v1, v2) {
@@ -104,7 +89,7 @@
                                 width: "auto",
                                 textAlign: "Begin",
                                 text: "{i18n>MSG_56006}"
-                            })
+                            }).addStyleClass("pt-10px")
 						]
 					})
 					.addStyleClass("search-field-group"),
@@ -161,40 +146,42 @@
 										width: "auto",
 										textAlign: "Begin",
 										text: "{i18n>MSG_56006}"
-									})
-								]
-							}),
-							new sap.m.HBox({
-								fitContainer: true,
-								items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
-									new sap.m.Input({
-										width: "150px",
-										value: "{Pword}",
-										type: sap.m.InputType.Password
-									})
+									}).addStyleClass("pt-10px")
 								]
 							})
 						]
 					})
-					.addStyleClass("mt-15px"),
+					.addStyleClass("mt-10px"),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
 						fitContainer: true,
 						items: []
 					}),
 					new sap.m.HBox({
+						justifyContent: sap.m.FlexJustifyContent.End,
 						fitContainer: true,
 						items: [
-							new sap.m.TextArea({
-								rows: 3,
-								width: "710px",
-								value:"{Detail}",
-								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							}).addStyleClass("mt-15px mr-8px"),
+							new sap.m.Input({
+								width: "160px",
+								value: "{Pword}",
+								maxLength: 10,
+								type: sap.m.InputType.Password,
+								placeholder: "{i18n>MSG_56013}"
+							}).addStyleClass("mr-5px"),
 							new sap.m.Button({
 								press: oController.onDialogSaveBtn.bind(oController),
 								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-light h-101px")
+							}).addStyleClass("button-dark mt-4px")
+						]
+					}).addStyleClass("custom-comment"),
+					new sap.m.HBox({
+						fitContainer: true,
+						items: [
+							new sap.m.TextArea({
+								rows: 2,
+								width: "775px",
+								value:"{Detail}",
+								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
+							})
 						]
 					})
 				]

@@ -2,7 +2,6 @@
 sap.ui.define([
 	"common/Common",
 	"common/DialogHandler",
-	"common/moment-with-locales",
 	"./SettlementTargetAbsenceListDialogHandler",
 	"./SettlementDetailDialogHandler",
 	"./CardExpenseDialogHandler",
@@ -17,7 +16,6 @@ sap.ui.define([
 ], function(
 	Common,
 	DialogHandler,
-	momentjs,
 	SettlementTargetAbsenceListDialogHandler,
 	SettlementDetailDialogHandler,
 	CardExpenseDialogHandler,
@@ -94,7 +92,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 	// 신청 : 출장정산 대상 근태정보 선택 dialog
 	pressSettlementForm: function() {
 
-		if (this.getSessionInfoByKey("Bukrs") === "A100" || this.getSessionInfoByKey("Ztitle") === "71") { // 첨단 or 수행비서
+		// if (this.getSessionInfoByKey("Bukrs") === "A100" || this.getSessionInfoByKey("Ztitle") === "71") { // 첨단 or 수행비서
+		if (this.getSessionInfoByKey("Ztitle") === "71") { // 수행비서
 			OnSettlement.openSettlementDetailDialog.call(this, { isA100OrZtitle71: true, isEnameEditable: false });
 			return;
 		}
@@ -1021,6 +1020,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 	// 신청 OData 호출
 	callRequestOData: function(Header, TableIn04, TableIn05) {
+		var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
 		$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 			"/BtSettlementSet",
@@ -1030,6 +1030,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				IPernr: this.getSessionInfoByKey("name"),
 				IBukrs: this.getSessionInfoByKey("Bukrs"),
 				ILangu: this.getSessionInfoByKey("Langu"),
+				IExtryn: vExtryn,
 				Export: [],
 				TableIn01: [],
 				TableIn02: [Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtSettlementTableIn02", Header)], // 출장 Header 정보
@@ -1051,7 +1052,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 					MessageBox.success(this.getBundleText("MSG_00061"), { // 신청되었습니다.
 						onClose: function() {
-							if (smoinUrl) {
+							if (vExtryn !== "X" && smoinUrl) {
 								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 							}
 

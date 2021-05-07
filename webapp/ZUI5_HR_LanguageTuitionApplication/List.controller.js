@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
@@ -5,7 +6,7 @@ sap.ui.define([
 	"../common/PageHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"sap/ui/core/util/File",
+	"sap/ui/core/util/File"
 	], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, MessageBox, BusyIndicator, File) {
 	"use strict";
@@ -42,7 +43,7 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -234,8 +235,9 @@ sap.ui.define([
 			
 			oModel.create("/LanguPayApplySet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
+					
 					if (oData && oData.LanguPayApplyTableIn) { //값을 제대로 받아 왔을 때
+						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.LanguPayApplyTableIn.results;
 						dataLength = rDatas1.length;
@@ -321,7 +323,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29005"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -331,13 +333,7 @@ sap.ui.define([
 		},
 
 		onPressMenuBtn: function(oEvent) { // 메뉴얼 (가이드 문서 다운로드)
-			var oController = $.app.getController(); //http://10.97.15.103:7097/file/informations/LCC_FOREIGNLANG_MANUAL.pptx
-			//var gUrl = "/file/informations/LCC_FOREIGNLANG_MANUAL.pptx";
-			File.save(
-				"C:\LCC_FOREIGNLANG_MANUAL.pptx",
-				"LCC_FOREIGNLANG_MANUAL",
-				"pptx"
-			);
+			window.open("./ZUI5_HR_LanguageTuitionApplication/manual/LCC_FOREIGNLANG_MANUAL2.pptx");
         },
         onPressReqBtn: function(oEvent) { // 신청 
 			var oView = $.app.byId("ZUI5_HR_LanguageTuitionApplication.List"),
@@ -586,8 +582,8 @@ sap.ui.define([
 			
 			oModel.create("/LanguScoreImportSet", sendObject, {
 				success: function(oData, oResponse) {
-					var dataLength = 10;
 					if(oData && oData.LanguScoreTableIn){
+						var dataLength = 10;
 						var rDatas1 = oData.LanguScoreTableIn.results;
 						dataLength = rDatas1.length;
 						oController.GradeModel.setProperty("/TableData", oData.LanguScoreTableIn.results);
@@ -808,7 +804,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29018"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -869,7 +865,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29003"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -919,7 +915,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_29005"), {
 				title: oController.getBundleText("LABEL_29001"),
@@ -939,7 +935,7 @@ sap.ui.define([
 				Appnm: vAppnm,
 				Mode: "S",
 				UseMultiCategories: true,
-				Editable: (!vStatus || vStatus === "AA") ? true : false,
+				Editable: (!vStatus || vStatus === "AA") ? true : false
 			},"001");
 			
 			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 수강학원증
@@ -948,7 +944,7 @@ sap.ui.define([
 				Appnm: vAppnm,
 				Mode: "S",
 				UseMultiCategories: true,
-				Editable: (!vStatus || vStatus === "AA") ? true : false,
+				Editable: (!vStatus || vStatus === "AA") ? true : false
 			},"002");
 		},
 

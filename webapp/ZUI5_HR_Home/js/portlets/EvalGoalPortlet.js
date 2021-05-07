@@ -3,7 +3,7 @@ function EvalGoalPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
-	this.$selector = '#portlet-evalGoalPortlet-list';
+	this.$selector = '.portlet-evalgoal .list-group';
 }
 
 EvalGoalPortlet.prototype = Object.create(AbstractPortlet.prototype);
@@ -24,29 +24,41 @@ ui: function() {
 	].join('');
 
 	return [
-		'<div class="card portlet portlet-${size}h portlet-bbs" datakey="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
+		'<div class="card portlet portlet-${size}h portlet-evalgoal" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div class="list-group" id="portlet-evalGoalPortlet-list"></div>',
+				'<div class="list-group"></div>',
 			'</div>',
-			this.spinner(false),
+			this.spinner(),
 		'</div>'
 	].join('');
 },
 fill: function() {
 
-	var url = '/odata/v2/GoalPlanTemplate?$select=id,defaultTemplate&$filter=defaultTemplate eq true&$format=json';
-	
+	var url = '/odata/v2/GoalPlanTemplate?$select=id,defaultTemplate&$filter=defaultTemplate eq true';
+
 	return $.getJSON({
 		url: url,
 		success: function(data) {
-			var oDataId = data.d.results[0].id;
-			var url2 = '/odata/v2/Goal_' + oDataId + "?$select=name,done&$filter=userId eq '" + this._gateway.pernr() + "'&$format=json";
+
+			var list = this.$();
+			var results = data.d.results;
+			if (!results || !results.length) {
+				if (list.data('jsp')) {
+					list.find('.list-group-item').remove().end()
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
+				} else {
+					list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
+				}
+				return;
+			}
+
+			var oDataId = results[0].id;
+			var url2 = '/odata/v2/Goal_' + oDataId + "?$select=name,done&$filter=userId eq '" + this._gateway.pernr() + "'";
 			$.getJSON({
 				url: url2,
 				success: function(data) {
 					var oDetailData = data.d.results;
-					var list = this.$();
 					var oBackGround = [
 						"bg-danger",
 						"bg-warning",
@@ -57,9 +69,9 @@ fill: function() {
 					if (!oDetailData.length) {
 						if (list.data('jsp')) {
 							list.find('.list-group-item').remove().end()
-								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action text-center">평가목표가 없습니다.</a>');
+								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
 						} else {
-							list.html('<a href="#" class="list-group-item list-group-item-action text-center">평가목표가 없습니다.</a>');
+							list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
 						}
 						return;
 					}
@@ -71,25 +83,25 @@ fill: function() {
 					$.map(oDetailData, function(v, i) {
 						var oGroundColor = "";
 						
-						if(parseInt(v.done) > 80)
+						if(parseFloat(v.done) > 80)
 							oGroundColor= oBackGround[3];
-						else if(parseInt(v.done) > 60)
+						else if(parseFloat(v.done) > 60)
 							oGroundColor= oBackGround[2];
-						else if(parseInt(v.done) > 30)
+						else if(parseFloat(v.done) > 30)
 							oGroundColor= oBackGround[1];
 						else 
 							oGroundColor= oBackGround[0];
 
 						setTimeout(function() {
 							list.append([
-								'<div style="height: auto; margin-bottom: 15px; display: flex; flex-direction: column">',
-									'<div style="font-size: 14px; height: 25px;">',
-									i + 1 + '.' + v.name,
+								'<div class="my-evalgoal-info">',
+									'<div class="mylist">',
+										i + 1 + '.' + v.name,
 									'</div>',
-									'<div style="display: flex; justify-content: flex-end">',
-										'<div class="progress" style="height: 20px; width: 50%; display: flex;">',
+									'<div class="evalgoal-statusBar">',
+										'<div class="progress">',
 											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-											parseInt(v.done) + '%',
+												parseInt(v.done) + '%',
 											'</div>',
 										'</div>',
 									'</div>',
@@ -101,7 +113,7 @@ fill: function() {
 					});
 				}.bind(this),
 				error: function(jqXHR) {
-					this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url);
+					this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url2);
 				}.bind(this),
 				complete: function() {
 					this.spinner(false);
@@ -119,7 +131,7 @@ fill: function() {
 onceAfter: function() {
 
 	var list = this.$();
-	if (!list.data('jsp')) {
+	if (!list.data('jsp') && this.scrollable()) {
 		list.jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
@@ -132,18 +144,14 @@ changeLocale: function() {
 	this.spinner(true);
 	this.fill();
 },
-itemUrl: function(o) {
-
-	return [
-		' data-popup-menu-url="${url}?Sdate=${Sdate}&Seqnr=${Seqnr}"'.interpolate(this.url(), o.Sdate, o.Seqnr),
-		' data-menu-id="${menu-id}"'.interpolate(this.mid())
-	].join('');
-},
 clearResource: function() {
 
 	return new Promise(function(resolve) {
 		setTimeout(function() {
-			this.$().data('jsp').destroy();
+			var jsp = this.$().data('jsp');
+			if (jsp) {
+				jsp.destroy();
+			}
 			resolve();
 		}.bind(this), 0);
 	}.bind(this));
