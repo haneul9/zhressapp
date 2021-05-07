@@ -72,3 +72,11 @@
 .sapMLabel.sapMLabelRequired .sapMLabelColonAndRequired:after{
     font-size:17px !important;
 }
+.msgBox{
+    padding:10px !important;
+    line-height:1.8;
+    background-color: #fffac4;
+    border:1px solid #f5be00;
+    font-size:14px;
+    color:#333;
+}

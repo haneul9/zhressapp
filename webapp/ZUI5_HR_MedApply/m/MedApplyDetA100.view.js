@@ -437,8 +437,22 @@ sap.ui.define([
 			oMat.addRow(oRow);
 
 			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><span style='color:red;font-size:14px;'>"
-			+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span>"})}).addStyleClass("DataCell");
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><div class='msgBox'><span>"
+			+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span></div>"})});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<span class='med-subtitle'>"
+			+oController.getBundleText("LABEL_47104")+"</span>"}),colSpan:2});
+			oRow.addCell(oCell);
+			oMat.addRow(oRow);
+			oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+			oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"}),colSpan:2});
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 	
