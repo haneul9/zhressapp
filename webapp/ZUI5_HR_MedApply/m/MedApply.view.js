@@ -26,7 +26,7 @@ sap.ui.define([
 										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 										width : "162px",
 										delimiter: "~",
-										dateValue: new Date(vYear, 0, 1),
+										dateValue: new Date(vYear, new Date().getMonth(), 1),
 										secondDateValue: new Date()
 									}),
 									new sap.m.Select(oController.PAGEID + "_HeadSel",{

@@ -646,6 +646,7 @@ sap.ui.define([
 					   IPernr:oSessionData.Pernr,
 					   IBukrs:oController._Bukrs,
 					   NavCommonCodeList:[],
+					   ILangu:"3",
 					   ICodty:"ZHOSP_TYPE"};
 			oModel.create("/CommonCodeListHeaderSet", vData, 
 				{success:function(data,res){
@@ -676,7 +677,7 @@ sap.ui.define([
 			var	oController = $.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController();
 			var oSessionData=oController._SessionData;	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
-			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[]};				
+			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[],ILangu:"3"};				
 			if(oController._SelData.Sel3.length==0){
 				oModel.create("/CommonCodeListHeaderSet", vData, 
 					{success:function(data,res){
@@ -1111,7 +1112,7 @@ sap.ui.define([
 			var oSel3=$.app.byId(oController.PAGEID+"_dSel3");
 			var oSel4=$.app.byId(oController.PAGEID+"_dSel4");
 			var oSessionData=oController._SessionData;	
-			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[]};	
+			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[],ILangu:"3"};	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			oController._SelData.Sel4=new Array();
 			oModel.create("/CommonCodeListHeaderSet", vData, 

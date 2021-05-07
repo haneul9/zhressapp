@@ -54,12 +54,12 @@ sap.ui.define([
 						ILangu:oSessionData.Langu,
 						IDatum:"\/Date("+new Date().getTime()+")\/",
 						MedicalApplyExport:[],
-						MedicalApplyTableIn:[],
+	//					MedicalApplyTableIn:[],
 						MedicalApplyTableIn0:[],
-						MedicalApplyTableIn3:[],
-						MedicalApplyTableIn4:[],
-						MedicalApplyTableIn5:[],
-						MedicalApplyTableInH:[]
+	//					MedicalApplyTableIn3:[],
+	//					MedicalApplyTableIn4:[],
+						MedicalApplyTableIn5:[]
+	//					MedicalApplyTableInH:[]
 						};
 			$.app.byId(oController.PAGEID + "_HeadSel").removeAllItems();
 			$.app.byId(oController.PAGEID + "_HeadSel").addItem(
@@ -111,6 +111,7 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
+			BusyIndicator.show(0);
 			this._ListCondJSonModel.setData({Data:oController.getView().getModel("session").getData()});
 			oController._SessionData=oController.getView().getModel("session").getData();
 			var oSessionData=oController._SessionData;
@@ -136,8 +137,11 @@ sap.ui.define([
 					}}
 				);
 //			oController._Bukrs=oSessionData.Bukrs3;		
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_ApplyDate");
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.getSelector();
 			this.onSearch();
+			BusyIndicator.hide(0);
 		},
 
 		onAfterShow:function(){
@@ -198,7 +202,6 @@ sap.ui.define([
 			}
 			var vAppnm="";
 			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/Pop1")[0].Appnm:null;
-			BusyIndicator.show(0);
 			var vEdit=true;
 			oController._onClose=="X"?vEdit=false:vEdit=true;
 			var vStatus=oController._DataModel.getProperty("/Pop1")[0].Status;
@@ -251,7 +254,6 @@ sap.ui.define([
 				if(oController._onDialog!="M"){
 					oController.changeSel2();
 				}
-				BusyIndicator.hide();
 			},100);
 		},
 
@@ -681,7 +683,7 @@ sap.ui.define([
 					   IPernr:oSessionData.Pernr,
 					   IBukrs:oController._Bukrs,
 					   NavCommonCodeList:[],
-					   ICodty:"ZHOSP_TYPE"};
+					   ICodty:"ZHOSP_TYPE",ILangu:"3"};
 			oModel.create("/CommonCodeListHeaderSet", vData, 
 				{success:function(data,res){
 					if(data&&data.NavCommonCodeList.results.length){
@@ -711,7 +713,7 @@ sap.ui.define([
 			var	oController = $.app.getController();
 			var oSessionData=oController._SessionData;	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
-			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[]};				
+			var vData={ICodeT:"001",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,NavCommonCodeList:[],ILangu:"3"};				
 			if(oController._SelData.Sel3.length==0){
 				oModel.create("/CommonCodeListHeaderSet", vData, 
 					{success:function(data,res){
@@ -814,29 +816,33 @@ sap.ui.define([
 				oController.initTdata(Flag);
 			}
 			oController._onDialog=New;
-			if(Flag=="1000"){
-				var oData=oController._tData;
-				var sData1=oController._SelData;
-				var vPageId="MedApplyDet";
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, vPageId].join($.app.getDeviceSuffix()),
-					data: [oData,sData1,oController._onDialog,oController._SessionData,Flag]
-				});
-			}else if(Flag=="A100"){
-				var oData=oController._tData;
-				var sData1=oController._SelData;
-				var vPageId="MedApplyDetA100";
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, vPageId].join($.app.getDeviceSuffix()),
-					data: [oData,sData1,oController._onDialog,oController._SessionData,Flag]
-				});
-			}else if(Flag=="N3"){
-				if (!oController.oDialog3) {
-					oController.oDialog3 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.prepopup", oController);
-					$.app.getView().addDependent(oController.oDialog3);
+			BusyIndicator.show(0);
+			setTimeout(function(){
+				if(Flag=="1000"){
+					var oData=oController._tData;
+					var sData1=oController._SelData;
+					var vPageId="MedApplyDet";
+					sap.ui.getCore().getEventBus().publish("nav", "to", {
+						id: [$.app.CONTEXT_PATH, vPageId].join($.app.getDeviceSuffix()),
+						data: [oData,sData1,oController._onDialog,oController._SessionData,Flag]
+					});
+				}else if(Flag=="A100"){
+					var oData=oController._tData;
+					var sData1=oController._SelData;
+					var vPageId="MedApplyDetA100";
+					sap.ui.getCore().getEventBus().publish("nav", "to", {
+						id: [$.app.CONTEXT_PATH, vPageId].join($.app.getDeviceSuffix()),
+						data: [oData,sData1,oController._onDialog,oController._SessionData,Flag]
+					});
+				}else if(Flag=="N3"){
+					if (!oController.oDialog3) {
+						oController.oDialog3 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.prepopup", oController);
+						$.app.getView().addDependent(oController.oDialog3);
+					}
+					oController.oDialog3.open();
 				}
-				oController.oDialog3.open();
-			}
+				BusyIndicator.hide();
+			},10);			
 		},
 
 		oTableInit : function(){
@@ -1132,7 +1138,7 @@ sap.ui.define([
 			var oSel3=$.app.byId(oController.PAGEID+"_dSel3");
 			var oSel4=$.app.byId(oController.PAGEID+"_dSel4");
 			var oSessionData=oController._SessionData;	
-			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[]};	
+			var vData={ICodeT:"002",ICodty:"GTZ51",IBukrs:oController._Bukrs,IPernr:oSessionData.Pernr,ICode:oSel3.getSelectedKey(),NavCommonCodeList:[],ILangu:"3"};	
 			var oModel=$.app.getModel("ZHR_COMMON_SRV");
 			oController._SelData.Sel4=new Array();
 			oModel.create("/CommonCodeListHeaderSet", vData, 
