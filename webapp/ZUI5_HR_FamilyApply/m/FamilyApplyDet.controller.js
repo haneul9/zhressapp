@@ -65,6 +65,7 @@ sap.ui.define([
 				sap.ui.getCore().getEventBus().publish("nav", "to", {
 					id: [$.app.CONTEXT_PATH, "FamilyApply"].join($.app.getDeviceSuffix())
 				});
+				BusyIndicator.hide();
 			}, 1);
 		},
 		
