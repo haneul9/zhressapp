@@ -2,7 +2,7 @@ function HomeMFA(_gateway) {
 
 	this._gateway = _gateway;
 	this.timeoutMinutes = 5;
-	this.timerCheckWaitTime = this.timeoutMinutes * 60 * 1000 - 2000;
+	this.timerCheckWaitTime = this.timeoutMinutes * 60 * 1000 - 2000; // timer를 종료시키기 위한 timerStopper 시작 대기 시간
 }
 
 $.extend(HomeMFA.prototype, {
@@ -20,6 +20,18 @@ check: function(callback) {
 		DONE: 3,
 		ERROR: 4
 	};
+
+	if (sessionStorage.getItem('ehr.mfa.done')) { // 새 창으로 뜨는 경우 다시 인증하지 않기 위해 sessionStorage에 인증여부를 저장함
+		return new Promise(function(resolve) {
+			setTimeout(function() {
+				resolve();
+			}, 0);
+
+			if (typeof callback === 'function') {
+				this.callback();
+			}
+		}.bind(this));
+	}
 
 	return Promise.all([
 		this.isTargetIP(),		// MFA 대상 IP인지 확인
@@ -200,7 +212,6 @@ requestCode: function(type) {
 
 		this._gateway.post({
 			url: url,
-			async: false,
 			data: {
 				Ttype: type,
 				Cernm: code,
@@ -209,7 +220,7 @@ requestCode: function(type) {
 			success: function(data) {
 				this._gateway.prepareLog('HomeMFA.requestCode success', arguments).log();
 
-				if(type === this.CODE.REQUEST) {
+				if (type === this.CODE.REQUEST) {
 					this.sendPush(data.d, type);
 				} else {
 					this.setStatus(this.STATUS.DONE, type);
@@ -219,22 +230,28 @@ requestCode: function(type) {
 			error: function(jqXHR) {
 				var errorMessage = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeMFA.requestCode').message;
 
-				this.showMessage('.invalid-feedback', errorMessage);
-				this.setStatus(this.STATUS.ERROR, type);
+				setTimeout(function() {
+					clearInterval(this.mfaCodeTimerStopper);
+					clearInterval(this.mfaCodeTimer);
+				}.bind(this), 0);
 
 				setTimeout(function() {
-					clearInterval(this.mfaCodeTimer);
-					$('#code-mfa-timer').val('5:00');
-				}.bind(this), 300);
+					this.showMessage('.invalid-feedback', errorMessage);
+					this.setStatus(this.STATUS.ERROR, type);
+
+					setTimeout(function() {
+						$('#code-mfa-timer').val('5:00');
+					}, 300);
+				}.bind(this), 0);
 			}.bind(this)
 		});
 	}.bind(this), 0);
 },
 
 sendPush: function(notification, type) {
+
 	$.post({
 		url: '/essproxy/twofactor',
-		async: false,
 		dataType: 'text',
 		data: {
 			token: notification.Token,
@@ -256,16 +273,20 @@ sendPush: function(notification, type) {
 
 showMessage: function(selector, message) {
 
-	var target = $('.feedback-message' + selector);
-	if (message) {
-		target.text(message);
-	}
-	target.show().siblings().hide();
+	setTimeout(function() {
+		var target = $('.feedback-message' + selector);
+		if (message) {
+			target.text(message);
+		}
+		target.show().siblings().hide();
+	}, 0);
 },
 
 hideMessage: function() {
 
-	$('.feedback-message').hide();
+	setTimeout(function() {
+		$('.feedback-message').hide();
+	}, 0);
 },
 
 setStatus: function(status, type) {
@@ -273,33 +294,40 @@ setStatus: function(status, type) {
 	var INIT = status === this.STATUS.INIT,
 	WAIT = status === this.STATUS.WAIT,
 	DONE = status === this.STATUS.DONE,
-	ERROR = status === this.STATUS.ERROR;
+	ERROR = status === this.STATUS.ERROR,
+	REQUEST = type === this.CODE.REQUEST,
+	CONFIRM = type === this.CODE.CONFIRM;
 
-	if (type === this.CODE.REQUEST) {
-		$('#code-mfa').prop('disabled', !DONE);
-		$('.fn-code-request').prop('disabled', WAIT);
-		$('.fn-code-confirm').prop('disabled', !DONE);
+	setTimeout(function() {
+		if (REQUEST) {
+			$('#code-mfa').prop('disabled', INIT || ERROR);	// 인증코드 발급 전 초기 상태이거나 발급 에러인 경우에 비활성
+			$('.fn-code-request').prop('disabled', WAIT);	// 인증코드 발급 요청중인 경우 비활성
+			$('.fn-code-confirm').prop('disabled', !DONE);	// 인증코드 발급 요청이 정상 완료되면 활성
 
-	} else if (type === this.CODE.CONFIRM) {
-		$('#code-mfa').prop('disabled', !ERROR);
-		$('.fn-code-request').prop('disabled', !ERROR);
-		$('.fn-code-confirm').prop('disabled', !ERROR);
+		} else if (CONFIRM) {
+			$('#code-mfa').prop('disabled', !ERROR);		// 인증코드 확인중인 경우 비활성
+			$('.fn-code-request').prop('disabled', !ERROR);	// 인증코드 확인중인 경우 비활성
+			$('.fn-code-confirm').prop('disabled', !ERROR);	// 인증코드 확인중인 경우 비활성
 
-	} else {
-		$('#code-mfa').prop('disabled', INIT);
-		$('.fn-code-request').prop('disabled', !INIT);
-		$('.fn-code-confirm').prop('disabled', INIT);
-
-	}
+		} else {
+			$('#code-mfa').prop('disabled', INIT);
+			$('.fn-code-request').prop('disabled', !INIT);
+			$('.fn-code-confirm').prop('disabled', INIT);
+	
+		}
+	}, 0);
 },
 
 done: function() {
 
 	setTimeout(function() {
 		$('#ehr-mfa-modal').modal('hide');
+		sessionStorage.setItem('ehr.mfa.done', true);
 	}, 0);
 
-	this.callback();
+	if (typeof callback === 'function') {
+		this.callback();
+	}
 },
 
 ui: function() {
