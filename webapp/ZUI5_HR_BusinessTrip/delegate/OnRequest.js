@@ -2,7 +2,6 @@
 sap.ui.define([
 	"common/Common",
 	"common/DialogHandler",
-	"common/moment-with-locales",
 	"common/SearchOrg",
 	"common/SearchUser1",
 	"./RequestDetailDialogHandler",
@@ -16,7 +15,6 @@ sap.ui.define([
 ], function(
 	Common,
 	DialogHandler,
-	momentjs,
 	SearchOrg,
 	SearchUser1,
 	RequestDetailDialogHandler,

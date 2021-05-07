@@ -11,8 +11,7 @@ sap.ui.define(
         "sap/m/MessageBox",
         "sap/m/MessageToast",
         "sap/ui/core/BusyIndicator",
-        "sap/ui/model/json/JSONModel",
-        "common/moment-with-locales"
+        "sap/ui/model/json/JSONModel"
     ],
     function (Common, DialogHandler, OrgOfIndividualHandler, OvertimeWork, ODataService, PickOnlyDatePicker, MessageBox, MessageToast, BusyIndicator, JSONModel) {
         "use strict";

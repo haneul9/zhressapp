@@ -1,13 +1,11 @@
 /* global moment */
 sap.ui.define([
 	"common/Common",
-	"common/moment-with-locales",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/model/json/JSONModel"
 ], function(
 	Common,
-	momentjs,
 	MessageBox,
 	BusyIndicator,
 	JSONModel

@@ -2,7 +2,6 @@
 sap.ui.define([
 	"common/Common",
 	"common/DialogHandler",
-	"common/moment-with-locales",
 	"common/moment-round",
 	"./AirportDialogHandler",
 	"./CurrencyDialogHandler",
@@ -13,7 +12,6 @@ sap.ui.define([
 ], function(
 	Common,
 	DialogHandler,
-	momentjs,
 	momentRoundjs,
 	AirportDialogHandler,
 	CurrencyDialogHandler,

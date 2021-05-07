@@ -2,7 +2,6 @@
 sap.ui.define([
 	"common/Common",
 	"common/DialogHandler",
-	"common/moment-with-locales",
 	"./SettlementTargetAbsenceListDialogHandler",
 	"./SettlementDetailDialogHandler",
 	"./CardExpenseDialogHandler",
@@ -17,7 +16,6 @@ sap.ui.define([
 ], function(
 	Common,
 	DialogHandler,
-	momentjs,
 	SettlementTargetAbsenceListDialogHandler,
 	SettlementDetailDialogHandler,
 	CardExpenseDialogHandler,

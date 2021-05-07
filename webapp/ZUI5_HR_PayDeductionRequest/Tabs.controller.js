@@ -2,14 +2,13 @@
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/moment-with-locales",
     "../common/SearchUser1",
     "../common/SearchOrg",
     "../common/DialogHandler",
     "../common/OrgOfIndividualHandler",
 	"sap/base/util/UriParameters",
 	"sap/ui/model/json/JSONModel"
-], function(Common, CommonController, momentjs, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, UriParameters, JSONModel) {
+], function(Common, CommonController, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, UriParameters, JSONModel) {
 "use strict";
 
 return CommonController.extend($.app.APP_ID, { // 출장

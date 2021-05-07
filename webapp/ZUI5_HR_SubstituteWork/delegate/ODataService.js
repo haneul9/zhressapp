@@ -2,8 +2,7 @@
 sap.ui.define(
     [
         "common/Common", //
-        "./SubstituteWork",
-        "common/moment-with-locales"
+        "./SubstituteWork"
     ],
     function (Common, SubstituteWork) {
         "use strict";

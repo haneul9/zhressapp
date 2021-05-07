@@ -3,8 +3,7 @@ sap.ui.define(
     [
         "common/Common", //
         "common/ZHR_TABLES",
-        "common/PickOnlyDatePicker",
-        "common/moment-with-locales"
+        "common/PickOnlyDatePicker"
     ],
     function (Common, ZHR_TABLES, PickOnlyDatePicker) {
         "use strict";

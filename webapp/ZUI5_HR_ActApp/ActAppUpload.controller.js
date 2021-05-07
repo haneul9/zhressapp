@@ -8,8 +8,7 @@ sap.ui.define(
 		"sap/ui/core/BusyIndicator",
 		"sap/m/MessageBox",
 		"sap/ui/core/util/Export",
-		"sap/ui/core/util/ExportTypeCSV",
-        "common/moment-with-locales"
+		"sap/ui/core/util/ExportTypeCSV"
 	],
     function (Common, CommonController, JSONModel, BusyIndicator, MessageBox, Export, ExportTypeCSV) {
         "use strict";

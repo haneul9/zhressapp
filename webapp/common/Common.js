@@ -4,7 +4,6 @@
 /* global common:true moment:true Promise:true */
 jQuery.sap.declare("common.Common");
 jQuery.sap.require("common.JSONModelHelper");
-jQuery.sap.require("common.moment-with-locales");
 jQuery.sap.require("sap.m.MessageBox");
 
 if ((1.005).toFixed(2) !== "1.01") {

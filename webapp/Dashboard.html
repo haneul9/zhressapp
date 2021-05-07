@@ -15,8 +15,9 @@
 	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
 	<script src="common/AppPrefilter.js"></script>
 	<script id="sap-ui-bootstrap"
-		src="resources/sap-ui-core.js"
+		src="resources/sap-ui-cachebuster/sap-ui-core.js"
 		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-appCacheBuster="./"
 		data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
 		data-sap-ui-compatVersion="edge"
 		data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
@@ -24,6 +25,7 @@
 		data-sap-ui-frameOptions="allow"
 		data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.suite.ui.commons, sap.f, sap.viz">
 	</script>
+	<script src="common/moment-with-locales.js"></script>
 	<script src="common/AppBasis.js"></script>
 	<script>
 	var oBundleText = $.app.geti18nResource();

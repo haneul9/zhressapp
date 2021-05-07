@@ -6,8 +6,7 @@ sap.ui.define(
 		"common/HoverIcon",
 		"common/PickOnlyDatePicker",
 		"../delegate/OvertimeWork",
-		"sap/m/InputBase",
-		"common/moment-with-locales"
+		"sap/m/InputBase"
 	],
 	function (Common, ZHR_TABLES, HoverIcon, PickOnlyDatePicker, OvertimeWork, InputBase) {
 		"use strict";
