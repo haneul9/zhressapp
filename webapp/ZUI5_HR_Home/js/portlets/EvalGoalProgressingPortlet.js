@@ -92,7 +92,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				}
 			}.bind(this));
 
-			if (!empDataList.length || !goalId) {
+			if (!empDataList.length) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
 				if (list.data('jsp')) {
