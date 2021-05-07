@@ -276,13 +276,11 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachFileList.removeSelections(true);
 
 		if(vDif){
-			vDifData.forEach(function(elem) {
-				if(vPage==elem.Cntnm){
-					elem.New = false;
-					elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-					Datas.Data.push(elem);
-				}
-			});
+			if(vPage==vDifData.Cntnm){
+				vDifData.New = false;
+				vDifData.Type = vDifData.Fname.substring(vDifData.Fname.lastIndexOf(".") + 1);
+				Datas.Data.push(vDifData);
+			}
 		} else{
 			oModel.read("/FileListSet", {
 				async: false,

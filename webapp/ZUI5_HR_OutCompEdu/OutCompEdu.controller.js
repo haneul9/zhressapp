@@ -1444,9 +1444,9 @@ sap.ui.define([
 				var vAppnm2 = "",
 					vAppnm3 = "",
 					vAppnm4 = "",
-					vList2 = [],
-					vList3 = [],
-					vList4 = [];
+					vList2 = {},
+					vList3 = {},
+					vList4 = {};
 
 				oController.ApplyModel.getProperty("/FileData").forEach(function(e) {
 					switch(e.Cntnm) {
@@ -1461,7 +1461,7 @@ sap.ui.define([
 					Mode: "S",
 					UseMultiCategories: true,
 					CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
-					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList2 : [],
+					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList2 : {},
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"002");
 				
@@ -1471,7 +1471,7 @@ sap.ui.define([
 					Mode: "S",
 					UseMultiCategories: true,
 					CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
-					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList3 : [],
+					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList3 : {},
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"003");
 	
@@ -1480,7 +1480,7 @@ sap.ui.define([
 					Mode: "S",
 					UseMultiCategories: true,
 					CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
-					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList4 : [],
+					CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList4 : {},
 					Editable: (Common.checkNull(vRepstT) && ((vStatus === "AA" && vEdoty === "2") || (vStatus === "99" && vEdoty === "1"))) ? true : false
 				},"004");
 			}
