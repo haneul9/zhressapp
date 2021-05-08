@@ -36,7 +36,7 @@ sap.ui.define([
 
 			var model = this.reset();
 
-			var result = $.extend(true, this.getResult(), Common.retrieveLoginInfo());
+			var result = Common.retrieveLoginInfo();
 			delete result.__metadata;
 
 			if (!result.Pernr) {

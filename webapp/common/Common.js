@@ -768,6 +768,7 @@ common.Common = {
 
         try {
             oRetrunLoginData = $.extend(true, JSON.parse(sessionStorage.getItem("ehr.odata.user")), {Percod: sessionStorage.getItem("ehr.odata.user.percod")});
+            oRetrunLoginData.nickname = oRetrunLoginData.Ename;
     
             return oRetrunLoginData;
         } catch(e) {
