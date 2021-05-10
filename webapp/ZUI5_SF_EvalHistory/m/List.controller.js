@@ -124,7 +124,7 @@ sap.ui.define(
 				));
 				Promise.all(PromiseData).then(function () {
 					BusyIndicator.hide();
-					this.afterTable.call(this,Btns);
+//					this.afterTable.call(this,Btns);
 				}.bind(this));
 			},
 
