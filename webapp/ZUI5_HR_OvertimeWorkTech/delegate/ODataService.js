@@ -93,9 +93,9 @@ sap.ui.define(
                         IFirst: arg.First ? arg.First : undefined,
                         IPernr: arg.Pernr ? arg.Pernr : undefined,
                         IOrgeh: arg.Orgeh ? arg.Orgeh : undefined,
-                        IBegda: arg.Begda ? Common.adjustGMTOdataFormat(arg.Begda) : undefined,
-                        IEndda: arg.Endda ? Common.adjustGMTOdataFormat(arg.Endda) : undefined,
-                        IDatum: arg.Datum ? Common.adjustGMTOdataFormat(arg.Datum) : undefined,
+                        IBegda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
+                        IEndda: arg.Endda ? moment(arg.Endda).hours(10).toDate() : undefined,
+                        IDatum: arg.Datum ? moment(arg.Datum).hours(10).toDate() : undefined,
                         OtWorkTab1: arg.OtWorkTab1 ? arg.OtWorkTab1 : [],
                         OtWorkTab2: []
                     }, {
@@ -189,8 +189,8 @@ sap.ui.define(
                         IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IMolga: this.getSessionInfoByKey("Molga"),
-                        IBegda: arg.Begda ? Common.adjustGMTOdataFormat(arg.Begda) : undefined,
-                        IEndda: arg.Begda ? Common.adjustGMTOdataFormat(arg.Begda) : undefined,
+                        IBegda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
+                        IEndda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
                         ITmtyp: arg.Tmtyp,
                         RecorderInfoNav: []
                     }, {

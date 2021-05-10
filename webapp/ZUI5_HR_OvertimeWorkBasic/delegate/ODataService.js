@@ -67,7 +67,7 @@ sap.ui.define(
 				$.app.getModel("ZHR_WORKSCHEDULE_SRV").create(
 					"/OvertimePersonSet",
 					{
-                        IDatum: Common.adjustGMTOdataFormat(new Date()),
+                        IDatum: moment().hours(10).toDate(),
                         IPernr: this.getSessionInfoByKey("Pernr"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
                         IOrgeh: this.getSessionInfoByKey("Orgeh"),
@@ -116,8 +116,8 @@ sap.ui.define(
                     {
                         IPernr: arg.Pernr ? arg.Pernr : undefined,
                         IOrgeh: arg.Orgeh ? arg.Orgeh : undefined,
-                        IBegda: arg.Begda ? Common.adjustGMTOdataFormat(arg.Begda) : undefined,
-                        IEndda: arg.Endda ? Common.adjustGMTOdataFormat(arg.Endda) : undefined,
+                        IBegda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
+                        IEndda: arg.Endda ? moment(arg.Endda).hours(10).toDate() : undefined,
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IStatus: arg.Status1 ? arg.Status1 : undefined,
                         NavOtList1: []
@@ -158,7 +158,7 @@ sap.ui.define(
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
-                        IDatum: Common.adjustGMTOdataFormat(new Date()),
+                        IDatum: moment().hours(10).toDate(),
                         IExtryn: payload.Extryn ? payload.Extryn : undefined,
                         NavOtApply1: payload.OvertimeApply
                     },
