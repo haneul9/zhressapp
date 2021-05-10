@@ -504,9 +504,10 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 [data-sap-ui-browser="ie11"] .side-navi-group > div:nth-child(2) {overflow: hidden;}
 [data-sap-ui-browser="ie11"] .side-table-box.no-line > div:nth-child(2) > div {overflow:hidden}
 [data-sap-ui-browser="ie11"] .side-table-box {overflow:hidden;}
-.custom-OpenHelp-field {padding:10px 20px; /*border-bottom:1px solid #e4e4e4;*/ background-color: #f3f4f4;}
+.custom-OpenHelp-field {padding:10px 20px; background-color: #e5f0fa;font-weight: 500;border:1px solid #b2cbe2}
+.custom-OpenHelp-field .sapMText {color: #0854A0;}
 .custom-OpenHelp-field > div > span {line-height:1.8;}
-.custom-OpenHelp-msgBox {padding:10px 20px; margin-top:20px; line-height:1.8; background-color: #fffac4 ;border:1px solid #f5be00}
+.custom-OpenHelp-msgBox {padding:10px 20px; margin-top:20px; line-height:1.8; background-color: #fffac4 ;border:1px solid #f0bf11}
 
 .side-table-box {/*border-top:1px solid #e4e4e4*/}
 .side-table-box.no-line {border-top:none}
