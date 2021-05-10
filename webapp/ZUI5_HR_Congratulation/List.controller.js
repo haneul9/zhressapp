@@ -126,7 +126,7 @@ sap.ui.define(
 				BusyIndicator.show(0);
 				
 				oModel.create("/CongratulationApplySet", sendObject, {
-					async: true,
+					async: false,
 					success: function (oData, oResponse) {
 						
 						if (oData && oData.TableIn.results) {
