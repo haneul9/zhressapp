@@ -58,7 +58,7 @@ sap.ui.define([
 					new sap.m.FlexBox({
 						alignContent: sap.m.FlexAlignContent.Center,
 						alignItems: sap.m.FlexAlignItems.Center,						
-						items: [
+						items: [ 
 							new sap.m.Label({
 								text: "{i18n>LABEL_00135}",
 								width : "100%",
