@@ -126,7 +126,7 @@ sap.ui.define(
                                                         showValueHelp: true,
                                                         valueHelpOnly: true,
                                                         valueHelpRequest: PriorHandler.searchOrgehPernrByDetail.bind(PriorHandler),
-                                                        editable: "{= !${/Detail/IsViewMode} && ${/Detail/Header/Bukrs3} !== 'A100' }",
+                                                        editable: "{= (!${/Detail/IsViewMode} && ${/Detail/Header/Bukrs3} !== 'A100') || ${/Auth} === 'H' }",
                                                         change: PriorHandler.checkFormControl.bind(PriorHandler)
                                                     })
                                                 ]
