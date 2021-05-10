@@ -17,9 +17,7 @@ sap.ui.define([
             $.app.setModel("ZHR_BENEFIT_SRV");
             $.app.setModel("ZHR_COMMON_SRV");
 
-            var vYear = new Date().getFullYear();
-			var vMonth = new Date().getMonth();		
-			var vDate = new Date().getDate();		
+            var vYear = new Date().getFullYear();	
 			
 			var oSearchBox = new sap.m.FlexBox({
 				fitContainer: true,
@@ -30,7 +28,7 @@ sap.ui.define([
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
 								dateValue: new Date(vYear, 0, 1),
-								secondDateValue: new Date(vYear, vMonth, vDate)
+								secondDateValue: new Date()
 							})
 						]
                     }).addStyleClass("search-field-group pr-0"),
