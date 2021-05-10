@@ -807,7 +807,8 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: ""
+                            Mssty: "",
+                            Zshift: true
                         };
         
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);

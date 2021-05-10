@@ -20,6 +20,7 @@ sap.ui.define(
 			callback: null,
 			autoClose: true,
 			zFlag: false,	// 전문직 사원만 보여주는 flag
+			Zshft: false,	// 교대근무자 보여주는 flag
             
             // DialogHandler 호출 function
 			get: function(oController, initData, callback) {
@@ -28,6 +29,7 @@ sap.ui.define(
 				this.callback = callback;
 				this.autoClose = Common.isNull(initData.autoClose) ? true : initData.autoClose; 
 				this.zFlag = Common.isNull(initData.Zflag) ? false : initData.Zflag; 
+				this.Zshft = Common.isNull(initData.Zshft) ? false : initData.Zshft; 
 
 				this.oModel.setProperty("/Percod", initData.Percod || "");
 				this.oModel.setProperty("/Bukrs", initData.Bukrs || "");
@@ -169,8 +171,18 @@ sap.ui.define(
 							// 전문직만 보여준다.
 							if(this.zFlag) {
 								data.results = data.results.filter(function(elem) {
-									return elem.Otype === "O" || elem.Zflag === "X";
+									if(this.Zshft) {	// 교대조 포함
+										return elem.Otype === "O" || elem.Zflag === "X" || elem.Zshift === "X";
+									} else {
+										return elem.Otype === "O" || elem.Zflag === "X";
+									}
 								});
+							} else {
+								if(this.Zshft) { // 전문직 프래그가 false이고 교대조 플래그가 true이면 리스트에서 교대조를 제외한다.
+									data.results = data.results.filter(function(elem) {
+										return elem.Otype === "O" || elem.Zshift !== "X";
+									});
+								}
 							}
 
 							oModel.setProperty(

@@ -472,7 +472,8 @@ sap.ui.define(
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
                             Mssty: "",
-                            Zflag: true
+                            Zflag: true,
+                            Zshft: true
                         },
                         callback = function(o) {
                             switch(o.Otype) {
