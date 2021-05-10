@@ -589,6 +589,7 @@ sap.ui.define([
 						]
 					}),
 					new sap.m.HBox({
+					alignItems: sap.m.FlexAlignItems.Center,
                         items: [
 							fragment.COMMON_ATTACH_FILES.renderer(oController,"2")
                         ]

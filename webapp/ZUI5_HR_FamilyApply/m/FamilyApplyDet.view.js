@@ -309,6 +309,7 @@ sap.ui.define([
 			// oMat.addRow(oRow);
 
 			var oHBox=new sap.m.HBox(oController.PAGEID+"_ModLine2",{
+				alignItems: sap.m.FlexAlignItems.Center,
 				items: [
 					oFileUploader
 				]
