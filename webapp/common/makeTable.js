@@ -441,6 +441,26 @@ common.makeTable = {
 							}
 							
 							break;
+						case "Delapptx":
+							oTemplate = new sap.ui.commons.TextView({
+											text : {
+												parts : [{path : "Delapptx"}, {path : "Delapp"}],
+												formatter : function(fVal1, fVal2){
+													this.removeStyleClass("color-signature-blue color-red");
+													
+													if(fVal2 == ""){
+														this.addStyleClass("color-signature-blue");
+													} else if(fVal2 == "X"){
+														this.addStyleClass("color-red");
+													}
+
+													return fVal1;
+												}
+											},
+											textAlign : "Center",
+											tooltip : " "
+										}).addStyleClass("FontFamily");
+							break; 
 					}
 					break;
 				default:
