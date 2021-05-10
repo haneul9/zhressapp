@@ -229,7 +229,7 @@ sap.ui.define([
 			});
 			
 			oController._DetailJSonModel.setProperty("/User", vData);
-			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs);
+			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs3);
 			oController._DetailJSonModel.setProperty("/Data/Molga", vData.Molga);
 			
 			if(oController.Error == "E"){

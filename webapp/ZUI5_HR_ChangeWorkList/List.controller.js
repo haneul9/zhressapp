@@ -30,7 +30,7 @@ sap.ui.define(
                     },
                     this
                 );
-
+				gDtfmt = $.app.getModel("session").getData().Dtfmt;	
                 // this.getView().addStyleClass("sapUiSizeCompact");
                 // this.getView().setModel($.app.getModel("i18n"), "i18n");
             },

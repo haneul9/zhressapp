@@ -28,7 +28,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -104,7 +104,7 @@ sap.ui.define([
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
 					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda.getFullYear(), oData.Begda.getMonth(), oData.Begda.getDate())) + ")\/"; 
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda.getFullYear(), oData.Endda.getMonth(), oData.Endda.getDate())) + ")\/";
-					createData.IBukrs = $.app.getModel("session").getData().Bukrs;
+					createData.IBukrs = $.app.getModel("session").getData().Bukrs3;
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = "1";
 

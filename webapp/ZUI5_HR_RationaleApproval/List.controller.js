@@ -1,10 +1,10 @@
 jQuery.sap.require("sap.m.MessageBox");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper) {
 	"use strict";
 
@@ -26,7 +26,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;	
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -41,7 +41,7 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Bukrs : $.app.getModel("session").getData().Bukrs,
+						Bukrs : $.app.getModel("session").getData().Bukrs3,
 						Pernr : $.app.getModel("session").getData().Pernr,
 						Orgeh : $.app.getModel("session").getData().Orgeh,
 						Langu : $.app.getModel("session").getData().Langu

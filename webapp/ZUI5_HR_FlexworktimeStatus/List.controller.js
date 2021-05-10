@@ -31,7 +31,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -46,7 +46,7 @@ sap.ui.define([
 				var	vData = {
 					Data : {
 						Werks : $.app.getModel("session").getData().Persa,
-						Bukrs : $.app.getModel("session").getData().Bukrs,
+						Bukrs : $.app.getModel("session").getData().Bukrs3,
 						Pernr : $.app.getModel("session").getData().Pernr,
 						Ename : $.app.getModel("session").getData().Ename,                                                                                                           
 						Langu : $.app.getModel("session").getData().Langu,

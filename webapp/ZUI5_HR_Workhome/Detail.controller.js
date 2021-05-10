@@ -211,7 +211,7 @@ sap.ui.define([
 			// oController._DetailJSonModel.setProperty("/Data/Stext", vData.Stext);
 			// oController._DetailJSonModel.setProperty("/Data/PGradeTxt", vData.PGradeTxt);
 			// oController._DetailJSonModel.setProperty("/Data/ZtitleT", vData.ZtitleT);
-			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs);
+			oController._DetailJSonModel.setProperty("/Data/Bukrs", vData.Bukrs2);
 			oController._DetailJSonModel.setProperty("/Data/Molga", vData.Molga);
 			// oController._DetailJSonModel.setProperty("/Data/Werks", vData.Persa);
 			

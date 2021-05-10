@@ -35,6 +35,7 @@ sap.ui.define([
 					onAfterShow: this.onAfterShow
 				}, this);
 				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -42,14 +43,14 @@ sap.ui.define([
 		onBeforeShow: function(oEvent){
 			var oController = this;
 			var oLoginData = $.app.getModel("session").getData();
-		
-			 if(!oController._ListCondJSonModel.getProperty("/Data")){
+			
+			if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			 	var today = new Date();
 			 	
 				var	vData = {
 					Data : {
-						Werks : oLoginData.Bukrs,
+						Werks : oLoginData.Bukrs3,
 						Pernr : oLoginData.Pernr,
 						Ename : oLoginData.Ename,
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),

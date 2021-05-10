@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -34,7 +34,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;	
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -58,7 +58,7 @@ sap.ui.define([
 					new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
 					new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
 					new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oLoginData.Percod),
-					new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oLoginData.Bukrs)
+					new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oLoginData.Bukrs3)
 				],
 				success: function(data, oResponse) {
 					if(data && data.results.length) {
@@ -544,6 +544,8 @@ sap.ui.define([
 						if(data.PersLeaveuseListNav && data.PersLeaveuseListNav.results){
 							for(var i=0; i<data.PersLeaveuseListNav.results.length; i++){
 								data.PersLeaveuseListNav.results[i].Idx = i+1;
+
+								data.PersLeaveuseListNav.results[i].Datum = data.PersLeaveuseListNav.results[i].Datum ? new Date(common.Common.setTime(data.PersLeaveuseListNav.results[i].Datum)) : null;
 								
 								data.PersLeaveuseListNav.results[i].Beguz = data.PersLeaveuseListNav.results[i].Beguz == "" ? data.PersLeaveuseListNav.results[i].Beguz : 
 																				data.PersLeaveuseListNav.results[i].Beguz.substring(0,2) + ":" + data.PersLeaveuseListNav.results[i].Beguz.substring(2,4);

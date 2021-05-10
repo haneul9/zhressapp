@@ -32,7 +32,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -49,7 +49,7 @@ sap.ui.define([
 					Data : {
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Bukrs : oLoginData.Bukrs, // 2021-05-07 Bukrs2
+						Bukrs : oLoginData.Bukrs3, // 2021-05-07 Bukrs2
 						Langu : oLoginData.Langu,
 						Persa : oLoginData.Persa
 					}

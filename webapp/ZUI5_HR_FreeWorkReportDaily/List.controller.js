@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -33,8 +33,10 @@ sap.ui.define([
 					onAfterShow: this.onAfterShow
 				}, this);
 				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
+			
 		},
 
 		onBeforeShow: function(oEvent){
@@ -52,7 +54,7 @@ sap.ui.define([
 						Pernr : oLoginData.Pernr,
 						Orgeh : "",
 						Ename : oLoginData.Ename,
-						Bukrs : oLoginData.Bukrs,
+						Bukrs : oLoginData.Bukrs3,
 						Molga : oLoginData.Molga,
 						Langu : oLoginData.Langu,
 						Werks : oLoginData.Persa,

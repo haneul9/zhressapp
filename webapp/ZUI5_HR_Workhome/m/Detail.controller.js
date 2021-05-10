@@ -39,7 +39,7 @@ sap.ui.define([
 					FromPageId : oEvent.data.FromPageId,
 					Status : oEvent.data.Status,
 					Werks : $.app.getModel("session").getData().Persa,
-					Bukrs : $.app.getModel("session").getData().Bukrs,
+					Bukrs : $.app.getModel("session").getData().Bukrs3,
 					Molga : $.app.getModel("session").getData().Molga,
 					Pernr : $.app.getModel("session").getData().Pernr
 				}

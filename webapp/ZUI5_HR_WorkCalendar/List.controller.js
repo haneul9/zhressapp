@@ -31,7 +31,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			gDtfmt = $.app.getModel("session").getData().Dtfmt;
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -49,7 +49,7 @@ sap.ui.define([
 						Zyymm : today.getFullYear() + (today.getMonth()+1 > 10 ? today.getMonth()+1 : "0" + (today.getMonth()+1)),
 						Pernr : oLoginData.Pernr,
 						Ename : oLoginData.Ename,
-						Bukrs : oLoginData.Bukrs,
+						Bukrs : oLoginData.Bukrs3,
 						Langu : oLoginData.Langu,
 						Molga : oLoginData.Molga,
 						Chief : $.app.getModel("session").getData().Chief
@@ -120,7 +120,7 @@ sap.ui.define([
 			var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyyMMdd"});
 				var dateFormat2 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "MM/dd"});
-				var dateFormat3 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
+				var dateFormat3 = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 				
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
 				var createData = {WorkCalendarNav1 : [], WorkCalendarNav2 : [], WorkCalendarNav3 : []};
