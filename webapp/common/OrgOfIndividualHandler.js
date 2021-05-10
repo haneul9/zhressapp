@@ -176,7 +176,7 @@ sap.ui.define(
 									} else {
 										return elem.Otype === "O" || elem.Zflag === "X";
 									}
-								});
+								}.bind(this));
 							} else {
 								if(this.Zshft) { // 전문직 프래그가 false이고 교대조 플래그가 true이면 리스트에서 교대조를 제외한다.
 									data.results = data.results.filter(function(elem) {
