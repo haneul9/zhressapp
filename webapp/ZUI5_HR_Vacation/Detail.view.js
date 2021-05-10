@@ -10,9 +10,6 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 	},
 
 	createContent: function(oController) {
-		$.app.setModel("ZHR_COMMON_SRV");
-		$.app.setModel("ZHR_LEAVE_APPL_SRV");
-		$.app.setModel("ZHR_PERS_INFO_SRV");
 		
 		var oHeader = new sap.m.HBox({
 			width : "100%",

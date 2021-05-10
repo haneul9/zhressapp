@@ -164,9 +164,9 @@ setModel: function(modelName) {
 		oModel.setCountSupported(false);
 		sap.ui.getCore().setModel(oModel, modelName);
 
-		setTimeout(function() {
-			common.Common.setMetadataModel(oModel, modelName);
-		}, 0);
+		// setTimeout(function() {
+		common.Common.setMetadataModel(oModel, modelName);
+		// }, 0);
 	} catch(e) {
 		common.Common.log(e);
 	}
