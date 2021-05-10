@@ -892,7 +892,9 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: ""
+                            Mssty: "",
+                            Zflag: true,
+                            Zshft: true
                         };
         
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);
