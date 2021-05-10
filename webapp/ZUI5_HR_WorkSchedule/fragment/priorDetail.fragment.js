@@ -80,7 +80,7 @@ sap.ui.define(
                                                         showValueHelp: true,
                                                         valueHelpOnly: true,
                                                         valueHelpRequest: PriorHandler.searchOrgehPernrByDetail.bind(PriorHandler),
-                                                        editable: false,
+                                                        editable: "{= ${/Auth} === 'H' }",
                                                         change: PriorHandler.toggleIsPossibleSave.bind(PriorHandler)
                                                     })
                                                 ]

@@ -79,12 +79,12 @@ sap.ui.define(
                 this.oModel.setProperty("/SearchConditions/Apsta", "ALL");
                 this.oModel.setProperty("/SearchConditions/Begda", moment().subtract(14, "days").toDate());
                 this.oModel.setProperty("/SearchConditions/Endda", moment().add(14, "days").toDate());
-                if($.app.getAuth() === $.app.Auth.MSS) {
-                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
-                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
-                } else {
+                if($.app.getAuth() === $.app.Auth.ESS) {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Ename"));
                     this.oModel.setProperty("/SearchConditions/Pernr", this.oController.getSessionInfoByKey("name"));
+                } else {
+                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
+                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
                 }
 
                 this.oModel.setProperty(
@@ -236,6 +236,7 @@ sap.ui.define(
              * @this {Handler}
              */
             pressOpenApprovalBtn: function() {
+                var vAuth = this.oModel.getProperty("/Auth");
 
                 this.oModel.setProperty("/Detail", {
                     IsViewMode: false,
@@ -243,9 +244,9 @@ sap.ui.define(
                     IsPossibleApproval: false,
                     Header: {
                         Status: "",
-                        Ename: this.oController.getSessionInfoByKey("Ename"),
-                        Pernr: this.oController.getSessionInfoByKey("Pernr"),
-                        Bukrs3: this.oController.getSessionInfoByKey("Bukrs3"),
+                        Ename: vAuth === $.app.Auth.HASS ? "" : this.oController.getSessionInfoByKey("Ename"),
+                        Pernr: vAuth === $.app.Auth.HASS ? "" : this.oController.getSessionInfoByKey("Pernr"),
+                        Bukrs3: vAuth === $.app.Auth.HASS ? "" : this.oController.getSessionInfoByKey("Bukrs3"),
                         WkbuzT: "00",
                         WkbuzM: "00",
                         WkeuzT: "00",
@@ -268,7 +269,9 @@ sap.ui.define(
                 
                 this.openDetailDialog();
                 
-                this.searchDetailData();
+                if(this.oModel.getProperty("/Auth") !== $.app.Auth.HASS) {
+                    this.searchDetailData();
+                }
                 this.toggleIsPossibleSave();
             },
 
@@ -454,6 +457,7 @@ sap.ui.define(
                         Pernr: vInputHeader.Pernr,
                         Ename: vInputHeader.Ename,
                         Schda: vInputHeader.Schda,
+                        Bukrs3: vInputHeader.Bukrs3,
                         Status: "",
                         MinDate: vInputHeader.MinDate,
                         WeekName: vInputHeader.WeekName

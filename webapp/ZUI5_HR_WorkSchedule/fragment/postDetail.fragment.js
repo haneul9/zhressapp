@@ -80,7 +80,7 @@ sap.ui.define(
                                                         showValueHelp: true,
                                                         valueHelpOnly: true,
                                                         valueHelpRequest: PostHandler.searchOrgehPernrByDetail.bind(PostHandler),
-                                                        editable: false,
+                                                        editable: "{= ${/Auth} === 'H' }",
                                                         change: PostHandler.toggleIsPossibleSave.bind(PostHandler)
                                                     })
                                                 ]
