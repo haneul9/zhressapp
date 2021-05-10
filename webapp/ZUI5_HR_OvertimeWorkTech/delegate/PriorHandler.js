@@ -75,7 +75,7 @@ sap.ui.define(
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/SearchConditions/Begda", new Date(currDate.getFullYear(), currDate.getMonth(), 1));
                 this.oModel.setProperty("/SearchConditions/Endda", new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0));
-                if($.app.getAuth() === $.app.Auth.ESS) {
+                if($.app.getAuth() === $.app.Auth.ESS && this.oController.getSessionInfoByKey("Zshft") !== "X") {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Ename"));
                     this.oModel.setProperty("/SearchConditions/Pernr", this.oController.getSessionInfoByKey("name"));
                     this.oModel.setProperty("/SearchConditions/Bukrs3", this.oController.getSessionInfoByKey("Bukrs3"));
@@ -215,7 +215,8 @@ sap.ui.define(
              */
             pressOpenApprovalBtn: function() {
 
-                var vBukrs3 = this.oController.getSessionInfoByKey("Bukrs3");
+                var vZshft = this.oController.getSessionInfoByKey("Zshft"),
+                    vBukrs3 = this.oController.getSessionInfoByKey("Bukrs3");
 
                 this.oModel.setProperty("/Detail", {
                     IsViewMode: false,
@@ -224,9 +225,9 @@ sap.ui.define(
                     IsPossibleDelete: false,
                     Header: {
                         Status1: "",
-                        Ename: this.oController.getSessionInfoByKey("Ename"),
-                        Pernr: this.oController.getSessionInfoByKey("Pernr"),
-                        Bukrs3: this.oController.getSessionInfoByKey("Bukrs3"),
+                        Ename: vZshft === "X" ? "" : this.oController.getSessionInfoByKey("Ename"),
+                        Pernr: vZshft === "X" ? "" : this.oController.getSessionInfoByKey("Pernr"),
+                        Bukrs3: vZshft === "X" ? "" : this.oController.getSessionInfoByKey("Bukrs3"),
                         OtbetmT: "00",
                         OtbetmM: "00",
                         OtentmT: "00",
@@ -242,7 +243,9 @@ sap.ui.define(
                 });
 
                 this.openDetailDialog();
-                this.calculationOverWork("X");
+                if(vZshft !== "X") {
+                    this.calculationOverWork("X");
+                }
             },
 
             /**
