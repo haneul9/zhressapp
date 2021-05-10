@@ -297,21 +297,27 @@ sap.ui.define([
 			oRow.addCell(oCell);
 			oMat.addRow(oRow);
 
-			oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_ModLine2");
+			// oRow=new c.layout.MatrixLayoutRow(oController.PAGEID+"_ModLine2");
 			var oFileUploader = sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController);
 
-			oCell=new c.layout.MatrixLayoutCell({
-				hAlign:"Begin",
-				colSpan:2,
-				content:[oFileUploader]
+			// oCell=new c.layout.MatrixLayoutCell({
+			// 	hAlign:"Begin",
+			// 	colSpan:2,
+			// 	content:[oFileUploader]
+			// });
+			// oRow.addCell(oCell);
+			// oMat.addRow(oRow);
+
+			var oHBox=new sap.m.HBox(oController.PAGEID+"_ModLine2",{
+				items: [
+					oFileUploader
+				]
 			});
-			oRow.addCell(oCell);
-			oMat.addRow(oRow);
 
 			var oContent = new sap.m.VBox({
 				justifyContent: "Center",
 				fitContainer: true,
-				items: [oMat]
+				items: [oMat,oHBox]
 			}).addStyleClass("vbox-form-mobile");
 					
 			/////////////////////////////////////////////////////////
