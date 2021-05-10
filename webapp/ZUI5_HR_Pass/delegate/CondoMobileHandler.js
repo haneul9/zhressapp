@@ -63,6 +63,9 @@ sap.ui.define(
 						// Display control
 						oRowData.isNew = false;
 
+						// Date format
+						oRowData.Dtfmt = this.oController.getSessionInfoByKey("Dtfmt");
+
 						this.oModel.setProperty("/Detail/Data", oRowData);
 
 						sap.ui.getCore().getEventBus().publish("nav", "to", {
@@ -94,6 +97,9 @@ sap.ui.define(
 
 						// Display control
 						oRowData.isNew = true;
+
+						// Date format
+						oRowData.Dtfmt = this.oController.getSessionInfoByKey("Dtfmt");
 
 						this.oModel.setProperty("/Detail/Data", oRowData);
 			
