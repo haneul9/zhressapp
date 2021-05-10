@@ -447,10 +447,13 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 					}).addStyleClass("displayNone")]
 		});
 		
-		var oPanel1 = new sap.m.Panel({
-			expandable : false,
-			expanded : true,
-			content : [oMatrix]
+		// var oPanel1 = new sap.m.Panel({
+		// 	expandable : false,
+		// 	expanded : true,
+		// 	content : [oMatrix]
+		// });
+		var oPanel1 = new sap.m.FlexBox({
+			items : [oMatrix]
 		});
         
         // 2. 대근신청
@@ -500,10 +503,15 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 		
 		oController.makeColumn(oController, oTable2, col_info2);
 		
-		var oPanel2 = new sap.m.Panel({
-			expandable : false,
-			expanded : true,
-			content : [oTable2],
+		// var oPanel2 = new sap.m.Panel({
+		// 	expandable : false,
+		// 	expanded : true,
+		// 	content : [oTable2],
+		// 	visible : "{Panel2Visible}"
+		// });
+
+		var oPanel2 = new sap.m.FlexBox({
+			items : [oTable2],
 			visible : "{Panel2Visible}"
 		});
 		
@@ -536,10 +544,14 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 		
 		common.makeTable.makeColumn(oController, oTable3, col_info3);
 		
-		var oPanel3 = new sap.m.Panel({
-			expandable : false,
-			expanded : true,
-			content : [oTable3]
+		// var oPanel3 = new sap.m.Panel({
+		// 	expandable : false,
+		// 	expanded : true,
+		// 	content : [oTable3]
+		// });
+
+		var oPanel3 = new sap.m.FlexBox({
+			items : [oTable3]
 		});
 		
 		var titleitem = [

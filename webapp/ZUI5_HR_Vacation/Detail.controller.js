@@ -320,10 +320,10 @@ sap.ui.define([
 									var data1 = data.VacationApply1Nav.results[0];
 									
 									if(data1){
-										var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
+										var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 										
-										data1.Begda = dateFormat.format(data1.Begda);
-										data1.Endda = dateFormat.format(data1.Endda);
+										data1.Begda = dateFormat.format(new Date(common.Common.setTime(data1.Begda)));
+										data1.Endda = dateFormat.format(new Date(common.Common.setTime(data1.Endda)));
 										
 										data1.Kaltg = parseFloat(data1.Kaltg) == 0 ? "" : parseFloat(data1.Kaltg);
 										data1.Hldtg = parseFloat(data1.Hldtg) == 0 ? "" : parseFloat(data1.Hldtg);
