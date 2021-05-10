@@ -154,7 +154,7 @@ sap.ui.define([
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								displayFormat: "{Dtfmt}",
 								editable: false,
-								dateValue: "{AppDate}",
+								dateValue: "{Begda}",
 								valueFormat: "yyyy-MM-dd",
 								placeholder: "yyyy-mm-dd"
 							})

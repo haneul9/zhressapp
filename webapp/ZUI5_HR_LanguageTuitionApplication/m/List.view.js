@@ -1,8 +1,9 @@
 ﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define([
 	"../../common/Common",
-	"../../common/PageHelper"
-], function (Common,PageHelper) {
+	"../../common/PageHelper",
+    "../../common/PickOnlyDateRangeSelection"
+], function (Common,PageHelper, PickOnlyDateRangeSelection) {
 "use strict";
     
     sap.ui.jsview($.app.APP_ID, {
@@ -15,6 +16,36 @@ sap.ui.define([
             // Model 선언
             $.app.setModel("ZHR_BENEFIT_SRV");
             $.app.setModel("ZHR_COMMON_SRV");
+
+            var vYear = new Date().getFullYear();
+			var vMonth = new Date().getMonth();		
+			
+			var oSearchBox = new sap.m.FlexBox({
+				fitContainer: true,
+				items: [ 
+					new sap.m.HBox({
+						items: [
+                            new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
+                                width: "80%",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								delimiter: "~",
+								dateValue: new Date(vYear, 0, 1),
+								secondDateValue: new Date(vYear, vMonth+1, 0)
+							})
+						]
+                    }).addStyleClass("search-field-group pr-0"),
+					new sap.m.HBox({
+						items: [
+							new sap.m.Button({
+								press: oController.onPressSer.bind(oController),
+								icon: "sap-icon://search"
+							}).addStyleClass("button-search")
+						]
+					})
+					.addStyleClass("button-group pl-0")
+				]
+			})
+			.addStyleClass("search-box-mobile h-auto");
 
             var oInfoBox = new sap.m.HBox({
                 justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
@@ -113,6 +144,7 @@ sap.ui.define([
             return new PageHelper({
                 contentContainerStyleClass: "app-content-container-mobile",
                 contentItems: [
+                    oSearchBox,
                     oInfoBox,
                     oTable
                 ]

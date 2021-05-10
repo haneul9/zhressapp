@@ -31,7 +31,9 @@ sap.ui.define([
 		},
 
 		onAfterShow: function() {
-
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
+			
 			this.retrieveTable.call(this);
 		},
 		
@@ -41,9 +43,14 @@ sap.ui.define([
 			this.DetailModel.setData({Data: {}});
 		},
 
+		onPressSer: function() {
+			this.retrieveTable.call(this);
+		},
+
 		retrieveTable: function() {
 			var oController = this;
 			var oPayload = {};
+			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 			
 			this.initModels.call(this);
 			
@@ -51,6 +58,8 @@ sap.ui.define([
 			oPayload.IGubun = "L";
 			oPayload.IPernr = this.getSessionInfoByKey("name");
 			oPayload.IBukrs = this.getSessionInfoByKey("Bukrs3");
+			oPayload.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+			oPayload.IEndda = oSearchDate.getSecondDateValue();
 			
 			// Navigation property
 			oPayload.ChildExport = [];

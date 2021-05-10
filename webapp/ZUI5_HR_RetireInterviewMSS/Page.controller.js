@@ -82,14 +82,10 @@
 				success: function(oData, oResponse) {
 					
 					if (oData && oData.TableIn1) {
-						var dataLength = 10;
 						Common.log(oData);
 						var rDatas = oData.TableIn1.results;
-						dataLength = rDatas.length;
 						oController.TableModel.setData({Data: rDatas}); 
 					}
-
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -98,6 +94,8 @@
 					});
 				}
 			});
+
+			Common.adjustAutoVisibleRowCount.call(oTable);
         },
 
 		onPressSer: function() { //조회

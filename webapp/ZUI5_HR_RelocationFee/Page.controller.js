@@ -49,6 +49,8 @@ sap.ui.define([
 		},
 		
 		onAfterShow: function() {
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 			this.onInitData(this);
         },
@@ -81,33 +83,36 @@ sap.ui.define([
 				}
 			});
 		},
+
+		onPressSer: function() {
+			this.onTableSearch();
+		},
 		
 		onTableSearch: function() {
 			var oController = $.app.getController();
 			var oTable = $.app.byId(oController.PAGEID + "_Table");
+			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
-
+			
 			oController.TableModel.setData({Data: []}); 
 			
 			var sendObject = {};
 			// Header
 			sendObject.IPernr = vPernr;
             sendObject.IGubun = "1";
+			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+			sendObject.IEndda = oSearchDate.getSecondDateValue();
 			// Navigation property
 			sendObject.NewPostTableIn1 = [];
 			
 			oModel.create("/NewPostImportSet", sendObject, {
 				success: function(oData, oResponse) {
 					if (oData && oData.NewPostTableIn1) {
-						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.NewPostTableIn1.results;
-						dataLength = rDatas1.length;
 						oController.TableModel.setData({Data: rDatas1}); 
 					}
-
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -116,6 +121,8 @@ sap.ui.define([
 					});
 				}
 			});
+
+			Common.adjustAutoVisibleRowCount.call(oTable);
         },
 
 		getLocationCost: function() {

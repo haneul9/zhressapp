@@ -271,14 +271,10 @@ sap.ui.define([
 				success: function(oData, oResponse) {
 					
 					if (oData && oData.TrainingOutApplyTableIn1) { //값을 제대로 받아 왔을 때
-						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.TrainingOutApplyTableIn1.results;
-						dataLength = rDatas1.length;
 						oController.TableModel.setData({Data: rDatas1}); //직접적으로 화면 테이블에 셋팅하는 작업
 					}
-					
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 
 					oController.SearchModel.setProperty("/ExportData", oData.TrainingOutApplyExport.results[0]);
 				},
@@ -289,6 +285,8 @@ sap.ui.define([
 					});
 				}
 			});
+
+			Common.adjustAutoVisibleRowCount.call(oTable);
 		},
 		
 		onSelectedRow: function(oEvent) { // Row선택

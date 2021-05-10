@@ -49,12 +49,19 @@
             },
 
             onAfterShow: function () {
+                var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+                oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
+                this.onTableSearch();
+            },
+
+            onPressSer: function() {
                 this.onTableSearch();
             },
 
             onTableSearch: function () {
                 var oController = $.app.getController();
                 var oTable = $.app.byId(oController.PAGEID + "_Table");
+                var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
                 var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
                 var vPernr = oController.getUserId();
 
@@ -65,6 +72,8 @@
                 sendObject.IPernr = vPernr;
                 sendObject.IEmpid = vPernr;
                 sendObject.IDatum = new Date();
+                sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+                sendObject.IEndda = oSearchDate.getSecondDateValue();
                 sendObject.IConType = "1";
                 // Navigation property
                 sendObject.Export = [];
@@ -75,16 +84,13 @@
                 oModel.create("/LeaveRequestSet", sendObject, {
                     success: function (oData) {
                         if (oData && oData.TableIn1) {
-                            var dataLength = 10;
                             Common.log(oData);
                             var rDatas = oData.TableIn1.results;
-                            dataLength = rDatas.length;
                             oController.TableModel.setData({ Data: rDatas });
                         }
 
                         oController.HistoryModel.setData({ Data: oData.TableIn3.results });
                         oController.LogModel.setData({ Data: oData.Export.results[0] });
-                        oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
                         if (oData.Export.results[0].ReqBtn !== "X") {
                             sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107") });
                         }
@@ -96,6 +102,8 @@
                         });
                     }
                 });
+
+                Common.adjustAutoVisibleRowCount.call(oTable);
             },
 
             getPeriod: function () {

@@ -507,12 +507,23 @@
                                             }
                                         },
                                         textAlign: "Begin"
+                                    }),
+                                    new sap.m.Text({
+										visible: {
+											path: vBukrs,
+											formatter: function() {
+												return vBukrs === "A100";
+											}
+										},
+                                        width: "auto",
+                                        text: "{i18n>MSG_42030}",
+                                        textAlign: "Begin"
                                     })
                                 ]
                             })
                         ]
                     })
-                    .addStyleClass("search-field-group h-60px")
+                    .addStyleClass("search-field-group h-auto")
                 ]
             })
 			.setModel(oController.ApplyModel)

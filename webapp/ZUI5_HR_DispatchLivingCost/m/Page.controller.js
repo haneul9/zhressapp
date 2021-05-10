@@ -44,6 +44,9 @@
 		},
 		
 		onAfterShow: function() {
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+			
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
         },
 
@@ -61,10 +64,15 @@
 					oController.TableModel.setProperty("/Data/" + index + "/Check", "");
 			});
         },
+
+		onPressSer: function() {
+			this.onTableSearch();
+		},
 		
 		onTableSearch: function() {
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 			
@@ -75,6 +83,8 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.IEmpid = vPernr;
             sendObject.IConType = "1";
+			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+			sendObject.IEndda = oSearchDate.getSecondDateValue();
 			// Navigation property
 			sendObject.DispatchApplyExport = [];
 			sendObject.DispatchApplyTableIn1 = [];

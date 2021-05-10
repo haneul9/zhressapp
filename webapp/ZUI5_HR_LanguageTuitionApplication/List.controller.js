@@ -159,7 +159,7 @@ sap.ui.define([
                 aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
 			});
 
-			oController.TuitionSearchModel.setProperty("/Data/Zyear1", vZyear-1);
+			oController.TuitionSearchModel.setProperty("/Data/Zyear1", vZyear);
 			oController.TuitionSearchModel.setProperty("/Zyears1", aYears);
 			
 			vZyear = new Date().getFullYear(),
@@ -188,7 +188,7 @@ sap.ui.define([
                 aMonths.push({ Code: vConvertMonth, Text: vConvertMonth + "월" });
             });
 
-            oController.TuitionSearchModel.setProperty("/Data/Zmonth1", vZmonth+1);
+            oController.TuitionSearchModel.setProperty("/Data/Zmonth1", 1);
 			oController.TuitionSearchModel.setProperty("/Zmonths1", aMonths);
 
 			vZmonth = new Date().getMonth() + 1,
@@ -237,14 +237,10 @@ sap.ui.define([
 				success: function(oData, oResponse) {
 					
 					if (oData && oData.LanguPayApplyTableIn) { //값을 제대로 받아 왔을 때
-						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.LanguPayApplyTableIn.results;
-						dataLength = rDatas1.length;
 						oController.TableModel.setData({Data: rDatas1}); //직접적으로 화면 테이블에 셋팅하는 작업
 					}
-					
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 
 					oController.TuitionSearchModel.setProperty("/ExportData", oData.LanguPayApplyExport.results[0]);
 					oController.UploadFileModel.setProperty("/FileData", oData.LanguPayApplyTableIn3.results);
@@ -256,6 +252,8 @@ sap.ui.define([
 					});
 				}
 			});
+
+			Common.adjustAutoVisibleRowCount.call(oTable);
 		},
 		
 		onSelectedRow: function(oEvent) { // Row선택

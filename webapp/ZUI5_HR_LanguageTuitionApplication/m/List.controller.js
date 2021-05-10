@@ -40,14 +40,20 @@
 		},
 		
 		onAfterShow: function() {
-            
+            var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+            oSearchDate.setDisplayFormat("yyyy-MM");
 			this.onTableSearch(this);
 		},
+
+        onPressSer: function() {
+            this.onTableSearch(this);
+        },
 
         onTableSearch: function(oController) {
             var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
             var vPernr = oController.getUserId();
             var vBukrs2 = oController.getUserGubun();
+            var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 
             oController.TableModel.setData({Data: []});
 
@@ -56,8 +62,8 @@
                 IEmpid: vPernr,
                 IBukrs: vBukrs2,
                 IConType: "1",
-                IBegda: new Date(new Date().setYear(new Date().getFullYear()-100)),
-                IEndda: new Date(new Date().setYear(new Date().getFullYear()+100)),
+                IBegda: Common.adjustGMTOdataFormat(oSearchDate.getDateValue()),
+                IEndda: oSearchDate.getSecondDateValue(),
                 LanguPayApplyExport: [],
                 LanguPayApplyTableIn: [],
                 LanguPayApplyTableIn3: []

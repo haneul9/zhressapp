@@ -1,8 +1,9 @@
 ﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define([
 	"../common/PageHelper",
-	"../common/ZHR_TABLES"
-], function (PageHelper, ZHR_TABLES) {
+	"../common/ZHR_TABLES",
+	"../common/PickOnlyDateRangeSelection"
+], function (PageHelper, ZHR_TABLES, PickOnlyDateRangeSelection) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -26,6 +27,38 @@ sap.ui.define([
 
 		createContent: function (oController) {
 			this.loadModel();
+
+			var vYear = new Date().getFullYear();
+			var vMonth = new Date().getMonth();		
+			var vDate = new Date().getDate();		
+			
+			var oSearchBox = new sap.m.FlexBox({
+				fitContainer: true,
+				items: [ 
+					new sap.m.HBox({
+						items: [
+							new sap.m.Label({text: "{i18n>LABEL_38003}"}), // 신청일
+                            new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
+								width: "250px",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								delimiter: "~",
+								dateValue: new Date(vYear, 0, 1),
+								secondDateValue: new Date(vYear, vMonth, vDate)
+							})
+						]
+                    }).addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						items: [
+							new sap.m.Button({
+								press: oController.onPressSer.bind(oController),
+								text: "{i18n>LABEL_00100}" // 조회
+							}).addStyleClass("button-search")
+						]
+					})
+					.addStyleClass("button-group")
+				]
+			})
+			.addStyleClass("search-box search-bg pb-7px mt-16px");
             
 			var infoBox = new sap.m.FlexBox({
 				justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
@@ -94,6 +127,7 @@ sap.ui.define([
 			
 			return new PageHelper({
 				contentItems: [
+					oSearchBox,
 					infoBox,
 					oTable
 				]

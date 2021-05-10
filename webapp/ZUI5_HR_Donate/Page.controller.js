@@ -189,14 +189,10 @@ sap.ui.define([
 				success: function(oData, oResponse) {
 					
 					if (oData && oData.SocialDonationTableIn1) {
-						var dataLength = 10;
 						Common.log(oData);
 						var rDatas1 = oData.SocialDonationTableIn1.results;
-						dataLength = rDatas1.length;
 						oController.TableModel.setData({Data: rDatas1}); 
 					}
-					
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -205,6 +201,8 @@ sap.ui.define([
 					});
 				}
 			});
+
+			Common.adjustAutoVisibleRowCount.call(oTable);
 		},
 		
 		onPressSer: function() { //조회

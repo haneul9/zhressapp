@@ -130,14 +130,10 @@ sap.ui.define(
 					success: function (oData, oResponse) {
 						
 						if (oData && oData.TableIn.results) {
-							var dataLength = 10;
 							//값을 제대로 받아 왔을 때
 							var rDatas = oData.TableIn.results;
-							dataLength = rDatas.length;
 							oController.TableModel.setData({ Data: rDatas }); //직접적으로 화면 테이블에 셋팅하는 작업
 						}
-						
-						oTable.setVisibleRowCount(dataLength > 10 ? 10 : rDatas.length); //rowcount가 10개 미만이면 그 갯수만큼 row적용
 						BusyIndicator.hide();
 					},
 					error: function (oResponse) {
@@ -145,6 +141,7 @@ sap.ui.define(
 						BusyIndicator.hide();
 					}
 				});
+				Common.adjustAutoVisibleRowCount.call(oTable);
 			},
 			
 			onStartDatePicker: function() {
@@ -235,7 +232,7 @@ sap.ui.define(
 					vSelectedType = "";
 					
 				// Data setting
-				oController.DetailModel.setProperty("/FormData", {});
+				oController.DetailModel.setData({FormData: []});
 				
 				if (!oController._DetailModel) {
 					oController._DetailModel = sap.ui.jsfragment("ZUI5_HR_Congratulation.fragment.CongratulationDetail", oController);
@@ -251,7 +248,7 @@ sap.ui.define(
 				vMsg = vMsg.replace("&Cntl", oController.DetailModel.getProperty("/MultiBoxData/0/TextA"));
 
 				oController.DetailModel.setProperty("/FormData/FilePlaceholder",vMsg);
-				oController.DetailModel.setProperty("/FormData/AppDate", curDate);
+				oController.DetailModel.setProperty("/FormData/Begda", curDate);
 				oController.DetailModel.setProperty("/FormData/Type", vSelectedType);
 				oController.DetailModel.setProperty("/FormData/TextA", "CAAID");
 				
@@ -376,13 +373,14 @@ sap.ui.define(
 					oController = $.app.getController();
 				var oContext = oEvent.mParameters.rowIndex;
 				var oRowData = oController.TableModel.getProperty("/Data/" + oContext);
+				var oCopiedRow = $.extend(true, {}, oRowData);
 				
 				if (!oController._DetailModel) {
 					oController._DetailModel = sap.ui.jsfragment("ZUI5_HR_Congratulation.fragment.CongratulationDetail", oController);
 					oView.addDependent(oController._DetailModel);
 				}
 				
-				oController.DetailModel.setProperty("/FormData", oRowData);
+				oController.DetailModel.setProperty("/FormData", oCopiedRow);
 				oController.setTypeCombo(false);
 				oController.onHelperCheck();
 				oController.onReadyPlaceholder();
@@ -390,7 +388,7 @@ sap.ui.define(
 				oController.onStartDatePicker();
 				
 				var oBirthDayDate = $.app.byId(oController.PAGEID + "_BirthDayBox");
-				if(oRowData.Fgbdt) oBirthDayDate.setVisible(true);
+				if(oCopiedRow.Fgbdt) oBirthDayDate.setVisible(true);
 				else oBirthDayDate.setVisible(false);
 				 
 			},
@@ -430,7 +428,11 @@ sap.ui.define(
 				vDetailData.Fmaid = oController.DetailModel.getProperty("/FormData/Fmaid");
 				vDetailData.Caaid = oController.DetailModel.getProperty("/FormData/Caaid");
 				
-				delete vDetailData.FilePlaceholder //필요없는 값이므로 key 삭제
+				if(vDetailData.Fgbdt) {
+					vDetailData.Fgbdt =	Common.setUTCDateTime(vDetailData.Fgbdt);
+				}
+				
+				delete vDetailData.FilePlaceholder; //필요없는 값이므로 key 삭제
 				delete vDetailData.TextA; //필요없는 값이므로 key 삭제
 				delete vDetailData.isVisibleType;
 				delete vDetailData.isVisibleVehicle; 
@@ -452,7 +454,7 @@ sap.ui.define(
 							IBukrs: "1000",
 							IOdkey: "",
 							IDatum: new Date(),
-							TableIn: [vDetailData] //넘길 값들을 담아놓음
+							TableIn: [Common.copyByMetadata(oModel, "CongratulationApplyTableIn", vDetailData)] //넘길 값들을 담아놓음
 						};
 						
 						oModel.create("/CongratulationApplySet", sendObject, {
@@ -505,8 +507,7 @@ sap.ui.define(
 				//신청 event
 				var oController = $.app.getController();
 				var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
-				var vDetailData = oController.DetailModel.getProperty("/FormData"),
-					oCopiedData = {};
+				var vDetailData = oController.DetailModel.getProperty("/FormData");
 				var vPernr = oController.getUserId();
 				
 				if(oController.onErrorCheckBox()){
@@ -514,21 +515,20 @@ sap.ui.define(
 				}
 				
 				delete vDetailData.FilePlaceholder; //필요없는 값이므로 key 삭제
-				
-				oCopiedData = Object.assign({}, vDetailData);
 
-				oCopiedData.Pernr = vPernr;
-				oCopiedData.StartDate = "/Date(" + Common.adjustGMT(oCopiedData.StartDate) + ")/";
+				vDetailData.Pernr = vPernr;
 				
 				this.onCheckedBox(); //체크박스 체크
-				oCopiedData.Fmaid = oController.DetailModel.getProperty("/FormData/Fmaid");
-				oCopiedData.Caaid = oController.DetailModel.getProperty("/FormData/Caaid");
-				
-				if(oCopiedData.Fgbdt) oCopiedData.Fgbdt.setDate(oCopiedData.Fgbdt.getDate() + 1)
-				
-				delete oCopiedData.TextA; //필요없는 값이므로 key 삭제
-				delete oCopiedData.isVisibleType;
-				delete oCopiedData.isVisibleVehicle;
+				vDetailData.Fmaid = oController.DetailModel.getProperty("/FormData/Fmaid");
+				vDetailData.Caaid = oController.DetailModel.getProperty("/FormData/Caaid");
+
+				if(vDetailData.Fgbdt) {
+					vDetailData.Fgbdt =	Common.setUTCDateTime(vDetailData.Fgbdt);
+				}
+								
+				delete vDetailData.TextA; //필요없는 값이므로 key 삭제
+				delete vDetailData.isVisibleType;
+				delete vDetailData.isVisibleVehicle;
 				
 				BusyIndicator.show(0);
 				var onProcessSave = function (fVal) {
@@ -544,8 +544,8 @@ sap.ui.define(
 						}; 
 						
 						// 첨부파일 저장
-						oCopiedData.Appnm = AttachFileAction.uploadFile.call(oController);
-						if(!oCopiedData.Appnm) return false;
+						vDetailData.Appnm = AttachFileAction.uploadFile.call(oController);
+						if(!vDetailData.Appnm) return false;
 						
 						var sendObject = {
 							IConType: "3",
@@ -555,7 +555,7 @@ sap.ui.define(
 							IBukrs: "1000",
 							IOdkey: "",
 							IDatum: new Date(),
-							TableIn: [oCopiedData] //넘길 값들을 담아놓음
+							TableIn: [Common.copyByMetadata(oModel, "CongratulationApplyTableIn", vDetailData)] //넘길 값들을 담아놓음
 						};
 						
 						oModel.create("/CongratulationApplySet", sendObject, {
@@ -757,7 +757,7 @@ sap.ui.define(
 				var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 				var vPernr = oController.getUserId();
 				var oTypeCheck = $.app.byId(oController.PAGEID + "_TypeCheck");
-				var vAppDate = oController.DetailModel.getData().FormData.AppDate;
+				var vAppDate = oController.DetailModel.getData().FormData.Begda;
 				
 				var vYear = vAppDate.getFullYear()+".";
 				var vMonth = vAppDate.getMonth()+1+".";

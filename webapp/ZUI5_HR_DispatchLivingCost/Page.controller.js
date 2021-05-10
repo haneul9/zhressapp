@@ -53,6 +53,8 @@ sap.ui.define([
 		},
 		
 		onAfterShow: function() {
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 
 			this.onTableSearch();
         },
@@ -196,9 +198,14 @@ sap.ui.define([
             });
         },
 
+		onPressSer: function() {
+			this.onTableSearch();
+		},
+
         onTableSearch: function() {
 			var oController = $.app.getController();
 			var oTable = $.app.byId(oController.PAGEID + "_Table");
+			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
@@ -210,6 +217,8 @@ sap.ui.define([
 			sendObject.IBukrs = vBukrs;
 			sendObject.IEmpid = vPernr;
             sendObject.IConType = "1";
+			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+			sendObject.IEndda = oSearchDate.getSecondDateValue();
 			// Navigation property
 			sendObject.DispatchApplyExport = [];
 			sendObject.DispatchApplyTableIn1 = [];
@@ -218,10 +227,8 @@ sap.ui.define([
 				success: function(oData, oResponse) {
 					
 					if (oData && oData.DispatchApplyTableIn1) {
-						var dataLength = 10;
 						Common.log(oData);
 						var rDatas = oData.DispatchApplyTableIn1.results;
-						dataLength = rDatas.length;
 						oController.TableModel.setData({Data: rDatas}); 
 					}
                     
@@ -229,8 +236,6 @@ sap.ui.define([
 					if(oData.DispatchApplyExport.results[0].EClose === "X"){
 						sap.m.MessageBox.alert(oController.getBundleText("MSG_00072"), { title: oController.getBundleText("MSG_08107")});
 					}
-
-					oTable.setVisibleRowCount(dataLength > 10 ? 10 : dataLength);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -239,6 +244,8 @@ sap.ui.define([
 					});
 				}
 			});
+			
+			Common.adjustAutoVisibleRowCount.call(oTable);
         },
 
 		onPressReq: function() { //신청

@@ -1,6 +1,7 @@
 ﻿sap.ui.define([
-	"../../common/PageHelper"
-], function (PageHelper) {
+	"../../common/PageHelper",
+    "../../common/PickOnlyDateRangeSelection"
+], function (PageHelper, PickOnlyDateRangeSelection) {
 "use strict";
     
     sap.ui.jsview($.app.APP_ID, {
@@ -13,6 +14,36 @@
             // Model 선언
             $.app.setModel("ZHR_BENEFIT_SRV");
             $.app.setModel("ZHR_COMMON_SRV");
+
+            var vYear = new Date().getFullYear();
+			var vMonth = new Date().getMonth();		
+			var vDate = new Date().getDate();		
+			
+			var oSearchBox = new sap.m.FlexBox({
+				fitContainer: true,
+				items: [ 
+					new sap.m.HBox({
+						items: [
+                            new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								delimiter: "~",
+								dateValue: new Date(vYear, 0, 1),
+								secondDateValue: new Date(vYear, vMonth, vDate)
+							})
+						]
+                    }).addStyleClass("search-field-group pr-0"),
+					new sap.m.HBox({
+						items: [
+							new sap.m.Button({
+								press: oController.onPressSer.bind(oController),
+								icon: "sap-icon://search"
+							}).addStyleClass("button-search")
+						]
+					})
+					.addStyleClass("button-group pl-0")
+				]
+			})
+			.addStyleClass("search-box-mobile h-auto");
 
             var oInfoBox = new sap.m.HBox({
                 justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
@@ -109,6 +140,7 @@
             return new PageHelper({
                 contentContainerStyleClass: "app-content-container-mobile",
                 contentItems: [
+                    oSearchBox,
                     oInfoBox,
                     oTable
                 ]

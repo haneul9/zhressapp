@@ -504,6 +504,17 @@
                                                 }
                                             },
                                             textAlign: "Begin"
+                                        }).addStyleClass("line-height-24"),
+                                        new sap.m.Text({
+                                            visible: {
+                                                path: vBukrs,
+                                                formatter: function() {
+                                                    return vBukrs === "A100";
+                                                }
+                                            },
+                                            width: "auto",
+                                            text: "{i18n>MSG_42030}",
+                                            textAlign: "Begin"
                                         }).addStyleClass("line-height-24")
                                     ]
                                 })

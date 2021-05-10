@@ -47,11 +47,18 @@
 		
 		onAfterShow: function() {
             var vBukrs = this.getUserGubun();
+			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+			
+			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
             this.LogModel.setData({Bukrs: vBukrs});
 
 			this.onTableSearch();
 			this.onChildrenData(this);
         },
+
+		onPressSer: function() { 
+			this.onTableSearch();
+		},
 
 		onChildrenData: function(oController) {
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
@@ -88,6 +95,7 @@
 		onTableSearch: function() {
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 			
@@ -97,6 +105,8 @@
 			// Header
 			sendObject.IPernr = vPernr;
 			sendObject.IBukrs = vBukrs;
+			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+			sendObject.IEndda = oSearchDate.getSecondDateValue();
             sendObject.IConType = "1";
 			// Navigation property
 			sendObject.EducationfundApplyTableIn = [];

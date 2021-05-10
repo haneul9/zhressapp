@@ -95,7 +95,7 @@ sap.ui.define([
 								textAlign: "End"
 							}),
 							new sap.m.DatePicker(oController.PAGEID + "_ADate", {
-								dateValue: "{AppDate}",
+								dateValue: "{Begda}",
 								width: "200px",
 								displayFormat: oController.getSessionInfoByKey("Dtfmt"),
 								valueFormat: "yyyy-MM-dd",
@@ -462,7 +462,6 @@ sap.ui.define([
 					}).addStyleClass("button-dark"),
 					new sap.m.Button({
 						press: function () {
-							oController.onTableSearch();
 							oController.onCheckedBox(); //체크박스 체크
 							oDialog.close();
 						},

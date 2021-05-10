@@ -42,12 +42,19 @@
             },
 
             onAfterShow: function () {
+                var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+                oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
+                this.onTableSearch();
+            },
+
+            onPressSer: function() { 
                 this.onTableSearch();
             },
 
             onTableSearch: function () {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+                var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
                 var vPernr = oController.getUserId();
 
                 oController.TableModel.setData({ Data: [] });
@@ -57,6 +64,8 @@
                 sendObject.IPernr = vPernr;
                 sendObject.IEmpid = vPernr;
                 sendObject.IDatum = new Date();
+                sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
+                sendObject.IEndda = oSearchDate.getSecondDateValue();
                 sendObject.IConType = "1";
                 // Navigation property
                 sendObject.Export = [];

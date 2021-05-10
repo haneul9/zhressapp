@@ -30,7 +30,7 @@ sap.ui.define([
 				visibleRowCount: 10,
 				showOverlay: false,
 				showNoData: true,
-				width: "70%",
+				width: "100%",
 				noData: "{i18n>LABEL_00901}"
 			})
 				.addStyleClass("mt-18px")
