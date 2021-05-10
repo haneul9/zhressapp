@@ -132,7 +132,7 @@ sap.ui.define(
                                             vAlign : "Middle"
                                         }).addStyleClass("Data"),
                                         new sap.ui.commons.layout.MatrixLayoutCell({
-                                            content : [new sap.m.Text({text : "{Holit}"})], // 휴일근로\n(C)
+                                            content : [new sap.m.Text({text : "{Hotot}"})], // 휴일근로\n(C)
                                             hAlign : "Center",
                                             vAlign : "Middle"
                                         }).addStyleClass("Data"),

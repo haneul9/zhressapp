@@ -112,7 +112,7 @@ sap.ui.define([
 				oCalendar.addContent(sap.ui.jsfragment("ZUI5_HR_WorkCalendar.fragment.Calendar", oController));
 			
 			// summary 초기화
-			var field = ["Dutyt", "Workt", "Overt", "Holit", "Sumoh", "Sumtm", "Workt2", "Dutyc", "DutycT"];    
+			var field = ["Dutyt", "Workt", "Overt", "Hotot", "Sumoh", "Sumtm", "Workt2", "Dutyc", "DutycT"];    
 			for(var i=0; i<field.length; i++){
 				eval("oController._ListCondJSonModel.setProperty('/Data/" + field[i] + "', '-');");
 			}
