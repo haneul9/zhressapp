@@ -172,7 +172,7 @@ sap.ui.define(
 							if(this.zFlag) {
 								data.results = data.results.filter(function(elem) {
 									if(this.Zshft) {	// 교대조 포함
-										return elem.Otype === "O" || elem.Zflag === "X" || elem.Zshift === "X";
+										return elem.Otype === "O" || elem.Zflag === "X" || elem.Zshft === "X";
 									} else {
 										return elem.Otype === "O" || elem.Zflag === "X";
 									}
@@ -180,7 +180,7 @@ sap.ui.define(
 							} else {
 								if(this.Zshft) { // 전문직 프래그가 false이고 교대조 플래그가 true이면 리스트에서 교대조를 제외한다.
 									data.results = data.results.filter(function(elem) {
-										return elem.Otype === "O" || elem.Zshift !== "X";
+										return elem.Otype === "O" || elem.Zshft !== "X";
 									});
 								}
 							}
