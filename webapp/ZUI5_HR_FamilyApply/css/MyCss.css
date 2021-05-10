@@ -47,3 +47,6 @@
 .sapMLabel.sapMLabelRequired .sapMLabelColonAndRequired:after{
     font-size:17px !important;
 }
+.sapMLabel{
+    width:100% !important;
+}

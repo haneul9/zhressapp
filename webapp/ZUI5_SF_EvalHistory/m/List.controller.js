@@ -49,10 +49,10 @@ sap.ui.define(
 									oCells[4].setText();
 								}else{
 									if(datas[i].TableIn2.results[0].Btn01==""){
-										oCells[2].setText();
+										oCells[3].setText();
 									}
 									if(datas[i].TableIn2.results[0].Btn02==""){
-										oCells[3].setText();
+										oCells[2].setText();
 									}
 									if(datas[i].TableIn2.results[0].Btn06==""){
 										oCells[4].setText();
