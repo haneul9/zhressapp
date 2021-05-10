@@ -521,7 +521,7 @@
                 Max: "3",
                 Editable: (!vStatus || vStatus === "AA") ? true : false,
             },vNo);
-			$("#"+oController.PAGEID+"_ATTACHBOX"+vNo).children()[0].childNodes[0].childNodes[0].style.width="70px";
+			fragment.COMMON_ATTACH_FILES.resizingLabel.call(oController,vNo);
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {

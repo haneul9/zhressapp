@@ -616,6 +616,12 @@ fragment.COMMON_ATTACH_FILES = {
 		});
 	},
 
+	resizingLabel:function(vNo){
+		setTimeout(function(){
+			$("#"+this.PAGEID+"_ATTACHBOX"+vNo).children()[0].childNodes[0].childNodes[0].style.width="70px";
+		},100);		
+	},
+
 	/*
 	 * 첨부파일을 다운로드 한다.
 	 */
