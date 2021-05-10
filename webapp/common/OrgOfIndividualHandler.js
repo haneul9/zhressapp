@@ -252,6 +252,7 @@ sap.ui.define(
 					}.bind(this))
 					.then(function() {
 						this.callback(!oSelectedItem ? null : oSelectedItem);
+						oTree.removeSelections();
 						
 						if(bChildIsDummyNode) oTree.setBusy(false);
 						if(this.autoClose) this.oDialog.close();
