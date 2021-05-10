@@ -121,9 +121,9 @@ sap.ui.define(
 
                 this.oModel.setProperty("/List", results);
 
-                $.app.byViewId("ApprovalTable").setFirstVisibleRow(0);
-                $.app.byViewId("ApprovalTable").clearSelection();
-                Common.adjustAutoVisibleRowCount.call($.app.byViewId("ApprovalTable"));
+                $.app.byId("ApprovalTable").setFirstVisibleRow(0);
+                $.app.byId("ApprovalTable").clearSelection();
+                Common.adjustAutoVisibleRowCount.call($.app.byId("ApprovalTable"));
             },
 
             toggleExcelBtn: function() {

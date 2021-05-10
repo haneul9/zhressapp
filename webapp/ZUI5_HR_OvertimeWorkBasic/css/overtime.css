@@ -8,3 +8,5 @@
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication05 { background-color: #ae80e2 !important; }
+
+#ApprovalTable > tbody > tr { cursor: pointer; }

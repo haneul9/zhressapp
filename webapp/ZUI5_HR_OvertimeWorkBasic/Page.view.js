@@ -122,7 +122,7 @@ sap.ui.define(
             },
 
             buildTable: function(oController, PageHandler) {
-                var oTable = new sap.ui.table.Table($.app.createId("ApprovalTable"), {
+                var oTable = new sap.ui.table.Table("ApprovalTable", {
                     selectionMode: sap.ui.table.SelectionMode.None,
                     enableColumnReordering: false,
                     enableColumnFreeze: false,
