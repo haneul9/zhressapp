@@ -537,18 +537,6 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
-                // 중복 체크
-                if(vListData.some(function(elem) { return elem.Pernr === data.Objid; })) {
-                    MessageToast.show(this.oController.getBundleText("MSG_31007"), {
-                        // 중복된 대상입니다.
-                        duration: 2000,
-                        my: sap.ui.core.Popup.Dock.CenterCenter,
-                        at: sap.ui.core.Popup.Dock.CenterCenter
-                    });
-
-                    return;
-                }
-
                 vListData.push({
                     Pernr: data.Objid,
                     Ename: data.Stext,
@@ -577,27 +565,9 @@ sap.ui.define(
              * @param {Array} data - 선택된 조직도 아이템(Array<사원>)
              */
             addTargetTableByMulti: function(data) {
-                var vListData = this.oModel.getProperty("/List"),
-                    vSelectedDataLength = data.length;
-
-                if(vListData.length) {
-                    // 중복데이터 제거
-                    data = data.filter(function(elem1) {
-                        return !vListData.some(function(item) {
-                            return elem1.Objid === item.Pernr;
-                        });
-                    });
-                }
+                var vListData = this.oModel.getProperty("/List");
 
                 if(!data.length) return;
-                if(vSelectedDataLength != data.length) {
-                    MessageToast.show(this.oController.getBundleText("MSG_31008"), {
-                        // 중복된 대상은 제외하고\n추가합니다.
-                        duration: 2000,
-                        my: sap.ui.core.Popup.Dock.CenterCenter,
-                        at: sap.ui.core.Popup.Dock.CenterCenter
-                    });
-                }
                 
                 this.oModel.setProperty(
                     "/List",
