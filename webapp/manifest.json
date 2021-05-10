@@ -54,7 +54,9 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "ZHR_ESSAPP.ZHR_ESSAPP.i18n.i18n"
+					"bundleName": "ZHR_ESSAPP.ZHR_ESSAPP.i18n.i18n",
+					"supportedLocales": ["ko", "en", "zh"],
+					"fallbackLocale": "ko"
 				}
 			}
 		},
