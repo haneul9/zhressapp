@@ -71,7 +71,7 @@ sap.ui.define(
                     {
                         IConType: processType,
                         ITttyp: "P",    // 개인
-                        IBukrs: this.getSessionInfoByKey("Bukrs"),
+                        IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
@@ -113,7 +113,7 @@ sap.ui.define(
                 oModel.create(
                     "/WorktimeApplySet",
                     $.extend(true, payload, {
-                        IBukrs: this.getSessionInfoByKey("Bukrs"),
+                        IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IPernr: this.getSessionInfoByKey("Pernr"),
                         IOrgeh: this.getSessionInfoByKey("Orgeh"),

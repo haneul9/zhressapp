@@ -85,7 +85,7 @@ sap.ui.define(
                 $.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
                     "/OvertimeWorkApplySet", {
                         IConType: processType,
-                        IBukrs: this.getSessionInfoByKey("Bukrs"),
+                        IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
@@ -148,7 +148,7 @@ sap.ui.define(
                 oModel.create(
                     "/OvertimeWorkApplySet", {
                         IConType: processType,
-                        IBukrs: this.getSessionInfoByKey("Bukrs"),
+                        IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IPernr: payload.Empid,
                         IEmpid: this.getSessionInfoByKey("Pernr"),
@@ -186,7 +186,7 @@ sap.ui.define(
                 $.app.getModel("ZHR_WORKSCHEDULE_SRV").create(
                     "/RecorderTimeInfoSet", {
                         IPernr: arg.Pernr,
-                        IBukrs: this.getSessionInfoByKey("Bukrs"),
+                        IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IBegda: arg.Begda ? Common.adjustGMTOdataFormat(arg.Begda) : undefined,
