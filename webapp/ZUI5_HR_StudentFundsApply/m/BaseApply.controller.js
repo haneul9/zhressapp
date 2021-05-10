@@ -513,14 +513,15 @@
         onBeforeOpenDetailDialog: function(oController) {
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
-
+			var vNo="1";
             fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
                 Appnm: vAppnm,
                 Required: true,
                 Mode: "M",
                 Max: "3",
                 Editable: (!vStatus || vStatus === "AA") ? true : false,
-            },"1");
+            },vNo);
+			$("#"+oController.PAGEID+"_ATTACHBOX"+vNo).children()[0].childNodes[0].childNodes[0].style.width="70px";
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {
