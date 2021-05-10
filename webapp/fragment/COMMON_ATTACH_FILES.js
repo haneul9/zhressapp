@@ -58,7 +58,6 @@ fragment.COMMON_ATTACH_FILES = {
 					alignItems: sap.m.FlexAlignItems.Center,
 					items: [
 						new sap.m.Label({
-							width: "100%",
 							text: "{/Settings/Label}",
 							required: "{/Settings/Required}"
 						//	design: "Bold"
