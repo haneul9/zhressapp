@@ -132,7 +132,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "SettlementList"].join("."), 
 			}),
 			cellClick: OnSettlement.clickSettlementListCell.bind(oController)
 		})
-		.addStyleClass("mt-10px")
+		.addStyleClass("mt-10px row-link")
 		.setModel(oController.SettlementListModel)
 		.bindRows("/");
 

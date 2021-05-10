@@ -100,7 +100,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementTargetAbsenceListDial
 			noData: "{i18n>LABEL_00901}",
 			cellClick: handler.clickTableCell.bind(handler)
 		})
-		.addStyleClass("mt-20px")
+		.addStyleClass("mt-20px row-link")
 		.bindRows("/Absence/List");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

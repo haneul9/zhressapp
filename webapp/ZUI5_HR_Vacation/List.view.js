@@ -137,7 +137,7 @@ sap.ui.define(
 													]
 												}).addStyleClass("button-group")]
 								}).addStyleClass("toolbarNoBottomLine")]
-				}).addStyleClass("mt-10px");
+				}).addStyleClass("mt-10px row-link");
 				
 				oTable.setModel(new sap.ui.model.json.JSONModel());
 				oTable.bindRows("/Data");

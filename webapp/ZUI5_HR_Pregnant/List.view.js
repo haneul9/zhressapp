@@ -53,7 +53,7 @@ sap.ui.define(
                             ]
                         })
                     ]
-                }).addStyleClass("mt-10px");
+                }).addStyleClass("mt-10px row-link");
 
                 oTable.setModel(new sap.ui.model.json.JSONModel());
                 oTable.bindRows("/Data");

@@ -568,7 +568,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: OnSettlement.clickSettlementTableIn05Cell.bind(oController)
 		})
-		.addStyleClass("thead-cell-border tbody-cell-border mt-8px")
+		.addStyleClass("thead-cell-border tbody-cell-border mt-8px row-link")
 		.bindRows("/SettlementTableIn05");
 
 		oTable.addEventDelegate({

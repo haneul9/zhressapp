@@ -153,7 +153,7 @@ sap.ui.jsview("ZUI5_HR_EvalPro.List", {
 											 	  customData : [new sap.ui.core.CustomData({key : "", value : "{}"})]
 											  })]
 								 })]
-		}).addStyleClass("mt-10px");
+		}).addStyleClass("mt-10px row-link");
 		
 		oTable.setModel(new sap.ui.model.json.JSONModel());
 		oTable.bindRows("/Data");

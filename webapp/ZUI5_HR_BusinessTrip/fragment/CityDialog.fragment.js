@@ -111,7 +111,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.CityDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: CityDialogHandler.clickTableCell.bind(CityDialogHandler)
 		})
-		.addStyleClass("mt-30px")
+		.addStyleClass("mt-30px row-link")
 		.bindRows("/City/SearchList");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

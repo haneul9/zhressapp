@@ -274,6 +274,7 @@ sap.ui.define([
 					]
 				})
 			})
+			.addStyleClass("row-link")
 			.setModel(mActionReqList)
 			.bindRows("/ActionReqListSet")	
 			.attachCellClick(oController.onSelectRow);

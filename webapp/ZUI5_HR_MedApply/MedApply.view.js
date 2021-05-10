@@ -127,7 +127,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 			showNoData: true,
 			width: "auto",
 			noData: "{i18n>MSG_05001}"
-		}).addStyleClass("mt-8px").attachCellClick(oController.onSelectedRow);
+		}).addStyleClass("mt-8px row-link").attachCellClick(oController.onSelectedRow);
 
 		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 		oCell=new sap.ui.commons.layout.MatrixLayoutCell({

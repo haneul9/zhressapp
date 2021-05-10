@@ -179,7 +179,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.CardExpenseDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: CardExpenseDialogHandler.clickTableCell.bind(CardExpenseDialogHandler)
 		})
-		.addStyleClass("mt-30px")
+		.addStyleClass("mt-30px row-link")
 		.bindRows("/CorpCardUsedList");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

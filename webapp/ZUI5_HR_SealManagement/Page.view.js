@@ -99,7 +99,7 @@ sap.ui.define(["../common/PageHelper", "../common/ZHR_TABLES"], function (PageHe
                 columnHeaderHeight: 38,
                 noData: "{i18n>LABEL_00901}"
             })
-                .addStyleClass("mt-10px")
+                .addStyleClass("mt-10px row-link")
                 .setModel(oController.TableModel)
                 .bindRows("/Data")
                 .attachCellClick(oController.onSelectedRow);

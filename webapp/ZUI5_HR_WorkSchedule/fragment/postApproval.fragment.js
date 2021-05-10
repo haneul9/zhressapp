@@ -162,7 +162,7 @@ sap.ui.define(
                         PostHandler.pressSelectRowDetail.call(PostHandler, oEvent.getParameters().rowBindingContext.getProperty());
                     }
                 })
-                .addStyleClass("mt-8px")
+                .addStyleClass("mt-8px row-link")
                 .bindRows("/List");
 
                 ZHR_TABLES.makeColumn(oController, oTable, this.getColumnModel.call(PostHandler));

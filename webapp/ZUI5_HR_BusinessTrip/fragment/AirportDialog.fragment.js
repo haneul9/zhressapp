@@ -128,7 +128,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.AirportDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: AirportDialogHandler.clickTableCell.bind(AirportDialogHandler)
 		})
-		.addStyleClass("mt-30px") 
+		.addStyleClass("mt-30px row-link") 
 		.bindRows("/Airport/SearchList");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

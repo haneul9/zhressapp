@@ -91,7 +91,7 @@ sap.ui.jsfragment("ZUI5_HR_OvertimeWorkTech.fragment.priorOverWorkDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: PriorOverWorkDialogHandler.clickTableCell.bind(PriorOverWorkDialogHandler)
 		})
-		.addStyleClass("mt-30px") 
+		.addStyleClass("mt-30px row-link") 
 		.bindRows("/List");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

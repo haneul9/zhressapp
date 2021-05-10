@@ -37,7 +37,7 @@ sap.ui.define(
                     showOverlay: false,
                     showNoData: true,
                     noData: "{i18n>LABEL_00901}" // No data found
-                });
+                }).addStyleClass("row-link");
 
                 oTable.attachEvent("cellClick", function (oEvent) {
                     oTable.clearSelection();
