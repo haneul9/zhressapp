@@ -123,8 +123,8 @@ sap.ui.define(
 				// 역량평가 결과
 				var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 				var createData = {CompResultsNav : []};
-					createData.Pernr = this.oModel.getProperty("/Data/Pernr");
-					createData.Appye = this.oModel.getProperty("/Data/Appye");
+					createData.Pernr = this.oModel.getProperty("/Pernr");
+					createData.Appye = this.oModel.getProperty("/Appye");
 				
 				oModel.create("/CompResultsSet", createData, {
 					success: function(data,res){
@@ -134,7 +134,7 @@ sap.ui.define(
 									data.CompResultsNav.results[i].Comppnt1 = data.CompResultsNav.results[i].Comppnt1 ? parseFloat(data.CompResultsNav.results[i].Comppnt1) : 0;
 									data.CompResultsNav.results[i].Comppnt2 = data.CompResultsNav.results[i].Comppnt2 ? parseFloat(data.CompResultsNav.results[i].Comppnt2) : 0;
 									
-									vData2.Data.push(data.CompResultsNav.results[i]);
+									vData2.Data2.push(data.CompResultsNav.results[i]);
 								}
 							}
 						} 
@@ -330,7 +330,7 @@ sap.ui.define(
 				var _sucHandler=function(data){
 					oController.makeMBOTable.call(oController,data,data2);
 				};
-				new JSONModelHelper().url("/odata/fix/Goal_"+datas[0]+"?$filter=userId%20eq%20%27"+data2.Pernr+"%27")
+				new JSONModelHelper().url("/odata/fix/Goal_"+datas[0]+"?$filter=userId%20eq%20%27"+data2.Pernr+"%27%20and%20type%20eq%20%27user%27")
 							 .setAsync(false)
 							 .attachRequestCompleted(function(){
 								var data=this.getData().d;
@@ -480,7 +480,7 @@ sap.ui.define(
 							new sap.m.Label({
 								textAlign:"Center",
 								width:"90px",
-								text:"{Mepnt}"
+								text:"{Pegrade}"
 							})
 						]
 					});
@@ -498,7 +498,7 @@ sap.ui.define(
 							new sap.m.Label({
 								textAlign:"Center",
 								width:"90px",
-								text:"{Mepnt}"
+								text:"{Pegrade2}"
 							})
 						]
 					});
