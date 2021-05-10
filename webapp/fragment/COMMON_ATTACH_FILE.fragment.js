@@ -61,7 +61,6 @@ sap.ui.define([
 						items: [ 
 							new sap.m.Label({
 								text: "{i18n>LABEL_00135}",
-								width : "100%",
 								required: {
 									path: "/Settings/Required",
 									formatter: function(v) {
