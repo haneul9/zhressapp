@@ -1,15 +1,13 @@
 sap.ui.define(
 	[
-		"../../common/Common",
-		"../../common/CommonController",
-		"../../common/AttachFileAction",
-		"../../common/JSONModelHelper",
-		"sap/ui/core/IconPool",
+		"common/Common",	//
+		"common/CommonController",
+		"common/AttachFileAction",
+		"common/JSONModelHelper",
 		"sap/ui/core/BusyIndicator",
-		"sap/m/MessageBox",
-		"sap/ui/unified/library"
+		"sap/m/MessageBox"
 	],
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, IconPool, BusyIndicator, MessageBox, unifiedLibrary) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, BusyIndicator, MessageBox) {
 		"use strict";
 
 		var SUB_APP_ID = [$.app.CONTEXT_PATH, "CongratulationDetail"].join($.app.getDeviceSuffix());
@@ -113,38 +111,18 @@ sap.ui.define(
 				var oController = this.getView().getController();
 				var vBurks = oController.getUserGubun();
 				var vStartDate = $.app.byId(oController.PAGEID + "_StartDatePicker");
-				var vYear1 = "",
-					vYear2 = "",
-					vMonth1 = "",
-					vMonth2 = "",
-					vDate1 = "",
-					vDate2 = "";
-				
-				if(vBurks !== "A100"){
-					vYear1 = new Date().getFullYear()-1;
-					vYear2 = new Date().getFullYear()+1;
-					vMonth1 = new Date().getMonth();
-					vDate1 = new Date().getDate();
-					vDate2 = new Date().getDate()-1;
-					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
-					vStartDate.setMaxDate(new Date(vYear2, vMonth1, vDate2));
-				}else {
-					var Bdate = parseInt(oController.g_BDate),
-						Edate = parseInt(oController.g_EDate);
-					vYear1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getFullYear();
-					vMonth1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getMonth();
-					vDate1 = new Date(new Date().setDate(new Date().getDate()-Bdate)).getDate();
-					vStartDate.setMinDate(new Date(vYear1, vMonth1, vDate1));
-					
-					vYear2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getFullYear();
-					vMonth2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getMonth();
-					vDate2 = new Date(new Date().setDate(new Date().getDate()+Edate)).getDate();
-					vStartDate.setMaxDate(new Date(vYear1, vMonth2, vDate2));
+
+				if (vBurks !== "A100") {
+					vStartDate.setMinDate(moment().subtract(1, 'year').toDate());
+					vStartDate.setMaxDate(moment().add(1, 'year').subtract(1, 'days').toDate());
+				} else {
+					vStartDate.setMinDate(moment().subtract(parseInt(oController.g_BDate), 'days').toDate());
+					vStartDate.setMaxDate(moment().add(parseInt(oController.g_EDate), 'days').toDate());
 				}
 			},
 			
 			setTypeCombo: function (oController) { //경조유형을 받아오는곳
-				var oController = this.getView().getController();
+				oController = this.getView().getController();
 				var oCommonModel = $.app.getModel("ZHR_COMMON_SRV"),
 					oCodeHeaderParams = {};
 				var vPernr = oController.getUserId();
@@ -161,7 +139,7 @@ sap.ui.define(
 					oCodeHeaderParams.NavCommonCodeList = [];
 					
 					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
-						success: function (oData, oResponse) {
+						success: function (oData) {
 							if (oData && oData.NavCommonCodeList.results) {
 								//값을 제대로 받아 왔을 때
 								var rDatas = oData.NavCommonCodeList.results;
@@ -185,7 +163,7 @@ sap.ui.define(
 
 				oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
 					//경조사유형 값받아오는곳
-					success: function (oData, oResponse) {
+					success: function (oData) {
 						if (oData && oData.NavCommonCodeList.results) {
 							//값을 제대로 받아 왔을 때
 							var rDatas = oData.NavCommonCodeList.results;
@@ -206,7 +184,7 @@ sap.ui.define(
 				
 				oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
 					//경조사유형에따른 상조도우미 Code값 받아오는곳
-					success: function (oData, oResponse) {
+					success: function (oData) {
 						if (oData && oData.NavCommonCodeList.results) {
 							//값을 제대로 받아 왔을 때
 							var rDatas = oData.NavCommonCodeList.results;
@@ -220,7 +198,7 @@ sap.ui.define(
 				});
 			},
 			
-			onHelperCheck: function (oEvent){ //경조유형에따라 상조도우미 CheckBox호출
+			onHelperCheck: function (){ //경조유형에따라 상조도우미 CheckBox호출
 				var oController = this.getView().getController();
 				var oMultiBoxInfo = oController.DetailModel.getProperty("/MultiBoxDataInfo");
 				var isVisibleVehicle = false,
@@ -230,11 +208,11 @@ sap.ui.define(
 				
 				var oVehicleList = oDeepCopyData.splice(0,2);
 		
-				if(oController.DetailModel.getProperty("/FormData/TextA") === "CAAID" || oVehicleList.some(function(e) { return e.Code === oController.DetailModel.getProperty("/FormData").Type})){
+				if(oController.DetailModel.getProperty("/FormData/TextA") === "CAAID" || oVehicleList.some(function(e) { return e.Code === oController.DetailModel.getProperty("/FormData").Type;})){
 					isVisibleVehicle = true;
 				}
 				
-				if(oController.getUserGubun() !== "A100" && ("FMAID" === oController.DetailModel.getProperty("/FormData/TextA") || oDeepCopyData.some(function(e) { return e.Code === oController.DetailModel.getProperty("/FormData").Type && e.TextA !== "YONLY"}))){
+				if(oController.getUserGubun() !== "A100" && (oController.DetailModel.getProperty("/FormData/TextA") === "FMAID" || oDeepCopyData.some(function(e) { return e.Code === oController.DetailModel.getProperty("/FormData").Type && e.TextA !== "YONLY";}))){
 					isVisibleType = true;
 				}
 				
@@ -310,7 +288,7 @@ sap.ui.define(
 						
 						oModel.create("/CongratulationApplySet", sendObject, {
 							async: true,
-							success: function (oData, response) {
+							success: function (oData) {
 								sap.m.MessageBox.alert(oController.getBundleText("LABEL_08002") + oController.getBundleText("LABEL_08023"));
 								oController.onTableSearch();
 								oController.navBack();
@@ -342,7 +320,7 @@ sap.ui.define(
 				var vDetailData = oController.DetailModel.getProperty("/FormData");
 				var vPernr = oController.getUserId();
 				
-				delete vDetailData.FilePlaceholder //필요없는 값이므로 key 삭제
+				delete vDetailData.FilePlaceholder; //필요없는 값이므로 key 삭제
 				delete vDetailData.TextA; //필요없는 값이므로 key 삭제
 				delete vDetailData.isVisibleType;
 				delete vDetailData.isVisibleVehicle; 
@@ -361,7 +339,7 @@ sap.ui.define(
 						};
 						
 						oModel.create("/CongratulationApplySet", sendObject, {
-							success: function (oData, response) {
+							success: function (oData) {
 								sap.m.MessageBox.alert(oController.getBundleText("LABEL_08003") + oController.getBundleText("LABEL_08023"));
 								oController.onTableSearch();
 								oController.navBack();
@@ -452,7 +430,7 @@ sap.ui.define(
 						
 						oModel.create("/CongratulationApplySet", sendObject, {
 							async: true,
-							success: function (oData, response) {
+							success: function (oData) {
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_44002"), { title: oController.getBundleText("LABEL_08022")});
 								oController.onTableSearch();
 								oController.navBack();
@@ -523,8 +501,8 @@ sap.ui.define(
 				var vMultiList = ["1507", "1508", "1509", "1510", "1552", "1553", "1554", "1555", "4001", "4002", "4003", "4004", "4005", "4006"];
 				var vType1 = ["1552", "1553", "1554", "1555", "4003", "4004", "4005", "4006"]; // 고희 & 칠순
 				
-				if(vMultiList.some(function(e){ return e === vDetailData.Type})){
-					if(vType1.some(function(e){ return e === vType})){ //고희 & 칠순
+				if(vMultiList.some(function(e){ return e === vDetailData.Type;})){
+					if(vType1.some(function(e){ return e === vType;})){ //고희 & 칠순
 						vMsg = vMsg.replace("year1", vYear-69);
 						vMsg = vMsg.replace("year2", vYear-67);
 						vMsg = vMsg.replace("month1", vMonth);
@@ -613,7 +591,7 @@ sap.ui.define(
 				if (!vDetailData.StartDate || !vDetailData.Type) return;
 				
 				oModel.create("/CongratulationApplySet", oPayload, {
-					success: function (oData, oResponse) {
+					success: function (oData) {
 						//값을 제대로 받아 왔을 때
 						if (oController.getUserGubun() === "A100") {
 							//첨단일 경우 CopayT에 값이 들어있지 않아 기본급으로 측정되기에 BasicT에서 그대로 받아서 넣어줌.
@@ -632,7 +610,7 @@ sap.ui.define(
 				});
 			},
 			
-			onCheckPress: function (oEvent) {
+			onCheckPress: function () {
 				var oController = this.getView().getController();
 				var oCommonModel = $.app.getModel("ZHR_COMMON_SRV");
 				var vPernr = oController.getUserId();
@@ -658,7 +636,7 @@ sap.ui.define(
 					oCodeHeaderParams.NavCommonCodeList = [];
 					
 					oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
-						success: function (oData, oResponse) {
+						success: function (oData) {
 							if (oData && oData.NavCommonCodeList.results) {
 								//값을 제대로 받아 왔을 때
 								var rDatas = oData.NavCommonCodeList.results;
@@ -678,7 +656,7 @@ sap.ui.define(
 				oController.DetailModel.setProperty("/FormData/AmountT",rAmountT);
 			},
 			
-			onBeforeOpenDetailDialog: function(oEvent) {
+			onBeforeOpenDetailDialog: function() {
 				var oController = this.getView().getController();
 				var vStatus = oController.DetailModel.getProperty("/FormData/Status"),
 					vInfoMessage = oController.DetailModel.getProperty("/FormData/FilePlaceholder"),

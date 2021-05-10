@@ -1,9 +1,6 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/PageHelper",
-	"../../common/ZHR_TABLES"
-], function (Common, Formatter, PageHelper, ZHR_TABLES) {
+	"common/Common"	//
+], function (Common) {
 "use strict";
 
 	sap.ui.jsfragment("ZUI5_HR_Congratulation.fragment.CongratulationDetail", {
@@ -346,7 +343,7 @@ sap.ui.define([
 								text: "{i18n>LABEL_08009}",
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
 								width: "120px",
-								textAlign: "End",
+								textAlign: "End"
 							}),
 							new sap.m.Input(oController.PAGEID + "_Zarea", {
 								value: "{Zarea}",
@@ -371,7 +368,7 @@ sap.ui.define([
 								text: "{i18n>LABEL_08015}",
 								layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
 								width: "120px",
-								textAlign: "End",
+								textAlign: "End"
 							}),
 							new sap.m.Input(oController.PAGEID + "_Zbigo", {
 								value: "{Zbigo}",
