@@ -67,7 +67,7 @@ sap.ui.define(
                     sort : makeTable.onTableSort
                     
                 })
-                    .addStyleClass("mt-10px")
+                    .addStyleClass("mt-10px row-link")
                     .setModel(oController._ListJSonModel)
                     .bindRows("/Data");
                     
