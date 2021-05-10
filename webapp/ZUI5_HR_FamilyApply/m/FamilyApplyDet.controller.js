@@ -163,6 +163,7 @@ sap.ui.define([
 			$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").bindElement("/oData/0");
 			var vAppnm = oJSON.getProperty("/oData")[0].Appnm;
 			var vStatus = oJSON.getProperty("/oData")[0].Opener;
+			$("#"+this.PAGEID+"_ATTACHBOX").children()[0].childNodes[0].childNodes[0].style.width="70px";
 			BusyIndicator.show(0);			
 			if(oController._onDialog=="N"){
 				oController.initTdata();
