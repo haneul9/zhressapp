@@ -104,7 +104,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SubCostCenterDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: SubCostCenterDialogHandler.clickTableCell.bind(SubCostCenterDialogHandler)
 		})
-		.addStyleClass("mt-30px") 
+		.addStyleClass("mt-30px row-link") 
 		.bindRows("/SubCostCenter/List");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

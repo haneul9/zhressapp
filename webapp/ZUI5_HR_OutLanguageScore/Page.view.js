@@ -121,7 +121,7 @@ sap.ui.define([
 					StatusListHandler.pressSelectRowDetail.call(StatusListHandler, oEvent.getParameters().rowBindingContext.getProperty());
 				}
 			})
-			.addStyleClass("mt-10px")
+			.addStyleClass("mt-10px row-link")
 			.bindRows("/List");
 			
 			ZHR_TABLES.makeColumn(oController, oTable, [

@@ -130,7 +130,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), { /
 			}),
 			cellClick: OnRequest.clickRequestListCell.bind(oController)
 		})
-		.addStyleClass("mt-10px")
+		.addStyleClass("mt-10px row-link")
 		.setModel(oController.RequestListModel)
 		.bindRows("/");
 

@@ -92,7 +92,7 @@
 				columnHeaderHeight: 38,
 				noData: "{i18n>LABEL_00901}"
 			})
-			.addStyleClass("mt-30px")
+			.addStyleClass("mt-30px row-link")
 			.setModel(oController.TableModel)
 			.bindRows("/Data")
 			.attachCellClick(oController.onSelectedRow);

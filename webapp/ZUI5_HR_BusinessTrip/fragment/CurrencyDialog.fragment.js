@@ -99,7 +99,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.CurrencyDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: CurrencyDialogHandler.clickTableCell.bind(CurrencyDialogHandler)
 		})
-		.addStyleClass("mt-30px")
+		.addStyleClass("mt-30px row-link")
 		.bindRows("/Currency/SearchList");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

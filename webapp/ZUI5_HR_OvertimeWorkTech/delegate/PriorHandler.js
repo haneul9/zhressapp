@@ -705,6 +705,9 @@ sap.ui.define(
                     if(o.Otype === "O") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32007")); // 사원을 선택하세요.
                         return;
+                    } else if(o.Zshft === "X") {
+                        MessageBox.warning(this.oController.getBundleText("MSG_32025")); // 교대근무자는 선택할 수 없습니다.
+                        return;
                     }
 
                     this.oModel.setProperty("/Detail/Header/Pernr", o.Objid);

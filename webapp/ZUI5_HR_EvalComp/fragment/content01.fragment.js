@@ -39,7 +39,7 @@ sap.ui.jsfragment("ZUI5_HR_EvalComp.fragment.content01", {
 			// 								press : oController.onPressDelete
 			// 							}).addStyleClass("button-dark")]
 			// 			 }).addStyleClass("toolbarNoBottomLine paddingBottom10")]
-		}).addStyleClass("mt-8px");
+		}).addStyleClass("mt-8px row-link");
 		
 		oTable.setModel(new sap.ui.model.json.JSONModel());
 		oTable.bindRows("/Data");

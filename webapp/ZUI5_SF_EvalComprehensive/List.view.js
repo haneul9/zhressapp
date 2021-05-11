@@ -110,7 +110,7 @@ sap.ui.jsview($.app.APP_ID, { // 종합평가 : 평가연도별 목록
 				});
 			}
 		})
-		.addStyleClass("mt-30px")
+		.addStyleClass("mt-30px row-link")
 		.bindRows("/Data");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [

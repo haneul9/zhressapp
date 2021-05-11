@@ -380,13 +380,17 @@ sap.ui.define(
 						Objid: "",
 						Stext: "",
 						PupStext: "",
-						ZpGradeTxt: ""
+						ZpGradeTxt: "",
+						Zflag: "",
+						Zshft: ""
 					} : {
 						Otype: "P",
 						Objid: data.Pernr,
 						Stext: data.Ename,
 						PupStext: data.Fulln,
-						ZpGradeTxt: data.ZpGradetx
+						ZpGradeTxt: data.ZpGradetx,
+						Zflag: data.Zflag,
+						Zshft: data.Zshft
 					});
 
 					if(this.autoClose) this.oDialog.close();

@@ -32,7 +32,7 @@ sap.ui.define(
                             content: [new sap.m.Text({ text: "{i18n>LABEL_43024}" }).addStyleClass("sub-title")] // 근무시간현황
                         }).addStyleClass("toolbarNoBottomLine")
                     ]
-                }).addStyleClass("mt-10px");
+                }).addStyleClass("mt-10px row-link");
 
                 oTable.setModel(new sap.ui.model.json.JSONModel());
                 oTable.bindRows("/Data");

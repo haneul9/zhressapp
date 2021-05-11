@@ -161,7 +161,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.WBSDialog", {
 			noData: "{i18n>LABEL_00901}",
 			cellClick: WBSDialogHandler.clickTableCell.bind(WBSDialogHandler)
 		})
-		.addStyleClass("mt-30px")
+		.addStyleClass("mt-30px row-link")
 		.bindRows("/WBS/List");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [
