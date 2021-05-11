@@ -617,9 +617,7 @@ fragment.COMMON_ATTACH_FILES = {
 	},
 
 	resizingLabel:function(vNo){
-		setTimeout(function(){
-			$("#"+this.PAGEID+"_ATTACHBOX"+vNo).children()[0].childNodes[0].childNodes[0].style.width="75px";
-		},100);		
+		$("#"+this.PAGEID+"_ATTACHBOX"+vNo).children()[0].childNodes[0].childNodes[0].style.width="80px";	
 	},
 
 	/*
