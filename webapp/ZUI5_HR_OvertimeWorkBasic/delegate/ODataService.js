@@ -25,8 +25,6 @@ sap.ui.define(
             CommonCodeListHeaderSet: function (arg) {
                 var results = [];
                 
-                $.app.setModel("ZHR_COMMON_SRV");
-
 				$.app.getModel("ZHR_COMMON_SRV").create(
 					"/CommonCodeListHeaderSet",
 					{
@@ -65,8 +63,6 @@ sap.ui.define(
              */
             OvertimePersonSet: function(arg) {
                 var results = [];
-
-                $.app.setModel("ZHR_WORKSCHEDULE_SRV");
 
 				$.app.getModel("ZHR_WORKSCHEDULE_SRV").create(
 					"/OvertimePersonSet",
@@ -115,8 +111,6 @@ sap.ui.define(
             OvertimeListSet: function (arg) {
                 var results = [];
 
-                $.app.setModel("ZHR_WORKTIME_APPL_SRV");
-
                 $.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
                     "/OvertimeListSet",
                     {
@@ -154,8 +148,6 @@ sap.ui.define(
              * @param {Function} error - 실패 callback
              */
             OvertimeApplySetByProcess: function (processType, payload, success, error) {
-                $.app.setModel("ZHR_WORKTIME_APPL_SRV");
-
                 $.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
                     "/OvertimeApplySet",
                     {
