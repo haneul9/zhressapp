@@ -649,6 +649,10 @@ span.sapMBtnInner.sapMBtnEmphasized {background-color:#0070BD; border-color:#007
 .app-content-container-mobile .button-light .sapMBtnIcon,
 .app-content-container-mobile .button-light .sapMBtnContent {line-height:32px; border-color:#0070bd; font-size:15px; font-weight:400; color:#0070bd}
 
+/*Hi 톡톡 모바일 알림 아이콘 */
+.app-content-container-mobile .button-light.h-42px .sapMBtnInner{width:36px;height:42px;line-height:42px}
+.app-content-container-mobile .button-light.h-42px .sapMBtnIcon {line-height: 42px;font-size: 1rem;font-weight:500;}
+
 .app-content-container-mobile .button-default.sapMBtn {padding:0}  
 .app-content-container-mobile .button-default.sapMBtn,
 .app-content-container-mobile .button-default .sapMBtnInner {height:34px; border-radius:.1875rem; border-color:#c3c3c3; background-color:#fff; color:#333}

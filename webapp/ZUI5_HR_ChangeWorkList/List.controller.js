@@ -5,9 +5,11 @@ sap.ui.define(
         "common/JSONModelHelper",
         "common/OrgOfIndividualHandler",
         "common/DialogHandler",
-        "sap/m/MessageBox"
+        "sap/m/MessageBox",
+		"common/SearchOrg",
+		"common/SearchUser1",
     ],
-    function (Common, CommonController, JSONModelHelper, OrgOfIndividualHandler, DialogHandler, MessageBox) {
+    function (Common, CommonController, JSONModelHelper, OrgOfIndividualHandler, DialogHandler, MessageBox, SearchOrg, SearchUser1) {
         "use strict";
 
         return CommonController.extend("ZUI5_HR_ChangeWorkList.List", {
@@ -217,6 +219,35 @@ sap.ui.define(
                 return this.OrgOfIndividualHandler;
             },
 
+			/**
+	         * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
+	         */
+			displayMultiOrgSearchDialog: function (oEvent) {
+				SearchOrg.oController = this.oController;
+				SearchOrg.vActionType = "Multi";
+				SearchOrg.vCallControlId = oEvent.getSource().getId();
+				SearchOrg.vCallControlType = "MultiInput";
+	
+				if (!this.oOrgSearchDialog) {
+					this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
+					$.app.getView().addDependent(this.oOrgSearchDialog);
+				}
+	
+				this.oOrgSearchDialog.open();
+			},
+	
+			onESSelectPerson : function(data){
+				var oController = $.app.getController();
+	
+				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
+				
+				oController._ListCondJSonModel.setProperty("/Data/Pernr", data.Pernr);
+				oController._ListCondJSonModel.setProperty("/Data/Ename", data.Ename);
+	
+				oController.OrgOfIndividualHandler.getDialog().close();
+				SearchUser1.onClose();
+			},
+			
             getUserId: function () {
                 return $.app.getModel("session").getData().Pernr;
             },

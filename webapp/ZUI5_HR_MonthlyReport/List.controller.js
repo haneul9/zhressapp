@@ -202,6 +202,33 @@ sap.ui.define([
             return this.OrgOfIndividualHandler;
         },
         
+        /**
+         * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
+         */
+		displayMultiOrgSearchDialog: function (oEvent) {
+			SearchOrg.oController = this.oController;
+			SearchOrg.vActionType = "Multi";
+			SearchOrg.vCallControlId = oEvent.getSource().getId();
+			SearchOrg.vCallControlType = "MultiInput";
+
+			if (!this.oOrgSearchDialog) {
+				this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
+				$.app.getView().addDependent(this.oOrgSearchDialog);
+			}
+
+			this.oOrgSearchDialog.open();
+		},
+
+		onESSelectPerson : function(data){
+			var oController = $.app.getController();
+			oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
+			oController._ListCondJSonModel.setProperty("/Data/Pernr", data.Pernr);
+			oController._ListCondJSonModel.setProperty("/Data/Ename", data.Ename);
+
+			oController.OrgOfIndividualHandler.getDialog().close();
+			SearchUser1.onClose();
+		},
+        
 		getLastDate : function(y, m) {
 			var last = [31,28,31,30,31,30,31,31,30,31,30,31];
 			

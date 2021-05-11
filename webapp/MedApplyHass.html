@@ -41,14 +41,14 @@
 	var oBundleText = $.app.geti18nResource();	
 	var m = sap.m;
 	var oCore = sap.ui.getCore();
-
+	var Auth="H";
 	function startAppInit() {
 
 		var contextPath = "ZUI5_HR_MedApply";
 		$.extend(true, $.app, {
 			CONTEXT_PATH: contextPath,
 			APP_SFMAIN_ID: "ZUI5_SF.SFMain",
-			APP_AUTH : "",
+			APP_AUTH: Auth,
 			APP_ID: [contextPath, "MedApply"].join("."),
 			APP_TILE: oBundleText.getText("LABEL_47001"), // 의료비 신청
 			LOG: {

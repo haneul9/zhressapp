@@ -9,6 +9,25 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
             columns:6,
             widths:['15%','','15%','','15%']
         });
+
+        var oPerInfo=new sap.m.HBox(oController.PAGEID+"_PerInfo2",{
+            justifyContent: "Start",
+            width : "100%",
+            visible:false,
+            items: [common.EmpBasicInfoBoxCustomHass.renderHeader()]
+        });
+
+        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:oPerInfo});
+        oRow.addCell(oCell);
+        oMat.addRow(oRow);
+        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:6,
+			content:new sap.ui.core.HTML({content:"<div style='height:5px;'/>"})
+		});
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel0}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
