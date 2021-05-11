@@ -43,12 +43,12 @@ sap.ui.define(
                                             valueHelpOnly: true,
                                             valueHelpRequest: oController.searchOrgehPernr,
                                             visible : (gAuth == "M" ? true : false),
-                                            editable : {
-                                                path : "Chief",
-                                                formatter : function(fVal){
-                                                    return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
-                                                }
-                                            }
+                                            // editable : {
+                                            //     path : "Chief",
+                                            //     formatter : function(fVal){
+                                            //         return ($.app.APP_AUTH == "M" && fVal == "") ? false : true;
+                                            //     }
+                                            // }
                                         })
                                     ]
                                 }).addStyleClass("search-field-group"),
