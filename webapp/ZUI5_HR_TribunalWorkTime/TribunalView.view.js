@@ -29,10 +29,10 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		var vYear = new Date().getFullYear();
 		var vMonth = new Date().getMonth()+1;
 
-		var oHBox = new sap.m.HBox(oController.PAGEID+"_HassPer",{
+		var oHBox = new sap.m.HBox({
 			items:[new sap.m.Label({
 				textAlign:"Begin",
-				text: oController.getBundleText("LABEL_47144")// 진료일								
+				text: oController.getBundleText("LABEL_47144")					
 			}),new sap.m.Input({
 				valueHelpRequest: function(oEvent){oController.searchOrgehPernr.call(oController,oEvent,"X");},
 				valueHelpOnly: true,
@@ -46,7 +46,6 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 			items: [ 
 				new sap.m.HBox({
 					items: [
-						oHBox,
 						new sap.m.Label({
 							textAlign:"Begin",
 							text: oController.getBundleText("LABEL_47003")// 진료일								
@@ -58,13 +57,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 							dateValue: new Date(vYear, new Date().getMonth(), 1),
 							secondDateValue: new Date()
 						}),
-						new sap.m.Label({
-							textAlign:"Begin",
-							text: oController.getBundleText("LABEL_47004") // 신청자 성명							
-						}),
-						new sap.m.Select(oController.PAGEID + "_HeadSel",{
-							width:"200px"
-						})
+						oHBox
 					]
 				}).addStyleClass("search-field-group"),
 				new sap.m.HBox({
@@ -82,53 +75,6 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 
 
 		oMat=new sap.ui.commons.layout.MatrixLayout({columns:2});
-		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			colSpan:2,
-			content:new sap.ui.core.HTML({content:"<div style='height:5px;'/>"})
-		});
-		oRow.addCell(oCell);
-		oMat.addRow(oRow);
-
-		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			content:[new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47002")+"</span>"}),
-			new HoverIcon({
-				size : "14px",
-				src: "sap-icon://information",
-				hover: function(oEvent) {
-					common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47001")); // 대리신청 등록된 사원만 출장자 변경 가능
-				},
-				leave: function(oEvent) {
-					common.Common.onPressTableHeaderInformation.call(oController, oEvent);
-				}
-			})
-			.addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue")]
-		});
-		oRow.addCell(oCell);
-		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			hAlign:"Right",
-			content:[new sap.m.Button(oController.PAGEID+"_NewBtn",{
-				press: function(){oController.onDialog(null,"N3");},
-				text: "{i18n>LABEL_47006}" // 신청 
-			}).addStyleClass("button-light"),
-			new sap.ui.commons.layout.HorizontalLayout(oController.PAGEID+"_NewIcon",{
-				visible:false,
-				content:[
-					new sap.ui.core.Icon({src:"sap-icon://message-information",color:"red",size:"15px"}),
-					new sap.ui.core.HTML({content:"<span style='font-size:14px;color:red;line-height:0px;'>&nbsp;"+oController.getBundleText('MSG_47040')+"</span>"})]
-			})]
-		});
-		oRow.addCell(oCell);
-		oMat.addRow(oRow);
-
-		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			colSpan:2,
-			content:new sap.ui.core.HTML({content:"<div style='height:5px;'/>"})
-		});
-		oRow.addCell(oCell);
-		oMat.addRow(oRow);
 
 		var oTable = new sap.ui.table.Table(oController.PAGEID+"_Table", {
 			selectionMode: "None",
@@ -140,7 +86,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 			showNoData: true,
 			width: "auto",
 			noData: oController.getBundleText("MSG_05001")
-		}).addStyleClass("mt-10px row-link").attachCellClick(oController.onSelectedRow);
+		}).addStyleClass("mt-10px row-link");
 
 		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 		oCell=new sap.ui.commons.layout.MatrixLayoutCell({

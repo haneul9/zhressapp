@@ -1,4 +1,5 @@
 $.sap.require("common.PickOnlyDatePicker");
+$.sap.require("common.EmpBasicInfoBoxCustomHass");
 sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
     createContent: function (oController) {
         var oRow,oCell,oMat,c=sap.ui.commons;
@@ -22,9 +23,29 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
                 return false;
             }
         }},change:oController.changeSel2});
+
+        var oPerInfo=new sap.m.HBox(oController.PAGEID+"_PerInfo",{
+            justifyContent: "Start",
+            visible:false,
+            width : "100%",
+            items: [common.EmpBasicInfoBoxCustomHass.renderHeader()]
+        });
+
         var oMat=new sap.ui.commons.layout.MatrixLayout({
             columns:6
         });
+        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:oPerInfo});
+        oRow.addCell(oCell);
+        oMat.addRow(oRow);
+        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
+		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:6,
+			content:new sap.ui.core.HTML({content:"<div style='height:5px;'/>"})
+		});
+		oRow.addCell(oCell);
+		oMat.addRow(oRow);
+
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel0}).addStyleClass("LabelCell");
         oRow.addCell(oCell);

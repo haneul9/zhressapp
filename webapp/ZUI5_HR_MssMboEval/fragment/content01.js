@@ -80,7 +80,7 @@ ZUI5_HR_MssMboEval.fragment.content01={
 			width: "auto",
 			selectionBehavior:sap.ui.table.SelectionBehavior.RowOnly,
 			noData: "{i18n>LABEL_00901}"
-		}).addStyleClass("mt-8px row-link").attachCellClick(function(oEvent){oController.onSelectedRow(oEvent,vPage)});
+		}).addStyleClass("mt-10px row-link").attachCellClick(function(oEvent){oController.onSelectedRow(oEvent,vPage)});
 
 		var mTable1 = new c.layout.MatrixLayout(oController.PAGEID+"_"+vPage+"_mTable1",{
 			columns:22,
