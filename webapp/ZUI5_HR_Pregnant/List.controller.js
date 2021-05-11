@@ -206,10 +206,10 @@ sap.ui.define(
                         return;
                     }
 
-                    if (oController._ListCondJSonModel.getProperty("/Data/Eretcode") == "X") {
-                        MessageBox.information(oController._ListCondJSonModel.getProperty("/Data/Erettext"));
-                    } else if (oController._ListCondJSonModel.getProperty("/Data/Eretcode") == "Z") {
-                        MessageBox.error(oController._ListCondJSonModel.getProperty("/Data/Erettext"));
+                    if (oController._ListCondJSonModel.getProperty("/Data/Eretcode") != "") {
+                        MessageBox.error(oController._ListCondJSonModel.getProperty("/Data/Erettext"), {
+                            title : oController.getBundleText("LABEL_02093") // 안내
+                        });
                     }
 
                     // 출산예정일 - 현재일 체크
