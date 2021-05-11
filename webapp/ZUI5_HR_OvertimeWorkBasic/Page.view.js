@@ -192,8 +192,6 @@ sap.ui.define(
             },
 
             loadModel: function () {
-                $.app.setModel("ZHR_WORKTIME_APPL_SRV");
-                $.app.setModel("ZHR_WORKSCHEDULE_SRV");
                 $.app.setModel("ZHR_COMMON_SRV");
             }
         });
