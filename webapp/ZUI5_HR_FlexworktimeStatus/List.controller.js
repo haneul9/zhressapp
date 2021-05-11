@@ -909,7 +909,8 @@ sap.ui.define([
 				}
 				
 				oController._BusyDialog.close();
-				sap.m.MessageBox.success(oController.getBundleText("MSG_69010"), { // 임시저장되었습니다.\n반드시 저장버튼을 클릭하시기 바랍니다.
+				sap.m.MessageBox.success(oController.getBundleText("MSG_69010"), { // 반드시 저장 버튼을 클릭하시기 바랍니다. 클릭하지 않으면 저장되지 않습니다.
+					title : oController.getBundleText("LABEL_00149"), // 안내
 					onClose : function(){
 						oController._AddBreakDialog.close();
 					}

@@ -70,7 +70,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.AddBreak", {
 			title : "{i18n>LABEL_69015}", // 추가휴게시간
 			content : [oTable],
 			buttons : [new sap.m.Button({
-						   text : "{i18n>LABEL_00101}", // 저장
+						   text : "{i18n>LABEL_00142}", // 임시저장
 						   press : oController.onSaveBreak
 					   }).addStyleClass("button-dark"),
 					   //new sap.m.Button({
