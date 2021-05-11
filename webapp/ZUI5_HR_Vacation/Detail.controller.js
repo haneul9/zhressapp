@@ -48,7 +48,8 @@ sap.ui.define([
 					Werks : $.app.getModel("session").getData().Persa,
 					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
 					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : "",
-					Chief : $.app.getModel("session").getData().Chief
+					Chief : $.app.getModel("session").getData().Chief,
+					Extryn : Common.isExternalIP() === true ? "X" : ""
 				}
 			};
 			
@@ -236,7 +237,81 @@ sap.ui.define([
 			if(oController.Error == "E"){
 				oController.Error = "";
 				sap.m.MessageBox.error(oController.ErrorMessage);
-				return;
+			}
+
+			// 결재자 리스트 생성 : Defyn == "X"인 경우 default 결재자로 세팅한다.
+			var oData = oController._DetailJSonModel.getProperty("/Data");
+			var oRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+				oAppName.destroyItems();
+				oAppName.setValue("");
+			
+			var oModel2 = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+			var createData2 = {ApprlistNav : []};
+				createData2.IPernr = Pernr;
+				createData2.IExtryn = oData.Extryn;
+				createData2.IZappSeq = "11";
+				createData2.IBukrs = oData.Bukrs;
+				createData2.IMobyn = "";
+				createData2.IAppkey = (oData.Appkey ? oData.Appkey : "");
+
+			if(oData.Status1 == "" || oData.Status1 == "AA" || oData.Status1 == "JJ"){
+				createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+				createData2.IPrcty = "1";
+			} else {
+				createData2.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
+				createData2.IPrcty = "2";
+			}
+
+			oModel2.create("/ApprListSet", createData2, {
+				success: function(data, res){
+					if(data){
+						if(data.ApprlistNav && data.ApprlistNav.results){
+								var data1 = data.ApprlistNav.results;
+								
+								if(data1){
+									for(var i=0; i<data1.length; i++){
+										oAppName.addItem(
+											new sap.ui.core.Item({
+												key : data1[i].AppName,
+												text : data1[i].AppText
+											})
+										);
+
+										if(data1[i].Defyn == "X"){
+											oController._DetailJSonModel.setProperty("/Data/AppName", data1[i].AppName);
+										}
+									}
+								}
+							}
+					}
+				},
+				error: function (oError) {
+			    	var Err = {};
+			    	oController.Error = "E";
+							
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			});
+
+			if(oController.Error == "E"){
+				oController.Error = "";
+				sap.m.MessageBox.error(oController.ErrorMessage);
+			}
+
+			// 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
+			if(oAppName.getItems().length == 0){
+				oController._DetailJSonModel.setProperty("/Data/AppName", "");
+				oRow.addStyleClass("displayNone");
+			} else {
+				oRow.removeStyleClass("displayNone");
 			}
 		},
 		
@@ -273,9 +348,10 @@ sap.ui.define([
 				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
 				if(oData.Status1 == "" || (pernr && pernr != "")){
+					
 					// 대상자
 					oController.onSetInfo((pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr));
-					
+
 					var vData = {
 						FromPageId : oController._DetailJSonModel.getProperty("/Data/FromPageId"),
 						Status1 : oController._DetailJSonModel.getProperty("/Data/Status1"),
@@ -284,16 +360,16 @@ sap.ui.define([
 						Molga : oController._DetailJSonModel.getProperty("/Data/Molga"),
 						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr),
 						Flag : oController._DetailJSonModel.getProperty("/Data/Flag"),
-						Delapp : oController._DetailJSonModel.getProperty("/Data/Delapp")
+						Delapp : oController._DetailJSonModel.getProperty("/Data/Delapp"),
+						Extryn : oController._DetailJSonModel.getProperty("/Data/Extryn"),
+						AppName : oController._DetailJSonModel.getProperty("/Data/AppName")
 					};
 					
 					oController._DetailJSonModel.setProperty("/Data", vData);
+					
 					// 대근신청 비활성화
 					oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
-				} else {
-					// 대상자
-					oController.onSetInfo(oData.Pernr);
-					
+				} else {					
 					// 데이터 조회
 					var createData = {VacationApply1Nav : [], VacationApply2Nav : []};
 						createData.IEmpid = oData.Pernr;
@@ -410,6 +486,9 @@ sap.ui.define([
 					}
 				}
 				
+				// 대상자
+				oController.onSetInfo(oData.Pernr);
+
 				oData = oController._DetailJSonModel.getProperty("/Data");
 				
 				// 근태코드 리스트
@@ -1214,6 +1293,15 @@ sap.ui.define([
 						sap.m.MessageBox.error(oController.getBundleText("MSG_48010")); // 행선지를 입력하여 주십시오.
 						return;
 					}
+
+					// 2021-05-11 결재자 리스트가 있는 경우 결재자 선택 여부 체크
+					var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+					if(oAppName.getItems().length != 0){
+						if(!oData.AppName){
+							sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+							return;
+						}
+					}
 				}
 			}
 			
@@ -1261,7 +1349,7 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IMolga = oData.Molga;
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
-					createData.IExtryn = vExtyn;
+					createData.IExtryn = oData.Extryn;
 					
 					// 신청구분값에 따라 구분값 변경
 					// 신규신청 3, 삭제 4, 삭제신청 5
@@ -1290,6 +1378,9 @@ sap.ui.define([
 					detail.Encard = oData.Encard;
 					detail.Bigo = oData.Bigo;
 					detail.Abrtg = oData.Abrtg;
+					detail.Seqnr = oData.Seqnr;
+					detail.Sprps = oData.Sprps;
+					detail.AppName1 = oData.AppName; // 2021-05-11 결재자 사번
 					
 					if(oData.Delapp != "" && Flag == "D"){
 						detail.Appkey = oData.ListAppkey;
@@ -1757,6 +1848,41 @@ sap.ui.define([
     
             oController.OrgOfIndividualHandler = OrgOfIndividualHandler.get(oController, initData, callback);	
             DialogHandler.open(oController.OrgOfIndividualHandler);
+		},
+
+		/**
+         * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
+         */
+		displayMultiOrgSearchDialog: function (oEvent) {
+			SearchOrg.oController = this.oController;
+			SearchOrg.vActionType = "Multi";
+			SearchOrg.vCallControlId = oEvent.getSource().getId();
+			SearchOrg.vCallControlType = "MultiInput";
+
+			if (!this.oOrgSearchDialog) {
+				this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
+				$.app.getView().addDependent(this.oOrgSearchDialog);
+			}
+
+			this.oOrgSearchDialog.open();
+		},
+
+		onESSelectPerson : function(data){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
+			var oController = oView.getController();
+
+			if(oController.oData){ // 대근신청 - 대근자 변경
+				var oJSONModel = sap.ui.getCore().byId(oController.PAGEID + "_Table2").getModel();
+					oJSONModel.setProperty("/Data/" + oController.oData.Idx + "/Awper", data.Pernr);
+					oJSONModel.setProperty("/Data/" + oController.oData.Idx + "/Awtxt", data.Ename);
+					oJSONModel.setProperty("/Data/" + oController.oData.Idx + "/Ligbn", ""); // 한도체크 여부 초기화
+					oJSONModel.setProperty("/Data/" + oController.oData.Idx + "/LigbnTx", "");
+			} else { // 대상자 변경
+				oController.onPressSearch(null, data.Pernr);
+			}
+
+			oController.OrgOfIndividualHandler.getDialog().close();
+			SearchUser1.onClose();
 		},
 		
 		getOrgOfIndividualHandler: function() {

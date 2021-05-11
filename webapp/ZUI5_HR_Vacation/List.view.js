@@ -1,6 +1,6 @@
 sap.ui.define(
     [
-        "common/makeTable", //
+        "common/makeTable",
         "common/PageHelper"
     ],
     function (MakeTable, PageHelper) {
@@ -15,6 +15,7 @@ sap.ui.define(
                 $.app.setModel("ZHR_COMMON_SRV");
 				$.app.setModel("ZHR_LEAVE_APPL_SRV");
 				$.app.setModel("ZHR_PERS_INFO_SRV");
+				$.app.setModel("ZHR_BATCHAPPROVAL_SRV");
 			
 				var oFilter = new sap.m.FlexBox({
 					fitContainer: true,

@@ -10,9 +10,6 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 	},
 
 	createContent: function(oController) {
-		$.app.setModel("ZHR_COMMON_SRV");
-		$.app.setModel("ZHR_LEAVE_APPL_SRV");
-		
 		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 			columns : 2,
 			width : "100%",
@@ -331,6 +328,28 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 								 	 vAlign : "Middle"
 								 })]
 					}),
+					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+						height : "45px",
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}"})], // 결재자
+									 hAlign : "Begin",
+									 vAlign : "Middle"
+								}),
+								new sap.ui.commons.layout.MatrixLayoutCell({
+									content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+												   selectedKey : "{AppName}",
+												   width : "100%",
+												   editable : {
+												   		path : "Status1",
+												   		formatter : function(fVal){
+												   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+												   		}
+												   }
+											   })],
+									hAlign : "Begin",
+									vAlign : "Middle"
+								})]
+					}).addStyleClass("displayNone"),					
 					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_MessageRow", {
 						// height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({

@@ -12,6 +12,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.List", {
 	createContent: function(oController) {
 		$.app.setModel("ZHR_COMMON_SRV");
 		$.app.setModel("ZHR_LEAVE_APPL_SRV");
+		$.app.setModel("ZHR_BATCHAPPROVAL_SRV");
 		
 		var oFilter = new sap.m.FlexBox({
 			fitContainer: true,

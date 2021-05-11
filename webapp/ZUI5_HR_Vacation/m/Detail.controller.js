@@ -15,6 +15,7 @@ sap.ui.define([
 		PAGEID: "ZUI5_HR_VacationDetail",
 		_BusyDialog : new sap.m.BusyDialog(),
 		_DetailJSonModel : new sap.ui.model.json.JSONModel(),
+		_Extryn : "",
 		
 		onInit: function () {
 			this.setupView()
@@ -27,7 +28,8 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-				
+			
+			this._Extryn = Common.isExternalIP() === true ? "X" : "";
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -46,7 +48,7 @@ sap.ui.define([
 					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
 					Molga : $.app.getModel("session").getData().Molga,
 					Langu : $.app.getModel("session").getData().Langu,
-					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : "",
+					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : ""
 				}
 			};
 			
@@ -242,7 +244,7 @@ sap.ui.define([
 					});
 					
 					oJSONModel2.setData(vData2);
-					
+
 					if(oController.Error == "E"){
 						oController._BusyDialog.close();
 						oController.Error = "";
@@ -252,6 +254,81 @@ sap.ui.define([
 						return;
 					}
 				}
+				
+				// 2021-05-11 결재자 리스트 조회
+				oData = oController._DetailJSonModel.getProperty("/Data");
+				var oRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
+				var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+					oAppName.destroyItems();
+					oAppName.setValue("");
+				
+				var oModel2 = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+				var createData2 = {ApprlistNav : []};
+					createData2.IPernr = oData.Pernr;
+					createData2.IExtryn = oController._Extryn;
+					createData2.IZappSeq = "11";
+					createData2.IBukrs = oData.Bukrs;
+					createData2.IMobyn = "X";
+					createData2.IAppkey = (oData.Appkey ? oData.Appkey : "");
+	
+				if(oData.Status1 == "" || oData.Status1 == "AA" || oData.Status1 == "JJ"){
+					createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+					createData2.IPrcty = "1";
+				} else {
+					createData2.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
+					createData2.IPrcty = "2";
+				}
+	
+				oModel2.create("/ApprListSet", createData2, {
+					success: function(data, res){
+						if(data){
+							if(data.ApprlistNav && data.ApprlistNav.results){
+									var data1 = data.ApprlistNav.results;
+									
+									if(data1){
+										for(var i=0; i<data1.length; i++){
+											oAppName.addItem(
+												new sap.ui.core.Item({
+													key : data1[i].AppName,
+													text : data1[i].AppText
+												})
+											);
+	
+											if(data1[i].Defyn == "X"){
+												oController._DetailJSonModel.setProperty("/Data/AppName", data1[i].AppName);
+											}
+										}
+									}
+								}
+						}
+					},
+					error: function (oError) {
+						var Err = {};
+						oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				});
+	
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+				}
+	
+				// 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
+				if(oAppName.getItems().length == 0){
+					oController._DetailJSonModel.setProperty("/Data/AppName", "");
+					oRow.addStyleClass("displayNone");
+				} else {
+					oRow.removeStyleClass("displayNone");
+				}	
 				
 				// 근태코드 리스트
 				var oAwart = sap.ui.getCore().byId(oController.PAGEID + "_Awart");
@@ -1048,6 +1125,15 @@ sap.ui.define([
 						sap.m.MessageBox.error(oController.getBundleText("MSG_48010")); // 행선지를 입력하여 주십시오.
 						return;
 					}
+
+					// 2021-05-11 결재자 리스트가 있는 경우 결재자 선택 여부 체크
+					var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+					if(oAppName.getItems().length != 0){
+						if(!oData.AppName){
+							sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+							return;
+						}
+					}
 				}
 			}
 			
@@ -1088,7 +1174,6 @@ sap.ui.define([
 			}
 			
 			var onProcess = function(){
-				var vExtryn = Common.isExternalIP() === true ? "X" : "";
 				var oUrl = "";
 
 				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
@@ -1098,7 +1183,7 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IMolga = oData.Molga;
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
-					createData.IExtryn = vExtryn;
+					createData.IExtryn = oController._Extryn;
 					
 					// 신청구분값에 따라 구분값 변경
 					// 신규신청 3, 삭제 4, 삭제신청 5
@@ -1126,6 +1211,9 @@ sap.ui.define([
 					detail.Desti = oData.Desti;
 					detail.Encard = oData.Encard;
 					detail.Bigo = oData.Bigo;
+					detail.Seqnr = oData.Seqnr;
+					detail.Sprps = oData.Sprps;
+					detail.AppName1 = oData.AppName; // 2021-05-11 결재자 사번
 					
 					if(oData.Delapp != "" && Flag == "D"){
 						detail.Appkey = oData.ListAppkey;
