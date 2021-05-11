@@ -25,7 +25,7 @@ sap.ui.jsview("ZUI5_HR_FamilyApply.FamilyApply", {
 		oMat=new sap.ui.commons.layout.MatrixLayout();
 		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
 		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			content:new sap.ui.core.HTML({content:"<div style='height:10px;'/>"})
+			content:new sap.ui.core.HTML({content:"<div style='height:16px;'/>"})
 		});
 		oRow.addCell(oCell);
 		oMat.addRow(oRow);
@@ -57,6 +57,8 @@ sap.ui.jsview("ZUI5_HR_FamilyApply.FamilyApply", {
 			showOverlay: false,
 			showNoData: true,
 			width: "auto",
+			rowHeight: 37,
+			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}"
 		}).addStyleClass("mt-8px row-link").attachCellClick(oController.onSelectedRow);
 

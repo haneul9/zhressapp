@@ -69,7 +69,7 @@ sap.ui.define(
                 this.oModel.setProperty("/SearchConditions/Status1", "FL");
                 this.oModel.setProperty("/SearchConditions/Begda", new Date(currDate.getFullYear(), currDate.getMonth(), 1));
                 this.oModel.setProperty("/SearchConditions/Endda", new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0));
-                if($.app.getAuth() === $.app.Auth.ESS && this.oController.getSessionInfoByKey("Zflag") === "X" && this.oController.getSessionInfoByKey("Zshft") === "X") {
+                if($.app.getAuth() === $.app.Auth.ESS && (this.oController.getSessionInfoByKey("Zflag") === "X" || this.oController.getSessionInfoByKey("Zshft") === "X")) {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Ename"));
                     this.oModel.setProperty("/SearchConditions/Pernr", this.oController.getSessionInfoByKey("name"));
                 } else {
@@ -329,7 +329,7 @@ sap.ui.define(
                             Zshft: true
                         },
                         callback = function(o) {
-                            if(o.Zshft !== "X" || o.Zflag !== "X") {
+                            if(o.Zshft !== "X" && o.Zflag !== "X") {
                                 MessageBox.warning(this.oController.getBundleText("MSG_31015")); // 사무직은 선택할 수 없습니다.
                                 return;
                             }

@@ -12,8 +12,6 @@ sap.ui.define(
             },
 
             createContent: function (oController) {
-                this.loadModel();
-
                 var tabBox = new sap.m.IconTabBar($.app.createId("TabContainer"), {
                     select: oController.selectIconTabBar.bind(oController),
                     selectedKey: OvertimeWork.Tab.APPROVAL,
@@ -36,11 +34,6 @@ sap.ui.define(
                 return new PageHelper({
                     contentItems: [tabBox]
                 });
-            },
-
-            loadModel: function () {
-                $.app.setModel("ZHR_BATCHAPPROVAL_SRV");
-                $.app.setModel("ZHR_COMMON_SRV");
             }
         });
     }

@@ -2,7 +2,7 @@
 sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
     createContent: function (oController) {
         var oRow,oCell,oMat,c=sap.ui.commons;
-		var oLabel1="<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText("LABEL_36041")+"</span>";
+		var oLabel1="<span style=''>"+oBundleText.getText("LABEL_36041")+"</span>";
         for(var i=15;i<30;i++){
             eval("var oLabel"+(i-14)+"=oController.getTxt('LABEL_440"+i+"',"+i+");");
         }
@@ -34,7 +34,7 @@ sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
                                 type: new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})}});
         oMat=new c.layout.MatrixLayout({
             columns:6,
-            widths:['9%','','9%','','9%','']
+            widths:['12%','','12%','','12%','']
         });
         oRow=new c.layout.MatrixLayoutRow();
         oCell=new c.layout.MatrixLayoutCell({
@@ -292,10 +292,10 @@ sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
             buttons: [
             new sap.m.Button(oController.PAGEID+"_Re",{text:oBundleText.getText("LABEL_44035"),press:function(){oController.onRe()},visible:{path:"Status",formatter:function(fVal){
                 return fVal=="88"?true:false;
-            }}}).addStyleClass("button-dark"),
+            }}}).addStyleClass("button-light"),
             new sap.m.Button({text:oBundleText.getText("LABEL_44031"),press:function(){oController.onSave()},visible:{path:"Opener",formatter:function(fVal){
                 return fVal=="X"?true:false;
-            }}}).addStyleClass("button-dark"),new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose}).addStyleClass("button-delete")],
+            }}}).addStyleClass("button-dark"),new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose}).addStyleClass("button-default custom-button-divide")],
             contentWidth: "1366px",
             afterOpen:function(){oController.onAfterOpen(oDialog)}
         });	

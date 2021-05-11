@@ -181,10 +181,7 @@ common.Common = {
      * @returns {Array<{label: string, property: string, type: string, template: {content: {parts: string, formatter: function()}}}>}
      */
     convertColumnArrayForExcel: function (oController, colModels) {
-        var preText = "",
-            dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-                pattern: "yyyy.MM.dd"
-            });
+        var preText = "";
 
         return $.map(colModels, function (rowData) {
             var label = common.Common.stripI18nExpression(rowData.label),
@@ -209,7 +206,7 @@ common.Common = {
                     content: {
                         parts: [rowData.id],
                         formatter: function (fVal) {
-                            return !fVal || typeof fVal === "string" ? fVal : dateFormat.format(new Date(common.Common.setTime(fVal)));
+                            return !fVal || typeof fVal === "string" ? fVal : moment(fVal).format("YYYY-MM-DD");
                         }
                     }
                 } : undefined

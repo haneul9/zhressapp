@@ -23,8 +23,8 @@ sap.ui.define(
              * @returns {Array<NavCommonCodeList>} - 코드 목록
              */
             CommonCodeListHeaderSet: function (arg) {
-				var results = [];
-
+                var results = [];
+                
 				$.app.getModel("ZHR_COMMON_SRV").create(
 					"/CommonCodeListHeaderSet",
 					{
@@ -148,9 +148,7 @@ sap.ui.define(
              * @param {Function} error - 실패 callback
              */
             OvertimeApplySetByProcess: function (processType, payload, success, error) {
-                var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
-
-                oModel.create(
+                $.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
                     "/OvertimeApplySet",
                     {
                         IConType: processType,

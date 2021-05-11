@@ -14,8 +14,6 @@ sap.ui.define(
             },
 
             createContent: function (oController) {
-                this.loadModel();
-
                 var PageHandler = oController.getPageHandler.call(oController);
 
                 return new PageHelper({
@@ -189,12 +187,6 @@ sap.ui.define(
                     { id: "Stext1", label: "{i18n>LABEL_32008}" /* 진행상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "15%", templateGetter: "getSmoinLink", templateGetterOwner: this },
                     { id: "Stext", label: "{i18n>LABEL_32013}" /* 결재상태(담당부서) */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "15%" }
                 ];
-            },
-
-            loadModel: function () {
-                $.app.setModel("ZHR_WORKTIME_APPL_SRV");
-                $.app.setModel("ZHR_WORKSCHEDULE_SRV");
-                $.app.setModel("ZHR_COMMON_SRV");
             }
         });
     }
