@@ -685,6 +685,11 @@ sap.ui.define(
              */
             searchOrgehPernrByList: function() {
                 this.searchOrgehPernr.call(this.oController, function(o) {
+                    if(o.Zshft === "X") {
+                        MessageBox.warning(this.oController.getBundleText("MSG_32025")); // 교대근무자는 선택할 수 없습니다.
+                        return;
+                    }
+                    
                     this.oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");
                     this.oModel.setProperty("/SearchConditions/Orgeh", o.Otype === "O" ? o.Objid : "");
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", o.Stext || "");
