@@ -70,7 +70,7 @@ sap.ui.define(
                     "/WorktimeApplySet",
                     {
                         IConType: processType,
-                        ITttyp: "P",    // 개인
+                        ITttyp: arg.Tttyp ? arg.Tttyp : "P",    // P: 개인, O: 일괄
                         IBukrs: this.getSessionInfoByKey("Bukrs3"),
                         IMolga: this.getSessionInfoByKey("Molga"),
                         ILangu: this.getSessionInfoByKey("Langu"),
