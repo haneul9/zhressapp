@@ -439,7 +439,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}"})], // 결재자
+									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true, textDirection : "RTL"})], // 결재자
 									 hAlign : "End",
 									 vAlign : "Middle"
 								}).addStyleClass("Label"),

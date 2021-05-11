@@ -909,22 +909,22 @@ sap.ui.define([
 				}
 				
 				oController._BusyDialog.close();
-				sap.m.MessageBox.success(oController.getBundleText("MSG_00017"), { // 저장되었습니다.
+				sap.m.MessageBox.success(oController.getBundleText("MSG_69010"), { // 임시저장되었습니다.\n반드시 저장버튼을 클릭하시기 바랍니다.
 					onClose : function(){
 						oController._AddBreakDialog.close();
 					}
 				});
 			};
 			
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_00058"), { // 저장하시겠습니까?
-				actions : ["YES", "NO"],
-				onClose : function(fVal){
-					if(fVal && fVal == "YES"){
+			// sap.m.MessageBox.confirm(oController.getBundleText("MSG_00058"), { // 저장하시겠습니까?
+			// 	actions : ["YES", "NO"],
+			// 	onClose : function(fVal){
+			// 		if(fVal && fVal == "YES"){
 						oController._BusyDialog.open();
 						setTimeout(onProcess, 100);
-					}
-				}
-			});
+			// 		}
+			// 	}
+			// });
 		},
 		
 		// 휴게시간 삭제
