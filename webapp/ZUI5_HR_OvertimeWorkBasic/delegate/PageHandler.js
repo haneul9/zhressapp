@@ -69,12 +69,12 @@ sap.ui.define(
                 this.oModel.setProperty("/SearchConditions/Status1", "FL");
                 this.oModel.setProperty("/SearchConditions/Begda", new Date(currDate.getFullYear(), currDate.getMonth(), 1));
                 this.oModel.setProperty("/SearchConditions/Endda", new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0));
-                if($.app.getAuth() === $.app.Auth.MSS) {
-                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
-                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
-                } else {
+                if($.app.getAuth() === $.app.Auth.ESS && this.oController.getSessionInfoByKey("Zflag") === "X" && this.oController.getSessionInfoByKey("Zshft") === "X") {
                     this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Ename"));
                     this.oModel.setProperty("/SearchConditions/Pernr", this.oController.getSessionInfoByKey("name"));
+                } else {
+                    this.oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", this.oController.getSessionInfoByKey("Stext"));
+                    this.oModel.setProperty("/SearchConditions/Orgeh", this.oController.getSessionInfoByKey("Orgeh"));
                 }
 
                 this.oModel.setProperty(
@@ -324,9 +324,16 @@ sap.ui.define(
                             Langu: this.getSessionInfoByKey("Langu"),
                             Molga: this.getSessionInfoByKey("Molga"),
                             Datum: new Date(),
-                            Mssty: ""
+                            Mssty: "",
+                            Zflag: true,
+                            Zshft: true
                         },
                         callback = function(o) {
+                            if(o.Zshft !== "X" || o.Zflag !== "X") {
+                                MessageBox.warning(this.oController.getBundleText("MSG_31015")); // 사무직은 선택할 수 없습니다.
+                                return;
+                            }
+
                             oModel.setProperty("/SearchConditions/Pernr", o.Otype === "P" ? o.Objid : "");
                             oModel.setProperty("/SearchConditions/Orgeh", o.Otype === "O" ? o.Objid : "");
                             oModel.setProperty("/SearchConditions/EnameOrOrgehTxt", o.Stext || "");
