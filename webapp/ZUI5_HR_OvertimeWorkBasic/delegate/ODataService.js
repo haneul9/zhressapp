@@ -115,7 +115,7 @@ sap.ui.define(
             OvertimeListSet: function (arg) {
                 var results = [];
 
-                $.app.setModel("ZHR_WORKSCHEDULE_SRV");
+                $.app.setModel("ZHR_WORKTIME_APPL_SRV");
 
                 $.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
                     "/OvertimeListSet",
