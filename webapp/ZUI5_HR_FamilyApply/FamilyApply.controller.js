@@ -62,7 +62,7 @@ sap.ui.define([
 
 		
 		getTxt:function(vTxt,vNo){
-			var redStar="<span style='color:red;font-weight:bold;font-size:14px;'>*</span>";
+			var redStar="<span style='color:#ce3b3b;font-weight:bold;font-size:14px;'>*</span>";
 			return vNo==15||vNo==16||vNo==17||vNo==18||vNo==29||vNo==30?"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>"+redStar:
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
 		},
@@ -569,7 +569,7 @@ sap.ui.define([
 				});
 				oCol.setWidth(e.Width);
 				oCol.setHAlign(e.Align);
-				oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));
+				oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}).addStyleClass("font-medium"));
 				
 				if(i==7||i==8||i==9){
 					oCol.setTemplate(new sap.ui.core.Icon({
