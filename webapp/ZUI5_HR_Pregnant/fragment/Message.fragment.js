@@ -27,7 +27,7 @@ sap.ui.define([], function () {
                             "<span style='color:#0070bd; font-weight:bold;'> {i18n>MSG_39006}</span><br/>" +
                             "<span style='padding-left:10px'>{i18n>MSG_39003}</span>" +
                             "<span style='color:#0070bd'> {i18n>MSG_39007}</span>" +
-                            "<span> {i18n>MSG_39008}</span>" +
+                            // "<span> {i18n>MSG_39008}</span>" +
                             "<span style='color:#0070bd; font-weight:bold;'> {i18n>MSG_39009}</span><br/>" +
                             "<span>{i18n>MSG_39010}</span>"
                     })
