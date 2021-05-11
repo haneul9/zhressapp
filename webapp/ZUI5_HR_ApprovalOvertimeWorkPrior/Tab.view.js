@@ -1,6 +1,6 @@
 sap.ui.define(
     [
-        "../common/PageHelper",  //
+        "common/PageHelper",  //
         "./delegate/OvertimeWork"
     ],
     function (PageHelper, OvertimeWork) {

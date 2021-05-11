@@ -1,9 +1,9 @@
 /* eslint-disable no-empty */
 sap.ui.define(
     [
-        "../../common/Common", //
-        "../../common/DialogHandler",
-        "../../common/OrgOfIndividualHandler",
+        "common/Common", //
+        "common/DialogHandler",
+        "common/OrgOfIndividualHandler",
         "./OvertimeWork",
         "./ODataService",
 		"sap/m/MessageBox",

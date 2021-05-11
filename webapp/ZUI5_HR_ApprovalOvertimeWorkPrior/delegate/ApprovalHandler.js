@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 sap.ui.define(
     [
-        "../../common/Common", //
+        "common/Common", //
         "./OvertimeWork",
         "./ODataService",
 		"sap/m/MessageBox",

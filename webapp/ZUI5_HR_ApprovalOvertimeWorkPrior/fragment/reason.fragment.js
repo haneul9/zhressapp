@@ -1,5 +1,5 @@
 sap.ui.define([
-    "../../common/Common"
+    "common/Common"
 ],
     function (Common) {
         "use strict";

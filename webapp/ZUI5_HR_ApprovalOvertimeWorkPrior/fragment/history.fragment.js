@@ -1,7 +1,7 @@
 sap.ui.define(
     [
-        "../../common/Common", //
-        "../../common/ZHR_TABLES",
+        "common/Common", //
+        "common/ZHR_TABLES",
         "../delegate/OvertimeWork"
     ],
     function (Common, ZHR_TABLES, OvertimeWork) {

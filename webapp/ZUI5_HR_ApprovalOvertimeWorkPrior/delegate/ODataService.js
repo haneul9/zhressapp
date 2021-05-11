@@ -1,6 +1,6 @@
 sap.ui.define(
     [
-        "../../common/Common", //
+        "common/Common", //
         "./OvertimeWork"
     ],
     function (Common, OvertimeWork) {

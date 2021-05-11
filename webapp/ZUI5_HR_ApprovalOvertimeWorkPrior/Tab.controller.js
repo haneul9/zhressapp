@@ -1,8 +1,8 @@
 sap.ui.define(
     [
-        "../common/Common", //
-        "../common/CommonController",
-        "../common/JSONModelHelper",
+        "common/Common", //
+        "common/CommonController",
+        "common/JSONModelHelper",
         "./delegate/OvertimeWork",
         "./delegate/ApprovalHandler",
         "./delegate/HistoryHandler"
