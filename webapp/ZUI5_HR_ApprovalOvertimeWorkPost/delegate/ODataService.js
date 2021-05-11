@@ -24,8 +24,8 @@ sap.ui.define(
              * @returns {Array<NavCommonCodeList>} - 코드 목록
              */
             CommonCodeListHeaderSet: function (arg) {
-				var results = [];
-
+                var results = [];
+                
 				$.app.getModel("ZHR_COMMON_SRV").create(
 					"/CommonCodeListHeaderSet",
 					{

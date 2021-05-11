@@ -158,7 +158,7 @@ getDestination: function() {
 },
 setModel: function(modelName) {
 	if(sap.ui.getCore().getModel(modelName) !== undefined) return;
-	
+
 	try {
 		var serviceURL = $.app.getDestination() + "/sap/opu/odata/sap/" + modelName,
 		oModel = new sap.ui.model.odata.ODataModel(serviceURL, true, undefined, undefined, undefined, undefined, undefined, false);
@@ -174,6 +174,10 @@ setModel: function(modelName) {
 	}
 },
 getModel: function(id, viewId) {
+	if(sap.ui.getCore().getModel(id) === undefined) {
+		$.app.setModel(id);
+	}
+
 	var model = $.app.getView(viewId).getModel(id) || sap.ui.getCore().getModel(id);
 	return {
 		create: function() {
