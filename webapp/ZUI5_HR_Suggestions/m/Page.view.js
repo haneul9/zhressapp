@@ -44,7 +44,11 @@
                             new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
 								icon: "sap-icon://search"
-							}).addStyleClass("button-search")
+							}).addStyleClass("button-search"),
+                            new sap.m.Button({
+								press: oController.onPressSer.bind(oController),
+								icon : "sap-icon://bell" // 알림
+							}).addStyleClass("button-light h-42px ml-8px")
 						]
 					})
                     .addStyleClass("button-group pl-0")
