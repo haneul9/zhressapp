@@ -86,11 +86,7 @@ sap.ui.define(
                 if(this.oController.getSessionInfoByKey("Bukrs3") === "1000") {
                     this.oModel.setProperty("/Minutes30", [
                         { Code: "00", Text: "00"},  //
-                        { Code: "10", Text: "10"},
-                        { Code: "20", Text: "20"},
-                        { Code: "30", Text: "30"},
-                        { Code: "40", Text: "40"},
-                        { Code: "50", Text: "50"}
+                        { Code: "30", Text: "30"}
                     ]);
                 } else {
                     this.oModel.setProperty("/Minutes30", this.oModel.getProperty("/Minutes"));
