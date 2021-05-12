@@ -2,15 +2,15 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"../common/AttachFileAction",
-    "../common/SearchOrg",
-    "../common/SearchUser1",
-    "../common/OrgOfIndividualHandler",
-    "../common/DialogHandler"], 
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/PageHelper",
+	"common/AttachFileAction",
+    "common/SearchOrg",
+    "common/SearchUser1",
+    "common/OrgOfIndividualHandler",
+    "common/DialogHandler"], 
 	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
 	"use strict";
 
@@ -258,6 +258,34 @@ sap.ui.define([
 		getOrgOfIndividualHandler: function() {
             return this.OrgOfIndividualHandler;
         },
+        
+        /**
+         * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
+         */
+        displayMultiOrgSearchDialog: function (oEvent) {
+            SearchOrg.oController = this.oController;
+            SearchOrg.vActionType = "Multi";
+            SearchOrg.vCallControlId = oEvent.getSource().getId();
+            SearchOrg.vCallControlType = "MultiInput";
+
+            if (!this.oOrgSearchDialog) {
+                this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
+                $.app.getView().addDependent(this.oOrgSearchDialog);
+            }
+
+            this.oOrgSearchDialog.open();
+        },
+
+		onESSelectPerson : function(data){
+			var oController = $.app.getController();
+
+			oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
+			oController._ListCondJSonModel.setProperty("/Data/Pernr", data.Pernr);
+			oController._ListCondJSonModel.setProperty("/Data/Ename", data.Ename);
+
+			oController.OrgOfIndividualHandler.getDialog().close();
+			SearchUser1.onClose();
+		},
         
         onPressStext : function(oEvent){
         	var oView = sap.ui.getCore().byId("ZUI5_HR_VacationList.List");

@@ -314,8 +314,8 @@ sap.ui.define([
 		onESSelectPerson : function(data){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.List");
 			var oController = oView.getController();
-			console.log(data)
 
+			oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
 			oController._ListCondJSonModel.setProperty("/Data/Pernr", data.Pernr);
 			oController._ListCondJSonModel.setProperty("/Data/Ename", data.Ename);
 
