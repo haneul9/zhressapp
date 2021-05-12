@@ -1,4 +1,5 @@
 $.sap.require("common.PickOnlyDatePicker");
+$.sap.require("common.EmpBasicInfoBoxCustomHass");
 sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
     createContent: function (oController) {
         var oRow,oCell,oMat,c=sap.ui.commons;

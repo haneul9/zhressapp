@@ -2,20 +2,16 @@
 $.sap.require("common.Common");
 $.sap.require("common.PageHelper");
 $.sap.require("common.Formatter");
-$.sap.require("common.makeTable");
-$.sap.require("common.EmpBasicInfoBoxCustom");
-$.sap.require("common.PickOnlyDateRangeSelection");
-jQuery.sap.require("control.ODataFileUploader");
-jQuery.sap.require("fragment.COMMON_ATTACH_FILES");
-jQuery.sap.includeStyleSheet("ZUI5_HR_MedApply/css/MyCss.css");
-sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
+$.sap.require("common.PickOnlyDatePicker");
+jQuery.sap.includeStyleSheet("ZUI5_HR_TribunalWorkTime/css/MyCss.css");
+sap.ui.jsview("ZUI5_HR_TribunalWorkTime.TribunalView", {
 
 	/** Specifies the Controller belonging to this View. 
 	 * In the case that it is not implemented, or that "null" is returned, this View does not have a Controller.
 	 * @memberOf controller.main
 	 */
 	getControllerName: function () {
-		return "ZUI5_HR_MedApply.MedApply";
+		return "ZUI5_HR_TribunalWorkTime.TribunalView";
 	},
 
 	/** Is initially called once after the Controller has been instantiated. It is the place where the UI is constructed. 
@@ -24,16 +20,13 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 	 */
 	createContent: function (oController) {
 		$.app.setModel("ZHR_COMMON_SRV");
-		$.app.setModel("ZHR_BENEFIT_SRV");
-		var oRow,oCell,oMat;
+		$.app.setModel("ZHR_WORKSCHEDULE_SRV");
 		var vYear = new Date().getFullYear();
-		var vMonth = new Date().getMonth()+1;
-
 		var oHBox = new sap.m.HBox({
 			items:[new sap.m.Label({
 				textAlign:"Begin",
-				text: oController.getBundleText("LABEL_47144")					
-			}),new sap.m.Input({
+				text: oController.getBundleText("LABEL_71003")					
+			}),new sap.m.Input(oController.PAGEID+"_searchOrgPer",{
 				valueHelpRequest: function(oEvent){oController.searchOrgehPernr.call(oController,oEvent,"X");},
 				valueHelpOnly: true,
 				showValueHelp: true,
@@ -48,17 +41,26 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 					items: [
 						new sap.m.Label({
 							textAlign:"Begin",
-							text: oController.getBundleText("LABEL_47003")// 진료일								
-						}),							
-						new common.PickOnlyDateRangeSelection(oController.PAGEID + "_ApplyDate", {
-							width: "250px",
-							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-							delimiter: "~",
-							dateValue: new Date(vYear, new Date().getMonth(), 1),
-							secondDateValue: new Date()
+							text: oController.getBundleText("LABEL_71002")		
+						}),	
+						new common.PickOnlyDatePicker(oController.PAGEID + "_Date1", {
+							width: "160px",
+							valueFormat : "yyyyMM",
+                            displayFormat : "yyyy-MM",
+							dateValue: new Date(vYear, new Date().getMonth())
 						}),
-						oHBox
+						new sap.ui.core.HTML({content:"<span>&nbsp;</span>"}),
+						new common.PickOnlyDatePicker(oController.PAGEID + "_Date2", {
+							width: "160px",
+							valueFormat : "yyyyMM",
+                            displayFormat : "yyyy-MM",
+							dateValue: new Date(vYear, new Date().getMonth())
+						})
 					]
+				}).addStyleClass("search-field-group"),
+				new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),
+				new sap.m.HBox({
+					items: oHBox
 				}).addStyleClass("search-field-group"),
 				new sap.m.HBox({
 					items: [
@@ -73,9 +75,6 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 		})
 		.addStyleClass("search-box search-bg pb-7px mt-16px");
 
-
-		oMat=new sap.ui.commons.layout.MatrixLayout({columns:2});
-
 		var oTable = new sap.ui.table.Table(oController.PAGEID+"_Table", {
 			selectionMode: "None",
 			enableColumnReordering: false,
@@ -88,21 +87,34 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 			noData: oController.getBundleText("MSG_05001")
 		}).addStyleClass("mt-10px row-link");
 
-		oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			colSpan:2,
-			content:oTable
+		var oFields=["Wkym","Pernr","Ename","Orgtx","SumtmAlv","ExptmAlv","LawtmAlv","AvetmAlv","RsttmAlv","LawckT"];			
+		var oWidths=['','','','','','','','','',''];			
+		var oAligns=['Center','Center','Center','Center','Center','Center','Center','Center','Center','Center'];	
+		var oLabels=new Array();		
+		for(var i=4;i<(oFields.length+4);i++){
+			i<10?i="0"+i:null;
+			oLabels.push({Label:"LABEL_710"+i,Width:oWidths[i-4],Align:"Center"});
+		}
+		oLabels.forEach(function(e,i){
+			var oCol=new sap.ui.table.Column({
+				flexible : false,
+				autoResizable : true,
+				resizable : true,
+				showFilterMenuEntry : true,
+				filtered : false,
+				sorted : false
+			});
+			oCol.setWidth(e.Width);
+			oCol.setHAlign(e.Align);
+			oCol.setLabel(new sap.m.Text({text:oController.getBundleText(e.Label),textAlign:e.Align}));	
+			oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:oAligns[i]}).addStyleClass("FontFamily"));								
+			oTable.addColumn(oCol);
 		});
-		oRow.addCell(oCell);
-		oMat.addRow(oRow);
-		oMat.setModel(oController._ListCondJSonModel);
-		oMat.bindElement("/Data");
 
 		return new common.PageHelper({
 			contentItems: [
-				new sap.ui.core.HTML({content : "<div style='height:20px' />"}),oSearchBox,oMat
+				new sap.ui.core.HTML({content : "<div style='height:20px' />"}),oSearchBox,oTable
 			]
 		});
 	}
-
 });

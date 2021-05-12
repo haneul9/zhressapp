@@ -49,11 +49,11 @@
 							new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
 								text: "{i18n>LABEL_56004}" // 조회
-							}).addStyleClass("button-search"),
-							new sap.m.Button({
-								press: oController.onPressSer.bind(oController),
-								icon : "sap-icon://bell" // 알림
-							}).addStyleClass("button-light w-36px ml-8px")
+							}).addStyleClass("button-search")
+						//	new sap.m.Button({
+						//		press: oController.onPressSer.bind(oController),
+						//		icon : "sap-icon://bell" // 알림
+						//	}).addStyleClass("button-light w-36px ml-8px")
 						]
 					})
 					.addStyleClass("button-group")

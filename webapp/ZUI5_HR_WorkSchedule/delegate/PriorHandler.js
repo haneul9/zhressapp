@@ -56,7 +56,14 @@ sap.ui.define(
                     List: [],
                     Hours: Common.makeNumbersArray({ length: 24 }).map(function(h) { return { Code: Common.lpad(h, 2), Text: Common.lpad(h, 2) }; }),
                     // Minutes: [{ Code: "", Text: "mm"}].concat(Common.makeNumbersArray({ length: 60 }).map(function(m) { return { Code: Common.lpad(m, 2), Text: Common.lpad(m, 2) }; })),
-                    Minutes: [{ Code: "00", Text: "00"}, { Code: "30", Text: "30"}],
+                    Minutes: [
+                        { Code: "00", Text: "00"},  //
+                        { Code: "10", Text: "10"},
+                        { Code: "20", Text: "20"},
+                        { Code: "30", Text: "30"},
+                        { Code: "40", Text: "40"},
+                        { Code: "50", Text: "50"}
+                    ],
                     Tprogs: [],
                     Faprss: [],
                     Weeks: ["LABEL_55028","LABEL_55029","LABEL_55030","LABEL_55031","LABEL_55032","LABEL_55033","LABEL_55034"],

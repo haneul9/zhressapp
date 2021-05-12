@@ -2,7 +2,6 @@
 $.sap.require("common.Common");
 $.sap.require("common.PageHelper");
 $.sap.require("common.Formatter");
-$.sap.require("common.makeTable");
 $.sap.require("common.EmpBasicInfoBoxCustom");
 $.sap.require("common.PickOnlyDateRangeSelection");
 jQuery.sap.require("control.ODataFileUploader");
