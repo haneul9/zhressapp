@@ -36,6 +36,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		IEndda = new Date(curDate.getFullYear(), curDate.getMonth(), new Date(curDate.getFullYear(), curDate.getMonth()-1, 0).getDate());
 		
 		oController._ListCondJSonModel.setSizeLimit(5000);
+		oController._ApplyJSonModel.setSizeLimit(5000);  
 		oController._ListCondJSonModel.setProperty("/Data",{Begda : IBegda, Endda : IEndda });
 		oController._ApplyJSonModel.setProperty("/Data",{});
 
