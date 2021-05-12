@@ -1047,16 +1047,16 @@ var OnSettlement = { // 출장 비용 정산 event handler
 						var exports = oData.Export.results;
 						if (exports.length) {
 							smoinUrl = exports[0].Url;
+
+							// if (vExtryn !== "X" ) {
+							if(smoinUrl) {
+								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
+							}
 						}
 					}
 
 					MessageBox.success(this.getBundleText("MSG_00061"), { // 신청되었습니다.
 						onClose: function() {
-							// if (vExtryn !== "X" && smoinUrl) {
-							if (smoinUrl) {
-								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-							}
-
 							BusyIndicator.hide();
 							this.SettlementDetailDialogHandler.getDialog().close();
 							setTimeout(OnSettlement.pressSearch.bind(this), 0);
