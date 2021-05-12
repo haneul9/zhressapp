@@ -35,8 +35,10 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		IBegda = new Date(curDate.getFullYear(), curDate.getMonth(), 1),
 		IEndda = new Date(curDate.getFullYear(), curDate.getMonth(), new Date(curDate.getFullYear(), curDate.getMonth()-1, 0).getDate());
 		
+		oController._ListCondJSonModel.setSizeLimit(5000);
 		oController._ListCondJSonModel.setProperty("/Data",{Begda : IBegda, Endda : IEndda });
 		oController._ApplyJSonModel.setProperty("/Data",{});
+
 		Promise.all([
 			common.Common.getPromise(function() {
 				$.app.getModel("ZHR_COMMON_SRV").create("/CommonCodeListHeaderSet",    //통화키
@@ -421,6 +423,10 @@ return CommonController.extend($.app.APP_ID, { // 출장
 					cRowData.Pernr = rowElem.Coulmn_0;    //  사번
 					cRowData.Lgart = rowElem.Coulmn_1;    //  임금유형
 					cRowData.Betrg = "" + common.Common.toNumber(rowElem.Coulmn_2);    //  금액
+					if(!rowElem.Coulmn_3 || rowElem.Coulmn_3 == ""){
+						sap.m.MessageBox.alert(oController.getBundleText("MSG_50006"), { title: oController.getBundleText("LABEL_50011") });	// =통화키는 필수입력항목입니다.
+						return;
+					}
 					cRowData.Waers = rowElem.Coulmn_3;    // 통화키 
 					cRowData.Notes = rowElem.Coulmn_4 && rowElem.Coulmn_4 != "" ? rowElem.Coulmn_4 : "" ;
 					cRowData.Begda = "\/Date("+ common.Common.getTime(oController._ListCondJSonModel.getProperty("/Info/EPaydt"))+")\/";
@@ -503,8 +509,6 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				}
 			});
 			
-		} else {
-			sap.m.MessageBox.alert(oController.getBundleText("MSG_02104"), {});	// 파일 업로드에 실패하였습니다
 		}
 		
 		oFileUploader.setValue("");
