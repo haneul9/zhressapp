@@ -443,8 +443,8 @@ sap.ui.define([
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();	
 
-			if(oData.UrlA && oData.UrlA != ""){
-				if(common.Common.openPopup.call(oController, oData.UrlA) == false){
+			if(oData.UrlA1 && oData.UrlA1 != ""){
+				if(common.Common.openPopup.call(oController, oData.UrlA1) == false){
 					return;
 				}
 			}

@@ -328,23 +328,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();	
-			if(oData.UrlA && oData.UrlA != ""){
-				setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(oData.UrlA, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
+			if(oData.UrlA1 && oData.UrlA1 != ""){
+				if(common.Common.openPopup.call(oController, oData.UrlA1) == false){
+					return;
+				}
 			}
         },
 		
