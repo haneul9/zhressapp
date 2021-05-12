@@ -38,7 +38,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "SettlementList"].join("."), 
 							secondDateValue: "{IEndda}",
 							dateValue: "{IBegda}",
 							delimiter: "~",
-							width: "210px"
+							width: "240px"
 						}),
 						new sap.m.Label({ text: "{i18n>LABEL_19102}" }), // 결재상태
 						new sap.m.ComboBox({
