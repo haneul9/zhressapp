@@ -1052,7 +1052,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 					MessageBox.success(this.getBundleText("MSG_00061"), { // 신청되었습니다.
 						onClose: function() {
-							if (vExtryn !== "X" && smoinUrl) {
+							// if (vExtryn !== "X" && smoinUrl) {
+							if (smoinUrl) {
 								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 							}
 
