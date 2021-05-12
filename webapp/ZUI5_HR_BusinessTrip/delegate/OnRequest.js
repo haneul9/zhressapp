@@ -1167,15 +1167,15 @@ var OnRequest = { // 출장 event handler
 								if (this.getSessionInfoByKey("Bukrs") === "A100" && TableIn03[0].ClDmtr === "2") { // 해외 출장인 경우에만 안내 메세지 popup
 									MessageBox.information(this.getBundleText("MSG_19020"), { // ※ 출장 사전 품의시 "모인 메모품의(항공권 예약/발권 신청서)" 첨부하시기 바랍니다.
 										onClose: function() {
-											if(vExtryn !== "X") {
-												this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-											}
+											this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
+											// if(vExtryn !== "X") {
+											// }
 										}.bind(this)
 									});
 								} else {
-									if(vExtryn !== "X") {
-										this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-									}
+									this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
+									// if(vExtryn !== "X") {
+									// }
 								}
 							}
 
