@@ -48,6 +48,21 @@ sap.ui.define([
 				}, this);
 		},
 
+		onESSelectPerson : function(Data){
+			$.app.byId(this.PAGEID+"_HassPer").getItems()[1].removeAllCustomData();
+			$.app.byId(this.PAGEID+"_HassPer").getItems()[1].setValue(Data.Ename);
+			$.app.byId(this.PAGEID+"_HassPer").getItems()[1].addCustomData(new sap.ui.core.CustomData({value:Data.Pernr,key:"Pernr"}));
+			this._vPernr=Data.Pernr;
+			sap.ui.getCore().byId(common.SearchUser1.oController.PAGEID + "_ES_Dialog").close();
+			this.OrgOfIndividualHandler.getDialog().close();
+		},
+
+		displayMultiOrgSearchDialog: function(oEvent) {
+			return !$.app.getController().EmployeeSearchCallOwner 
+					? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
+					: $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
+		},
+
 		getOrgOfIndividualHandler: function() {
             return this.OrgOfIndividualHandler;
         },
@@ -181,7 +196,7 @@ sap.ui.define([
 							sap.m.MessageBox.alert(oError.toString());
 						}
 					}
-					});
+			});
 //			oController._Bukrs=oSessionData.Bukrs3;		
 		},
 
@@ -254,11 +269,11 @@ sap.ui.define([
 			if(oController._onDialog!="M"){
 				oController.changeSel2();
 			}
+			BusyIndicator.show(0);
 			var vAppnm="";
 			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/Pop1")[0].Appnm:null;
 			oController._Hass=="X"?$.app.byId(oController.PAGEID+"_PerInfo").setVisible(true):$.app.byId(oController.PAGEID+"_PerInfo").setVisible(false);
 			oController._Hass=="X"?common.EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr):null;
-			BusyIndicator.show(0);
 			var vEdit=true;
 			oController._onClose=="X"?vEdit=false:vEdit=true;
 			var vStatus=oController._DataModel.getProperty("/Pop1")[0].Status;
@@ -338,10 +353,10 @@ sap.ui.define([
 			}
 			$.app.byId(oController.PAGEID+"_Dialog2").bindElement("/Pop2/0");		
 			var vAppnm="";
+			BusyIndicator.show(0);
 			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Dialog2").getModel().getProperty("/Pop2")[0].Appnm:null;
 			oController._Hass=="X"?$.app.byId(oController.PAGEID+"_PerInfo2").setVisible(true):$.app.byId(oController.PAGEID+"_PerInfo2").setVisible(false);
 			oController._Hass=="X"?common.EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr):null;
-			BusyIndicator.show(0);
 			var vEdit=true;
 			oController._onClose=="X"?vEdit=false:vEdit=true;
 			var vStatus=oController._DataModel.getProperty("/Pop2")[0].Status;

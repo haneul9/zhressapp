@@ -1,0 +1,65 @@
+.LabelCell{
+    border : 1px solid #d8dadf;
+    padding : 4px !important;
+    background : #f3f4f6;
+}
+.DataCell{
+    border : 1px solid #d8dadf;
+    padding : 4px !important;
+}
+.Bold{
+    font-weight:bold !important;
+}
+.Font16{
+    font-size:16px;
+}
+.Font15{
+    font-size:15px;
+}
+.Font14{
+    font-size:14px;
+}
+.RightZone{
+    float: right;
+}
+.righter{
+    float: right;
+}
+.paddingbody{
+    padding : 10px;
+}
+.sapUiSmallMargin{
+    margin : 0px !important;
+}
+.centerAlign{
+    text-align: center !important;
+    vertical-align : middle !important;
+}
+.L2P13FontCustom{
+    font-weight:bold !important;
+    color:#0070bd !important;
+}
+.busyDialog{
+    width:320px !important;
+}
+.sapMListTblCnt{
+    border-top : 1px solid white !important;
+}
+.Red{
+    color:red !important;
+}
+.Blue{
+    color:#0070bd !important;
+    font-size:14px !important;
+}
+.msgBox{
+    padding:10px !important;
+    line-height:1.8;
+    background-color: #fffac4;
+    border:1px solid #f5be00;
+    font-size:14px;
+    color:#333;
+}
+.search-field-group .sapMFlexItem .sapMLabel:not(.sapMCbLabel){
+    text-align:left !important;
+}
