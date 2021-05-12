@@ -238,8 +238,13 @@ sap.ui.define([
 				oController.Error = "";
 				sap.m.MessageBox.error(oController.ErrorMessage);
 			}
-
-			// 결재자 리스트 생성 : Defyn == "X"인 경우 default 결재자로 세팅한다.
+		},
+		
+		// 결재자 리스트 생성 : Defyn == "X"인 경우 default 결재자로 세팅한다.
+		setAppName : function(){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.Detail");
+			var oController = oView.getController();
+			
 			var oData = oController._DetailJSonModel.getProperty("/Data");
 			var oRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
 			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
@@ -248,7 +253,7 @@ sap.ui.define([
 			
 			var oModel2 = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
 			var createData2 = {ApprlistNav : []};
-				createData2.IPernr = Pernr;
+				createData2.IPernr = oData.Pernr;
 				createData2.IExtryn = oData.Extryn;
 				createData2.IZappSeq = "11";
 				createData2.IBukrs = oData.Bukrs;
@@ -312,7 +317,7 @@ sap.ui.define([
 				oRow.addStyleClass("displayNone");
 			} else {
 				oRow.removeStyleClass("displayNone");
-			}
+			}	
 		},
 		
 		// 대상자 변경 시 pernr
@@ -367,9 +372,15 @@ sap.ui.define([
 					
 					oController._DetailJSonModel.setProperty("/Data", vData);
 					
+					// 결재자
+					oController.setAppName();
+					
 					// 대근신청 비활성화
 					oController._DetailJSonModel.setProperty("/Data/Panel2Visible", false);
-				} else {					
+				} else {	
+					// 대상자
+					oController.onSetInfo(oData.Pernr);
+				
 					// 데이터 조회
 					var createData = {VacationApply1Nav : [], VacationApply2Nav : []};
 						createData.IEmpid = oData.Pernr;
@@ -486,9 +497,9 @@ sap.ui.define([
 					}
 				}
 				
-				// 대상자
-				oController.onSetInfo(oData.Pernr);
-
+				// 결재자
+				oController.setAppName();
+				
 				oData = oController._DetailJSonModel.getProperty("/Data");
 				
 				// 근태코드 리스트
