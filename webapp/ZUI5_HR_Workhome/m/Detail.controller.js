@@ -62,6 +62,74 @@ sap.ui.define([
 			}
 			
 			oJSONModel.setData(vData);
+
+			// 2021-05-13 결재자 리스트
+			var oRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+				oAppName.destroyItems();
+				oAppName.setValue("");
+			
+			var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+			var createData = {ApprlistNav : []};
+				createData.IPernr = oData.Data.Pernr;
+				createData.IExtryn = "X";
+				createData.IZappSeq = "39";
+				createData.IBukrs = oData.Data.Bukrs;
+				createData.IMobyn = "X";
+				createData.IAppkey = "";
+				createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+				createData.IPrcty = "1";
+
+			oModel.create("/ApprListSet", createData, {
+				success: function(data, res){
+					if(data){
+						if(data.ApprlistNav && data.ApprlistNav.results){
+								var data1 = data.ApprlistNav.results;
+								
+								if(data1){
+									for(var i=0; i<data1.length; i++){
+										oAppName.addItem(
+											new sap.ui.core.Item({
+												key : data1[i].AppName,
+												text : data1[i].AppText
+											})
+										);
+
+										if(data1[i].Defyn == "X"){
+											oController._DetailJSonModel.setProperty("/Data/AppName", data1[i].AppName);
+										}
+									}
+								}
+							}
+					}
+				},
+				error: function (oError) {
+					var Err = {};
+					oController.Error = "E";
+							
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			});
+
+			if(oController.Error == "E"){
+				oController.Error = "";
+				sap.m.MessageBox.error(oController.ErrorMessage);
+			}
+
+			// 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
+			if(oAppName.getItems().length == 0){
+				oController._DetailJSonModel.setProperty("/Data/AppName", "");
+				oRow.addStyleClass("displayNone");
+			} else {
+				oRow.removeStyleClass("displayNone");
+			}	
 		},
 		
 		onAfterShow: function(oEvent){
@@ -139,7 +207,7 @@ sap.ui.define([
 						detail.Endda = "\/Date(" + common.Common.getTime(new Date(vData[i].Begda)) + ")\/"; 
 						detail.Telnum = oData.Telnum;
 						detail.Bigo = oData.Bigo;
-
+						detail.AppName = oData.AppName ? oData.AppName : "";
 					createData.WorkhomeNav.push(detail);
 				}
 			}
@@ -150,6 +218,15 @@ sap.ui.define([
 			} else if(!oData.Telnum || oData.Telnum.trim() == ""){
 				sap.m.MessageBox.error(oController.getBundleText("MSG_53007")); // 연락처를 입력하여 주십시오.
 				return;
+			}
+
+			// 2021-05-13 결재자 리스트가 있는 경우 결재자 선택 여부 체크
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+			if(oAppName.getItems().length != 0){
+				if(!oData.AppName){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+					return;
+				}
 			}
 			
 			var onProcess = function(){
@@ -164,7 +241,7 @@ sap.ui.define([
 					createData.ILangu = $.app.getModel("session").getData().Langu;
 					createData.IConType = Flag == "C" ? "3" : "4";
 					createData.IExtryn = oExtryn;
-					console.log(createData);
+					
 				oModel.create("/WorkhomeApplySet", createData, {
 					success: function(data, res){
 						if(data){

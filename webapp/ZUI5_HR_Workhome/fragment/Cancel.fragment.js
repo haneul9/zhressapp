@@ -11,11 +11,36 @@ sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Cancel", {
 			rows : 5,
 			maxLength : common.Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "WorkhomeApplyTab", "Bigo")
 		});
+
+		var oAppname = new sap.ui.commons.layout.MatrixLayout({
+			columns : 2,
+			width : "100%",
+			widths : ["20%", "80%"],
+			visible : "{AppNameyn}",
+			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+						height : "45px",
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
+									 hAlign : "Begin",
+									 vAlign : "Middle"
+								}),
+								new sap.ui.commons.layout.MatrixLayoutCell({
+									content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+													selectedKey : "{AppName}",
+													width : "100%"
+												})],
+									hAlign : "Begin",
+									vAlign : "Middle"
+								})]	
+					})]
+		});
 		
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "500px",
 			draggable : true,
-			content : [oTextArea],
+			content : [new sap.m.VBox({
+						   items : [oTextArea, oAppname]
+					   })],
 			title : "{i18n>LABEL_53015}", // 취소사유
 			beginButton : [new sap.m.Button({
 							   text : "{i18n>LABEL_53007}", // 취소처리

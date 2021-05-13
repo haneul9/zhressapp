@@ -1,5 +1,3 @@
-jQuery.sap.require("common.TMEmpBasicInfoBox");
-
 sap.ui.define(
     [
         "common/PageHelper"
@@ -128,7 +126,7 @@ sap.ui.define(
                 var oContent = new sap.ui.commons.layout.MatrixLayout({
                     columns : 2,
                     width : "100%",
-                    widths : ["45%", "55%"],
+                    widths : ["105px", ""],
                     rows : [new sap.ui.commons.layout.MatrixLayoutRow({
                                 height : "45px",
                                 cells : [new sap.ui.commons.layout.MatrixLayoutCell({
@@ -174,7 +172,29 @@ sap.ui.define(
                                              hAlign : "Begin",
                                              vAlign : "Middle"
                                          })] 
-                            })]
+                            }),
+							new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+                                height : "45px",
+                                cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+                                             content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
+                                             hAlign : "Begin",
+                                             vAlign : "Middle"
+                                        }),
+                                        new sap.ui.commons.layout.MatrixLayoutCell({
+                                            content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+                                                           selectedKey : "{AppName}",
+                                                           width : "100%",
+                                                           editable : {
+                                                                   path : "Status",
+                                                                   formatter : function(fVal){
+                                                                        return (fVal == "" || fVal == "AA") ? true : false;
+                                                                   }
+                                                           }
+                                                       })],
+                                            hAlign : "Begin",
+                                            vAlign : "Middle"
+                                        })]
+                            }).addStyleClass("displayNone")]
                 });
 
                 var oLayout3 = new sap.m.VBox({

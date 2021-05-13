@@ -376,7 +376,29 @@ sap.ui.define(
                                              hAlign : "Begin",
                                              vAlign : "Middle"
                                          }).addStyleClass("Data")]
-                            })]
+                            }),
+                            new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+                                height : "45px",
+                                cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+                                             content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true, textDirection : "RTL"})], // 결재자
+                                             hAlign : "End",
+                                             vAlign : "Middle"
+                                        }).addStyleClass("Label"),
+                                        new sap.ui.commons.layout.MatrixLayoutCell({
+                                            content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+                                                           selectedKey : "{AppName}",
+                                                           width : "50%",
+                                                           editable : {
+                                                                   path : "Status",
+                                                                   formatter : function(fVal){
+                                                                        return (fVal == "" || fVal == "AA") ? true : false;
+                                                                   }
+                                                           }
+                                                       })],
+                                            hAlign : "Begin",
+                                            vAlign : "Middle"
+                                        }).addStyleClass("Data")]
+                            }).addStyleClass("displayNone")]
                 });
                 
                 var oPanel3 = new sap.m.Panel({
