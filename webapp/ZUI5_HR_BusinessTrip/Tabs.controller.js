@@ -141,22 +141,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 
 	openWindow: function(p) {
 
-		setTimeout(function() {
-			var width = p.width, height = p.height,
-			left = (screen.availWidth - width) / 2,
-			top = (screen.availHeight - height) / 2,
-			popup = window.open(p.url, p.name, [
-				"width=" + width,
-				"height=" + height,
-				"left=" + left,
-				"top=" + top,
-				"status=yes,resizable=yes,scrollbars=yes"
-			].join(","));
-
-			setTimeout(function() {
-				popup.focus();
-			}, 500);
-		}, 0);
+		Common.openPopup(p.url);
 	},
 
 	onESSelectPerson: function(oEvent) {

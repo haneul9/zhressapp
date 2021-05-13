@@ -89,13 +89,13 @@ common.map.LotteChemMap = function(options) {
 
 	$(document)
 		.off('click', '.button-departure')
-		.on('click', '.button-departure', function () {
+		.on('click', '.button-departure', function() {
 			this.setPlace(this.PLACE_TARGET.DEPARTURE);
 		}.bind(this));
 
 	$(document)
 		.off('click', '.button-destination')
-		.on('click', '.button-destination', function () {
+		.on('click', '.button-destination', function() {
 			this.setPlace(this.PLACE_TARGET.DESTINATION);
 		}.bind(this));
 };
@@ -501,8 +501,8 @@ common.map.LotteChemMap.prototype.searchLocal = function(o) {
 common.map.LotteChemMap.prototype.searchPath = function() {
 
 	var departurePosition = this.getMarkerPosition(this.getDepartureId()),
-		destinationPosition = this.getMarkerPosition(this.getDestinationId());
-	
+	destinationPosition = this.getMarkerPosition(this.getDestinationId());
+
 	if (!departurePosition || !destinationPosition) {
 		this.functionProvider.spinner(false);
 		return;
