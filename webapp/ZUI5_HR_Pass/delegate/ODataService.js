@@ -66,8 +66,8 @@ sap.ui.define(
 						IEmpid: this.getSessionInfoByKey("name"),
 						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						IFacty: searchConditions.Facty,
-						IBegda: moment(searchConditions.Zyear).startOf('year').hours(10).toDate(),
-						IEndda: moment(searchConditions.Zyear).endOf('year').hours(10).toDate(),
+						IBegda: moment(String(searchConditions.Zyear)).startOf('year').hours(10).toDate(),
+						IEndda: moment(String(searchConditions.Zyear)).endOf('year').hours(10).toDate(),
 						TableIn: []
 					},
 					{
