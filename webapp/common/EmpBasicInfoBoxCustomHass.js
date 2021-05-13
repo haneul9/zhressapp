@@ -40,7 +40,7 @@ common.EmpBasicInfoBoxCustomHass={
 	setHeader:function(Pernr){
 		var oModel=$.app.getModel("ZHR_COMMON_SRV");
 		var vPernr=common.Common.encryptPernr(Pernr);
-		var oFilter="?$filter=Lpmid%20eq%20%27HACTA%27%20and%20Percod%20eq%20%27"+vPernr+"%27"
+		var oFilter="?$filter=Lpmid%20eq%20%27HACTA%27%20and%20Percod%20eq%20%27"+vPernr+"%27";
 		var oJSON=new sap.ui.model.json.JSONModel();
 		var sData={User:[]};
 		oModel.read("/EmpLoginInfoSet"+oFilter,null,null,false,function(data){
