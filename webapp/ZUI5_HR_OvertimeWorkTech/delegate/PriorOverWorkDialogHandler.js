@@ -81,8 +81,8 @@ sap.ui.define([
 
                 this.oModel.setProperty("/List", results.OtWorkTab1.map(function(elem) {
                     return $.extend(true, elem, {
-                        Otbetm: Common.timeFormatter(elem.Otbetm),
-                        Otentm: Common.timeFormatter(elem.Otentm)
+                        Otbetm: (elem.Otbetm === "" && elem.Otbet === "PT00H00M00S") ? "24:00" : Common.timeFormatter(elem.Otbetm),
+                        Otentm: (elem.Otentm === "" && elem.Otent === "PT00H00M00S") ? "24:00" : Common.timeFormatter(elem.Otentm)
                     });
                 }));
                 $.app.byViewId("PriorOverWorkTable").setBusy(false);
