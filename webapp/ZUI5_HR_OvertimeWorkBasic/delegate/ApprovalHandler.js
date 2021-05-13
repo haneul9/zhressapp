@@ -69,10 +69,10 @@ sap.ui.define(
                         this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                         this.oModel.setProperty("/TemplateData/Begda", new Date());
                         this.oModel.setProperty("/TemplateData/Beguz", "");
-                        this.oModel.setProperty("/TemplateData/BeguzT", "");
+                        this.oModel.setProperty("/TemplateData/BeguzT", "00");
                         this.oModel.setProperty("/TemplateData/BeguzM", "00");
                         this.oModel.setProperty("/TemplateData/Enduz", "");
-                        this.oModel.setProperty("/TemplateData/EnduzT", "");
+                        this.oModel.setProperty("/TemplateData/EnduzT", "00");
                         this.oModel.setProperty("/TemplateData/EnduzM", "00");
                         this.oModel.setProperty("/TemplateData/Awart", "");
                         this.oModel.setProperty("/TemplateData/Repla", "");
@@ -547,10 +547,10 @@ sap.ui.define(
                     Ename: data.Stext,
                     Begda: null,
                     Beguz: null,
-                    BeguzT: "",
+                    BeguzT: "00",
                     BeguzM: "00",
                     Enduz: null,
-                    EnduzT: "",
+                    EnduzT: "00",
                     EnduzM: "00",
                     Jobco: null,
                     stateBegda: sap.ui.core.ValueState.None,
@@ -582,10 +582,10 @@ sap.ui.define(
                             Ename: elem2.Stext,
                             Begda: null,
                             Beguz: null,
-                            BeguzT: "",
+                            BeguzT: "00",
                             BeguzM: "00",
                             Enduz: null,
-                            EnduzT: "",
+                            EnduzT: "00",
                             EnduzM: "00",
                             Jobco: null,
                             stateBegda: sap.ui.core.ValueState.None,
