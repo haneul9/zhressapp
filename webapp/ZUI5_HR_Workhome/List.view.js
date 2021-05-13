@@ -136,7 +136,7 @@ sap.ui.define(
                 oTable.bindRows("/Data");
                 
                                 // 결재상태, 구분, 사번, 성명, 재택근무일, 신청사유, 연락처, 삭제처리, 취소처리
-                var col_info = [{id: "Statust", label: "{i18n>LABEL_53005}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+                var col_info = [{id: "Statust", label: "{i18n>LABEL_53005}", plabel: "", resize: true, span: 0, type: "link", sort: true, filter: true},
                                 {id: "Cancltx", label: "{i18n>LABEL_48047}", plabel: "", resize: true, span: 0, type: "cancle", sort: true, filter: true},
                                 {id: "Pernr", label: "{i18n>LABEL_48004}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
                                 {id: "Ename", label: "{i18n>LABEL_48005}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
