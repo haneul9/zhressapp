@@ -53,10 +53,10 @@ sap.ui.define(
 					function () {
 						this.oModel.setProperty("/Bukrs", this.oController.getSessionInfoByKey("Bukrs"));
 						this.oModel.setProperty("/Detail/Data/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
-						this.oModel.setProperty("/Condos", ODataService.CondoListSet.call(this.oController));
-						this.oModel.setProperty("/Locats", ODataService.CondoLocatListSet.call(this.oController, null));
-						this.oModel.setProperty("/Zyears", ODataService.YearRangeList.call(this.oController));
-						this.oModel.setProperty("/Zmonths", ODataService.MonthRangeList.call(this.oController));
+						// this.oModel.setProperty("/Condos", ODataService.CondoListSet.call(this.oController));
+						// this.oModel.setProperty("/Locats", ODataService.CondoLocatListSet.call(this.oController, null));
+						// this.oModel.setProperty("/Zyears", ODataService.YearRangeList.call(this.oController));
+						// this.oModel.setProperty("/Zmonths", ODataService.MonthRangeList.call(this.oController));
 
 						this.buildResvMyTable();
 						this.buildRequestTable();
