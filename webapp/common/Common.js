@@ -272,13 +272,14 @@ common.Common = {
      * 신청내역 조회와 같이 검색조건 영역과 Table로만 구성된 화면에서만 사용할 것
      */
     adjustAutoVisibleRowCount: function () {
-        var vBottomMargin = 50;
+        var vRowHeight = this.getRowHeight() === 0 ? 37 : this.getRowHeight();
+            vBottomMargin = 50;
 
         setTimeout(function () {
             var oBinding = this.getBinding(),
                 rows = oBinding.getModel().getProperty(oBinding.getPath()).length;
             if (rows) {
-                var visibleRowCountLimit = Math.floor(($(document).height() - this.$().find('.sapUiTableCCnt').offset().top - vBottomMargin) / this.getRowHeight());
+                var visibleRowCountLimit = Math.floor(($(document).height() - this.$().find('.sapUiTableCCnt').offset().top - vBottomMargin) / vRowHeight);
                 common.Common.adjustVisibleRowCount(this, visibleRowCountLimit, rows);
             } else {
                 common.Common.adjustVisibleRowCount(this, 1, 1);
