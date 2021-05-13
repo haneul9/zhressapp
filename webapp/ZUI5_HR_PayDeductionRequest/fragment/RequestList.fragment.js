@@ -55,7 +55,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), {
 							items: {
 								path: "/Lgart",
 								templateShareable: false,
-								template: new sap.ui.core.ListItem({key: "{Lgart}", text: "{Lgtxt}"})
+								template: new sap.ui.core.ListItem({key: "{Lgart}", text: "{Lgtxt2}"})
 							}
 						}),
 						new sap.m.Label({text: "{i18n>LABEL_50004}"}), // 지급/공제일
