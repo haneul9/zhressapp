@@ -55,15 +55,14 @@ sap.ui.define([
 			var oTable = $.app.byId(oController.PAGEID+"_Table");
 			var oJSON = new sap.ui.model.json.JSONModel();
 			var aData = {Datas:[]};
-			BusyIndicator.show(0);
-			setTimeout(function(){				
-				oModel.create("/FreeWorkReportHeaderSet", vData,
+			BusyIndicator.show(0);	
+			setTimeout(function(){
+					oModel.create("/FreeWorkReportHeaderSet", vData,
 					{success:function(data,res){
 						data.FreeWorkReport.results.forEach(function(e){
 							aData.Datas.push(e);
 						});
 						oJSON.setData(aData);
-						data.FreeWorkReport.results.length>10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(data.FreeWorkReport.results.length);
 					},
 					error:function (oError) {
 						var Err = {};						
@@ -79,9 +78,9 @@ sap.ui.define([
 				});	
 				oTable.setModel(oJSON);
 				oTable.bindRows("/Datas");
-				BusyIndicator.hide();
-			},10);
-			
+				Common.adjustAutoVisibleRowCount.call(oTable);
+				BusyIndicator.hide();	
+			},10);		
 		},
 
 		onESSelectPerson : function(Data){
