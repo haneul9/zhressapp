@@ -361,10 +361,10 @@ sap.ui.define(
 
 					var sendData = Common.copyByMetadata($.app.getModel("ZHR_BENEFIT_SRV"), "CondoUseRequestIt", oInputData);
 					sendData.Pernr = this.oController.getSessionInfoByKey("name");
-					sendData.Begda = Common.adjustGMTOdataFormat(vBegdaDT);
-					sendData.Endda = Common.adjustGMTOdataFormat(vEnddaDT);
-					sendData.Appbg = Common.adjustGMTOdataFormat(oInputData.Appbg);
-					sendData.Appen = Common.adjustGMTOdataFormat(oInputData.Appen);
+					sendData.Begda = moment(vBegdaDT).hours(10).toDate();
+					sendData.Endda = moment(vEnddaDT).hours(10).toDate();
+					sendData.Appbg = moment(oInputData.Appbg).hours(10).toDate();
+					sendData.Appen = moment(oInputData.Appen).hours(10).toDate();
 
 					ODataService.CondoUseRequestSetByProcess.call(this.oController, $.app.ConType.UPDATE, sendData, this.ProcessOnSuccess.bind(this), this.ProcessOnFail.bind(this));
 				};
@@ -392,10 +392,10 @@ sap.ui.define(
 
 					var sendData = Common.copyByMetadata($.app.getModel("ZHR_BENEFIT_SRV"), "CondoUseRequestIt", oInputData);
 					sendData.Pernr = this.oController.getSessionInfoByKey("name");
-					sendData.Begda = Common.adjustGMTOdataFormat(vBegdaDT);
-					sendData.Endda = Common.adjustGMTOdataFormat(vEnddaDT);
-					sendData.Appbg = Common.adjustGMTOdataFormat(oInputData.Appbg);
-					sendData.Appen = Common.adjustGMTOdataFormat(oInputData.Appen);
+					sendData.Begda = moment(vBegdaDT).hours(10).toDate();
+					sendData.Endda = moment(vEnddaDT).hours(10).toDate();
+					sendData.Appbg = moment(oInputData.Appbg).hours(10).toDate();
+					sendData.Appen = moment(oInputData.Appen).hours(10).toDate();
 
 					ODataService.CondoUseRequestSetByProcess.call(this.oController, $.app.ConType.CREATE, sendData, this.ProcessOnSuccess.bind(this), this.ProcessOnFail.bind(this));
 				};

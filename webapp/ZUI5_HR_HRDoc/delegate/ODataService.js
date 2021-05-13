@@ -54,8 +54,8 @@ sap.ui.define(
                         IPersa: (searchConditions.Persa !== "ALL" && $.app.getAuth() == "H") ? searchConditions.Persa : undefined,
                         IHrdoc: (searchConditions.Hrdoc !== "ALL") ? searchConditions.Hrdoc : undefined,
                         IDoctl: searchConditions.Doctl ? searchConditions.Doctl : undefined,
-                        IReqbeg: searchConditions.Reqbeg ? Common.adjustGMTOdataFormat(new Date(searchConditions.Reqbeg.setHours(9))) : undefined,
-                        IReqend: searchConditions.Reqend ? Common.adjustGMTOdataFormat(new Date(searchConditions.Reqend.setHours(9))) : undefined,
+                        IReqbeg: searchConditions.Reqbeg ? moment(searchConditions.Reqbeg).hours(10).toDate() : undefined,
+                        IReqend: searchConditions.Reqend ? moment(searchConditions.Reqend).hours(10).toDate() : undefined,
                         HrDocumentsSet: []
                     },
                     {

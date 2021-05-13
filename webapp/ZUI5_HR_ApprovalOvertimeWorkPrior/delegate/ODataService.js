@@ -93,9 +93,9 @@ sap.ui.define(
                         IPernr2: arg.Pernr ? arg.Pernr : undefined,
                         IOrgeh: arg.Orgeh ? arg.Orgeh : undefined,
                         IApsta: arg.Apsta && (arg.Apsta !== "ALL") ? arg.Apsta : undefined,
-                        IBegda: arg.Begda ? Common.adjustGMTOdataFormat(arg.Begda) : undefined,
-                        IEndda: arg.Endda ? Common.adjustGMTOdataFormat(arg.Endda) : undefined,
-                        IDatum: arg.Datum ? Common.adjustGMTOdataFormat(arg.Datum) : undefined,
+                        IBegda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
+                        IEndda: arg.Endda ? moment(arg.Endda).hours(10).toDate() : undefined,
+                        IDatum: arg.Datum ? moment(arg.Datum).hours(10).toDate() : undefined,
                         OtConfirmNav: []
                     },
                     {
