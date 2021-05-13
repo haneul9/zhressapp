@@ -16,8 +16,7 @@ sap.ui.define([
 			{id: "Edrom",		label: "{i18n>LABEL_40017}"/* 학습장소 */,  plabel: "", resize: true, span: 0, type: "string",   sort: false, filter: false, width: "15%", align: sap.ui.core.HorizontalAlign.Left},
 			{id: "Edsta",		label: "{i18n>LABEL_40018}"/* 교육기관 */,  plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "15%", align: sap.ui.core.HorizontalAlign.Left},
 			{id: "RepstT",		label: "{i18n>LABEL_40019}"/* 보고서 */,  	plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "auto"},
-			{id: "Status1T",	label: "{i18n>LABEL_40020}"/* 신청부서 */,  plabel: "", resize: true, span: 0, type: "template",  sort: false, filter: false, width: "auto", templateGetter:"getUrl"},
-			{id: "StatusT",		label: "{i18n>LABEL_40021}"/* 주관부서 */,  plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "auto"}
+			{id: "Status1T",	label: "{i18n>LABEL_40020}"/* 신청부서 */,  plabel: "", resize: true, span: 0, type: "template",  sort: false, filter: false, width: "auto", templateGetter:"getUrl"}
 		],
 		
 		getControllerName: function() {
