@@ -52,7 +52,7 @@ sap.ui.define(
                     { id: "Cnt01", label: "{i18n>LABEL_43009}", plabel: "{i18n>LABEL_43010}", resize: true, span: 3, type: "link", sort: true, filter: true },
                     { id: "Cnt02", label: "{i18n>LABEL_43009}", plabel: "{i18n>LABEL_43011}", resize: true, span: 0, type: "link", sort: true, filter: true },
                     { id: "Cnt03", label: "{i18n>LABEL_43009}", plabel: "{i18n>LABEL_43012}", resize: true, span: 0, type: "link", sort: true, filter: true },
-                    // 근무(교육, 출장, 기타)
+                    // 근태(교육, 출장, 기타근태)
                     { id: "Cnt04", label: "{i18n>LABEL_43013}", plabel: "{i18n>LABEL_43014}", resize: true, span: 3, type: "link", sort: true, filter: true },
                     { id: "Cnt05", label: "{i18n>LABEL_43013}", plabel: "{i18n>LABEL_43015}", resize: true, span: 0, type: "link", sort: true, filter: true },
                     { id: "Cnt06", label: "{i18n>LABEL_43013}", plabel: "{i18n>LABEL_43016}", resize: true, span: 0, type: "link", sort: true, filter: true },
