@@ -414,7 +414,8 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
                     }
                 }}}).addStyleClass("button-search"),new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose2}).addStyleClass("button-delete")],
             contentWidth: "1600px",
-            afterOpen : oController.onAfterOpen2
+            beforeOpen: oController.onAfterOpen2,
+            afterOpen : oController.onAfterLoad2
         }).setModel(oController._DataModel);	
 
         return oDialog;
