@@ -53,7 +53,11 @@ common.EmpBasicInfoBoxCustomHass={
 		oJSON.setData(sData);
 		this._Header.setModel(null);
 		this._Header.setModel(oJSON);
-		this._Header.bindElement("/User/0");	
+		this._Header.bindElement("/User/0");
+		oJSON.getProperty("/User")[0].Pbtxt==""?this._Header.getModel().setProperty("/User/0/Pbtxt",$.app.geti18nResource().getText("LABEL_47145")):null;
+		oJSON.getProperty("/User")[0].Stext==""?this._Header.getModel().setProperty("/User/0/Stext",$.app.geti18nResource().getText("LABEL_47146")):null;
+		oJSON.getProperty("/User")[0].PGradeTxt==""?this._Header.getModel().setProperty("/User/0/PGradeTxt",$.app.geti18nResource().getText("LABEL_47147")):null;
+		oJSON.getProperty("/User")[0].ZtitleT==""?this._Header.getModel().setProperty("/User/0/ZtitleT",$.app.geti18nResource().getText("LABEL_47148")):null;
 		var ePernr=this.exceptZeroPernr(Pernr);
 		oJSON.getProperty("/User")[0].Photo==""?oJSON.getProperty("/User")[0].Photo="images/photoNotAvailable.gif":null;
 		$.ajax({
@@ -64,8 +68,8 @@ common.EmpBasicInfoBoxCustomHass={
 		}).done(function(data){
 			if(data&&data.d.results.length){				
 				oJSON.getProperty("/User")[0].Photo="data:image/jpeg;base64,"+data.d.results[0].photo;	
-				common.EmpBasicInfoBoxCustom._Header.bindElement("/User/0");	
-				common.EmpBasicInfoBoxCustom._Img.setSrc("data:image/jpeg;base64,"+data.d.results[0].photo);					
+				common.EmpBasicInfoBoxCustomHass._Header.bindElement("/User/0");	
+				common.EmpBasicInfoBoxCustomHass._Img.setSrc("data:image/jpeg;base64,"+data.d.results[0].photo);					
 			}
 		}).fail(function(res) {
 			common.Common.log(res);
