@@ -6,8 +6,8 @@ common.EmpBasicInfoBoxCustomHass={
 	renderHeader:function(){
 		var oImg=new sap.m.Image({
 			src:"images/photoNotAvailable.gif",
-			width: "34px",
-			height: "34px"
+			width: "55px",
+			height: "55px"
 		}).addStyleClass("tm-employee-basic-info-photo");
 		this._Img=oImg;
 		var oFlexBox= new sap.m.FlexBox({
