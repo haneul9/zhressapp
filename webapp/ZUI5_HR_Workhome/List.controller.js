@@ -22,6 +22,7 @@ sap.ui.define([
 		_Columns : [],
 		
 		_Bukrs : "",
+		oExtryn : "",
 		
 		onInit: function () {
 			this.setupView()
@@ -42,6 +43,7 @@ sap.ui.define([
 		onBeforeShow: function(oEvent){
 			var oController = this;
 			var oLoginData = $.app.getModel("session").getData();
+			this.oExtryn = Common.isExternalIP() === true ? "X" : "";
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -219,6 +221,9 @@ sap.ui.define([
 				if(oData.Bigo == "" || oData.Bigo.trim() == ""){
 					sap.m.MessageBox.error(oController.getBundleText("MSG_53010")); // 취소사유를 입력하여 주십시오.
 					return;
+				} else if(oData.AppNameyn == true && !oData.AppName){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+					return;
 				}
 			}
 			
@@ -242,6 +247,10 @@ sap.ui.define([
 					detail.Endda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 					detail.Telnum = oData.Telnum;
 					detail.Bigo = oData.Bigo;
+				if(Flag == "E"){
+					detail.AppName = oData.AppName;
+				}
+					
 				createData.WorkhomeNav.push(detail);
 				
 				oModel.create("/WorkhomeApplySet", createData, {
@@ -336,7 +345,74 @@ sap.ui.define([
 				}
 				
 				var oJSONModel = oController._CancelDialog.getModel();
-				var vData = Object.assign({}, oData, {Bigo : ""});
+				var vData = Object.assign({}, oData, {Bigo : "", AppNameyn : false});
+
+				// 2021-05-13 결재자 리스트 생성
+				var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+					oAppName.destroyItems();
+					oAppName.setValue("");
+				
+				var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+				var createData = {ApprlistNav : []};
+					createData.IPernr = oData.Pernr;
+					createData.IExtryn = oController.oExtryn;
+					createData.IZappSeq = "40";
+					createData.IBukrs = oData.Bukrs;
+					createData.IMobyn = "";
+					createData.IAppkey = (oData.Appkey ? oData.Appkey : "");
+
+				if(oData.Status1 == "" || oData.Status1 == "AA" || oData.Status1 == "JJ"){
+					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+					createData.IPrcty = "1";
+				} else {
+					createData.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
+					createData.IPrcty = "2";
+				}
+
+				oModel.create("/ApprListSet", createData, {
+					success: function(data, res){
+						if(data){
+							if(data.ApprlistNav && data.ApprlistNav.results){
+									var data1 = data.ApprlistNav.results;
+									
+									if(data1 && data1.length){
+										vData.AppNameyn = true;
+										for(var i=0; i<data1.length; i++){
+											oAppName.addItem(
+												new sap.ui.core.Item({
+													key : data1[i].AppName,
+													text : data1[i].AppText
+												})
+											);
+
+											if(data1[i].Defyn == "X"){
+												vData.AppName = data1[i].AppName;
+											}
+										}
+									}
+								}
+						}
+					},
+					error: function (oError) {
+						var Err = {};
+						oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				});
+
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+					return;
+				}
 				
 				oJSONModel.setData({Data : vData});
 				

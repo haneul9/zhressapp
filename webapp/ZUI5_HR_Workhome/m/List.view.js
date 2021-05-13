@@ -14,6 +14,7 @@ sap.ui.define(
             createContent: function (oController) {
                 $.app.setModel("ZHR_COMMON_SRV");
                 $.app.setModel("ZHR_WORKTIME_APPL_SRV");
+                $.app.setModel("ZHR_BATCHAPPROVAL_SRV");
                 
 				var oFilter = new sap.m.FlexBox({
 					fitContainer: true,
