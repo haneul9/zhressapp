@@ -318,19 +318,16 @@ initPopover: function() {
 	].join('');
 
 	$('.portlet-calendar .list-group-item[data-type="vacation"]') // 휴가 인원 목록
-		.tooltip({
-			html: true,
-			sanitize: false,
-			container: '.portlet-calendar',
-			placement: 'top',
-			template: template,
-			title: function() {
-				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
-				if (!tooltipBody.length) {
-					return null;
-				}
-				return [
-					'<table class="portlet-calendar-tooltip">',
+		.on('inserted.bs.tooltip', this.tooltipInserted)
+		.on('hide.bs.tooltip', this.tooltipHide)
+		.tooltip(this.tooltipOptions(template, function() {
+			var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
+			if (!tooltipBody.length) {
+				return null;
+			}
+			return [
+				'<div class="portlet-calendar-tooltip">',
+					'<table>',
 						'<colgroup>',
 							'<col style="width:80px" /><col style="width:80px" /><col style="width:80px" /><col style="width:80px" />',
 						'</colgroup>',
@@ -340,29 +337,26 @@ initPopover: function() {
 						'<tbody>',
 							tooltipBody,
 						'</tbody>',
-					'</table>'
-				].join('');
-			}
-		});
+					'</table>',
+				'</div>'
+			].join('');
+		}));
 
 	$([
 		'.portlet-calendar .list-group-item[data-type="education"]',	// 교육 인원 목록
 		'.portlet-calendar .list-group-item[data-type="biztrip"]',		// 출장 인원 목록
 		'.portlet-calendar .list-group-item[data-type="telecommuting"]'	// 재택근무 인원 목록
 	].join(','))
-		.tooltip({
-			html: true,
-			sanitize: false,
-			container: '.portlet-calendar',
-			placement: 'top',
-			template: template,
-			title: function() {
-				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
-				if (!tooltipBody.length) {
-					return null;
-				}
-				return [
-					'<table class="portlet-calendar-tooltip">',
+		.on('inserted.bs.tooltip', this.tooltipInserted)
+		.on('hide.bs.tooltip', this.tooltipHide)
+		.tooltip(this.tooltipOptions(template, function() {
+			var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
+			if (!tooltipBody.length) {
+				return null;
+			}
+			return [
+				'<div class="portlet-calendar-tooltip">',
+					'<table>',
 						'<colgroup>', 
 							'<col style="width:100px" /><col style="width:100px" /><col style="width:100px" />',
 						'</colgroup>',
@@ -372,25 +366,22 @@ initPopover: function() {
 						'<tbody>',
 							tooltipBody,
 						'</tbody>',
-					'</table>'
-				].join('');
-			}
-		});
+					'</table>',
+				'</div>'
+			].join('');
+		}));
 
 	$('.portlet-calendar .list-group-item[data-type="birthday"]') // 생일 인원 목록
-		.tooltip({
-			html: true,
-			sanitize: false,
-			container: '.portlet-calendar',
-			placement: 'top',
-			template: template,
-			title: function() {
-				var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
-				if (!tooltipBody.length) {
-					return null;
-				}
-				return [
-					'<table class="portlet-calendar-tooltip">',
+		.on('inserted.bs.tooltip', this.tooltipInserted)
+		.on('hide.bs.tooltip', this.tooltipHide)
+		.tooltip(this.tooltipOptions(template, function() {
+			var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
+			if (!tooltipBody.length) {
+				return null;
+			}
+			return [
+				'<div class="portlet-calendar-tooltip">',
+					'<table>',
 						'<colgroup>',
 							'<col style="width:100px" /><col style="width:100px" /><col style="width:100px" />',
 						'</colgroup>',
@@ -400,10 +391,41 @@ initPopover: function() {
 						'<tbody>',
 							tooltipBody,
 						'</tbody>',
-					'</table>'
-				].join('');
-			}
+					'</table>',
+				'</div>'
+			].join('');
+		}));
+},
+tooltipInserted: function() {
+
+	var tooltip = $(this).parents('.portlet').find('.portlet-calendar-tooltip');
+	setTimeout(function() {
+		tooltip.jScrollPane({
+			resizeSensor: true,
+			verticalGutter: 0,
+			horizontalGutter: 0
 		});
+	}, 0);
+},
+tooltipHide: function() {
+
+	var jsp = $(this).parents('.portlet').find('.portlet-calendar-tooltip').data('jsp');
+	if (jsp) {
+		jsp.destroy();
+	}
+},
+tooltipOptions: function(template, title) {
+
+	return {
+		html: true,
+		sanitize: false,
+		container: '.portlet-calendar',
+		placement: 'top',
+		trigger: 'click',
+		// delay: { show: 0, hide: 600 },
+		template: template,
+		title: title
+	};
 },
 tooltipBody: function(dateText, type) {
 
