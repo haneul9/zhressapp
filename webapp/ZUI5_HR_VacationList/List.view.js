@@ -118,7 +118,8 @@ sap.ui.jsview("ZUI5_HR_VacationList.List", {
 		oTable.bindRows("/Data");
 		
 						// 구분, 사번, 성명, 근태, 근태기간, 일수, 근태시간, 행선지, 연락처, 근태사유, 결재상태
-		var col_info = [{id: "Delapptx", label: oBundleText.getText("LABEL_48047"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+		var col_info = [{id: "Stext1", label: oBundleText.getText("LABEL_48012"), plabel: "", resize: true, span: 0, type: "link", sort: true, filter: true},
+						{id: "Delapptx", label: oBundleText.getText("LABEL_48047"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Pernr", label: oBundleText.getText("LABEL_48004"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Ename", label: oBundleText.getText("LABEL_48005"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Atext", label: oBundleText.getText("LABEL_48006"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
@@ -127,8 +128,7 @@ sap.ui.jsview("ZUI5_HR_VacationList.List", {
 						{id: "Time", label: oBundleText.getText("LABEL_48050"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Desti", label: oBundleText.getText("LABEL_48009"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 						{id: "Telnum", label: oBundleText.getText("LABEL_48010"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Bigo", label: oBundleText.getText("LABEL_48011"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "20%", align : "Begin"},
-						{id: "Stext1", label: oBundleText.getText("LABEL_48012"), plabel: "", resize: true, span: 0, type: "link", sort: true, filter: true}];
+						{id: "Bigo", label: oBundleText.getText("LABEL_48011"), plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "20%", align : "Begin"}];
 		
 		common.makeTable.makeColumn(oController, oTable, col_info);
 		

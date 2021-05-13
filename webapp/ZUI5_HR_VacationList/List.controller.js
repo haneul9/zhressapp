@@ -50,9 +50,9 @@ sap.ui.define([
 				var	vData = {
 					Data : {
 						Werks : oLoginData.Werks,
-						Pernr : oLoginData.Pernr,
-						Orgeh : "",
-						Ename : oLoginData.Ename,
+						Pernr : "",
+						Orgeh : oLoginData.Orgeh, // 2021-05-13 Default값 부서로 변경
+						Ename : oLoginData.Stext,
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
 						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
 						Chief : $.app.getModel("session").getData().Chief
@@ -292,23 +292,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oEvent.getSource().getCustomData()[0].getValue();	
-			if(oData.UrlA && oData.UrlA != ""){
-				setTimeout(function() {
-                    var width = 1000, height = screen.availHeight * 0.9,
-                    left = (screen.availWidth - width) / 2,
-                    top = (screen.availHeight - height) / 2,
-                    popup = window.open(oData.UrlA, "smoin-approval-popup", [
-                        "width=" + width,
-                        "height=" + height,
-                        "left=" + left,
-                        "top=" + top,
-                        "status=yes,resizable=yes,scrollbars=yes"
-                    ].join(","));
-
-                    setTimeout(function() {
-                        popup.focus();
-                    }, 500);
-                }, 0);
+			if(oData.UrlA1 && oData.UrlA1 != ""){
+				if(common.Common.openPopup.call(oController, oData.UrlA1) == false){
+					return;
+				}
 			}
         },
 		
