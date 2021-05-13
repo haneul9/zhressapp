@@ -428,11 +428,11 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.POST;
                     payload.Reqes = "";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = moment(oInputData.Header.Begda).hours(10).toDate();
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : "",
-                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Begda),
+                            Otdat: moment(oInputData.Header.Begda).hours(10).toDate(),
                             Otbetm: oInputData.Header.OtbetmT + oInputData.Header.OtbetmM,
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
@@ -476,11 +476,11 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.POST;
                     payload.Reqes = "X";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = moment(oInputData.Header.Begda).hours(10).toDate();
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : "",
-                            Otdat: Common.adjustGMTOdataFormat(oInputData.Header.Begda),
+                            Otdat: moment(oInputData.Header.Begda).hours(10).toDate(),
                             Otbetm: oInputData.Header.OtbetmT + oInputData.Header.OtbetmM,
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
@@ -529,7 +529,7 @@ sap.ui.define(
                     payload.Aftck = OvertimeWork.POST;
                     payload.Reqes = "";
                     payload.Empid = oInputData.Header.Pernr;
-                    payload.Datum = Common.adjustGMTOdataFormat(oInputData.Header.Begda);
+                    payload.Datum = moment(oInputData.Header.Begda).hours(10).toDate();
                     payload.OtWorkTab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "OvertimeWorkApplyTab1", oInputData.Header), {
                             Holick: oInputData.Header.Holick === true ? "X" : ""
@@ -723,7 +723,7 @@ sap.ui.define(
                                 Datum: vDetailInfo.Begda,
                                 OtWorkTab1: [{
                                     Pernr: vDetailInfo.Pernr,
-                                    Otdat: Common.adjustGMTOdataFormat(vDetailInfo.Begda),
+                                    Otdat: moment(vDetailInfo.Begda).hours(10).toDate(),
                                     Otbetm: Common.nvl(vDetailInfo.OtbetmT, "00") + Common.nvl(vDetailInfo.OtbetmM, "00"),
                                     Otentm: Common.nvl(vDetailInfo.OtentmT, "00") + Common.nvl(vDetailInfo.OtentmM, "00"),
                                     BrktmHr: Common.nvl(vDetailInfo.BrktmHr, "00"),

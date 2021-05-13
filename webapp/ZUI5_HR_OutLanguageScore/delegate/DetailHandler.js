@@ -328,7 +328,7 @@ sap.ui.define(
                     payload.IPernr = this.oController.getSessionInfoByKey("Pernr");
                     payload.IEmpid = this.oController.getSessionInfoByKey("Pernr");
                     payload.ILangu = this.oController.getSessionInfoByKey("Langu");
-                    payload.IDatum = Common.adjustGMTOdataFormat(new Date());
+                    payload.IDatum = moment().hours(10).toDate();
 
                     payload.LanguageApp1Nav = [
                         $.extend(true, Common.copyByMetadata(oModel, "LanguageApplyTab1", oInputData), {
@@ -394,7 +394,7 @@ sap.ui.define(
                     payload.IPernr = this.oController.getSessionInfoByKey("Pernr");
                     payload.IEmpid = this.oController.getSessionInfoByKey("Pernr");
                     payload.ILangu = this.oController.getSessionInfoByKey("Langu");
-                    payload.IDatum = Common.adjustGMTOdataFormat(new Date());
+                    payload.IDatum = moment().hours(10).toDate();
 
                     payload.LanguageApp1Nav = [
                         $.extend(true, Common.copyByMetadata(oModel, "LanguageApplyTab1", oInputData), {

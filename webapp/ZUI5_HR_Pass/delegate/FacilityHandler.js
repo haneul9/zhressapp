@@ -226,7 +226,7 @@ sap.ui.define(
 					var sendData = Common.copyByMetadata($.app.getModel("ZHR_BENEFIT_SRV"), "FacilityApplyTableIn", oInputData);
 					sendData.Pernr = this.oController.getSessionInfoByKey("name");
 					sendData.Bukrs = "1000";
-					sendData.Usday = Common.adjustGMTOdataFormat(oInputData.Usday);
+					sendData.Usday = moment(oInputData.Usday).hours(10).toDate();
 					sendData.Begda = sendData.Usday;
 
 					ODataService.FacilityApplySetByProcess.call(this.oController, $.app.ConType.CREATE, sendData, this.ProcessOnSuccess.bind(this), this.ProcessOnFail.bind(this));

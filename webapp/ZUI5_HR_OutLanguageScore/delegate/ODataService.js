@@ -68,7 +68,7 @@ sap.ui.define(
                         ILangu: this.getSessionInfoByKey("Langu"),
                         IPernr: this.getSessionInfoByKey("Pernr"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
-                        IDatum: Common.adjustGMTOdataFormat(new Date()),
+                        IDatum: moment().hours(10).toDate(),
                         LanguageApp1Nav: [],
                         LanguageApp2Nav: []
                     },

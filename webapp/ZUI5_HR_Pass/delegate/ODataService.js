@@ -66,8 +66,8 @@ sap.ui.define(
 						IEmpid: this.getSessionInfoByKey("name"),
 						IBukrs: this.getSessionInfoByKey("Bukrs"),
 						IFacty: searchConditions.Facty,
-						IBegda: Common.adjustGMTOdataFormat(new Date(parseInt(searchConditions.Zyear, 10), 0, 1)),
-						IEndda: Common.adjustGMTOdataFormat(new Date(parseInt(searchConditions.Zyear, 10), 11, 31)),
+						IBegda: moment(String(searchConditions.Zyear)).startOf('year').hours(10).toDate(),
+						IEndda: moment(String(searchConditions.Zyear)).endOf('year').hours(10).toDate(),
 						TableIn: []
 					},
 					{
@@ -216,8 +216,8 @@ sap.ui.define(
 						IPernr: this.getSessionInfoByKey("name"),
 						ICondo: pData.Condo === "ALL" ? "" : pData.Condo,
 						ILocat: pData.Locat === "ALL" ? "" : pData.Locat,
-						IBegda: Common.adjustGMTOdataFormat(vBegdaDT),
-						IEndda: Common.adjustGMTOdataFormat(vEnddaDT),
+						IBegda: moment(vBegdaDT).hours(10).toDate(),
+						IEndda: moment(vEnddaDT).hours(10).toDate(),
 						It: []
 					},
 					{
@@ -242,7 +242,7 @@ sap.ui.define(
 						IOdkey: "",
 						IPernr: this.getSessionInfoByKey("name"),
 						ILangu: "3",
-						IDatum: Common.adjustGMTOdataFormat(new Date()),
+						IDatum: moment().hours(10).toDate(),
 						It: []
 					},
 					{

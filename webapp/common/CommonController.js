@@ -43,7 +43,7 @@ sap.ui.define([
             return new ResourceModel({
                 bundleUrl: "i18n/i18n.properties",
                 supportedLocales: ["ko", "en", "zh"],
-                fallbackLocale: ""
+                fallbackLocale: "ko"
             });
         },
 
