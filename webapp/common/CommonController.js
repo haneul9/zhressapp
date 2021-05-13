@@ -55,10 +55,9 @@ sap.ui.define([
             var sfSessionModel = this.retrieveSFSessionModel(),
             sessionModelData = sfSessionModel.getData(),
             mLoginData = Common.retrieveLoginInfo();
-            // traceInfo = Common.activeClientTrace({ async: false });
 
-            mLoginData.Langu = Common.retrieveSFUserLocale(sessionModelData.name);
-            // if ($.isEmptyObject(traceInfo) === false) mLoginData.Ipadd = traceInfo.Ipadd.split(',')[0];
+            mLoginData.Langu = Common.retrieveSFUserLocale();
+            mLoginData.Ipadd = sessionStorage.getItem("ehr.client.ip");
 
             sfSessionModel.setData($.extend(sessionModelData, mLoginData));
 
