@@ -86,7 +86,7 @@ sap.ui.jsview("ZUI5_HR_TribunalWorkTime.TribunalView", {
 			rowHeight: 37,
 			width: "auto",
 			noData: oController.getBundleText("MSG_05001")
-		}).addStyleClass("mt-10px row-link");
+		}).addStyleClass("mt-10px");
 
 		var oFields=["Wkym","Pernr","Ename","Orgtx","SumtmAlv","ExptmAlv","LawtmAlv","AvetmAlv","RsttmAlv","LawckT"];			
 		var oWidths=['','','','','','','','','',''];			
