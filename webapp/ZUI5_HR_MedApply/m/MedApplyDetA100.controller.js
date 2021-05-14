@@ -104,7 +104,7 @@ sap.ui.define([
 		},
 
 		onAfterShow:function(){
-
+			this.onAfterLoad2();
 		},
 
 		getBukrs : function(vDatum){
@@ -240,10 +240,13 @@ sap.ui.define([
 			}else{
 				oController.getSelData2();
 			}
-			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').bindElement("/Pop2/0");		
+			$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').bindElement("/Pop2/0");
+		},
+
+		onAfterLoad2 : function(){
+			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController();
 			var vAppnm="";
-			oController._onDialog=="M"?vAppnm=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDetA100').getModel().getProperty("/Pop2")[0].Appnm:null;
-			BusyIndicator.show(0);
+			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0].Appnm:null;
 			var vEdit=true;
 			oController._onClose=="X"?vEdit=false:vEdit=true;
 			var vStatus=oController._DataModel.getProperty("/Pop2")[0].Status;
@@ -253,11 +256,11 @@ sap.ui.define([
 			}else{
 				vEdit=false;
 			}
+			BusyIndicator.show(0);
 			setTimeout(function(){
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
-					Required: false,
-					Label: "",
+					Required: true,
 					Mode: "M",
 					Max: "15",
 					Editable: vEdit,

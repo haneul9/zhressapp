@@ -106,7 +106,7 @@ sap.ui.define([
 		},
 
 		onAfterShow:function(){
-
+			this.onAfterLoad();
 		},
 
 		getBukrs : function(vDatum){
@@ -174,7 +174,6 @@ sap.ui.define([
 			}
 			var vAppnm="";
 			oController._onDialog=="M"?vAppnm=$.app.byId('ZUI5_HR_MedApply.m.MedApplyDet').getModel().getProperty("/Pop1")[0].Appnm:null;
-			BusyIndicator.show(0);
 			var vEdit=true;
 			oController._onClose=="X"?vEdit=false:vEdit=true;
 			var vStatus=oController._DataModel.getProperty("/Pop1")[0].Status;
@@ -184,8 +183,31 @@ sap.ui.define([
 			}else{
 				vEdit=false;
 			}
-
 			setTimeout(function(){			
+				if(oController._onDialog!="M"){
+					oController.changeSel();
+				}	
+				if(oController._onDialog!="M"){
+					oController.changeSel2();
+				}
+			},100);
+		},
+
+		onAfterLoad : function(){
+			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDet").getController();
+			var vAppnm="";
+			var vEdit=true;
+			oController._onClose=="X"?vEdit=false:vEdit=true;
+			var vStatus=oController._DataModel.getProperty("/Pop1")[0].Status;
+			var vClose=oController._onClose;
+			if(vStatus==""){
+				vClose=="X"?vEdit=false:vEdit=true;
+			}else{
+				vEdit=false;
+			}
+			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/Pop1")[0].Appnm:null;
+			BusyIndicator.show(0);
+			setTimeout(function(){
 				var vProperty1={
 					Appnm: vAppnm,
 					Mode: "S",
@@ -208,28 +230,18 @@ sap.ui.define([
 				};
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty2,"002");
-
-
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
 					Appnm:vAppnm,
 					Required: false,
 					Mode: "M",
 					Max: "7",
 					Cntnm: "009",
-					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
 					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				},"009");
-				
-				if(oController._onDialog!="M"){
-					oController.changeSel();
-				}	
-				if(oController._onDialog!="M"){
-					oController.changeSel2();
-				}
 				BusyIndicator.hide();
-			},100);
+			},10);			
 		},
 
 		onAfterOpen2 : function(){
