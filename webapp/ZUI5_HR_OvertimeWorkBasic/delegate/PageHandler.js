@@ -329,7 +329,7 @@ sap.ui.define(
                             Zshft: true
                         },
                         callback = function(o) {
-                            if(o.Zshft !== "X" && o.Zflag !== "X") {
+                            if(o.Otype === "P" && o.Zshft !== "X" && o.Zflag !== "X") {
                                 MessageBox.warning(this.oController.getBundleText("MSG_31015")); // 사무직은 선택할 수 없습니다.
                                 return;
                             }

@@ -322,10 +322,10 @@ sap.ui.define(
                         callback = function(o) {
                             oModel.setProperty("/Detail/Header/Begda", o.Otdat);
                             oModel.setProperty("/Detail/Header/Otbetm", o.Otbetm);
-                            oModel.setProperty("/Detail/Header/OtbetmT", o.Otbetm ? o.Otbetm.split(":")[0] : "00");
+                            oModel.setProperty("/Detail/Header/OtbetmT", o.Otbetm && !/^24/.test(o.Otbetm) ? o.Otbetm.split(":")[0] : "00");
                             oModel.setProperty("/Detail/Header/OtbetmM", o.Otbetm ? o.Otbetm.split(":")[1] : "00");
                             oModel.setProperty("/Detail/Header/Otentm", o.Otentm);
-                            oModel.setProperty("/Detail/Header/OtentmT", o.Otentm ? o.Otentm.split(":")[0] : "00");
+                            oModel.setProperty("/Detail/Header/OtentmT", o.Otentm && !/^24/.test(o.Otentm) ? o.Otentm.split(":")[0] : "00");
                             oModel.setProperty("/Detail/Header/OtentmM", o.Otentm ? o.Otentm.split(":")[1] : "00");
                             oModel.setProperty("/Detail/Header/Holick", o.Holick === "X" ? true : false);
                             oModel.setProperty("/Detail/Header/Horex", o.Horex);
@@ -685,7 +685,7 @@ sap.ui.define(
              */
             searchOrgehPernrByList: function() {
                 this.searchOrgehPernr.call(this.oController, function(o) {
-                    if(o.Zshft === "X") {
+                    if(o.Otype === "P" && o.Zshft === "X") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32025")); // 교대근무자는 선택할 수 없습니다.
                         return;
                     }
@@ -789,7 +789,7 @@ sap.ui.define(
                     if(o.Otype === "O") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32007")); // 사원을 선택하세요.
                         return;
-                    } else if(o.Zshft === "X") {
+                    } else if(o.Otype === "P" && o.Zshft === "X") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32025")); // 교대근무자는 선택할 수 없습니다.
                         return;
                     }
