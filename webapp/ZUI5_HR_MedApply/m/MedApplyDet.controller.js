@@ -205,7 +205,7 @@ sap.ui.define([
 			}else{
 				vEdit=false;
 			}
-			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat").getModel().getProperty("/Pop1")[0].Appnm:null;
+			oController._onDialog=="M"?vAppnm=oController._DataModel.getProperty("/Pop1")[0].Appnm:null;
 			BusyIndicator.show(0);
 			setTimeout(function(){
 				var vProperty1={

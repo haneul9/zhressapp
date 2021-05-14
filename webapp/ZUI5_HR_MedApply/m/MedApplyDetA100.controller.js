@@ -246,7 +246,7 @@ sap.ui.define([
 		onAfterLoad2 : function(){
 			var oController=$.app.byId("ZUI5_HR_MedApply.m.MedApplyDetA100").getController();
 			var vAppnm="";
-			oController._onDialog=="M"?vAppnm=$.app.byId(oController.PAGEID+"_Mat2").getModel().getProperty("/Pop2")[0].Appnm:null;
+			oController._onDialog=="M"?vAppnm=oController._DataModel.getProperty("/Pop2")[0].Appnm:null;
 			var vEdit=true;
 			oController._onClose=="X"?vEdit=false:vEdit=true;
 			var vStatus=oController._DataModel.getProperty("/Pop2")[0].Status;
