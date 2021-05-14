@@ -178,6 +178,13 @@ sap.ui.define(
 						oAnnounceBtn.setVisible(false);
 						oAnnounceBtn.removeAllCustomData();
 					}
+
+					// 확정 버튼 기안부서와 내부서가 같으면 활성
+					if($.app.getController().getSessionInfoByKey("Orgeh") === oController._vOneReq.Orgeh) {
+						oCompleteBtn.setEnabled(true);
+					} else {
+						oCompleteBtn.setEnabled(false);
+					}
 				}
 
 				var oViewRec_Btn = $.app.byId(this.PAGEID + "_View_Rec_Btn");
