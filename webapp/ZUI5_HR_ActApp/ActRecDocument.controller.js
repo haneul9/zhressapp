@@ -100,6 +100,7 @@ sap.ui.define(
 						oController._vReqno = oEvent.data.Reqno;
 						oController._vDocno = oEvent.data.Docno;
 						oController._vDocty = oEvent.data.Docty;
+						oController._vPersa = oEvent.data.Persa;
 						oController._vEntrs = oEvent.data.Entrs;
 						oController._oContext = oEvent.data.context;
 						oController._vSelectedPersa = oEvent.data.SelectedPersa;
@@ -141,7 +142,7 @@ sap.ui.define(
 								}
 							}
 
-							oController._vPersa = vPersaData[s_idx].Persa;
+							// oController._vPersa = vPersaData[s_idx].Persa;
 							oController._vIntca = vPersaData[s_idx].Intca;
 							oPersa.setSelectedKey(oController._vPersa);
 
@@ -386,6 +387,14 @@ sap.ui.define(
 						oExcel_Btn.setVisible(true);
 						if (oController._vActionCount > 0) {
 							oComplete_Btn.setVisible(true);
+
+							// 확정 버튼 기안부서와 내부서가 같으면 활성
+							var oOrgeh = $.app.byId(oController.PAGEID + "_Orgeh");
+							if($.app.getController().getSessionInfoByKey("Orgeh") === oOrgeh.getSelectedKey()) {
+								oComplete_Btn.setEnabled(true);
+							} else {
+								oComplete_Btn.setEnabled(false);
+							}
 						} else {
 							oComplete_Btn.setVisible(false);
 						}
