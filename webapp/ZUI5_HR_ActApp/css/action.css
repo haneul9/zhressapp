@@ -134,23 +134,23 @@ span.sapMLabel.sapUiSelectable.sapMLabelMaxWidth.act-search-label{margin-top:6px
 
 .sapMBtnBase.sapMBtn.act-search-btn .sapMBtnContent,
 .sapMBtnBase.sapMBtn.act-search-btn .sapMBtnContent:hover {color:#fff !important;}
-.sapMBtnBase.sapMBtn {border-radius:.1875rem; border:1px solid #c3c3c3; background-color:#f9f9f9;}
+.sapMBtnBase.sapMBtn {border-radius:.1875rem; border:1px solid #0070bd; background-color:#fff;}
 .sapMBtnBase.sapMBtn:hover {border:1px solid #0070bd;}
 .sapMBtnBase.sapMBtn .sapMBtnInner {border-radius:.1875rem; border:none; background-color:none;}
 .sapMBtnBase.sapMBtn .sapMBtnInner:active .sapMBtnContent {color:#fff}
 .sapMBtnBase.sapMBtn .sapMBtnIcon {color:#0070bd}
-.sapMBtnBase.sapMBtn .sapMBtnContent {color:#333}
+.sapMBtnBase.sapMBtn .sapMBtnContent {color:#0070bd}
 
 /* 기본버튼 */   
 .act-basic-btn.sapMBtn {padding:0;}
-.act-basic-btn.sapMBtn {height:32px; border-radius:.1875rem; border:1px solid #c3c3c3; background-color:#f9f9f9;}
+.act-basic-btn.sapMBtn {height:32px; border-radius:.1875rem; border:1px solid #0070bd; background-color:#fff;}
 .act-basic-btn.sapMBtn:hover {line-height:32px;border:1px solid #0070bd;padding:0;margin:0}
 .act-basic-btn.sapMBtn .sapMBtnInner {border-radius:.1875rem; border:none; background-color:none;padding:0;} 
 .act-basic-btn.sapMBtn .sapMBtnInner:hover .sapMBtnContent {color:#064975}
 .act-basic-btn.sapMBtn .sapMBtnInner:active .sapMBtnContent {color:#fff}
 .act-basic-btn.sapMBtn .sapMBtnInner.sapMBtnText {padding-right:6px;padding-left: 6px;}
 .act-basic-btn.sapMBtn .sapMBtnIcon {line-height:28px;color:#0070bd}
-.act-basic-btn.sapMBtn .sapMBtnContent {line-height:26px;border:none; color:#333}
+.act-basic-btn.sapMBtn .sapMBtnContent {line-height:26px;border:none; color:#0070bd}
 
 /* 강조버튼 */
 .sapMBtn .sapMBtnInner.sapMBtnEmphasized {height: 2.125rem;margin-top:-5px;margin-left:-1px;margin-bottom:-5px;margin-right:-1px;}
