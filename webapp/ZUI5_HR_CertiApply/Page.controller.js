@@ -154,6 +154,16 @@ sap.ui.define(
                     oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear());
                 }
 
+                  // 구분
+                if (oController.ApplyModel.getProperty("/Data/ZformType") == "05" && 
+                    oController.ApplyModel.getProperty("/Data/Zyear") * 1 < 2018 && 
+                    oController.ApplyModel.getProperty("/Data/Aptyp")   != "1"  ) {
+                    MessageBox.error(oController.getBundleText("MSG_65009"), { title: oController.getBundleText("LABEL_00149") });
+                    return true;
+                }
+
+
+
                 // 수량 , 미입력 시 1 기본 세팅
                 if (Common.checkNull(oController.ApplyModel.getProperty("/Data/Zcount"))) {
                     oController.ApplyModel.setProperty("/Data/Zcount", "1");
@@ -302,6 +312,68 @@ sap.ui.define(
                     BusyIndicator.hide();
                 };
 
+                var onPrintForm = function () {
+                    var sendObject = {};
+                    var tableIn = {};
+                    // Navigation property
+                    tableIn.Pernr = oCopiedRow.Pernr;
+                    tableIn.Subty = oCopiedRow.Subty;
+                    tableIn.Objps = oCopiedRow.Objps;
+                    tableIn.Sprps = oCopiedRow.Sprps;
+                    tableIn.Seqnr = oCopiedRow.Seqnr;
+                    tableIn.Zyear = oCopiedRow.Zyear;
+                    tableIn.ZformType = oCopiedRow.ZformType;
+                    tableIn.Begda = "/Date(" + Common.getTime(new Date(oCopiedRow.Begda)) + ")/";
+                    tableIn.Endda = "/Date(" + Common.getTime(new Date(oCopiedRow.Endda)) + ")/";
+
+                    // Header
+                    sendObject.IPnpesscf = "X";
+                    sendObject.IPernr = oCopiedRow.Pernr;
+                    sendObject.IBukrs = oController.getView().getModel("session").getData().Bukrs;
+                    sendObject.IMolga = oCopiedRow.Molga;
+                    sendObject.IEmpid = oController.getView().getModel("session").getData().Pernr;
+                    sendObject.ILangu = oController.getView().getModel("session").getData().Langu;
+                    sendObject.IDatum = "/Date(" + Common.getTime(new Date()) + ")/";
+                    
+                    sendObject.TableIn = [];
+                    sendObject.TableIn.push(tableIn);
+                    sendObject.Export = [];
+
+                    oModel.create("/CertiFormSet", sendObject, {
+                        success: function (oData) {
+                            if (oData && oData.Export && oData.Export.results.length > 0) {
+                                // var vZpdf = "data:application/html;base64," + oData.Export.results[0].EPdfTable;
+                                var vZpdf = oData.Export.results[0].EHtml;
+                                oLayout.addContent(
+                                    new sap.ui.core.HTML({
+                                        content: ["<iframe id='iWorkerPDF' name='iWorkerPDF' src='" + vZpdf + "' width='" + vWidth + "' height='" + vHeight + "' frameborder='0' border='0' scrolling='no'></>"],
+                                        preferDOM: false
+                                    })
+                                );
+                                oLayout.addDelegate({
+                                    onAfterRendering: function () {
+                                        var vHeight = document.getElementById("ZUI5_HR_CertiApply_DetailDialog").offsetHeight * 1 - 135 + "px";
+                                        $("#iWorkerPDF").height(vHeight);
+                                    }
+                                });
+                                oController._DetailDialog.open();
+                                oController.onTableSearch();
+                            }
+                            BusyIndicator.hide();
+                        },
+                        error: function (oResponse) {
+                            Common.log(oResponse);
+                            sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+                                title: oController.getBundleText("LABEL_09030")
+                            });
+                            oController.onTableSearch();
+                            BusyIndicator.hide();
+                        }
+                    });
+
+                    BusyIndicator.hide();
+                };
+
                 if (oCopiedRow.Zstatus == "1") return;
                 // 처리중
                 else if (oCopiedRow.Zstatus == "2") {
@@ -313,7 +385,13 @@ sap.ui.define(
                 } else if (oCopiedRow.Zstatus == "3") {
                     // 프린트
                     BusyIndicator.show(0);
-                    onPrintPDF(oCopiedRow);
+                    // 원천징수 영수증 이며 2018년도 
+                    if(oCopiedRow.ZformType == "05" && 1 * oCopiedRow.Zyear < 2018 ){
+                        onPrintForm(oCopiedRow);
+                    }else{
+                        onPrintPDF(oCopiedRow);
+                    }
+                    
                 }
             },
 

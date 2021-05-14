@@ -216,7 +216,7 @@ sap.ui.jsfragment("fragment.EvalResult2", {
 			content : [oSectionLayout],
 			beforeOpen : common.SearchEvalResult.onBeforeOpen,
 			afterOpen : common.SearchEvalResult.onAfterOpen,
-			endButton : [new sap.m.Button({
+			buttons : [new sap.m.Button({
 							 type : "Emphasized",
 							 text : "프린트", // 프린트
 							 press : oController.onPrint

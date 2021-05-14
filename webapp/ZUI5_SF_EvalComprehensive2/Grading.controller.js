@@ -435,7 +435,8 @@ return CommonController.extend(SUB_APP_ID, { // 종합평가 : 수행
 	},
 	onPrint : function(){
 		  //var svg =  document.getElementById('UIComp_0').querySelector( "svg" );
-		  var svg =  document.getElementById('__section0-innerGrid').querySelector( "svg" );
+		//   var svg =  document.getElementById('__section0-innerGrid').querySelector( "svg" );
+		  var svg =  document.getElementById('EvalResult_Chart').querySelector( "svg" );
 		  var svgData = new XMLSerializer().serializeToString( svg );
 		  var canvas = document.createElement( "canvas" );
 		  var svgSize = svg.getBoundingClientRect();
@@ -445,47 +446,74 @@ return CommonController.extend(SUB_APP_ID, { // 종합평가 : 수행
 		  canvas.style.height = svgSize.height;
 		  var ctx = canvas.getContext( "2d" );
 		  ctx.scale(3,3);
-		  var doc = new jsPDF('l', 'mm', 'a4');
-		
-		  var img = document.createElement( "img" );
-		  img.setAttribute( "src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData))) );
-		
-		  img.onload = function() {
-		      ctx.drawImage( img, 0, 0 );
-		      var canvasdata = canvas.toDataURL("image/png",1);
+		//   var doc = new jsPDF('l', 'mm', [4, 2]);
 
-		      //var pngimg = '<img src="'+canvasdata+'">';
-		      //d3.select("#pngdataurl").html(pngimg);
+		  var doc = new jsPDF({
+			orientation: "portrait",
+			//format: "a4"
+			format: [400, 200]
+		  });
 		
-		      //var a = document.createElement("a");
-		      //a.download = "download_img"+".png";
-		      //a.href = canvasdata;
-		      //document.body.appendChild(a);
-		      //a.click();
-			//   var doc = new jsPDF('l', 'mm', 'a4');
-			//   var position = 0;
-	          doc.addImage(canvasdata, "PNG", 150, 20, 120, 100);  // 시작 x, 시작 y, 넓이, 높이
-	          doc.save('file-name.pdf')
-		  };
+		doc.autoTable({
+			headStyles:  { halign: 'center', valign: 'middle' },  //헤더 부분 옵션
+			startX: 0, 
+			startY: 0,
+			margin: {  left : 2, top : 2, right : 2  },  //여백
+			tableWidth : 400,
+			styles : { font : 'malgun', fontStyle :'normal'},  //폰트적용
+			head: ['헤더1', '헤더2', '헤더3'],
+			body : [
+				[   
+					{content: '데이터1', rowSpan: 6, styles: {halign: 'center'}},  //여러 속성들, content는 내용입니다.
+					{content: '데이터2', styles: {halign: 'center', fillColor: [ 252, 252, 252 ]}},
+					{content: '데이터3', styles: {halign: 'center'}}
+				]
+			]
+		});
 
-		  var vHeader = document.getElementById('EvalResultObjectPageLayout-OPHeaderContent')
-		  Html2canvas(document.getElementById("EvalResultObjectPageLayout-OPHeaderContent"), {
-				// scale based on quality value input
-				scale: 1,
-				// logging for debugging
-				logging: true,
-				letterRendering: 1,
-				// allows for cross origin images
-				allowTaint: true,
-				useCORS: true
-			}).then(function (canvas) {
-				setTimeout(function () {
-					var img = canvas.toDataURL('image/png');
-					const pdfWidth = "600px";
-					const pdfHeight = "1000px"
-					doc.addImage(img, 'PNG', 2, 2, pdfWidth, pdfHeight);
-				}, 3000);
-			});	
+		// 화면 전체 ( 단 보이는 곳만 출력됨)
+		//   html2canvas(document.getElementById("EvalResultObjectPageLayout"), {
+		// 		// scale based on quality value input
+		// 		scale: 1,
+		// 		// logging for debugging
+		// 		logging: true,
+		// 		letterRendering: 1,
+		// 		// allows for cross origin images
+		// 		allowTaint: true,
+		// 		useCORS: true
+		// 	}).then(function (canvas) {
+		// 		setTimeout(function () {
+		// 			var img = canvas.toDataURL('image/png');
+		// 			doc.addImage(img, 'PNG', 2, 2, 120, 200);
+		// 			doc.save('file-name.pdf');
+		// 		}, 3000);
+		// 	}
+		//   );	
+
+		// 절대 삭제 금지 (그래프 다운로드)
+		//   var img = document.createElement( "img" );
+		//   img.setAttribute( "src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData))) );
+		
+		//   img.onload = function() {
+		//       ctx.drawImage( img, 0, 0 );
+		//       var canvasdata = canvas.toDataURL("image/png",1);
+
+		//       //var pngimg = '<img src="'+canvasdata+'">';
+		//       //d3.select("#pngdataurl").html(pngimg);
+		
+		//       //var a = document.createElement("a");
+		//       //a.download = "download_img"+".png";
+		//       //a.href = canvasdata;
+		//       //document.body.appendChild(a);
+		//       //a.click();
+		// 	//   var doc = new jsPDF('l', 'mm', 'a4');
+		// 	//   var position = 0;
+	    //       doc.addImage(canvasdata, "PNG", 150, 20, 120, 100);  // 시작 x, 시작 y, 넓이, 높이
+	    //       doc.save('file-name.pdf')
+		//   };
+
+
+		
 
 
 

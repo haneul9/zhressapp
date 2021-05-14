@@ -202,6 +202,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			createData.IPernr = detailData.Pernr;
 			createData.IBukrs = detailData.Bukrs;
 			delete detailData.Bukrs;
+			delete detailData.Stext;
 			detailData.Begda = "\/Date(" + common.Common.getTime(new Date(oController._ListCondJSonModel.getProperty("/Info/EPaydt"))) + ")\/";
 			createData.IPaydt = detailData.Begda;  // 지급공제일
 

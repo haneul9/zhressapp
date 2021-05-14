@@ -13,6 +13,7 @@ sap.ui.define([
 		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
 		_UserJSonModel : new sap.ui.model.json.JSONModel(),
 		_Columns : [],
+		_TargetList : [],
 		
 		onInit: function () {
 			this.setupView()
@@ -97,12 +98,39 @@ sap.ui.define([
 			var oView = oController.getView();
 			
 			// oController._BusyDialog.open();
+			oController.getTargetReports(oEvent);
 			oController.onSearchUserList(oEvent);
 			oController.onPressSearch();
 		},
 		
 		SmartSizing : function(oEvent){
 			
+		},
+
+		getTargetReports: function() { // 평가대상 확인여부
+			var oView = sap.ui.getCore().byId("ZUI5_SF_EvalGoal.EvalGoalList");
+			var oController = oView.getController();
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vData = {Data : []},
+				createData = {},
+				oPath = "/CommonCodeListHeaderSet";
+				createData.ICodeT =   "066"; 
+				createData.NavCommonCodeList = [] ;
+			
+			oModel.create(oPath, createData, null,
+				function(data, res){
+					if(data){
+						if(data.NavCommonCodeList && data.NavCommonCodeList.results.length > 0){
+							vData.Data = data.NavCommonCodeList.results;
+						}
+					}
+				},
+				function (oError) {
+					
+				}
+			);
+			
+			oController._TargetList = vData.Data;
 		},
 		
 		onSearchUserList : function(oEvent){
@@ -114,7 +142,9 @@ sap.ui.define([
 				
 			oController._UserList = "";
 			
-			var vData = {Data : []};
+			var vData = {Data : []},
+			empDataList = [];
+			
 			
 			new JSONModelHelper().url("/odata/v2/User('" + $.app.getModel("session").getData().name + "')/directReports")
 								 .select("userId")
@@ -125,30 +155,37 @@ sap.ui.define([
 								 .select("division")
 								 .select("jobCode")
 								 .select("custom04")
+								 .select("custom07")
 								 .setAsync(false)
 								 .attachRequestCompleted(function(){
 										var data = this.getData().d;
 										
 										if(data && data.results.length){
-											for(var i=0; i<data.results.length; i++){
-												if(data.results[i].custom04 != null) continue; // 평가 대상 제외
+											data.results.forEach(function(e) {
+												if(oController._TargetList.some(function(ele) {return ele.Code === e.custom07;})){
+													empDataList.push(e);
+												}
+											}.bind(this));
+
+											for(var i=0; i<empDataList.length; i++){
+												if(empDataList[i].custom04 != null) continue; // 평가 대상 제외
 											
 												if(i==0){
-													oController._UserList = data.results[i].userId;
+													oController._UserList = empDataList[i].userId;
 												} else {
-													oController._UserList += "," + data.results[i].userId;
+													oController._UserList += "," + empDataList[i].userId;
 												}
 												
-												data.results[i].Ename = data.results[i].nickname;
+												empDataList[i].Ename = empDataList[i].nickname;
 
-												data.results[i].title = data.results[i].title.split(" (")[0];
-												data.results[i].department = data.results[i].department.split(" (")[0];
+												empDataList[i].title = empDataList[i].title.split(" (")[0];
+												empDataList[i].department = empDataList[i].department.split(" (")[0];
 												
-												data.results[i].Count1 = 0;
-												data.results[i].Count2 = 0;
-												data.results[i].Count3 = 0;
+												empDataList[i].Count1 = 0;
+												empDataList[i].Count2 = 0;
+												empDataList[i].Count3 = 0;
 												
-												vData.Data.push(data.results[i]);
+												vData.Data.push(empDataList[i]);
 											}
 										}
 								 })
@@ -157,7 +194,10 @@ sap.ui.define([
 										return;
 								 })
 								 .load();
-								 
+			
+
+
+
 			oController._UserJSonModel.setData(vData);
 			
 			// 조회된 부서리스트로 조회조건의 팀 리스트 생성
@@ -240,7 +280,7 @@ sap.ui.define([
 			
 			var search = function(){
 				var user = oController._UserJSonModel.getProperty("/Data");
-				
+				var vYear = oController._ListCondJSonModel.getProperty("/Data/Year");
 				for(var i=0; i<user.length; i++){
 					var detail = {};
 					Object.assign(detail, user[i]);
@@ -248,11 +288,13 @@ sap.ui.define([
 				}
 				
 				var goal = [], activity = [], achievement = [], status = [], rating = [];
-				 var activityId = "";
-				 
+				var activityId = "";
+				var vCreateTime = "createdDateTime ge '" + vYear + "-01-01T00:00:00Z' and createdDateTime le '" +  vYear + "-12-31T00:00:00Z'";
+				
+
 				var promise = [
 					new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/v2/Activity?$filter=subjectUserId in " + oController._UserList)
+						new JSONModelHelper().url("/odata/v2/Activity?$filter=subjectUserId in " + oController._UserList + " and " + vCreateTime)
 											 .attachRequestCompleted(function(){
 												 var data = this.getData().d;
 												 
@@ -271,18 +313,18 @@ sap.ui.define([
 											 })
 											 .attachRequestFailed(function(error){
 												 if(error.getParameters() && error.getParameters().message == "error"){
-													  var message = JSON.parse(error.getParameters().responseText).error.message.value;
-													  sap.m.MessageBox.error(message);
+													//   var message = JSON.parse(error.getParameters().responseText).error.message.value;
+													//   sap.m.MessageBox.error(message);
 													  reject();
 												 } else {
-													  sap.m.MessageBox.error(error);
+													//   sap.m.MessageBox.error(error);
 													  reject();
 												 }
 											 })
 											 .load();
 					 }),
 					 new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/v2/Achievement?$filter=subjectUserId in " + oController._UserList)
+						new JSONModelHelper().url("/odata/v2/Achievement?$filter=subjectUserId in " + oController._UserList + " and " + vCreateTime)
 											 .attachRequestCompleted(function(){
 												 var data = this.getData().d;
 												 
@@ -295,11 +337,11 @@ sap.ui.define([
 											 })
 											 .attachRequestFailed(function(error){
 												 if(error.getParameters() && error.getParameters().message == "error"){
-													  var message = JSON.parse(error.getParameters().responseText).error.message.value;
-													  sap.m.MessageBox.error(message);
+													//   var message = JSON.parse(error.getParameters().responseText).error.message.value;
+													//   sap.m.MessageBox.error(message);
 													  reject();
 												 } else {
-													  sap.m.MessageBox.error(error);
+													//   sap.m.MessageBox.error(error);
 													  reject();
 												 }
 											 })
@@ -310,7 +352,7 @@ sap.ui.define([
 				for(var i=0; i<oData2.Data.length; i++){
 					promise.push(
 						new Promise(function(resolve, reject){
-							new JSONModelHelper().url("/odata/v2/GoalPlanTemplate?$select=id,goals,planStates&$expand=goals,planStates&userId=" + oData2.Data[i].userId)
+							new JSONModelHelper().url("/odata/v2/GoalPlanTemplate?$select=id,goals,planStates&$expand=goals,planStates&userId=" + oData2.Data[i].userId + "&$filter=name%20like%20%27"+ vYear + "%25%27" )
 												 .attachRequestCompleted(function(){
 													 var data = this.getData().d;
 													 
