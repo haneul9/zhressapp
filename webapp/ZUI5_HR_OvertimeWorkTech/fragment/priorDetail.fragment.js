@@ -78,7 +78,7 @@ sap.ui.define(
                                                     color : "#0854a0"
                                                 }).addStyleClass("mt-5px"),
                                                 new sap.m.Text({ 
-                                                    text : "{i18n>MSG_32005}" // 근무시간은 출퇴근 기준으로 입력해주시기 바라며, 근로시간 산정 시 점심시간 한 시간은 자동으로 제외됩니다.
+                                                    text : "{= (${/Detail/Header/Bukrs3} === '1000') ? ${i18n>MSG_32026} : ${i18n>MSG_32005} }" // 근무시간은 출퇴근 기준으로 입력해주시기 바라며, 근로시간 산정 시 점심시간 한 시간은 자동으로 제외됩니다.
                                                 }).addStyleClass("ml-6px")
                                             ]
                                         }),
