@@ -322,10 +322,10 @@ sap.ui.define(
                         callback = function(o) {
                             oModel.setProperty("/Detail/Header/Begda", o.Otdat);
                             oModel.setProperty("/Detail/Header/Otbetm", o.Otbetm);
-                            oModel.setProperty("/Detail/Header/OtbetmT", o.Otbetm ? o.Otbetm.split(":")[0] : "00");
+                            oModel.setProperty("/Detail/Header/OtbetmT", o.Otbetm && !/^24/.test(o.Otbetm) ? o.Otbetm.split(":")[0] : "00");
                             oModel.setProperty("/Detail/Header/OtbetmM", o.Otbetm ? o.Otbetm.split(":")[1] : "00");
                             oModel.setProperty("/Detail/Header/Otentm", o.Otentm);
-                            oModel.setProperty("/Detail/Header/OtentmT", o.Otentm ? o.Otentm.split(":")[0] : "00");
+                            oModel.setProperty("/Detail/Header/OtentmT", o.Otentm && !/^24/.test(o.Otentm) ? o.Otentm.split(":")[0] : "00");
                             oModel.setProperty("/Detail/Header/OtentmM", o.Otentm ? o.Otentm.split(":")[1] : "00");
                             oModel.setProperty("/Detail/Header/Holick", o.Holick === "X" ? true : false);
                             oModel.setProperty("/Detail/Header/Horex", o.Horex);
