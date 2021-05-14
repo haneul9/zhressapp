@@ -69,47 +69,51 @@ sap.ui.define([
                 $.app.log("common.CommonController.retrieveSFSessionModel called.");
             }
 
-            if (!Common.isPRD()) {
-                var pernr = UriParameters.fromQuery(document.location.search).get("pernr");
-                if (pernr) {
-                    if (window._init_sequence_logging) {
-                        $.app.log("common.CommonController.retrieveSFSessionModel pernr parameter.");
-                    }
-                    return new JSONModel({
-                        name: pernr
-                    });
-                }
-                if (typeof this.getLocalSessionModel === "function") {
-                    if (window._init_sequence_logging) {
-                        $.app.log("common.CommonController.retrieveSFSessionModel localSessionModel.");
-                    }
-                    return this.getLocalSessionModel();
-                }
-            }
+            return new JSONModel({
+                name: sessionStorage.getItem("ehr.sf-user.name")
+            });
 
-            var sfSessionModel = new JSONModel()
-                .attachRequestCompleted(function (oEvent) {
-                    if (window._init_sequence_logging) {
-                        $.app.log("common.CommonController.retrieveSFSessionModel attachRequestCompleted.");
-                    }
-                    if (oEvent.getParameter("success")) {
-                        this.setData({
-                            json: this.getJSON(),
-                            status: "Success"
-                        }, true);
-                    } else {
-                        var msg = oEvent.getParameter("errorObject").textStatus;
-                        if (msg) {
-                            this.setData("status", msg);
-                        } else {
-                            this.setData("status", "Unknown error retrieving user info");
-                        }
-                    }
-                });
+            // if (!Common.isPRD()) {
+            //     var pernr = UriParameters.fromQuery(document.location.search).get("pernr");
+            //     if (pernr) {
+            //         if (window._init_sequence_logging) {
+            //             $.app.log("common.CommonController.retrieveSFSessionModel pernr parameter.");
+            //         }
+            //         return new JSONModel({
+            //             name: pernr
+            //         });
+            //     }
+            //     if (typeof this.getLocalSessionModel === "function") {
+            //         if (window._init_sequence_logging) {
+            //             $.app.log("common.CommonController.retrieveSFSessionModel localSessionModel.");
+            //         }
+            //         return this.getLocalSessionModel();
+            //     }
+            // }
 
-            sfSessionModel.loadData("/services/userapi/currentUser", null, false); // sync
+            // var sfSessionModel = new JSONModel()
+            //     .attachRequestCompleted(function (oEvent) {
+            //         if (window._init_sequence_logging) {
+            //             $.app.log("common.CommonController.retrieveSFSessionModel attachRequestCompleted.");
+            //         }
+            //         if (oEvent.getParameter("success")) {
+            //             this.setData({
+            //                 json: this.getJSON(),
+            //                 status: "Success"
+            //             }, true);
+            //         } else {
+            //             var msg = oEvent.getParameter("errorObject").textStatus;
+            //             if (msg) {
+            //                 this.setData("status", msg);
+            //             } else {
+            //                 this.setData("status", "Unknown error retrieving user info");
+            //             }
+            //         }
+            //     });
 
-            return sfSessionModel;
+            // sfSessionModel.loadData("/services/userapi/currentUser", null, false); // sync
+
+            // return sfSessionModel;
         },
 
         getSessionModel: function () {
