@@ -14,7 +14,7 @@ sap.ui.define([
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "MedApplyDet"].join($.app.getDeviceSuffix());
 	return CommonController.extend(SUB_APP_ID, {
 
-		PAGEID: "MedApply",
+		PAGEID: "MedApplyDet",
 		BusyDialog : new sap.m.BusyDialog().addStyleClass("centerAlign"),
 		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
 		_DataModel : new sap.ui.model.json.JSONModel(),

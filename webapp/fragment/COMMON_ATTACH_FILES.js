@@ -298,7 +298,7 @@ fragment.COMMON_ATTACH_FILES = {
 										Datas.Data.push(elem);
 									}
 								}else if(vPage=="009"){
-									if(oController.PAGEID=="MedApply"){
+									if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
 										if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
 											elem.New = false;
 											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
