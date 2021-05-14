@@ -24,7 +24,7 @@ sap.ui.define([
 ) {
 "use strict";
 
-var Handler = {
+return {
 
 	oController: null,
 	oDialog: null,
@@ -402,7 +402,5 @@ var Handler = {
 	}
 
 };
-
-return Handler;
 
 });
