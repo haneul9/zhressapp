@@ -183,7 +183,7 @@ sap.ui.define([
 			
 			var vData = {Data : []}, vData2 = {Data : []};
 			
-			new JSONModelHelper().url("/odata/v2/User('" + $.app.getModel("session").getData().Pernr + "')/directReports")
+			new JSONModelHelper().url("/odata/v2/User('" + ($.app.getModel("session").getData().Pernr * 1) + "')/directReports")
 								.select("userId")
 								.select("nickname")
 								.select("title")
