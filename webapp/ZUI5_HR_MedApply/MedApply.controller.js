@@ -984,7 +984,7 @@ sap.ui.define([
 					});
 					oCol.setWidth(e.Width);
 					oCol.setHAlign(e.Align);
-					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));	
+					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}).addStyleClass("font-medium"));	
 					if(i<3){
 						oCol.setTemplate(new sap.ui.commons.TextView({text : {
 							path :oFields[i], 						

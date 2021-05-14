@@ -12,7 +12,7 @@ sap.ui.define([
 ) {
 "use strict";
 
-var Handler = {
+return {
 
 	oController: null,
 	oRowData: null,
@@ -512,7 +512,5 @@ var Handler = {
 	}
 
 };
-
-return Handler;
 
 });
