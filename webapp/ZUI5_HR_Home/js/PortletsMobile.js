@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet */
+/* global Chart EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet VacationForHQPortlet */
 function PortletsMobile(_gateway) {
 
 	this._gateway = _gateway;
@@ -20,9 +20,15 @@ init: function() {
 		'P106': HiTalkTalkPortlet,			// 하이톡톡
 		'P107': EvalGoalPortlet	,			// 목표관리
 		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
-		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
-		'P110': VacationPortlet				// 근태신청
+		'P109': WorkstimeStatusPortlet,		// My Working Time
+		'P110': VacationPortlet,			// 휴가사용현황
+		'P111': VacationForHQPortlet		// 연차사용현황 : 임원용
 	};
+
+	Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
+	Chart.defaults.global.defaultFontColor = 'rgb(153, 153, 153)';
+	Chart.defaults.global.legend.labels.boxWidth = 20;
+	Chart.defaults.global.legend.align = 'end';
 
 	$(document)
 		.off('click', '.portlet-masonry [data-url]')

@@ -1,4 +1,4 @@
-/* global AbstractPortlet moment */
+/* global AbstractPortlet Chart ChartDataLabels moment */
 function VacationPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
@@ -138,10 +138,6 @@ fill: function() {
                 vList3.push(vReman);
             });
 
-            Chart.defaults.global.defaultFontColor = 'rgb(153, 153, 153)';
-            Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
-            Chart.defaults.global.legend.labels.boxWidth = 20;
-            Chart.defaults.global.legend.align = 'end';
             var chart = new Chart(vChartId, { // type : 'bar' = 막대차트를 의미합니다. 
                 type: 'bar',
                 data: { 
@@ -176,8 +172,14 @@ fill: function() {
                                 beginAtZero: true
                             }
                         }]
+                    },
+                    plugins: {
+                        datalabels: {
+                            color: '#064975'
+                        }
                     }
-                }
+                },
+                plugins: [ChartDataLabels]
             });
 
             $('.ChartClass').append([chart]);

@@ -238,12 +238,13 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .custom-control-input:checked~.custom-control-label::before {background-color:#0070bd; border-color:#0070bd}
 .card.portlet-switch {border-radius:.375rem}
 
+.portlet .blue-banner {background-color:#ebf5fe; margin-top:10px; color:#064975; display:flex; justify-content:space-between; align-items:flex-end; padding:15px}
+.portlet .blue-banner .blue-banner-title {font-size:.875rem; font-weight:500; padding-bottom:5px}
+.portlet .blue-banner .blue-banner-value {font-size:1.625rem; font-weight:700; letter-spacing:-0.5px}
+
 .portlet-worktime .today {display:flex; align-items:flex-end; justify-content:space-between; font-weight:400}
 .portlet-worktime .today .title {font-size:.875rem; padding-left:14px; padding-right:5px}
 .portlet-worktime .today .state {font-size:1rem; color:#0070bd; letter-spacing:-0.5px}
-.portlet-worktime .worktime {background-color:#ebf5fe; margin-top:10px; color:#064975; display:flex; justify-content:space-between; align-items:flex-end; padding:15px}
-.portlet-worktime .worktime .title {font-size:.875rem; font-weight:500; padding-bottom:5px}
-.portlet-worktime .worktime .total {font-size:1.625rem; font-weight:700; letter-spacing:-0.5px}
 .portlet-worktime .statusBar {display:flex; flex-direction:column; align-items:center; width:100%; margin-top:25px}
 .portlet-worktime .statusBar .progress {border-radius:1rem; background-color:#f0f0f0; height:20px; width:100%; display:flex; position:relative}
 .portlet-worktime .statusBar .progress .progress-bar.bg-success {height:100%; position:absolute}

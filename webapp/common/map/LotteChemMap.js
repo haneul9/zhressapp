@@ -391,7 +391,7 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 				].join(',')
 			}, function(status, response) {
 				this.functionProvider.log('searchAddress', status, response);
-	
+
 				if (status === naver.maps.Service.Status.ERROR) {
 					if (!coord) {
 						this.functionProvider.alert('ReverseGeocode Error, Please check lonlat.');
@@ -408,7 +408,7 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 					this.functionProvider.alert('ReverseGeocode Error, Please check lonlat.');
 					return;
 				}
-	
+
 				response.v2.address.building = ((((response.v2.results || [])[0] || {}).land || {}).addition0 || {}).value || '';
 
 				oMarker.set('custom-address', response.v2.address);
