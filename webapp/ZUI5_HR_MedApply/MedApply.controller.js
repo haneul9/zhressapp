@@ -310,7 +310,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				};
 				var vProperty2={
 					Appnm: vAppnm,
@@ -320,7 +320,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				};
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty1,"001");
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController,vProperty2,"002");
@@ -332,7 +332,7 @@ sap.ui.define([
 					Cntnm: "009",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				},"009");
 				BusyIndicator.hide();
 			},10);			
@@ -359,7 +359,7 @@ sap.ui.define([
 					Mode: "M",
 					Max: "15",
 					Editable: vEdit,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				},"008");
 				BusyIndicator.hide();
 			},100);	
@@ -653,7 +653,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				};
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
@@ -671,7 +671,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				};
 				vProperty1.Appnm='';
 				vProperty1.Editable=false;
@@ -692,7 +692,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				};
 				vProperty1.Appnm=vAppnm;
 				vProperty1.Editable=true;
@@ -710,7 +710,7 @@ sap.ui.define([
 					Label : "",
 					Editable: vEdit,
 					UseMultiCategories : true,
-					FileTypes: ["ppt", "pptx", "xls", "xlsx", "doc", "docx", "jpg", "pdf", "zip", "gif", "png"]
+					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 				};
 				vProperty1.Appnm='';
 				vProperty1.Editable=false;
