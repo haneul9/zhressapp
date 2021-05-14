@@ -202,9 +202,9 @@ return {
 				// 해외 결제 : 2021-05-13 hpjt0857 UsedForAmt에서 UsedAmt로 변경
 				else {
 					this.callback($.extend(cardExpenseData, {
-						PayAmtTr: p.UsedForAmt,
-						BtExpenseTr: p.UsedForAmt,
-						BtTaxbaseTr: p.UsedForAmt,
+						PayAmtTr: p.UsedAmt,
+						BtExpenseTr: p.UsedAmt,
+						BtTaxbaseTr: p.UsedAmt,
 						Mwskz: "IP"
 					}));
 				}
