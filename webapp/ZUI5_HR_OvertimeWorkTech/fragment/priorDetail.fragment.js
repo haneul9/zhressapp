@@ -223,7 +223,8 @@ sap.ui.define(
                                                     new sap.m.Text({
                                                         text: "{/Detail/Header/ComtmW}"
                                                     }).addStyleClass("mx-10px")
-                                                ]
+                                                ],
+                                                visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
                                             }).addStyleClass("search-field-group")
                                         ]
                                     }).addStyleClass("search-inner-vbox"),
@@ -283,7 +284,8 @@ sap.ui.define(
                                                         }
                                                     })
                                                     .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue ml-20px")
-                                                ]
+                                                ],
+                                                visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
                                             }).addStyleClass("search-field-group"),
                                             new sap.m.HBox({
                                                 items: [
