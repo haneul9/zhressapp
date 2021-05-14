@@ -790,7 +790,7 @@ sap.ui.define([
 				Mode: "M",
 				Max: "10",
 				Editable: oSaveBtn.getVisible(),
-				FileTypes: ["pdf", "jpg", "doc", "docx", "gif", "png"],
+				FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
 			});
 		},
 		

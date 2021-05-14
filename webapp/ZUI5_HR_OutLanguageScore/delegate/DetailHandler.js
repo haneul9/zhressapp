@@ -168,7 +168,7 @@ sap.ui.define(
                         Appnm: this.oModel.getProperty("/IsViewMode") ? this.oModel.getProperty("/Info/Appnm") : "",
                         Mode: "M",
                         Max: 5,
-                        FileTypes: ["jpg", "gif"], 
+                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"], 
                         InfoMessage: this.oController.getBundleText("MSG_51001"),   // 성적표의 스캔이미지 파일(jpg 또는 gif 포멧)을 첨부하시기 바랍니다.
                         fnChange: function() {
                             this.getDetailHandler().toggleIsPossibleSave.call(this.getDetailHandler());
