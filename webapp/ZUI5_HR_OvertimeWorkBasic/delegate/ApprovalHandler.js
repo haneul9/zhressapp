@@ -487,9 +487,11 @@ sap.ui.define(
                                     ApprovalHandler.addTargetTableByOne(o);
                                     break;
                                 case "O":
-                                    ApprovalHandler.addTargetTableByMulti(o.nodes.filter(function(node) {
-                                        return node.Otype === "P";
-                                    }));
+                                    if(o.nodes && o.nodes.length) {
+                                        ApprovalHandler.addTargetTableByMulti(o.nodes.filter(function(node) {
+                                            return node.Otype === "P";
+                                        }));
+                                    }
                                     break;
                             }
                         };
