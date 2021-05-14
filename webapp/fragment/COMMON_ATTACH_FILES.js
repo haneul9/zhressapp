@@ -298,9 +298,17 @@ fragment.COMMON_ATTACH_FILES = {
 										Datas.Data.push(elem);
 									}
 								}else if(vPage=="009"){
-									elem.New = false;
-									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-									Datas.Data.push(elem);
+									if(oController.PAGEID=="MedApply"){
+										if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+											elem.New = false;
+											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+											Datas.Data.push(elem);
+										}
+									}else{
+										elem.New = false;
+										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+										Datas.Data.push(elem);
+									}									
 								}else{
 									if(elem.Cntnm =="009"){
 										elem.New = false;
