@@ -509,7 +509,7 @@ sap.ui.define(
              */
             searchOrgehPernrByList: function() {
                 this.searchOrgehPernr.call(this.oController, function(o) {
-                    if(o.Zshft === "X") {
+                    if(o.Otype === "P" && o.Zshft === "X") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32025")); // 교대근무자는 선택할 수 없습니다.
                         return;
                     }
@@ -710,7 +710,7 @@ sap.ui.define(
                     if(o.Otype === "O") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32007")); // 사원을 선택하세요.
                         return;
-                    } else if(o.Zshft === "X") {
+                    } else if(o.Otype === "P" && o.Zshft === "X") {
                         MessageBox.warning(this.oController.getBundleText("MSG_32025")); // 교대근무자는 선택할 수 없습니다.
                         return;
                     }
