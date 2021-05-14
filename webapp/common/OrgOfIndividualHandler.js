@@ -356,10 +356,12 @@ sap.ui.define(
 				SearchUser1._vPersa = this.oController.getSessionInfoByKey("Persa");
 				SearchUser1.dialogContentHeight = 480;
 				
-				if (!this.oEmployeeSearchDialog) {
-                    this.oEmployeeSearchDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this.oController);
-                    $.app.getView().addDependent(this.oEmployeeSearchDialog);
-                }
+				if(this.oEmployeeSearchDialog) {
+					this.oEmployeeSearchDialog.destroy();
+				}
+				
+				this.oEmployeeSearchDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this.oController);
+				$.app.getView().addDependent(this.oEmployeeSearchDialog);
 
                 this.oEmployeeSearchDialog.open();
 			},

@@ -143,7 +143,7 @@ sap.ui.define(
                                             new sap.m.Input({ 
                                                 width: "776px",
                                                 value: "{/TemplateData/Jobco}",
-                                                maxLength: 30,
+                                                maxLength: 70,
                                                 change: ApprovalHandler.checkTemplateControl.bind(ApprovalHandler)
                                             })
                                         ]

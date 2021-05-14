@@ -404,7 +404,7 @@ sap.ui.define([
 		},
 		
 		getTxt:function(vTxt,vNo){
-			var redStar="<span style='color:red;font-weight:bold;font-size:14px;'>*</span>";
+			var redStar="<span style='color:#ce3b3b;font-weight:bold;font-size:14px;'>*</span>";
 			var oTxt=vNo<=23||vNo==48||vNo==49||vNo==63||vNo==64||vNo==65||vNo==66||vNo==67||vNo==68||vNo==69||vNo==70||vNo==71||vNo==75||vNo==76||
 			vNo==89?"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>"+redStar:
 			"<span style='font-weight:bold;font-size:14px;'>"+oBundleText.getText(vTxt)+"</span>";
@@ -935,7 +935,7 @@ sap.ui.define([
 			oTable.destroyColumns();
 			if(oController._Bukrs=="1000"){
 				var oFields=["Begda","MedDate","PatiName","RelationTx","HospName","DiseName","MychargeT","SuppAmtT","PayDateT","StatusText"];			
-				var oWidths=['','','','','200px','200px','','','',''];			
+				var oWidths=['','','','','100px','200px','','','',''];			
 				var oAligns=['Center','Center','Center','Center','Begin','Begin','End','End','Center','Center'];	
 				var oLabels=new Array();
 				for(var i=91;i<101;i++){
@@ -953,7 +953,7 @@ sap.ui.define([
 					});
 					oCol.setWidth(e.Width);
 					oCol.setHAlign(e.Align);
-					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));	
+					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}).addStyleClass("font-medium"));	
 					if(i<2){
 						oCol.setTemplate(new sap.ui.commons.TextView({text : {
 							path :oFields[i], 						
@@ -984,7 +984,7 @@ sap.ui.define([
 					});
 					oCol.setWidth(e.Width);
 					oCol.setHAlign(e.Align);
-					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));	
+					oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}).addStyleClass("font-medium"));	
 					if(i<3){
 						oCol.setTemplate(new sap.ui.commons.TextView({text : {
 							path :oFields[i], 						

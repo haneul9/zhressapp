@@ -13,10 +13,10 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.minipop", {
            submit: oController.onMiniSearch}),new sap.ui.core.HTML({content:"<span>&nbsp;</span>"}),new sap.m.Button({
             press: oController.onMiniSearch,
             text: "{i18n>LABEL_23010}", // 조회
-        }).addStyleClass("button-search btn-margin"),new sap.m.Button({
+        }).addStyleClass("button-search btn-margin mt-4px"),new sap.m.Button({
             press: oController.onMiniAdd,
             text: "{i18n>LABEL_00153}", // 추가
-        }).addStyleClass("button-light righter btn-margin")]
+        }).addStyleClass("button-light righter btn-margin mt-4px")]
         });
         oRow.addCell(oCell);
         oMat.addRow(oRow);
@@ -38,6 +38,8 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.minipop", {
 			showNoData: true,
             selectionBehavior:sap.ui.table.SelectionBehavior.RowOnly,
 			width: "auto",
+            rowHeight: 37,
+			columnHeaderHeight: 38,
 			noData: "{i18n>MSG_05001}"
 		}).setModel(oJSON).addStyleClass("mt-8px");
 
@@ -59,7 +61,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.minipop", {
             });
             oCol.setWidth(e.Width);
             oCol.setHAlign(e.Align);
-            oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}));				
+            oCol.setLabel(new sap.m.Text({text:oBundleText.getText(e.Label),textAlign:e.Align}).addStyleClass("font-medium"));				
             oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:"Center"}).addStyleClass("FontFamily"));			
             oTable.addColumn(oCol);
         });
@@ -96,7 +98,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.minipop", {
         var oDialog = new sap.m.Dialog(oController.PAGEID+"_miniDialog",{
             title : oBundleText.getText("LABEL_47056"),
             content: [oContent],
-            buttons: [new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onCloseMini}).addStyleClass("button-delete")],
+            buttons: [new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onCloseMini}).addStyleClass("button-default")],
             contentWidth: "660px",
             beforeOpen : oController.onMini,
             afterOpen : oController.onFocusMini

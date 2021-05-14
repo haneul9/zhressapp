@@ -196,7 +196,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
         });
 //1
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:[oController.getTxt("LABEL_47131"),new sap.ui.core.HTML({content:"<span style='color:red;font-weight:bold;font-size:14px;'>*</span>"})]}).addStyleClass("LabelCell");
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:[oController.getTxt("LABEL_47131"),new sap.ui.core.HTML({content:"<span style='color:#ce3b3b;font-weight:bold;font-size:14px;'>*</span>"})]}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"99%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Ptamt}",
         editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -216,7 +216,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
             }
         }}})}).addStyleClass("DataCell");
         oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:[oController.getTxt("LABEL_47132"),new sap.ui.core.HTML({content:"<span style='color:red;font-weight:bold;font-size:14px;'>*</span>"})]}).addStyleClass("LabelCell");
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:[oController.getTxt("LABEL_47132"),new sap.ui.core.HTML({content:"<span style='color:#ce3b3b;font-weight:bold;font-size:14px;'>*</span>"})]}).addStyleClass("LabelCell");
         oRow.addCell(oCell);
         oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"99%",textAlign:"End",liveChange:oController.onLiveMoney,maxLength:13,value:"{Medsp}",
         editable:{parts : [{path : "Close"}, {path : "Gtz51"}, {path:"Status"}],
@@ -366,7 +366,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
         oMat2.addRow(oRow);
 
         oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><div class='msgBox'><span>"+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span></div>"})});
+        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:new sap.ui.core.HTML({content:"<div style='height:20px;'></div><div class='msgBox'><span>"+oController.getBundleText("MSG_47042")+"<br/>"+oController.getBundleText("MSG_47043")+"</span></div>"})});
         oRow.addCell(oCell);
         oMat2.addRow(oRow);
 
@@ -381,9 +381,9 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
         oMat2.addRow(oRow);
 
         var oPanel2 = new sap.m.Panel({
-			headerToolbar : [new sap.m.Toolbar({content:[new sap.ui.core.HTML({content:"<span style='font-size:16px;font-weight:bold;'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
+			headerToolbar : [new sap.m.Toolbar({content:[new sap.ui.core.HTML({content:"<span class='sub-title'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
             new sap.m.ToolbarSpacer(),new sap.ui.core.HTML({content:
-                "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;'>"+oController.getBundleText("LABEL_47143")+"</a>"})]})],
+                "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;padding-right:15px;'>"+oController.getBundleText("LABEL_47143")+"</a>"})]})],
 			expanded:true,
 			expandable:false,
 			content:oMat2
@@ -412,7 +412,7 @@ sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", {
                     }else{
                         return false;
                     }
-                }}}).addStyleClass("button-search"),new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose2}).addStyleClass("button-delete")],
+                }}}).addStyleClass("button-search"),new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose2}).addStyleClass("button-default")],
             contentWidth: "1600px",
             beforeOpen: oController.onAfterOpen2,
             afterOpen : oController.onAfterLoad2

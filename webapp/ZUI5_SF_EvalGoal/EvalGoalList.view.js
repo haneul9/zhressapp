@@ -11,6 +11,8 @@ sap.ui.define(
             },
 
             createContent: function (oController) {
+                $.app.setModel("ZHR_COMMON_SRV");
+                
 				var oFilter = new sap.m.FlexBox({
 					fitContainer: true,
 					justifyContent : "SpaceBetween",

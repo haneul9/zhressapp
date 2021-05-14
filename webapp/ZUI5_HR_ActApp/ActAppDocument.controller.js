@@ -76,6 +76,7 @@ sap.ui.define(
 					this._vReqno = oEvent.data.Reqno;
 					this._vDocno = oEvent.data.Docno;
 					this._vDocty = oEvent.data.Docty;
+					this._vPersa = oEvent.data.Persa;
 					this._vEntrs = oEvent.data.Entrs;
 					this._oContext = oEvent.data.context;
 				}
@@ -156,13 +157,14 @@ sap.ui.define(
 								})
 							);
 						}
-						vFirstPersa = vPersaData[0].Persa;
-						oPersa.setSelectedKey(vFirstPersa);
-						oController._vPersa = vFirstPersa;
+						oPersa.setSelectedKey(oController._vPersa);
+						// vFirstPersa = vPersaData[0].Persa;
+						// oPersa.setSelectedKey(vFirstPersa);
+						// oController._vPersa = vFirstPersa;
 
 						oModel.read("/AppReqDepListSet", {
 							async: false,
-							filters: [new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, vFirstPersa)],
+							filters: [new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, oController._vPersa)],
 							success: function (oData) {
 								if (oData.results && oData.results.length) {
 									for (var i = 0; i < oData.results.length; i++) {
@@ -319,6 +321,14 @@ sap.ui.define(
 						oAnnounce_Btn.setVisible(true);
 						oUpload_Btn.setVisible(true);
 						oExcel_Btn.setVisible(true);
+
+						// 확정 버튼 기안부서와 내부서가 같으면 활성
+						var oOrgeh = $.app.byId(oController.PAGEID + "_Orgeh");
+						if($.app.getController().getSessionInfoByKey("Orgeh") === oOrgeh.getSelectedKey()) {
+							oComplete_Btn.setEnabled(true);
+						} else {
+							oComplete_Btn.setEnabled(false);
+						}
 					} else {
 						modbtn.setVisible(false);
 						delbtn.setVisible(false);

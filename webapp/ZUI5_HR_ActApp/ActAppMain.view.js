@@ -320,26 +320,29 @@ sap.ui.define([
 
 		setActionModel: function() {
 			//인사영역 리스트
-			var PersaJSONModel = new sap.ui.model.json.JSONModel(),
-				vPersaDatas = { PersAreaListSet: [] };
+			// var PersaJSONModel = new sap.ui.model.json.JSONModel(),
+			// 	vPersaDatas = { PersAreaListSet: [] };
 
-			$.app.getModel("ZHR_ACTIONAPP_SRV").read("/PersAreaListSet", {
-				async: false,
-				filters: [new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, "1")],
-				success: function(oData) {
-					if (oData && oData.results.length) {
-						oData.results.forEach(function(elem) {
-							vPersaDatas.PersAreaListSet.push(elem);
-						});
-					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-				}
-			});
+			// $.app.getModel("ZHR_ACTIONAPP_SRV").read("/PersAreaListSet", {
+			// 	async: false,
+			// 	filters: [
+			// 		new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, "1"),
+			// 		new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, $.app.getController().getSessionInfoByKey("Percod"))
+			// 	],
+			// 	success: function(oData) {
+			// 		if (oData && oData.results.length) {
+			// 			oData.results.forEach(function(elem) {
+			// 				vPersaDatas.PersAreaListSet.push(elem);
+			// 			});
+			// 		}
+			// 	},
+			// 	error: function(oResponse) {
+			// 		Common.log(oResponse);
+			// 	}
+			// });
 
-			PersaJSONModel.setData(vPersaDatas);
-			sap.ui.getCore().setModel(PersaJSONModel, "PersaModel");
+			// PersaJSONModel.setData(vPersaDatas);
+			// sap.ui.getCore().setModel(PersaJSONModel, "PersaModel");
 
 			//정렬대상 리스트
 			var mActionAppReqSort = new sap.ui.model.json.JSONModel(),

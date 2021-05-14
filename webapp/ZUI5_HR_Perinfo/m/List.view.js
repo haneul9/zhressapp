@@ -14,10 +14,10 @@ sap.ui.define(
                 this.loadModel();
                 var searchBox = new sap.m.HBox({
                     fitContainer: true,
-                    height : "130px",
+                    height : "auto",
                     items: [
                         new sap.m.HBox({
-                        	width : "120px",
+                        	width : "120px", 
                             items: [
                                new sap.m.Image({
                                		src : "{photo}",

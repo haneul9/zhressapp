@@ -102,7 +102,8 @@ sap.ui.define(
 					$.app.getModel("ZHR_ACTIONAPP_SRV").read("/PersAreaListSet", {
 						async: false,
 						filters: [
-							new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, "1")
+							new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, "1"),
+							new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, $.app.getController().getSessionInfoByKey("Percod"))
 						],
 						success: function (oData) {
 							if (oData && oData.results.length) {
@@ -351,6 +352,8 @@ sap.ui.define(
 				var oController = $.app.getController();
 				var toPageId = "";
 				var vDocty = "";
+				var oPersa = $.app.byId(oController.PAGEID + "_Persa");
+				var vPersa = oPersa.getSelectedItems().length ? oPersa.getSelectedItems()[0].getKey() : "1000";
 
 				for (var i = 1; i <= 6; i++) {
 					var oControl = $.app.byId(oController.PAGEID + "_SM_RadioButton" + i);
@@ -378,7 +381,8 @@ sap.ui.define(
 							Statu: "00",
 							Reqno: "",
 							Docno: "",
-							Docty: vDocty
+							Docty: vDocty,
+							Persa: vPersa
 						}
 					});
 				} else {

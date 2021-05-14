@@ -1,4 +1,4 @@
-.LabelCell{
+/* .LabelCell{
     border : 1px solid #d8dadf;
     padding : 4px !important;
     background : #f3f4f6;
@@ -6,7 +6,26 @@
 .DataCell{
     border : 1px solid #d8dadf;
     padding : 4px !important;
+} */
+
+.LabelCell{
+    background-color:#f3f4f4;
+    border:1px solid #e4e4e4;
+    padding: 0 8px !important;
+    font-weight:500 !important;
 }
+.LabelCell.LabelCellBg {background-color:#f9f9f9;}
+.LabelCell.totalLine, .DataCell.totalLine {border-top:2px solid #c3c3c3; border-bottom:1px solid #c3c3c3}
+.DataCell{
+    border:1px solid #e4e4e4;    
+    padding:0 8px !important;
+}
+.border-left-no {border-left:0;}
+.LabelCell:first-child {border-left:0}
+.LabelCell:last-child, .DataCell:last-child {border-right:0}
+.sapMTBStandard {border-bottom:none;}
+.sapMPanelContent {margin-top:-10px}
+
 .Bold{
     font-weight:bold !important;
 }
@@ -28,6 +47,7 @@
 .paddingbody{
     padding : 10px;
 }
+
 .sapUiSmallMargin{
     margin : 0px !important;
 }
@@ -56,7 +76,7 @@
     padding:10px !important;
     line-height:1.8;
     background-color: #fffac4;
-    border:1px solid #f5be00;
+    border:1px solid #f0bf11;
     font-size:14px;
     color:#333;
 }

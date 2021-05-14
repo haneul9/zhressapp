@@ -123,6 +123,48 @@ return CommonController.extend($.app.APP_ID, { // 종합평가 : 평가연도별
 		});
 	},
 
+	onPrint : function(){
+		//var svg =  document.getElementById('UIComp_0').querySelector( "svg" );
+	  //   var svg =  document.getElementById('__section0-innerGrid').querySelector( "svg" );
+		var svg =  document.getElementById('EvalResult_Chart').querySelector( "svg" );
+		var svgData = new XMLSerializer().serializeToString( svg );
+		var canvas = document.createElement( "canvas" );
+		var svgSize = svg.getBoundingClientRect();
+		canvas.width = svgSize.width * 3;
+		canvas.height = svgSize.height * 3;
+		canvas.style.width = svgSize.width;
+		canvas.style.height = svgSize.height;
+		var ctx = canvas.getContext( "2d" );
+		ctx.scale(3,3);
+	  //   var doc = new jsPDF('l', 'mm', [4, 2]);
+
+		var doc = new jsPDF({
+		  orientation: "portrait",
+		  //format: "a4"
+		  format: [400, 200]
+		});
+	  
+		html2canvas(document.getElementById("EvalResultObjectPageLayout"), {
+			  // scale based on quality value input
+			  scale: 1,
+			  // logging for debugging
+			  logging: true,
+			  letterRendering: 1,
+			  // allows for cross origin images
+			  allowTaint: true,
+			  useCORS: true
+		  }).then(function (canvas) {
+			  setTimeout(function () {
+				  var img = canvas.toDataURL('image/png');
+				  const pdfWidth = 600;
+				  const pdfHeight = 1000;
+				  doc.addImage(img, 'PNG', 2, 2, 120, 200);
+				  doc.save('file-name.pdf');
+			  }, 3000);
+		  }
+		);	
+	},
+
 	getLocalSessionModel: Common.isLOCAL() ? function() {
 		// return new JSONModel({name: "20090028"});
 		// return new JSONModel({name: "981011"});
