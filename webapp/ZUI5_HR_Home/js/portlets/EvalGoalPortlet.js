@@ -96,7 +96,8 @@ fill: function() {
 							list.append([
 								'<div class="my-evalgoal-info">',
 									'<div class="mylist">',
-										i + 1 + '.' + v.name,
+										// i + 1 + '.' + v.name,
+										v.name,
 									'</div>',
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
