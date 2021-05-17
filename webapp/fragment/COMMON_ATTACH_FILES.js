@@ -117,16 +117,45 @@ fragment.COMMON_ATTACH_FILES = {
 									return common.Common.FileTypeIcon(v);
 								}
 							},
-							color: "#005f28"
+							color: "#005f28",
+							visible: {
+								parts: [
+									{path: "Mimetype"},
+									{path: "Mresource"}
+								],
+								formatter: function(v1, v2) {
+									return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) && v2 ? false : true;
+								}
+							}
 						}),
 						new sap.m.Link({
 							text: "{Fname}",
 							wrapping: true,
 							textAlign: "Begin",
-							press: fragment.COMMON_ATTACH_FILES.onDownload.bind(oController)
-							// href: "{Url}",
-							// target: "_new"
-						}).addStyleClass("ml-4px")
+							press: fragment.COMMON_ATTACH_FILES.onDownload.bind(oController),
+							visible: {
+								parts: [
+									{path: "Mimetype"},
+									{path: "Mresource"}
+								],
+								formatter: function(v1, v2) {
+									return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) && v2 ? false : true;
+								}
+							}
+						}).addStyleClass("ml-4px"),
+						new sap.m.Image({
+							width: "100%",
+							src: "{Mresource_convert}",
+							visible: {
+								parts: [
+									{path: "Mimetype"},
+									{path: "Mresource"}
+								],
+								formatter: function(v1, v2) {
+									return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) && v2 ? true : false;
+								}
+							}
+						})
 					]
 				}),
 				new sap.m.Button({
@@ -185,7 +214,7 @@ fragment.COMMON_ATTACH_FILES = {
 		if(!vFileInfo) return;
 
 		if(common.Common.isExternalIP()) {
-			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype)) {
+			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
 				common.AttachFileAction.retrieveFile(vFileInfo);
 			} else {
 				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
@@ -332,6 +361,9 @@ fragment.COMMON_ATTACH_FILES = {
 				success: function (data) {
 					if (data && data.results.length) {
 						data.results.forEach(function (elem) {
+							elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
+							elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
+
 							if(vUse){
 								if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
 									if(vPage==elem.Cntnm){
@@ -360,8 +392,8 @@ fragment.COMMON_ATTACH_FILES = {
 								}
 							}else{
 								elem.New = false;
-									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-									Datas.Data.push(elem);
+								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+								Datas.Data.push(elem);
 							}
 							
 						});
