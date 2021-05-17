@@ -123,8 +123,9 @@ fragment.COMMON_ATTACH_FILES = {
 							text: "{Fname}",
 							wrapping: true,
 							textAlign: "Begin",
-							href: "{Url}",
-							target: "_new"
+							press: common.AttachFileAction.onDownload.bind(oController)
+							// href: "{Url}",
+							// target: "_new"
 						}).addStyleClass("ml-4px")
 					]
 				}),

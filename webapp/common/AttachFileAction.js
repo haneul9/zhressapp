@@ -178,7 +178,9 @@ common.AttachFileAction = {
 
 		if(vFileInfo.Url) {
 			if(common.Common.isExternalIP()) {
-				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"));	// 조회할 수 없습니다.
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
+					title: this.getBundleText("LABEL_09029")
+				});
 			} else {
 				window.open(vFileInfo.Url, '_blank').focus();
 			}
