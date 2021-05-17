@@ -155,7 +155,7 @@
 		onPressNotice: function() {
 
 			if (!this.oNoticeDialog) {
-				this.oNoticeDialog = sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.ScoreChart", this);
+				this.oNoticeDialog = sap.ui.jsfragment([$.app.CONTEXT_PATH, "Notice"].join(".fragment."), this);
 				$.app.getView().addDependent(this.oNoticeDialog);
 			}
 
