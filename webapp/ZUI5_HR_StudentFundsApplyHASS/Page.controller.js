@@ -1235,8 +1235,13 @@
 			var oView = $.app.byId("ZUI5_HR_StudentFundsApplyHASS.Page");
 			var oController = oView.getController();
 
-			if(oController.oData){ // 
-				
+			if(oController.data){ // 
+				oController.SearchModel.setProperty("/User/Ename", data.Ename);
+				oController.SearchModel.setProperty("/User/Pernr", data.Pernr);
+				oController.SearchModel.setProperty("/User/Btrtx", data.Pbtxt);
+				oController.SearchModel.setProperty("/User/Orgtx", data.Fulln);
+				oController.SearchModel.setProperty("/User/PGradeTxt", data.ZpGradetx);
+				oController.SearchModel.setProperty("/User/ZtitleT", data.Ztitletx);
 			}
 
 			oController.OrgOfIndividualHandler.getDialog().close();
