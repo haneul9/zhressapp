@@ -292,41 +292,36 @@ sap.ui.define([
                     new sap.m.HBox({
                         width: "100%",
                         items: [
-							new sap.m.HBox({
-								width: "40%",
-								items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_70014}", "150px", "Right", true), // 학습일자
-									new PickOnlyDatePicker({
-                                        width: "150px",
-                                        dateValue: "{Begda}",
-                                        displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
-                                        valueFormat: "yyyy-MM-dd",
-                                        placeholder: "yyyy-mm-dd",
-                                        editable: {
-											parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
-											formatter: function(v1, v2, v3) {
-												return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-											}
-										}
-                                    })
-									.addStyleClass("mr-30px")
-								]
+							ViewTemplates.getLabel("header", "{i18n>LABEL_70014}", "150px", "Right", true), // 학습일자
+							new PickOnlyDatePicker({
+								width: "150px",
+								dateValue: "{Begda}",
+								displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
+								valueFormat: "yyyy-MM-dd",
+								placeholder: "yyyy-mm-dd",
+								editable: {
+									parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
+									formatter: function(v1, v2, v3) {
+										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+									}
+								}
 							})
-							.addStyleClass("search-field-group"),
-							new sap.m.HBox({
-								items: [
-									ViewTemplates.getLabel("header", "{i18n>LABEL_70015}", "150px", "Right"), // 학습시간
-									oBTimeBox1,
-                                    oBTimeBox2,
-                                    new sap.m.Text({ text: "~" }).addStyleClass("mx-5px"),
-                                    oETimeBox1,
-                                    oETimeBox2
-								]
-							})
-							.addStyleClass("search-field-group")
+							.addStyleClass("mr-30px")
                         ]
                     })
                     .addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						width: "100%",
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_70015}", "150px", "Right"), // 학습시간
+							oBTimeBox1,
+							oBTimeBox2,
+							new sap.m.Text({ text: "~" }).addStyleClass("mx-5px"),
+							oETimeBox1,
+							oETimeBox2
+						]
+					})
+					.addStyleClass("search-field-group"),
                     new sap.m.HBox({
                         width: "100%",
                         items: [
@@ -355,89 +350,99 @@ sap.ui.define([
                                     new sap.m.HBox({
                                         items: [
                                             ViewTemplates.getLabel("header", "{i18n>LABEL_70026}", "74px", "Right" ), // 사내
-                                            new sap.m.VBox(oController.PAGEID + "_InTeacherBox", {
+                                            new sap.m.VBox({
                                                 items: [
+													new sap.m.HBox({
+														justifyContent: sap.m.FlexJustifyContent.End,
+														alignContent: sap.m.FlexAlignContent.End,
+														alignItems: sap.m.FlexAlignItems.End,
+														items: [
+															new sap.m.Button({
+																icon: "sap-icon://add",
+																press: oController.onInPressAddRow.bind(oController),
+																text: "{i18n>LABEL_70028}", // 추가
+																visible: {
+																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
+																	formatter: function(v1, v2, v3) {
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																	}
+																}
+															}).addStyleClass("button-light-sm mr-5px"),
+															new sap.m.Button({
+																icon: "sap-icon://less",
+																press: oController.onInPressDelRow.bind(oController),
+																text: "{i18n>LABEL_70011}", // 삭제
+																visible: {
+																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
+																	formatter: function(v1, v2, v3) {
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																	}
+																}
+															}).addStyleClass("button-light-sm")
+														]
+													}).addStyleClass("ml-10px mt-3px"),
+													new sap.m.VBox(oController.PAGEID + "_InTeacherBox", {
+														items: [
+														]
+													})
+													.setModel(oController.TeacherInfoModel)
+													.bindElement("/InData")
                                                 ]
                                             })
-											.setModel(oController.TeacherInfoModel)
-											.bindElement("/InData"),
-											new sap.m.HBox({
-												alignContent: sap.m.FlexAlignContent.End,
-												alignItems: sap.m.FlexAlignItems.Center,
-												items: [
-													new sap.m.Button({
-														icon: "sap-icon://add",
-														press: oController.onInPressAddRow.bind(oController),
-														text: "{i18n>LABEL_70028}", // 추가
-														visible: {
-															parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
-															formatter: function(v1, v2, v3) {
-																return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-															}
-														}
-													}).addStyleClass("button-light-sm mr-5px"),
-													new sap.m.Button({
-														icon: "sap-icon://less",
-														press: oController.onInPressDelRow.bind(oController),
-														text: "{i18n>LABEL_70011}", // 삭제
-														visible: {
-															parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
-															formatter: function(v1, v2, v3) {
-																return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-															}
-														}
-													}).addStyleClass("button-light-sm")
-												]
-											}).addStyleClass("ml-10px")
                                         ]
                                     }),
                                     new sap.m.HBox({
                                         items: [
                                             ViewTemplates.getLabel("header", "{i18n>LABEL_70027}", "74px", "Right" ), // 사외
-                                            new sap.m.VBox(oController.PAGEID + "_OutTeacherBox", {
+                                            new sap.m.VBox({
                                                 items: [
+													new sap.m.HBox({
+														justifyContent: sap.m.FlexJustifyContent.End,
+														alignContent: sap.m.FlexAlignContent.End,
+														alignItems: sap.m.FlexAlignItems.End,
+														items: [
+															new sap.m.Button({
+																press: oController.onDirTeacher.bind(oController),
+																text: "{i18n>LABEL_70019}", // 직접입력
+																visible: {
+																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
+																	formatter: function(v1, v2, v3) {
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																	}
+																}
+															}).addStyleClass("button-light-sm ml-5px mr-10px"),
+															new sap.m.Button({
+																icon: "sap-icon://add",
+																press: oController.onOutPressAddRow.bind(oController),
+																text: "{i18n>LABEL_70028}", // 추가
+																visible: {
+																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
+																	formatter: function(v1, v2, v3) {
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																	}
+																}
+															}).addStyleClass("button-light-sm mr-5px"),
+															new sap.m.Button({
+																icon: "sap-icon://less",
+																press: oController.onOutPressDelRow.bind(oController),
+																text: "{i18n>LABEL_70011}", // 삭제
+																visible: {
+																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
+																	formatter: function(v1, v2, v3) {
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																	}
+																}
+															}).addStyleClass("button-light-sm")
+														]
+													}).addStyleClass("mt-3px"),
+													new sap.m.VBox(oController.PAGEID + "_OutTeacherBox", {
+														items: [
+														]
+													})
+													.setModel(oController.TeacherInfoModel)
+													.bindElement("/OutData")
                                                 ]
                                             })
-											.setModel(oController.TeacherInfoModel)
-											.bindElement("/OutData"),
-											new sap.m.HBox({
-												alignContent: sap.m.FlexAlignContent.End,
-												alignItems: sap.m.FlexAlignItems.Center,
-												items: [
-													new sap.m.Button({
-														press: oController.onDirTeacher.bind(oController),
-														text: "{i18n>LABEL_70019}", // 직접입력
-														visible: {
-															parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
-															formatter: function(v1, v2, v3) {
-																return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-															}
-														}
-													}).addStyleClass("button-light-sm ml-5px mr-10px"),
-													new sap.m.Button({
-														icon: "sap-icon://add",
-														press: oController.onOutPressAddRow.bind(oController),
-														text: "{i18n>LABEL_70028}", // 추가
-														visible: {
-															parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
-															formatter: function(v1, v2, v3) {
-																return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-															}
-														}
-													}).addStyleClass("button-light-sm mr-5px"),
-													new sap.m.Button({
-														icon: "sap-icon://less",
-														press: oController.onOutPressDelRow.bind(oController),
-														text: "{i18n>LABEL_70011}", // 삭제
-														visible: {
-															parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
-															formatter: function(v1, v2, v3) {
-																return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-															}
-														}
-													}).addStyleClass("button-light-sm")
-												]
-											})
                                         ]
                                     })
                                 ]
