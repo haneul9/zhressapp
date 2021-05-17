@@ -981,7 +981,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onInCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -1049,7 +1048,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onOutCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -1436,7 +1434,6 @@ sap.ui.define([
 					items: [
 						new sap.m.CheckBox({ 
 							select: oController.onOutCheck.bind(oController),
-							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 							visible: {
 								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 								formatter: function(v1, v2, v3) {
@@ -1625,7 +1622,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onInCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -1682,7 +1678,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onOutCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
