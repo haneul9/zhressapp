@@ -3071,7 +3071,7 @@ sap.ui.define(
 			               type: "SFOData.Photo"
 						},
 		                photoType  : 1,
-		                userId : parseInt(oController.getView().getModel("session").getData().Pernr),
+		                userId : "" + parseInt(oController.getView().getModel("session").getData().Pernr),
 		                photoName  : saveData.name,
 		                photo : vOData.photo
 						},
