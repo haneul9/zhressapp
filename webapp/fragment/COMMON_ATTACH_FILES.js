@@ -145,7 +145,7 @@ fragment.COMMON_ATTACH_FILES = {
 						}).addStyleClass("ml-4px"),
 						new sap.m.Image({
 							width: "100%",
-							activeSrc: "{Mresource_convert}",
+							lazyLoading: true,
 							src: "{Mresource_convert}",
 							visible: {
 								parts: [
