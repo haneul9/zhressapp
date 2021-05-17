@@ -219,7 +219,7 @@ sap.ui.define([
 										}
 								})
 								.attachRequestFailed(function() {
-										sap.m.MessageBox.error(oBundleText.getText("MSG_05002")); // 직원 리스트 조회 시 오류가 발생하였습니다.
+										sap.m.MessageBox.error(oBundleText.getText("MSG_05002")); // 부서원 조회 시 오류가 발생하였습니다.
 										return;
 								})
 								.load();
@@ -274,7 +274,7 @@ sap.ui.define([
 					oController._UserJSonModel.setData(vData2);
 					
 					if(oController._UserList == ""){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_05021")); // 대상자가 존재하지 않습니다.
+						sap.m.MessageBox.error(oBundleText.getText("MSG_05021")); // 부서원이 존재하지 않거나, 조회 시 오류가 발생하였습니다.
 						return;
 					} else {
 						oController.onPressSearch();
