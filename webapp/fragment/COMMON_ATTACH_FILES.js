@@ -418,20 +418,6 @@ fragment.COMMON_ATTACH_FILES = {
 		oController._TextViewModel.open();
 	},
 
-	
-	retrieveFile: function(oEvent) {
-		var vFileInfo = oEvent.getSource().getBindingContext().getProperty();
-
-		if(!vFileInfo) return;
-
-		sap.ui.core.util.File.save(
-			atob(vFileInfo.Mresource),
-			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
-			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
-			vFileInfo.Mimetype
-		);
-	},
-
 	/*
 	 * 첨부파의 크기가 Max Size를 넘었을 경우의 처리내역
 	 */
