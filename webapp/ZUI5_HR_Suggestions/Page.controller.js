@@ -78,7 +78,7 @@
 			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey")) {
 				this.onSelectDetail(false);
 			} else {
-				if (localStorage.getItem("ehr.suggestions.notice.confirmed") === "Y") {
+				if (localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {
 					this.onPressNotice();
 				}
 			}
