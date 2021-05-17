@@ -153,7 +153,6 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
                 var vConType = "1";
-                var vDtfmt = oController.getSessionInfoByKey("Dtfmt");
                 vBurks = oController.getView().getModel("session").getData().Bukrs2;
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
                 var oAddressTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
@@ -176,66 +175,51 @@ sap.ui.define(
                 // 세션 User info
                 var result = Common.retrieveLoginInfo();
                 result.photo = sessionStorage.getItem("ehr.sf-user.photo");
-
                 oController._HeaderJSonModel.setData({User: result}, true);
 
                 var search = function () {
                     Promise.all([
                         Common.getPromise(true, function (resolve) {
-                            var results = oController.PerinfoBasicSet.call(oController);
-                            
-                            oController._ListCondJSonModel.setProperty("/Data/Openf", results.Openf);
-                            oController._BasicJSonModel.setProperty("/Data", $.extend(true, results, {
-                                disyn: "2",
-                                Auth: $.app.getAuth(),
-                                Zzbdate: results.Zzbdate ? moment(results.Zzbdate).format(vDtfmt) : null,
-                                Famdt: results.Famdt ? moment(results.Famdt).format(vDtfmt) : null,
-                                Dat01: results.Dat01 ? moment(results.Dat01).format(vDtfmt) : null,
-                                Dat02: results.Dat02 ? moment(results.Dat02).format(vDtfmt) : null,
-                                Zzclass: results.Zzclass ? Number(results.Zzclass) - 1 : null
-                            }));
-
-                            resolve();
-                            // $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                            //     // 기본인적
-                            //     "/PerinfoBasicSet",
-                            //     {
-                            //         IPernr: vPernr,
-                            //         IConType: vConType,
-                            //         PinfoBasicNav: []
-                            //     },
-                            //     {
-                            //         async: true,
-                            //         success: function (data) {
-                            //             var vData = { Data: {} };
-                            //             if (data) {
-                            //                 if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
-                            //                     vData.Data = data.PinfoBasicNav.results[0];
-                            //                     vData.Data.disyn = "2";
-                            //                     vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
-                            //                     vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(Common.setTime(vData.Data.Famdt))) : null;
-                            //                     vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
-                            //                     vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat02))) : null;
-                            //                     vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
-                            //                 }
-                            //             }
-                            //             vData.Data.disyn = "2";
-                            //             vData.Data.Auth = $.app.getAuth();
-                            //             oController._ListCondJSonModel.setProperty("/Data/Openf", vData.Data.Openf);
-                            //             oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                            //             resolve();
-                            //         },
-                            //         error: function () {
-                            //             var vData = { Data: {} };
-                            //             vData.User.Auth = $.app.getAuth();
-                            //             vData.Data.disyn = "2";
-                            //             oController._ListCondJSonModel.setProperty("/Data/Openf", "");
-                            //             oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                            //             // Common.displaylog(oError);
-                            //             resolve();
-                            //         }
-                            //     }
-                            // );
+                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                                // 기본인적
+                                "/PerinfoBasicSet",
+                                {
+                                    IPernr: vPernr,
+                                    IConType: vConType,
+                                    PinfoBasicNav: []
+                                },
+                                {
+                                    async: true,
+                                    success: function (data) {
+                                        var vData = { Data: {} };
+                                        if (data) {
+                                            if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
+                                                vData.Data = data.PinfoBasicNav.results[0];
+                                                vData.Data.disyn = "2";
+                                                vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
+                                                vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(Common.setTime(vData.Data.Famdt))) : null;
+                                                vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
+                                                vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat02))) : null;
+                                                vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
+                                            }
+                                        }
+                                        vData.Data.disyn = "2";
+                                        vData.Data.Auth = $.app.getAuth();
+                                        oController._ListCondJSonModel.setProperty("/Data/Openf", vData.Data.Openf);
+                                        oController._BasicJSonModel.setProperty("/Data", vData.Data);
+                                        resolve();
+                                    },
+                                    error: function () {
+                                        var vData = { Data: {} };
+                                        vData.User.Auth = $.app.getAuth();
+                                        vData.Data.disyn = "2";
+                                        oController._ListCondJSonModel.setProperty("/Data/Openf", "");
+                                        oController._BasicJSonModel.setProperty("/Data", vData.Data);
+                                        // Common.displaylog(oError);
+                                        resolve();
+                                    }
+                                }
+                            );
                         }),
                         Common.getPromise(true, function (resolve) {
                             $.app.getModel("ZHR_PERS_INFO_SRV").create(
@@ -693,37 +677,6 @@ sap.ui.define(
 
                 oController._BusyDialog.open();
                 setTimeout(search, 100);
-            },
-
-            // 기본인적
-            PerinfoBasicSet: function(arg) {
-                $.app.log("Perinfo.PerinfoBasicSet called.", [].slice.call(arguments));
-
-                var result = {};
-
-                $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                    "/PerinfoBasicSet",
-                    {
-                        IPernr: arg.Pernr ? arg.Pernr : this.getSessionInfoByKey("Pernr"),
-                        IConType: "1",
-                        IDatum: moment().hours(10).toDate(),
-                        ILangu: this.getSessionInfoByKey("Langu"),
-                        PinfoBasicNav: []
-                    },
-                    {
-                        async: false,
-                        success: function (data) {
-                            if(data && data.PinfoBasicNav) {
-                                result = data.PinfoBasicNav.results[0];
-                            }
-                        },
-                        error: function (e) {
-                            $.app.log(e);
-                        }
-                    }
-                );
-
-                return result;
             },
             
             onPressSearchFamily : function(vPernr) {
