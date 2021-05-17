@@ -80,6 +80,8 @@ fill: function() {
 						list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 					}
 
+					var oList3 = [];
+
 					$.map(oDetailData, function(v, i) {
 						var iDone = parseInt(v.done), oGroundColor;
 						if (iDone > 80) {
@@ -92,31 +94,33 @@ fill: function() {
 							oGroundColor = oBackGround[0];
 						}
 
-						setTimeout(function() {
-							list.append([
-								'<div class="my-evalgoal-info">',
-									'<div class="mylist">',
-										// i + 1 + '.' + v.name,
-										(v.name || '').split(/\n/)[0],
-									'</div>',
-									'<div class="evalgoal-statusBar" title="' + iDone + '%">',
-										'<div class="progress">',
-											'<div style="height:auto" class="progress-bar i' + i + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
-										'</div>',
-									'</div>',
-								'</div>'
-							].join(''));
+						oList3.push({iDone: iDone, index: i, vGroundColor: oGroundColor});
 
-							if (iDone > 0) {
-								$('.my-evalgoal-info .progress-bar.i' + i)
-									.addClass(oGroundColor)
-									.animate({
-										width: iDone + '%'
-									}, 2e3, 'linear', function () {
-										$(this).text(iDone + '%');
-									});
-							}
-						}, 0);
+						list.append([
+							'<div class="my-evalgoal-info">',
+								'<div class="mylist">',
+									// i + 1 + '.' + v.name,
+									(v.name || '').split(/\n/)[0],
+								'</div>',
+								'<div class="evalgoal-statusBar" title="' + iDone + '%">',
+									'<div class="progress">',
+										'<div style="height:auto" class="progress-bar i' + i + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
+									'</div>',
+								'</div>',
+							'</div>'
+						].join(''));
+					});
+					
+					$.map(oList3, function(v) {
+						if (v.iDone > 0) {
+							$('.my-evalgoal-info .progress-bar.i' + v.index)
+								.addClass(v.vGroundColor)
+								.animate({
+									width: v.iDone + '%'
+								}, 2e3, 'linear', function () {
+									$(this).text(v.iDone + '%');
+								});
+						}
 					});
 				}.bind(this),
 				error: function(jqXHR) {
