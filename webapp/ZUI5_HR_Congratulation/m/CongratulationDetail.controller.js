@@ -686,7 +686,6 @@ sap.ui.define(
                     Mode: "M",
                     Max: 3,
                     Editable: !vStatus || vStatus === "AA" ? true : false,
-                    FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"],
                     InfoMessage: vInfoMessage
                 });
             },

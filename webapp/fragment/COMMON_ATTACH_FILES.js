@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
 $.sap.declare("fragment.COMMON_ATTACH_FILES");
+
 $.sap.require("control.ODataFileUploader");
-jQuery.sap.require("sap.ui.core.util.File");
-jQuery.sap.require("sap.m.MessageBox");
-jQuery.sap.require("common.Common");
+$.sap.require("sap.ui.core.util.File");
+$.sap.require("sap.m.MessageBox");
+$.sap.require("common.Common");
+
 fragment.COMMON_ATTACH_FILES = {
 	renderer : function(oController,vPage){
 		var oFileUploader = new control.ODataFileUploader(oController.PAGEID + "_ATTACHFILE_BTN" + vPage, {
@@ -181,7 +183,7 @@ fragment.COMMON_ATTACH_FILES = {
 				true,
 				{ 
 					Editable: false, 
-					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"], 
+					FileTypes: [], 
 					InfoMessage: "", 
 					Label:oController.getBundleText("LABEL_00135"),
 					Appnm: "",
@@ -202,6 +204,7 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.setValue("");
 
 		options.ListMode = options.Editable ? sap.m.ListMode.MultiSelect : sap.m.ListMode.None;
+		options.FileTypes = ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "jpeg"];
 		if (!common.Common.isEmptyArray(opt.FileTypes)) options.FileTypes = opt.FileTypes;
 
 		oAttachbox.getModel().setProperty("/Settings", options);
