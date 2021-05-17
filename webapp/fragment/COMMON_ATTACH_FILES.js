@@ -184,27 +184,23 @@ fragment.COMMON_ATTACH_FILES = {
 
 		if(!vFileInfo) return;
 
-		if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype)) {
-			common.AttachFileAction.retrieveFile(vFileInfo);
-		} else {
-			if(common.Common.isExternalIP()) {
+		if(common.Common.isExternalIP()) {
+			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype)) {
+				common.AttachFileAction.retrieveFile(vFileInfo);
+			} else {
 				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
 					title: this.getBundleText("LABEL_09029")
 				});
-			} else {
-				window.open(vFileInfo.Url, '_blank').focus();
 			}
+		} else {
+			window.open(vFileInfo.Url, '_blank').focus();
 		}
 	},
 	
 	retrieveFile: function(vFileInfo) {
-		// var vFileInfo = oEvent.getSource().getBindingContext().getProperty();
-
-		if(!vFileInfo) return;
-
 		sap.ui.core.util.File.save(
-			atob(vFileInfo.Mresource),
-			// vFileInfo.Mresource,
+			// atob(vFileInfo.Mresource),
+			vFileInfo.Mresource,
 			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
 			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
 			vFileInfo.Mimetype
@@ -244,7 +240,10 @@ fragment.COMMON_ATTACH_FILES = {
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
 
 		this.refreshAttachFileList(oController,null,vPage);
-		oController.PAGEID=="MedApply"?this.hideLine(oAttachbox):null;
+		
+		if(oController.PAGEID === "MedApply") {
+			this.hideLine(oAttachbox);
+		}
 	},
 
 	hideLine : function(oAttachbox){
