@@ -95,12 +95,14 @@ fill: function() {
 						}
 
 						oList3.push({iDone: iDone, index: i, vGroundColor: oGroundColor});
+						
+						var vName = (v.name || '').split(/\n/)[0] + "\n" + (v.name || '').split(/\n/)[1];
 
 						list.append([
 							'<div class="my-evalgoal-info">',
 								'<div class="mylist">',
 									// i + 1 + '.' + v.name,
-									(v.name || '').split(/\n/)[0] + "\n" + (v.name || '').split(/\n/)[1],
+									vName,
 								'</div>',
 								'<div class="evalgoal-statusBar" title="' + iDone + '%">',
 									'<div class="progress">',
