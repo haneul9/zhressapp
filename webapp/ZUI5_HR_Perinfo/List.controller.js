@@ -1560,8 +1560,7 @@ sap.ui.define(
                         Required: false,
                         Mode: "M",
                         Max: "1",
-                        Editable: actMode == "2" || actMode == "3" ? true : false,
-                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                        Editable: actMode == "2" || actMode == "3" ? true : false
                     });
                     oController._SchoolDialog.open();
                 } else {
@@ -1571,8 +1570,7 @@ sap.ui.define(
                         Required: false,
                         Mode: "M",
                         Max: "1",
-                        Editable: actMode == "2" || actMode == "3" ? true : false,
-                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                        Editable: actMode == "2" || actMode == "3" ? true : false
                     });
                     oController.onChangeSlart("N"); // 하위필드 초기화 하지 않음
                 }
@@ -1625,8 +1623,7 @@ sap.ui.define(
                         Required: false,
                         Mode: "M",
                         Max: "1",
-                        Editable: actMode == "2" || actMode == "3" ? true : false,
-                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                        Editable: actMode == "2" || actMode == "3" ? true : false
                     });
                     oController._LicenseDialog.open();
                 } else {
@@ -1635,8 +1632,7 @@ sap.ui.define(
                         Required: false,
                         Mode: "M",
                         Max: "1",
-                        Editable: actMode == "2" || actMode == "3" ? true : false,
-                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                        Editable: actMode == "2" || actMode == "3" ? true : false
                     });
                     oController.onChangeLicnn("N"); // 하위필드 초기화 하지 않음
                 }
@@ -1690,8 +1686,7 @@ sap.ui.define(
                         Required: false,
                         Mode: "M",
                         Max: "1",
-                        Editable: actMode == "2" || actMode == "3" ? true : false,
-                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                        Editable: actMode == "2" || actMode == "3" ? true : false
                     });
                     oController._CareerDialog.open();
                 }
@@ -1743,8 +1738,7 @@ sap.ui.define(
                         Required: false,
                         Mode: "M",
                         Max: "1",
-                        Editable: actMode == "2" || actMode == "3" ? true : false,
-                        FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                        Editable: actMode == "2" || actMode == "3" ? true : false
                     });
                     oController._AwardDialog.open();
                 }

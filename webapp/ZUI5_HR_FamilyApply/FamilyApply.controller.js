@@ -129,8 +129,7 @@ sap.ui.define([
 				InfoMessage:oBundleText.getText("LABEL_44030"),
 				Mode: "S",
 				Max: "1",
-				Editable: true,
-				FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+				Editable: true
 			});	
 			$.app.byId(oController.PAGEID+"_Re").setVisible(false);
 		},
@@ -173,8 +172,7 @@ sap.ui.define([
 					InfoMessage:oBundleText.getText("LABEL_44030"),
 					Mode: "S",
 					Max: "1",
-					Editable: vStatus=="X"?true:false,
-					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+					Editable: vStatus=="X"?true:false
 				};
 					
 				var oDialog=$.app.byId(oController.PAGEID+"_Dialog");
@@ -256,8 +254,7 @@ sap.ui.define([
 					InfoMessage:oBundleText.getText("LABEL_44030"),
 					Mode: "S",
 					Max: "1",
-					Editable: true,
-					FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+					Editable: true
 				});
 				if(oPro.Status==""){
 					$.app.byId(oController.PAGEID+"_Sel1").setEditable(false);
@@ -273,7 +270,6 @@ sap.ui.define([
 					true,
 					{ 
 						Editable: false, 
-						FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"], 
 						InfoMessage: "", 
 						Appnm: "",
 						Mode: "S",	// S: single file, M: multi file
@@ -290,6 +286,7 @@ sap.ui.define([
 			oFileUploader.setValue("");
 	
 			options.ListMode = options.Editable ? sap.m.ListMode.MultiSelect : sap.m.ListMode.None;
+			options.FileTypes = ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "jpeg"];
 			if (!common.Common.isEmptyArray(opt.FileTypes)) options.FileTypes = opt.FileTypes;
 	
 			oAttachbox.getModel().setProperty("/Settings", options);

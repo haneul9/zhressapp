@@ -573,8 +573,7 @@ sap.ui.define(
                     Required: true,
                     Mode: "M",
                     Max: "100",
-                    Editable: !vStatus || vStatus === "10" ? true : false,
-                    FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                    Editable: !vStatus || vStatus === "10" ? true : false
                 });
             },
 

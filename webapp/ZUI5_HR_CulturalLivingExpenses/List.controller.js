@@ -758,7 +758,7 @@ sap.ui.define([
 				Required: true,
 				Mode: "M",
 				Max: "100",
-				Editable: (!vStatus || vStatus === "10") ? true : false,
+				Editable: (!vStatus || vStatus === "10") ? true : false
 			});
 		},
 		

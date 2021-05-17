@@ -487,8 +487,7 @@ sap.ui.define(
                     Required: true,
                     Mode: "M",
                     Max: "1",
-                    Editable: vData.Data.Status1 == "" || vData.Data.Status1 == "AA" ? true : false,
-                    FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+                    Editable: vData.Data.Status1 == "" || vData.Data.Status1 == "AA" ? true : false
                 });
             },
 

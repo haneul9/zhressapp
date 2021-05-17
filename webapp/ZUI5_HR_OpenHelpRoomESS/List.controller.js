@@ -410,8 +410,7 @@ sap.ui.define([
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "10",
-				Editable: false,
-				FileTypes: ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "heic", "jpeg"]
+				Editable: false
 			});
 		},
 		
