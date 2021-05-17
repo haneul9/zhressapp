@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 sap.ui.define([], function () {
     "use strict";
 
@@ -207,7 +208,7 @@ sap.ui.define([], function () {
                 // ;
                 .setModel(oController._ListCondJSonModel)
                 .bindElement("/Data");
-            var vTitile = gAuth == "M" ? oBundleText.getText("LABEL_37109") : oBundleText.getText("LABEL_37001");
+            var vTitile = $.app.getAuth() === "M" ? oBundleText.getText("LABEL_37109") : oBundleText.getText("LABEL_37001");
             var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
                 customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
                 showHeader: false,

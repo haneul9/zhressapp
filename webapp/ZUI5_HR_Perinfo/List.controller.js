@@ -1,6 +1,4 @@
 /* eslint-disable no-eval */
-/* eslint-disable no-eval */
-/* eslint-disable no-eval */
 sap.ui.define(
     [
         "common/Common", //
@@ -18,9 +16,7 @@ sap.ui.define(
             PAGEID: "Perinfo",
             _BusyDialog: new sap.m.BusyDialog(),
             oModel: new sap.ui.model.json.JSONModel(),
-            Model: function () {
-                return this.oModel;
-            },
+            
             _ListCondJSonModel: new sap.ui.model.json.JSONModel(),
             _HeaderJSonModel: new sap.ui.model.json.JSONModel(),
             _BasicJSonModel: new sap.ui.model.json.JSONModel(),
@@ -38,16 +34,14 @@ sap.ui.define(
             EmpSearchResult: new sap.ui.model.json.JSONModel(),
             EmployeeModel: new EmployeeModel(),
 
+            Model: function () {
+                return this.oModel;
+            },
+
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
                     {
-                        onBeforeShow: this.onBeforeShow
-                    },
-                    this
-                );
-
-                this.getView().addEventDelegate(
-                    {
+                        onBeforeShow: this.onBeforeShow,
                         onAfterShow: this.onAfterShow
                     },
                     this
@@ -129,7 +123,7 @@ sap.ui.define(
                         Langu: this.getSessionInfoByKey("Langu"),
                         Molga: this.getSessionInfoByKey("Molga"),
                         Datum: new Date(),
-                        Mssty: gAuth
+                        Mssty: $.app.getAuth()
                     },
                     callback = function (o) {
                         //전체 조회 OData 호출
@@ -158,18 +152,10 @@ sap.ui.define(
             onPressSearchAll: function (vPernr, vBurks) {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
-                var vConType = "1",
-                    oPhoto;
+                var vConType = "1";
+                var vDtfmt = oController.getSessionInfoByKey("Dtfmt");
                 vBurks = oController.getView().getModel("session").getData().Bukrs2;
-                // var vPercod = Common.encryptPernr(vPernr);
                 var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
-                var oFilters = [
-                    new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
-                    new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, vBurks),
-                    new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, "A"),
-                    new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(new Date().setHours(9))),
-                    new sap.ui.model.Filter("Ename", sap.ui.model.FilterOperator.EQ, vPernr)
-                ];
                 var oAddressTable = sap.ui.getCore().byId(oController.PAGEID + "_AddressTable"),
                     oAddressJSONModel = oAddressTable.getModel(),
                     oPassportTable = sap.ui.getCore().byId(oController.PAGEID + "_PassportTable"),
@@ -195,98 +181,61 @@ sap.ui.define(
 
                 var search = function () {
                     Promise.all([
-                        // Common.getPromise(true, function (resolve) {
-                        //     new JSONModelHelper()
-                        //         .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(vPernr) + "' and photoType eq '1'")
-                        //         .select("photo")
-                        //         .setAsync(true)
-                        //         .attachRequestCompleted(function () {
-                        //             var data = this.getData().d;
-
-                        //             if (data && data.results.length) {
-                        //                 oPhoto = "data:text/plain;base64," + data.results[0].photo;
-                        //             } else {
-                        //                 oPhoto = "images/male.jpg";
-                        //             }
-
-                        //             oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
-                        //             resolve();
-                        //         })
-                        //         .attachRequestFailed(function () {
-                        //             oPhoto = "images/male.jpg";
-                        //             oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
-                        //             resolve();
-                        //         })
-                        //         .load();
-                        // }),
-                        // Common.getPromise(true, function (resolve) {
-                        //     $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
-                        //         async: true,
-                        //         filters: oFilters,
-                        //         success: function (data) {
-                        //             var vData = { User: {} };
-                        //             if (data && data.results.length > 0) {
-                        //                 data.results[0].nickname = data.results[0].Ename;
-                        //                 data.results[0].Stext = data.results[0].Fulln;
-                        //                 data.results[0].PGradeTxt = data.results[0].ZpGradetx;
-                        //                 data.results[0].ZtitleT = data.results[0].Ztitletx;
-
-                        //                 vData.User = data.results[0];
-                        //             }
-                        //             vData.User.Auth = gAuth;
-                        //             oController._HeaderJSonModel.setData(vData, true);
-                        //             resolve();
-                        //         },
-                        //         error: function (oError) {
-                        //             var vData = { User: {} };
-                        //             vData.User.Auth = gAuth;
-                        //             oController._HeaderJSonModel.setData(vData, true);
-                        //             // Common.displaylog(oError);
-                        //             resolve();
-                        //         }
-                        //     });
-                        // }),
                         Common.getPromise(true, function (resolve) {
-                            $.app.getModel("ZHR_PERS_INFO_SRV").create(
-                                // 기본인적
-                                "/PerinfoBasicSet",
-                                {
-                                    IPernr: vPernr,
-                                    IConType: vConType,
-                                    PinfoBasicNav: []
-                                },
-                                {
-                                    async: true,
-                                    success: function (data) {
-                                        var vData = { Data: {} };
-                                        if (data) {
-                                            if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
-                                                vData.Data = data.PinfoBasicNav.results[0];
-                                                vData.Data.disyn = "2";
-                                                vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
-                                                vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(Common.setTime(vData.Data.Famdt))) : null;
-                                                vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
-                                                vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat02))) : null;
-                                                vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
-                                            }
-                                        }
-                                        vData.Data.disyn = "2";
-                                        vData.Data.Auth = gAuth;
-                                        oController._ListCondJSonModel.setProperty("/Data/Openf", vData.Data.Openf);
-                                        oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                                        resolve();
-                                    },
-                                    error: function (oError) {
-                                        var vData = { Data: {} };
-                                        vData.User.Auth = gAuth;
-                                        vData.Data.disyn = "2";
-                                        oController._ListCondJSonModel.setProperty("/Data/Openf", "");
-                                        oController._BasicJSonModel.setProperty("/Data", vData.Data);
-                                        // Common.displaylog(oError);
-                                        resolve();
-                                    }
-                                }
-                            );
+                            var results = oController.PerinfoBasicSet.call(oController);
+                            
+                            oController._ListCondJSonModel.setProperty("/Data/Openf", results.Openf);
+                            oController._BasicJSonModel.setProperty("/Data", $.extend(true, results, {
+                                disyn: "2",
+                                Auth: $.app.getAuth(),
+                                Zzbdate: results.Zzbdate ? moment(results.Zzbdate).format(vDtfmt) : null,
+                                Famdt: results.Famdt ? moment(results.Famdt).format(vDtfmt) : null,
+                                Dat01: results.Dat01 ? moment(results.Dat01).format(vDtfmt) : null,
+                                Dat02: results.Dat02 ? moment(results.Dat02).format(vDtfmt) : null,
+                                Zzclass: results.Zzclass ? Number(results.Zzclass) - 1 : null
+                            }));
+
+                            resolve();
+                            // $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                            //     // 기본인적
+                            //     "/PerinfoBasicSet",
+                            //     {
+                            //         IPernr: vPernr,
+                            //         IConType: vConType,
+                            //         PinfoBasicNav: []
+                            //     },
+                            //     {
+                            //         async: true,
+                            //         success: function (data) {
+                            //             var vData = { Data: {} };
+                            //             if (data) {
+                            //                 if (data.PinfoBasicNav && data.PinfoBasicNav.results.length > 0) {
+                            //                     vData.Data = data.PinfoBasicNav.results[0];
+                            //                     vData.Data.disyn = "2";
+                            //                     vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
+                            //                     vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(Common.setTime(vData.Data.Famdt))) : null;
+                            //                     vData.Data.Dat01 = vData.Data.Dat01 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat01))) : null;
+                            //                     vData.Data.Dat02 = vData.Data.Dat02 ? dateFormat.format(new Date(Common.setTime(vData.Data.Dat02))) : null;
+                            //                     vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
+                            //                 }
+                            //             }
+                            //             vData.Data.disyn = "2";
+                            //             vData.Data.Auth = $.app.getAuth();
+                            //             oController._ListCondJSonModel.setProperty("/Data/Openf", vData.Data.Openf);
+                            //             oController._BasicJSonModel.setProperty("/Data", vData.Data);
+                            //             resolve();
+                            //         },
+                            //         error: function () {
+                            //             var vData = { Data: {} };
+                            //             vData.User.Auth = $.app.getAuth();
+                            //             vData.Data.disyn = "2";
+                            //             oController._ListCondJSonModel.setProperty("/Data/Openf", "");
+                            //             oController._BasicJSonModel.setProperty("/Data", vData.Data);
+                            //             // Common.displaylog(oError);
+                            //             resolve();
+                            //         }
+                            //     }
+                            // );
                         }),
                         Common.getPromise(true, function (resolve) {
                             $.app.getModel("ZHR_PERS_INFO_SRV").create(
@@ -355,13 +304,13 @@ sap.ui.define(
                                         vData.Data.Parkticket = vData.Data.Parkticket == "X" ? true : null;
                                         vData.Data.Hybrid = vData.Data.Hybrid == "X" ? true : null;
                                         vData.Data.Hybrid2 = vData.Data.Hybrid2 == "X" ? true : null;
-                                        vData.Data.Auth = gAuth;
+                                        vData.Data.Auth = $.app.getAuth();
                                         oController._CarJSonModel.setProperty("/Data", vData.Data);
                                         resolve();
                                     },
                                     error: function () {
                                         var vData = { Data: {} };
-                                        vData.User.Auth = gAuth;
+                                        vData.User.Auth = $.app.getAuth();
                                         vData.Data.disyn = "2";
                                         oController._CarJSonModel.setProperty("/Data", vData.Data);
                                         resolve();
@@ -475,13 +424,13 @@ sap.ui.define(
                                         vData.Data.disyn = "2";
                                         vData.Data.Zrotc = vData.Data.Zrotc == "X" ? true : null;
                                         vData.Data.actMode = vData.Data.Begda == undefined ? (vData.Data.actMode = "3") : (vData.Data.actMode = "2"); // 신규 / 수정
-                                        vData.Data.Auth = gAuth;
+                                        vData.Data.Auth = $.app.getAuth();
                                         oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
                                         resolve();
                                     },
                                     error: function () {
                                         var vData = { Data: {} };
-                                        vData.User.Auth = gAuth;
+                                        vData.User.Auth = $.app.getAuth();
                                         vData.Data.Zrotc = null;
                                         vData.Data.disyn = "2";
                                         oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
@@ -713,13 +662,13 @@ sap.ui.define(
                                         }
                                         vData.Data.disyn = "2";
                                         vData.Data.actMode = vData.Data.Begda == undefined ? (vData.Data.actMode = "3") : (vData.Data.actMode = "2"); // 신규 / 수정
-                                        vData.Data.Auth = gAuth;
+                                        vData.Data.Auth = $.app.getAuth();
                                         oController._HandicapJSonModel.setProperty("/Data", vData.Data);
                                         resolve();
                                     },
                                     error: function () {
                                         var vData = { Data: {} };
-                                        vData.User.Auth = gAuth;
+                                        vData.User.Auth = $.app.getAuth();
                                         vData.Data.disyn = "2";
                                         oController._HandicapJSonModel.setProperty("/Data", vData.Data);
                                         resolve();
@@ -745,11 +694,42 @@ sap.ui.define(
                 oController._BusyDialog.open();
                 setTimeout(search, 100);
             },
+
+            // 기본인적
+            PerinfoBasicSet: function(arg) {
+                $.app.log("Perinfo.PerinfoBasicSet called.", [].slice.call(arguments));
+
+                var result = {};
+
+                $.app.getModel("ZHR_PERS_INFO_SRV").create(
+                    "/PerinfoBasicSet",
+                    {
+                        IPernr: arg.Pernr ? arg.Pernr : this.getSessionInfoByKey("Pernr"),
+                        IConType: "1",
+                        IDatum: moment().hours(10).toDate(),
+                        ILangu: this.getSessionInfoByKey("Langu"),
+                        PinfoBasicNav: []
+                    },
+                    {
+                        async: false,
+                        success: function (data) {
+                            if(data && data.PinfoBasicNav) {
+                                result = data.PinfoBasicNav.results[0];
+                            }
+                        },
+                        error: function (e) {
+                            $.app.log(e);
+                        }
+                    }
+                );
+
+                return result;
+            },
             
             onPressSearchFamily : function(vPernr) {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
-                if(gAuth != "M"){
+                if($.app.getAuth() != "M"){
                 	return ;	
                 }
                 var vConType = "1";
@@ -758,7 +738,7 @@ sap.ui.define(
             	var oFamilyTable = sap.ui.getCore().byId(oController.PAGEID + "_FamilyTable"),
                     oFamilyTableJSONModel = oFamilyTable.getModel();
                	Promise.all([
-                	Common.getPromise(true, function (resolve) {    
+                	Common.getPromise(true, function () {    
 		                $.app.getModel("ZHR_PERS_INFO_SRV").create(
 		                    // 가족사항
 		                    "/PerinfoFamilySet",
@@ -795,7 +775,7 @@ sap.ui.define(
 		                            oFamilyTable.setVisibleRowCount(vData.Data.length);
 		                        }
 		                    }
-		                )
+		                );
                 	}),
                 	Common.usePrivateLog({
                     	pernr : vPernr,
@@ -812,11 +792,11 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
                 var oController = oView.getController();
 			    var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: oView.getModel("session").getData().Dtfmt });
-                var vData = { Data: {} };
+                // var vData = { Data: {} };
 
                 var search = function () {
                     var oPath = "/PerinfoBasicSet";
-                    var createData = { PinfoBasicNav: [] };
+                    // var createData = { PinfoBasicNav: [] };
                     var vData = { Data: [] };
 		            Promise.all([
                         Common.getPromise(true, function (resolve) {
@@ -853,7 +833,7 @@ sap.ui.define(
 		                            resolve();
 		                        }
 		                    }
-		                 )
+		                 );
                         }),
                     	Common.usePrivateLog({
 	                    	pernr : vPernr,
@@ -863,7 +843,7 @@ sap.ui.define(
 	                    })
                     ]).then(function () {
                         vData.Data.disyn = "2";
-	                    vData.Data.Auth = gAuth;
+	                    vData.Data.Auth = $.app.getAuth();
 	                    vData.Data.Zzbdate = vData.Data.Zzbdate ? dateFormat.format(new Date(Common.setTime(vData.Data.Zzbdate))) : null;
 	                    vData.Data.Zzclass = vData.Data.Zzclass ? Number(vData.Data.Zzclass) - 1 : null;
 	                    vData.Data.Famdt = vData.Data.Famdt ? dateFormat.format(new Date(Common.setTime(vData.Data.Famdt))) : null;
@@ -1004,7 +984,7 @@ sap.ui.define(
                     vData.Data.Parkticket = vData.Data.Parkticket == "X" ? true : null;
                     vData.Data.Hybrid = vData.Data.Hybrid == "X" ? true : null;
                     vData.Data.Hybrid2 = vData.Data.Hybrid2 == "X" ? true : null;
-                    vData.Data.Auth = gAuth;
+                    vData.Data.Auth = $.app.getAuth();
                     oController._CarJSonModel.setProperty("/Data", vData.Data);
                     oController._BusyDialog.close();
 
@@ -1202,7 +1182,7 @@ sap.ui.define(
                     vData.Data.Zrotc = vData.Data.Zrotc == "X" ? true : null;
                     vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(Common.setTime(vData.Data.Begda))) : null;
                     vData.Data.Endda = vData.Data.Endda ? dateFormat.format(new Date(Common.setTime(vData.Data.Endda))) : null;
-                    vData.Data.Auth = gAuth;
+                    vData.Data.Auth = $.app.getAuth();
                     vData.Data.Openf = oController._ListCondJSonModel.getProperty("/Data/Openf");
 
                     oController._MilitaryJSonModel.setProperty("/Data", vData.Data);
@@ -1470,7 +1450,7 @@ sap.ui.define(
                     vData.Data.Begda = vData.Data.Begda ? dateFormat.format(new Date(Common.setTime(vData.Data.Begda))) : null;
                     vData.Data.Endda = vData.Data.Endda ? dateFormat.format(new Date(Common.setTime(vData.Data.Endda))) : null;
                     vData.Data.Idate = vData.Data.Idate ? dateFormat.format(new Date(Common.setTime(vData.Data.Idate))) : null;
-                    vData.Data.Auth = gAuth;
+                    vData.Data.Auth = $.app.getAuth();
                     vData.Data.Openf = oController._ListCondJSonModel.getProperty("/Data/Openf");
 
                     oController._HandicapJSonModel.setProperty("/Data", vData.Data);
@@ -3010,7 +2990,7 @@ sap.ui.define(
             /////////////////////////////////////////////////////////////////////////////////////////////
 			// 사진 변경 
 			//////////////////////////////////////
-			changePicture : function(oEvent){
+			changePicture : function(){
 				var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
                     oController = oView.getController();
                     
@@ -3058,7 +3038,7 @@ sap.ui.define(
     
 				    reader.onload = function(e) {
 				    	oController._PictureJSonModel.setData({Data : {photo : e.target.result , change : "X" }}, true);
-				    }
+				    };
 				    reader.readAsDataURL(files[0]); // convert to base64 string  
 				    oController._PicChangeJSonModel.setData({Data : files[0]}, true);
 				    oController._PictureJSonModel.setData({Data : { name : files[0].name }}, true);
@@ -3072,16 +3052,16 @@ sap.ui.define(
 			onSavePicture: function () {
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List"),
                     oController = oView.getController();
-                var saveData = oController._PictureJSonModel.getProperty("/Data");
+                // var saveData = oController._PictureJSonModel.getProperty("/Data");
               		
                 var create = function () {
-                    var oPath = "";
+                    // var oPath = "";
 				    var oModel = sap.ui.getCore().getModel("ZHR_PERS_INFO_SRV");
 					try {
-						var _handleSuccess = function (data) {
+						var _handleSuccess = function () {
 							oController.requestSF();
 						};
-						var _handleError = function (data) {
+						var _handleError = function () {
 							oController.requestSF();
 						};
 	    				var vData = oController._PicChangeJSonModel.getProperty("/Data");
