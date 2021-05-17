@@ -287,7 +287,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-evalgoal-progress .evalgoal-statusBar .progress .progress-bar.bg-success {padding-right:5px; background-color:#064975 !important}
 
 .portlet-evalgoal .list-group {height:100%}
-.portlet-evalgoal .my-evalgoal-info {height:auto; margin-bottom:15px; display:flex; flex-direction:column}
+.portlet-evalgoal .my-evalgoal-info {height:auto; display:flex; flex-direction:column}
+.portlet-evalgoal .my-evalgoal-info + .my-evalgoal-info {margin-top:20px}
 .portlet-evalgoal .my-evalgoal-info .myList {font-size:14px; height:25px; color:#333}
 .portlet-evalgoal .jspPane .my-evalgoal-info {margin-right:15px}
 
