@@ -95,10 +95,10 @@ fill: function() {
 						setTimeout(function() {
 							list.append([
 								'<div class="my-evalgoal-info">',
-									'<div class="mylist">',
+									'<pre class="mylist">',
 										// i + 1 + '.' + v.name,
-										v.name,
-									'</div>',
+										(v.name || '').split(/\n/)[0],
+									'</pre>',
 									'<div class="evalgoal-statusBar">',
 										'<div class="progress">',
 											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
