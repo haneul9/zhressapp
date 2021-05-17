@@ -359,6 +359,15 @@ sap.ui.define([
 						detail.Appkey = oData.Appkey ? oData.Appkey : "";
 						detail.Appkey1 = oData.Appkey1 ? oData.Appkey1 : "";
 						detail.AppName = oData.AppName ? oData.AppName : "";
+
+					if(createData.WorkhomeNav.length > 0){
+						for(var j=0; j<createData.WorkhomeNav.length; j++){
+							if(createData.WorkhomeNav[j].Begda == detail.Begda){
+								sap.m.MessageBox.error(oController.getBundleText("MSG_53012")); // 동일일자 신청은 불가합니다.
+								return;
+							}
+						}
+					}
 					
 					createData.WorkhomeNav.push(detail);
 				}
