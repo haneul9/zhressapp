@@ -112,7 +112,7 @@ fill: function() {
 								'</div>',
 							'</div>'
 						].join(''));
-					}).bind(this);
+					});
 					
 					$.map(oList3, function(v) {
 						if (v.iDone > 0) {
