@@ -1235,12 +1235,9 @@
 			var oView = $.app.byId("ZUI5_HR_StudentFundsApplyHASS.Page");
 			var oController = oView.getController();
 
-			if(oController.data){
-				oController.onSetInfo(data.Pernr);
-				oController.onChildrenData();
-				oController.getChildInfo();
-			}
-
+			oController.onSetInfo(data.Pernr);
+			oController.onChildrenData();
+			oController.getChildInfo();
 			oController.OrgOfIndividualHandler.getDialog().close();
 			SearchUser1.onClose();
 		},
