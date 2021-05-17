@@ -93,23 +93,24 @@ fill: function() {
 							oGroundColor= oBackGround[0];
 
 						setTimeout(function() {
+							var done = parseInt(v.done) + '%';
 							list.append([
 								'<div class="my-evalgoal-info">',
 									'<div class="mylist">',
 										// i + 1 + '.' + v.name,
-										v.name,
+										(v.name || '').split(/\n/)[0],
 									'</div>',
-									'<div class="evalgoal-statusBar">',
+									'<div class="evalgoal-statusBar" title="' + done + '">',
 										'<div class="progress">',
-											'<div style="height: auto;" class="progress-bar i' + i + ' ' + oGroundColor + ' ' +'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												parseInt(v.done) + '%',
+											'<div style="height:auto" class="progress-bar i' + i + ' ' + oGroundColor + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
+												done,
 											'</div>',
 										'</div>',
 									'</div>',
 								'</div>'
 							].join(''));
 
-							$('.progress-bar.i' + i).animate({ width: parseInt(v.done) + '%' }, 2000);
+							$('.progress-bar.i' + i).animate({ width: done }, 2000);
 						}, 0);
 					});
 				}.bind(this),
