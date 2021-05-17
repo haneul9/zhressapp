@@ -678,19 +678,23 @@ common.Common = {
             $.app.log("common.Common.checkProxyIP called.");
         }
 
-        var result;
+        var result = sessionStorage.getItem('ehr.client.network');
 
-        $.post({
-            url: common.Common.getJavaOrigin($.app.getController(), "/check2FA"),
-            data: {},
-            async: false,
-            success: function (data) {
-                result = JSON.parse(data).result;
-            },
-            error: function () {
-                common.Common.log([].slice.call(arguments));
-            }
-        });
+        if(!result || result === "") {
+            $.post({
+                url: common.Common.getJavaOrigin($.app.getController(), "/check2FA"),
+                data: {},
+                async: false,
+                success: function (data) {
+                    result = JSON.parse(data).result;
+    
+                    sessionStorage.setItem('ehr.client.network', result);
+                },
+                error: function () {
+                    common.Common.log([].slice.call(arguments));
+                }
+            });
+        }
 
         return result === "E" ? true : false;
     },

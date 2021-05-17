@@ -128,8 +128,9 @@ sap.ui.define([
 								text: "{Fname}",
 								wrapping: true,
 								textAlign: "Begin",
-								href: "{Url}",
-								target: "_new"
+								press: AttachFileAction.onDownload.bind(oController)
+								// href: "{Url}",
+								// target: "_new"
 							}).addStyleClass("ml-4px")
 						] 
 					}),

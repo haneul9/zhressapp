@@ -171,9 +171,24 @@ common.AttachFileAction = {
 		oController._TextViewModel.open();
 	},
 
-	
-	retrieveFile: function(oEvent) {
+	onDownload: function(oEvent) {
 		var vFileInfo = oEvent.getSource().getBindingContext().getProperty();
+
+		if(!vFileInfo) return;
+
+		if(vFileInfo.Url) {
+			if(common.Common.isExternalIP()) {
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"));	// 조회할 수 없습니다.
+			} else {
+				window.open(vFileInfo.Url, '_blank').focus();
+			}
+		} else {
+			common.AttachFileAction.retrieveFile(vFileInfo);
+		}
+	},
+	
+	retrieveFile: function(vFileInfo) {
+		// var vFileInfo = oEvent.getSource().getBindingContext().getProperty();
 
 		if(!vFileInfo) return;
 
