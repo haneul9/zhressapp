@@ -240,8 +240,8 @@ fragment.COMMON_ATTACH_FILES = {
 	},
 	
 	retrieveFile: function(vFileInfo) {
-		var sampleArr = common.base64ToArrayBuffer(vFileInfo.Mresource);
-		common.saveByteArray(vFileInfo.Fname, vFileInfo.Mimetype, sampleArr);
+		var sampleArr = common.Common.base64ToArrayBuffer(vFileInfo.Mresource);
+		common.Common.saveByteArray(vFileInfo.Fname, vFileInfo.Mimetype, sampleArr);
 	},
 
 	setAttachFile: function (oController, opt, vPage) {
