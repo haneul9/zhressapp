@@ -592,7 +592,7 @@ generate: function() {
 			].join(''));
 
 			this._gateway.alert({ title: '오류', html: [
-				'<p>Protlet 정보를 조회하지 못했습니다.',
+				'<p>Portlet 정보를 조회하지 못했습니다.',
 				'화면을 새로고침 해주세요.<br />',
 				'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.</p>'
 			].join('<br />') });
