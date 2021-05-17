@@ -116,22 +116,52 @@ sap.ui.define([
 						items: [
 							new sap.ui.core.Icon({
 								size: "1.0rem",
+								color: "#005f28",
 								src: {
 									path: "Type",
 									formatter: function(v) {
 										return Common.FileTypeIcon(v);
 									}
 								},
-								color: "#005f28"
+								visible: {
+									parts: [
+										{path: "Mimetype"},
+										{path: "Mresource"}
+									],
+									formatter: function(v1, v2) {
+										return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) && v2 ? false : true;
+									}
+								}
 							}),
 							new sap.m.Link({
 								text: "{Fname}",
 								wrapping: true,
 								textAlign: "Begin",
-								press: AttachFileAction.onDownload.bind(oController)
-								// href: "{Url}",
-								// target: "_new"
-							}).addStyleClass("ml-4px")
+								press: AttachFileAction.onDownload.bind(oController),
+								visible: {
+									parts: [
+										{path: "Mimetype"},
+										{path: "Mresource"}
+									],
+									formatter: function(v1, v2) {
+										return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) && v2 ? false : true;
+									}
+								}
+							}).addStyleClass("ml-4px"),
+							new sap.m.Image({
+								width: "100%",
+								lazyLoading: true,
+								src: "{Mresource_convert}",
+								visible: {
+									parts: [
+										{path: "Mimetype"},
+										{path: "Mresource"}
+									],
+									formatter: function(v1, v2) {
+										return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) && v2 ? true : false;
+									}
+								}
+							})
 						] 
 					}),
 					new sap.m.Button({    

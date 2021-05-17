@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 jQuery.sap.declare("common.AttachFileAction");
 
 jQuery.sap.require("sap.ui.core.util.File");
@@ -111,6 +112,7 @@ common.AttachFileAction = {
 						elem.New = false;
 						elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 						elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
+						elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
 
 						Datas.Data.push(elem);
 					});
@@ -177,7 +179,7 @@ common.AttachFileAction = {
 		if(!vFileInfo) return;
 
 		if(common.Common.isExternalIP()) {
-			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype)) {
+			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
 				common.AttachFileAction.retrieveFile(vFileInfo);
 			} else {
 				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
@@ -185,18 +187,25 @@ common.AttachFileAction = {
 				});
 			}
 		} else {
-			window.open(vFileInfo.Url, '_blank').focus();
+			var popup = window.open(vFileInfo.Url, '_blank');
+
+			if(!popup) {
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), {    // 팝업 차단 기능이 실행되고 있습니다.\n차단 해제 후 다시 실행해주세요.
+					title: this.getBundleText("LABEL_00139")    // 오류
+				});
+	
+				return false;
+			} else {
+				setTimeout(function() {
+					popup.focus();
+				}, 500);
+			}
 		}
 	},
 	
 	retrieveFile: function(vFileInfo) {
-		sap.ui.core.util.File.save(
-			// atob(vFileInfo.Mresource),
-			vFileInfo.Mresource,
-			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
-			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
-			vFileInfo.Mimetype
-		);
+		var sampleArr = common.Common.base64ToArrayBuffer(vFileInfo.Mresource);
+		common.Common.saveByteArray(vFileInfo.Fname, vFileInfo.Mimetype, sampleArr);
 	},
 
 	/*

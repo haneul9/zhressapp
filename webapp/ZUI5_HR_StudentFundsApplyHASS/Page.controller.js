@@ -7,8 +7,9 @@
 	"common/OrgOfIndividualHandler",
     "common/DialogHandler",
 	"common/SearchOrg",
+	"common/SearchUser1"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, OrgOfIndividualHandler, DialogHandler, SearchOrg) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, OrgOfIndividualHandler, DialogHandler, SearchOrg, SearchUser1) {
 	"use strict";
 
 	
@@ -1229,6 +1230,17 @@
 
             this.oOrgSearchDialog.open();
         },
+
+		onESSelectPerson : function(data){
+			var oView = $.app.byId("ZUI5_HR_StudentFundsApplyHASS.Page");
+			var oController = oView.getController();
+
+			oController.onSetInfo(data.Pernr);
+			oController.onChildrenData();
+			oController.getChildInfo();
+			oController.OrgOfIndividualHandler.getDialog().close();
+			SearchUser1.onClose();
+		},
 
 		onPressCancel: function(oEvent) { // 삭제
 			var oController = $.app.getController();

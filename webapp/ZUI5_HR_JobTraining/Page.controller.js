@@ -981,7 +981,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onInCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -990,14 +989,14 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "auto", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
 									width: "70px",
 									editable:false,
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "auto", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1010,7 +1009,7 @@ sap.ui.define([
 									width: "70px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "auto", "Right").addStyleClass("mr-5px"), // 강사료(단가)
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1019,7 +1018,7 @@ sap.ui.define([
 										}
 									},
 									textAlign: "End",
-									width: "70px",
+									width: "132px",
 									liveChange: oController.getMoneyComma.bind(oController),
 									value: e.Tepay
 								})
@@ -1028,10 +1027,20 @@ sap.ui.define([
 					);
 				});
 			}else { // 사외강사
-				oList = oController.TeacherInfoModel.getProperty("/OutData");
+				
+				oOutTeacherBox.getItems().forEach(function(e) {
+					var oTeaList1 = {};
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "H";
+					oList.push(oTeaList1);
+				});
+				
 				oList.push(oRowData);
 				oOutTeacherBox.destroyItems();
-
+				
 				oList.forEach(function(e) {
 					oOutTeacherBox.addItem(
 						new sap.m.HBox({
@@ -1039,7 +1048,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onOutCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -1048,14 +1056,15 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "auto", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
 									width: "70px",
+									liveChange: oController.getDyNameComma.bind(oController),
 									editable:false,
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "auto", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1064,11 +1073,11 @@ sap.ui.define([
 										}
 									},
 									textAlign: "End",
-									liveChange: oController.getTimeComma.bind(oController),
+									liveChange: oController.getDyTimeComma.bind(oController),
 									width: "70px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "auto", "Right").addStyleClass("mr-5px"), // 강사료(단가)
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1077,8 +1086,8 @@ sap.ui.define([
 										}
 									},
 									textAlign: "End",
-									width: "70px",
-									liveChange: oController.getMoneyComma.bind(oController),
+									width: "132px",
+									liveChange: oController.getDyMoneyComma.bind(oController),
 									value: e.Tepay
 								})
 							]
@@ -1330,6 +1339,7 @@ sap.ui.define([
 			// Navigation property
 			sendObject.TrainingOjtApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", oRowData)];
 			sendObject.TrainingOjtApplyLearner = [];
+			sendObject.TrainingOjtApplyTableIn2 = [];
 			
 			oModel.create("/TrainingOjtApplySet", sendObject, {
 				success: function(oData, oResponse) {
@@ -1344,6 +1354,7 @@ sap.ui.define([
 						oController.AttModel.setProperty("/OJTResult", oController.ApplyModel.getProperty("/OJTResult"));
 						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
 					}
+					oController.ApplyModel.setProperty("/FileData", oData.TrainingOjtApplyTableIn2.results);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -1374,8 +1385,6 @@ sap.ui.define([
 
 					oData.forEach(function(ele) {
 						if(ele.Pchk){
-							ele.Edoty = "1";
-
 							sendObject = {};
 							// Header
 							sendObject.IPernr = vPernr;
@@ -1425,7 +1434,6 @@ sap.ui.define([
 					items: [
 						new sap.m.CheckBox({ 
 							select: oController.onOutCheck.bind(oController),
-							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 							visible: {
 								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 								formatter: function(v1, v2, v3) {
@@ -1434,7 +1442,7 @@ sap.ui.define([
 							}
 						}),
 						new sap.m.Text({ visible:false, text: "" }),
-						ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "auto", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+						ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
 						new sap.m.Input({
 							textAlign: "Begin",
 							width: "70px",
@@ -1444,33 +1452,34 @@ sap.ui.define([
 									return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
 								}
 							},
-							value: ""
+							value: "",
+							liveChange: oController.getDyNameComma.bind(oController),
 						}).addStyleClass("mr-10px"),
-						ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "auto", "Right").addStyleClass("mr-5px"), // 시간
+						ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
 						new sap.m.Input({
 							textAlign: "End",
-							liveChange: oController.getTimeComma.bind(oController),
+							liveChange: oController.getDyTimeComma.bind(oController),
 							width: "70px",
+							value: "",
+							editable: {
+								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
+								formatter: function(v1, v2, v3) {
+									return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+								}
+							}
+						}).addStyleClass("mr-10px"),
+						ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
+						new sap.m.Input({
+							textAlign: "End",
+							width: "132px",
+							value: "",
 							editable: {
 								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 								formatter: function(v1, v2, v3) {
 									return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
 								}
 							},
-							value: ""
-						}).addStyleClass("mr-10px"),
-						ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "auto", "Right").addStyleClass("mr-5px"), // 강사료(단가)
-						new sap.m.Input({
-							textAlign: "End",
-							width: "70px",
-							editable: {
-								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
-								formatter: function(v1, v2, v3) {
-									return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
-								}
-							},
-							liveChange: oController.getMoneyComma.bind(oController),
-							value: ""
+							liveChange: oController.getDyMoneyComma.bind(oController)
 						})
 					]
 				}).addStyleClass("search-field-group")
@@ -1613,7 +1622,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onInCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -1622,14 +1630,14 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "auto", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
 									width: "70px",
 									editable:false,
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "auto", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1642,7 +1650,7 @@ sap.ui.define([
 									width: "70px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "auto", "Right").addStyleClass("mr-5px"), // 강사료(단가)
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1651,7 +1659,7 @@ sap.ui.define([
 										}
 									},
 									textAlign: "End",
-									width: "70px",
+									width: "132px",
 									liveChange: oController.getMoneyComma.bind(oController),
 									value: e.Tepay
 								})
@@ -1670,7 +1678,6 @@ sap.ui.define([
 							items: [
 								new sap.m.CheckBox({ 
 									select: oController.onOutCheck.bind(oController),
-									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
@@ -1679,14 +1686,15 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "auto", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
 									width: "70px",
 									editable:false,
+									liveChange: oController.getDyNameComma.bind(oController),
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "auto", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1694,12 +1702,12 @@ sap.ui.define([
 											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
 										}
 									},
-									liveChange: oController.getTimeComma.bind(oController),
+									liveChange: oController.getDyTimeComma.bind(oController),
 									textAlign: "End",
 									width: "70px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "auto", "Right").addStyleClass("mr-5px"), // 강사료(단가)
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1708,8 +1716,8 @@ sap.ui.define([
 										}
 									},
 									textAlign: "End",
-									width: "70px",
-									liveChange: oController.getMoneyComma.bind(oController),
+									width: "132px",
+									liveChange: oController.getDyMoneyComma.bind(oController),
 									value: e.Tepay
 								})
 							]
@@ -1718,7 +1726,27 @@ sap.ui.define([
 				});
 			}
 		},
+		
+		getDyNameComma: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim();
 
+			oEvent.getSource().setValue(Common.checkNull(inputValue) ? "" : inputValue);
+		},
+
+		getDyTimeComma: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d || ^\.]/g, '');
+
+			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "" : convertValue);
+		},
+
+		getDyMoneyComma: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
+
+			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "" : Common.numberWithCommas(convertValue));
+		},
+		
 		getTimeComma: function(oEvent) {
 			var inputValue = oEvent.getParameter('value').trim(),
 				convertValue = inputValue.replace(/[^\d || ^\.]/g, '');
@@ -1857,6 +1885,12 @@ sap.ui.define([
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
 			
+			if(oTeaList2.some(function(e) {
+				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
+			})){ // 강사
+				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
+				return;
+			}
 
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
@@ -1938,6 +1972,13 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
+
+			if(oTeaList2.some(function(e) {
+				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
+			})){ // 강사
+				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
+				return;
+			}
 
 			if(vEdoty === "2") {
 				if(oController.AttModel.getProperty("/Data").length === 0){ // 참석자
@@ -2101,6 +2142,13 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
+
+			if(oTeaList2.some(function(e) {
+				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
+			})){ // 강사
+				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
+				return;
+			}
 
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
