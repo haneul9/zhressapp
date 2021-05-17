@@ -1,17 +1,17 @@
 ﻿sap.ui.define([
 	"../common/PageHelper",
 	"../common/ZHR_TABLES",
-    "../common/PickOnlyDateRangeSelection"
+	"../common/PickOnlyDateRangeSelection"
 ], function (PageHelper, ZHR_TABLES, PickOnlyDateRangeSelection) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
-        
-        _ColModel: [
-            {id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,          plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto", align: sap.ui.core.HorizontalAlign.Left},
-            {id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,        plabel: "", resize: true, span: 0, type: "date",    sort: true,  filter: true,  width: "20%"},
-            {id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "25%", templateGetter: "getChangeDate"},
-        ],
+		
+		_ColModel: [
+			{id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,		  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto", align: sap.ui.core.HorizontalAlign.Left},
+			{id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,		plabel: "", resize: true, span: 0, type: "date",	sort: true,  filter: true,  width: "20%"},
+			{id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "25%", templateGetter: "getChangeDate"},
+		],
 		
 		getControllerName: function () {
 			return $.app.APP_ID;
@@ -31,11 +31,11 @@
 						items: [
 							new sap.m.Label({text: "{i18n>LABEL_56002}"}), // 검색어(제목)
 							new sap.m.Input(oController.PAGEID + "_SearchInput",{
-                                width: "200px",
-                                value: "{ITitle}"
-                            }),
+								width: "200px",
+								value: "{ITitle}"
+							}),
 							new sap.m.Label({text: "{i18n>LABEL_56003}"}), // 등록일
-                            new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
+							new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
 								width: "250px",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
@@ -43,17 +43,17 @@
 								secondDateValue: new Date(vYear, vMonth, 0)
 							})
 						]
-                    }).addStyleClass("search-field-group mr-10px"),
+					}).addStyleClass("search-field-group mr-10px"),
 					new sap.m.HBox({
 						items: [
 							new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
 								text: "{i18n>LABEL_56004}" // 조회
-							}).addStyleClass("button-search")
-						//	new sap.m.Button({
-						//		press: oController.onPressSer.bind(oController),
-						//		icon : "sap-icon://bell" // 알림
-						//	}).addStyleClass("button-light w-36px ml-8px")
+							}).addStyleClass("button-search"),
+							new sap.m.Button({
+								press: oController.onPressNotice.bind(oController),
+								icon: "sap-icon://bell" // 알림
+							}).addStyleClass("button-light w-36px ml-8px")
 						]
 					})
 					.addStyleClass("button-group")
@@ -71,7 +71,7 @@
 						text: "{i18n>LABEL_56005}" // 등록
 					}).addStyleClass("button-light")
 				]
-            }).addStyleClass("mt-10px");
+			}).addStyleClass("mt-10px");
 
 			var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
 				selectionMode: sap.ui.table.SelectionMode.None,
@@ -82,7 +82,7 @@
 				showOverlay: false,
 				showNoData: true,
 				cellClick: oController.onSelectedRow,
-			    width: "auto",
+				width: "auto",
 				rowHeight: 37,
 				columnHeaderHeight: 38,
 				noData: "{i18n>LABEL_00901}"

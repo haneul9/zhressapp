@@ -2,7 +2,7 @@
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-    "../common/AttachFileAction",
+	"../common/AttachFileAction",
 	"sap/base/util/UriParameters",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
@@ -49,7 +49,7 @@
 		getUserGubun  : function() {
 
 			return this.getSessionInfoByKey("Bukrs2");
-        },
+		},
 		
 		onInit: function () {
 
@@ -77,39 +77,43 @@
 
 			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey")) {
 				this.onSelectDetail(false);
+			} else {
+				if (localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {
+					this.onPressNotice();
+				}
 			}
-        },
+		},
 
 		getParameterByName: function(name) {
 			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
 		},
 
-        getChangeDate: function() {
+		getChangeDate: function() {
 			return new sap.ui.commons.TextView({
-                text : {
-                    parts: [{path: "Aedtm"}, {path: "Aetim"}],
-                    formatter: function(v1, v2) {
+				text : {
+					parts: [{path: "Aedtm"}, {path: "Aetim"}],
+					formatter: function(v1, v2) {
 						if(v1 && v2){
 							v1 = Common.DateFormatter(v1);
 							v2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm:ss" }).format(new Date(v2.ms), true);
 						}
 						return v1 + " " + v2; 
-                    }
-                }, 
-                textAlign : "Center"
-            });
-        },
+					}
+				}, 
+				textAlign : "Center"
+			});
+		},
 		
 		onTableSearch: function() {
 			var oController = $.app.getController();
 			var oTable = $.app.byId(oController.PAGEID + "_Table");
-            var oSearchInput = $.app.byId(oController.PAGEID + "_SearchInput");
-            var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
+			var oSearchInput = $.app.byId(oController.PAGEID + "_SearchInput");
+			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vPernr = oController.getUserId();
 			var vBukrs = oController.getUserGubun();
 
-            oController.TableModel.setData({Data: []}); 
+			oController.TableModel.setData({Data: []}); 
 			
 			var sendObject = {};
 			// Header
@@ -117,10 +121,10 @@
 			sendObject.IApern = vPernr;
 			sendObject.IBukrs = vBukrs;
 			sendObject.IGubun = "E";
-            sendObject.IConType = "0";
+			sendObject.IConType = "0";
 			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
 			sendObject.IEndda = oSearchDate.getSecondDateValue();
-            sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
+			sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
 			// Navigation property
 			sendObject.TableIn1 = [];
 			
@@ -142,11 +146,21 @@
 			});
 
 			Common.adjustAutoVisibleRowCount.call(oTable);
-        },
+		},
 
-        onPressSer: function() { // 조회
-            this.onTableSearch();
-        },
+		onPressSer: function() { // 조회
+			this.onTableSearch();
+		},
+
+		onPressNotice: function() {
+
+			if (!this.oNoticeDialog) {
+				this.oNoticeDialog = sap.ui.jsfragment([$.app.CONTEXT_PATH, "Notice"].join(".fragment."), this);
+				$.app.getView().addDependent(this.oNoticeDialog);
+			}
+
+			this.oNoticeDialog.open();
+		},
 
 		onPressRegi: function() { // 등록
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
@@ -168,12 +182,12 @@
 			oDateBox.setVisible(false);
 			oIsHideBox.setVisible(true);
 			
-            this.onBeforeOpenDetailDialog();
-		    this._RegistModel.open();
+			this.onBeforeOpenDetailDialog();
+			this._RegistModel.open();
 		},
 		
 		onSelectedRow: function(oEvent) {
-            var oController = $.app.getController();
+			var oController = $.app.getController();
 			var vPath = oEvent.getParameters().rowBindingContext.getPath();
 			
 			oController.onSelectDetail(true, vPath);
@@ -198,7 +212,7 @@
 			
 			oController.CommentModel.setData({Data: {}});
 			oController.getDetailData(vSdate, vSeqnr);
-            oController.onBeforeOpenDetailDialog();
+			oController.onBeforeOpenDetailDialog();
 			oController._RegistModel.open();
 		},
 
@@ -212,7 +226,7 @@
 			sendObject.ISdate = Sdate;
 			sendObject.ISeqnr = Seqnr;
 			sendObject.IBukrs = vBukrs;
-            sendObject.IConType = "1";
+			sendObject.IConType = "1";
 			// Navigation property
 			sendObject.TableIn2 = [];
 			sendObject.TableIn3 = [];
@@ -906,10 +920,10 @@
 
 		},
 
-        onDialogRegistBtn: function() { // 등록
+		onDialogRegistBtn: function() { // 등록
 			var oController = this;
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-            var vBukrs = this.getUserGubun();
+			var vBukrs = this.getUserGubun();
 			var oRowData = this.RegistModel.getProperty("/FormData");
 
 			if(this.checkError()) return;
@@ -955,7 +969,7 @@
 				actions: [oController.getBundleText("LABEL_56005"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressRegist
 			});
-        },
+		},
 
 		onDialogReBtn: function() { // 수정
 			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
@@ -973,7 +987,7 @@
 		onDeleteData: function() {
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-            var vBukrs = oController.getUserGubun();
+			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.RegistModel.getProperty("/FormData");
 
 			var sendObject = {};
@@ -1030,7 +1044,7 @@
 		onDialogSaveBtn: function() { // 댓글 저장
 			var oController = this;
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-            var vBukrs = this.getUserGubun();
+			var vBukrs = this.getUserGubun();
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			var oCommData = this.CommentModel.getProperty("/Data");
 
@@ -1075,7 +1089,7 @@
 			});
 		},
 
-        onBeforeOpenDetailDialog: function() {
+		onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
