@@ -348,6 +348,7 @@ sap.ui.define([
                             new sap.m.VBox({
                                 items: [
                                     new sap.m.HBox({
+										width: "100%",
                                         items: [
                                             ViewTemplates.getLabel("header", "{i18n>LABEL_70026}", "74px", "Right" ), // 사내
                                             new sap.m.VBox({
@@ -392,6 +393,7 @@ sap.ui.define([
                                         ]
                                     }),
                                     new sap.m.HBox({
+										width: "100%",
                                         items: [
                                             ViewTemplates.getLabel("header", "{i18n>LABEL_70027}", "74px", "Right" ), // 사외
                                             new sap.m.VBox({
