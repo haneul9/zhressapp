@@ -1126,6 +1126,6 @@ common.Common = {
 		var fileName = reportName;
 		link.download = fileName;
 		link.click();
-	},
+	}
  
 };

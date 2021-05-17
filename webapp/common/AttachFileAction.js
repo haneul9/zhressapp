@@ -112,6 +112,7 @@ common.AttachFileAction = {
 						elem.New = false;
 						elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 						elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
+						elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
 
 						Datas.Data.push(elem);
 					});

@@ -128,10 +128,23 @@ sap.ui.define([
 								text: "{Fname}",
 								wrapping: true,
 								textAlign: "Begin",
-								press: AttachFileAction.onDownload.bind(oController)
-								// href: "{Url}",
-								// target: "_new"
-							}).addStyleClass("ml-4px")
+								press: AttachFileAction.onDownload.bind(oController),
+								visible: {
+									path: "Mimetype",
+									formatter: function(v1) {
+										return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) ? false : true;
+									}
+								}
+							}).addStyleClass("ml-4px"),
+							new sap.m.Image({
+								src: "{Mresource_convert}",
+								visible: {
+									path: "Mimetype",
+									formatter: function(v1) {
+										return parent._gateway.isMobile() && /image+\/[-+.\w]+/.test(v1) ? true : false;
+									}
+								}
+							})
 						] 
 					}),
 					new sap.m.Button({    
