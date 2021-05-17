@@ -187,60 +187,65 @@ sap.ui.define(
                     oAnnouncementTable = sap.ui.getCore().byId(oController.PAGEID + "_AnnouncementTable"),
                     oAnnouncementJSONModel = oAnnouncementTable.getModel();
                     
+                // 세션 User info
+                var result = Common.retrieveLoginInfo();
+                result.photo = sessionStorage.getItem("ehr.sf-user.photo");
+
+                oController._HeaderJSonModel.setData({User: result}, true);
 
                 var search = function () {
                     Promise.all([
-                        Common.getPromise(true, function (resolve) {
-                            new JSONModelHelper()
-                                .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(vPernr) + "' and photoType eq '1'")
-                                .select("photo")
-                                .setAsync(true)
-                                .attachRequestCompleted(function () {
-                                    var data = this.getData().d;
+                        // Common.getPromise(true, function (resolve) {
+                        //     new JSONModelHelper()
+                        //         .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(vPernr) + "' and photoType eq '1'")
+                        //         .select("photo")
+                        //         .setAsync(true)
+                        //         .attachRequestCompleted(function () {
+                        //             var data = this.getData().d;
 
-                                    if (data && data.results.length) {
-                                        oPhoto = "data:text/plain;base64," + data.results[0].photo;
-                                    } else {
-                                        oPhoto = "images/male.jpg";
-                                    }
+                        //             if (data && data.results.length) {
+                        //                 oPhoto = "data:text/plain;base64," + data.results[0].photo;
+                        //             } else {
+                        //                 oPhoto = "images/male.jpg";
+                        //             }
 
-                                    oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
-                                    resolve();
-                                })
-                                .attachRequestFailed(function () {
-                                    oPhoto = "images/male.jpg";
-                                    oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
-                                    resolve();
-                                })
-                                .load();
-                        }),
-                        Common.getPromise(true, function (resolve) {
-                            $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
-                                async: true,
-                                filters: oFilters,
-                                success: function (data) {
-                                    var vData = { User: {} };
-                                    if (data && data.results.length > 0) {
-                                        data.results[0].nickname = data.results[0].Ename;
-                                        data.results[0].Stext = data.results[0].Fulln;
-                                        data.results[0].PGradeTxt = data.results[0].ZpGradetx;
-                                        data.results[0].ZtitleT = data.results[0].Ztitletx;
+                        //             oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
+                        //             resolve();
+                        //         })
+                        //         .attachRequestFailed(function () {
+                        //             oPhoto = "images/male.jpg";
+                        //             oController._HeaderJSonModel.setData({ User: { photo: oPhoto } }, true);
+                        //             resolve();
+                        //         })
+                        //         .load();
+                        // }),
+                        // Common.getPromise(true, function (resolve) {
+                        //     $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
+                        //         async: true,
+                        //         filters: oFilters,
+                        //         success: function (data) {
+                        //             var vData = { User: {} };
+                        //             if (data && data.results.length > 0) {
+                        //                 data.results[0].nickname = data.results[0].Ename;
+                        //                 data.results[0].Stext = data.results[0].Fulln;
+                        //                 data.results[0].PGradeTxt = data.results[0].ZpGradetx;
+                        //                 data.results[0].ZtitleT = data.results[0].Ztitletx;
 
-                                        vData.User = data.results[0];
-                                    }
-                                    vData.User.Auth = gAuth;
-                                    oController._HeaderJSonModel.setData(vData, true);
-                                    resolve();
-                                },
-                                error: function (oError) {
-                                    var vData = { User: {} };
-                                    vData.User.Auth = gAuth;
-                                    oController._HeaderJSonModel.setData(vData, true);
-                                    // Common.displaylog(oError);
-                                    resolve();
-                                }
-                            });
-                        }),
+                        //                 vData.User = data.results[0];
+                        //             }
+                        //             vData.User.Auth = gAuth;
+                        //             oController._HeaderJSonModel.setData(vData, true);
+                        //             resolve();
+                        //         },
+                        //         error: function (oError) {
+                        //             var vData = { User: {} };
+                        //             vData.User.Auth = gAuth;
+                        //             oController._HeaderJSonModel.setData(vData, true);
+                        //             // Common.displaylog(oError);
+                        //             resolve();
+                        //         }
+                        //     });
+                        // }),
                         Common.getPromise(true, function (resolve) {
                             $.app.getModel("ZHR_PERS_INFO_SRV").create(
                                 // 기본인적
