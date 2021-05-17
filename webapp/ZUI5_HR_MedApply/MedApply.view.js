@@ -48,7 +48,7 @@ sap.ui.jsview("ZUI5_HR_MedApply.MedApply", {
 						oHBox,
 						new sap.m.Label({
 							textAlign:"Begin",
-							text: oController.getBundleText("LABEL_47003")// 진료일								
+							text: oController.getBundleText("LABEL_47007")// 신청일
 						}),							
 						new common.PickOnlyDateRangeSelection(oController.PAGEID + "_ApplyDate", {
 							width: "250px",
