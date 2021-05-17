@@ -1,11 +1,12 @@
-﻿sap.ui.define([
+﻿jQuery.sap.require("common.TMEmpBasicInfoBox");
+sap.ui.define([
     "../../common/Common",
     "../delegate/ViewTemplates",
 	"../../common/ZHR_TABLES"
 ], function (Common, ViewTemplates, ZHR_TABLES) {
 	"use strict";
 
-    sap.ui.jsfragment("ZUI5_HR_StudentFundsApply.fragment.BaseApply", {
+    sap.ui.jsfragment("ZUI5_HR_StudentFundsApplyHASS.fragment.BaseApply", {
 
 		createContent: function (oController) {
 			
@@ -192,6 +193,18 @@
 			var oApplyBox = new sap.m.VBox({
 				fitContainer: true,
 				items: [
+					new sap.m.HBox({
+	                	justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
+						alignItems: sap.m.FlexAlignItems.End,
+	                	width : "100%",
+	                    items: [
+							new common.TMEmpBasicInfoBox(oController.SearchModel).addStyleClass("ml-10px mt-15px"),
+							new sap.m.Button({
+								text : "{i18n>LABEL_48040}", // 대상자 변경
+								press : oController.searchOrgehPernr
+						   }).addStyleClass("button-light")
+						]
+	                }),
 					new sap.m.HBox({
 						width: "100%",
 						fitContainer: true,
