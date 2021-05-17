@@ -123,7 +123,7 @@ fragment.COMMON_ATTACH_FILES = {
 							text: "{Fname}",
 							wrapping: true,
 							textAlign: "Begin",
-							press: common.AttachFileAction.onDownload.bind(oController)
+							press: fragment.COMMON_ATTACH_FILES.onDownload.bind(oController)
 							// href: "{Url}",
 							// target: "_new"
 						}).addStyleClass("ml-4px")
@@ -177,6 +177,38 @@ fragment.COMMON_ATTACH_FILES = {
 			items: [FileInfoBox, oAttachFileTable]
 		})
 		.setModel(new sap.ui.model.json.JSONModel());
+	},
+
+	onDownload: function(oEvent) {
+		var vFileInfo = oEvent.getSource().getBindingContext().getProperty();
+
+		if(!vFileInfo) return;
+
+		if(vFileInfo.Url) {
+			if(common.Common.isExternalIP()) {
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
+					title: this.getBundleText("LABEL_09029")
+				});
+			} else {
+				window.open(vFileInfo.Url, '_blank').focus();
+			}
+		} else {
+			common.AttachFileAction.retrieveFile(vFileInfo);
+		}
+	},
+	
+	retrieveFile: function(vFileInfo) {
+		// var vFileInfo = oEvent.getSource().getBindingContext().getProperty();
+
+		if(!vFileInfo) return;
+
+		sap.ui.core.util.File.save(
+			atob(vFileInfo.Mresource),
+			// vFileInfo.Mresource,
+			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
+			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
+			vFileInfo.Mimetype
+		);
 	},
 
 	setAttachFile: function (oController, opt, vPage) {
