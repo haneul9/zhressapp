@@ -193,18 +193,25 @@ fragment.COMMON_ATTACH_FILES = {
 				});
 			}
 		} else {
-			window.open(vFileInfo.Url, '_blank').focus();
+			var popup = window.open(vFileInfo.Url, '_blank');
+
+			if(!popup) {
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), {    // 팝업 차단 기능이 실행되고 있습니다.\n차단 해제 후 다시 실행해주세요.
+					title: this.getBundleText("LABEL_00139")    // 오류
+				});
+	
+				return false;
+			} else {
+				setTimeout(function() {
+					popup.focus();
+				}, 500);
+			}
 		}
 	},
 	
 	retrieveFile: function(vFileInfo) {
-		sap.ui.core.util.File.save(
-			// atob(vFileInfo.Mresource),
-			vFileInfo.Mresource,
-			vFileInfo.Fname.substring(0, vFileInfo.Fname.lastIndexOf(".")),
-			vFileInfo.Fname.substring(vFileInfo.Fname.lastIndexOf(".") + 1),
-			vFileInfo.Mimetype
-		);
+		var sampleArr = common.base64ToArrayBuffer(vFileInfo.Mresource);
+		common.saveByteArray(vFileInfo.Fname, vFileInfo.Mimetype, sampleArr);
 	},
 
 	setAttachFile: function (oController, opt, vPage) {
