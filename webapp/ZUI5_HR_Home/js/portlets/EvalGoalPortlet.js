@@ -33,6 +33,9 @@ ui: function() {
 		'</div>'
 	].join('');
 },
+checkNull: function (v) {
+    return v === undefined || v === null || v == "" ? true : false;
+},
 fill: function() {
 
 	var url = '/odata/v2/GoalPlanTemplate?$select=id,defaultTemplate&$filter=defaultTemplate eq true';
@@ -103,8 +106,7 @@ fill: function() {
 									(v.name || '').split(/\n/)[0],
 								'</div>',
 								'<div class="mylist2">',
-									// i + 1 + '.' + v.name,
-									(v.name || '').split(/\n/)[1],
+									this.checkNull((v.name || '').split(/\n/)[1]) ? "" : (v.name || '').split(/\n/)[1] + this.checkNull(v.name.split(/\n/)[2]) ? "" : "...",
 								'</div>',
 								'<div class="evalgoal-statusBar" title="' + iDone + '%">',
 									'<div class="progress">',
@@ -113,7 +115,7 @@ fill: function() {
 								'</div>',
 							'</div>'
 						].join(''));
-					});
+					}).bind(this);
 					
 					$.map(oList3, function(v) {
 						if (v.iDone > 0) {
