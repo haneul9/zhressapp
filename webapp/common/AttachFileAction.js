@@ -176,7 +176,7 @@ common.AttachFileAction = {
 
 		if(!vFileInfo) return;
 
-		if(/image+\/[-+.\w]+/.text(vFileInfo.Mimetype)) {
+		if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype)) {
 			common.AttachFileAction.retrieveFile(vFileInfo);
 		} else {
 			if(common.Common.isExternalIP()) {
