@@ -190,7 +190,7 @@ sap.ui.define([
 										}
 								 })
 								 .attachRequestFailed(function() {
-										sap.m.MessageBox.error(oController.getBundleText("MSG_05002")); // 직원 리스트 조회 시 오류가 발생하였습니다.
+										sap.m.MessageBox.error(oController.getBundleText("MSG_05002")); // 부서원 조회 시 오류가 발생하였습니다.
 										return;
 								 })
 								 .load();
