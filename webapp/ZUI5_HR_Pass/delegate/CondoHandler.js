@@ -110,13 +110,14 @@ sap.ui.define(
 				diff = Math.ceil(diff / vPerDaySeconds);
 
 				// 첨단 1박2일 이상 선택 불가
-				if (this.oModel.getProperty("/Detail/Data/Compcd") === "T" && diff > 2) {
-					MessageBox.show(this.oController.getBundleText("MSG_09013"), { title: this.oController.getBundleText("LABEL_09030") });
+				// if (this.oModel.getProperty("/Detail/Data/Compcd") === "T" && diff > 2) {
+				// 	MessageBox.show(this.oController.getBundleText("MSG_09013"), { title: this.oController.getBundleText("LABEL_09030") });
 
-					diff = 2;
-					sTo = new Date(sFrom.getFullYear(), sFrom.getMonth(), sFrom.getDate() + 1);
-					oEvent.getSource().setSecondDateValue(sTo);
-				} else if (diff === 1) {
+				// 	diff = 2;
+				// 	sTo = new Date(sFrom.getFullYear(), sFrom.getMonth(), sFrom.getDate() + 1);
+				// 	oEvent.getSource().setSecondDateValue(sTo);
+				// } else if (diff === 1) {
+				if (diff === 1) {
 					// 0박1일 - 1박2일
 					diff = 2;
 					sTo = new Date(sFrom.getFullYear(), sFrom.getMonth(), sFrom.getDate() + 1);
