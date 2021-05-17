@@ -298,18 +298,20 @@ sap.ui.define([
          * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
          */
         displayMultiOrgSearchDialog: function (oEvent) {
-            SearchOrg.oController = this.oController;
-            SearchOrg.vActionType = "Multi";
-            SearchOrg.vCallControlId = oEvent.getSource().getId();
-            SearchOrg.vCallControlType = "MultiInput";
+			var oController = $.app.getController();
 
-            if (!this.oOrgSearchDialog) {
-                this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
-                $.app.getView().addDependent(this.oOrgSearchDialog);
-            }
+			SearchOrg.oController = oController;
+			SearchOrg.vActionType = "Multi";
+			SearchOrg.vCallControlId = oEvent.getSource().getId();
+			SearchOrg.vCallControlType = "MultiInput";
 
-            this.oOrgSearchDialog.open();
-        },
+			if (!oController.oOrgSearchDialog) {
+				oController.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", oController);
+				$.app.getView().addDependent(oController.oOrgSearchDialog);
+			}
+
+			oController.oOrgSearchDialog.open();
+		},
 
 		onESSelectPerson : function(data){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.List");
