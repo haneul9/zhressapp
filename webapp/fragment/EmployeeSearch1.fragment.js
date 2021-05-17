@@ -34,6 +34,7 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 					new sap.m.MultiInput(oController.PAGEID + "_ES_Fulln", {
 						width: "200px",
 						showValueHelp: true,
+						valueHelpOnly : true,
 						enableMultiLineMode: true,
 						valueHelpRequest: oController.displayMultiOrgSearchDialog
 					}).addStyleClass("L2P13Font")
