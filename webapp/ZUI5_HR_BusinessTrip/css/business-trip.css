@@ -5,6 +5,7 @@
 .field-min-width-50 .sapMInputDescriptionWrapper {max-width:calc(100% - 250px) !important; width:calc(100% - 250px) !important}
 .field-min-width-100px .sapMInputBaseContentWrapper {min-width:100px !important; width:100px !important}
 .field-min-width-100px .sapMInputDescriptionWrapper {max-width:calc(100% - 100px) !important; width:calc(100% - 100px) !important}
+.sapMMsgStripIcon~.sapMMsgStripMessage {margin-top:0; margin-left:1.4rem}
 .custom-checkbox {height:31px; line-height:31px}
 .custom-checkbox.sapMCb:focus::before {height:26px !important; top:2px !important}
 .custom-checkbox .sapMCbBg {top:5px}
