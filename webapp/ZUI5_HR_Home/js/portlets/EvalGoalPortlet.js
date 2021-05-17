@@ -101,9 +101,7 @@ fill: function() {
 									'</div>',
 									'<div class="evalgoal-statusBar" title="' + iDone + '%">',
 										'<div class="progress">',
-											'<div style="height:auto" class="progress-bar i' + i + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">',
-												iDone,
-											'</div>',
+											'<div style="height:auto" class="progress-bar i' + i + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
 										'</div>',
 									'</div>',
 								'</div>'
