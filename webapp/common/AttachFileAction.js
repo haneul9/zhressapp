@@ -179,7 +179,7 @@ common.AttachFileAction = {
 		if(!vFileInfo) return;
 
 		if(common.Common.isExternalIP()) {
-			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype)) {
+			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
 				common.AttachFileAction.retrieveFile(vFileInfo);
 			} else {
 				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
