@@ -14,16 +14,16 @@ sap.ui.define([], function () {
 						src: $.app.CONTEXT_PATH + "/img/HiTalkTalkPopupNotice210511.png"
 					})
 				],
-				beginButton: new sap.m.CheckBox("SUGGESTIONS_NOTICE_CONFIRMED", {
-					text: "{i18n>MSG_00075}" // 다시 열지 않기
-				})
-				.addStyleClass("custom-checkbox"),
+				// beginButton: new sap.m.CheckBox("SUGGESTIONS_NOTICE_CONFIRMED", {
+				// 	text: "{i18n>MSG_00075}" // 다시 열지 않기
+				// })
+				// .addStyleClass("custom-checkbox"),
 				endButton: new sap.m.Button({
 					text: oController.getBundleText("LABEL_00133"), // 닫기
 					press: function() {
-						if ($.app.byId("SUGGESTIONS_NOTICE_CONFIRMED").getSelected()) {
-							localStorage.setItem("ehr.suggestions.notice.confirmed", "Y");
-						}
+						// if ($.app.byId("SUGGESTIONS_NOTICE_CONFIRMED").getSelected()) {
+						// 	localStorage.setItem("ehr.suggestions.notice.confirmed", "Y");
+						// }
 						oDialog.close();
 					}
 				}).addStyleClass("button-default")
