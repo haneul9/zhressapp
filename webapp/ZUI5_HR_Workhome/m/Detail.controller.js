@@ -32,16 +32,15 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			var oData = {
 				Data : {
 					FromPageId : oEvent.data.FromPageId,
 					Status : oEvent.data.Status,
-					Werks : $.app.getModel("session").getData().Persa,
-					Bukrs : $.app.getModel("session").getData().Bukrs3,
-					Molga : $.app.getModel("session").getData().Molga,
-					Pernr : $.app.getModel("session").getData().Pernr
+					Werks : oController.getSessionInfoByKey("Persa"),
+					Bukrs : oController.getSessionInfoByKey("Bukrs3"),
+					Molga : oController.getSessionInfoByKey("Molga"),
+					Pernr : oController.getSessionInfoByKey("Pernr")
 				}
 			};
 			
@@ -246,9 +245,9 @@ sap.ui.define([
 				oController._DetailJSonModel.setProperty("/Data/Extryn", oExtryn);
 				
 					createData.IPernr = oData.Pernr;
-					createData.IEmpid = $.app.getModel("session").getData().Pernr;
+					createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = Flag == "C" ? "3" : "4";
 					createData.IExtryn = oExtryn;
 					

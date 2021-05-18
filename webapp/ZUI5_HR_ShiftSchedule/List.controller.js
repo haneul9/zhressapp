@@ -31,14 +31,13 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -46,7 +45,7 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Bukrs : $.app.getModel("session").getData().Bukrs2,
+						Bukrs : oController.getSessionInfoByKey("Bukrs2"),
 						Datum : dateFormat.format(today)
 					}
 				};

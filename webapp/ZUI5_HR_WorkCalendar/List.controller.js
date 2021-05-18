@@ -31,14 +31,13 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;
+
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -47,12 +46,12 @@ sap.ui.define([
 				var	vData = {
 					Data : {
 						Zyymm : today.getFullYear() + (today.getMonth()+1 > 10 ? today.getMonth()+1 : "0" + (today.getMonth()+1)),
-						Pernr : oLoginData.Pernr,
-						Ename : oLoginData.Ename,
-						Bukrs : oLoginData.Bukrs3,
-						Langu : oLoginData.Langu,
-						Molga : oLoginData.Molga,
-						Chief : $.app.getModel("session").getData().Chief
+						Pernr : oController.getSessionInfoByKey("Pernr"),
+						Ename : oController.getSessionInfoByKey("Ename"),
+						Bukrs : oController.getSessionInfoByKey("Bukrs3"),
+						Langu : oController.getSessionInfoByKey("Langu"),
+						Molga : oController.getSessionInfoByKey("Molga"),
+						Chief : oController.getSessionInfoByKey("Chief")
 					}
 				};
 				
@@ -367,7 +366,7 @@ sap.ui.define([
 				oView.addDependent(oController._DetailDialog);
 			}
 																				// 이상데이터 승인 클릭여부
-			oController._DetailDialog.getModel().setData({Data : (Object.assign({Confirm : ""}, oData, $.app.getModel("session").getData()))});
+			oController._DetailDialog.getModel().setData({Data : (Object.assign({Confirm : ""}, oData, oController.getSessionModel().getData()))});
 			
 			// 근태 table
 			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
@@ -558,10 +557,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },

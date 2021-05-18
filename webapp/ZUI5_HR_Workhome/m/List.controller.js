@@ -28,7 +28,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -43,8 +43,8 @@ sap.ui.define([
 					Data : {
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
 						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
-						Persa : $.app.getModel("session").getData().Persa,
-						Pernr : $.app.getModel("session").getData().Pernr
+						Persa : oController.getSessionInfoByKey("Persa"),
+						Pernr : oController.getSessionInfoByKey("Pernr")
 					}
 				};
 				
@@ -104,8 +104,8 @@ sap.ui.define([
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
 					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda.getFullYear(), oData.Begda.getMonth(), oData.Begda.getDate())) + ")\/"; 
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda.getFullYear(), oData.Endda.getMonth(), oData.Endda.getDate())) + ")\/";
-					createData.IBukrs = $.app.getModel("session").getData().Bukrs3;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.IBukrs = oController.getSessionInfoByKey("Bukrs3");
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = "1";
 
 				oModel.create("/WorkhomeApplySet", createData, {
@@ -202,7 +202,7 @@ sap.ui.define([
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = Flag == "D" ? "4" : "9";
 					createData.IExtryn = oExtryn;
 					

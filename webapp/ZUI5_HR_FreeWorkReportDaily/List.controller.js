@@ -41,7 +41,6 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -51,14 +50,14 @@ sap.ui.define([
 					Data : {
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Pernr : oLoginData.Pernr,
+						Pernr : oController.getSessionInfoByKey("Pernr"),
 						Orgeh : "",
-						Ename : oLoginData.Ename,
-						Bukrs : oLoginData.Bukrs3,
-						Molga : oLoginData.Molga,
-						Langu : oLoginData.Langu,
-						Werks : oLoginData.Persa,
-						Chief : $.app.getModel("session").getData().Chief
+						Ename : oController.getSessionInfoByKey("Ename"),
+						Bukrs : oController.getSessionInfoByKey("Bukrs3"),
+						Molga : oController.getSessionInfoByKey("Molga"),
+						Langu : oController.getSessionInfoByKey("Langu"),
+						Werks : oController.getSessionInfoByKey("Persa"),
+						Chief : oController.getSessionInfoByKey("Chief")
 					}
 				};
 				
@@ -180,10 +179,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },

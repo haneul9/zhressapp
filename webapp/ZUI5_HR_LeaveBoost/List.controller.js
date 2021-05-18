@@ -43,7 +43,6 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -51,10 +50,10 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Bukrs : oLoginData.Bukrs,
-						Pernr : oLoginData.Pernr,
-						Ename : oLoginData.Ename,
-						Molga : oLoginData.Molga
+						Bukrs : oController.getSessionInfoByKey("Bukrs"),
+						Pernr : oController.getSessionInfoByKey("Pernr"),
+						Ename : oController.getSessionInfoByKey("Ename"),
+						Molga : oController.getSessionInfoByKey("Molga")
 						// Begda : new Date(today.getFullYear(), today.getMonth(), 1),
 						// Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))
 						// Tmdat : dateFormat.format(new Date()),
@@ -189,7 +188,7 @@ sap.ui.define([
 					createData.IBukrs = oData.Bukrs;
 					createData.IMolga = oData.Molga;
 					createData.IBegda = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = "1";
 
 				oModel.create("/LeaveBoostListHeaderSet", createData, {
@@ -423,7 +422,7 @@ sap.ui.define([
 				createData.IConType = (Flag == "S" ? "2" : "3");
 				createData.IBukrs = oData.Bukrs;
 				createData.IMolga = oData.Molga;
-				createData.ILangu = $.app.getModel("session").getData().Langu;
+				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				createData.IPernr = oData.Pernr;
 				createData.IEmpid = oData.Pernr;
 				createData.IBegda = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
@@ -500,7 +499,7 @@ sap.ui.define([
 			var oData = oController._ListCondJSonModel.getProperty("/Data");
 			
 			var oModel = sap.ui.getCore().getModel("ZHR_LEAVE_APPL_SRV");
-			var oPath = "/LeaveBoostFormSet?$filter=Percod eq '" + encodeURIComponent($.app.getModel("session").getData().Percod) + "'";
+			var oPath = "/LeaveBoostFormSet?$filter=Percod eq '" + encodeURIComponent(oController.getSessionInfoByKey("Percod")) + "'";
 				oPath += " and Bukrs eq '" + oData.Bukrs + "'";
 				oPath += " and Zyear eq '" + new Date().getFullYear() + "'";
 					
