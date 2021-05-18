@@ -224,3 +224,28 @@ footer.sapMDialogFooter .sapMIBar.sapMFooter-CTX{border-top:none;}
 .sapMPopoverHeader .sapMTitle {font-size: 1rem;}
 .sapMIBar-CTX .sapMTitle {font-weight:500;}
 .sapMPopover .sapMIBar.sapMHeader-CTX {background-color:#f4f5f6; border-bottom:1px solid #e1e4e9; box-shadow: none;}
+
+/* 사원검색 */
+#ActAppPersonInfo_ES_Dialog-cont.sapMDialogSection{padding:0}
+#ActAppPersonInfo_ES_Dialog-cont.sapUiSizeCompact.sapMDialog>footer,
+#ActAppPersonInfo_ES_Dialog-cont.sapMDialog>footer {padding-bottom:0} 
+.custom-employee .sapMTBStandard, .custom-employee .sapMPanelContent:not(.sapMPanelBGTransparent) {border-bottom: 0;}
+.custom-employee .custom-employeeSearch-area {background-color:#DDE2EB;}
+.custom-employee .sapMIBar.sapMTB .sapMBarChild:first-child {margin-left:0}
+.custom-employee .emp-title {font-size: 14px; font-weight:400 !important;}
+.custom-employee .sapMPanelContent {padding:.25rem 1rem 1rem 1rem;}
+.custom-employee .sapUiMltPadRight {padding:0}
+.custom-employee .sapuiVltCell .sapMSlt {border:solid 1px #c3c3c3 !important; border-radius:.1875rem}
+.custom-employee .sapMPanel.p-0 .sapMPanelContent {padding:0;}
+.custom-employee .sapMPanel.p-0 .sapMPanelContent {overflow: hidden;}  /*발령*/
+.custom-employeeSearch-area .L2PFilterItem .sapMSlt, 
+.custom-employeeSearch-area .sapMInputBaseContentWrapper,
+.custom-employeeSearch-area .sapMInputBase{height:2.25rem;}
+.custom-employeeSearch-area .sapMSlt>.sapMSltLabel, 
+.custom-employeeSearch-area .sapMSlt>.sapMSltArrow,
+.custom-employeeSearch-area .sapMInputBase,
+.custom-employeeSearch-area .sapMInputBaseIcon {line-height:2rem}
+.custom-employeeSearch-area .L2PFilterItem .sapuiVltCell .sapMLabel{padding-left:8px;font-weight:500}
+.custom-employeeSearch-area .L2PFilterItem {padding-bottom:5px}
+.custom-employeeSearch-area .L2PFilterItem:last-child {padding-bottom:0}
+.custom-employee .L2PToolbarNoBottomLine.sapMPanelHeaderTB {padding-top:12px;padding-left:15px}
