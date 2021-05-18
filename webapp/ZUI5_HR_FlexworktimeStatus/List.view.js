@@ -16,6 +16,7 @@ sap.ui.define(
                 
                 var oFilter = new sap.m.FlexBox({
                     fitContainer: true,
+                    justifyContent : "SpaceBetween",
                     items: [
                         new sap.m.FlexBox({
                             // 검색
@@ -79,6 +80,16 @@ sap.ui.define(
                                         }).addStyleClass("button-search")
                                     ]
                                 }).addStyleClass("button-group")
+                            ]
+                        }),
+                        new sap.m.FlexBox({
+                            items : [
+                                new sap.m.Button({
+                                    text : "{i18n>LABEL_69058}",  // 선택근무 가이드
+                                    press : function(){
+                                        window.open("/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/manual/manual_flexible.pdf");
+                                    }
+                                }).addStyleClass("button-light")
                             ]
                         })
                     ]
