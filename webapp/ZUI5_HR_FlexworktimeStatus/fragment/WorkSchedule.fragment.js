@@ -179,7 +179,7 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 						
 		oController.makeTable(oController, oTable, col_info);
 		
-		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+		var oFooter = new sap.ui.commons.layout.MatrixLayout({
 			columns : 5,
 			width : "100%",
 			widths : ["", "", "", "400px", "60px"],
@@ -212,8 +212,48 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 					  .bindElement("/Data/0")]
 		});
 		
-		oMatrix.setModel(oJSONModel);
-		oTable.setFooter(oMatrix);
+		oFooter.setModel(oJSONModel);
+		oTable.setFooter(oFooter);
+
+		// 2021-05-17 결재자
+		var oMatrix2 = new sap.ui.commons.layout.MatrixLayout(oController.PAGEID + "_AppNameLayout", {
+			columns : 2,
+			width : "100%",
+			widths : ["33%", ""],
+			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+						height : "40px",
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									content : [new sap.m.Toolbar({
+													content : [new sap.m.Text({text : "{i18n>LABEL_48066}"}).addStyleClass("sub-title")] // 결재자
+												}).addStyleClass("toolbarNoBottomLine")],
+									hAlign : "Begin",
+									vAlign : "Middle",
+									colSpan : 2
+								})]
+					}),
+					new sap.ui.commons.layout.MatrixLayoutRow({
+						height : "45px",
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true, textDirection : "RTL"})], // 결재자
+									 hAlign : "End",
+									 vAlign : "Middle"
+								 }).addStyleClass("Label"),
+								 new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+													selectedKey : "{AppName}",
+													width : "100%",
+													editable : {
+					                                    path : "Offyn",
+					                                    formatter : function(fVal){
+					                                    	return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
+					                                    }
+				                                	}
+												})],
+									 hAlign : "Begin",
+									 vAlign : "Middle"
+								 }).addStyleClass("Data")]		
+					})]
+		}).addStyleClass("mt-8px displayNone");
 		
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "1000px",
@@ -221,12 +261,12 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 			title : {
 				path : "Offyn",
 				formatter : function(fVal){
-										// 과거근무 변경신청				   // 근무 변경
+										 // 과거근무 변경신청				   		  // 근무 변경
 					return fVal == "1" ? oController.getBundleText("LABEL_69047") : oController.getBundleText("LABEL_69048"); 
 				}
 			},
 			initialFocus : oMatrix1,
-			content : [oMatrix1, oTable],
+			content : [oMatrix1, oTable, oMatrix2],
 			buttons : [new sap.m.Button({
 						   text : "{i18n>LABEL_00152}", // 신청
 						   visible : {
@@ -248,14 +288,14 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.WorkSchedule", {
 						   }
 					   }).addStyleClass("button-default custom-button-divide"),
 					   new sap.m.Button({
-							 text : "{i18n>LABEL_00133}", // 닫기
-							 press : function(){oDialog.close();},
-							   visible : {
-								   	path : "Offyn",
-								   	formatter : function(fVal){
-								   		return (fVal == "" || fVal == "1" || fVal == "2") ? false : true;
-									}	
-							 }
+						   text : "{i18n>LABEL_00133}", // 닫기
+						   press : function(){oDialog.close();},
+						   visible : {
+								path : "Offyn",
+								formatter : function(fVal){
+									return (fVal == "" || fVal == "1" || fVal == "2") ? false : true;
+								}
+						   }
 						 }).addStyleClass("button-default")]
 		}).addStyleClass("custom-dialog-popup");
 		

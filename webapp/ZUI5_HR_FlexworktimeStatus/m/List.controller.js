@@ -33,7 +33,6 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -41,11 +40,11 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Werks : $.app.getModel("session").getData().Persa,
-						Bukrs : $.app.getModel("session").getData().Bukrs,
-						Pernr : $.app.getModel("session").getData().Pernr,
-						Ename : $.app.getModel("session").getData().Ename,                                                                                                           
-						Langu : $.app.getModel("session").getData().Langu,
+						Werks : oController.getSessionInfoByKey("Persa"),
+						Bukrs : oController.getSessionInfoByKey("Bukrs"),
+						Pernr : oController.getSessionInfoByKey("Pernr"),
+						Ename : oController.getSessionInfoByKey("Ename"),                                                                                                           
+						Langu : oController.getSessionInfoByKey("Langu"),
 						Zyymm : today.getFullYear() + (today.getMonth() + 1 < 10 ? ("0" + (today.getMonth()+1)) : (today.getMonth()+1)),
 						Year : today.getFullYear(),
 						Month : (today.getMonth() + 1)
