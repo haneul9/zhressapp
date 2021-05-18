@@ -989,14 +989,14 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "85px", "Right").addStyleClass(""), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
-									width: "70px",
+									width: "85px",
 									editable:false,
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "85px", "Right").addStyleClass(""), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1006,7 +1006,7 @@ sap.ui.define([
 									},
 									textAlign: "End",
 									liveChange: oController.getTimeComma.bind(oController),
-									width: "70px",
+									width: "85px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
 								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
@@ -1056,15 +1056,15 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "85px", "Right").addStyleClass(""), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
-									width: "70px",
+									width: "85px",
 									liveChange: oController.getDyNameComma.bind(oController),
 									editable:false,
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "85px", "Right").addStyleClass(""), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1074,7 +1074,7 @@ sap.ui.define([
 									},
 									textAlign: "End",
 									liveChange: oController.getDyTimeComma.bind(oController),
-									width: "70px",
+									width: "85px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
 								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
@@ -1448,10 +1448,10 @@ sap.ui.define([
 							}
 						}),
 						new sap.m.Text({ visible:false, text: "" }),
-						ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+						ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "85px", "Right").addStyleClass(""), // 강사명
 						new sap.m.Input({
 							textAlign: "Begin",
-							width: "70px",
+							width: "85px",
 							editable: {
 								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 								formatter: function(v1, v2, v3) {
@@ -1461,11 +1461,11 @@ sap.ui.define([
 							value: "",
 							liveChange: oController.getDyNameComma.bind(oController),
 						}).addStyleClass("mr-10px"),
-						ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
+						ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "85px", "Right").addStyleClass(""), // 시간
 						new sap.m.Input({
 							textAlign: "End",
 							liveChange: oController.getDyTimeComma.bind(oController),
-							width: "70px",
+							width: "85px",
 							value: "",
 							editable: {
 								parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1636,14 +1636,14 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "85px", "Right").addStyleClass(""), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
-									width: "70px",
+									width: "85px",
 									editable:false,
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "85px", "Right").addStyleClass(""), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1653,7 +1653,7 @@ sap.ui.define([
 									},
 									liveChange: oController.getTimeComma.bind(oController),
 									textAlign: "End",
-									width: "70px",
+									width: "85px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
 								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)
@@ -1692,15 +1692,15 @@ sap.ui.define([
 									}
 								}),
 								new sap.m.Text({ visible:false, text: e.Pernr }),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "100px", "Right").addStyleClass("ml-3px mr-5px"), // 강사명
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70029}", "85px", "Right").addStyleClass(""), // 강사명
 								new sap.m.Input({
 									textAlign: "Begin",
-									width: "70px",
+									width: "85px",
 									editable:false,
 									liveChange: oController.getDyNameComma.bind(oController),
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
-								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "100px", "Right").addStyleClass("mr-5px"), // 시간
+								ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "85px", "Right").addStyleClass(""), // 시간
 								new sap.m.Input({
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
@@ -1710,7 +1710,7 @@ sap.ui.define([
 									},
 									liveChange: oController.getDyTimeComma.bind(oController),
 									textAlign: "End",
-									width: "70px",
+									width: "85px",
 									value: e.Times
 								}).addStyleClass("mr-10px"),
 								ViewTemplates.getLabel("header", "{i18n>LABEL_70031}", "100px", "Right").addStyleClass("mr-5px"), // 강사료(단가)

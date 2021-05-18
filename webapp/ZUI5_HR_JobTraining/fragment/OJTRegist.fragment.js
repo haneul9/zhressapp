@@ -350,7 +350,7 @@ sap.ui.define([
                                     new sap.m.HBox({
 										width: "100%",
                                         items: [
-                                            ViewTemplates.getLabel("header", "{i18n>LABEL_70026}", "74px", "Right" ), // 사내
+                                            ViewTemplates.getLabel("header", "{i18n>LABEL_70026}", "74px", "Right" ), // 사내     
                                             new sap.m.VBox({
 												width: "702px",
                                                 items: [
@@ -382,17 +382,18 @@ sap.ui.define([
 																}
 															}).addStyleClass("button-light-sm")
 														]
-													}).addStyleClass("ml-10px mt-3px"),
+													}).addStyleClass("mt-10px mb-8px"),
 													new sap.m.VBox(oController.PAGEID + "_InTeacherBox", {
 														items: [
 														]
 													})
 													.setModel(oController.TeacherInfoModel)
 													.bindElement("/InData")
+													.addStyleClass("mb-10px border-top")
                                                 ]
                                             })
                                         ]
-                                    }),
+                                    }).addStyleClass("border-bottom"),
                                     new sap.m.HBox({
 										width: "100%",
                                         items: [
@@ -438,13 +439,14 @@ sap.ui.define([
 																}
 															}).addStyleClass("button-light-sm")
 														]
-													}).addStyleClass("mt-3px"),
+													}).addStyleClass("mt-10px mb-8px"),
 													new sap.m.VBox(oController.PAGEID + "_OutTeacherBox", {
 														items: [
 														]
 													})
 													.setModel(oController.TeacherInfoModel)
 													.bindElement("/OutData")
+													.addStyleClass("mb-10px border-top")
                                                 ]
                                             })
                                         ]
@@ -769,7 +771,7 @@ sap.ui.define([
 			})
 			.setModel(oController.ApplyModel)
 			.bindElement("/FormData")
-			.addStyleClass("custom-dialog-popup");
+			.addStyleClass("custom-dialog-popup custom-ojt");
 
 			return oDialog;
 		}
