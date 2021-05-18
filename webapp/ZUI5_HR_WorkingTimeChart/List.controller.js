@@ -34,21 +34,21 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 			
 			// 인사영역
 			var oWerks = sap.ui.getCore().byId(oController.PAGEID + "_Werks");
 				oWerks.destroyItems();
 			
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-			var oPath = "/WerksListAuthSet?$filter=Percod eq '" + encodeURIComponent(oLoginData.Percod) + "' and Bukrs eq '" + oLoginData.Bukrs3 + "'";
+			var oPath = "/WerksListAuthSet?$filter=Percod eq '" + encodeURIComponent(oController.getSessionInfoByKey("Percod")) + "'";
+				oPath += " and Bukrs eq '" + oController.getSessionInfoByKey("Bukrs3") + "'";
 				oPath += " and ICusrid eq '" + encodeURIComponent(sessionStorage.getItem('ehr.odata.user.percod')) + "'";
 				oPath += " and ICusrse eq '" + encodeURIComponent(sessionStorage.getItem('ehr.session.token')) + "'";
 				oPath += " and ICusrpn eq '" + encodeURIComponent(sessionStorage.getItem('ehr.sf-user.name')) + "'";
@@ -95,21 +95,21 @@ sap.ui.define([
 						Lowyn : oEvent.data.Lowyn ? oEvent.data.Lowyn : "",
 						FromPageId : oEvent.data.FromPageId,
 						Orgeh : oEvent.data.Orgeh ? oEvent.data.Orgeh : "",
-						Chief : $.app.getModel("session").getData().Chief
+						Chief : oController.getSessionInfoByKey("Chief")
 					}
 				};
 				
 			} else if(!oController._ListCondJSonModel.getProperty("/Data")){
 				vData = {
 					Data : {
-						Werks : oLoginData.Persa,
+						Werks : oController.getSessionInfoByKey("Persa"),
 						Tmdat : dateFormat.format(new Date()),
 						Key : "1",
 						Wrkty : "1",
 						Disty : "1",
-						Orgeh : (gAuth != "H" ? $.app.getModel("session").getData().Orgeh : ""),
-						Ename : (gAuth != "H" ? $.app.getModel("session").getData().Stext : ""),
-						Chief : $.app.getModel("session").getData().Chief
+						Orgeh : (gAuth != "H" ? oController.getSessionInfoByKey("Orgeh") : ""),
+						Ename : (gAuth != "H" ? oController.getSessionInfoByKey("Stext") : ""),
+						Chief : oController.getSessionInfoByKey("Chief")
 					}
 				};
 			}
@@ -250,8 +250,8 @@ sap.ui.define([
 			var search = function(){
 				var oPath = "";
 				var createData = {WorkingTimeHisNav : []};
-					createData.IEmpid = $.app.getModel("session").getData().Pernr;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.IEmpid = oController.getSessionInfoByKey("Pernr");
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IAusty = gAuth;
 					createData.IWerks = oData.Werks;
 					createData.IBukrs = oData.Werks;
@@ -333,8 +333,8 @@ sap.ui.define([
 			
 			var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
 			var createData = {WorkingTimeStatNav : []};
-				createData.IEmpid = $.app.getModel("session").getData().Pernr;
-				createData.ILangu = $.app.getModel("session").getData().Langu;
+				createData.IEmpid = oController.getSessionInfoByKey("Pernr");
+				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				createData.IAusty = gAuth;
 				createData.IWerks = oData.Werks;
 				createData.IBukrs = oData.Werks;
@@ -545,10 +545,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },

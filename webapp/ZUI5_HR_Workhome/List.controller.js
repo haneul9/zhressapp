@@ -35,14 +35,14 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
+
 			this.oExtryn = Common.isExternalIP() === true ? "X" : "";
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
@@ -53,17 +53,17 @@ sap.ui.define([
 					Data : {
 						Begda : new Date(today.getFullYear(), today.getMonth(), 1),
 						Endda : new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth()))),
-						Persa : oLoginData.Persa
+						Persa : oController.getSessionInfoByKey("Persa")
 						// Tmdat : dateFormat.format(new Date()),
 					}
 				};
 				
-				if(oLoginData.Persa.substring(0,1) == "D"){ // 첨단은 대상자 사번
-					vData.Data.Pernr = oLoginData.Pernr;
-					vData.Data.Ename = oLoginData.Ename;
+				if(oController.getSessionInfoByKey("Persa").substring(0,1) == "D"){ // 첨단은 대상자 사번
+					vData.Data.Pernr = oController.getSessionInfoByKey("Pernr");
+					vData.Data.Ename = oController.getSessionInfoByKey("Ename");
 				} else { // 기초는 소속부서로 default값 설정
-					vData.Data.Orgeh = oLoginData.Orgeh;
-					vData.Data.Ename = oLoginData.Stext;
+					vData.Data.Orgeh = oController.getSessionInfoByKey("Orgeh");
+					vData.Data.Ename = oController.getSessionInfoByKey("Stext");
 				}
 			
 				oController._ListCondJSonModel.setData(vData);
@@ -132,8 +132,8 @@ sap.ui.define([
 					createData.IOrgeh = (oData.Orgeh && oData.Orgeh != "" ? oData.Orgeh : "");
 					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda.getFullYear(), oData.Begda.getMonth(), oData.Begda.getDate())) + ")\/"; 
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda.getFullYear(), oData.Endda.getMonth(), oData.Endda.getDate())) + ")\/";
-					createData.IBukrs = $.app.getModel("session").getData().Bukrs3;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.IBukrs = oController.getSessionInfoByKey("Bukrs3");
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = "1";
 
 				oModel.create("/WorkhomeApplySet", createData, {
@@ -235,7 +235,7 @@ sap.ui.define([
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = Flag == "D" ? "4" : "9";
 					createData.IExtryn = oExtryn;
 					
@@ -457,10 +457,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: "",
             },

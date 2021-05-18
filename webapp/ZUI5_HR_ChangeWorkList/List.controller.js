@@ -32,7 +32,7 @@ sap.ui.define(
                     },
                     this
                 );
-				gDtfmt = $.app.getModel("session").getData().Dtfmt;	
+				gDtfmt = this.getSessionInfoByKey("Dtfmt");	
                 // this.getView().addStyleClass("sapUiSizeCompact");
                 // this.getView().setModel($.app.getModel("i18n"), "i18n");
             },
@@ -46,23 +46,23 @@ sap.ui.define(
 
                     var vData = {
                         Data: {
-                            Bukrs: $.app.getModel("session").getData().Bukrs2,
+                            Bukrs: oController.getSessionInfoByKey("Bukrs2"),
                             Pernr: "",
                             Orgeh: "",
                             Ename: "",
-                            Langu: $.app.getModel("session").getData().Langu,
+                            Langu: oController.getSessionInfoByKey("Langu"),
                             Begda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
                             Endda: dateFormat.format(new Date(today.getFullYear(), today.getMonth(), oController.getLastDate(today.getFullYear(), today.getMonth()))),
-                            Persa : $.app.getModel("session").getData().Persa
+                            Persa : oController.getSessionInfoByKey("Persa")
                         }
                     };
                     
                     if(vData.Data.Persa.substring(0,1) == "D"){
-						vData.Data.Pernr = $.app.getModel("session").getData().Pernr;
-						vData.Data.Ename = $.app.getModel("session").getData().Ename;
+						vData.Data.Pernr = oController.getSessionInfoByKey("Pernr");
+						vData.Data.Ename = oController.getSessionInfoByKey("Ename");
 					} else {
-						vData.Data.Orgeh = $.app.getModel("session").getData().Orgeh;
-                        vData.Data.Ename = $.app.getModel("session").getData().Stext;
+						vData.Data.Orgeh = oController.getSessionInfoByKey("Orgeh");
+                        vData.Data.Ename = oController.getSessionInfoByKey("Stext");
 					}
 
                     oController._ListCondJSonModel.setData(vData);
@@ -188,10 +188,10 @@ sap.ui.define(
                 oController = oView.getController();
 
                 var initData = {
-                        Percod: $.app.getModel("session").getData().Percod,
-                        Bukrs: $.app.getModel("session").getData().Bukrs2,
-                        Langu: $.app.getModel("session").getData().Langu,
-                        Molga: $.app.getModel("session").getData().Molga,
+                        Percod: oController.getSessionInfoByKey("Percod"),
+                        Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                        Langu: oController.getSessionInfoByKey("Langu"),
+                        Molga: oController.getSessionInfoByKey("Molga"),
                         Datum: new Date(),
                         Mssty: ""
                     },

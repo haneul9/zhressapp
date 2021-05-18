@@ -34,14 +34,13 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;	
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");	
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 			
 			// 조회조건 초기화
 			// 인사영역
@@ -57,8 +56,8 @@ sap.ui.define([
 					new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
 					new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
 					new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
-					new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oLoginData.Percod),
-					new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oLoginData.Bukrs3)
+					new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
+					new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Bukrs3"))
 				],
 				success: function(data, oResponse) {
 					if(data && data.results.length) {
@@ -96,24 +95,18 @@ sap.ui.define([
 				
 				var vData = {
 					Data : {
-						Werks : oLoginData.Persa,
+						Werks : oController.getSessionInfoByKey("Persa"),
 						Zyymm : oZyymm,
 						Key : "1",
 						Disty : "1",
 						Pernr : "",
-						Chief : $.app.getModel("session").getData().Chief
+						Chief : oController.getSessionInfoByKey("Chief")
 					}
 				};
 				
 				if(gAuth == "M"){
-					// sap.ui.getCore().byId(oController.PAGEID + "_Orgeh").addToken(
-					// 	new sap.m.Token({
-					// 		key : $.app.getModel("session").getData().Orgeh,
-					// 		text : $.app.getModel("session").getData().Stext
-					// 	})	
-					// );
-					vData.Data.Orgeh = $.app.getModel("session").getData().Orgeh;
-					vData.Data.Ename = $.app.getModel("session").getData().Stext;
+					vData.Data.Orgeh = oController.getSessionInfoByKey("Orgeh");
+					vData.Data.Ename = oController.getSessionInfoByKey("Stext");
 				}
 				
 				oController._ListCondJSonModel.setData(vData);
@@ -223,7 +216,7 @@ sap.ui.define([
 			var search = function(){
 				var oPath = "";
 				var createData = {LeaveuseHistoryNav : []};
-					createData.IEmpid = $.app.getModel("session").getData().Pernr;
+					createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 					createData.IActty = gAuth;
 					createData.IWerks = oData.Werks;
 					createData.IZyymm = oData.Zyymm;
@@ -299,7 +292,7 @@ sap.ui.define([
 			
 			var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 			var createData = {LeaveuseBoardNav : []};
-				createData.IEmpid = $.app.getModel("session").getData().Pernr;
+				createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 				createData.IActty = gAuth;
 				createData.IWerks = oData.Werks;
 				createData.IZyymm = oData.Zyymm;
@@ -411,7 +404,7 @@ sap.ui.define([
 				createData.IWerks = oData.Werks;
 				createData.IOrgeh = oData.Orgeh;
 				createData.IZyymm = oController._ListCondJSonModel.getProperty("/Data/Zyymm");
-				createData.IEmpid = $.app.getModel("session").getData().Pernr;
+				createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 				createData.IDisty = "3";
 				createData.IActty = gAuth;
 				
@@ -756,10 +749,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },

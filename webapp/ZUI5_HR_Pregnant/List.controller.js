@@ -61,15 +61,14 @@ sap.ui.define(
                 var oController = oView.getController();
 
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
-                var vEmpLoginInfo = $.app.getModel("session").getData();
                 var oData = oController._ListCondJSonModel.getProperty("/Data");
 
                 var oField = [];
                 var createData = { PregnantApplyTableIn: [] };
-                createData.IBukrs = vEmpLoginInfo.Bukrs;
-                createData.IPernr = vEmpLoginInfo.Pernr;
-                createData.IEmpid = vEmpLoginInfo.Pernr;
-                createData.ILangu = vEmpLoginInfo.Langu;
+                createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+                createData.IPernr = oController.getSessionInfoByKey("Pernr");
+                createData.IEmpid = oController.getSessionInfoByKey("Pernr");
+                createData.ILangu = oController.getSessionInfoByKey("Langu");
 
                 var detail = {};
 
@@ -98,7 +97,7 @@ sap.ui.define(
 
                         createData.IConType = "A";
 
-                        detail = { Pernr: vEmpLoginInfo.Pernr, Preen: "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/" };
+                        detail = { Pernr: oController.getSessionInfoByKey("Pernr"), Preen: "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/" };
                         if (oData.Status1 == "AA") {
                             detail.Subty = oData.Subty;
                             detail.Objps = oData.Objps;
@@ -120,7 +119,7 @@ sap.ui.define(
 
                         createData.IConType = "B";
 
-                        detail = { Pernr: vEmpLoginInfo.Pernr, Preen: "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/", Prebg: "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/" };
+                        detail = { Pernr: oController.getSessionInfoByKey("Pernr"), Preen: "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/", Prebg: "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/" };
                         if (oData.Status1 == "AA") {
                             detail.Subty = oData.Subty;
                             detail.Objps = oData.Objps;
@@ -259,8 +258,6 @@ sap.ui.define(
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Pregnant.List");
                 var oController = oView.getController();
 
-                var vEmpLoginInfo = $.app.getModel("session").getData();
-
                 var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
                 var oJSONModel = oTable.getModel();
                 var vData = { Data: [] };
@@ -276,11 +273,11 @@ sap.ui.define(
                     var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                     var createData = { PregnantApplyTableIn: [] };
                     createData.IConType = "1";
-                    createData.IBukrs = vEmpLoginInfo.Bukrs;
-                    createData.IMolga = vEmpLoginInfo.Molga;
-                    createData.IEmpid = vEmpLoginInfo.Pernr;
-                    createData.IPernr = vEmpLoginInfo.Pernr;
-                    createData.ILangu = vEmpLoginInfo.Langu;
+                    createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+                    createData.IMolga = oController.getSessionInfoByKey("Molga");
+                    createData.IEmpid = oController.getSessionInfoByKey("Pernr");
+                    createData.IPernr = oController.getSessionInfoByKey("Pernr");
+                    createData.ILangu = oController.getSessionInfoByKey("Langu");
 
                     oModel.create("/PregnantApplyHeaderSet", createData, {
                         success: function (data) {
@@ -410,7 +407,7 @@ sap.ui.define(
                 var createData = { NavCommonCodeList: [] };
                 createData.ICodeT = "058";
                 createData.IDatum = vData.Data.Reqdt ? "/Date(" + Common.getTime(new Date(vData.Data.Reqdt)) + ")/" : "/Date(" + Common.getTime(new Date()) + ")/";
-                createData.ILangu = $.app.getModel("session").getData().Langu;
+                createData.ILangu = oController.getSessionInfoByKey("Langu");
 
                 oModel.create("/CommonCodeListHeaderSet", createData, {
 					success: function (data) {
@@ -452,7 +449,7 @@ sap.ui.define(
                 createData.ICodeT = "058";
                 createData.ICodty = "PT_MATE";
                 createData.IDatum = vData.Data.Reqdt ? "/Date(" + Common.getTime(new Date(vData.Data.Reqdt)) + ")/" : "/Date(" + Common.getTime(new Date()) + ")/";
-                createData.ILangu = $.app.getModel("session").getData().Langu;
+                createData.ILangu = oController.getSessionInfoByKey("Langu");
 
                 oModel.create("/CommonCodeListHeaderSet", createData, {
 					success: function (data) {
@@ -663,17 +660,17 @@ sap.ui.define(
                         }
                     }
 
-                    createData.IPernr = $.app.getModel("session").getData().Pernr;
-                    createData.IEmpid = $.app.getModel("session").getData().Pernr;
-                    createData.IMolga = $.app.getModel("session").getData().Molga;
-                    createData.IBukrs = $.app.getModel("session").getData().Bukrs;
-                    createData.ILangu = $.app.getModel("session").getData().Langu;
+                    createData.IPernr = oController.getSessionInfoByKey("Pernr");
+                    createData.IEmpid = oController.getSessionInfoByKey("Pernr");
+                    createData.IMolga = oController.getSessionInfoByKey("Molga");
+                    createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+                    createData.ILangu = oController.getSessionInfoByKey("Langu");
                     createData.IBegda = oData.Begda ? "/Date(" + Common.getTime(oData.Begda) + ")/" : null;
                     createData.IEndda = oData.Endda ? "/Date(" + Common.getTime(oData.Endda) + ")/" : null;
                     createData.IExtryn = vExtryn;
 
                     var detail = {};
-                    detail.Pernr = $.app.getModel("session").getData().Pernr;
+                    detail.Pernr = oController.getSessionInfoByKey("Pernr");
                     detail.Preen = "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/"; // 출산예정일
                     detail.Prebg = oData.Prebg ? "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/" : null; // 임신시작일
                     detail.Prebn = oData.Prebn; // 태아수
@@ -788,7 +785,7 @@ sap.ui.define(
             },
 
             getUserId: function () {
-                return $.app.getModel("session").getData().Pernr;
+                return oController.getSessionInfoByKey("Pernr");
             },
 
             getLocalSessionModel: Common.isLOCAL()

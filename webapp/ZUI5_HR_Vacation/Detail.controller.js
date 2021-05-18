@@ -38,17 +38,16 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			var oData = {
 				Data : {
 					FromPageId : oEvent.data.FromPageId,
 					Status1 : oEvent.data.Status1,
 					ListStatus : oEvent.data.Status1,
-					Werks : $.app.getModel("session").getData().Persa,
+					Werks : oController.getSessionInfoByKey("Persa"),
 					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
 					Delapp : oEvent.data.Delapp ? oEvent.data.Delapp : "",
-					Chief : $.app.getModel("session").getData().Chief,
+					Chief : oController.getSessionInfoByKey("Chief"),
 					Extryn : Common.isExternalIP() === true ? "X" : ""
 				}
 			};
@@ -196,7 +195,7 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
 			var createData = {TableIn : []};
 				createData.IPernr = Pernr;
-				createData.ILangu = $.app.getModel("session").getData().Langu;
+				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				
 			oModel.create("/HeaderSet", createData, {
 				success: function(data, res){
@@ -355,7 +354,7 @@ sap.ui.define([
 				if(oData.Status1 == "" || (pernr && pernr != "")){
 					
 					// 대상자
-					oController.onSetInfo((pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr));
+					oController.onSetInfo((pernr && pernr != "" ? pernr : oController.getSessionInfoByKey("Pernr")));
 
 					var vData = {
 						FromPageId : oController._DetailJSonModel.getProperty("/Data/FromPageId"),
@@ -363,7 +362,7 @@ sap.ui.define([
 						Bukrs : oController._DetailJSonModel.getProperty("/Data/Bukrs"),
 						Werks :	oController._DetailJSonModel.getProperty("/Data/Werks"),
 						Molga : oController._DetailJSonModel.getProperty("/Data/Molga"),
-						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr),
+						Pernr : (pernr && pernr != "" ? pernr : oController.getSessionInfoByKey("Pernr")),
 						Flag : oController._DetailJSonModel.getProperty("/Data/Flag"),
 						Delapp : oController._DetailJSonModel.getProperty("/Data/Delapp"),
 						Extryn : oController._DetailJSonModel.getProperty("/Data/Extryn"),
@@ -385,7 +384,7 @@ sap.ui.define([
 					var createData = {VacationApply1Nav : [], VacationApply2Nav : []};
 						createData.IEmpid = oData.Pernr;
 						createData.IBukrs = oData.Bukrs;
-						createData.ILangu = $.app.getModel("session").getData().Langu;
+						createData.ILangu = oController.getSessionInfoByKey("Langu");
 						createData.IMolga = oData.Molga;
 						createData.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 						createData.IConType = "1";
@@ -508,7 +507,7 @@ sap.ui.define([
 				var createData = {VacationTypeNav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IMolga = oData.Molga;
 				
 				oModel.create("/VacationTypePeSet", createData, {
@@ -564,7 +563,7 @@ sap.ui.define([
 				var createData2 = {VacationQuotaNav : []};
 					createData2.IPernr = oData.Pernr;
 					createData2.IBukrs = oData.Bukrs;
-					createData2.ILangu = $.app.getModel("session").getData().Langu;
+					createData2.ILangu = oController.getSessionInfoByKey("Langu");
 					createData2.IMolga = oData.Molga;
 					createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
 					createData2.ICorre = "X";
@@ -681,7 +680,7 @@ sap.ui.define([
 						var createData = {BztrCodeListNav : []};
 							createData.IPernr = oData.Pernr;
 							createData.IBukrs = oData.Bukrs;
-							createData.ILangu = $.app.getModel("session").getData().Langu;
+							createData.ILangu = oController.getSessionInfoByKey("Langu");
 							createData.IMolga = oData.Molga;
 							createData.IInpType = "04";
 						
@@ -792,7 +791,7 @@ sap.ui.define([
 				var createData = {OvertimePe1Nav : [], OvertimePe2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IMolga = oData.Molga;
 					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
@@ -929,7 +928,7 @@ sap.ui.define([
 				var createData = {ChkAbsenceNav : [], ChkAbsence2Nav : []};
 					createData.IPernr = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IMolga = oData.Molga;
 					createData.IBegda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(oData.Endda)) + ")\/"; 
@@ -1078,7 +1077,7 @@ sap.ui.define([
 					createData.IEndda = "\/Date(" + common.Common.getTime(new Date(vData.Endda)) + ")\/"; 
 					createData.IBukrs = vData.Bukrs;
 					createData.IMolga = vData.Molga;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					
 				for(var i=0; i<oData.length; i++){
 					var detail = {};
@@ -1355,9 +1354,9 @@ sap.ui.define([
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
 				
-					createData.IEmpid = $.app.getModel("session").getData().Pernr;
+					createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IMolga = oData.Molga;
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/";
 					createData.IExtryn = oData.Extryn;
@@ -1575,7 +1574,7 @@ sap.ui.define([
 			var createData = {PerScheduleNav : []};
 				createData.IPernr = oData.Pernr;
 				createData.IBukrs = oData.Bukrs;
-				createData.ILangu = $.app.getModel("session").getData().Langu;
+				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				createData.IMolga = oData.Molga;
 				createData.IYear = oData.Year + "";
 				createData.IMonth = (oData.Month >= 10 ? (oData.Month + "") : ("0" + oData.Month));
@@ -1827,10 +1826,10 @@ sap.ui.define([
 			}
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: "",
                 autoClose : false

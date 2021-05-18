@@ -32,14 +32,13 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -49,18 +48,18 @@ sap.ui.define([
 					Data : {
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
-						Bukrs : oLoginData.Bukrs3, // 2021-05-07 Bukrs2
-						Langu : oLoginData.Langu,
-						Persa : oLoginData.Persa
+						Bukrs : oController.getSessionInfoByKey("Bukrs3"), // 2021-05-07 Bukrs2
+						Langu : oController.getSessionInfoByKey("Langu"),
+						Persa : oController.getSessionInfoByKey("Persa")
 					}
 				};
 				
-				if(oLoginData.Persa.substring(0,1) == "D"){
-					vData.Data.Pernr = oLoginData.Pernr;
-					vData.Data.Ename = oLoginData.Ename;
+				if(oController.getSessionInfoByKey("Persa").substring(0,1) == "D"){
+					vData.Data.Pernr = oController.getSessionInfoByKey("Pernr");
+					vData.Data.Ename = oController.getSessionInfoByKey("Ename");
 				} else {
-					vData.Data.Orgeh = oLoginData.Orgeh;
-					vData.Data.Ename = oLoginData.Stext;
+					vData.Data.Orgeh = oController.getSessionInfoByKey("Orgeh");
+					vData.Data.Ename = oController.getSessionInfoByKey("Stext");
 				}
 				
 				oController._ListCondJSonModel.setData(vData);
@@ -195,10 +194,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: "",
             },

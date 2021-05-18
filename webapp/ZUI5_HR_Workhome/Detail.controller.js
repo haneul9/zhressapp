@@ -41,14 +41,12 @@ sap.ui.define([
 		onBeforeShow: function(oEvent){
 			var oController = this;
 			this.oExtryn = Common.isExternalIP() === true ? "X" : "";
-
-			var oLoginData = $.app.getModel("session").getData();
 		
 			var oData = {
 				Data : {
 					FromPageId : oEvent.data.FromPageId,
 					Status : oEvent.data.Status,
-					Werks : $.app.getModel("session").getData().Persa
+					Werks : oController.getSessionInfoByKey("Persa")
 				}
 			};
 			
@@ -174,7 +172,7 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
 			var createData = {TableIn : []};
 				createData.IPernr = Pernr;
-				createData.ILangu = $.app.getModel("session").getData().Langu;
+				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				
 			oModel.create("/HeaderSet", createData, {
 				success: function(data, res){
@@ -303,14 +301,14 @@ sap.ui.define([
 				
 				if(oData.Status == "" || (pernr && pernr != "")){
 					// 대상자
-					oController.onSetInfo((pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr));
+					oController.onSetInfo((pernr && pernr != "" ? pernr : oController.getSessionInfoByKey("Pernr")));
 					
 					var vData = {
 						FromPageId : oController._DetailJSonModel.getProperty("/Data/FromPageId"),
 						Status : oController._DetailJSonModel.getProperty("/Data/Status"),
 						Bukrs : oController._DetailJSonModel.getProperty("/Data/Bukrs"),
 						Molga : oController._DetailJSonModel.getProperty("/Data/Molga"),
-						Pernr : (pernr && pernr != "" ? pernr : $.app.getModel("session").getData().Pernr),
+						Pernr : (pernr && pernr != "" ? pernr : oController.getSessionInfoByKey("Pernr")),
 						Werks : oController._DetailJSonModel.getProperty("/Data/Werks"),
 						AppName : oController._DetailJSonModel.getProperty("/Data/AppName")
 					};
@@ -394,9 +392,9 @@ sap.ui.define([
 				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 
 					createData.IPernr = oData.Pernr;
-					createData.IEmpid = $.app.getModel("session").getData().Pernr;
+					createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 					createData.IBukrs = oData.Bukrs;
-					createData.ILangu = $.app.getModel("session").getData().Langu;
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
 					createData.IConType = Flag == "C" ? "3" : "4";
 					createData.IExtryn = oController.oExtryn;
 					
@@ -505,10 +503,10 @@ sap.ui.define([
 			}
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: "",
                 autoClose : false

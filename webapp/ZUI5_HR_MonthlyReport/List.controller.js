@@ -39,7 +39,6 @@ sap.ui.define([
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -48,10 +47,10 @@ sap.ui.define([
 				var	vData = {
 					Data : {
 						Zyymm : today.getFullYear() + "." + (today.getMonth()+1 > 10 ? today.getMonth()+1 : "0" + (today.getMonth()+1)),
-						Orgeh : oLoginData.Orgeh,
-						Ename : oLoginData.Stext,
-						Bukrs : oLoginData.Bukrs2,
-						Langu : oLoginData.Langu
+						Orgeh : oController.getSessionInfoByKey("Orgeh"),
+						Ename : oController.getSessionInfoByKey("Stext"),
+						Bukrs : oController.getSessionInfoByKey("Bukrs2"),
+						Langu : oController.getSessionInfoByKey("Langu")
 					}
 				};
 				
@@ -170,10 +169,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: "",
             },

@@ -401,12 +401,12 @@ common.makeTable = {
 							var oModel = $.app.getModel("ZHR_COMMON_SRV");
 							var createData = {NavCommonCodeList : []};
 								createData.ICodeT = "022";
-								createData.IPernr = $.app.getModel("session").getData().Pernr;
+								createData.IPernr = oController.getSessionInfoByKey("Pernr");
 								createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
-								createData.IBukrs = $.app.getModel("session").getData().Bukrs;
-								createData.IMolga = $.app.getModel("session").getData().Molga;
+								createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+								createData.IMolga = oController.getSessionInfoByKey("Molga");
 								createData.ICodty = "CC";
-								createData.ILangu = $.app.getModel("session").getData().Langu;
+								createData.ILangu = oController.getSessionInfoByKey("Langu");
 							
 							oModel.create("/CommonCodeListHeaderSet", createData, null,
 								function(data, res){

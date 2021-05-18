@@ -31,7 +31,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			// gDtfmt = $.app.getModel("session").getData().Dtfmt;		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -45,11 +45,11 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Werks : $.app.getModel("session").getData().Persa,
-						Bukrs : $.app.getModel("session").getData().Bukrs3,
-						Pernr : $.app.getModel("session").getData().Pernr,
-						Ename : $.app.getModel("session").getData().Ename,                                                                                                           
-						Langu : $.app.getModel("session").getData().Langu,
+						Werks : oController.getSessionInfoByKey("Persa"),
+						Bukrs : oController.getSessionInfoByKey("Bukrs3"),
+						Pernr : oController.getSessionInfoByKey("Pernr"),
+						Ename : oController.getSessionInfoByKey("Ename"),                                                                                                           
+						Langu : oController.getSessionInfoByKey("Langu"),
 						Zyymm : today.getFullYear() + (today.getMonth() + 1 < 10 ? ("0" + (today.getMonth()+1)) : (today.getMonth()+1))
 					}
 				};
@@ -425,10 +425,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"), 
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },

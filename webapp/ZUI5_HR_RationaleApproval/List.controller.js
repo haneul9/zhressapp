@@ -26,14 +26,13 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;	
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");	
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -41,10 +40,10 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Bukrs : $.app.getModel("session").getData().Bukrs3,
-						Pernr : $.app.getModel("session").getData().Pernr,
-						Orgeh : $.app.getModel("session").getData().Orgeh,
-						Langu : $.app.getModel("session").getData().Langu
+						Bukrs : oController.getSessionInfoByKey("Bukrs3"),
+						Pernr : oController.getSessionInfoByKey("Pernr"),
+						Orgeh : oController.getSessionInfoByKey("Orgeh"),
+						Langu : oController.getSessionInfoByKey("Langu")
 					}
 				};
 				
@@ -52,7 +51,7 @@ sap.ui.define([
 				
 				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 				
-				if($.app.getModel("session").getData().Persa.substring(0,1) != "D"){
+				if(oController.getSessionInfoByKey("Persa").substring(0,1) != "D"){
 									// No,  상태, 근무일자, 사번, 성명, 근무형태
 					var col_info = [{id: "No", label: "No.", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
 									{id: "Status", label: "{i18n>LABEL_67004}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "160px"},

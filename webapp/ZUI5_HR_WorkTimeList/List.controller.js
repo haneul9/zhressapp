@@ -32,14 +32,13 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
-			var oLoginData = $.app.getModel("session").getData();
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
 			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
@@ -47,17 +46,17 @@ sap.ui.define([
 			 	
 				var	vData = {
 					Data : {
-						Bukrs : $.app.getModel("session").getData().Bukrs2,
-						Pernr : $.app.getModel("session").getData().Pernr,
+						Bukrs : oController.getSessionInfoByKey("Bukrs2"),
+						Pernr : oController.getSessionInfoByKey("Pernr"),
 						Orgeh : "",
-						Ename : $.app.getModel("session").getData().Ename,
-						Molga : $.app.getModel("session").getData().Molga,
-						Langu : $.app.getModel("session").getData().Langu,
+						Ename : oController.getSessionInfoByKey("Ename"),
+						Molga : oController.getSessionInfoByKey("Molga"),
+						Langu : oController.getSessionInfoByKey("Langu"),
 						Begda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), 1)),
 						Endda : dateFormat.format(new Date(today.getFullYear(), today.getMonth(), (oController.getLastDate(today.getFullYear(), today.getMonth())))),
 						Type : "1",
-						Werks : $.app.getModel("session").getData().Persa,
-						Chief : $.app.getModel("session").getData().Chief
+						Werks : oController.getSessionInfoByKey("Persa"),
+						Chief : oController.getSessionInfoByKey("Chief")
 					}
 				};
 				
@@ -676,10 +675,10 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var initData = {
-                Percod: $.app.getModel("session").getData().Percod,
-                Bukrs: $.app.getModel("session").getData().Bukrs2,
-                Langu: $.app.getModel("session").getData().Langu,
-                Molga: $.app.getModel("session").getData().Molga,
+                Percod: oController.getSessionInfoByKey("Percod"),
+                Bukrs: oController.getSessionInfoByKey("Bukrs2"),
+                Langu: oController.getSessionInfoByKey("Langu"),
+                Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
             },
