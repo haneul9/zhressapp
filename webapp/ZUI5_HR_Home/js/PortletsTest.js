@@ -1,4 +1,4 @@
-/* global EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet */
+/* global Chart EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet VacationForHQPortlet */
 function Portlets(_gateway) {
 
 	this._gateway = _gateway;
@@ -24,9 +24,15 @@ init: function() {
 		'P106': HiTalkTalkPortlet,			// 하이톡톡
 		'P107': EvalGoalPortlet	,			// 목표관리
 		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
-		'P109': WorkstimeStatusPortlet,		// 자율출퇴근 관리
-		'P110': VacationPortlet				// 근태신청
+		'P109': WorkstimeStatusPortlet,		// My Working Time
+		'P110': VacationPortlet,			// 휴가사용현황
+		'P111': VacationForHQPortlet		// 연차사용현황 : 임원용
 	};
+
+	Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
+	Chart.defaults.global.defaultFontColor = 'rgb(153, 153, 153)';
+	Chart.defaults.global.legend.labels.boxWidth = 20;
+	Chart.defaults.global.legend.align = 'end';
 
 	$(document)
 		.off('click', '.portlet-masonry [data-url]')
@@ -259,6 +265,8 @@ renderSwitchModal: function() {
 			var t = $(e.currentTarget), toBeUsed = !t.prop('checked');
 			this.switch(toBeUsed, t.prop('checked', toBeUsed).parents('.portlet-switch').toggleClass('active', toBeUsed).data('key'));
 		}.bind(this));
+
+	$('#portlet-personalization .btn-primary').prop('disabled', false);
 },
 
 initSwitchModal: function() {
@@ -290,7 +298,10 @@ initSwitchModal: function() {
 			'</div>',
 		'</div>'
 	].join(''))
-	.on('click', '.btn-primary', function() { // 적용 button click event handler
+	.find('.btn-primary').prop('disabled', true).end()
+	.on('click', '.btn-primary', function(e) { // 적용 button click event handler
+		$(e.currentTarget).prop('disabled', true);
+
 		this._gateway.spinner(true);
 
 		var save = false;
