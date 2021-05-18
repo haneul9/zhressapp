@@ -96,21 +96,18 @@ fill: function() {
 
 						oList3.push({iDone: iDone, index: i, vGroundColor: oGroundColor});
 
-						var vName2 = (v.name || '').split(/\n/)[1] === undefined ? "" : (v.name || '').split(/\n/)[1],
-							vName3 = v.name.split(/\n/)[2] === undefined ? "" : "...";
+						v.name = v.name.replace(/\n/g, "</br>");
 							
 						list.append([
 							'<div class="my-evalgoal-info">',
-								'<div class="mylist1">',
+								'<div class="mylist1" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">',
 									// i + 1 + '.' + v.name,
-									(v.name || '').split(/\n/)[0],
+									v.name,
 								'</div>',
-								'<div class="mylist2">',
-								vName2 + vName3,
 								'</div>',
 								'<div class="evalgoal-statusBar" title="' + iDone + '%">',
 									'<div class="progress">',
-										'<div style="height:auto" class="progress-bar i' + i + '" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
+										'<div style="height:auto" id="i' + i + '" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>',
 									'</div>',
 								'</div>',
 							'</div>'
@@ -119,7 +116,7 @@ fill: function() {
 					
 					$.map(oList3, function(v) {
 						if (v.iDone > 0) {
-							$('.my-evalgoal-info .progress-bar.i' + v.index)
+							$('#i' + v.index)
 								.addClass(v.vGroundColor)
 								.animate({
 									width: v.iDone + '%'
