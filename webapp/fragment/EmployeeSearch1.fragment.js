@@ -13,57 +13,66 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 					new sap.m.Label({ text: "{i18n>LABEL_00106}" })
 					.addStyleClass("mb--5px"),	// 인사영역
 					new sap.m.Select(oController.PAGEID + "_ES_Persa", {
-						width: "200px",
+						width: "208px",
 						change: common.SearchUser1.onChangePersa
 					}).addStyleClass("L2P13Font")
 				]
-			}).addStyleClass("L2PFilterItem mb-10px"),
+			}).addStyleClass("L2PFilterItem"),
 			new sap.ui.layout.VerticalLayout(oController.PAGEID + "_ES_Filter2", {
 				content: [
 					new sap.m.Label({ text: "{i18n>LABEL_00107}" }).addStyleClass("mb--5px"),	// 성명 또는 사번
 					new sap.m.Input(oController.PAGEID + "_ES_Ename", {
-						width: "200px"
+						width: "208px"
 					})
 						.addStyleClass("L2P13Font")
 						.attachBrowserEvent("keyup", common.SearchUser1.onKeyUp)
 				]
-			}).addStyleClass("L2PFilterItem mb-15px"),
+			}).addStyleClass("L2PFilterItem"),
 			new sap.ui.layout.VerticalLayout(oController.PAGEID + "_ES_Filter3", {
 				content: [
 					new sap.m.Label({ text: "{i18n>LABEL_00108}" }).addStyleClass("mb--5px"),	// 소속
 					new sap.m.MultiInput(oController.PAGEID + "_ES_Fulln", {
-						width: "200px",
+						width: "208px",
 						showValueHelp: true,
 						valueHelpOnly : true,
 						enableMultiLineMode: true,
 						valueHelpRequest: oController.displayMultiOrgSearchDialog
 					}).addStyleClass("L2P13Font")
 				]
-			}).addStyleClass("L2PFilterItem mb-15px"),
+			}).addStyleClass("L2PFilterItem"),
 			new sap.ui.layout.VerticalLayout({
 				content: [
 					new sap.m.Label({ text: "{i18n>LABEL_00109}" }).addStyleClass("mb--5px "),	// 재직구분
 					new sap.m.Select(oController.PAGEID + "_ES_Stat2", {
-						width: "200px"
+						width: "208px"
 					}).addStyleClass("L2P13Font")
 				]
-			}).addStyleClass("L2PFilterItem mb-10px"),
+			}).addStyleClass("L2PFilterItem"),
 			new sap.ui.layout.VerticalLayout(oController.PAGEID + "_ES_Filter5", {
 				content: [
 					new sap.m.Label({ text: "{i18n>LABEL_00111}" }).addStyleClass("mb--5px"),	// 사원그룹
 					new sap.m.Select(oController.PAGEID + "_ES_Persg", {
-						width: "200px"
+						width: "208px"
 					}).addStyleClass("L2P13Font")
 				]
-			}).addStyleClass("L2PFilterItem mb-10px"),
+			}).addStyleClass("L2PFilterItem"),
 			new sap.ui.layout.VerticalLayout(oController.PAGEID + "_ES_Filter6", {
 				content: [
 					new sap.m.Label({ text: "{i18n>ZHGRADE}" }).addStyleClass("mb--5px"),	// 직급구분
 					new sap.m.Select(oController.PAGEID + "_ES_Zhgrade", {
-						width: "200px"
+						width: "208px"
 					}).addStyleClass("L2P13Font")
 				]
-			}).addStyleClass("L2PFilterItem")
+			}).addStyleClass("L2PFilterItem"),
+			new sap.m.Panel({
+				content: [					
+					new sap.m.Button({
+						text: "{i18n>LABEL_00100}",
+						type: sap.m.ButtonType.Emphasized,
+						press: common.SearchUser1.searchFilterBar
+					}).addStyleClass("button-search w-100 mt-10px")
+				]
+			}).addStyleClass("p-0")
 		];
 
 		var oFilterLayout = new sap.m.ScrollContainer(oController.PAGEID + "_ES_LeftScrollContainer", {
@@ -72,25 +81,25 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 			horizontal: false,
 			vertical: true,
 			content: aFilterContents
-		}).addStyleClass("");
+		}).addStyleClass("mt-10px");
 
 		var oFilterPanel = new sap.m.Panel({
 			expandable: false,
 			expanded: false,
-			headerToolbar: new sap.m.Toolbar({
-				design: sap.m.ToolbarDesign.Auto,
-				content: [
-					new sap.ui.core.Icon({ src: "sap-icon://filter", size: "1.0rem", color: "#666666" }),
-					new sap.m.Label({ text: "{i18n>LABEL_00116}", design: "Bold" }).addStyleClass("L2P13Font"),
-					new sap.m.ToolbarSpacer(),
-					new sap.m.Button({
-						text: "{i18n>LABEL_00104}",
-						type: sap.m.ButtonType.Emphasized,
-						press: common.SearchUser1.searchFilterBar
-					}).addStyleClass("L2P13Font mt-10px mr-5px w-60px"),
-					new sap.m.ToolbarSpacer({ width: "10px" })
-				]
-			}).addStyleClass("L2PToolbarNoBottomLine pt-1px h-45px"),
+			// headerToolbar: new sap.m.Toolbar({
+			// 	design: sap.m.ToolbarDesign.Auto,
+			// 	content: [
+			// 		new sap.ui.core.Icon({ src: "sap-icon://filter", size: "1.0rem", color: "#666666" }),
+			// 		new sap.m.Label({ text: "{i18n>LABEL_00116}"}).addStyleClass("emp-title"),
+			// 		new sap.m.ToolbarSpacer(),
+			// 		new sap.m.Button({
+			// 			text: "{i18n>LABEL_00100}",	
+			// 			type: sap.m.ButtonType.Emphasized,
+			// 			press: common.SearchUser1.searchFilterBar
+			// 		}).addStyleClass("button-search w-100"),
+			// 		new sap.m.ToolbarSpacer({ width: "10px" })
+			// 	]
+			// }).addStyleClass("h-45px"),
 			content: [oFilterLayout]
 		});
 
@@ -99,6 +108,8 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 			visibleRowCount: 10,
 			selectionMode: sap.ui.table.SelectionMode.MultiToggle, //Use Singe or Multi
 			fixedColumnCount: 3,
+			rowHeight: 37,
+			columnHeaderHeight: 38,
 			showNoData: true
 		});
 
@@ -124,7 +135,7 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 			if (vColumns[i].control == "date") {
 				oTable.addColumn(
 					new sap.ui.table.Column({
-						label: new sap.ui.commons.Label({ text: vColumns[i].label }).addStyleClass("L2PFontFamily"),
+						label: new sap.ui.commons.Label({ text: vColumns[i].label }).addStyleClass("emp-title"),
 						template: new sap.ui.commons.TextView({
 							text: { path: vColumns[i].id, type: new sap.ui.model.type.Date({ pattern: "yyyy.MM.dd" }), tooltip: new sap.ui.core.TooltipBase() }
 						}).addStyleClass("L2PFontFamily"),
@@ -156,7 +167,10 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 			expanded: false,
 			headerToolbar: new sap.m.Toolbar({
 				design: sap.m.ToolbarDesign.Auto,
-				content: [new sap.ui.core.Icon({ src: "sap-icon://table-chart", size: "1.0rem", color: "#666666" }), new sap.m.Label({ text: "{i18n>LABEL_00120}", design: "Bold" }).addStyleClass("L2P13Font"), new sap.m.ToolbarSpacer()]
+				content: [
+				//	new sap.ui.core.Icon({ src: "sap-icon://table-chart", size: "1.0rem", color: "#666666" }), 
+					new sap.m.Label({ text: "{i18n>LABEL_00120}"}).addStyleClass("L2P13Font"), 
+					new sap.m.ToolbarSpacer()]
 			}).addStyleClass("L2PToolbarNoBottomLine"),
 			content: [oPersonList]
 		});
@@ -172,13 +186,13 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 			hAlign: sap.ui.commons.layout.HAlign.Begin,
 			vAlign: sap.ui.commons.layout.VAlign.Top,
 			content: [oFilterPanel]
-		}).addStyleClass("act-employeeSearch-area");
+		}).addStyleClass("custom-employeeSearch-area");
 
 		var oCell2 = new sap.ui.commons.layout.MatrixLayoutCell({
 			hAlign: sap.ui.commons.layout.HAlign.Begin,
 			vAlign: sap.ui.commons.layout.VAlign.Top,
 			content: [oResultPanel]
-		}).addStyleClass("pl-20px");   
+		});   
 
 		oMainLayout.createRow(oCell1, oCell2);
 
@@ -189,19 +203,19 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 
 		var oDialog = new sap.m.Dialog(oController.PAGEID + "_ES_Dialog", {
 			content: [oMainLayout],
-			contentWidth: "1250px",
-			contentHeight: "520px",    
+			contentWidth: "1220px",
+		//	contentHeight: "520px",    
 			// contentHeight: vContentHeight + "px",
 			showHeader: true,
 			title: "{i18n>LABEL_00117}",
 			afterOpen: common.SearchUser1.onAfterOpenSearchDialog,
 			beforeClose: common.SearchUser1.onBeforeCloseSearchDialog,
-			beginButton: new sap.m.Button({ text: "{i18n>LABEL_00118}", icon: "sap-icon://complete", press: common.SearchUser1.onESSelectPerson }), //
-			endButton: new sap.m.Button({ text: "{i18n>LABEL_00119}", icon: "sap-icon://sys-cancel-2", press: common.SearchUser1.onClose })
+			beginButton: new sap.m.Button({ text: "{i18n>LABEL_00118}", press: common.SearchUser1.onESSelectPerson }).addStyleClass("button-light"), 
+			endButton: new sap.m.Button({ text: "{i18n>LABEL_00119}", press: common.SearchUser1.onClose }).addStyleClass("button-delete")
 		});
 
 		if (!jQuery.support.touch) {
-			oDialog.addStyleClass("sapUiSizeCompact");
+			oDialog.addStyleClass("sapUiSizeCompact custom-employee");
 		}
 
 		return oDialog;

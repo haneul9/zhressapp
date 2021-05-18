@@ -73,6 +73,14 @@ init: function() {
 		$.app.log("common.AppBasis.init called.");
 	}
 
+	var paramMap = {};
+	$.map(location.search.replace(/\?/, "").split(/&/), function(v) {
+		var pair = v.split(/=/);
+		paramMap[pair[0]] = decodeURIComponent(pair[1]);
+	});
+
+	$.app.APP_TILE = paramMap.mtitle || $.app.APP_TILE;
+
 	if ($.app.APP_TILE) {
 		$(document).attr("title", $.app.APP_TILE);
 		try {
