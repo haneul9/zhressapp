@@ -286,7 +286,7 @@ goToLink: function(menuId, url) {
 
 	var form = $('form#' + this.menuFormName);
 	if (!form.length) {
-		form = $('<form id="${menu-form}" method="GET" target="${content-iframe}"><input type="hidden" name="mid" /></form>'.interpolate(this.menuFormName, this.menuIframeName)).appendTo('body');
+		form = $('<form id="${menu-form}" method="GET" target="${content-iframe}"><input type="hidden" name="mid" /><input type="hidden" name="mtitle" /></form>'.interpolate(this.menuFormName, this.menuIframeName)).appendTo('body');
 	}
 
 	if (!this._gateway.isPRD()) {
