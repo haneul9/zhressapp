@@ -36,9 +36,9 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		];
 	},
 
-	getAddedPanel : function(oController){
-		var Dtfmt = oController.getSessionInfoByKey("Dtfmt"),c=sap.ui.commons;
-		var oTable = new sap.ui.table.Table(oController.PAGEID+"_aTable", {
+	getAddedPanel : function(oController) {
+
+		var oTable = new sap.ui.table.Table(oController.PAGEID + "_aTable", {
 			selectionMode: "None",
 			enableColumnReordering: false,
 			enableColumnFreeze: false,
@@ -64,7 +64,6 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 							items: [
 								new sap.m.HBox({
 									items: [
-										
 										new sap.m.Button({
 											press: OnRequest.checkHD.bind(oController),
 											enabled: "{/Header/Edtfg}",

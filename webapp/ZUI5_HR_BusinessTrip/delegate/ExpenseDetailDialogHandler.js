@@ -59,7 +59,7 @@ return {
 		this.callback = callback;
 
 		Common.removeProperties(this.initData, "__metadata", "dialogTitle");
-		this.initData.Edtfg = this.getParentModelProperty("/Header/Edtfg");
+		this.initData.Edtfg = this.getParentModelProperty("/Header/Edtfg") && (this.getParentModelProperty("/Header/Status1") !== "88");
 
 		oController.ExpenseDetailDialogHandler = this;
 
@@ -325,23 +325,6 @@ return {
 					}
 				);
 			}.bind(this))
-			// Common.encryptByJava({
-			// 	input: this.getParentModelProperty("/Header/Pernr"),
-			// 	success: function(GisUser) {
-
-			// 		var protocol = document.location.protocol,
-			// 		p = {
-			// 			protocol: protocol,
-			// 			domain: "gis",
-			// 			port: protocol === "https:" ? "7002" : "7001"
-			// 		},
-			// 		GisParams = $.param({ callScrCls: "c3", hi: "N", checkone: "1", isCallBack: "Y", user_id: GisUser }),
-			// 			GisUrl = "${protocol}//${domain}.lottechem.com:${port}/sdsgis/proxy_caller.jsp?uri=${protocol}//${domain}SBL0zHYazX9BnhspgEE4TQ==SBL0zHYazX9BnhspgEE4TQ==.lottechem.com:${port}/sdsgis/EP_gisMap.jsp?" + GisParams;
-
-			// 		this.oModel.setProperty("/GisUser", GisUser);
-			// 		this.oModel.setProperty("/GisUrl", GisUrl.replace(/\$\{protocol\}/g, p.protocol).replace(/\$\{domain\}/g, p.domain).replace(/\$\{port\}/g, p.port));
-			// 	}.bind(this)
-			// })
 		]);
 	},
 

@@ -33,7 +33,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			draggable: true,
 			verticalScrolling: false,
 			beginButton: new sap.m.Button({
-				visible: "{/Header/Edtfg}",
+				visible: "{/ExpenseDetail/Edtfg}",
 				text: oController.getBundleText("LABEL_00101"), // 저장
 				press: ExpenseDetailDialogHandler.setExpenseData.bind(ExpenseDetailDialogHandler)
 			}).addStyleClass("button-light"),

@@ -1,4 +1,4 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
 	"common/CommaInteger",
 	"common/Common",
@@ -93,7 +93,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 													path: "/Header/BtSettledat",
 													type: new sap.ui.model.type.Date({ pattern: Dtfmt })
 												}
-											}),
+											})
 										]
 									})
 									.addStyleClass("search-field-group"),
@@ -118,16 +118,16 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 									ViewTemplates.getCustomInput("SettlementHeaderEname", {
 										layoutData: new sap.m.FlexItemData({ minWidth: "342px" }),
 										fieldWidth: "250px",
-										editable: "{= ${/Header/Edtfg} && ${/Header/isEnameDialogAvailable} && ${/Header/isEnameEditable} }",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' && ${/Header/isEnameDialogAvailable} && ${/Header/isEnameEditable} }",
 										description: "{/Header/Pernr}",
-										showValueHelp: "{= ${/Header/Edtfg} && ${/Header/isEnameDialogAvailable} && ${/Header/isEnameEditable} }",
+										showValueHelp: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' && ${/Header/isEnameDialogAvailable} && ${/Header/isEnameEditable} }",
 										value: "{/Header/Ename}",
 										valueHelpOnly: true,
 										valueHelpRequest: OnSettlement.searchEname.bind(oController)
 									}, OnSettlement.clearEname.bind(oController))
 									.addStyleClass("field-min-width-50"),
 									new HoverIcon({
-										visible: "{= ${/Header/Edtfg} && ${/Header/isEnameDialogAvailable} && ${/Header/isEnameEditable} }",
+										visible: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' && ${/Header/isEnameDialogAvailable} && ${/Header/isEnameEditable} }",
 										src: "sap-icon://information",
 										hover: function(oEvent) {
 											Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_19001")); // 대리신청 등록된 사원만 출장자 변경 가능
@@ -142,12 +142,12 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 							.addStyleClass("search-field-group"),
 							new sap.m.HBox({
 								items: [
-									ViewTemplates.getHeaderLabel("{i18n>LABEL_19308}", "{/Header/Edtfg}"), // 출장구분
+									ViewTemplates.getHeaderLabel("{i18n>LABEL_19308}", "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }"), // 출장구분
 									new sap.m.Select("SettlementHeaderBtPurpose1", {
 										layoutData: new sap.m.FlexItemData({ minWidth: "250px" }),
 										change: OnSettlement.changeBtPurpose.bind(oController),
 										width: "250px",
-										editable: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										selectedKey: "{/Header/BtPurpose1}",
 										items: {
 											path: "/BtPurpose1SelectList",
@@ -174,12 +174,12 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 							.addStyleClass("search-field-group"),
 							new sap.m.HBox({
 								items: [
-									ViewTemplates.getHeaderLabel("{i18n>LABEL_19312}", "{/Header/Edtfg}"), // 출장명
+									ViewTemplates.getHeaderLabel("{i18n>LABEL_19312}", "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }"), // 출장명
 									new sap.m.Input("SettlementHeaderTitle", {
 										maxLength: Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtRequestTableIn02", "Title", false),
 										layoutData: new sap.m.FlexItemData({ growFactor: 1, minWidth: "250px" }),
 										width: "95%",
-										editable: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										value: "{/Header/Title}"
 									})
 								]
@@ -190,7 +190,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 									new sap.m.Label({
 										text: "{i18n>LABEL_19314}", // 출장목적
 										width: "130px",
-										required: "{/Header/Edtfg}",
+										required: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										design: sap.m.LabelDesign.Bold,
 										textAlign: sap.ui.core.TextAlign.Right,
 										layoutData: new sap.m.FlexItemData({ alignSelf: sap.m.FlexAlignSelf.Stretch, minHeight: "120px" })
@@ -199,7 +199,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 										maxLength: Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtRequestTableIn02", "BtPurpose2", false),
 										layoutData: new sap.m.FlexItemData({ growFactor: 1, minWidth: "250px" }),
 										width: "95%",
-										editable: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										value: "{/Header/BtPurpose2}",
 										rows: 5
 									})
@@ -211,7 +211,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 									new sap.m.Label({
 										text: "{i18n>LABEL_19319}", // 출장결과
 										width: "130px",
-										required: "{/Header/Edtfg}",
+										required: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										design: sap.m.LabelDesign.Bold,
 										textAlign: sap.ui.core.TextAlign.Right,
 										layoutData: new sap.m.FlexItemData({ alignSelf: sap.m.FlexAlignSelf.Stretch, minHeight: "120px" })
@@ -220,7 +220,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 										maxLength: Common.getODataPropertyLength("ZHR_WORKTIME_APPL_SRV", "BtRequestTableIn02", "BtResult", false),
 										layoutData: new sap.m.FlexItemData({ growFactor: 1, minWidth: "250px" }),
 										width: "95%",
-										editable: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										value: "{/Header/BtResult}",
 										rows: 5
 									})
@@ -239,7 +239,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 									ViewTemplates.getHeaderLabel("{i18n>LABEL_19303}", false), // 전기일
 									new PickOnlyDatePicker({
 										width: "250px",
-										editable: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										displayFormat: Dtfmt,
 										placeholder: Dtfmt,
 										minDate: new Date(2020, 0, 1),
@@ -250,12 +250,12 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 							.addStyleClass("search-field-group"),
 							new sap.m.HBox({
 								items: [
-									ViewTemplates.getHeaderLabel("{i18n>LABEL_19305}", "{/Header/Edtfg}"), // 소속부서
+									ViewTemplates.getHeaderLabel("{i18n>LABEL_19305}", "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }"), // 소속부서
 									ViewTemplates.getCustomInput("SettlementHeaderCdIndpt", {
 										layoutData: new sap.m.FlexItemData({ growFactor: 1, minWidth: "350px" }),
 										fieldWidth: "250px",
-										editable: "{= ${/Header/Edtfg} && ${/Header/isEnameEditable} }",
-										showValueHelp: "{= ${/Header/Edtfg} && ${/Header/isEnameEditable} }",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' && ${/Header/isEnameEditable} }",
+										showValueHelp: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' && ${/Header/isEnameEditable} }",
 										description: "{/Header/CdIndpt}",
 										value: "{/Header/CdIndptText}",
 										valueHelpOnly: true,
@@ -267,7 +267,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 							.addStyleClass("search-field-group"),
 							new sap.m.HBox({
 								items: [
-									ViewTemplates.getHeaderLabel("{i18n>LABEL_19307}", "{/Header/Edtfg}"), // 비용귀속부서
+									ViewTemplates.getHeaderLabel("{i18n>LABEL_19307}", "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }"), // 비용귀속부서
 									ViewTemplates.getCustomInput("SettlementHeaderZsendKostl", {
 										layoutData: new sap.m.FlexItemData({ growFactor: 1, minWidth: "350px" }),
 										customData: [
@@ -291,8 +291,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 											})
 										],
 										fieldWidth: "250px",
-										editable: "{/Header/Edtfg}",
-										showValueHelp: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
+										showValueHelp: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										description: "{/Header/ZsendKostl}",
 										value: "{/Header/ZsendKostlT}",
 										valueHelpOnly: true,
@@ -324,8 +324,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 											})
 										],
 										fieldWidth: "250px",
-										editable: "{/Header/Edtfg}",
-										showValueHelp: "{/Header/Edtfg}",
+										editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
+										showValueHelp: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 										description: "{/Header/PsPosid}",
 										value: "{/Header/PsPosidT}",
 										valueHelpOnly: true,
@@ -397,13 +397,13 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 
 		return new sap.m.HBox({
 			justifyContent: sap.m.FlexJustifyContent.End,
-			visible: "{/Header/Edtfg}",
+			visible: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			items: [
 				new sap.m.HBox({
 					items: [
 						new sap.m.CheckBox({
 							select: OnSettlement.selectExceptDailyAmount.bind(oController),
-							editable: "{= ${/Header/Edtfg} && ${/Header/BtPurpose1} !== '5' }", // 출장구분 '근거리 출장'의 경우 항상 일비 제외
+							editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' && ${/Header/BtPurpose1} !== '5' }", // 출장구분 '근거리 출장'의 경우 항상 일비 제외
 							selected: "{= ${/Header/ChkPer} || ${/Header/BtPurpose1} === '5' }",
 							text: "{i18n>LABEL_19353}" // 일비 제외
 						})
@@ -447,8 +447,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 
 		var oTable = new sap.ui.table.Table("SettlementTableIn04", {
 			layoutData: new sap.m.FlexItemData({ maxWidth: "100%" }),
-			selectionMode: "{= ${/Header/Edtfg} ? '" + sap.ui.table.SelectionMode.MultiToggle + "' : '" + sap.ui.table.SelectionMode.None + "' }",
-			enableSelectAll: "{/Header/Edtfg}",
+			selectionMode: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' ? '" + sap.ui.table.SelectionMode.MultiToggle + "' : '" + sap.ui.table.SelectionMode.None + "' }",
+			enableSelectAll: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			enableColumnReordering: false,
 			enableColumnFreeze: false,
 			enableBusyIndicator: true,
@@ -516,7 +516,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 				})
 				.addStyleClass("info-field-group"),
 				new sap.m.HBox({
-					visible: "{/Header/Edtfg}",
+					visible: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 					items: [
 						new sap.m.Button("SettlementTableIn05-add-card", {
 							press: OnSettlement.pressAddExpense.bind(oController),
@@ -553,8 +553,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 	getTableIn05: function(oController) {
 
 		var oTable = new sap.ui.table.Table("SettlementTableIn05", {
-			selectionMode: "{= ${/Header/Edtfg} ? '" + sap.ui.table.SelectionMode.MultiToggle + "' : '" + sap.ui.table.SelectionMode.None + "' }",
-			enableSelectAll: "{/Header/Edtfg}",
+			selectionMode: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' ? '" + sap.ui.table.SelectionMode.MultiToggle + "' : '" + sap.ui.table.SelectionMode.None + "' }",
+			enableSelectAll: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			enableColumnReordering: false,
 			enableColumnFreeze: false,
 			enableBusyIndicator: true,
@@ -671,7 +671,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 			valueHelpOnly: true,
 			showValueHelp: true,
 			placeholder: "{BtCity}",
-			editable: "{/Header/Edtfg}",
+			editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			width: "100%"
 		});
 
@@ -690,7 +690,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 		var oDRS = new sap.m.DateRangeSelection("Settlement" + columnInfo.id, {
 			displayFormat: oController.getSessionInfoByKey("Dtfmt"),
 			change: OnSettlement.changeScheduleDate.bind(oController),
-			editable: "{/Header/Edtfg}",
+			editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			secondDateValue: "{BtEnddat}",
 			dateValue: "{BtStartdat}",
 			minDate: "{= ${/EmpLoginInfo/Bukrs} === 'A100' ? ${/Header/BtStartdat} : null }",
@@ -718,7 +718,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 		var oCheckBox = new sap.m.CheckBox({
 			select: OnSettlement.selectEarlierDeparture.bind(oController),
 			useEntireWidth: true,
-			editable: "{/Header/Edtfg}",
+			editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			selected: "{" + columnInfo.id + "}"
 		});
 
@@ -746,7 +746,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementDetail", {
 			maxLength: 3, // maxNumberLength + (comma 가능 개수)
 			textAlign: sap.ui.core.TextAlign.Right,
 			description: "{i18n>LABEL_00145}", // 일
-			editable: "{/Header/Edtfg}",
+			editable: "{= ${/Header/Edtfg} && ${/Header/Status1} !== '88' }",
 			fieldWidth: "40px"
 		});
 
