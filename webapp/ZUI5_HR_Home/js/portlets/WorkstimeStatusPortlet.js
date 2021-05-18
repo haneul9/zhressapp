@@ -182,7 +182,7 @@ fill: function() {
                 '</div>'
             ].join(''));
 
-            $('.progress-bar').animate({ width: vWorkTime + '%' }, 2000);
+            $('.statusBar .progress-bar').animate({ width: vWorkTime + '%' }, 2000);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'WorkstimeStatusPortlet.fill ' + url);
