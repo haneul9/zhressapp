@@ -57,8 +57,7 @@ sap.ui.define([
 					createData.IZappSeq = "99";
 					createData.IAppkey = (oData.Appkey1 ? oData.Appkey1 : "");
 
-				// if(oData.Status == "" || oData.Status == "AA" || oData.Status == "JJ"){
-				if(oData.Offyn == "" || oData.Offyn == "1" || oData.Offyn == "2"){
+				if(oData.Status == "" || oData.Status == "AA" || oData.Status == "JJ"){
 					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
 					createData.IPrcty = "1";
 				} else {

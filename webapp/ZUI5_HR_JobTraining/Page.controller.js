@@ -1112,9 +1112,9 @@ sap.ui.define([
 		onOutCheck: function(oEvent) {
 			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
 			var oList = [];
-			
+
 			oOutTeacherBox.getItems().forEach(function(e) {
-				if(e.getItems().getSelected()) {
+				if(e.getItems()[0].getSelected()) {
 					oList.push(e);
 				}
 			});
