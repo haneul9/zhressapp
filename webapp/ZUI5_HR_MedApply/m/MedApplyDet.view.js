@@ -514,7 +514,7 @@ sap.ui.define([
 				
 			return new PageHelper({
 				idPrefix: "MedApplyDet",
-                title: "{i18n>LABEL_47001}", // 의료비
+                // title: "{i18n>LABEL_47001}", // 의료비
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.FlexBox({

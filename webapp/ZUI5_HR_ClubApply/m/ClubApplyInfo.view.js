@@ -15,7 +15,7 @@ sap.ui.define([
 			
 			return new PageHelper({
 				idPrefix: "ClubApplyInfo-",
-                title: "{i18n>LABEL_10033}", // 동호회 가입현황
+                // title: "{i18n>LABEL_10033}", // 동호회 가입현황
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				contentStyleClass: "sub-app-content",

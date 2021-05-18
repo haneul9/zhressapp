@@ -19,7 +19,7 @@ sap.ui.define([
 			
 			return new PageHelper({
 				idPrefix: "CostApply-",
-                title: "{i18n>LABEL_59013}", // 파견자 생활경비 신청
+                // title: "{i18n>LABEL_59013}", // 파견자 생활경비 신청
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.HBox({

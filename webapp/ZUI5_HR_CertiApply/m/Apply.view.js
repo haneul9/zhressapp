@@ -17,7 +17,7 @@ sap.ui.define(
             createContent: function (oController) {
                 return new PageHelper({
                     idPrefix: "Apply-",
-                    title: "{i18n>LABEL_65001}", // 제증명 신청
+                    // title: "{i18n>LABEL_65001}", // 제증명 신청
                     showNavButton: true,
                     navBackFunc: oController.navBack,
                     headerButton: new sap.m.HBox({

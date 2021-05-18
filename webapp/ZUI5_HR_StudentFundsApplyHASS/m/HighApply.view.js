@@ -18,7 +18,7 @@ sap.ui.define([
 			
 			return new PageHelper({
 				idPrefix: "HighApply-",
-                title: "{i18n>LABEL_38001}", // 학자금 신청
+                // title: "{i18n>LABEL_38001}", // 학자금 신청
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.HBox({

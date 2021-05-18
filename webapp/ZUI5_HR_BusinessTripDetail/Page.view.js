@@ -41,7 +41,7 @@ sap.ui.jsview($.app.APP_ID, { // 출장 신청/정산 상세
 		}
 
 		return new PageHelper({
-			title: tab === "settlement" ? "{i18n>LABEL_19003}" : "{i18n>LABEL_19002}", // 출장 비용 정산 : 출장 사전 신청
+			// title: tab === "settlement" ? "{i18n>LABEL_19003}" : "{i18n>LABEL_19002}", // 출장 비용 정산 : 출장 사전 신청
 			contentContainerStyleClass: "custom-app-title",
 			contentItems: sap.ui.jsfragment(fragment, oController)
 		});

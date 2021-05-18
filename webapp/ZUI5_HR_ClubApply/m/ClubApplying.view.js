@@ -15,7 +15,7 @@ sap.ui.define([
 			
 			return new PageHelper({
 				idPrefix: "ClubApplying-",
-                title: "{i18n>LABEL_10024}", // 동호회 가입신청
+                // title: "{i18n>LABEL_10024}", // 동호회 가입신청
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.FlexBox({

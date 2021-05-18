@@ -17,7 +17,7 @@
 			
 			return new PageHelper({
 				idPrefix: "Regist-",
-                title: "{i18n>LABEL_57013}", // 공지사항 상세내용
+                // title: "{i18n>LABEL_57013}", // 공지사항 상세내용
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				contentStyleClass: "sub-app-content",

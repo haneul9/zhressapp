@@ -225,7 +225,7 @@ sap.ui.define([
 
             return new PageHelper({
                 idPrefix: "Detail-",
-                title: "{i18n>LABEL_07001}",    // 평가이력
+                // title: "{i18n>LABEL_07001}",    // 평가이력
                 showNavButton: true,
                 navBackFunc: oController.navBack.bind(oController),
                 contentStyleClass: "sub-app-content",

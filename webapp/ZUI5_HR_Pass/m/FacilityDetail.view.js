@@ -17,7 +17,7 @@ sap.ui.define([
 
             return new PageHelper({
                 idPrefix: "FacilityDetail-",
-                title: "{i18n>LABEL_09064}",    // 시설이용
+                // title: "{i18n>LABEL_09064}",    // 시설이용
                 showNavButton: true,
 				navBackFunc: FacilityHandler.navBack,
 				headerButton: new sap.m.FlexBox({

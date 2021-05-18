@@ -19,7 +19,7 @@
 			
 			return new PageHelper({
 				idPrefix: "LanguageApply-",
-                title: "{i18n>LABEL_29001}", // 어학비 신청
+                // title: "{i18n>LABEL_29001}", // 어학비 신청
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.HBox({

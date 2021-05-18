@@ -19,7 +19,7 @@
             createContent: function (oController) {
                 return new PageHelper({
                     idPrefix: "LeaveReinApp-",
-                    title: "{i18n>LABEL_42002}", // 휴/복직 신청
+                    // title: "{i18n>LABEL_42002}", // 휴/복직 신청
                     showNavButton: true,
                     navBackFunc: oController.navBack,
                     headerButton: new sap.m.HBox({

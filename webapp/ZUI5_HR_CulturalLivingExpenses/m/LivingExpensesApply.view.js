@@ -16,7 +16,7 @@ sap.ui.define([
 			
 			return new PageHelper({
 				idPrefix: "LivingExpensesApply-",
-                title: "{i18n>LABEL_21001}", // 문화생활비 신청
+                // title: "{i18n>LABEL_21001}", // 문화생활비 신청
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.FlexBox({

@@ -15,7 +15,7 @@ sap.ui.define(
             createContent: function (oController) {
                 return new PageHelper({
                     idPrefix: "CongratulationDetail-",
-                    title: "{i18n>LABEL_08022}", // 경조금신청
+                    // title: "{i18n>LABEL_08022}", // 경조금신청
                     showNavButton: true,
                     navBackFunc: oController.navBack,
                     headerButton: new sap.m.FlexBox({

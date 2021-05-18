@@ -20,7 +20,7 @@
 			
 			return new PageHelper({
 				idPrefix: "RelocationApply-",
-                title: "{i18n>LABEL_34001}", // 부임이전비 신청
+                // title: "{i18n>LABEL_34001}", // 부임이전비 신청
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				headerButton: new sap.m.HBox({

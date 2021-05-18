@@ -17,7 +17,7 @@ sap.ui.define([
 
             return new PageHelper({
                 idPrefix: "CondoDetail-",
-                title: "{i18n>LABEL_09032}",    // 콘도 신청
+                // title: "{i18n>LABEL_09032}",    // 콘도 신청
                 showNavButton: true,
                 navBackFunc: CondoHandler.navBack.bind(null, false),
                 headerButton: new sap.m.FlexBox({

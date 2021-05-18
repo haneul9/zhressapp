@@ -325,7 +325,7 @@ sap.ui.define([
 
 			return new PageHelper({ 
 				idPrefix: "FamilyApplyDet-",
-                title: "{i18n>LABEL_44001}", // 가족사항
+                // title: "{i18n>LABEL_44001}", // 가족사항
                 showNavButton: true,
 				navBackFunc: oController.navBack,
 				contentItems: [
