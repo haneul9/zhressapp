@@ -128,6 +128,7 @@ changeLocale: function() {
 	setTimeout(function() {
 		$('.ehr-header .menu-spinner-wrapper').toggleClass('d-none', false);
 	}, 0);
+
 	setTimeout(function() {
 		var parentSelector = this.parentSelector;
 		this.generate(true).then(function() {
@@ -318,6 +319,7 @@ goToLink: function(menuId, url) {
 	}
 
 	form.find('input[name="mid"]').val(menuId).end()
+		.find('input[name="mtitle"]').val(this.menuDataMap[menuId].title).end()
 		.attr('action', url).submit();
 },
 
