@@ -1110,13 +1110,21 @@ sap.ui.define([
 		},
 
 		onOutCheck: function(oEvent) {
+			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
+			var oList = [];
+			
+			oOutTeacherBox.getItems().forEach(function(e) {
+				if(e.getItems().getSelected()) {
+					oList.push(e);
+				}
+			});
 
 			if(!oEvent.getSource().getSelected()){
 				var vIndex = this.g_ODelTeacherList.indexOf(oEvent.getSource().getParent());
 
 				if(vIndex > -1) this.g_ODelTeacherList.splice(vIndex, 1);
 			}else {
-				this.g_ODelTeacherList.push(oEvent.getSource().getParent());
+				this.g_ODelTeacherList.push(oList);
 			}
 		},
 
