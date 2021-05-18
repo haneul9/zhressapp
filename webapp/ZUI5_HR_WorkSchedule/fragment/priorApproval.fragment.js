@@ -106,6 +106,11 @@ sap.ui.define(
                                     text: "{i18n>LABEL_00152}" // 신청
                                 }).addStyleClass("button-light"),
                                 new sap.m.Button({
+                                    press: PriorHandler.pressBatchApply.bind(PriorHandler),
+                                    visible : (Common.getOperationMode() == "DEV" && $.app.getAuth() == $.app.Auth.HASS ? true : false),
+                                    text: "{i18n>LABEL_55051}" // 일괄신청
+                                }).addStyleClass("button-light"),
+                                new sap.m.Button({
                                     press: PriorHandler.pressOpenApprovalCancelBtn.bind(PriorHandler),
                                     text: "{i18n>LABEL_55037}" // 결재취소
                                 }).addStyleClass("button-light")

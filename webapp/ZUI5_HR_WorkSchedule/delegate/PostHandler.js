@@ -907,6 +907,22 @@ sap.ui.define(
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);
                     DialogHandler.open(this.OrgOfIndividualHandler);
                 }.bind(this), 0);
+            },
+            
+            /** 근무 일괄신청(사후) **/
+            pressBatchApply : function(){
+            	sap.ui.getCore().getEventBus().publish("nav", "to", {
+				      id : $.app.CONTEXT_PATH + ".Detail",
+				      data : {
+				    	  FromPageId : $.app.APP_ID,
+				    	  Data : {Key : WorkSchedule.Tab.POST},
+				    	  ApprStats : this.oModel.getProperty("/ApprStats"),
+				    	  Faprss : this.oModel.getProperty("/Faprss"), // 근무사유
+				    	  Tprogs : this.oModel.getProperty("/Tprogs"), // 근무일정
+				    	  Hours : this.oModel.getProperty("/Hours"),
+						  Minutes : this.oModel.getProperty("/Minutes")
+				      }
+				});
             }
         };
 

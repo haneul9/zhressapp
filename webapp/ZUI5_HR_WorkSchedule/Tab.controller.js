@@ -54,8 +54,19 @@ sap.ui.define(
                 this.PriorHandler.load();
             },
 
-            onAfterShow: function () {
-                this.PriorHandler.search();
+            onAfterShow: function (oEvent) {
+                if(oEvent.data.Key){
+                    switch(oEvent.data.Key) {
+                        case WorkSchedule.Tab.PRIOR:
+                            this.PriorHandler.load().search();
+                            break;
+                        case WorkSchedule.Tab.POST:
+                            this.PostHandler.load().search();
+                            break;
+                    }
+                } else {
+                    this.PriorHandler.search();
+                }                
             },
 
             selectIconTabBar: function(oEvent) {
