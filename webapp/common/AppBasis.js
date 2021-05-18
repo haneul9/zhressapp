@@ -76,7 +76,7 @@ init: function() {
 	var paramMap = {};
 	$.map(location.search.replace(/\?/, "").split(/&/), function(v) {
 		var pair = v.split(/=/);
-		paramMap[pair[0]] = decodeURIComponent(pair[1]);
+		paramMap[pair[0]] = pair[1];
 	});
 
 	$.app.APP_TILE = paramMap.mtitle || $.app.APP_TILE;
