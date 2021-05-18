@@ -31,7 +31,7 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			// gDtfmt = $.app.getModel("session").getData().Dtfmt;		
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
@@ -384,12 +384,15 @@ sap.ui.define([
 			
 			// 결재중 데이터가 있는 경우 근무일정 데이터를 변경해서 표시함
 			if(oData.Status == "00"){
-				oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm"), Beguz : oData.Beguz2, Enduz : oData.Enduz2, Lnctm : oData.Lnctm2}));
+				oJSONModel.setProperty("/Data/0", $.extend(true, {}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm"), Beguz : oData.Beguz2, Enduz : oData.Enduz2, Lnctm : oData.Lnctm2}));
 			} else {
-				oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")}));
+				oJSONModel.setProperty("/Data/0", $.extend(true, {}, oData, {Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")}));
 			}
+
+			// 2021-05-17 과거근무 변경신청인 경우 결재자를 선택할 수 있도록 추가함
+			oController.setAppName(oController); 
 			
-			oController._WorkScheduleDialog.open();
+			// oController._WorkScheduleDialog.open();
 		},
 		
 		onSelectDate : function(oEvent){
@@ -415,9 +418,98 @@ sap.ui.define([
 			
 			oController.setBreak(oData, "2");
 			
-			oJSONModel.setProperty("/Data/0", Object.assign({}, oData, {Title : oController.getBundleText("LABEL_69048"), Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")})); // 근무 변경
+			oJSONModel.setProperty("/Data/0", $.extend(true, {}, oData, {Title : oController.getBundleText("LABEL_69048"), Adbtm : oJSONModel.getProperty("/Data/0/Adbtm")})); // 근무 변경
+
+			// 2021-05-17 과거근무 변경신청인 경우 결재자를 선택할 수 있도록 추가함
+			oController.setAppName(oController);
 			
-			oController._WorkScheduleDialog.open();
+			// oController._WorkScheduleDialog.open();
+		},
+
+		// 결재자 리스트 생성
+		setAppName : function(oController){
+			var oData = oController._WorkScheduleDialog.getModel().getProperty("/Data/0");
+			
+			var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_AppNameLayout");
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+				oAppName.destroyItems();
+				oAppName.setValue("");
+
+			if(oData.Offyn == "1"){
+				oLayout.removeStyleClass("displayNone");
+
+				oController._BusyDialog.open();
+				setTimeout(function(){
+					var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+					var createData = {ApprlistNav : []};
+						createData.IPernr = oController._ListCondJSonModel.getProperty("/Data/Pernr");
+						createData.IBukrs = oController._ListCondJSonModel.getProperty("/Data/Bukrs");
+						createData.IExtryn = "X"; // 선택적근로제의 경우 내/외부 구분없이 리스트 생성
+						createData.IMobyn = "";
+						createData.IZappSeq = "99";
+						createData.IAppkey = (oData.Appkey1 ? oData.Appkey1 : "");
+
+					if(oData.Status == "" || oData.Status == "AA" || oData.Status == "JJ"){
+						createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+						createData.IPrcty = "1";
+					} else {
+						createData.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Datum)) + ")\/";
+						createData.IPrcty = "2";
+					}
+
+					oModel.create("/ApprListSet", createData, {
+						success: function(data, res){
+							if(data){
+								if(data.ApprlistNav && data.ApprlistNav.results){
+									var data1 = data.ApprlistNav.results;
+									
+									if(data1){
+										for(var i=0; i<data1.length; i++){
+											oAppName.addItem(new sap.ui.core.Item({key : data1[i].AppName, text : data1[i].AppText}));
+
+											if(data1[i].Defyn == "X"){
+												oController._WorkScheduleDialog.getModel().setProperty("/Data/0/AppName", data1[i].AppName);
+											}
+										}
+									}
+								}
+							}
+						},
+						error: function (oError) {
+							var Err = {};
+							oController.Error = "E";
+									
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+								else oController.ErrorMessage = Err.error.message.value;
+							} else {
+								oController.ErrorMessage = oError.toString();
+							}
+						}
+					});
+		
+					if(oController.Error == "E"){
+						oController.Error = "";
+						sap.m.MessageBox.error(oController.ErrorMessage);
+					}
+
+					oController._BusyDialog.close();
+		
+					// 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
+					if(oAppName.getItems().length == 0){
+						oController._WorkScheduleDialog.getModel().setProperty("/Data/0/AppName", "");
+						oLayout.addStyleClass("displayNone");
+					} 
+
+					oController._WorkScheduleDialog.open();
+				}, 100);
+
+			} else {
+				oLayout.addStyleClass("displayNone");
+				oController._WorkScheduleDialog.open();
+			}
 		},
 		
 		searchOrgehPernr : function(oController){
@@ -427,7 +519,7 @@ sap.ui.define([
 			var initData = {
                 Percod: oController.getSessionInfoByKey("Percod"),
                 Bukrs: oController.getSessionInfoByKey("Bukrs2"),
-                Langu: oController.getSessionInfoByKey("Langu"), 
+                Langu: oController.getSessionInfoByKey("Langu"),
                 Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
                 Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
@@ -700,11 +792,11 @@ sap.ui.define([
 							}
 						}
 						
-						data.Data.push(Object.assign({Offyn : oData.Offyn}, vData[i]));
+						data.Data.push($.extend(true, {Offyn : oData.Offyn}, vData[i]));
 						break;
 					}
 					
-					tableData.Data.push(Object.assign({Offyn : oData.Offyn}, vData[i], {Idx : tableData.Data.length}));
+					tableData.Data.push($.extend({Offyn : oData.Offyn}, vData[i], {Idx : tableData.Data.length}));
 				}
 			}
 			
@@ -833,7 +925,7 @@ sap.ui.define([
 					var oMonyn = oController._WorkScheduleDialog.getModel().getProperty("/Data/0/Monyn");
 						oMonyn = (!oMonyn || oMonyn == "") ? "2" : (oMonyn == "1" ? "3" : "2");
 					
-					vData2.Data[0] = Object.assign({}, oController._WorkScheduleDialog.getModel().getProperty("/Data/0"), {Adbtm : vData2.Data[0].Adbtm, Monyn : oMonyn});
+					vData2.Data[0] = $.extend({}, oController._WorkScheduleDialog.getModel().getProperty("/Data/0"), {Adbtm : vData2.Data[0].Adbtm, Monyn : oMonyn});
 					
 					oController._WorkScheduleDialog.getModel().setData(vData2);
 				} 
@@ -1072,6 +1164,15 @@ sap.ui.define([
 			var oController = oView.getController();
 			
 			var oData = oController._WorkScheduleDialog.getModel().getProperty("/Data/0");
+
+			// 결재자 리스트가 존재하는 경우 결재자 필수 입력
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+			if(oAppName.getItems().length != 0){
+				if(!oData.AppName){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+					return;
+				}
+			}
 			
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");
@@ -1090,6 +1191,7 @@ sap.ui.define([
 					detail.Monyn = oData.Offyn == "1" ? "5" : oData.Monyn;
 					detail.Chgrsn = oData.Chgrsn;
 					detail.Appkey1 = oData.Appkey1;
+					detail.AppName = oData.AppName ? oData.AppName : "";
 				
 				createData.FlexWorktime1Nav.push(detail);
 				

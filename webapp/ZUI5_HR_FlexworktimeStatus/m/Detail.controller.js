@@ -33,12 +33,81 @@ sap.ui.define([
 			var oController = this;
 		
 			if(oEvent.data.Data){
-				var oData = Object.assign({}, oEvent.data.Data);
+				var oData = $.extend(true, {}, oEvent.data.Data);
 					oData.Atext = oData.Offyn == "X" ? "OFF" : (oData.Atext == "" ? oController.getBundleText("LABEL_69041") : oData.Atext); // 정상근무
 				oController._DetailJSonModel.setProperty("/Data", oData);
 			}
 			
 			oController._DetailJSonModel.setProperty("/Data/FromPageId", oEvent.data.FromPageId ? oEvent.data.FromPageId : "ZUI5_HR_FlexworktimeStatus.m.List");
+
+			// 2021-05-18 과거근무 변경신청인 경우 결재자 리스트 생성
+			var oAppNameRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
+				oAppNameRow.addStyleClass("displayNone");
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+				oAppName.destroyItems();
+				oAppName.setValue("");
+
+			if(oData.Offyn == "1"){
+				var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+				var createData = {ApprlistNav : []};
+					createData.IPernr = oData.Pernr;
+					createData.IBukrs = oData.Bukrs;
+					createData.IExtryn = "X"; // 선택적근로제의 경우 내/외부 구분없이 리스트 생성
+					createData.IMobyn = "X";
+					createData.IZappSeq = "99";
+					createData.IAppkey = (oData.Appkey1 ? oData.Appkey1 : "");
+
+				// if(oData.Status == "" || oData.Status == "AA" || oData.Status == "JJ"){
+				if(oData.Offyn == "" || oData.Offyn == "1" || oData.Offyn == "2"){
+					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+					createData.IPrcty = "1";
+				} else {
+					createData.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Datum)) + ")\/";
+					createData.IPrcty = "2";
+				}
+
+				oModel.create("/ApprListSet", createData, {
+					success: function(data, res){
+						if(data){
+							if(data.ApprlistNav && data.ApprlistNav.results){
+								var data1 = data.ApprlistNav.results;
+								
+								if(data1){
+									for(var i=0; i<data1.length; i++){
+										oAppName.addItem(new sap.ui.core.Item({key : data1[i].AppName, text : data1[i].AppText}));
+
+										if(data1[i].Defyn == "X"){
+											oController._DetailJSonModel.setProperty("/Data/AppName", data1[i].AppName);
+										}
+									}
+								}
+							}
+						}
+					},
+					error: function (oError) {
+						var Err = {};
+						oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				});
+	
+				if(oController.Error == "E"){
+					oController.Error = "";
+					sap.m.MessageBox.error(oController.ErrorMessage);
+				}
+
+				if(oAppName.getItems().length > 0){
+					oAppNameRow.removeStyleClass("displayNone");
+				}
+			}
 			
 			// 추가휴게시간, 근로시간현황
 			var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
@@ -331,6 +400,14 @@ sap.ui.define([
 				sap.m.MessageBox.error(oController.getBundleText("MSG_69002")); // 시작시간이 종료시간 이후인 경우 저장이 불가합니다.
 				return;
 			}
+
+			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+			if(oAppName.getItems().length != 0){
+				if(!oData.AppName){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+					return;
+				}
+			}
 			
 			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime5Nav : []}; 
 			
@@ -372,7 +449,8 @@ sap.ui.define([
 					Chgrsn : oData.Chgrsn,
 					Adbtm : oAdbtm == "" ? "" : oAdbtm.replace(":", ""),
 					Monyn : oData.Offyn == "1" ? "5" : oData.Monyn,
-					Appkey1 : oData.Appkey1
+					Appkey1 : oData.Appkey1,
+					AppName : oData.AppName ? oData.AppName : ""
 				});
 				
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");

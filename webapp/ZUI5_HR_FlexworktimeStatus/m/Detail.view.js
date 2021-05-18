@@ -171,7 +171,32 @@ sap.ui.define(
                                             hAlign : "Begin",
                                             vAlign : "Middle"
                                         })]
-                            })]
+                            }),
+                            new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+                                height : "45px",
+                                cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+                                             content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
+                                             hAlign : "Begin",
+                                             vAlign : "Middle"
+                                        }),
+                                        new sap.ui.commons.layout.MatrixLayoutCell({
+                                            content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+                                                           selectedKey : "{AppName}",
+                                                           width : "100%",
+                                                           editable : {
+                                                               path : "Offyn",
+                                                               formatter : function(fVal){
+                                                                   return (fVal == "" || fVal == "1" || fVal == "2") ? true : false;
+                                                               }
+                                                           },
+                                                           change : function(oEvent){
+                                                               oController.setMonyn(oEvent, "1");
+                                                           }
+                                                       })],
+                                            hAlign : "Begin",
+                                            vAlign : "Middle"
+                                        })]
+                            }).addStyleClass("displayNone")]
                 });
                 
                 // 추가휴게시간
