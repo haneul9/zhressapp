@@ -197,7 +197,7 @@ goToLink: function(menuId, url) {
 	}
 
 	form.find('input[name="mid"]').val(menuId).end()
-		.find('input[name="mtitle"]').val(this.menuDataMap[menuId].title).end()
+		.find('input[name="mtitle"]').val(((this.menuDataMap || {})[menuId] || {}).title || "").end()
 		.attr('action', url).submit();
 },
 
