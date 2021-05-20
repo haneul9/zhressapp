@@ -832,14 +832,10 @@ sap.ui.define([
 			this.TeacherInfoModel.setData({InData: [], OutData: []});
 			var vStatus1 = oController.ApplyModel.getProperty("/FormData/Status1");
 			var vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty");
-			var vOJTResult = oController.ApplyModel.getProperty("/OJTResult");
 
 			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
 			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
-			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
-			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
+			oController.TeacherInfoModel.setProperty("/OJTResult", "X");
 
 			this.AttModel.setData({Data: []});
 			this.g_IDelTeacherList = [];
@@ -1340,7 +1336,7 @@ sap.ui.define([
 			var vGubun = oController.SearchModel.getProperty("/Data/Gubun");
 			var vStatus = oController.SearchModel.getProperty("/Data/Status");
 			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
-			var oAttTable = oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
+			var oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
 
 			oController.AttModel.setData({Data: []});
 
