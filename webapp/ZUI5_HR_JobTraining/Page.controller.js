@@ -967,7 +967,16 @@ sap.ui.define([
 			var oList = [];
 
 			if(oController.g_TeacherType === "P"){ // 사내강사
-				oList = oController.TeacherInfoModel.getProperty("/InData");
+				oTeacherBox.getItems().forEach(function(e) {
+					var oTeaList1 = {};
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "P";
+					oList.push(oTeaList1);
+				});
+				
 				oList.push(oRowData);
 				oTeacherBox.destroyItems();
 
@@ -1773,7 +1782,7 @@ sap.ui.define([
 			var inputValue = oEvent.getParameter('value').trim(),
 				convertValue = inputValue.replace(/[^\d || ^\.]/g, '');
 
-			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : convertValue);
+			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "" : convertValue);
 		},
 
 		getScoreComma2: function(oEvent) {
@@ -1843,20 +1852,19 @@ sap.ui.define([
 				return true;
 			}
 
+			var oList2 = [];
+
+			oOutTeacherBox.getItems().forEach(function(e) {
+				var oTeaList1 = {};
+				oTeaList1.Ename = e.getItems()[3].getValue();
+				oTeaList1.Times = e.getItems()[5].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oList2.push(oTeaList1);
+			});
+			oController.TeacherInfoModel.setProperty("/OutData", oList2);
 			if(Common.checkNull(oController.TeacherInfoModel.getProperty("/InData")) && Common.checkNull(oController.TeacherInfoModel.getProperty("/OutData"))){
 				MessageBox.error(oController.getBundleText("MSG_70014"), { title: oController.getBundleText("MSG_08107")});
 				return true;
-			} else{
-				var oList2 = [];
-
-				oOutTeacherBox.getItems().forEach(function(e) {
-					var oTeaList1 = {};
-					oTeaList1.Ename = e.getItems()[3].getValue();
-					oTeaList1.Times = e.getItems()[5].getValue();
-					oTeaList1.Tepay = e.getItems()[7].getValue();
-					oList2.push(oTeaList1);
-				});
-				oController.TeacherInfoModel.setProperty("/OutData", oList2);
 			}
 
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edpeo"))){ // 교육대상
