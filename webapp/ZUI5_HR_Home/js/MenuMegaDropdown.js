@@ -8,6 +8,7 @@ function MenuMegaDropdown(_gateway, parentSelector) {
 	this.menuFavorites = null;
 	this.menuUrlMap = null;
 	this.menuDataMap = null;
+	this.ownMenuDataMap = null;
 
 	this._gateway = _gateway;
 	_gateway.homeMenu(this);
@@ -495,6 +496,7 @@ getMenuTree: function(data) {
 	level2SubMenuMap = {},
 	menuUrlMap = this.menuUrlMap = {},
 	menuDataMap = this.menuDataMap = {},
+	ownMenuDataMap = this.ownMenuDataMap = {},
 	menuFavorites = this.menuFavorites = [];
 
 	$.map(results.TableIn4, function(o) {
@@ -506,6 +508,11 @@ getMenuTree: function(data) {
 		};
 	});
 	$.map(results.TableIn3, function(o) { // Level 2 메뉴의 하위 메뉴 목록 생성
+		ownMenuDataMap[o.Menid] = {
+			menuId: o.Menid,
+			// title: o.Mentx,
+			url: o.Meurl
+		};
 		if (o.Hide === 'X') {
 			return;
 		}
