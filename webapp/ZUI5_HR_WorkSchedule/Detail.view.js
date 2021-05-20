@@ -78,7 +78,8 @@ sap.ui.define(
 	                                                               text: "{i18n>LABEL_55037}", // 결재취소
                                                                    press : function(oEvent){
                                                                        oController.onPressSave(oEvent, WorkSchedule.ProcessType.APPROVE_CANCEL);
-                                                                   }
+                                                                   },
+                                                                   visible : false
 	                                                           }).addStyleClass("button-light")]
 	                                              }).addStyleClass("button-group")]
                                  }).addStyleClass("border-bt-none pb-10px")
@@ -100,10 +101,10 @@ sap.ui.define(
                     { id: "PlanTime", label: "{i18n>LABEL_55007}" /* 계획근무 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "150px" },
                     { id: "InoutTime", label: "{i18n>LABEL_55008}" /* 입/출문 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "150px" },
                     { id: "WorkTime", label: "{i18n>LABEL_55009}" /* 근무시간 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "315px", templateGetter: "setWorkTime", templateGetterOwner: this, required: true },
-                    { id: "AddTime1", label: "{i18n>LABEL_55010}" /* 추가시간1 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "315px", templateGetter: "setAddTime1", templateGetterOwner: this },
-                    { id: "AddTime2", label: "{i18n>LABEL_55035}" /* 추가시간2 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "315px", templateGetter: "setAddTime2", templateGetterOwner: this },
-                    { id: "FaprsT", label: "{i18n>LABEL_55011}" /* 사유구분 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "200px", templateGetter: "setFaprss", templateGetterOwner: this, required: true },
-                    { id: "Ovres", label: "{i18n>LABEL_55012}" /* 사유 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "200px", templateGetter: "setOvres", templateGetterOwner: this, required: true },
+                    { id: "AddTime1", label: "{i18n>LABEL_55059}" /* 추가근무시간1 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "315px", templateGetter: "setAddTime1", templateGetterOwner: this },
+                    { id: "AddTime2", label: "{i18n>LABEL_55060}" /* 추가근무시간2 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "315px", templateGetter: "setAddTime2", templateGetterOwner: this },
+                    { id: "FaprsT", label: "{i18n>LABEL_55057}" /* 근무사유구분 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "200px", templateGetter: "setFaprss", templateGetterOwner: this, required: true },
+                    { id: "Ovres", label: "{i18n>LABEL_55058}" /* 근무사유 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "200px", templateGetter: "setOvres", templateGetterOwner: this, required: true },
                     { id: "Tim00", label: "{i18n>LABEL_55013}" /* 정상 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "100px" },
                     { id: "Tim01", label: "{i18n>LABEL_55014}" /* 연장 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "100px" },
                     { id: "Tim07", label: "{i18n>LABEL_55015}" /* 심야 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "100px" },
@@ -232,7 +233,7 @@ sap.ui.define(
                        });
             },
 
-            // 근무사유
+            // 근무사유구분
             setFaprss : function(){
                 return new sap.m.Select({
                            width: "185px",
@@ -246,7 +247,7 @@ sap.ui.define(
                        });
             },
 
-            // 사유    
+            // 근무사유    
             setOvres : function(){
                 return new sap.m.Input({
                     required: true,
@@ -316,7 +317,7 @@ sap.ui.define(
                        });
             },
 
-            // 추가휴게1
+            // 추가근무시간1
             setAddTime1 : function(){
                 return new sap.m.HBox({
                            items : [
@@ -367,7 +368,7 @@ sap.ui.define(
                        });
             },
 
-            // 추가휴게2
+            // 추가근무시간2
             setAddTime2 : function(){
                 return new sap.m.HBox({
                            items : [
