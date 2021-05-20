@@ -511,7 +511,7 @@ sap.ui.define(
                             }
 
                             if(check == ""){
-                                oNewData.push($.extend(true, {Idx : oNewData.length}, oTableData[i]));
+                                oNewData.push($.extend(true, oTableData[i], {Idx : oNewData.length}));
                             }
                         }
 
