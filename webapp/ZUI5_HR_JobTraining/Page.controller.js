@@ -1930,13 +1930,6 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
-			
-			if(oTeaList2.some(function(e) {
-				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
-			})){ // 강사
-				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
-				return;
-			}
 
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
@@ -2018,13 +2011,6 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
-
-			if(oTeaList2.some(function(e) {
-				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
-			})){ // 강사
-				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
-				return;
-			}
 
 			if(vEdoty === "2") {
 				if(oController.AttModel.getProperty("/Data").length === 0){ // 참석자
@@ -2188,13 +2174,6 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
-
-			if(oTeaList2.some(function(e) {
-				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
-			})){ // 강사
-				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
-				return;
-			}
 
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
