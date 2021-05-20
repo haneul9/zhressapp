@@ -22,3 +22,6 @@
 .RightZone{
     float: right;
 }
+.border-bottom {border-bottom:1px solid #e4e4e4}
+.border-top {border-top:1px solid #e4e4e4}
+.custom-dialog-popup.custom-ojt .search-field-group .sapMFlexItem .sapMLabel:not(.sapMCbLabel) {margin-left: 0;margin-right:8px}

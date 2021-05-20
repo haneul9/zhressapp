@@ -178,6 +178,9 @@ return {
 						var TableIn02 = Common.getTableInResults(oData, "TableIn02"); // 상세 Header, 경비현황 일부 정보
 						if (TableIn02.length) {
 							var Header = TableIn02[0];
+							if (Header.Status1 === "99") { // 삭제버튼 관련 임시 로직
+								Header.Status1 = "";
+							}
 							if (!Header.BtPurpose1) {
 								var BtPurpose1SelectList = this.oModel.getProperty("/BtPurpose1SelectList");
 								Header.BtPurpose1 = BtPurpose1SelectList.length === 1 ? this.oModel.getProperty("/BtPurpose1SelectList/0/Code") : this.oModel.getProperty("/BtPurpose1SelectList/1/Code");
@@ -317,6 +320,9 @@ return {
 						var TableIn02 = Common.getTableInResults(oData, "TableIn02"); // 상세 Header, 경비현황 일부 정보
 						if (TableIn02.length) {
 							var Header = TableIn02[0];
+							if (Header.Status1 === "99") { // 삭제버튼 관련 임시 로직
+								Header.Status1 = "";
+							}
 							if (!Header.BtPurpose1) {
 								var BtPurpose1SelectList = this.oModel.getProperty("/BtPurpose1SelectList");
 								Header.BtPurpose1 = BtPurpose1SelectList.length === 1 ? this.oModel.getProperty("/BtPurpose1SelectList/0/Code") : this.oModel.getProperty("/BtPurpose1SelectList/1/Code");
@@ -424,6 +430,9 @@ return {
 						var TableIn02 = Common.getTableInResults(oData, "TableIn02");
 						if (TableIn02.length) {
 							var Header = TableIn02[0];
+							if (Header.Status1 === "99") { // 삭제버튼 관련 임시 로직
+								Header.Status1 = "";
+							}
 
 							Header.isEnameEditable = typeof this.oRowData.isEnameEditable === "boolean" ? this.oRowData.isEnameEditable : true;
 							Header.isEnameDialogAvailable = (this.oModel.getProperty("/EnameList") || []).length > 0;

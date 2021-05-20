@@ -389,7 +389,7 @@ sap.ui.define(
 
                 MessageBox.show(this.oController.getBundleText("MSG_00058"), {
                     // 저장하시겠습니까?
-                    title: this.oController.getBundleText("LABEL_00149"),
+                    title: this.oController.getBundleText("LABEL_00150"),
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: Process.bind(this)
                 });
@@ -442,7 +442,7 @@ sap.ui.define(
                 }
 
                 MessageBox.show(confirmMessage, {
-                    title: this.oController.getBundleText("LABEL_00149"),
+                    title: this.oController.getBundleText("LABEL_00150"),
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: Process.bind(this)
                 });
