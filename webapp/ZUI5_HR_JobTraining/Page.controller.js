@@ -510,6 +510,7 @@ sap.ui.define([
 			// Navigation property
 			sendObject.TrainingOjtApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", oRowData)];
 			sendObject.TrainingOjtApplyTeacher = [];
+			sendObject.TrainingOjtApplyTableIn2 = [];
 			
 			oModel.create("/TrainingOjtApplySet", sendObject, {
 				success: function(oData, oResponse) {
@@ -531,6 +532,7 @@ sap.ui.define([
 						oController.setTeacherBox("I");
 						oController.setTeacherBox("O");
 					}
+					oController.ApplyModel.setProperty("/FileData", oData.TrainingOjtApplyTableIn2.results);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
