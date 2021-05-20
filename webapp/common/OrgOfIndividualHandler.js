@@ -352,7 +352,7 @@ sap.ui.define(
 			 */
 			pressEmployeeSearch: function() {
 				SearchUser1.oController = this.oController;
-				SearchUser1.fPersaEnabled = false;
+				SearchUser1.fPersaEnabled = true;
 				SearchUser1._vPersa = this.oController.getSessionInfoByKey("Persa");
 				SearchUser1.dialogContentHeight = 480;
 				
