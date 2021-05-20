@@ -1099,7 +1099,7 @@ sap.ui.define([
 			var oTable = sap.ui.getCore().byId(oController.PAGEID +"_Table");
 			var vPath = oEvent.getSource().getBindingContextPath();
 			var oData = oTable.getModel().getProperty(vPath);
-			oController._tData=oData;	
+			oController._tData = $.extend(true, {}, oData);	
 			oController._tData.Close=oController._onClose;	
 			oController._Bukrs==""?oController._Bukrs=oData.Bukrs:null;				
 			oController.onDialog("M",oController._Bukrs);
