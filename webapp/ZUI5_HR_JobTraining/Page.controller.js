@@ -1813,6 +1813,7 @@ sap.ui.define([
 		ErrorCheck: function() {
 			var oController = $.app.getController();
 			var oOutTeacherBox = $.app.byId(oController.PAGEID + "_OutTeacherBox");
+			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
 
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edkaj"))){ // 교육과정
 				MessageBox.error(oController.getBundleText("MSG_40013"), { title: oController.getBundleText("MSG_08107")});
@@ -1853,7 +1854,6 @@ sap.ui.define([
 			}
 
 			var oList2 = [];
-
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
@@ -1862,6 +1862,17 @@ sap.ui.define([
 				oList2.push(oTeaList1);
 			});
 			oController.TeacherInfoModel.setProperty("/OutData", oList2);
+
+			oList2 = [];
+			oTeacherBox.getItems().forEach(function(e) {
+				var oTeaList1 = {};
+				oTeaList1.Ename = e.getItems()[3].getValue();
+				oTeaList1.Times = e.getItems()[5].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oList2.push(oTeaList1);
+			});
+			oController.TeacherInfoModel.setProperty("/InData", oList2);
+
 			if(Common.checkNull(oController.TeacherInfoModel.getProperty("/InData")) && Common.checkNull(oController.TeacherInfoModel.getProperty("/OutData"))){
 				MessageBox.error(oController.getBundleText("MSG_70014"), { title: oController.getBundleText("MSG_08107")});
 				return true;
