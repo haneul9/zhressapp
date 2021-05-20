@@ -846,7 +846,6 @@ sap.ui.define([
 			oOutTeacherBox.destroyItems();
 
 			oCopyRow = $.extend(true, {}, oCopyRow);
-			oCopyRow.Appnm = "";
 			
 			this.ApplyModel.setData({FormData: oCopyRow});
 			this.ApplyModel.setProperty("/OJTResult", "X");
