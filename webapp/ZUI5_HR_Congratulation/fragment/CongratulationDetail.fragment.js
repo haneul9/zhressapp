@@ -7,7 +7,6 @@ sap.ui.define(
 
         sap.ui.jsfragment("ZUI5_HR_Congratulation.fragment.CongratulationDetail", {
             createContent: function (oController) {
-                var vBukrs = oController.getUserGubun();
 
                 var oStartDatePicker = new sap.m.DatePicker(oController.PAGEID + "_StartDatePicker", {
                     change: $.proxy(oController.onSelectBox, oController),
@@ -112,9 +111,9 @@ sap.ui.define(
                                 }),
                                 new sap.m.FlexBox(oController.PAGEID + "_WarningMsg", {
                                     visible: {
-                                        path: vBukrs,
-                                        formatter: function () {
-                                            if (vBukrs === "A100") return false;
+                                        path: "/Bukrs",
+                                        formatter: function (v) {
+                                            if (v === "A100") return false;
                                             return true;
                                         }
                                     },
@@ -248,9 +247,9 @@ sap.ui.define(
                                         }
                                     },
                                     visible: {
-                                        parts: [{ path: "isVisibleType" }, { path: vBukrs }],
+                                        parts: [{ path: "isVisibleType" }, { path: "/Bukrs" }],
                                         formatter: function (v1, v2) {
-                                            if (v1 === true && vBukrs !== "A100") return true;
+                                            if (v1 === true && v2 !== "A100") return true;
                                             else return false;
                                         }
                                     }
@@ -265,9 +264,9 @@ sap.ui.define(
                                         }
                                     },
                                     visible: {
-                                        parts: [{ path: "isVisibleVehicle" }, { path: vBukrs }],
+                                        parts: [{ path: "isVisibleVehicle" }, { path: "/Bukrs" }],
                                         formatter: function (v1, v2) {
-                                            if (v1 === true && vBukrs !== "A100") return true;
+                                            if (v1 === true && v2 !== "A100") return true;
                                             else return false;
                                         }
                                     }

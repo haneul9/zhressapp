@@ -26,6 +26,10 @@ sap.ui.define(
                 return this.getView().getModel("session").getData().Bukrs;
             },
 
+            getUserGubun2: function () {
+                return this.getView().getModel("session").getData().Bukrs2;
+            },
+
             onInit: function () {
                 this.setupView();
 
@@ -46,6 +50,7 @@ sap.ui.define(
 
             onAfterShow: function () {
                 this.onTableSearch();
+                this.DetailModel.setProperty("/Bukrs", this.getUserGubun());
             },
 
             getStatusTxt: function () {
@@ -108,6 +113,7 @@ sap.ui.define(
                 var oTable = $.app.byId(oController.PAGEID + "_Table");
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vPernr = oController.getUserId();
+                var vBukrs2 = oController.getUserGubun2();
 
                 oController.TableModel.setData({ Data: [] });
 
@@ -117,7 +123,7 @@ sap.ui.define(
                 sendObject.IPernr = vPernr;
                 sendObject.IConType = "1";
                 sendObject.ILangu = "3";
-                sendObject.IBukrs = "1000";
+                sendObject.IBukrs = vBukrs2;
 
                 // Navigation property
                 sendObject.TableIn = [];
@@ -163,6 +169,7 @@ sap.ui.define(
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var oRowIndex = oEvent.getSource().getParent().getParent().getParent().getRowBindingContext().sPath.slice(6);
                 var vPernr = oController.getUserId();
+                var vBukrs2 = oController.getUserGubun2();
 
                 var onProcessDelete = function (fVal) {
                     //삭제 확인클릭시 발생하는 이벤트
@@ -171,7 +178,7 @@ sap.ui.define(
                         var sendObject = {
                             IConType: "4",
                             IPernr: vPernr,
-                            IBukrs: "1000",
+                            IBukrs: vBukrs2,
                             TableIn: vDelDatas //넘길 값들을 담아놓음
                         };
                         BusyIndicator.show(0);
@@ -236,13 +243,39 @@ sap.ui.define(
                 oController.onStartDatePicker();
             },
 
-            setTypeCombo: function (isBegda) {
+            getBukrs: function(vDate) { // Bukrs가져옴
+                var oController = $.app.getController();
+                var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+                var vPernr = oController.getUserId();
+                var vBukrs = "";
+                
+                var sendObject = {
+                    Datum: Common.adjustGMTOdataFormat(vDate),
+                    Pernr: vPernr,
+                    BukrsExport: []
+                };
+
+                oModel.create("/BukrsImportSet", sendObject, {
+                    success: function (oData) {
+                        //값을 제대로 받아 왔을 때
+                        vBukrs = oData.BukrsExport.results[0].Bukrs;
+                        Common.log(oData);
+                    },
+                    error: function (oResponse) {
+                        Common.log(oResponse);
+                    }
+                });
+
+                return vBukrs;
+            },
+
+            setTypeCombo: function (isBegda, vChangeBukrs) {
                 //경조유형을 받아오는곳
                 var oController = $.app.getController();
                 var oCommonModel = $.app.getModel("ZHR_COMMON_SRV"),
                     oCodeHeaderParams = {};
                 var vPernr = oController.getUserId();
-                var vBurks = oController.getUserGubun();
+                var vBurks = Common.checkNull(vChangeBukrs) ? oController.getUserGubun() : vChangeBukrs;
                 var oWarningMsg = $.app.byId(oController.PAGEID + "_WarningMsg");
                 var vBegda = oController.DetailModel.getProperty("/FormData/StartDate");
 
@@ -412,6 +445,7 @@ sap.ui.define(
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vDetailData = oController.DetailModel.getProperty("/FormData");
                 var vPernr = oController.getUserId();
+                var vBukrs2 = oController.getUserGubun2();
 
                 if (oController.onErrorCheckBox()) {
                     return;
@@ -444,7 +478,7 @@ sap.ui.define(
                             ILangu: "3",
                             IPernr: vPernr,
                             IEmpid: vPernr,
-                            IBukrs: "1000",
+                            IBukrs: vBukrs2,
                             IOdkey: "",
                             IDatum: new Date(),
                             TableIn: [Common.copyByMetadata(oModel, "CongratulationApplyTableIn", vDetailData)] //넘길 값들을 담아놓음
@@ -498,6 +532,7 @@ sap.ui.define(
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vDetailData = oController.DetailModel.getProperty("/FormData");
                 var vPernr = oController.getUserId();
+                var vBukrs2 = oController.getUserGubun2();
 
                 if (oController.onErrorCheckBox()) {
                     return;
@@ -541,7 +576,7 @@ sap.ui.define(
                             ILangu: "3",
                             IPernr: vPernr,
                             IEmpid: vPernr,
-                            IBukrs: "1000",
+                            IBukrs: vBukrs2,
                             IOdkey: "",
                             IDatum: new Date(),
                             TableIn: [Common.copyByMetadata(oModel, "CongratulationApplyTableIn", vDetailData)] //넘길 값들을 담아놓음
@@ -584,10 +619,23 @@ sap.ui.define(
                 var oController = $.app.getController();
                 var vDetailData = oController.DetailModel.getProperty("/FormData");
                 var oBirthDayDate = $.app.byId(oController.PAGEID + "_BirthDayBox");
+                var vBukrs = oController.DetailModel.getProperty("/Bukrs");
 
                 if (!vDetailData.StartDate) {
                     MessageBox.error(oController.getBundleText("MSG_08108"), { title: oController.getBundleText("MSG_08107") });
                     return true;
+                }
+
+                if(vBukrs === "A100") {
+                    if (new Date(new Date().setMonth(new Date().getMonth() -1)) > vDetailData.StartDate) {
+                        MessageBox.error(oController.getBundleText("MSG_08116"), { title: oController.getBundleText("MSG_08107") });
+                        return true;
+                    }
+                }else {
+                    if (new Date(new Date().setFullYear(new Date().getFullYear() -1)) > vDetailData.StartDate) {
+                        MessageBox.error(oController.getBundleText("MSG_08117"), { title: oController.getBundleText("MSG_08107") });
+                        return true;
+                    }
                 }
 
                 if (!vDetailData.Zname) {
@@ -672,6 +720,7 @@ sap.ui.define(
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vPernr = oController.getUserId();
                 var vBukrs = oController.getUserGubun();
+                var vBukrs2 = oController.getUserGubun2();
                 var oMultiBoxInfo = oController.DetailModel.getProperty("/MultiBoxDataInfo");
                 var oTypeCheck = $.app.byId(oController.PAGEID + "_TypeCheck");
                 var oVehicleCheck = $.app.byId(oController.PAGEID + "_VehicleCheck");
@@ -683,8 +732,11 @@ sap.ui.define(
                 var oPayload = {};
 
                 if (oEvent.oSource.sId === "List_Type") this.onDateType();
-                else this.setTypeCombo(true);
-
+                else{ 
+                    vBukrs = this.getBukrs(oEvent.getSource().getDateValue());
+                    this.setTypeCombo(true, vBukrs);
+                    this.DetailModel.setProperty("/Bukrs", vBukrs);
+                } 
                 if (vBukrs !== "A100") {
                     oController.DetailModel.setProperty("/FormData/TextA", "");
                     oController.DetailModel.setProperty("/FormData/AmountT", "");
@@ -716,7 +768,7 @@ sap.ui.define(
                 oPayload.IOdkey = "";
                 oPayload.IConType = "0";
                 oPayload.IPernr = vPernr;
-                oPayload.IBukrs = "1000";
+                oPayload.IBukrs = vBukrs2;
                 oPayload.ILangu = "3";
                 oPayload.IDatum = new Date();
 
