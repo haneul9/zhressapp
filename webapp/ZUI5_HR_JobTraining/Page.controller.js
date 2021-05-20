@@ -1853,27 +1853,32 @@ sap.ui.define([
 				return true;
 			}
 
-			var oList2 = [];
+			var oList2 = [],
+				vError = "N";
+
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue();
 				oList2.push(oTeaList1);
+				if(Common.checkNull(oTeaList1.Ename) || Common.checkNull(oTeaList1.Times)) vError = "Y";
 			});
 			oController.TeacherInfoModel.setProperty("/OutData", oList2);
 
 			oList2 = [];
+
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue();
 				oList2.push(oTeaList1);
+				if(Common.checkNull(oTeaList1.Ename) || Common.checkNull(oTeaList1.Times)) vError = "Y";
 			});
 			oController.TeacherInfoModel.setProperty("/InData", oList2);
 
-			if(Common.checkNull(oController.TeacherInfoModel.getProperty("/InData")) && Common.checkNull(oController.TeacherInfoModel.getProperty("/OutData"))){
+			if(vError === "Y"){
 				MessageBox.error(oController.getBundleText("MSG_70014"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
