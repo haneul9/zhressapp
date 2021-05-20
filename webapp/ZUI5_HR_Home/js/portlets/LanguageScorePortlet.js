@@ -84,7 +84,7 @@ fill: function() {
 
 			// MSS 권한 -> MSS 링크로 변경
 			if(window._menu.ownMenuDataMap["1720"]) {
-				this.url(window._menu.menuDataMap["1720"]);
+				this.url(window._menu.menuDataMap["1720"].url);
 				this.mid("1720");
 
 				this.$().parent().parent().find('.card-header :button').eq(1)
