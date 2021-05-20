@@ -1856,8 +1856,8 @@ sap.ui.define([
 			var oList2 = [],
 				vError = "";
 
-			if(Common.checkNull(oOutTeacherBox.getItems()[0]) && Common.checkNull(oTeacherBox.getItems()[0])) vError === "Y";
-			else vError === "N";
+			if(Common.checkNull(oOutTeacherBox.getItems()[0]) && Common.checkNull(oTeacherBox.getItems()[0])) vError = "Y";
+			else vError = "N";
 
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
