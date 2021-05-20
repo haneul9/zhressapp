@@ -1708,7 +1708,12 @@ sap.ui.define([
 								new sap.m.Input({
 									textAlign: "Begin",
 									width: "85px",
-									editable:false,
+									editable: {
+										path: e.Ename,
+										formatter: function() {
+											return Common.checkNull(e.Ename);
+										}
+									},
 									liveChange: oController.getDyNameComma.bind(oController),
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
