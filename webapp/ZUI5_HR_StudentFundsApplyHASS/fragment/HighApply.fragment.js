@@ -179,7 +179,8 @@
 							new common.TMEmpBasicInfoBox(oController.SearchModel).addStyleClass("ml-10px mt-15px"),
 							new sap.m.Button({
 								text : "{i18n>LABEL_48040}", // 대상자 변경
-								press : oController.searchOrgehPernr
+								press : oController.searchOrgehPernr,
+								visible: false
 						   }).addStyleClass("button-light")
 						]
 	                }),
