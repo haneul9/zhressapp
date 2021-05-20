@@ -82,10 +82,10 @@ fill: function() {
 				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
 			}
 
-			var urlMss = this.urlMss();
-			if(window._menu.menuUrlMap[urlMss]) {
-				this.url(urlMss);
-				this.mid(window._menu.menuUrlMap[urlMss]);
+			// MSS 권한 -> MSS 링크로 변경
+			if(window._menu.ownMenuDataMap["1720"]) {
+				this.url(window._menu.ownMenuDataMap["1720"]);
+				this.mid("1720");
 
 				this.$().parent().parent().find('.card-header :button').eq(1)
 					.attr('data-url', this.url())
@@ -102,7 +102,6 @@ fill: function() {
 				var date = moment(Number((e.Endda || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 
                 $('.languageTable').append([
-				'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl()),
 					'<div class="table-body">',
 						'<div style="width: 55%;">',
 							e.ZlanguTxt + " " + e.ZltypeTxt,
@@ -113,8 +112,7 @@ fill: function() {
 						'<div style="width: 15%;">',
 							e.Acqpot,
 						'</div>',
-					'</div>',
-				'</a>'
+					'</div>'
                 ].join(''));
 			}.bind(this));
 		}.bind(this),
@@ -142,20 +140,6 @@ changeLocale: function() {
 	this.spinner(true);
 	this.fill();
 },
-itemUrl: function() {
-
-	if (this.mobile()) {
-		return [
-			' data-url="${url}"'.interpolate(this.url()),
-			' data-menu-id="${menu-id}"'.interpolate(this.mid())
-		].join('');
-	} else {
-		return [
-			' data-popup-menu-url="${url}"'.interpolate(this.url()),
-			' data-menu-id="${menu-id}"'.interpolate(this.mid())
-		].join('');
-	}
-},
 clearResource: function() {
 
 	return new Promise(function(resolve) {
@@ -164,13 +148,6 @@ clearResource: function() {
 			resolve();
 		}.bind(this), 0);
 	}.bind(this));
-},
-urlMss: function() {
-	
-	var urlMss = this.url().split(".");
-	urlMss.splice(1, 0, "MSS.");
-	
-	return urlMss.join("");
 }
 
 });
