@@ -13,12 +13,13 @@ return Page.extend("common.PageHelper", {
 
 /*
 @param o = {
-	contentContainerStyleClass
+	idPrefix,
+	hideEmpInfoBox,
+	contentContainerStyleClass,
 	contentHeaderLeft,
 	contentHeaderMiddle,
 	contentHeaderRight,
-	contentItems,
-	idPrefix
+	contentItems
 }
 
 @example
@@ -79,7 +80,9 @@ new common.PageHelper({
 			}
 
 			try {
-				if ((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true) {
+				o.hideEmpInfoBox = typeof o.hideEmpInfoBox !== 'undefined' ? o.hideEmpInfoBox : false;
+
+				if ((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true && o.hideEmpInfoBox !== true) {
 					window._CommonEmployeeModel = new EmployeeModel();
 					window._CommonEmployeeModel.retrieve();
 
