@@ -384,6 +384,7 @@ sap.ui.define(
 						PupStext: "",
 						ZpGradeTxt: "",
 						Zflag: "",
+						Zfxck2: "",
 						Zshft: ""
 					} : {
 						Otype: "P",
@@ -392,6 +393,7 @@ sap.ui.define(
 						PupStext: data.Fulln,
 						ZpGradeTxt: data.ZpGradetx,
 						Zflag: data.Zflag,
+						Zfxck2: data.Zfxck2,
 						Zshft: data.Zshft
 					});
 
