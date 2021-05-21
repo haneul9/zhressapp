@@ -107,7 +107,7 @@ sap.ui.define(
                                 }).addStyleClass("button-light"),
                                 new sap.m.Button({
                                     press: PostHandler.pressBatchApply.bind(PostHandler),
-                                    visible : (Common.getOperationMode() == "DEV" && $.app.getAuth() == $.app.Auth.HASS ? true : false),
+                                    visible : ($.app.getAuth() == $.app.Auth.HASS ? true : false),
                                     text: "{i18n>LABEL_55051}" // 일괄신청
                                 }).addStyleClass("button-light"),
                                 new sap.m.Button({
