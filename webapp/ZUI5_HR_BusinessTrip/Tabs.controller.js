@@ -141,7 +141,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 
 	openWindow: function(p) {
 
-		Common.openPopup(p.url);
+		Common.openPopup.call(this, p.url);
 	},
 
 	onESSelectPerson: function(oEvent) {

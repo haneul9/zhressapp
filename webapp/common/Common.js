@@ -1080,7 +1080,8 @@ common.Common = {
     },
     
     openPopup: function(url) {
-        if(!url) return true;
+
+        if (!url) return true;
 
         var width = 1000, height = screen.availHeight * 0.9,
         left = (screen.availWidth - width) / 2,
@@ -1093,7 +1094,7 @@ common.Common = {
             "status=yes,resizable=yes,scrollbars=yes"
         ].join(","));
 
-        if(!popup) {
+        if (!popup) {
             sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), {    // 팝업 차단 기능이 실행되고 있습니다.\n차단 해제 후 다시 실행해주세요.
                 title: this.getBundleText("LABEL_00139")    // 오류
             });
