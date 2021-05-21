@@ -353,6 +353,7 @@ sap.ui.define(
 			pressEmployeeSearch: function() {
 				SearchUser1.oController = this.oController;
 				SearchUser1.fPersaEnabled = true;
+				SearchUser1.searchAuth = "A";
 				SearchUser1._vPersa = this.oController.getSessionInfoByKey("Persa");
 				SearchUser1.dialogContentHeight = 480;
 				
@@ -383,6 +384,7 @@ sap.ui.define(
 						Stext: "",
 						PupStext: "",
 						ZpGradeTxt: "",
+						Bukrs: "",
 						Zflag: "",
 						Zfxck2: "",
 						Zshft: ""
@@ -391,6 +393,7 @@ sap.ui.define(
 						Objid: data.Pernr,
 						Stext: data.Ename,
 						PupStext: data.Fulln,
+						Bukrs: data.Bukrs,
 						ZpGradeTxt: data.ZpGradetx,
 						Zflag: data.Zflag,
 						Zfxck2: data.Zfxck2,

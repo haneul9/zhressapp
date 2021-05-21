@@ -8,7 +8,6 @@ sap.ui.define(["../common/PageHelper", "../common/ZHR_TABLES"], function (PageHe
             { id: "Sidoc", label: "{i18n>LABEL_23004}" /* 문서명 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "20%", align: sap.ui.core.HorizontalAlign.Left },
             { id: "Sito", label: "{i18n>LABEL_23005}" /* 제출처 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Left },
             { id: "AppEname", label: "{i18n>LABEL_23006}" /* 승인자 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto" },
-            { id: "SignEname", label: "{i18n>LABEL_23007}" /* 담당자 */, plabel: "", resize: true, span: 0, type: "string", sort: false, filter: false, width: "auto" },
             { id: "StatusText", label: "{i18n>LABEL_23008}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: false, width: "auto", templateGetter: "getStatusTxt" },
             { id: "Sealdate", label: "{i18n>LABEL_23009}" /* 날인일자 */, plabel: "", resize: true, span: 0, type: "date", sort: false, filter: false, width: "auto" }
         ],
