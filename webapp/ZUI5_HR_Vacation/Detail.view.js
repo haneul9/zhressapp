@@ -118,6 +118,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Awart", {
 											 	 	selectedKey : "{Awart}",
+											 	 	value : "{Atext}",
 											 	 	width : "70%",
 											 	 	change : oController.onChangeAwart,
 											 	 	editable : {

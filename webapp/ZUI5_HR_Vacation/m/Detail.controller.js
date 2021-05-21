@@ -344,6 +344,11 @@ sap.ui.define([
 						if(data){
 							if(data.VacationTypeNav && data.VacationTypeNav.results){
 								for(var i=0; i<data.VacationTypeNav.results.length; i++){   
+									// 2021-05-21 재택근무 리스트에 추가하지 않음
+									if(data.VacationTypeNav.results[i].Subty == "1615" || data.VacationTypeNav.results[i].Subty == "1LA1"){
+										continue;
+									}
+									
 									oAwart.addItem(
 										new sap.ui.core.Item({
 											key : data.VacationTypeNav.results[i].Subty,
@@ -1134,6 +1139,11 @@ sap.ui.define([
 							return;
 						}
 					}
+				}
+			} else if(Flag == "C" && oData.Flag == "D"){
+				if(oData.Awart == "1615" || oData.Awart == "1LA1"){
+					sap.m.MessageBox.error(oController.getBundleText("MSG_48027")); // 재택근무는 삭제신청이 불가합니다.
+					return;
 				}
 			}
 			
