@@ -82,7 +82,7 @@ new common.PageHelper({
 			try {
 				o.hideEmpInfoBox = typeof o.hideEmpInfoBox !== 'undefined' ? o.hideEmpInfoBox : false;
 
-				if ((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true && o.hideEmpInfoBox !== true) {
+				if ((!sap.ui.Device.system.phone && !sap.ui.Device.system.tablet) && parent && window._use_emp_info_box === true && !o.hideEmpInfoBox) {
 					window._CommonEmployeeModel = new EmployeeModel();
 					window._CommonEmployeeModel.retrieve();
 
