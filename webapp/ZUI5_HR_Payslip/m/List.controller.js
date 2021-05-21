@@ -45,6 +45,7 @@ sap.ui.define(
 				oController._DetailJSonModel.setProperty("/Month", vMonth);
                 oController._DetailJSonModel.setProperty("/Year", vYear);
                 oController._DetailJSonModel.setProperty("/Data", { Year: "" + curDate.getFullYear(), Month: "" + (curDate.getMonth() + 1), Pernr: vPernr, Langu: this.getSessionInfoByKey("Langu"), Bukrs: this.getSessionInfoByKey("Bukrs") });
+                oController.getOcrsnList();
             },
 
             onAfterShow: function () {},
@@ -118,12 +119,14 @@ sap.ui.define(
                     oMoney2Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money2Layout"),
                     oMoney3Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money3Layout"),
                     oMoney4Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money4Layout");
+                    // oMoney5Layout = sap.ui.getCore().byId(oController.PAGEID + "_Money5Layout");
                                     
                 oController._DetailJSonModel.setProperty("/Data/visibleYn", "");
                 oMoney1Layout.destroyItems();
                 oMoney2Layout.destroyItems();
                 oMoney3Layout.destroyItems();
                 oMoney4Layout.destroyItems();
+                // oMoney5Layout.destroyItems();
 
                 if (!vCondiData.Seqnr || vCondiData.Seqnr == "") {
                     // 조회조건을 모두 입력하시기 바랍니다.
@@ -133,8 +136,8 @@ sap.ui.define(
 
                 var search = function () {
                     var oPath = "";
+                    // var createData = { PayslipForm1Nav: [], PayslipForm2Nav: [], PayslipForm3Nav: [], PayslipForm4Nav: [] , PayslipForm5Nav: []};
                     var createData = { PayslipForm1Nav: [], PayslipForm2Nav: [], PayslipForm3Nav: [], PayslipForm4Nav: [] };
-
                     oPath = "/PayslipFormSet";
                     createData.IPernr = vCondiData.Pernr && vCondiData.Pernr != "" ? vCondiData.Pernr : "";
                     createData.ISeqnr = vCondiData.Seqnr && vCondiData.Seqnr != "" ? vCondiData.Seqnr : "";
@@ -214,6 +217,19 @@ sap.ui.define(
                                         .setModel(oController._DetailJSonModel)
                                         .bindElement("/Data")
                                 );
+
+                                
+                                // oMoney5Layout.addItem(
+                                //     new sap.m.HBox({
+                                //         height: "55px",
+                                //         alignItems: sap.m.FlexAlignItems.Center,
+                                //         items: [new sap.m.Label({ width: "100%", text: oController.getBundleText("LABEL_54019"), textAlign: "Center" }).addStyleClass("sub-title")]
+                                //     })
+                                //         .addStyleClass("sub-con-titleBar-both")
+                                //         .setModel(oController._DetailJSonModel)
+                                //         .bindElement("/Data")
+                                // );
+
                                 if (data.PayslipForm1Nav && data.PayslipForm1Nav.results.length > 0) {
                                     for (var i = 0; i < data.PayslipForm1Nav.results.length; i++) {
                                         if (data.PayslipForm1Nav.results[i].Pyitm != "") {
@@ -301,6 +317,28 @@ sap.ui.define(
                                         }
                                     });
                                 }
+
+                                // if (data.PayslipForm5Nav.results && data.PayslipForm5Nav.results.length > 0) {
+                                //     data.PayslipForm5Nav.results.forEach(function (elem) {
+                                //         if (elem.Pyitm != "") {
+                                //             oMoney5Layout.addItem(
+                                //                 new sap.m.HBox({
+                                //                     height: "40px",
+                                //                     alignItems: sap.m.FlexAlignItems.Center,
+                                //                     items: [
+                                //                         new sap.m.Label({ width: "180px", text: elem.Pyitx, textAlign: "Left" }).addStyleClass("sub-conRead-title"),
+                                //                         new sap.m.Label({
+                                //                             textAlign: "End",
+                                //                             width: "100%",
+                                //                             layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                //                             text: elem.Pyitm
+                                //                         }).addStyleClass("sub-conRead-title")
+                                //                     ]
+                                //                 })
+                                //             );
+                                //         }
+                                //     });
+                                // }
                             }
                         },
                         function (oError) {

@@ -136,7 +136,7 @@ sap.ui.define(
 
             changeDate : function(oEvent){
                 if(oEvent && oEvent.getParameters().valid == false){
-                    sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // 잘못된 일자형식입니다.
+                    MessageBox.alert(oController.getBundleText("MSG_02047"), {title: oController.getBundleText("LABEL_00149")}); // 잘못된 일자형식입니다.
                     oEvent.getSource().setValue("");
                     return;
                 }
@@ -175,6 +175,10 @@ sap.ui.define(
                     }
                 );
 
+                if(result.Worktimetab1.length == 0 && result.Worktimetab2.length == 0){
+                    return false;
+                }
+
                 var oController = this;
                 setTimeout(function(){
                     var oData = oController.oModel.getProperty("/Data1");
@@ -185,7 +189,7 @@ sap.ui.define(
                             MessageBox.alert(oController.getBundleText("MSG_55021"), { // 동일부서 내의 대상자만 추가할 수 있습니다.
                                 title: oController.getBundleText("LABEL_00149")
                             });
-                            return;
+                            return false;
                         }
                         
                         for(var i=0; i<oData.length; i++){
@@ -193,7 +197,7 @@ sap.ui.define(
                                 MessageBox.alert(oController.getBundleText("MSG_55022"), { // 이미 추가된 대상자입니다.
                                     title: oController.getBundleText("LABEL_00149")
                                 });
-                                return;
+                                return false;
                             }
                         }
                     }         
@@ -209,19 +213,29 @@ sap.ui.define(
                             }
                         }
 
-                        if(check == ""){ // ${Ename}(${Pernr}), ${Datum} 승인된 사전신청건이 없습니다.
-                            MessageBox.alert(oController.getBundleText("MSG_55023").interpolate(result.Worktimetab1[0].Ename, result.Worktimetab1[0].Pernr, sap.ui.getCore().byId(oController.PAGEID + "_Period").getValue()), { // ${Ename}(${Pernr}), ${Datum} 승인된 사전신청건이 없습니다.
+                        if(result.Worktimetab1.length != 0 && check == ""){ // 대상 근무일의 승인된 사전신청건이 없습니다. (${Ename}, ${Pernr})
+                            MessageBox.alert(oController.getBundleText("MSG_55023").interpolate(result.Worktimetab1[0].Ename, result.Worktimetab1[0].Pernr), {
                                 title: oController.getBundleText("LABEL_00149")
                             });
-                            return;
+                            return false;
                         }
                     }
+
+                    var count = 0;
 
                     for(var i=0; i<result.Worktimetab1.length; i++){
                         var data1 = result.Worktimetab1[i];
                         
                         // 신청 또는 승인된 데이터는 테이블에 추가하지 않음
-                        if(data1.Status == "00" || data1.Status == "99") continue;
+                        if(data1.Status == "00" || data1.Status == "99"){
+                            count++;
+                            continue;
+                        }
+
+                        // 사후신청의 경우 Cbchk == "2" 인 데이터만 추가
+                        if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST && data1.Cbchk != "2"){
+                            continue;
+                        }
                         
                         data1.Idx = oData.length;
                         data1.EditMode = data1.Status == "" || data1.Status == "AA" ? true : false;
@@ -248,24 +262,53 @@ sap.ui.define(
 
                         oData.push(data1);
                     }
-                    
+
+                    var oTable1 = sap.ui.getCore().byId(oController.PAGEID + "_Table1");
+                    var column = oTable1.getColumns();
+                    for(var i=0; i<column.length; i++){
+                        column[i].setSorted(false);
+                        column[i].setFiltered(false);
+                    }
+                                        
                     oController.oModel.setProperty("/Data1", oData);
-                    sap.ui.getCore().byId(oController.PAGEID + "_Table1").bindRows("/Data1");
-                    Common.adjustAutoVisibleRowCount.call(sap.ui.getCore().byId(oController.PAGEID + "_Table1"));
+                    oTable1.bindRows("/Data1");
+                    Common.adjustAutoVisibleRowCount.call(oTable1);
 
-                    // 결재정보
-                    if(oController.oModel.getProperty("/Data2").length == 0){
-                        for(var i=0; i<result.Worktimetab2.length; i++){
-                            var data2 = result.Worktimetab2[i];
-                                data2.AprsqTx = oController.getBundleText("LABEL_32042").interpolate(data2.Aprsq);
-                                data2.EditMode = oController.oModel.getProperty("/Data/Bukrs") == "A100" ? false : true;
-                        }
-
-                        oController.oModel.setProperty("/Data2", result.Worktimetab2);
-                        
-                        Common.adjustVisibleRowCount(sap.ui.getCore().byId(oController.PAGEID + "_ApprovalLineTable"), 3, oController.oModel.getProperty("/Data2").length);
+                    if(oData.length == 0){
+                        oController.oModel.setProperty("/Data2", []);
                     }
 
+                    // 결재정보
+                    if(count == result.Worktimetab1.length){
+                        if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST){
+                            MessageBox.alert(oController.getBundleText("MSG_55023").split("(")[0], { // 대상 근무일의 승인된 사전신청건이 없습니다. (${Ename}, ${Pernr})
+                                title: oController.getBundleText("LABEL_00149")
+                            });
+                        } else {
+                            MessageBox.alert(oController.getBundleText("MSG_55030"), { // 근무일에 신청가능한 일자가 없습니다. 신청내역을 확인하시기 바랍니다.
+                                title: oController.getBundleText("LABEL_00149")
+                            });
+                        }
+                         
+                         return false;
+                    } else {
+                        if(oData.length != 0 && oController.oModel.getProperty("/Data2").length == 0){
+                            for(var i=0; i<result.Worktimetab2.length; i++){
+                                var data2 = result.Worktimetab2[i];
+                                    data2.AprsqTx = oController.getBundleText("LABEL_32042").interpolate(data2.Aprsq);
+                                    data2.EditMode = oController.oModel.getProperty("/Data/Bukrs") == "A100" ? false : true;
+
+                                    // 결재상태 clear
+                                    data2.Apsta = "";
+                                    data2.ApstaT = "";
+                            }
+    
+                            oController.oModel.setProperty("/Data2", result.Worktimetab2);
+                            
+                            Common.adjustVisibleRowCount(sap.ui.getCore().byId(oController.PAGEID + "_ApprovalLineTable"), 3, oController.oModel.getProperty("/Data2").length);
+                        }
+                    }
+                    
                 }, 0);
             },
 
@@ -301,14 +344,22 @@ sap.ui.define(
                 var oTable = sap.ui.getCore().byId(this.PAGEID + "_Table1");
                 var oIndices = oTable.getSelectedIndices();
 
-                if(oIndices.length != 1){
-                    MessageBox.alert(this.getBundleText("MSG_55015")); // 한 건만 선택하세요.
+                if(oIndices.length == 0){
+                    MessageBox.alert(this.getBundleText("MSG_55028"), { // 대상항목을 선택하세요.
+                        title: this.getBundleText("LABEL_00149")
+                    });                    
+                    return;
+                } else if(oIndices.length != 1){
+                    MessageBox.alert(this.getBundleText("MSG_55015"), { // 한 건만 선택하세요.
+                        title: this.getBundleText("LABEL_00149")
+                    });                    
                     return;
                 }
                 
                 this.oModel.setProperty("/Copy", this.oModel.getProperty(oTable.getContextByIndex(oIndices[0]).sPath));
 
                 MessageBox.success(this.getBundleText("MSG_55014"), { // 복사되었습니다.
+                    title: this.getBundleText("LABEL_00149"),
                     onClose : function(){
                         oTable.clearSelection();
                     }
@@ -320,10 +371,14 @@ sap.ui.define(
                 var oIndices = oTable.getSelectedIndices();
 
                 if(this.oModel.getProperty("/Copy") == null){
-                    MessageBox.alert(this.getBundleText("MSG_55016")); // 먼저 복사 후 진행하세요.
+                    MessageBox.alert(this.getBundleText("MSG_55016"), { // 먼저 복사 후 진행하세요.
+                        title: this.getBundleText("LABEL_00149")
+                    });
                     return;
                 } else if(oIndices.length == 0){
-                    MessageBox.alert(this.getBundleText("MSG_55018")); // 데이터를 먼저 선택하세요.
+                    MessageBox.alert(this.getBundleText("MSG_55018"), { // 데이터를 먼저 선택하세요.
+                        title: this.getBundleText("LABEL_00149")
+                    });
                     return;
                 }
 
@@ -429,7 +484,9 @@ sap.ui.define(
                 // validation check
                 if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL){
                     if(oIndices.length == 0){
-                        MessageBox.error(oController.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                        MessageBox.alert(oController.getBundleText("MSG_00066"), { // 대상 항목을 선택하세요.
+                            title: oController.getBundleText("LABEL_00149")
+                        });
                         return;
                     }
                 } 
@@ -451,33 +508,86 @@ sap.ui.define(
 
                 var payload = {Worktimetab1 : [], Worktimetab2 : []};
                 var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
+                
+                // 리스트 삭제
+                var tmp = []; 
+                var onDelete = function(Flag){
+                    if(tmp.length != 0){
+                        var oTableData = oController.oModel.getProperty("/Data1"), oNewData = [];
+                        for(var i=0; i<oTableData.length; i++){
+                            var check = "";
+                            for(var j=0; j<tmp.length; j++){
+                                if(oTableData[i].Idx == tmp[j]){
+                                    check = "X";
+                                }
+                            }
 
-                if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL) {
+                            if(check == ""){
+                                oNewData.push($.extend(true, oTableData[i], {Idx : oNewData.length}));
+                            }
+                        }
+
+                        oController.oModel.setProperty("/Data1", oNewData);
+                        Common.adjustAutoVisibleRowCount.call(oTable);
+
+                        if(oNewData.length == 0){
+                            oController.oModel.setProperty("/Data2", []);
+                        }
+
+                        oTable.clearSelection();
+                        BusyIndicator.hide();
+                        
+                        if(Flag && Flag == "X"){
+                            MessageBox.success(successMessage, {                                
+                                title: oController.getBundleText("LABEL_00149"),
+                            });
+                        }
+                    }
+                };
+
+                if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL) {                    
                     for(var i=0; i<oIndices.length; i++){
                         var oData = oController.oModel.getProperty(oTable.getContextByIndex(oIndices[i]).sPath);                    
                         
                         if(Prcty == WorkSchedule.ProcessType.DELETE && oData.Status != "AA"){
-                            MessageBox.alert(oController.getBundleText("MSG_55020").interpolate(oData.Idx + 1), { // ${index}번째는 삭제 대상이 아닙니다.
-                                title: oController.getBundleText("LABEL_00149")
-                            });
-                            return;
+                            // MessageBox.alert(oController.getBundleText("MSG_55020").interpolate(oData.Idx + 1), { // ${index}번째는 삭제 대상이 아닙니다.
+                            //     title: oController.getBundleText("LABEL_00149")
+                            // });
+                            // return;
+                            
+                            // AA가 아닌 경우 대상자 리스트에서만 삭제함
+                            tmp.push(oData.Idx);
+                        } else {
+                            payload.Worktimetab1.push($.extend(true, {}, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oData), {
+                                Schda: moment(oData.Schda).hours(10).toDate(),
+                                Wkbuzc: oData.WkbuzT && oData.WkbuzM ? oData.WkbuzT + oData.WkbuzM : null,
+                                Wkeuzc: oData.WkeuzT && oData.WkeuzM ? oData.WkeuzT + oData.WkeuzM : null,
+                                Trbuzc: oData.TrbuzT && oData.TrbuzM && oData.TreuzT && oData.TreuzM ? oData.TrbuzT + oData.TrbuzM : null,
+                                Treuzc: oData.TrbuzT && oData.TrbuzM && oData.TreuzT && oData.TreuzM ? oData.TreuzT + oData.TreuzM : null,
+                                Trbu1c: oData.Trbu1T && oData.Trbu1M && oData.Treu1T && oData.Treu1M ? oData.Trbu1T + oData.Trbu1M : null,
+                                Treu1c: oData.Trbu1T && oData.Trbu1M && oData.Treu1T && oData.Treu1M ? oData.Treu1T + oData.Treu1M : null
+                            }));
                         }
 
-                        if(Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL && oData.Status != "00"){
-                            MessageBox.alert(oController.getBundleText("MSG_55007").interpolate(oData.Idx + 1)); // 결재가 진행되지 않은 건만 선택바랍니다.
-                            return;
-                        }
+                        // if(Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL && oData.Status != "00"){
+                        //     MessageBox.alert(oController.getBundleText("MSG_55007").interpolate(oData.Idx + 1)); // 결재가 진행되지 않은 건만 선택바랍니다.
+                        //     return;
+                        // }
+                    }
+                    
+                    if(payload.Worktimetab1.length == 0){                       
+                        MessageBox.show(confirmMessage, {
+                            actions: ["YES", "NO"],
+                            title: oController.getBundleText("LABEL_00150"),
+                            onClose: function(fVal){
+                                if(fVal && fVal == "YES"){
+                                    BusyIndicator.show(0);
+                                    setTimeout( function(){onDelete("X");} , 50 );
+                                }
+                            }
+                        });
                         
-                        payload.Worktimetab1.push($.extend(true, {}, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oData), {
-                            Schda: moment(oData.Schda).hours(10).toDate(),
-                            Wkbuzc: oData.WkbuzT && oData.WkbuzM ? oData.WkbuzT + oData.WkbuzM : null,
-                            Wkeuzc: oData.WkeuzT && oData.WkeuzM ? oData.WkeuzT + oData.WkeuzM : null,
-                            Trbuzc: oData.TrbuzT && oData.TrbuzM && oData.TreuzT && oData.TreuzM ? oData.TrbuzT + oData.TrbuzM : null,
-                            Treuzc: oData.TrbuzT && oData.TrbuzM && oData.TreuzT && oData.TreuzM ? oData.TreuzT + oData.TreuzM : null,
-                            Trbu1c: oData.Trbu1T && oData.Trbu1M && oData.Treu1T && oData.Treu1M ? oData.Trbu1T + oData.Trbu1M : null,
-                            Treu1c: oData.Trbu1T && oData.Trbu1M && oData.Treu1T && oData.Treu1M ? oData.Treu1T + oData.Treu1M : null
-                        }));
-                        
+                        return;
                     }
                 } else {
                     var oData = oController.oModel.getProperty("/Data1");
@@ -485,20 +595,24 @@ sap.ui.define(
                     for(var i=0; i<oData.length; i++){
                         // validation check
                         if(!oData[i].Tprog){ 
-                            MessageBox.error(oController.getBundleText("MSG_55024") + " (" + oData[i].Ename + ", " + dateFormat.format(oData[i].Schda) + ")");
-                             // 일근유형을 선택하세요.
+                            MessageBox.alert(oController.getBundleText("MSG_55024") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                                title: oController.getBundleText("LABEL_00149")
+                            }); // 일근유형을 선택하세요.                            
                             return;
                         } else if(!oData[i].WkbuzT || !oData[i].WkbuzM || !oData[i].WkeuzT || !oData[i].WkeuzM){
-                            MessageBox.error(oController.getBundleText("MSG_55025") + " (" + oData[i].Ename + ", " + dateFormat.format(oData[i].Schda) + ")"); 
-                            // 근무시간을 입력하세요.
+                            MessageBox.alert(oController.getBundleText("MSG_55025") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                                title: oController.getBundleText("LABEL_00149")
+                            });  // 근무시간을 입력하세요.                           
                             return;
                         } else if(!oData[i].Faprs){
-                            MessageBox.error(oController.getBundleText("MSG_55026") + " (" + oData[i].Ename + ", " + dateFormat.format(oData[i].Schda) + ")");
-                             // 사유구분을 선택하세요.
+                            MessageBox.alert(oController.getBundleText("MSG_55026") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                                title: oController.getBundleText("LABEL_00149")
+                            }); // 사유구분을 선택하세요.                            
                             return;
                         } else if(!oData[i].Ovres || oData[i].Ovres.trim() == ""){
-                            MessageBox.error(oController.getBundleText("MSG_55027") + " (" + oData[i].Ename + ", " + dateFormat.format(oData[i].Schda) + ")");
-                             // 사유를 입력하세요.
+                            MessageBox.alert(oController.getBundleText("MSG_55027") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                                title: oController.getBundleText("LABEL_00149")
+                            }); // 사유를 입력하세요.                            
                             return;
                         }
 
@@ -515,8 +629,12 @@ sap.ui.define(
                 }
 
                 if(payload.Worktimetab1.length == 0){
-                    MessageBox.error(oController.getBundleText("MSG_32018")); // 조회된 데이터가 없습니다.
-                    return;
+                    MessageBox.alert(oController.getBundleText("MSG_55029") // ${flag}할 대상자가 없습니다.
+                                        .interpolate(Prcty == WorkSchedule.ProcessType.APPROVE ? 
+                                                        oController.getBundleText("LABEL_00152") : oController.getBundleText("LABEL_00101")), {                        
+                        title: oController.getBundleText("LABEL_00149")
+                    });
+                    return; 
                 }
 
                 var oData2 = oController.oModel.getProperty("/Data2");
@@ -535,8 +653,8 @@ sap.ui.define(
                         payload, 
                         function (data, Prcty) {           
                             BusyIndicator.hide(); 
-                            MessageBox.success(successMessage, {
-                                title: oController.getBundleText("LABEL_00150"),
+                            MessageBox.success(successMessage, {                                
+                                title: oController.getBundleText("LABEL_00149"),
                                 onClose: function () {
                                     if(data.Url) {
                                         Common.openPopup.call(oController, data.Url);
@@ -573,12 +691,16 @@ sap.ui.define(
                 };
 
                 MessageBox.show(confirmMessage, {
-                    title: oController.getBundleText("LABEL_00149"),
                     actions: ["YES", "NO"],
+                    title: oController.getBundleText("LABEL_00150"),
                     onClose: function(fVal){
                         if(fVal && fVal == "YES"){
                             BusyIndicator.show(0);
                             setTimeout( Process, 50 );
+
+                            if(tmp.length != 0){
+                                onDelete();
+                            }
                         }
                     }
                 });
@@ -645,7 +767,7 @@ sap.ui.define(
 
             onESSelectPerson: function(data) {
                 if(this.oTarget == "X"){
-                    this.addTarget({Objid : data.Pernr});
+                    if(this.addTarget({Objid : data.Pernr}) == false) return;
 
                     this.oTarget = "";
                     this.EmployeeSearchCallOwner = null;

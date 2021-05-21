@@ -1207,7 +1207,7 @@ sap.ui.define([
 			var oTable = sap.ui.getCore().byId(oController.PAGEID +"_Table");
 			var oData = oTable.getModel().getProperty(sPath);
 			var oSessionData=oController._SessionData;		
-			oController._tData=oData;
+			oController._tData = $.extend(true, {}, oData);
 			oController._vPernr=oData.Pernr;
 			oController._tData.Close=oController._onClose;	
 			oController._Bukrs=oData.Bukrs;

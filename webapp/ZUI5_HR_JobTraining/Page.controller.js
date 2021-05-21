@@ -510,6 +510,7 @@ sap.ui.define([
 			// Navigation property
 			sendObject.TrainingOjtApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", oRowData)];
 			sendObject.TrainingOjtApplyTeacher = [];
+			sendObject.TrainingOjtApplyTableIn2 = [];
 			
 			oModel.create("/TrainingOjtApplySet", sendObject, {
 				success: function(oData, oResponse) {
@@ -531,6 +532,7 @@ sap.ui.define([
 						oController.setTeacherBox("I");
 						oController.setTeacherBox("O");
 					}
+					oController.ApplyModel.setProperty("/FileData", oData.TrainingOjtApplyTableIn2.results);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
@@ -830,14 +832,10 @@ sap.ui.define([
 			this.TeacherInfoModel.setData({InData: [], OutData: []});
 			var vStatus1 = oController.ApplyModel.getProperty("/FormData/Status1");
 			var vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty");
-			var vOJTResult = oController.ApplyModel.getProperty("/OJTResult");
 
 			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
 			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
-			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
-			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
+			oController.TeacherInfoModel.setProperty("/OJTResult", "X");
 
 			this.AttModel.setData({Data: []});
 			this.g_IDelTeacherList = [];
@@ -848,7 +846,6 @@ sap.ui.define([
 			oOutTeacherBox.destroyItems();
 
 			oCopyRow = $.extend(true, {}, oCopyRow);
-			oCopyRow.Appnm = "";
 			
 			this.ApplyModel.setData({FormData: oCopyRow});
 			this.ApplyModel.setProperty("/OJTResult", "X");
@@ -970,7 +967,16 @@ sap.ui.define([
 			var oList = [];
 
 			if(oController.g_TeacherType === "P"){ // 사내강사
-				oList = oController.TeacherInfoModel.getProperty("/InData");
+				oTeacherBox.getItems().forEach(function(e) {
+					var oTeaList1 = {};
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "P";
+					oList.push(oTeaList1);
+				});
+				
 				oList.push(oRowData);
 				oTeacherBox.destroyItems();
 
@@ -1110,17 +1116,31 @@ sap.ui.define([
 		},
 
 		onOutCheck: function(oEvent) {
+			var oController = this;
 			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
+			var oList = [];
 
+			oOutTeacherBox.getItems().forEach(function(e) {
+				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
+				oTeaList1.Ename = e.getItems()[3].getValue();
+				oTeaList1.Times = e.getItems()[5].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Sclas = "H";
+				oList.push(oTeaList1);
+			});
+			oController.TeacherInfoModel.setProperty("/OutData", oList);
 			
 			if(!oEvent.getSource().getSelected()){
 				var vIndex = this.g_ODelTeacherList.indexOf(oEvent.getSource().getParent());
 				
 				if(vIndex > -1) this.g_ODelTeacherList.splice(vIndex, 1);
 			}else {
+				oController.g_ODelTeacherList = [];
+				
 				oOutTeacherBox.getItems().forEach(function(e) {
 					if(e.getItems()[0].getSelected()) {
-						this.g_ODelTeacherList.push(e);
+						oController.g_ODelTeacherList.push(e);
 					}
 				});
 			}
@@ -1324,7 +1344,7 @@ sap.ui.define([
 			var vGubun = oController.SearchModel.getProperty("/Data/Gubun");
 			var vStatus = oController.SearchModel.getProperty("/Data/Status");
 			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
-			var oAttTable = oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
+			var oAttTable = $.app.byId(oController.PAGEID + "_AttTable");
 
 			oController.AttModel.setData({Data: []});
 
@@ -1696,7 +1716,12 @@ sap.ui.define([
 								new sap.m.Input({
 									textAlign: "Begin",
 									width: "85px",
-									editable:false,
+									editable: {
+										path: e.Ename,
+										formatter: function() {
+											return Common.checkNull(e.Ename);
+										}
+									},
 									liveChange: oController.getDyNameComma.bind(oController),
 									value: e.Ename
 								}).addStyleClass("mr-10px"),
@@ -1757,7 +1782,7 @@ sap.ui.define([
 			var inputValue = oEvent.getParameter('value').trim(),
 				convertValue = inputValue.replace(/[^\d || ^\.]/g, '');
 
-			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : convertValue);
+			oEvent.getSource().setValue(Common.checkNull(convertValue) ? "" : convertValue);
 		},
 
 		getScoreComma2: function(oEvent) {
@@ -1788,6 +1813,7 @@ sap.ui.define([
 		ErrorCheck: function() {
 			var oController = $.app.getController();
 			var oOutTeacherBox = $.app.byId(oController.PAGEID + "_OutTeacherBox");
+			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
 
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edkaj"))){ // 교육과정
 				MessageBox.error(oController.getBundleText("MSG_40013"), { title: oController.getBundleText("MSG_08107")});
@@ -1827,20 +1853,37 @@ sap.ui.define([
 				return true;
 			}
 
-			if(Common.checkNull(oController.TeacherInfoModel.getProperty("/InData")) && Common.checkNull(oController.TeacherInfoModel.getProperty("/OutData"))){
+			var oList2 = [],
+				vError = "";
+
+			if(Common.checkNull(oOutTeacherBox.getItems()[0]) && Common.checkNull(oTeacherBox.getItems()[0])) vError = "Y";
+			else vError = "N";
+
+			oOutTeacherBox.getItems().forEach(function(e) {
+				var oTeaList1 = {};
+				oTeaList1.Ename = e.getItems()[3].getValue();
+				oTeaList1.Times = e.getItems()[5].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oList2.push(oTeaList1);
+				if(Common.checkNull(oTeaList1.Ename) || Common.checkNull(oTeaList1.Times)) vError = "Y";
+			});
+			oController.TeacherInfoModel.setProperty("/OutData", oList2);
+
+			oList2 = [];
+
+			oTeacherBox.getItems().forEach(function(e) {
+				var oTeaList1 = {};
+				oTeaList1.Ename = e.getItems()[3].getValue();
+				oTeaList1.Times = e.getItems()[5].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oList2.push(oTeaList1);
+				if(Common.checkNull(oTeaList1.Ename) || Common.checkNull(oTeaList1.Times)) vError = "Y";
+			});
+			oController.TeacherInfoModel.setProperty("/InData", oList2);
+
+			if(vError === "Y"){
 				MessageBox.error(oController.getBundleText("MSG_70014"), { title: oController.getBundleText("MSG_08107")});
 				return true;
-			} else{
-				var oList2 = [];
-
-				oOutTeacherBox.getItems().forEach(function(e) {
-					var oTeaList1 = {};
-					oTeaList1.Ename = e.getItems()[3].getValue();
-					oTeaList1.Times = e.getItems()[5].getValue();
-					oTeaList1.Tepay = e.getItems()[7].getValue();
-					oList2.push(oTeaList1);
-				});
-				oController.TeacherInfoModel.setProperty("/OutData", oList2);
 			}
 
 			if(Common.checkNull(oController.ApplyModel.getProperty("/FormData/Edpeo"))){ // 교육대상
@@ -1890,13 +1933,6 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
-			
-			if(oTeaList2.some(function(e) {
-				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
-			})){ // 강사
-				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
-				return;
-			}
 
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
@@ -1978,13 +2014,6 @@ sap.ui.define([
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
-
-			if(oTeaList2.some(function(e) {
-				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
-			})){ // 강사
-				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
-				return;
-			}
 
 			if(vEdoty === "2") {
 				if(oController.AttModel.getProperty("/Data").length === 0){ // 참석자
@@ -2149,13 +2178,6 @@ sap.ui.define([
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
 
-			if(oTeaList2.some(function(e) {
-				return Common.checkNull(e.Ename) || Common.checkNull(e.Times) || Common.checkNull(e.Tepay);
-			})){ // 강사
-				MessageBox.error(oController.getBundleText("MSG_70019"), { title: oController.getBundleText("MSG_08107")});
-				return;
-			}
-
 			oController.AttModel.getProperty("/Data").forEach(function(e) {
 				var oAttList1 = {};
 				oAttList1.Sobid = e.Pernr;
@@ -2180,7 +2202,8 @@ sap.ui.define([
 						uFiles.push("003");
 					}
 					
-					oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+					fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+					
 					oSendData.Edoty = "2";
 					oSendData.Pernr = vPernr;
 
