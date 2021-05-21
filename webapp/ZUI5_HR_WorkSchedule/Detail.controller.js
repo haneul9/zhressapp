@@ -136,7 +136,7 @@ sap.ui.define(
 
             changeDate : function(oEvent){
                 if(oEvent && oEvent.getParameters().valid == false){
-                    sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // 잘못된 일자형식입니다.
+                    MessageBox.alert(oController.getBundleText("MSG_02047"), {title: oController.getBundleText("LABEL_00149")}); // 잘못된 일자형식입니다.
                     oEvent.getSource().setValue("");
                     return;
                 }
@@ -213,7 +213,7 @@ sap.ui.define(
                             }
                         }
 
-                        if(check == ""){ // 대상 근무일의 승인된 사전신청건이 없습니다. (${Ename}, ${Pernr})
+                        if(result.Worktimetab1.length != 0 && check == ""){ // 대상 근무일의 승인된 사전신청건이 없습니다. (${Ename}, ${Pernr})
                             MessageBox.alert(oController.getBundleText("MSG_55023").interpolate(result.Worktimetab1[0].Ename, result.Worktimetab1[0].Pernr), {
                                 title: oController.getBundleText("LABEL_00149")
                             });
@@ -229,6 +229,11 @@ sap.ui.define(
                         // 신청 또는 승인된 데이터는 테이블에 추가하지 않음
                         if(data1.Status == "00" || data1.Status == "99"){
                             count++;
+                            continue;
+                        }
+
+                        // 사후신청의 경우 Cbchk == "2" 인 데이터만 추가
+                        if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST && data1.Cbchk != "2"){
                             continue;
                         }
                         
@@ -275,9 +280,16 @@ sap.ui.define(
 
                     // 결재정보
                     if(count == result.Worktimetab1.length){
-                         MessageBox.alert(oController.getBundleText("MSG_55030"), { // 근무일에 신청가능한 일자가 없습니다. 신청내역을 확인하시기 바랍니다.
-                            title: oController.getBundleText("LABEL_00149")
-                         });
+                        if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST){
+                            MessageBox.alert(oController.getBundleText("MSG_55023").split("(")[0], { // 대상 근무일의 승인된 사전신청건이 없습니다. (${Ename}, ${Pernr})
+                                title: oController.getBundleText("LABEL_00149")
+                            });
+                        } else {
+                            MessageBox.alert(oController.getBundleText("MSG_55030"), { // 근무일에 신청가능한 일자가 없습니다. 신청내역을 확인하시기 바랍니다.
+                                title: oController.getBundleText("LABEL_00149")
+                            });
+                        }
+                         
                          return false;
                     } else {
                         if(oData.length != 0 && oController.oModel.getProperty("/Data2").length == 0){
@@ -583,22 +595,22 @@ sap.ui.define(
                     for(var i=0; i<oData.length; i++){
                         // validation check
                         if(!oData[i].Tprog){ 
-                            MessageBox.error(oController.getBundleText("MSG_55024") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                            MessageBox.alert(oController.getBundleText("MSG_55024") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             }); // 일근유형을 선택하세요.                            
                             return;
                         } else if(!oData[i].WkbuzT || !oData[i].WkbuzM || !oData[i].WkeuzT || !oData[i].WkeuzM){
-                            MessageBox.error(oController.getBundleText("MSG_55025") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                            MessageBox.alert(oController.getBundleText("MSG_55025") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             });  // 근무시간을 입력하세요.                           
                             return;
                         } else if(!oData[i].Faprs){
-                            MessageBox.error(oController.getBundleText("MSG_55026") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                            MessageBox.alert(oController.getBundleText("MSG_55026") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             }); // 사유구분을 선택하세요.                            
                             return;
                         } else if(!oData[i].Ovres || oData[i].Ovres.trim() == ""){
-                            MessageBox.error(oController.getBundleText("MSG_55027") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                            MessageBox.alert(oController.getBundleText("MSG_55027") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             }); // 사유를 입력하세요.                            
                             return;
@@ -617,7 +629,9 @@ sap.ui.define(
                 }
 
                 if(payload.Worktimetab1.length == 0){
-                    MessageBox.error(oController.getBundleText("MSG_55029"), { // 저장할 대상자가 없습니다.
+                    MessageBox.alert(oController.getBundleText("MSG_55029") // ${flag}할 대상자가 없습니다.
+                                        .interpolate(Prcty == WorkSchedule.ProcessType.APPROVE ? 
+                                                        oController.getBundleText("LABEL_00152") : oController.getBundleText("LABEL_00101")), {                        
                         title: oController.getBundleText("LABEL_00149")
                     });
                     return; 
