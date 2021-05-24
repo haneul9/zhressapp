@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/jquery.jscrollpane-custom.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/bootstrap.min.css" />
 <link rel="stylesheet" href="ZUI5_HR_Home/css/lib/Chart.min.css" />
-<link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" />
+<!-- <link rel="stylesheet" href="ZUI5_HR_Home/css/home.css" /> -->
 <script src="plugin/jspdf/jspdf.js"></script>
 <script src="plugin/jspdf/bluebird.js"></script>
 <script src="plugin/jspdf/html2canvas.js"></script>
@@ -60,8 +60,26 @@ $( document ).ready(function() {
 });
 
 </script>
+<style>
+	body {
+		font-size: 14px;
+		font-family:'맑은고딕', 'Malgun Gothic',serif;
+		color:#000;
+		background:#fff;
+		padding:20px; 
+		width:1200px; 		
+	}
+	table {
+		width: 100%;
+		border: 1px solid #333;
+		border-collapse: collapse;
+	}
+	th, td {border: 1px solid #333;padding:8px}
+	th {text-align: center;background: #f5f5f5;}
+</style>
+
 </head>
-<body style="overflow:scroll;">
+<body>
 
 <div id="header_layout">
 	<input type="button" value="프린트" onclick="onPrint()">
@@ -150,53 +168,43 @@ $( document ).ready(function() {
 
 	</script>
 </div>
+
+<!-- 평가프린트 html 작업  -->
+
 <div>
-<div id="name_layout">
-	<div style="display:inline-block"> <img id="pic_1" style="width: 55px; height: 55px;"></img></div>
-	<div id="Name" style="display:inline-block; background:red;"></div>
-	<div id="Title" style="display:inline-block"></div>
-	<div id="Title1"></div>
+
+<!-- 사원정보  -->
+<div id="name_layout" style="padding-top:10px; width:100%;">
+	<div style="display:inline-block;height:80px;vertical-align: top;padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
+	<div style="display:inline-block;height:80px">
+		<div id="Name" style="display:inline-block;font-weight:bold;"></div>
+		<div id="Title" style="display:inline-block"></div>
+		<div id="Title1"></div>
+	</div>		
 </div>
 
+<!-- 평가 Table List  -->
 <div id="overivew_layout"></div>
 	<!-- <div>
 		<div id="performance_layout" style="width:50%;float:left"></div>
 		<div style="width:50%;float:right"><canvas id="competency_layout" width="300" height="200"></canvas></div>
 	</div> -->
-	<div>
-		<table style="width:100%">
-			<colgroup>
-				<col>
-				<col style="width:25px;">
-				<col>
-			</colgroup>
-			<tbody style="width:100%; height:100%">
-				<tr>
-					<td>업적평가</td>
-					<td></td>
-					<td>역량평가</td>
-				</tr>
-				<tr>
-					<td id="performance_layout"></td>
-					<td></td>
-					<td><div style="width:400px;float:right"><canvas id="competency_layout" width="400" height="300"></canvas></div></td>
-				</tr>
-				<tr>
-					<td>업적평가 1차 평가자 의견</td>
-					<td></td>
-					<td>역량평가 1차 평가자 의견</td>
-				</tr>
-				<tr>
-					<td id="comment1_layout"></td>
-					<td></td>
-					<td id="comment2_layout"></td>
-				</tr>
-			
-			
-			</tbody>
-		</table>
+	<div style="margin-top:20px">
+		<div style="float:left;width:45%">
+			<div style="font-weight:bold;padding-bottom:6px;">&gt; 업적평가</div>
+			<div id="performance_layout"></div>
+			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;margin-top:20px">&gt; 업적평가 1차 평가자 의견</div>
+			<div id="comment1_layout" style="margin-top:10px"></div>
+		</div>
+		<div style="float:right;width:45%">
+			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 역량평가</div>
+			<div style="padding-top:10px"><canvas id="competency_layout" width="400" height="300"></canvas></div>
+			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;margin-top:20px">&gt; 역량평가 1차 평가자 의견</div>
+			<div id="comment2_layout" style="margin-top:10px"></div>
+		</div>	
 	</div>
 </div>
+
 <!-- <div>
 	<div style="width:50%;float:left">
 		<table>

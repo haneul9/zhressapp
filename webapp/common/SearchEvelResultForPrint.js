@@ -127,13 +127,13 @@ onSearchEval : function(vPernr, vZyear){
 					vTableBody = vTableBody +  [
 
 						'<tr>',
-							'<td>', o.Appye || '', '</td>',
-							'<td>', o.Grade1 || '', '</td>',
-							'<td>', o.Grade2 || '', '</td>',
-							'<td>', o.Grade3 || '', '</td>',
-							'<td>', o.Grade4 || '', '</td>',
-							'<td>', o.Grade5 || '', '</td>',
-							'<td>', o.Grade6 || '', '</td>',
+							'<td style="text-align:center">', o.Appye || '', '</td>',
+							'<td style="text-align:center">', o.Grade1 || '', '</td>',
+							'<td style="text-align:center">', o.Grade2 || '', '</td>',
+							'<td style="text-align:center">', o.Grade3 || '', '</td>',
+							'<td style="text-align:center">', o.Grade4 || '', '</td>',
+							'<td style="text-align:center">', o.Grade5 || '', '</td>',
+							'<td style="text-align:center">', o.Grade6 || '', '</td>',
 						'</tr>'
 					].join('');
 				}.bind(this)).join('');
@@ -280,11 +280,11 @@ onSearchPerformance : function(vPernr, vZyear){
 													vTableBody = vTableBody +  [
 
 														'<tr>',
-															'<td>', o.idx || '', '</td>',
-															'<td>', o.name || '', '</td>',
-															'<td>', o.done || '', '</td>',
-															'<td>', o.custom01 || '', '</td>',
-															'<td>', o.rating || '', '</td>',
+															'<td style="text-align:center">', o.idx || '', '</td>',
+															'<td style="text-align:center">', o.name || '', '</td>',
+															'<td style="text-align:center">', o.done || '', '</td>',
+															'<td style="text-align:center">', o.custom01 || '', '</td>',
+															'<td style="text-align:center">', o.rating || '', '</td>',
 														'</tr>'
 													].join('');
 												}.bind(this)).join('');
