@@ -98,7 +98,7 @@ sap.ui.define([
 	            oModel.read(oPath, null, null, false,
 	                    function(data, oResponse) {
 	                        if(data && data.results.length) {
-	                            oZyear = data.results[0].Zyear;
+	                            oZyear = data.results[0].Zyear == "0000" ? '2019' : data.results[0].Zyear;
 								oPystat = data.results[0].Pystat;
 								oYestat = (data.results[0].Yestat == "X" ? "1" : "");
 	                        }
@@ -344,7 +344,7 @@ sap.ui.define([
             );
             
             if(oData2.Pystat == "1" && oData2.Yestat == "1"){
-                oTable.setSelectionMode("MultiToggle");
+                oTable.setSelectionMode("Single");
             } else {
                 oTable.setSelectionMode("None");
             }
@@ -660,7 +660,18 @@ sap.ui.define([
             
             var process = function(){
                 var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
-                var sPath = oTable.getContextByIndex(oIndices[0]).sPath;
+
+                for(var i=0; i<oIndices.length; i++){
+                    var sPath = oTable.getContextByIndex(oIndices[i]).sPath;
+
+                    var detail = {};
+                        detail.Zyear = oData.Zyear;
+                        detail.Pernr = oData.Pernr;
+                        detail.Regno = oData.Regno.replace(/-/g, "");
+                        detail.Objps = oData.Objps;
+
+                        createData.RESULT.push(detail);  
+                }
                 
                 var oData = oTable.getModel().getProperty(sPath);
                         
@@ -668,14 +679,6 @@ sap.ui.define([
                     createData.IMode = "2";
                     createData.IPernr = oData.Pernr;
                     createData.IYear = oData.Zyear;
-                    
-                var detail = {};
-                    detail.Zyear = oData.Zyear;
-                    detail.Pernr = oData.Pernr;
-                    detail.Regno = oData.Regno.replace(/-/g, "");
-                    detail.Objps = oData.Objps;
-
-                    createData.RESULT.push(detail);
                     
                 oModel.create("/YeartaxGetFamResultHeaderSet", createData, 
                     {
