@@ -78,20 +78,53 @@ getTargetReports: function(goalId, resolve) { // 평가대상 확인여부
 },
 retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
-	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01,custom07".interpolate(this._gateway.pernr());
+	var url2 = "/odata/v2/User('${pernr}')/directReports?$select=userId,nickname,custom01,custom07,custom04".interpolate(this._gateway.pernr());
 
 	$.getJSON({ // 평가 대상자 조회 : 조회한 사원번호의 평가대상자를 조회
 		url: url2,
 		success: function(data) {
 			var oEmpDataList = data.d.results,
 				empDataList = [],
+				exEmpDataList = [],
 				list = this.$();
 
 			oEmpDataList.forEach(function(e) {
-				if(this.targetList.some(function(ele) {return ele.Code === e.custom07;})){
-					empDataList.push(e);
+				if(this.checkNull(!e.custom04)){
+					this.targetList.forEach(function(ele) {
+						if(ele.Code === e.custom07){
+							e.Seqnr = ele.Seqnr;
+							exEmpDataList.push(e);
+						}
+					});
+
+					exEmpDataList.sort(function(a, b) {
+						if(a['Seqnr'] === b['Seqnr']) {
+							var x = a['nickname'].toLowerCase();
+							var y = b['nickname'].toLowerCase();
+							return x < y ? -1 : x > y ? 1 : 0;
+						}
+						return a['Seqnr'] - b['Seqnr']; 
+					});
+				}else {
+					this.targetList.forEach(function(ele) {
+						if(ele.Code === e.custom07){
+							e.Seqnr = ele.Seqnr;
+							empDataList.push(e);
+						}
+					});
+
+					empDataList.sort(function(a, b) {
+						if(a['Seqnr'] === b['Seqnr']) {
+							var x = a['nickname'].toLowerCase();
+							var y = b['nickname'].toLowerCase();
+							return x < y ? -1 : x > y ? 1 : 0;
+						}
+						return a['Seqnr'] - b['Seqnr']; 
+					});
 				}
 			}.bind(this));
+
+			empDataList = empDataList.concat(exEmpDataList);
 
 			if (!empDataList.length) {
 				$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
