@@ -958,7 +958,7 @@ sap.ui.define([
                 {
                     success: function(data,res){
                         if(data){
-                            if(data.NavYeartaxPrevWorkN2 && data.NavYeartaxPrevWorkN2.results){
+                            if(data.NavYeartaxPrevWorkN2.results && data.NavYeartaxPrevWorkN2.results.length){
                                 for(var i=0; i<data.NavYeartaxPrevWorkN2.results.length; i++){
                                     data.NavYeartaxPrevWorkN2.results[i].Pystat = oData.Pystat;
                                     data.NavYeartaxPrevWorkN2.results[i].Yestat = oData.Yestat;

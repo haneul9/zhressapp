@@ -93,7 +93,7 @@ sap.ui.define(
                             text : "삭제",
                             press : oController.onPressDelete7,
                             visible : {
-                                parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Key"}],
+                                parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Key2"}],
                                 formatter : function(fVal1, fVal2, fVal3){
                                     return fVal1 == "1" && fVal2 == "1" && fVal3 == "7" ? true : false;
                                 }
@@ -119,13 +119,7 @@ sap.ui.define(
                                 }
                             }
                         }).addStyleClass("button-dark")
-                    ],
-                    visible : {
-                        parts : [{path : "Pystat"}, {path : "Yestat"}],
-                        formatter : function(fVal1, fVal2){
-                            return fVal1 == "1" && fVal2 == "1" ? true : false;
-                        }
-                    }
+                    ]
                 }).addStyleClass("button-group");
         
                 var oPage = new PageHelper({

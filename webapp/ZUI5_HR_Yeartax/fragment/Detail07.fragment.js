@@ -157,7 +157,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail07", {
 													},
 													change : oController.onChangeDate
 											 	}),
-											 	new sap.m.Text({text : "~"}).addStyleClass("PaddingLeft5 PaddingRight5 PaddingTop5"),
+											 	new sap.m.Text({text : "~"}).addStyleClass("pl-5px pr-5px pt-10px"),
 											 	new sap.m.DatePicker({
 											 	 	displayFormat : gDtfmt,
 											 	 	valueFormat : "yyyy-MM-dd",
@@ -194,7 +194,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail07", {
 													},
 													change : oController.onChangeDate
 											 	}),
-											 	new sap.m.Text({text : "~"}).addStyleClass("PaddingLeft5 PaddingRight5 PaddingTop5"),
+											 	new sap.m.Text({text : "~"}).addStyleClass("pl-5px pr-5px pt-10px"),
 											 	new sap.m.DatePicker({
 											 	 	displayFormat : gDtfmt,
 											 	 	valueFormat : "yyyy-MM-dd",
