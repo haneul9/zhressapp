@@ -11,6 +11,7 @@ sap.ui.define([], function () {
             $.app.setModel("ZHR_COMMON_SRV");
             $.app.setModel("ZHR_PERS_INFO_SRV");
             $.app.setModel("ZHR_PERS_RECORD_SRV");
+            $.app.setModel("ZHR_APPRAISAL_SRV");
 
             oController.setupView.call(oController);
 
@@ -177,7 +178,24 @@ sap.ui.define([], function () {
                                 else return false;
                             }
                         }
-                    })
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_37115}", // 평가이력
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_Perinfo.fragment.Eval", oController)]
+                            })
+                        ],
+                        visible: {
+                            path: "Auth",
+                            formatter: function (v) {
+                                if (v == "M") return true;
+                                else return false;
+                            }
+                        }
+                    }),
                 ]
             }).addStyleClass("tab-group");
 
