@@ -120,7 +120,7 @@ sap.ui.define(
                             }
                         }).addStyleClass("button-dark")
                     ]
-                }).addStyleClass("button-group");
+                }).addStyleClass("button-group pt-10px");
         
                 var oPage = new PageHelper({
                     idPrefix : oController.PAGEID,

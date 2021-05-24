@@ -91,13 +91,14 @@ sap.ui.define([
 	            var oPath = "/YeartaxHeaderSet?$filter=IZyear eq '2019'";
 	                oPath += " and IBukrs eq '" + oController.getSessionInfoByKey("Bukrs") + "'";
 	                oPath += " and IPercod eq '" + encodeURIComponent(oController.getSessionInfoByKey("Percod")) + "'";
+	                oPath += " and IEmpid eq '" + encodeURIComponent(oController.getSessionInfoByKey("Pernr")) + "'";
 	                
 	            var oZyear = "", oPystat = "", oYestat = "";
 	            
 	            oModel.read(oPath, null, null, false,
 	                    function(data, oResponse) {
 	                        if(data && data.results.length) {
-	                            oZyear = data.results[0].Zyear == "0000" ? '2019' : data.results[0].Zyear;
+	                            oZyear = data.results[0].Zyear;
 								oPystat = data.results[0].Pystat;
 								oYestat = (data.results[0].Yestat == "X" ? "1" : "");
 	                        }
@@ -343,7 +344,7 @@ sap.ui.define([
             );
             
             if(oData2.Pystat == "1" && oData2.Yestat == "1"){
-                oTable.setSelectionMode("Single");
+                oTable.setSelectionMode("MultiToggle");
             } else {
                 oTable.setSelectionMode("None");
             }
@@ -1635,9 +1636,10 @@ sap.ui.define([
             var oController = oView.getController();
 
 			var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
-			var oPath = "/YeartaxHeaderSet?$filter=IZyear eq '2019'";
+			var oPath = "/YeartaxHeaderSet?$filter=IZyear eq '" + oController._DetailJSonModel.getProperty("/Data/Zyear") + "'";
 				oPath += " and IBukrs eq '" + oController.getSessionInfoByKey("Bukrs") + "'";
 				oPath += " and IPercod eq '" + encodeURIComponent(oController.getSessionInfoByKey("Percod")) + "'";
+                oPath += " and IEmpid eq '" + encodeURIComponent(oController.getSessionInfoByKey("Pernr")) + "'";
 				
 			var oZyear = "", oPystat = "", oYestat = "";
 			

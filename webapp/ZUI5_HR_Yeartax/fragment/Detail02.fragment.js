@@ -300,11 +300,69 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 			columnHeaderHeight  : 35,
 			showNoData : true,
 			selectionMode: "None",
+			enableSelectAll : false,
 			showOverlay : false,
 			enableBusyIndicator : true,
 			visibleRowCount : 1,
 			enableGrouping : false,
-			enableSelectAll : false
+			enableSelectAll : false,
+			extension : new sap.m.Toolbar({
+								 height : "40px",
+								 content : [new sap.m.Text({text : "가족정보"}).addStyleClass("Font15 FontBold"),
+									 	  	new sap.m.ToolbarSpacer(),
+									 	  	new sap.m.Button({
+									 	  		text : "신규",
+									 	  		press : function(oEvent){
+									 	  			oController.onPressFamInfo(oEvent, "C");
+	 								 	  		},
+									 	  		visible : {
+									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
+									 	  			formatter : function(fVal1, fVal2, fVal3){
+									 	  				if(!fVal3 || fVal3 == false)
+									 	  					return false;
+									 	  				else if(fVal1 == "1" && fVal2 == "1")
+									 	  					return true;
+									 	  				else
+									 	  					return false;
+									 	  			}
+									 	  		}
+									 	  	}).addStyleClass("button-light"),
+									 	  	new sap.m.Button({
+									 	  		text : "수정",
+									 	  		press : function(oEvent){
+									 	  			oController.onPressFamInfo(oEvent, "M");
+									 	  		},
+									 	  		visible : {
+									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
+									 	  			formatter : function(fVal1, fVal2, fVal3){
+									 	  				if(!fVal3 || fVal3 == false)
+									 	  					return false;
+									 	  				else if(fVal1 == "1" && fVal2 == "1")
+									 	  					return true;
+									 	  				else
+									 	  					return false;
+									 	  			}
+									 	  		}
+									 	  	}).addStyleClass("button-light"),
+									 	  	new sap.m.Button({
+									 	  		text : "삭제",
+									 	  		press : oController.onDeleteFamInfo,
+									 	  		visible : {
+								 	  				parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
+									 	  			formatter : function(fVal1, fVal2, fVal3){
+									 	  				if(!fVal3 || fVal3 == false)
+									 	  					return false;
+									 	  				else if(fVal1 == "1" && fVal2 == "1")
+									 	  					return true;
+									 	  				else
+									 	  					return false;
+									 	  			}
+									 	  		}
+									 	  	}).addStyleClass("button-delete"),
+									 	  	new sap.m.ToolbarSpacer({width : "10px"})]
+							 }).addStyleClass("ToolbarNoBottomLine")
+							   .setModel(oController._DetailJSonModel)
+							   .bindElement("/Data2")
 		}).addStyleClass("FontFamily");
 		
 		oTable3.setModel(new sap.ui.model.json.JSONModel());
@@ -328,68 +386,9 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 		common.makeTable.makeColumn(oController, oTable3, col_info);
 		
 		var oPanel3 = new sap.m.Panel({
-			expandable : true,
+			expandable : false,
 			expanded : true,
-			headerToolbar : [new sap.m.Toolbar({
-								 content : [new sap.m.Text({text : "가족정보"}).addStyleClass("Font15 FontBold"),
-									 	  	new sap.m.ToolbarSpacer(),
-									 	  	new sap.m.Button({
-									 	  		text : "신규",
-									 	  		icon : "sap-icon://add-contact",
-									 	  		type : "Ghost",
-									 	  		press : function(oEvent){
-									 	  			oController.onPressFamInfo(oEvent, "C");
-	 								 	  		},
-									 	  		visible : {
-									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
-									 	  			formatter : function(fVal1, fVal2, fVal3){
-									 	  				if(!fVal3 || fVal3 == false)
-									 	  					return false;
-									 	  				else if(fVal1 == "1" && fVal2 == "1")
-									 	  					return true;
-									 	  				else
-									 	  					return false;
-									 	  			}
-									 	  		}
-									 	  	}),
-									 	  	new sap.m.Button({
-									 	  		text : "수정",
-									 	  		icon : "sap-icon://edit",
-									 	  		type : "Ghost",
-									 	  		press : function(oEvent){
-									 	  			oController.onPressFamInfo(oEvent, "M");
-									 	  		},
-									 	  		visible : {
-									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
-									 	  			formatter : function(fVal1, fVal2, fVal3){
-									 	  				if(!fVal3 || fVal3 == false)
-									 	  					return false;
-									 	  				else if(fVal1 == "1" && fVal2 == "1")
-									 	  					return true;
-									 	  				else
-									 	  					return false;
-									 	  			}
-									 	  		}
-									 	  	}),
-									 	  	new sap.m.Button({
-									 	  		text : "삭제",
-									 	  		icon : "sap-icon://delete",
-									 	  		type : "Ghost",
-									 	  		press : oController.onDeleteFamInfo,
-									 	  		visible : {
-								 	  				parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
-									 	  			formatter : function(fVal1, fVal2, fVal3){
-									 	  				if(!fVal3 || fVal3 == false)
-									 	  					return false;
-									 	  				else if(fVal1 == "1" && fVal2 == "1")
-									 	  					return true;
-									 	  				else
-									 	  					return false;
-									 	  			}
-									 	  		}
-									 	  	}),
-									 	  	new sap.m.ToolbarSpacer({width : "10px"})]
-							 }).addStyleClass("ToolbarNoBottomLine")],
+			headerToolbar : [],
 			content : [oTable3]
 		});
 		

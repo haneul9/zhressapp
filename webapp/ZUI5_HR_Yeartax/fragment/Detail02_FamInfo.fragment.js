@@ -5,16 +5,16 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 		var oMatrix1 = new sap.ui.commons.layout.MatrixLayout({
 			columns : 4,
 			width : "100%",
-			widths : ["20%", "30%", "20%", "30%"],
+			widths : ["15%", "35%", "15%", "35%"],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "성명"}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Label({text : "성명"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "(성)"}).addStyleClass("FontFamily PaddingTop5 PaddingRight5"),
+								 	 content : [new sap.m.Text({text : "(성)"}).addStyleClass("FontFamily pt-10px pr-5px"),
 								 				new sap.m.Input({
 								 					value : "{Lnmhg}",
 								 					width : "100px",
@@ -40,12 +40,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 								 				}).addStyleClass("FontFamily")],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								     content : [new sap.m.Text({text : "관계"}).addStyleClass("FontFamily")],
+								     content : [new sap.m.Label({text : "관계"}).addStyleClass("FontFamily")],
 								     hAlign : "Center",
 								     vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Kdsvh", {
 											 		selectedKey : "{Kdsvh}",
@@ -59,15 +59,15 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	})],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData")]
+								 }).addStyleClass("Data2")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "국적"}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Label({text : "국적"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Fanat", {
 											 	 	selectedKey : "{Fanat}",
@@ -81,12 +81,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	})],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "주민번호"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "주민번호"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Input({
 											 	 	value : "{Regno1}",
@@ -103,7 +103,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	 			oEvent.getSource().setValue(value);
 											 	 	}
 											 	}),
-											 	new sap.m.Text({text : "-"}).addStyleClass("FontFamily PaddingLeft5 PaddingRight5 PaddingTop5"),
+											 	new sap.m.Text({text : "-"}).addStyleClass("FontFamily pt-10px pr-5px pl-5px"),
 											 	new sap.m.Input({
 											 		value : "{Regno2}",
 											 		width : "100px",
@@ -121,7 +121,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	})],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixData")]
+								 }).addStyleClass("Data2")]
 					})]
 		});
 		
@@ -130,49 +130,49 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 			width : "100%",
 			widths : ["", "250px", "", "", "300px"],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "기본공제"}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Label({text : "기본공제"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "추가공제"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "추가공제"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle",
 								 	 colSpan : 4
-								 }).addStyleClass("MatrixLabel PaddingLeft0")]
+								 }).addStyleClass("Label3")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "부양가족"}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Label({text : "부양가족"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "자녀구분"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "자녀구분"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "7세미만취학아동"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "7세미만취학아동"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "위탁아동"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "위탁아동"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "장애인"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "장애인"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0")]
+								 }).addStyleClass("Label3")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.CheckBox({
 												 	selected : "{Dptid}", // 부양가족
@@ -185,7 +185,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 												})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Kdbsl", {
 											 	 	selectedKey : "{Kdbsl}", // 자녀구분
@@ -193,21 +193,21 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	})],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.CheckBox({
 											 	 	selected : "{Sesch}" // 7세미만취학아동
 											 	})],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.CheckBox({
 											 	 	selected : "{Fstid}", // 위탁아동
 											 	})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.CheckBox({
 											 	 	selected : "{Hndid}", // 장애인
@@ -227,7 +227,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	})],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixData")]
+								 }).addStyleClass("Data2")]
 					})]
 		});
 		
@@ -236,70 +236,70 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 			width : "100%",
 			widths : ["", "", "", "", ""],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "보험료"}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Label({text : "보험료"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "의료비"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "의료비"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "교육비"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "교육비"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "신용카드"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "신용카드"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "기부금"}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Label({text : "기부금"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0")]
+								 }).addStyleClass("Label3")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.CheckBox({
 												 	selected : "{Zzinsyn}"
 												})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.CheckBox({
 												 	selected : "{Zzmedyn}"
 												})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.CheckBox({
 												 	selected : "{Zzeduyn}"
 												})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.CheckBox({
 												 	selected : "{Zzcrdyn}"
 												})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.CheckBox({
 												 	selected : "{Zzdonyn}"
 												})],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixData")]
+								 }).addStyleClass("Data2")]
 					})]
 		});
 		
@@ -309,10 +309,10 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 			widths : ["20%", "80%"],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "안내"}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Label({text : "안내"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel PaddingLeft0"),
+								 }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Text({
 											 	 	text : "• 7세 미만 취학아동의 경우 체크하여 주십시오." +
@@ -323,7 +323,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	}).addStyleClass("FontFamily")],
 									 hAlign : "Begin",
 									 vAlign : "Top"
-								 }).addStyleClass("MatrixData PaddingTop5 PaddingBottom5")]
+								 }).addStyleClass("Data2 PaddingTop5 PaddingBottom5")]
 					})]
 		});
 		
@@ -362,15 +362,13 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 				}
 			},
 			beginButton : [new sap.m.Button({
-								icon : "sap-icon://save", 
-								type : "Emphasized",
 								text : "저장",
 								press : oController.onSaveFamInfo
-						   })],			
-			endButton : [new sap.m.Button({icon: "sap-icon://decline", text : "닫기", type : "Emphasized", press : function(oEvent){oDialog.close();}})]
+						   }).addStyleClass("button-dark")],			
+			endButton : [new sap.m.Button({text : "닫기", press : function(oEvent){oDialog.close();}}).addStyleClass("button-default")]
 		});
 		
-		oDialog.addStyleClass("sapUiSizeCompact");
+		oDialog.addStyleClass("custom-dialog-popup");
 		oDialog.setModel(new sap.ui.model.json.JSONModel());
 		oDialog.bindElement("/Data");
 		
