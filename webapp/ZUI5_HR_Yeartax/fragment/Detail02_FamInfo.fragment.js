@@ -209,22 +209,25 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 									 vAlign : "Middle"
 								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.CheckBox({
-											 	 	selected : "{Hndid}", // 장애인
-											 	 	select : function(oEvent){
-											 	 		oController._FamInfoDialog.getModel().setProperty("/Data/Hndcd", "");
-											 	 	}
-											 	}),
-											 	new sap.m.ComboBox(oController.PAGEID + "_Hndid2", {
-											 		selectedKey : "{Hndcd}",
-											 		width : "245px",
-											 		editable : {
-											 			path : "Hndid",
-											 			formatter : function(fVal){
-											 				return fVal && fVal == true ? true : false;
-											 			}
-											 		}
-											 	})],
+								 	 content : [new sap.m.HBox({
+											 	 	items : [
+											 	 		new sap.m.CheckBox({
+														 	 	selected : "{Hndid}", // 장애인
+														 	 	select : function(oEvent){
+														 	 		oController._FamInfoDialog.getModel().setProperty("/Data/Hndcd", "");
+														 	 	}
+														 	}),
+														 	new sap.m.ComboBox(oController.PAGEID + "_Hndid2", {
+														 		selectedKey : "{Hndcd}",
+														 		width : "230px",
+														 		editable : {
+														 			path : "Hndid",
+														 			formatter : function(fVal){
+														 				return fVal && fVal == true ? true : false;
+														 			}
+														 		}
+														 	})]
+											 	 })],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data2")]
