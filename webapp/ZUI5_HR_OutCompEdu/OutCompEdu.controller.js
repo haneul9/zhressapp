@@ -660,7 +660,6 @@ sap.ui.define([
 
 					oData.forEach(function(ele) {
 						if(ele.Pchk){
-							ele.Edoty = "1";
 
 							sendObject = {};
 							// Header
@@ -1289,8 +1288,6 @@ sap.ui.define([
 			var onProcessDelete = function (fVal) {
 				//삭제 클릭시 발생하는 이벤트
 				if (fVal && fVal == oController.getBundleText("LABEL_40011")) { // 삭제
-					
-					oSendData.Edoty = "1";
 
 					var sendObject = {};
 					// Header
