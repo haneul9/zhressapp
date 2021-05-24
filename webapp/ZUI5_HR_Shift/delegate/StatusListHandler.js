@@ -34,6 +34,7 @@ sap.ui.define(
                     Dtfmt: "yyyy-MM-dd",
                     Bukrs: null,    // 통합전 회사코드 앞 1자리('A' 첨단으로 판단)
                     Zfxck2: null,
+                    Zflag: null,
                     Auth: $.app.getAuth(),
                     IsSearch: false,
                     isEditOrgtree: false,
@@ -56,10 +57,10 @@ sap.ui.define(
                 this.oModel.setProperty("/Dtfmt", this.oController.getSessionInfoByKey("Dtfmt"));
                 this.oModel.setProperty("/Bukrs", this.oController.getSessionInfoByKey("Bukrs").charAt(0));
                 this.oModel.setProperty("/Zfxck2", this.oController.getSessionInfoByKey("Zfxck2"));
-                // ($.app.getAuth() === $.app.Auth.MSS && this.oController.getSessionInfoByKey("Chief") !== "X") 부서장조건 제거
+                this.oModel.setProperty("/Zflag", this.oController.getSessionInfoByKey("Zflag"));
                 this.oModel.setProperty(
                     "/isEditOrgtree",
-                    this.oController.getSessionInfoByKey("Bukrs").charAt(0) === "A" || this.oController.getSessionInfoByKey("Zfxck2") !== "X"
+                    this.oController.getSessionInfoByKey("Bukrs").charAt(0) === "A" || (this.oController.getSessionInfoByKey("Zflag") === "X" && this.oController.getSessionInfoByKey("Zfxck2") !== "X")
                             ? false : true
                 );
                 this.oModel.setProperty("/SearchConditions/Schkz", "ALL");

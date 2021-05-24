@@ -62,7 +62,8 @@ sap.ui.define(
             onBeforeShow: function () {
                 this.oModel.setData({
                     Bukrs: this.getSessionInfoByKey("Bukrs").charAt(0),
-                    Zfxck2: this.getSessionInfoByKey("Zfxck2")
+                    Zfxck2: this.getSessionInfoByKey("Zfxck2"),
+                    Zflag: this.getSessionInfoByKey("Zflag")
                 });
 
                 this.StatusListHandler.load();
