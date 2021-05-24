@@ -714,7 +714,7 @@ common.SearchEvalResult = {
 		// 1차평가 결과
 		new JSONModelHelper().url("/odata/fix/FormContent?$filter=formDataId eq " + formDataId + "L and formContentId eq " + formContentId + "L")
 							 //.expand("pmReviewContentDetail/competencySections/competencies/officialRating") // 역량평가 점수
-							 .expand("pmReviewContentDetail/competencySections/competencies/othersRatingComment") // 역량평가 본인평가 점수
+							 .expand("pmReviewContentDetail/competencySections/competencies/selfRatingComment") // 역량평가 본인평가 점수
 							 .expand("pmReviewContentDetail/objectiveSections/objectives/officialRating") // 1차평가 결과
 							 .expand("pmReviewContentDetail/customSections/othersRatingComment") // 종합의견
 							 .attachRequestCompleted(function(){
@@ -1094,7 +1094,7 @@ common.SearchEvalResult = {
 				promise.push(
 					new Promise(function(resolve, reject){
 						new JSONModelHelper().url("/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[j].formContentId + "L,itemId=" + itemId[i].itemId + "L,sectionIndex=3)")
-						                     .expand("officialRating,selfRatingComment")
+						                     .expand("officialRating,othersRatingComment")
 							 .attachRequestCompleted(function(){
 									var data = this.getData().d;
 									
@@ -1110,11 +1110,11 @@ common.SearchEvalResult = {
 										}
 										
 										// 항목 별 응답내용
-										if(data.selfRatingComment){
+										if(data.othersRatingComment && data.othersRatingComment.results.length > 0){
 											comment.push({
-												formContentId : data.selfRatingComment.formContentId,
-												itemId : data.selfRatingComment.itemId,
-												comment : onChangeComment(data.selfRatingComment.comment)
+												formContentId : data.othersRatingComment.results[0].formContentId,
+												itemId : data.othersRatingComment.results[0].itemId,
+												comment : onChangeComment(data.othersRatingComment.results[0].comment)
 											});
 										}
 									}
@@ -1278,7 +1278,9 @@ common.SearchEvalResult = {
 								var text = category[b].replace(/<p>- /g, "");
 								
 								// 2020-11-20 무조건 카테고리 항목과 동일한 경우만 비율 계산, 이외는 전부 기타처리
-								if(text.length == 3 && category.length == 2){
+								// 2021-05-17 Category.length == 2 삭제 
+								// if(text.length == 3 && category.length == 2){
+								if(text.length == 3 ){
 									if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06110")) != -1){ // 지시형
 										score1++;
 									} else if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06111")) != -1){ // 비전형
@@ -1370,14 +1372,14 @@ common.SearchEvalResult = {
 			for(var i=0; i<rater.length; i++){
 				promise2.push(
 					new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[i].formContentId + "L,itemId=" + id1 + "L,sectionIndex=4)/selfRatingComment")
+						new JSONModelHelper().url("/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[i].formContentId + "L,itemId=" + id1 + "L,sectionIndex=4)/othersRatingComment")
 											 .attachRequestCompleted(function(){
 													var data = this.getData().d;
 													
-													if(data){
+													if(data.results && data.results.length > 0){
 														description1.push({
-													 		formContentId : data.formContentId,
-													 		comment : onChangeComment(data.comment)
+													 		formContentId : data.results[0].formContentId,
+													 		comment : onChangeComment(data.results[0].comment)
 													 	});
 													}
 													resolve();
@@ -1459,14 +1461,14 @@ common.SearchEvalResult = {
 			for(var i=0; i<rater.length; i++){
 				promise3.push(
 					new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[i].formContentId + "L,itemId=" + id2 + "L,sectionIndex=5)/selfRatingComment")
+						new JSONModelHelper().url("/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[i].formContentId + "L,itemId=" + id2 + "L,sectionIndex=5)/othersRatingComment")
 											 .attachRequestCompleted(function(){
 													var data = this.getData().d;
 													
-													if(data){
+													if(data.results && data.results.length > 0){
 														description2.push({
-													 		formContentId : data.formContentId,
-													 		comment : onChangeComment(data.comment)
+													 		formContentId : data.results[0].formContentId,
+													 		comment : onChangeComment(data.results[0].comment)
 													 	});
 													}
 													resolve();
