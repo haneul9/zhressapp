@@ -1,0 +1,630 @@
+/* Enter your custom styles here */
+@charset "utf-8";
+
+/** standard css overwrite **/
+.sapMPanelContent:not(.sapMPanelBGTransparent){
+	border: 0 !important;
+}
+
+/*.sapUiMltPadRight{*/
+/*	padding: 0 !important;*/
+/*}*/
+
+.FontFamily{
+    font-size: 0.875rem !important;
+	font-weight: normal !important;
+	color: #000000;
+}
+
+.FontBold{
+	font-weight: bold !important;
+}
+
+.Font10{
+    font-size: 10px !important;
+}
+
+.Font11{
+    font-size: 11px !important;
+}
+
+.Font12{
+    font-size: 12px !important;
+}
+
+.Font13{
+    font-size: 13px !important;
+}
+
+.Font14{
+	font-size: 14px !important;
+}
+
+.Font15{
+	font-size: 15px !important;
+}
+
+.Font16{
+	font-size: 16px !important;
+}
+
+.Font18{
+	font-size: 18px !important;
+}
+
+.FontColorGray{
+	color: #696969;
+}
+
+.FontGray{
+	color: #F8F8F8 !important
+}
+
+.FontWhite{
+	color: white !important;
+}
+
+.FontColorLightRed {
+	color : #ff2424 !important;
+}
+
+.colorBlue {
+	color : #2A80B9 !important;
+}
+
+.colorOrange{
+	color : #e78c07 !important;
+}
+
+.colorGreen{
+	color : #2b7d2b !important; 
+}
+
+.colorRed {
+	color : #ee0000 !important;
+}
+
+/** Padding **/
+.Padding0{
+	padding: 0 !important;
+}
+
+.PaddingLeft05rem {
+    padding-left: 0.5rem;
+}
+
+.PaddingLeft0{
+	padding-left: 0px !important;
+}
+
+.PaddingLeft1rem2{
+	padding-left: 1rem;
+}
+
+.PaddingLeft1rem{
+	padding-left: 1.1rem;
+}
+
+.PaddingLeft2rem{
+	padding-left: 2rem;
+}
+
+.PaddingLeft3{
+	padding-left: 3px;
+}
+
+.PaddingLeft4{
+	padding-left: 4px;
+}
+
+.PaddingLeft5{
+	padding-left: 5px !important;
+}
+
+.PaddingLeft7{
+	padding-left: 7px;
+}
+
+.PaddingLeft10{
+	padding-left: 10px !important;
+}
+
+.PaddingLeft14{
+	padding-left: 14px;
+}
+
+.PaddingLeft20{
+	padding-left: 20px;
+}
+
+.PaddingRight0{
+	padding-right: 0px !important;
+}
+
+.PaddingRight3{
+	padding-right: 3px !important;
+}
+
+.PaddingRight5{
+	padding-right: 5px !important;
+}
+
+.PaddingRight6{
+	padding-right: 6px;
+}
+
+.PaddingRight7{
+	padding-right: 7px;
+}
+
+.PaddingRight10{
+	padding-right: 10px !important;
+}
+
+.PaddingBottom0{
+	padding-bottom: 0px !important;
+}
+
+.PaddingBottom2{
+	padding-bottom: 2px !important;
+}
+
+.PaddingBottom3{
+	padding-bottom: 3px !important;
+}
+
+.PaddingBottom4{
+	padding-bottom: 4px;
+}
+
+.PaddingBottom5{
+	padding-bottom: 5px !important;
+}
+
+.PaddingBottom7{
+	padding-bottom: 7px !important;
+}
+
+.PaddingBottom10{
+	padding-bottom: 10px;
+}
+
+.PaddingBottom30{
+	padding-bottom: 30px;
+}
+
+.PaddingTop0{
+	padding-top: 0px !important;
+}
+
+.PaddingTop1{
+	padding-top: 1px;
+}
+
+.PaddingTop2{
+	padding-top: 2px !important;
+}
+
+.PaddingTop3{
+	padding-top: 3px;
+}
+
+.PaddingTop4{
+	padding-top: 4px;
+}
+
+.PaddingTop5{
+	padding-top: 5px !important;
+}
+
+.PaddingTop6{
+	padding-top: 6px;
+}
+
+.PaddingTop7{
+	padding-top: 7px !important;
+}
+
+.PaddingTop10{
+	padding-top: 10px;
+}
+
+.MarginTop4{
+	margin-top: 4px;
+}
+
+.MarginTop5{
+	margin-top: 5px;
+}
+
+.Margin0{
+	margin: 0 !important;
+}
+
+/**********/
+
+.CursorPointer {
+	cursor : pointer;
+}
+
+.MessageStrip_Success{
+	border: 1px solid;
+    border-radius: 0.1875rem;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+    font-weight: normal;
+    padding: 0.4375rem 1rem;
+    position: relative;
+    min-height: 2rem;
+    background-color: #e4f5e4;
+    border-color: #38a238;
+    color: #333333 !important;
+}
+
+.MessageStrip_Error{
+	border: 1px solid !important;
+    border-radius: 0.1875rem;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+    font-weight: normal;
+    padding: 0.4375rem 1rem;
+    position: relative;
+    background-color: #ffe4e4 !important;
+    border-color: #ee0000 !important;
+    color: #333333;
+    font-family: 'Malgun Gothic' !important;
+}
+
+.ToolbarNoBottomLine{
+	border-bottom: 0px !important;
+}
+
+.bgYellow80 {	
+	background-color: rgba(255,255,0,0.2) !important;
+}
+
+.bgGray1 {	
+	background-color: rgba(228,246,228,1) !important;
+}
+
+.bgGray2 {	
+	background-color: rgba(242,242,242,1) !important;
+}
+
+/* 연차휴가계획 */
+.noCalDay {
+	background-color: rgba(150,150,150,1) !important;
+}
+
+.noCalEdit {	
+	background-color: rgba(145, 200, 246, 0.2) !important;
+}
+
+.calHoliDay {	
+	background-color: rgba(191,191,191,1) !important;
+}
+
+.backgroundPadding{
+	padding : 0.2rem;
+}
+
+.backgroundPadding2{
+	padding : 0.1rem;
+}
+
+.vacationplanBackground1{
+	background-color: white;
+	border: 1.5px solid #FF8888;
+}
+
+.vacationplanBackground2{
+	background-color: white;
+	border: 1.5px solid #678BC7;
+}
+
+.vacationplanColor1{
+	color: #FF8888 !important;
+}
+
+.vacationplanColor2{
+	color: #678BC7 !important;
+}
+
+.MatrixDetailDataBlue{
+	border: 1px solid #427cac;
+	background-color: #e7ecf0;
+	padding-left: 5px;
+	padding-right: 5px;
+	cursor: pointer !important;
+}
+
+.TextAlignleft {
+	text-align: left !important;
+}
+
+/***********/
+
+.displayNone{
+	display: none;
+}
+
+.MatrixBottomBorder{
+	border-bottom : 1px solid #aaaaaa;
+}
+
+.borderBottom{
+	border-bottom: 1px solid #dddddd;
+}
+
+.MatrixLabel{	
+	background-color: #f7f7f7;
+	border : 1px solid #dddddd;
+	border-collapse: collapse;
+	padding-left: 10px;
+}
+
+.MatrixLabel2{
+   /* -webkit-box-align: center;
+    align-items: center;
+    position: relative; */
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+ 	padding-Top: 0.5rem !important;
+	padding-Left: 0.7rem !important;
+	padding-Bottom: 0.5rem !important;
+}
+
+.MatrixLabelBlue{
+	border: 1px solid #427cac;
+	background-color: #427cac;
+	height: 35px;
+}
+
+.MatrixData{	
+	background-color:rgb(255,255,255);
+	border: 1px solid #dddddd;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
+
+.MatrixData2{	
+	background-color: white;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.MatrixDataBlue{
+	border: 1px solid #427cac;
+}
+
+.InputTableLabel {	
+	background-color:#f7f7f7;
+    border:1px solid #dddddd;
+    padding-top: 4px;
+}
+
+.InputTableData{	
+	background-color: rgb(255,255,255);
+	border: 1px solid #dddddd;
+}
+
+.BackgroundWhite{
+	background-color: white !important;
+}
+
+.TitleFont {
+	font-size: 18px !important;
+	padding-bottom: 3px;
+	font-weight: bold;
+	/*color: white !important;*/
+	vertical-align: middle !important;
+	text-shadow : none !important;
+}
+
+.Header{
+    background-color: #427cac !important;
+}
+
+.PageWidth{
+	width: 1600px !important;
+	margin: 0 auto; 
+}
+
+.WhiteBackground{
+ 	background: white !important; 
+}
+
+.LaunchpadBackground{
+	background-image: linear-gradient(to bottom,#a9c6de,#e7ecf0);
+	background-repeat:no-repeat;
+	background-position:center;
+	background-size:cover;
+	opacity : 1;
+}
+
+.ApprLayout{
+	background-color: white;
+	border-bottom: 1px solid #dddddd;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 10px;
+}
+
+.height27{
+	height : 27px !important;
+}
+
+.MatrixRadioGroup{
+	background-color: rgb(255,255,255);
+    border: 1px solid #dddddd;
+}
+
+.MatrixRadio{
+	border-right: 1px solid #dddddd;
+}
+
+.EmployeePic{
+	border: 1px solid #d1e0ee;
+}
+
+.Apstatus5{
+	color: #2b7c2b;
+}
+
+.RoundImage{
+	border-radius: 100%;
+	border: 1px solid #dddddd;
+}
+
+.background-Gray{
+	background-color: #BFBFBF;
+}
+
+.background-Blue{
+	background-color: #7da9cd;
+}
+
+.background-Red{
+	background-color: #e98b8b;
+}
+
+.ListHeaderBackground{
+	background-color: #A9C6DE !important;
+}
+
+.EmpListLayout{
+	background-color: white;
+	border-bottom: 1px solid #dddddd;
+	border-right: 1px solid #f7f7f7;
+}
+
+.EmpListDetail{
+	color: #808080;
+	font-size: 14px !important;
+}
+
+.NoPadding {
+	padding : 0px !important;
+	margin : 0px !important;
+}
+
+.backgroundGray{
+	background-color: #f7f7f7;
+}
+
+.textshadowNone{
+	text-shadow: none !important;
+}
+
+.Header_FilterBackground{
+	background-color: #eff4f9;
+	border-bottom: 1px solid #d1e0ee;
+}
+
+.Header_FilterBackground2{
+	background-color: #eff4f9;
+}
+
+.TextAlignleft {
+	text-align: left !important;
+}
+
+.selectButton{
+	border-bottom: 2px solid white !important;
+}
+
+/******************/
+
+.L2PFontFamily {
+    font-size: 0.875rem !important;
+	font-weight : normal !important;
+	color: #000000 !important;
+}
+
+.L2PFontFamilyBold {
+    font-size: 0.875rem !important;
+    color: #333333 !important;
+    font-weight: bold !important;
+}
+
+.L2P15FontBold {
+    font-size: 15px !important;
+	font-weight : bold !important;
+}
+
+
+/* control.TalentSearchPersonCard */
+.L2PPersonCardTextBold {
+    padding-left: 10px;
+    font-size: 0.875rem !important;
+    color: #000000;
+    font-weight: bold;
+    height: 21px;
+}
+
+.L2PPersonCardText {
+    padding-left: 10px;
+    font-size: 0.875rem !important;
+    color: #000000;
+    height: 21px;
+}
+
+.L2PPersonCardPicture2 {
+    width: 85px;
+    height: 110px;
+    cursor: pointer !important;
+}
+
+.L2PPersonCardLayout2 {
+    border: 1px solid #d9d9d9;
+    background-color: #ffffff;
+    vertical-align: top;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+.L2PPersonTable {
+    width: 100%;
+}
+
+.SecondaryHeader{
+	border-top: 1px solid #d1e0ee;
+}
+
+.FilterLayoutBackground {
+	width : 100% !important;
+	background-color: #eff4f9 !important;
+}
+
+.FilterLayout {
+/* 	padding-left: 2rem !important; */
+	padding-top: 1rem; 
+	padding-bottom: 1rem;
+}
+
+.FilterItem{
+	padding-right : 0.7rem;
+	padding-top : 0.5rem;
+	padding-bottom : 0.5rem;
+	vertical-align: bottom !important;
+}
+
+.helpText{
+	color: #285af0 !important;
+}
+
+.Height100{
+	height: 100% !important;
+}
+
+.Description{
+   background-color: rgb(255,255,255);
+   border: 1px solid #dddddd;
+   padding: 10px;
+}
+
+html, #ui-body {height:100%; background-color:#fff}
+.app-preparing {position: absolute; top:30%; left:calc(50% - 150px); width:300px; display:flex; flex-direction:column; justify-content:center; align-items:center}
+.app-preparing .spinner {position:relative; display:block; top:-30px}
+
+.custom_icontabbar .sapMITBContent {border-bottom: 0 !important}
