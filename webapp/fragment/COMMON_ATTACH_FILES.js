@@ -226,8 +226,8 @@ fragment.COMMON_ATTACH_FILES = {
 			var popup = window.open(vFileInfo.Url, '_blank');
 
 			if(!popup) {
-				sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), {    // 팝업 차단 기능이 실행되고 있습니다.\n차단 해제 후 다시 실행해주세요.
-					title: this.getBundleText("LABEL_00139")    // 오류
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00073"), { // 원활한 진행을 위해 브라우저의 설정 메뉴에서 팝업차단을 해제하시기 바랍니다.
+					title: this.getBundleText("LABEL_00149") // 안내
 				});
 	
 				return false;

@@ -394,7 +394,7 @@ openPopup: function(o) {
 	].join(','));
 
 	if (!popup) {
-		this.alert({ title: '오류', html: '<p>팝업 차단 기능이 실행되고 있습니다.<br />차단 해제 후 다시 실행해주세요.</p>' });
+		this.alert({ title: '안내', html: '<p>원활한 진행을 위해 브라우저의 설정 메뉴에서 팝업차단을 해제하시기 바랍니다.</p>' });
 	} else {
 		setTimeout(function() {
 			popup.focus();
@@ -412,7 +412,7 @@ openWindow: function(o) {
 
 	var popup = window.open(o.url, o.name || ('window-' + new Date().getTime()));
 	if (!popup) {
-		this.alert({ title: '오류', html: '<p>팝업 차단 기능이 실행되고 있습니다.<br />차단 해제 후 다시 실행해주세요.</p>' });
+		this.alert({ title: '안내', html: '<p>원활한 진행을 위해 브라우저의 설정 메뉴에서 팝업차단을 해제하시기 바랍니다.</p>' });
 	} else {
 		setTimeout(function() {
 			popup.focus();
