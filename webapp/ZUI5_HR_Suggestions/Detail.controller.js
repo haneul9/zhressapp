@@ -120,8 +120,6 @@
 			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vBukrs = oController.getUserGubun();
-			var vThumUp = $.app.byId(oController.PAGEID + "_ThumUp");
-			var vThumDown = $.app.byId(oController.PAGEID + "_ThumDown");
 			
 			var sendObject = {};
 			// Header
@@ -144,21 +142,6 @@
 						oController.RegistModel.setData({FormData: oCopiedRow});
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
-
-						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
-							vThumUp.toggleStyleClass("button-HiTokTok-check", true);
-							vThumDown.toggleStyleClass("button-HiTokTok-check", false);
-							vThumUp.setEnabled(true);
-							vThumDown.setEnabled(false);
-						}
-						
-						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
-							vThumUp.toggleStyleClass("button-HiTokTok-check", false);
-							vThumDown.toggleStyleClass("button-HiTokTok-check", true);
-							vThumUp.setEnabled(false);
-							vThumDown.setEnabled(true);
-						}
-
 						oController.setComments();
 					}
 				},
@@ -180,9 +163,6 @@
 			oCommentBox.destroyItems();
 
 			vCommData.forEach(function(e, i) {
-				var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y"
-				var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N"
-
 				oCommentBox.addItem(
 					new sap.m.VBox({
 						fitContainer: true,
@@ -247,17 +227,13 @@
 													new sap.m.Button({ 
 														icon: "sap-icon://thumb-up",
 														press: oController.OnCommThumbUp.bind(oController),
-														enabled: vGood,
 														text: "{i18n>LABEL_56020}" // 좋아요
-													}).addStyleClass("button-light-sm")
-													.toggleStyleClass("button-HiTokTok-check", vGood),
+													}).addStyleClass("button-light-sm"),
 													new sap.m.Button({ 
 														icon: "sap-icon://thumb-down",
 														press: oController.OnCommThumbDown.bind(oController),
-														enabled: vBed,
 														text: "{i18n>LABEL_56021}" // 싫어요
-													}).addStyleClass("button-light-sm")
-													.toggleStyleClass("button-HiTokTok-check", vBed),
+													}).addStyleClass("button-light-sm"),
 													new sap.m.Button({
 														press: oController.onCommentSubBtn.bind(oController),
 														icon: "sap-icon://comment",
@@ -333,9 +309,6 @@
 			if(Common.checkNull(!index) || index === 0){ // 저장된 대댓글 Setting
 				vSubCommentData.forEach(function(e) {
 					if(e.Seqnr2 === oEvent.Seqnr2) {
-						var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
-						var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
-
 						oCommentBox.getItems()[index].getItems()[2].setVisible(true);
 						oCommentBox.getItems()[index].getItems()[2].addItem(
 							new sap.m.VBox({
@@ -401,17 +374,13 @@
 															new sap.m.Button({ 
 																icon: "sap-icon://thumb-up",
 																press: oController.OnReCommThumbUp.bind(oController),
-																enabled: vGood,
-																text: "{i18n>LABEL_56020}" // 좋아요
-															}).addStyleClass("button-light-sm")
-															.toggleStyleClass("button-HiTokTok-check", vGood),
-															new sap.m.Button({
+																text: "{i18n>LABEL_56020}" 
+															}).addStyleClass("button-light-sm"),
+															new sap.m.Button({ // 싫어요
 																icon: "sap-icon://thumb-down",
 																press: oController.OnReCommThumbDown.bind(oController),
-																enabled: vBed,
 																text: "{i18n>LABEL_56021}" // 싫어요
-															}).addStyleClass("button-light-sm")
-															.toggleStyleClass("button-HiTokTok-check", vBed),
+															}).addStyleClass("button-light-sm"),
 															new sap.m.Button({
 																press: oController.onSubCommentReBtn.bind(oController),
 																text: "{i18n>LABEL_56013}" // 수정
@@ -958,20 +927,15 @@
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
-				vThumUp.setEnabled(true);
-				vThumDown.setEnabled(false);
-				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) + 1);
-				vThumUp.toggleStyleClass("button-HiTokTok-check", true);
-				vThumDown.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "");
-				oSendData.Zcanc = "X";
-				vThumUp.setEnabled(true);
-				vThumDown.setEnabled(true);
-				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) - 1);
-				vThumUp.toggleStyleClass("button-HiTokTok-check", false);
-				vThumDown.toggleStyleClass("button-HiTokTok-check", false);
+				MessageBox.error(oController.getBundleText("MSG_56014"), { title: oController.getBundleText("LABEL_00149")});
+				return;
 			}
+			
+			// vThumUp.setEnabled(true);
+			// vThumDown.setEnabled(false);
+			
+			this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1010,21 +974,14 @@
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
-				vThumUp.setEnabled(false);
-				vThumDown.setEnabled(true);
-				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) + 1);
-				vThumUp.toggleStyleClass("button-HiTokTok-check", false);
-				vThumDown.toggleStyleClass("button-HiTokTok-check", true);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "");
-				oSendData.Zcanc = "X";
-				vThumUp.setEnabled(true);
-				vThumDown.setEnabled(true);
-				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) - 1);
-				vThumUp.toggleStyleClass("button-HiTokTok-check", false);
-				vThumDown.toggleStyleClass("button-HiTokTok-check", false);
+				MessageBox.error(oController.getBundleText("MSG_56015"), { title: oController.getBundleText("LABEL_00149")});
+				return;
 			}
 			
+			// vThumUp.setEnabled(false);
+			// vThumDown.setEnabled(true);
+			this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1053,8 +1010,6 @@
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_CommGoodText = oEvent.getSource().getParent().getItems()[1];
-			this.g_CommGood = oEvent.getSource();
-			this.g_CommBed = oEvent.getSource().getParent().getItems()[5];
 
 			var oSendData = {
 				Sdate : oRowData.Sdate,
@@ -1065,21 +1020,15 @@
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
-				this.g_CommGood.setEnabled(true);
-				this.g_CommBed.setEnabled(false);
-				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
-				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", true);
-				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
-				oSendData.Zcanc = "X";
-				this.g_CommGood.setEnabled(true);
-				this.g_CommBed.setEnabled(true);
-				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) - 1);
-				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", false);
-				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
+				MessageBox.error(oController.getBundleText("MSG_56014"), { title: oController.getBundleText("LABEL_00149")});
+				return;
 			}
 			
+			// vThumUp.setEnabled(true);
+			// vThumDown.setEnabled(false);
+			
+			this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1109,8 +1058,6 @@
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_CommBedText = oEvent.getSource().getParent().getItems()[3];
-			this.g_CommGood = oEvent.getSource().getParent().getItems()[4];
-			this.g_CommBed = oEvent.getSource();
 			
 			var oSendData = {
 				Sdate : oRowData.Sdate,
@@ -1121,21 +1068,14 @@
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
-				this.g_CommGood.setEnabled(false);
-				this.g_CommBed.setEnabled(true);
-				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) + 1);
-				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", false);
-				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", true);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "");
-				oSendData.Zcanc = "X";
-				this.g_CommGood.setEnabled(true);
-				this.g_CommBed.setEnabled(true);
-				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) - 1);
-				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", false);
-				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
+				MessageBox.error(oController.getBundleText("MSG_56015"), { title: oController.getBundleText("LABEL_00149")});
+				return;
 			}
 			
+			// vThumUp.setEnabled(false);
+			// vThumDown.setEnabled(true);
+			this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1165,8 +1105,6 @@
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[2];
 			this.g_ReCommGoodText = oEvent.getSource().getParent().getItems()[1];
-			this.g_ReCommGood = oEvent.getSource();
-			this.g_ReCommBed = oEvent.getSource().getParent().getItems()[5];
 
 			var oSendData = {
 				Sdate : oRowData.Sdate,
@@ -1178,21 +1116,12 @@
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
-				this.g_ReCommGood.setEnabled(true);
-				this.g_ReCommBed.setEnabled(false);
-				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) + 1);
-				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", true);
-				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "");
-				oSendData.Zcanc = "X";
-				this.g_ReCommGood.setEnabled(true);
-				this.g_ReCommBed.setEnabled(true);
-				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) - 1);
-				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", false);
-				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", false);
+				MessageBox.error(oController.getBundleText("MSG_56014"), { title: oController.getBundleText("LABEL_00149")});
+				return;
 			}
 			
+			this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1222,8 +1151,6 @@
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[2];
 			this.g_ReCommBedText = oEvent.getSource().getParent().getItems()[3];
-			this.g_ReCommGood = oEvent.getSource();
-			this.g_ReCommBed = oEvent.getSource().getParent().getItems()[5];
 			
 			var oSendData = {
 				Sdate : oRowData.Sdate,
@@ -1234,20 +1161,12 @@
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
-				this.g_ReCommBed.setEnabled(true);
-				this.g_ReCommGood.setEnabled(false);
-				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) + 1);
-				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", false);
-				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", true);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "");
-				oSendData.Zcanc = "X";
-				this.g_ReCommBed.setEnabled(true);
-				this.g_ReCommGood.setEnabled(true);
-				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) - 1);
-				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", false);
-				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", false);
+				MessageBox.error(oController.getBundleText("MSG_56015"), { title: oController.getBundleText("LABEL_00149")});
+				return;
 			}
+
+			this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
