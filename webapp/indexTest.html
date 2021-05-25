@@ -174,9 +174,18 @@ $( document ).ready(function() {
 <div>
 
 <!-- 사원정보  -->
-<div id="name_layout" style="padding-top:10px; width:100%;">
+<!-- <div id="name_layout" style="padding-top:10px; width:100%;">
 	<div style="display:inline-block;height:80px;vertical-align: top;padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
 	<div style="display:inline-block;height:80px">
+		<div id="Name" style="display:inline-block;font-weight:bold;"></div>
+		<div id="Title" style="display:inline-block"></div>
+		<div id="Title1"></div>
+	</div>		
+</div> -->
+
+<div id="name_layout" style="display:flex;padding:10px 0 20px; width:100%;">
+	<div style="padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
+	<div>
 		<div id="Name" style="display:inline-block;font-weight:bold;"></div>
 		<div id="Title" style="display:inline-block"></div>
 		<div id="Title1"></div>
@@ -189,19 +198,31 @@ $( document ).ready(function() {
 		<div id="performance_layout" style="width:50%;float:left"></div>
 		<div style="width:50%;float:right"><canvas id="competency_layout" width="300" height="200"></canvas></div>
 	</div> -->
-	<div style="margin-top:20px">
-		<div style="float:left;width:45%">
+
+	<div style="display:flex;padding-top:20px;">
+		<div style="width:50%;padding-right:20px;">
 			<div style="font-weight:bold;padding-bottom:6px;">&gt; 업적평가</div>
 			<div id="performance_layout"></div>
+		</div>
+		<div style="width:50%;padding-left:20px;">
+			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 역량평가</div>
+			<div style="padding-top:10px"><canvas id="competency_layout" width="400" height="300"></canvas></div>
+		</div>
+	</div>
+
+	<div style="display:flex;justify-content:center;padding-top:20px;">
+		<div style="width:50%;padding-right:20px;">
 			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;margin-top:20px">&gt; 업적평가 1차 평가자 의견</div>
 			<div id="comment1_layout" style="margin-top:10px"></div>
 		</div>
-		<div style="float:right;width:45%">
-			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 역량평가</div>
-			<div style="padding-top:10px"><canvas id="competency_layout" width="400" height="300"></canvas></div>
+		<div style="width:50%;padding-left:20px;">
 			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;margin-top:20px">&gt; 역량평가 1차 평가자 의견</div>
 			<div id="comment2_layout" style="margin-top:10px"></div>
 		</div>	
+		</div>
+	</div>
+
+
 	</div>
 </div>
 
