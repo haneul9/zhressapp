@@ -328,7 +328,7 @@
 														maxLength: 10,
 														value: e.Pword,
 														type: sap.m.InputType.Password
-													})
+													}).addStyleClass("mr-10px")
 												]
 											}).addStyleClass("custom-HiTokTok-group mt-10px"),
 											new sap.m.HBox({
