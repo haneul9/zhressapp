@@ -8,9 +8,10 @@
 	sap.ui.jsview($.app.APP_ID, {
 		
 		_ColModel: [
-			{id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,		  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto", align: sap.ui.core.HorizontalAlign.Left},
-			{id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,		plabel: "", resize: true, span: 0, type: "date",	sort: true,  filter: true,  width: "20%"},
-			{id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "25%", templateGetter: "getChangeDate"},
+			{id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,		  plabel: "", resize: true, span: 2, type: "string",  sort: true,  filter: true,  width: "auto",align: sap.ui.core.HorizontalAlign.Left},
+			{id: "Title1",label: "{i18n>LABEL_56006}" /* 제목 */,          plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "auto", templateGetter: "getMainTitle"},
+			{id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,		plabel: "", resize: true, span: 0, type: "date",	sort: true,  filter: true,  width: "10%"},
+			{id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "15%", templateGetter: "getChangeDate"}
 		],
 		
 		getControllerName: function () {
@@ -58,7 +59,7 @@
 					})
 					.addStyleClass("button-group")
 				]
-			}).addStyleClass("search-box search-bg pb-7px mt-30px");
+			}).addStyleClass("search-box search-bg pb-7px mt-16px");
 
 			var infoBox = new sap.m.FlexBox({
 				justifyContent: sap.m.FlexJustifyContent.End,

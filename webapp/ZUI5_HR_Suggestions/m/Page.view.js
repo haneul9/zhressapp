@@ -82,11 +82,7 @@
 				itemPress: oController.onSelectedRow.bind(oController),
                 columns: [
                     new sap.m.Column ({
-                        width: "55%",
-                        hAlign: "Begin"
-                    }),
-                    new sap.m.Column ({
-                        width: "auto",
+                        width: "100%",
                         hAlign: "Begin"
                     })
                 ],
@@ -96,37 +92,80 @@
                         type: sap.m.ListType.Active,
                         counter: 5,
                         cells: [
-                            new sap.m.Text({ // 제목
-                                textAlign: "Begin",
-                                text : "{Title}"
-                            })
-                            .addStyleClass("L2P13Font font-14px"),
                             new sap.m.VBox({
+                                fitContainer: true,
+                                width: "100%",
                                 items: [
-                                    new sap.m.Text({ // 등록일
-                                        text : {
-                                            path : "Sdate",
-                                            formatter : function(v){
-                                                return v ? Common.DateFormatter(v) : "";
-                                            }
-                                        },
-                                        textAlign: "Begin"
-                                    })
-                                    .addStyleClass("L2P13Font font-14px"),
-                                    new sap.ui.commons.TextView({
-                                        text : {
-                                            parts: [{path: "Aedtm"}, {path: "Aetim"}],
-                                            formatter: function(v1, v2) {
-                                                if(v1 && v2){
-                                                    v1 = Common.DateFormatter(v1);
-                                                    v2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm:ss" }).format(new Date(v2.ms), true);
-                                                }
-                                                return v1 + " " + v2; 
-                                            }
-                                        }, 
+                                    new sap.m.Text({
+                                        text : "{Title}",
                                         textAlign : "Begin"
+                                    }).addStyleClass("L2P13Font font-14px pb-8px"),
+                                    new sap.m.HBox({
+                                        justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
+                                        items: [
+                                            new sap.ui.commons.TextView({
+                                                text : {
+                                                    parts: [{path: "Aedtm"}, {path: "Aetim"}],
+                                                    formatter: function(v1, v2) {
+                                                        if(v1 && v2){
+                                                            v1 = Common.DateFormatter(v1);
+                                                            v2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm:ss" }).format(new Date(v2.ms), true);
+                                                        }
+                                                        return v1 + " " + v2; 
+                                                    }
+                                                }, 
+                                                textAlign : "Begin"
+                                            })
+                                            .addStyleClass("L2P13Font font-14px"),
+                                            new sap.m.HBox({
+                                                justifyContent: sap.m.FlexJustifyContent.End,
+                                                alignContent: sap.m.FlexAlignContent.End,
+                                                alignItems: sap.m.FlexAlignItems.End,
+                                                items: [
+                                                    new sap.ui.core.Icon({
+                                                        visible: {
+                                                            path: "Zgood",
+                                                            formatter: function(v) {
+                                                                return v !== "0" && Common.checkNull(!v);
+                                                            }
+                                                        },
+                                                        src: "sap-icon://thumb-up"
+                                                    })
+                                                    .addStyleClass("icon-HiTokTok ok"),
+                                                    new sap.m.Text({
+                                                        visible: {
+                                                            path: "Zgood",
+                                                            formatter: function(v) {
+                                                                return v !== "0" && Common.checkNull(!v);
+                                                            }
+                                                        },
+                                                        width: "auto",
+                                                        text: "{Zgood}"
+                                                    }).addStyleClass("mr-8px font-12px"),
+                                                    new sap.ui.core.Icon({
+                                                        visible: {
+                                                            path: "Zbed",
+                                                            formatter: function(v) {
+                                                                return v !== "0" && Common.checkNull(!v);
+                                                            }
+                                                        },
+                                                        src: "sap-icon://thumb-down"
+                                                    })
+                                                    .addStyleClass("icon-HiTokTok no"),
+                                                    new sap.m.Text({
+                                                        visible: {
+                                                            path: "Zbed",
+                                                            formatter: function(v) {
+                                                                return v !== "0" && Common.checkNull(!v);
+                                                            }
+                                                        },
+                                                        width: "auto",
+                                                        text: "{Zbed}"
+                                                    }).addStyleClass("font-12px")
+                                                ]
+                                            })
+                                        ]
                                     })
-                                    .addStyleClass("L2P13Font font-14px")
                                 ]
                             })
                         ]

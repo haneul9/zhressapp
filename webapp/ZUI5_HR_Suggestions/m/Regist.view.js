@@ -79,15 +79,27 @@ sap.ui.define([
 				items: [
                     new sap.m.HBox({
 						height: "40px",
-						justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
+						justifyContent: sap.m.FlexJustifyContent.Start,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "105px", "Left").addStyleClass("sub-title") // 댓글                                 
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "auto", "Left").addStyleClass("sub-title mr-5px pt-5px"), // 댓글
+                            new sap.m.Text({
+                                width: "auto",
+                                text: {
+                                    path: "CommSum",
+                                    formatter: function(v) {
+                                        if(Common.checkNull(v) || v === 0) return ""; 
+                                        else {
+                                            return oController.getBundleText("MSG_56016").interpolate(v);
+                                        }
+                                    }
+                                }
+                            }).addStyleClass("font-12px")
 						]
 					}),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
                         fitContainer: true,
 						items: []
-					}).addStyleClass("mt--24px"),
+					}),
                     new sap.m.HBox({
                         justifyContent: sap.m.FlexJustifyContent.End,
                         fitContainer: true,
@@ -116,7 +128,7 @@ sap.ui.define([
 							}).addStyleClass("button-dark mt-4px")
                         ]
                     })
-                    .addStyleClass("custom-comment"),
+                    .addStyleClass("mt-10px"),
                     new sap.m.HBox({
 						fitContainer: true,
 						items: [
