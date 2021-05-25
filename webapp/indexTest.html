@@ -71,7 +71,7 @@ $( document ).ready(function() {
 	}
 	table {
 		width: 100%;
-		border: 1px solid #333;
+		border: 3px solid #333;
 		border-collapse: collapse;
 	}
 	th, td {border: 1px solid #333;padding:8px}
@@ -181,22 +181,22 @@ $( document ).ready(function() {
 <div id="page1">
 
 <!-- 사원정보  -->
-<!-- <div id="name_layout" style="padding-top:10px; width:100%;">
-	<div style="display:inline-block;height:80px;vertical-align: top;padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
-	<div style="display:inline-block;height:80px">
-		<div id="Name" style="display:inline-block;font-weight:bold;"></div>
-		<div id="Title" style="display:inline-block"></div>
-		<div id="Title1"></div>
-	</div>		
-</div> -->
-
 	<div id="name_layout" style="display:flex;padding:10px 0 20px; width:100%;">
 		<div style="padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
-		<div>
+		<div style="width:30%;">
 			<div id="Name" style="display:inline-block;font-weight:bold;"></div>
 			<div id="Title" style="display:inline-block"></div>
 			<div id="Title1"></div>
-		</div>		
+		</div>	
+		<div>
+			<div style="display:flex;justify-content:center">
+				<div style="width:100px">1</div>
+				<div style="width:100px">2</div>
+				<div style="width:100px">3</div>
+				<div style="width:100px">4</div>
+			</div>
+		</div>
+
 	</div>
 
 <!-- 평가 Table List  -->
@@ -231,9 +231,9 @@ $( document ).ready(function() {
 
 <div id="page2">
 	<div id="page2_1">
-		<div style="font-weight:bold;padding-bottom:6px;">&gt; 다면평가</div>
-		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 직무 만족도</div>
-		<div style="display:flex;padding-top:20px;">
+		<div style="font-size:16px;font-weight:bold;padding-top:20px;"> 다면평가</div>
+		<div style="font-weight:bold;padding-top:20px;padding-bottom:6px;">&gt; 직무 만족도</div>
+		<div style="display:flex;">
 			<div style="width:25%;padding-right:20px;">
 				<div id="job_layout"></div>
 			</div>
@@ -242,8 +242,8 @@ $( document ).ready(function() {
 			</div>
 		</div>
 
-		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 협업 만족도</div>
-		<div style="display:flex;padding-top:20px;">
+		<div style="font-weight:bold;padding-top:20px;padding-bottom:6px;">&gt; 협업 만족도</div>
+		<div style="display:flex;">
 			<div style="width:25%;padding-right:20px;">
 				<div id="cooperation_layout"></div>
 			</div>
@@ -252,8 +252,8 @@ $( document ).ready(function() {
 			</div>
 		</div>
 
-		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 리더십 만족도</div>
-		<div style="display:flex;padding-top:20px;">
+		<div style="font-weight:bold;padding-top:20px;padding-bottom:6px;">&gt; 리더십 만족도</div>
+		<div style="display:flex;">
 			<div style="width:25%;padding-right:20px;">
 				<div id="leadership_layout"></div>
 			</div>
@@ -263,9 +263,9 @@ $( document ).ready(function() {
 		</div>
 	</div>
 	<div id="page2_2">
-		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 강점/보완점</div>
-		<div style="padding:10px 0 20px; width:100%;"> 
-			<div id="totalcomment_layout" style="margin-top:10px"></div>
+		<div style="font-weight:bold;padding-top:20px;padding-bottom:6px;">&gt; 강점/보완점</div>
+		<div> 
+			<div id="totalcomment_layout"></div>
 		</div>
 	</div>
 	
