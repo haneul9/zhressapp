@@ -30,7 +30,7 @@ sap.ui.jsfragment("ZUI5_HR_LanguageScore.fragment.Main", {
 		{id: "Obj1t",  label: "{i18n>LABEL_49009}" /* 팀 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 		{id: "Obj2t",  label: "{i18n>LABEL_49011}" /* 담당 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 		{id: "Gradet", 	 label: "{i18n>LABEL_02273}" /* 직급 */,    plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "auto"},
-		{id: "Ename",  label: "{i18n>LABEL_49004}" /* 성명 */,  plabel: "", resize: true, span: 0, type: "string",     sort: true,  filter: true,  width: "auto"},
+		{id: "Ename",  label: "{i18n>LABEL_01303}" /* 성명 */,  plabel: "", resize: true, span: 0, type: "string",     sort: true,  filter: true,  width: "auto"},
 		{id: "ZlanguTxt",  label: "{i18n>LABEL_49002}" /* 어학종류 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
 		{id: "ZltypeTxt", 	 label: "{i18n>LABEL_49003}" /* 시험종류 */,    plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "200px"},
 		{id: "IndexCo",  label: "{i18n>LABEL_49012}" /* 기준점수 */,  plabel: "", resize: true, span: 0, type: "string",     sort: true,  filter: true,  width: "auto"},
