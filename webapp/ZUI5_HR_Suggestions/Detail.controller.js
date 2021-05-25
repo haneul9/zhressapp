@@ -148,11 +148,15 @@
 						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
 							vThumUp.toggleStyleClass("button-HiTokTok-check", true);
 							vThumDown.toggleStyleClass("button-HiTokTok-check", false);
+							vThumUp.setEnabled(true);
+							vThumDown.setEnabled(false);
 						}
 						
 						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
 							vThumUp.toggleStyleClass("button-HiTokTok-check", false);
 							vThumDown.toggleStyleClass("button-HiTokTok-check", true);
+							vThumUp.setEnabled(false);
+							vThumDown.setEnabled(true);
 						}
 
 						oController.setComments();
