@@ -554,7 +554,8 @@ logout: function() {
 
 callLogoutPage: function() {
 
-	$('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', '/Logout.html');
+	// $('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', '/Logout.html');
+	this.callLogoutActionPage();
 },
 
 callLogoutActionPage: function() {
@@ -567,7 +568,7 @@ callLogoutActionPage: function() {
 
 callLogoutIndexPage: function() {
 
-	$('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; });
+	// $('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; }).attr('src', '/index.html');
 },
 
 pernr: function() {
