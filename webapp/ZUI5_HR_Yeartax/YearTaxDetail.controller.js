@@ -320,6 +320,7 @@ sap.ui.define([
                         if(data && data.RESULT) {
                             if(data.RESULT.results && data.RESULT.results.length){
                                 for(var i=0; i<data.RESULT.results.length; i++){
+                                    data.RESULT.results[i].Regno2 = data.RESULT.results[i].Regno.substring(0,6) + "-" + data.RESULT.results[i].Regno.substring(6,7) + "******";
                                     data.RESULT.results[i].Regno = data.RESULT.results[i].Regno.substring(0,6) + "-" + data.RESULT.results[i].Regno.substring(6);
                                     
                                     vData.Data.push(data.RESULT.results[i]);
@@ -344,7 +345,7 @@ sap.ui.define([
             );
             
             if(oData2.Pystat == "1" && oData2.Yestat == "1"){
-                oTable.setSelectionMode("Single");
+                oTable.setSelectionMode("MultiToggle");
             } else {
                 oTable.setSelectionMode("None");
             }
@@ -400,6 +401,9 @@ sap.ui.define([
                 // 주민등록번호
                 vData.Regno1 = vData.Regno.split("-")[0];
                 vData.Regno2 = vData.Regno.split("-")[1];
+                vData.Regno2tx = vData.Regno2.substring(0,1) + "******";
+
+                oTable.clearSelection();
             } else {
                 vData.Zyear = oController._DetailJSonModel.getProperty("/Data/Zyear");
                 vData.Pernr = oController._DetailJSonModel.getProperty("/Data/Pernr");
@@ -407,6 +411,7 @@ sap.ui.define([
                 vData.Fnmhg = "";
                 vData.Regno1 = "";
                 vData.Regno2 = "";
+                vData.Regno2tx = "";
                 vData.Fanat = "KR"; // 국적
             }
             
@@ -415,130 +420,143 @@ sap.ui.define([
             if(!oController._FamInfoDialog){
                 oController._FamInfoDialog = sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", oController);
                 oView.addDependent(oController._FamInfoDialog);
-                
-                // 코드 리스트 
-                var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
-                var oPath = "IPernr eq '" + oController._DetailJSonModel.getProperty("/Data/Pernr") + "'";
-                
-                // 관계
-                var oKdsvh = sap.ui.getCore().byId(oController.PAGEID + "_Kdsvh");
-                oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '806'", null, null, false,
-                    function(data, oResponse) {
-                        if(data && data.results.length) {
-                            for(var i=0; i<data.results.length; i++){
-                                oKdsvh.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+
+                oController._BusyDialog.open();
+                setTimeout(function(){
+                    // 코드 리스트 
+                    var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
+                    var oPath = "IPernr eq '" + oController._DetailJSonModel.getProperty("/Data/Pernr") + "'";
+                    
+                    // 관계
+                    var oKdsvh = sap.ui.getCore().byId(oController.PAGEID + "_Kdsvh");
+                    oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '806'", null, null, false,
+                        function(data, oResponse) {
+                            if(data && data.results.length) {
+                                for(var i=0; i<data.results.length; i++){
+                                    oKdsvh.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                                }
+                            }
+                        },
+                        function(Res) {
+                            oController.Error = "E";
+                            if(Res.response.body){
+                                var ErrorJSON = JSON.parse(Res.response.body);
+                                if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+                                    oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+                                } else {
+                                    oController.ErrorMessage = ErrorMessage;
+                                }
                             }
                         }
-                    },
-                    function(Res) {
-                        oController.Error = "E";
-                        if(Res.response.body){
-                            var ErrorJSON = JSON.parse(Res.response.body);
-                            if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
-                                oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
-                            } else {
-                                oController.ErrorMessage = ErrorMessage;
-                            }
-                        }
+                    );
+                    
+                    if(oController.Error == "E"){
+                        oController.Error = "";
+                        oController._BusyDialog.close();
+                        MessageBox.error(oController.ErrorMessage);
+                        return;
                     }
-                );
-                
-                if(oController.Error == "E"){
-                    oController.Error = "";
-                    MessageBox.error(oController.ErrorMessage);
-                    return;
-                }
-                
-                // 국적
-                var oFanat = sap.ui.getCore().byId(oController.PAGEID + "_Fanat");
-                oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '805'", null, null, false,
-                    function(data, oResponse) {
-                        if(data && data.results.length) {
-                            for(var i=0; i<data.results.length; i++){
-                                oFanat.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                    
+                    // 국적
+                    var oFanat = sap.ui.getCore().byId(oController.PAGEID + "_Fanat");
+                    oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '805'", null, null, false,
+                        function(data, oResponse) {
+                            if(data && data.results.length) {
+                                for(var i=0; i<data.results.length; i++){
+                                    oFanat.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                                }
+                            }
+                        },
+                        function(Res) {
+                            oController.Error = "E";
+                            if(Res.response.body){
+                                var ErrorJSON = JSON.parse(Res.response.body);
+                                if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+                                    oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+                                } else {
+                                    oController.ErrorMessage = ErrorMessage;
+                                }
                             }
                         }
-                    },
-                    function(Res) {
-                        oController.Error = "E";
-                        if(Res.response.body){
-                            var ErrorJSON = JSON.parse(Res.response.body);
-                            if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
-                                oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
-                            } else {
-                                oController.ErrorMessage = ErrorMessage;
-                            }
-                        }
+                    );
+                    
+                    if(oController.Error == "E"){
+                        oController.Error = "";
+                        oController._BusyDialog.close();
+                        MessageBox.error(oController.ErrorMessage);
+                        return;
                     }
-                );
-                
-                if(oController.Error == "E"){
-                    oController.Error = "";
-                    MessageBox.error(oController.ErrorMessage);
-                    return;
-                }
-                
-                // 자녀구분
-                var oKdbsl = sap.ui.getCore().byId(oController.PAGEID + "_Kdbsl");
-                oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '807'", null, null, false,
-                    function(data, oResponse) {
-                        if(data && data.results.length) {
-                            for(var i=0; i<data.results.length; i++){
-                                oKdbsl.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                    
+                    // 자녀구분
+                    var oKdbsl = sap.ui.getCore().byId(oController.PAGEID + "_Kdbsl");
+                    oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '807'", null, null, false,
+                        function(data, oResponse) {
+                            if(data && data.results.length) {
+                                for(var i=0; i<data.results.length; i++){
+                                    oKdbsl.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                                }
+                            }
+                        },
+                        function(Res) {
+                            oController.Error = "E";
+                            if(Res.response.body){
+                                var ErrorJSON = JSON.parse(Res.response.body);
+                                if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+                                    oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+                                } else {
+                                    oController.ErrorMessage = ErrorMessage;
+                                }
                             }
                         }
-                    },
-                    function(Res) {
-                        oController.Error = "E";
-                        if(Res.response.body){
-                            var ErrorJSON = JSON.parse(Res.response.body);
-                            if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
-                                oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
-                            } else {
-                                oController.ErrorMessage = ErrorMessage;
-                            }
-                        }
+                    );
+                    
+                    if(oController.Error == "E"){
+                        oController.Error = "";
+                        oController._BusyDialog.close();
+                        MessageBox.error(oController.ErrorMessage);
+                        return;
                     }
-                );
-                
-                if(oController.Error == "E"){
-                    oController.Error = "";
-                    MessageBox.error(oController.ErrorMessage);
-                    return;
-                }
-                
-                // 장애인
-                var oHndid = sap.ui.getCore().byId(oController.PAGEID + "_Hndid2");
-                oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '899' and ICodty eq 'PKR_HNDCD'", null, null, false,
-                    function(data, oResponse) {
-                        if(data && data.results.length) {
-                            for(var i=0; i<data.results.length; i++){
-                                oHndid.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                    
+                    // 장애인
+                    var oHndid = sap.ui.getCore().byId(oController.PAGEID + "_Hndid2");
+                    oModel.read("/YeartaxCodeTableSet?$filter=ICodeT eq '899' and ICodty eq 'PKR_HNDCD'", null, null, false,
+                        function(data, oResponse) {
+                            if(data && data.results.length) {
+                                for(var i=0; i<data.results.length; i++){
+                                    oHndid.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                                }
+                            }
+                        },
+                        function(Res) {
+                            oController.Error = "E";
+                            if(Res.response.body){
+                                var ErrorJSON = JSON.parse(Res.response.body);
+                                if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
+                                    oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
+                                } else {
+                                    oController.ErrorMessage = ErrorMessage;
+                                }
                             }
                         }
-                    },
-                    function(Res) {
-                        oController.Error = "E";
-                        if(Res.response.body){
-                            var ErrorJSON = JSON.parse(Res.response.body);
-                            if(ErrorJSON.error.innererror.errordetails&&ErrorJSON.error.innererror.errordetails.length){
-                                oController.ErrorMessage = ErrorJSON.error.innererror.errordetails[0].message;
-                            } else {
-                                oController.ErrorMessage = ErrorMessage;
-                            }
-                        }
+                    );
+                    
+                    if(oController.Error == "E"){
+                        oController.Error = "";
+                        oController._BusyDialog.close();
+                        MessageBox.error(oController.ErrorMessage);
+                        return;
                     }
-                );
-                
-                if(oController.Error == "E"){
-                    oController.Error = "";
-                    MessageBox.error(oController.ErrorMessage);
-                    return;
-                }
+
+                    oController._BusyDialog.close();
+
+                    oController._FamInfoDialog.getModel().setData({Data : vData});
+                    oController._FamInfoDialog.open();
+                }, 100);
+            } else {
+                oController._FamInfoDialog.getModel().setData({Data : vData});
+                oController._FamInfoDialog.open();
             }
-            
-            oController._FamInfoDialog.getModel().setData({Data : vData});
-            oController._FamInfoDialog.open();
+           
         },
         
         // 가족정보 저장
@@ -661,8 +679,11 @@ sap.ui.define([
             var process = function(){
                 var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
 
+                var createData = {RESULT : []};
+
                 for(var i=0; i<oIndices.length; i++){
                     var sPath = oTable.getContextByIndex(oIndices[i]).sPath;
+                    var oData = oTable.getModel().getProperty(sPath);
 
                     var detail = {};
                         detail.Zyear = oData.Zyear;
@@ -672,10 +693,7 @@ sap.ui.define([
 
                         createData.RESULT.push(detail);  
                 }
-                
-                var oData = oTable.getModel().getProperty(sPath);
-                        
-                var createData = {RESULT : []};
+
                     createData.IMode = "2";
                     createData.IPernr = oData.Pernr;
                     createData.IYear = oData.Zyear;

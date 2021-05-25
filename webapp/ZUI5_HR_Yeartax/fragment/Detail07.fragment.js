@@ -94,7 +94,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail07", {
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Input({
 										 	 		value : "{Bizno}",
-										 	 		width : "80%",
+										 	 		width : "320px",
 										 	 		editable : {
 														parts : [{path : "Pystat"}, {path : "Yestat"}],
 														formatter : function(fVal1, fVal2){
@@ -106,7 +106,8 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail07", {
 														
 														oEvent.getSource().setValue(value);
 													},
-											 	 	maxLength : common.Common.getODataPropertyLength("ZHR_YEARTAX_SRV", "YeartaxPrevWorkN2", "Bizno")
+											 	 	// maxLength : common.Common.getODataPropertyLength("ZHR_YEARTAX_SRV", "YeartaxPrevWorkN2", "Bizno")
+											 	 	maxLength : 10
 										 	   }),
 										 	   new sap.m.Text({text : "(하이픈(-) 제외)"}).addStyleClass("FontFamily pl-5px pt-10px")],
 									 hAlign : "Begin",
@@ -116,7 +117,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail07", {
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Input({
 										 	 		value : "{Bizno}",
-										 	 		width : "80%",
+										 	 		width : "320px",
 										 	 		editable : {
 														parts : [{path : "Pystat"}, {path : "Yestat"}],
 														formatter : function(fVal1, fVal2){
@@ -128,7 +129,8 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail07", {
 														
 														oEvent.getSource().setValue(value);
 													},
-											 	 	maxLength : common.Common.getODataPropertyLength("ZHR_YEARTAX_SRV", "YeartaxPrevWorkN2", "Bizno")
+											 	 	// maxLength : common.Common.getODataPropertyLength("ZHR_YEARTAX_SRV", "YeartaxPrevWorkN2", "Bizno")
+											 	 	maxLength : 10
 										 	   }),
 										 	   new sap.m.Text({text : "(하이픈(-) 제외)"}).addStyleClass("FontFamily pl-5px pt-10px")],
 									 hAlign : "Begin",

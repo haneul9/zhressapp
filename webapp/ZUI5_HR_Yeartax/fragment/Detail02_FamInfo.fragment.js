@@ -91,7 +91,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 								 	 content : [new sap.m.Input({
 											 	 	value : "{Regno1}",
 											 	 	width : "100px",
-											 	 	maxLength     : 6,
+											 	 	maxLength : 6,
 											 	 	editable : {
 											 	 		path : "Flag",
 											 	 		formatter : function(fVal){
@@ -105,18 +105,27 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 											 	}),
 											 	new sap.m.Text({text : "-"}).addStyleClass("FontFamily pt-10px pr-5px pl-5px"),
 											 	new sap.m.Input({
-											 		value : "{Regno2}",
+											 		value : "{Regno2tx}",
 											 		width : "100px",
-											 		maxLength     : 7,
+											 		maxLength : 7,
 											 		editable : {
 											 			path : "Flag",
 											 			formatter : function(fVal){
 											 				return fVal == "C" ? true : false;
 											 			}
 											 		},
-											 		liveChange : function(oEvent){
-											 			var value = oEvent.getParameters().value.replace(/[^0-9\.]/g, "");
-											 				oEvent.getSource().setValue(value);
+											 		// liveChange : function(oEvent){
+											 		// 	var value = oEvent.getParameters().value.replace(/[^0-9\*]/g, "");
+											 		// 		oEvent.getSource().setValue(value);
+											 		// },
+											 		change : function(oEvent){
+											 			var value = oEvent.getParameters().value.replace(/[^0-9]/g, "");
+											 			// 	oEvent.getSource().setValue(value);
+
+														// 주민번호 마스킹처리
+														oDialog.getModel().setProperty("/Data/Regno2", value);  
+														oEvent.getSource().setValue(value.replace(/(?<=.{1})./gi, "*"));
+														
 											 		}
 											 	})],
 								 	 hAlign : "Begin",
