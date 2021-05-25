@@ -1,10 +1,9 @@
 ﻿sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
-	"../common/JSONModelHelper",
-    "../common/AttachFileAction"
+	"../common/JSONModelHelper"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction) {
+	function (Common, CommonController, JSONModelHelper) {
 	"use strict";
 
 	
@@ -36,7 +35,7 @@
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -59,6 +58,58 @@
 			return Common.checkNull(regex)? "" : regex;
 		},
 
+		getMainTitle: function() {
+			return new sap.m.HBox({
+				justifyContent: sap.m.FlexJustifyContent.End,
+				alignContent: sap.m.FlexAlignContent.End,
+				alignItems: sap.m.FlexAlignItems.End,
+				width: "100%",
+				fitContainer: true,
+				items: [
+					new sap.ui.core.Icon({
+						visible: {
+							path: "Zgood",
+							formatter: function(v) {
+								return v !== "0" && Common.checkNull(!v);
+							}
+						},
+						src: "sap-icon://thumb-up"
+					})
+					.addStyleClass("icon-HiTokTok ok"),
+					new sap.m.Text({
+						visible: {
+							path: "Zgood",
+							formatter: function(v) {
+								return v !== "0" && Common.checkNull(!v);
+							}
+						},
+						width: "auto",
+						text: "{Zgood}"
+					}).addStyleClass("mr-12px font-12px"),
+					new sap.ui.core.Icon({
+						visible: {
+							path: "Zbed",
+							formatter: function(v) {
+								return v !== "0" && Common.checkNull(!v);
+							}
+						},
+						src: "sap-icon://thumb-down"
+					})
+					.addStyleClass("icon-HiTokTok no"),
+					new sap.m.Text({
+						visible: {
+							path: "Zbed",
+							formatter: function(v) {
+								return v !== "0" && Common.checkNull(!v);
+							}
+						},
+						width: "auto",
+						text: "{Zbed}"
+					}).addStyleClass("font-12px")
+				]
+			});
+		},
+
         getChangeDate: function() {
 			return new sap.ui.commons.TextView({
                 text : {
@@ -72,7 +123,7 @@
                     }
                 }, 
                 textAlign : "Center"
-            })
+            });
         },
 
         getHide: function() {
@@ -84,7 +135,7 @@
                         return v === "X";
                     }
                 }
-            })
+            });
         },
 		
 		onTableSearch: function() {
@@ -144,68 +195,17 @@
 
 		onSelectDetail: function(Gubun, Path){
 			var oController = $.app.getController();
-			var oView = $.app.byId("ZUI5_HR_Suggestions.Page");
 			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
 			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Skey");
 			vSeqnr = vSeqnr.slice(-5);
 			
-			if (!oController._RegistModel) {
-				oController._RegistModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.fragment.Regist", oController);
-				oView.addDependent(oController._RegistModel);
-			}
-
-			var oDateBox = $.app.byId(oController.PAGEID + "_RegistDateBox");
-			var oIsHideBox = $.app.byId(oController.PAGEID + "_IsHideBox");
-			oDateBox.setVisible(true);
-			oIsHideBox.setVisible(false);
-			
-			oController.CommentModel.setData({Data: {}});
-			oController.getDetailData(vSdate, vSeqnr);
-            oController.onBeforeOpenDetailDialog();
-			oController._RegistModel.open();
-		},
-
-		getDetailData: function(Sdate, Seqnr) { // 상세정보
-			var oController = $.app.getController();
-			var oModel = $.app.getModel("ZHR_COMMON_SRV");
-			var vBukrs = oController.getUserGubun();
-			
-			var sendObject = {};
-			// Header
-			sendObject.ISdate = Sdate;
-			sendObject.ISeqnr = Seqnr;
-			sendObject.IBukrs = vBukrs;
-            sendObject.IConType = "1";
-			// Navigation property
-			sendObject.TableIn2 = [];
-			
-			oModel.create("/SuggestionBoxSet", sendObject, {
-				success: function(oData, oResponse) {
-					if (oData && oData.TableIn2) {
-						Common.log(oData);
-						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
-						oController.RegistModel.setData({FormData: oCopiedRow});
-					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
-					});
-				}
-			});
-		},
-
-        onBeforeOpenDetailDialog: function() {
-			var oController = $.app.getController();
-			var	vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
-
-			AttachFileAction.setAttachFile(oController, {
-				Appnm: vAppnm,
-				Mode: "M",
-				Max: "5",
-				Editable: false,
-			});
+			sap.ui.getCore().getEventBus().publish("nav", "to", {
+                id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
+                data: { 
+                    vSdate: vSdate,
+                    vSeqnr: vSeqnr
+                }
+            });
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {

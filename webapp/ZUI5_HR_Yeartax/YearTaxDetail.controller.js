@@ -361,6 +361,21 @@ sap.ui.define([
             }
         },
         
+        // 가족정보 수정버튼 클릭 시 가족등록 메뉴로 이동
+        onPressFamilyApply : function(oEvent){
+        	var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
+            var oController = oView.getController();
+
+            MessageBox.confirm("가족정보 수정을 위해 해당 화면으로 이동하시겠습니까?", {
+                actions : ["YES", "NO"],
+                onClose : function(fVal){
+                    if(fVal && fVal == "YES"){
+                        setTimeout(function(){parent._gateway.redirect("FamilyApply.html");}, 100);
+                    }
+                }
+            });
+        },
+        
         // 가족정보 : C 신규 M 변경
         onPressFamInfo : function(oEvent, oFlag){
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");

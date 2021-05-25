@@ -15,7 +15,7 @@ return Page.extend("common.PageHelper", {
 @param o = {
 	idPrefix,
 	hideEmpInfoBox,
-	contentContainerStyleClass,
+	contentContainerStyleClass
 	contentHeaderLeft,
 	contentHeaderMiddle,
 	contentHeaderRight,

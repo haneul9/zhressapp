@@ -3,4 +3,21 @@
 .tableMargin5 { margin:5px !important; }
 .background-lightblue {background-color:rgba(200, 220, 243, 0.3); }
 .minHight {height: "85px";}
-.custom-comment {margin-top:10px;padding-top:10px;margin-left:auto}
+
+.app-nav-button {transform:rotate(360deg);padding-right:.625rem;}
+.icon-HiTokTok {width:1.25rem; height:1.25rem;line-height:1.25rem;color:#555;font-size: .8125rem;border-radius: 50%;margin-right:4px;}
+.icon-HiTokTok.ok {background-color:#e3f1fc;}
+.icon-HiTokTok.no {background-color:#feebeb;}
+.custom-HiTokTok-group {align-items:center;align-content:center;height:45px;border-bottom:1px solid #ededed}
+.custom-HiTokTok-content {align-items:center;align-content:center;height:45px;}
+.border-bottom-no {border-bottom:0;}
+.custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0;border-bottom:1px solid #ededed}
+.custom-HiTokTok-comment .sapMInputBaseInner.sapMTextAreaInner.sapMTextAreaGrow {padding:.5rem 1.5rem;}
+.custom-HiTokTok-write {background-color: #f3f4f4;padding:10px;margin:10px 0}
+.custom-HiTokTok-write .custom-input .sapMInputBaseContentWrapper {height:36px;margin:1px 0}
+
+/* Mobile */
+.app-content-container-mobile .custom-HiTokTok-group {height:auto;}
+.app-content-container-mobile .custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0 !important;border-bottom:1px solid #ededed !important}
+.app-content-container-mobile .custom-HiTokTok-comment .button-group {flex-wrap:wrap;margin:0;padding-top:.25rem;border-bottom:0}
+.app-content-container-mobile .custom-HiTokTok-comment .button-group .sapMBtn.button-light-sm {margin:.375rem 0;padding-top:0;padding-left:.25rem;}
