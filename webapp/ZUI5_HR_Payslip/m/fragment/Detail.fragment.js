@@ -20,8 +20,8 @@ sap.ui.define([], function () {
                     new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
                     this.getMoney4InfoBox(oController),
                     new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
-                    // this.getMoney5InfoBox(oController),
-                    // new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
+                    this.getMoney5InfoBox(oController),
+                    new sap.ui.core.HTML({ content: "<div style='height : 5px;'/>" }),
                     this.getNoticeInfoBox(oController)
                 ]
             }).addStyleClass("EmployeeLayout vbox-form-mobile-etc");
@@ -224,10 +224,10 @@ sap.ui.define([], function () {
             return new sap.m.VBox(oController.PAGEID + "_Money4Layout", {});
             // .addStyleClass("vbox-form-mobile");
         },
-        // getMoney5InfoBox: function (oController) {
-        //     return new sap.m.VBox(oController.PAGEID + "_Money5Layout", {});
-        //     // .addStyleClass("vbox-form-mobile");
-        // },
+        getMoney5InfoBox: function (oController) {
+            return new sap.m.VBox(oController.PAGEID + "_Money5Layout", {});
+            // .addStyleClass("vbox-form-mobile");
+        },
 
         getNoticeInfoBox: function (oController) {
             return new sap.m.VBox({
@@ -248,7 +248,7 @@ sap.ui.define([], function () {
                     }
                 }
             })
-                .addStyleClass("pb-20px")
+                .addStyleClass("pb-20px sub-con-titleBar-both")
                 .setModel(oController._DetailJSonModel)
                 .bindElement("/Data");
         }

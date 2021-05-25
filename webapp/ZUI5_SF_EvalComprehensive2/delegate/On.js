@@ -159,20 +159,23 @@ var On = { // 종합평가 event handler
 	
 	// Table 평가결과 column icon click event handler
 	pressEvalResultDialogIcon: function(oEvent) {
-		Common.log("pressEvalResultDialogIcon", oEvent.getSource().getBindingContext().getProperty());
+		// Common.log("pressEvalResultDialogIcon", oEvent.getSource().getBindingContext().getProperty());
 
-		if (!this.EvalResultDialog) {
-			this.EvalResultDialog = sap.ui.jsfragment("fragment.EvalResult2", this);
-			this.getView().addDependent(this.EvalResultDialog);
-		}
+		// if (!this.EvalResultDialog) {
+		// 	this.EvalResultDialog = sap.ui.jsfragment("fragment.EvalResult2", this);
+		// 	this.getView().addDependent(this.EvalResultDialog);
+		// }
 
 		var data = oEvent.getSource().getBindingContext().getProperty();
-		SearchEvalResult.oController = this;
-		SearchEvalResult.Year = data.Appye;
-		SearchEvalResult.Grade5 = data.Cograde;
-		SearchEvalResult.userId = data.Pernr;
+		// SearchEvalResult.oController = this;
+		// SearchEvalResult.Year = data.Appye;
+		// SearchEvalResult.Grade5 = data.Cograde;
+		// SearchEvalResult.userId = data.Pernr;
 		
-		this.EvalResultDialog.open();
+		// this.EvalResultDialog.open();
+		window.open("../webapp/indexTest.html?Pernr=" + data.Pernr+ "&Year=" + data.Appye, "pop", "width=1200,height=850, scrollbars=yes, resizable=no");
+		// window.open("../webapp/indexTest.html?Pernr=" + data.Pernr+ "&Year=" + data.Appye ,'평가결과','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
+	
 	},
 	
 

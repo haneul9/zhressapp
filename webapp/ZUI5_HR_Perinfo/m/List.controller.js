@@ -21,6 +21,7 @@ sap.ui.define(
             _CarJSonModel: new sap.ui.model.json.JSONModel(),
             _CareerJSonModel: new sap.ui.model.json.JSONModel(),
             _AnnouncementJSonModel: new sap.ui.model.json.JSONModel(),
+            _EvalJSonModel: new sap.ui.model.json.JSONModel(),
             EmpSearchResult: new sap.ui.model.json.JSONModel(),
             EmployeeModel: new common.EmployeeModel(),
 			doubleRendering : "",	
@@ -106,6 +107,9 @@ sap.ui.define(
                         break;
                     case "Announcement":
                         oController.onPressSearchAnnouncement();
+                        break;
+                    case "Eval":
+                        oController.onPressSearchEval();
                         break;
                 }
             },
@@ -505,6 +509,66 @@ sap.ui.define(
                     });
 
                     oController._SchoolJSonModel.setData(vData);
+                    oController._BusyDialog.close();
+
+                    if (oController.Error == "E") {
+                        oController.Error = "";
+                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        return;
+                    }
+                };
+
+                oController._BusyDialog.open();
+                setTimeout(search, 100);
+            },
+
+            //평가이력
+            onPressSearchEval: function () {
+                var oController = $.app.getController();
+                var oData = oController._ListCondJSonModel.getProperty("/Data");
+                var vData = { Data: [] };
+                var oDate = new Date();
+                var vYear =  oDate.getFullYear();
+
+                var search = function () {
+                    var oPath = "";
+                    var createData = { TableIn: [] };
+
+                    oPath = "/EvalResultsSet";
+                    createData.IEmpid = oData.Pernr;
+                    createData.IConType = "3";
+                    createData.IAppye = "" + vYear;
+                    createData.TableIn = [];
+
+                    var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
+
+                    oModel.create(oPath, createData, {
+                        success: function (data) {
+                            if (data) {
+                                if (data.TableIn && data.TableIn.results) {
+                                    for (var i = 0; i < data.TableIn.results.length; i++) {
+                                        data.TableIn.results[i].Idx = i + 1;
+                                        vData.Data.push(data.TableIn.results[i]);
+                                    }
+                                }
+                            }
+                        },
+                        error: function (oError) {
+                            var Err = {};
+                            oController.Error = "E";
+
+                            if (oError.response) {
+                                Err = window.JSON.parse(oError.response.body);
+                                var msg1 = Err.error.innererror.errordetails;
+                                if (msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                                else oController.ErrorMessage = Err.error.message.value;
+                            } else {
+                                oController.ErrorMessage = oError.toString();
+                            }
+                        }
+                    });
+
+                    oController._EvalJSonModel.setData(vData);
                     oController._BusyDialog.close();
 
                     if (oController.Error == "E") {

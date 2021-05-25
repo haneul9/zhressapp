@@ -469,8 +469,8 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
-                // 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
-                if(data.Bukrs.charAt(0) === "A" || data.Zfxck2 !== "X") {
+                // 첨단 소속일 경우 신청 불가
+                if(data.Bukrs.charAt(0) === "A") {
                     MessageBox.alert(this.oController.getBundleText("MSG_31012").interpolate(data.Stext));
                     return;
                 }
@@ -520,9 +520,9 @@ sap.ui.define(
                     vSelectedDataLength = data.length,
                     impossibleTargets = [];
 
-                // 기초의 전문직 이거나, 첨단 소속일 경우 신청 불가
+                // 첨단 소속일 경우 신청 불가
                 data = data.filter(function(elem) {
-                    if(elem.Bukrs.charAt(0) === "A" || elem.Zfxck2 !== "X") {
+                    if(elem.Bukrs.charAt(0) === "A") {
                         impossibleTargets.push(elem.Stext);
                         return false;
                     }

@@ -294,6 +294,18 @@ common.makeTable = {
 									tooltip : " "
 								}).addStyleClass("font-bold");
 					break;
+				case "YET":
+					oTemplate = new sap.ui.core.Icon({
+									src : "sap-icon://accept",
+									size : "15px",
+									visible : {
+										path : col_info[i].id,
+										formatter : function(fVal){
+											return fVal == "X" ? true : false;
+										}
+									}
+								});
+					break;
 				case "process":
 					if(col_info[i].id == "Delete"){
 						oTemplate = new sap.m.Link({

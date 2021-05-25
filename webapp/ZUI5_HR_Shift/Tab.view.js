@@ -27,7 +27,7 @@ sap.ui.define(
                         new sap.m.IconTabFilter({
                             key: Shift.Tab.APPROVAL,
                             text: "{i18n>LABEL_30003}", // 변경신청내역
-                            visible: "{= ${/Bukrs} === 'A' || ${/Zfxck2} !== 'X' ? false : true }",
+                            visible: "{= ${/Bukrs} === 'A' || (${/Zflag} === 'X' && ${/Zfxck2} !== 'X') ? false : true }",
                             content: [sap.ui.jsfragment([$.app.CONTEXT_PATH, Shift.Tab.APPROVAL].join(".fragment."), oController)]
                         })
                     ]

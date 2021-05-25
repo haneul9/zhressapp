@@ -170,7 +170,9 @@ sap.ui.define(
                     oPunishTable = sap.ui.getCore().byId(oController.PAGEID + "_PunishTable"),
                     oPunishJSONModel = oPunishTable.getModel(),
                     oAnnouncementTable = sap.ui.getCore().byId(oController.PAGEID + "_AnnouncementTable"),
-                    oAnnouncementJSONModel = oAnnouncementTable.getModel();
+                    oAnnouncementJSONModel = oAnnouncementTable.getModel(),
+                    oEvalTable = sap.ui.getCore().byId(oController.PAGEID + "_EvalTable"),
+                    oEvalJSONModel = oEvalTable.getModel();
                     
                 // 세션 User info
                 var result = Common.retrieveLoginInfo();
@@ -661,6 +663,7 @@ sap.ui.define(
                             );
                         }),
                         oController.onPressSearchFamily(vPernr),
+                        oController.onPressSearchEval(vPernr),
                         Common.usePrivateLog({
                         	pernr : vPernr,
                         	func : "기본인적사항|주소",
@@ -736,6 +739,58 @@ sap.ui.define(
                     	mobile : "",
                         action : "R" //CRUD
                     })
+            	]).then(function () {
+                    
+            	});
+            },
+
+            onPressSearchEval : function(vPernr) {
+                var oView = sap.ui.getCore().byId("ZUI5_HR_Perinfo.List");
+                var oController = oView.getController();
+                if($.app.getAuth() != "M"){
+                	return ;	
+                }
+                var vConType = "3";
+                var oDate = new Date();
+                var vYear =  oDate.getFullYear();
+                var oEvalTable = sap.ui.getCore().byId(oController.PAGEID + "_EvalTable"),
+                    oEvalTableJSONModel = oEvalTable.getModel();
+               	Promise.all([
+                	Common.getPromise(true, function () {    
+		                $.app.getModel("ZHR_APPRAISAL_SRV").create(
+		                    // 평가이력
+		                    "/EvalResultsSet",
+		                    {
+		                        IEmpid: vPernr,
+                                IAppye : "" + vYear,
+		                        IConType: vConType,
+		                        TableIn: []
+		                    },
+		                    {
+		                        async: true,
+		                        success: function (data) {
+		                            var vData = { Data: [] };
+		                            if (data) {
+		                                if (data.TableIn && data.TableIn.results) {
+		                                    for (var i = 0; i < data.TableIn.results.length; i++) {
+		                                        data.TableIn.results[i].Idx = i + 1;
+		                                        vData.Data.push(data.TableIn.results[i]);
+		                                    }
+		                                }
+		                            }
+		                            oEvalTableJSONModel.setData(vData);
+		                            oEvalTable.bindRows("/Data");
+		                            oEvalTable.setVisibleRowCount(vData.Data.length);
+		                        },
+		                        error: function () {
+		                            var vData = { Data: [] };
+		                            oEvalTableJSONModel.setData(vData);
+		                            oEvalTable.bindRows("/Data");
+		                            oEvalTable.setVisibleRowCount(vData.Data.length);
+		                        }
+		                    }
+		                );
+                	})
             	]).then(function () {
                     
             	});

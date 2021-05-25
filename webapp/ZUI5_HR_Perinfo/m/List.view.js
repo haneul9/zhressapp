@@ -90,6 +90,17 @@ sap.ui.define(
                             key: "Announcement",
                             text: "{i18n>LABEL_18008}", // 발령사항
                             content: [sap.ui.jsfragment("ZUI5_HR_Perinfo.m.fragment.AnnouncementList", oController)]
+                        }),
+                        new sap.m.IconTabFilter(oController.PAGEID + "_Eval", {
+                            key: "Eval",
+                            text: "{i18n>LABEL_37115}", // 평가이력
+                            content: [sap.ui.jsfragment("ZUI5_HR_Perinfo.m.fragment.Eval", oController)],
+                            visible: {
+                                path : "Chief",
+                                formatter : function(v){
+                                  return v === "X" ? true : false; 
+                                }
+                            } 
                         })
                     ]
                 }).addStyleClass("tab-group");
@@ -140,6 +151,7 @@ sap.ui.define(
                 $.app.setModel("ZHR_PERS_INFO_SRV");
                 $.app.setModel("ZHR_PERS_RECORD_SRV");
                 $.app.setModel("ZHR_COMMON_SRV");
+                $.app.setModel("ZHR_APPRAISAL_SRV");
             }
         });
     }
