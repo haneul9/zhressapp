@@ -16,7 +16,7 @@ naver.maps.LatLng.prototype.toParamString = function() {
  */
 common.map.LotteChemMap = function(options) {
 
-	this.functionProvider = options.functionProvider;
+	this.functionProvider = options.functionProvider; // LccMapDialogHandler
 
 	this.PLACE_TARGET = {
 		CHOICE: 'choice',
@@ -58,7 +58,7 @@ common.map.LotteChemMap = function(options) {
 	this.mAddressOverlayMap[this.PLACE_TARGET.DEPARTURE] = null;
 	this.mAddressOverlayMap[this.PLACE_TARGET.DESTINATION] = null;
 
-	this.oMap = this.instantiate(options);
+	this.oMap = this.instantiate(options); // 실제 지도 생성
 	this.oPathPolyline1 = new naver.maps.Polyline({ // 경로선 테두리
 		path: [],
 		strokeColor: '#000', // 8dc63f ff6347
@@ -119,7 +119,7 @@ common.map.LotteChemMap.prototype.instantiate = function(options) {
 	},
 	oMap = new naver.maps.Map(options.id, oMapOptions);
 
-	naver.maps.Event.addListener(oMap, 'click', function(e) {
+	naver.maps.Event.addListener(oMap, 'click', function(e) { // 지도 클릭시 마커 표시
 		this.setMarker({
 			target: this.PLACE_TARGET.CHOICE,
 			coord: e.coord
@@ -166,7 +166,7 @@ common.map.LotteChemMap.prototype.setMarker = function(o) {
 	}
 
 	var oMarker = this.mMarkerMap[o.target];
-	if (!oMarker) {
+	if (!oMarker) { // 마커 객체가 없으면 생성, 생성 후에는 재사용
 		oMarker = this.getMarker(o);
 		this.mMarkerMap[o.target] = oMarker;
 	}
@@ -193,7 +193,7 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 	oMarker.set('custom-target', o.target);
 
 	if (o.target !== this.PLACE_TARGET.CHOICE) {
-		naver.maps.Event.addListener(oMarker, 'click', function() {
+		naver.maps.Event.addListener(oMarker, 'click', function() { // 마커 클릭시 주소 오버레이 토글
 			var target = oMarker.get('custom-target'),
 			oAddressOverlay = this.mAddressOverlayMap[target];
 			if (oAddressOverlay.getMap()) {
@@ -204,7 +204,7 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 		}.bind(this));
 	}
 
-	naver.maps.Event.addListener(oMarker, 'position_changed', function() {
+	naver.maps.Event.addListener(oMarker, 'position_changed', function() { // 마커가 이동된 경우
 		this.functionProvider.log('position_changed');
 
 		this.functionProvider.spinner(true);
@@ -217,20 +217,20 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 			oAddressOverlay.setMap();
 		}
 
-		this.initPath();
+		this.initPath(); // 경로찾기를 했었다면 초기화
 
 		if (target !== this.PLACE_TARGET.CHOICE && address) {
-			this.setAddressOverlay({
+			this.setAddressOverlay({ // 주소 오버레이 표시
 				target: target,
 				address: address
 			});
 			if (target !== this.PLACE_TARGET.CHOICE) {
-				this.searchPath();
+				this.searchPath(); // 경로찾기 시작
 			} else {
 				this.functionProvider.spinner(false);
 			}
 		} else {
-			this.searchAddress(target);
+			this.searchAddress(target); // 주소가 없는 경우 주소부터 조회 후 주소 오버레이 표시
 		}
 	}.bind(this));
 
@@ -302,7 +302,7 @@ common.map.LotteChemMap.prototype.setPlace = function(target) {
 	return this.replaceMarker(target);
 };
 
-common.map.LotteChemMap.prototype.replaceMarker = function(target) {
+common.map.LotteChemMap.prototype.replaceMarker = function(target) { // 출발지, 도착지 마커 지정시
 
 	this.functionProvider.spinner(true);
 
@@ -311,13 +311,13 @@ common.map.LotteChemMap.prototype.replaceMarker = function(target) {
 	oAddressOverlay = this.mAddressOverlayMap[choice];
 
 	if (this.mMarkerMap[target]) {
-		this.mMarkerMap[target].setMap();
+		this.mMarkerMap[target].setMap(); // 기존 위치 마커 숨김
 	}
 	if (this.mAddressOverlayMap[target]) {
-		this.mAddressOverlayMap[target].setMap();
+		this.mAddressOverlayMap[target].setMap(); // 기존 위치 주소 오버레이 숨김
 	}
 
-	if (oChoiceMarker) {
+	if (oChoiceMarker) { // 출발/도착 선택용 마커인 경우
 		oChoiceMarker.setIcon(this.mPlaceMarkerIcon[target]);
 
 		var address = oChoiceMarker.get('custom-address');
@@ -342,12 +342,12 @@ common.map.LotteChemMap.prototype.replaceMarker = function(target) {
 	this.oPathPolyline2.setPath([]);
 	this.oPathPolyline2.setMap();
 
-	this.searchPath();
+	this.searchPath(); // 경로찾기 시작
 
 	return this;
 };
 
-// 주소 -> 좌표
+// 주소 -> 좌표 : 사용하지 않으나 참고용으로 남겨둠
 common.map.LotteChemMap.prototype.searchCoord = function(value) {
 
 	var url = this.functionProvider.getURL('/geocode');
@@ -413,12 +413,12 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 
 				oMarker.set('custom-address', response.v2.address);
 
-				this.setAddressOverlay({
+				this.setAddressOverlay({ // 조회된 주소로 주소 오버레이 표시
 					target: target,
 					address: response.v2.address
 				});
 				if (target !== this.PLACE_TARGET.CHOICE) {
-					this.searchPath();
+					this.searchPath(); // 경로찾기 시작
 				} else {
 					this.functionProvider.spinner(false);
 				}
@@ -429,6 +429,7 @@ common.map.LotteChemMap.prototype.searchAddress = function(target) {
 	}.bind(this));
 };
 
+// 지역 키워드 검색 : 입력된 지역명으로 해당 지역 주변의 키워드가 검색됨, 최대 5개의 키워드가 검색됨
 common.map.LotteChemMap.prototype.searchLocal = function(o) {
 
 	if (!o.keyword) {
@@ -498,7 +499,7 @@ common.map.LotteChemMap.prototype.searchLocal = function(o) {
 	});
 };
 
-common.map.LotteChemMap.prototype.searchPath = function() {
+common.map.LotteChemMap.prototype.searchPath = function() { // 경로 탐색, 거리, 톨비, 유류비
 
 	var departurePosition = this.getMarkerPosition(this.getDepartureId()),
 	destinationPosition = this.getMarkerPosition(this.getDestinationId());
