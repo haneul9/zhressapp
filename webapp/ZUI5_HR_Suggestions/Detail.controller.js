@@ -180,6 +180,9 @@
 			oCommentBox.destroyItems();
 
 			vCommData.forEach(function(e, i) {
+				var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y"
+				var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N"
+
 				oCommentBox.addItem(
 					new sap.m.VBox({
 						fitContainer: true,
@@ -244,15 +247,17 @@
 													new sap.m.Button({ 
 														icon: "sap-icon://thumb-up",
 														press: oController.OnCommThumbUp.bind(oController),
+														enabled: vGood,
 														text: "{i18n>LABEL_56020}" // 좋아요
 													}).addStyleClass("button-light-sm")
-													.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y"),
+													.toggleStyleClass("button-HiTokTok-check", vGood),
 													new sap.m.Button({ 
 														icon: "sap-icon://thumb-down",
 														press: oController.OnCommThumbDown.bind(oController),
+														enabled: vBed,
 														text: "{i18n>LABEL_56021}" // 싫어요
 													}).addStyleClass("button-light-sm")
-													.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N"),
+													.toggleStyleClass("button-HiTokTok-check", vBed),
 													new sap.m.Button({
 														press: oController.onCommentSubBtn.bind(oController),
 														icon: "sap-icon://comment",
@@ -328,6 +333,9 @@
 			if(Common.checkNull(!index) || index === 0){ // 저장된 대댓글 Setting
 				vSubCommentData.forEach(function(e) {
 					if(e.Seqnr2 === oEvent.Seqnr2) {
+						var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
+						var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
+
 						oCommentBox.getItems()[index].getItems()[2].setVisible(true);
 						oCommentBox.getItems()[index].getItems()[2].addItem(
 							new sap.m.VBox({
@@ -393,15 +401,17 @@
 															new sap.m.Button({ 
 																icon: "sap-icon://thumb-up",
 																press: oController.OnReCommThumbUp.bind(oController),
+																enabled: vGood,
 																text: "{i18n>LABEL_56020}" // 좋아요
 															}).addStyleClass("button-light-sm")
-															.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y"),
+															.toggleStyleClass("button-HiTokTok-check", vGood),
 															new sap.m.Button({
 																icon: "sap-icon://thumb-down",
 																press: oController.OnReCommThumbDown.bind(oController),
+																enabled: vBed,
 																text: "{i18n>LABEL_56021}" // 싫어요
 															}).addStyleClass("button-light-sm")
-															.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N"),
+															.toggleStyleClass("button-HiTokTok-check", vBed),
 															new sap.m.Button({
 																press: oController.onSubCommentReBtn.bind(oController),
 																text: "{i18n>LABEL_56013}" // 수정
