@@ -95,8 +95,7 @@ $( document ).ready(function() {
 				unit : 'mm'
 			});
 			
-			var vImage1 = "";
-			html2canvas(document.getElementById("name_layout"), {
+			html2canvas(document.getElementById("page1"), {
 					// scale based on quality value input
 					scale: 1,
 					// logging for debugging
@@ -107,43 +106,49 @@ $( document ).ready(function() {
 					useCORS: true
 				}).then(function (canvas) {
 					var img = canvas.toDataURL('image/png');
-					doc.addImage(img, 'PNG', 2, 2, 200, 20); 
-				}
-			);
-			// 평가 Table
-			html2canvas(document.getElementById("overivew_layout"), {
-					// scale based on quality value input
-					scale: 1,
-					// logging for debugging
-					logging: true,
-					letterRendering: 1,
-					// allows for cross origin images
-					allowTaint: true,
-					useCORS: true
-				}).then(function (canvas) {
-					var img = canvas.toDataURL('image/png');
+					console.log(img);
+					var vWidth = canvas.width * 1 / 6,
+						vHeight = canvas.height * 1 / 6;
 					//  시작x, 시작y, 넓이, 높이
-					doc.addImage(img, 'PNG', 2, 30, 200, 50);
+					doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
 				}
 			);
-			// 업적평가
-			html2canvas(document.getElementById("performance_layout"), {
-					// scale based on quality value input
+			var vPage2 = document.getElementById("page2");
+			if(vPage2.clientHeight > 1000 ){
+				html2canvas(document.getElementById("page2_1"), {
 					scale: 1,
-					// logging for debugging
 					logging: true,
 					letterRendering: 1,
-					// allows for cross origin images
 					allowTaint: true,
 					useCORS: true
 				}).then(function (canvas) {
-					var img = canvas.toDataURL('image/png');
+						var img = canvas.toDataURL('image/png');
+						doc.addPage();
+						var vWidth = canvas.width * 1 / 6,
+						    vHeight = canvas.height * 1 / 6;
 						//  시작x, 시작y, 넓이, 높이
-					doc.addImage(img, 'PNG', 2, 90, 100, 50); 
-				}
-			);
-			// 업적평가
-			html2canvas(document.getElementById("competency_layout"), {
+						doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
+				});
+
+				html2canvas(document.getElementById("page2_2"), {
+					scale: 1,
+					logging: true,
+					letterRendering: 1,
+					allowTaint: true,
+					useCORS: true
+				}).then(function (canvas) {
+					setTimeout(function () {
+						var img = canvas.toDataURL('image/png');
+						doc.addPage();
+						var vWidth = canvas.width * 1 / 6,
+						    vHeight = canvas.height * 1 / 6;
+						//  시작x, 시작y, 넓이, 높이
+						doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
+						doc.save('file-name.pdf');
+					}, 3000);
+				});
+			}else{
+				html2canvas(document.getElementById("page2"), {
 					// scale based on quality value input
 					scale: 1,
 					// logging for debugging
@@ -155,13 +160,15 @@ $( document ).ready(function() {
 				}).then(function (canvas) {
 					setTimeout(function () {
 						var img = canvas.toDataURL('image/png');
+						doc.addPage();
+						var vWidth = canvas.width * 1 / 6,
+						    vHeight = canvas.height * 1 / 6;
 						//  시작x, 시작y, 넓이, 높이
-						doc.addImage(img, 'PNG', 100, 90, 100, 70); 
+						doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
 						doc.save('file-name.pdf');
 					}, 3000);
-				}
-			);
-			
+				});
+			}
     }
 
 
@@ -171,7 +178,7 @@ $( document ).ready(function() {
 
 <!-- 평가프린트 html 작업  -->
 
-<div>
+<div id="page1">
 
 <!-- 사원정보  -->
 <!-- <div id="name_layout" style="padding-top:10px; width:100%;">
@@ -183,17 +190,17 @@ $( document ).ready(function() {
 	</div>		
 </div> -->
 
-<div id="name_layout" style="display:flex;padding:10px 0 20px; width:100%;">
-	<div style="padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
-	<div>
-		<div id="Name" style="display:inline-block;font-weight:bold;"></div>
-		<div id="Title" style="display:inline-block"></div>
-		<div id="Title1"></div>
-	</div>		
-</div>
+	<div id="name_layout" style="display:flex;padding:10px 0 20px; width:100%;">
+		<div style="padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
+		<div>
+			<div id="Name" style="display:inline-block;font-weight:bold;"></div>
+			<div id="Title" style="display:inline-block"></div>
+			<div id="Title1"></div>
+		</div>		
+	</div>
 
 <!-- 평가 Table List  -->
-<div id="overivew_layout"></div>
+	<div id="overivew_layout"></div>
 	<!-- <div>
 		<div id="performance_layout" style="width:50%;float:left"></div>
 		<div style="width:50%;float:right"><canvas id="competency_layout" width="300" height="200"></canvas></div>
@@ -219,11 +226,49 @@ $( document ).ready(function() {
 			<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;margin-top:20px">&gt; 역량평가 1차 평가자 의견</div>
 			<div id="comment2_layout" style="margin-top:10px"></div>
 		</div>	
+	</div>
+</div>
+
+<div id="page2">
+	<div id="page2_1">
+		<div style="font-weight:bold;padding-bottom:6px;">&gt; 다면평가</div>
+		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 직무 만족도</div>
+		<div style="display:flex;padding-top:20px;">
+			<div style="width:25%;padding-right:20px;">
+				<div id="job_layout"></div>
+			</div>
+			<div style="width:75%;padding-left:20px;">
+				<div id="job_comment"></div>
+			</div>
+		</div>
+
+		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 협업 만족도</div>
+		<div style="display:flex;padding-top:20px;">
+			<div style="width:25%;padding-right:20px;">
+				<div id="cooperation_layout"></div>
+			</div>
+			<div style="width:75%;padding-left:20px;">
+				<div id="cooperation_comment"></div>
+			</div>
+		</div>
+
+		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 리더십 만족도</div>
+		<div style="display:flex;padding-top:20px;">
+			<div style="width:25%;padding-right:20px;">
+				<div id="leadership_layout"></div>
+			</div>
+			<div style="width:75%;padding-left:20px;">
+				<div id="leadership_comment"></div>
+			</div>
 		</div>
 	</div>
-
-
+	<div id="page2_2">
+		<div style="font-weight:bold;border-bottom:1px solid #000;padding-bottom:6px;">&gt; 강점/보완점</div>
+		<div style="padding:10px 0 20px; width:100%;"> 
+			<div id="totalcomment_layout" style="margin-top:10px"></div>
+		</div>
 	</div>
+	
 </div>
 
 <!-- <div>

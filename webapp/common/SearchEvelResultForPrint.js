@@ -5,15 +5,13 @@ function SearchEvelResultForPrint(_gateway, vPernr, vZyear) {
 	this.Zyear = vZyear;
 	this.User = {};
 	this._gateway = _gateway;
-	this.init();
-
+	this.onSearchUser(vPernr, vZyear);
 	Promise.all([
-		this.onSearchUser(vPernr, vZyear),
 		this.onSearchPhoto(vPernr, vZyear), 
 		this.onSearchEval(vPernr, vZyear),
 		this.onSearchPerformance(vPernr, vZyear),
 		this.onSearchCompetency(vPernr, vZyear),
-		this.onSearch360(vPernr, vZyear)
+		this.onSearch360(vPernr, vZyear, this.User)
 	]).then(function() {
 		
 	}.bind(this));
@@ -63,10 +61,11 @@ onSearchUser : function(vPernr, vZyear){
 		success: function(d) {
 
 			if(d){ 
-				this.User = d.d;
 				$('#Name').text(d.d.nickname);
 				$('#Title').text(d.d.title);
 				$('#Title1').text(d.d.department + " / " + d.d.custom01);
+				this.User.nickname = d.d.nickname;
+				this.User.title = d.d.title;
 			}
 		
 		}.bind(this),
@@ -439,7 +438,7 @@ onSearchCompetency : function(vPernr, vZyear){
 	});
 },
 
-onSearch360 : function(vPernr, vZyear){
+onSearch360 : function(vPernr, vZyear, vEmployee){
 	var oData2 = [{ // 직무만족도
 		Score1 : 0, Score2 : 0, Score3 : 0, Score4 : 0,
 		Description1 : "", Description2 : "", Description3 : "", Description4 : "",
@@ -460,10 +459,10 @@ onSearch360 : function(vPernr, vZyear){
 		  Description1_2 : "", Description2_2 : "", Description3_2 : "", Description4_2 : "",
 	  }];
 	  
-	for(var i=0; i<=3; i++){
-		oData2[i].nickname = this.User.nickname;
-		oData2[i].title = this.User.title;
-	}
+	// for(var i=0; i<=3; i++){
+	// 	oData2[i].nickname = vEmployee.nickname;
+	// 	oData2[i].title = vEmployee.title;
+	// }
 
 
 	var vFormTemplateId ="",
@@ -779,15 +778,381 @@ onSearch360 : function(vPernr, vZyear){
 										}
 
 
-										
-										//    common.SearchEvalResult._JSONModel.setProperty("/summary", summary);
-										
-										// 평가 점수 조회 완료
-										//    common.SearchEvalResult._MessageJSONModel.setProperty("/Data/2", {Type : "Success", Text : common.SearchEvalResult.oBundleText.getText("MSG_12021")});
+										// 2. 강점
+
+										// 다면평가 Table 그리기
+										var make360Table = function(layout, comment, idx){
+											var layoutBody = [],
+												commentBody = [];
+											if (rating.length) {
+												layoutBody = layoutBody +  [
+													'<tr>',
+														'<td style="text-align:center">', "상사", '</td>',
+														'<td style="text-align:center">', oData2[idx].Score1|| '', '</td>',
+													'</tr>',
+													'<tr>',
+														'<td style="text-align:center">', "동료(팀내)", '</td>',
+														'<td style="text-align:center">', oData2[idx].Score2|| '', '</td>',
+													'</tr>',
+													'<tr>',
+														'<td style="text-align:center">', "동료(팀외)", '</td>',
+														'<td style="text-align:center">', oData2[idx].Score3|| '', '</td>',
+													'</tr>',
+													'<tr>',
+														'<td style="text-align:center">', "부하", '</td>',
+														'<td style="text-align:center">', oData2[idx].Score4|| '', '</td>',
+													'</tr>'
+												].join('');
+
+												var body1 = [
+													'<table style="width:100%;">',
+														'<colgroup>',
+															'<col style="width:50%"/><col style="width:50%" />',
+														'</colgroup>',
+														'<thead>',
+															'<tr><th >평가자</th><th>점수</th>',
+														'</thead>',
+														'<tbody>',
+														layoutBody,
+														'</tbody>',
+													'</table>'
+													].join('');
+	
+												layout.html(body1);
+
+												var vComment = "";
+												if(idx == 0){
+													vComment =  vEmployee.nickname +" " + vEmployee.title +"님의 일처리 능력은 (  )이다.";
+												}else if(idx == 1){
+													vComment =  vEmployee.nickname +" " + vEmployee.title +"님과 함께 일하는 것은 (  )이다.";
+												}else if(idx == 2){
+													vComment =  vEmployee.nickname +" " + vEmployee.title +"님의 리더십 스타일은 (  )이다.";
+												}
+												
+												if(idx == 0 || idx == 1){
+													commentBody = [
+														'<tr>',
+															'<td style="text-align:center;"  rowspan="4">', vComment , '</td>',
+															'<td style="text-align:center">', "상사", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[idx].Description1) || '', '</td>',
+															// '<td style="text-align:center">', onChangeComment(oData2[0].Description1).replace(/<p>- /g, "")|| '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "동료(팀내)", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[idx].Description2) || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "동료(팀외)", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[idx].Description3) || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "부하", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[idx].Description4) || '', '</td>',
+														'</tr>'
+													].join('');
+	
+													var body2 = [
+														'<table style="width:100%;">',
+															'<colgroup>',
+																'<col style="width:20%"/><col style="width:15%" /><col style="width:65%" />',
+															'</colgroup>',
+															'<thead>',
+																'<tr><th>설명</th><th>평가자</th><th>응답내용</th></tr>',
+															'</thead>',
+															'<tbody>',
+															commentBody,
+															'</tbody>',
+														'</table>'
+														].join('');
+				
+													comment.html(body2);	
+												}else if(idx == 2){
+													commentBody = [
+														'<tr>',
+															'<td style="text-align:center;"  rowspan="4">', vComment , '</td>',
+															'<td style="text-align:center">', "상사", '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_1 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_2 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_3 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_4 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_5 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_6 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Description1 || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "동료(팀내)", '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score1_1 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score2_2 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score2_3 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score2_4 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score2_5 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score2_6 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Description2 || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "동료(팀외)", '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score3_1 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score3_2 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score3_3 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score3_4 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score3_5 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score3_6 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Description3 || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "부하", '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score4_1 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score4_2 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score4_3 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score4_4 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score4_5 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Score4_6 || '', '</td>',
+															'<td style="text-align:center;">', oData2[idx].Description4 || '', '</td>',
+														'</tr>'
+													].join('');
+								
+	
+													var body2 = [
+														'<table style="width:100%;">',
+															'<colgroup>',
+																'<col style="width:18%"/><col style="width:12%" /><col style="width:7%" />'+
+																'<col style="width:7%"/><col style="width:7%" /><col style="width:7%" />'+
+																'<col style="width:7%"/><col style="width:7%" /><col style="width:28%" />'+
+															'</colgroup>',
+															'<thead>',
+																'<tr><th>설명</th><th>평가자</th><th>지시형</th><th>비전형</th><th>솔선형</th><th>친화형</th><th>육성형</th>'+
+																'<th>민주형</th><th>기타</th></tr>',
+															'</thead>',
+															'<tbody>',
+															commentBody,
+															'</tbody>',
+														'</table>'
+														].join('');
+				
+													comment.html(body2);
+												}
+												
+											}
+										}; 
+
+										var id1 = "";
+										var url5 = "/odata/fix/FormCompetencySection(formDataId=" + formDataId + "L,formContentId=" + formContentId[formContentId.length-1] + "L,sectionIndex=4)/competencies";
+										$.getJSON({
+											url: url5,
+											async : false,
+											success: function(d) {
+												var data = d.d;
+												
+												if(data && data.results.length){
+													id1 = data.results[0].itemId;
+												}
+												
+											}.bind(this),
+											error: function(jqXHR) {
+												// this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url2);
+											}.bind(this),
+											complete: function() {
+												// this.spinner(false);
+											}.bind(this)
 										});
-										//rating
-										console.log("rating");
-										console.log(rating);
+										
+										if(id1 != ""){
+											var promise2 = [], description1 = [];
+											for(var i=0; i<rater.length; i++){
+												var url6 = "/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[i].formContentId + "L,itemId=" + id1 + "L,sectionIndex=4)/othersRatingComment";
+												promise2.push(
+													new Promise(function(resolve, reject){
+														$.getJSON({
+															url: url6,
+															success: function(d) {
+																var data = d.d;
+																
+																if(data.results && data.results.length > 0){
+																	description1.push({
+																		formContentId : data.results[0].formContentId,
+																		comment : onChangeComment(data.results[0].comment)
+																	});
+																}
+																resolve();
+															}.bind(this),
+															error: function(jqXHR) {
+																// this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url2);
+															}.bind(this),
+															complete: function() {
+																// this.spinner(false);
+															}.bind(this)
+														});
+													})
+												);
+											}
+											
+											Promise.all(promise2).then(function(){
+												setTimeout(function(){
+													var comnt1 = "", comnt2 = "", comnt3 = "", comnt4 = "";
+													for(var i=0; i<description1.length; i++){
+														for(var j=0; j<rater.length; j++){
+															if(description1[i].formContentId == rater[j].formContentId){
+																switch(rater[j].category){
+																	case "상사":
+																		comnt1 = comnt1 + description1[i].comment;
+																		break;
+																	case "동료(팀내)":
+																		comnt2 = comnt2 + description1[i].comment;
+																		break;
+																	case "동료(팀외)":
+																		comnt3 = comnt3 + description1[i].comment;
+																		break;
+																	case "부하":
+																		comnt4 = comnt4 + description1[i].comment;
+																		break;
+																}
+															}
+														}
+													}
+													
+													for(var i=1; i<=4; i++){
+														eval("oData2[3].Description" + i + "_1 = comnt" + i);
+													}
+												});
+											});
+										}
+										
+										// 3. 보완점
+										var id2 = "";
+										var url7 = "/odata/fix/FormCompetencySection(formDataId=" + formDataId + "L,formContentId=" + formContentId[formContentId.length-1] + "L,sectionIndex=5)/competencies";
+										$.getJSON({
+											url: url7,
+											async : false,
+											success: function(d) {
+												var data = d.d;
+												
+												if(data && data.results.length){
+													id2 = data.results[0].itemId;
+												}
+												resolve();
+											}.bind(this),
+											error: function(jqXHR) {
+												// this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url2);
+											}.bind(this),
+											complete: function() {
+												// this.spinner(false);
+											}.bind(this)
+										});
+										
+										if(id2 != ""){
+											var promise3 = [], description2 = [];
+											for(var i=0; i<rater.length; i++){
+												var url6 = "/odata/fix/FormCompetency(formDataId=" + formDataId + "L,formContentId=" + rater[i].formContentId + "L,itemId=" + id1 + "L,sectionIndex=4)/othersRatingComment";
+												promise3.push(
+													new Promise(function(resolve, reject){
+														$.getJSON({
+															url: url6,
+															success: function(d) {
+																var data = d.d;
+																
+																if(data.results && data.results.length > 0){
+																	description2.push({
+																		formContentId : data.results[0].formContentId,
+																		comment : onChangeComment(data.results[0].comment)
+																	});
+																}
+																resolve();
+																
+															}.bind(this),
+															error: function(jqXHR) {
+																// this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EvalGoalPortlet.fill ' + url2);
+															}.bind(this),
+															complete: function() {
+																// this.spinner(false);
+															}.bind(this)
+														});
+													})
+												);
+											}
+											
+											Promise.all(promise3).then(function(){
+												setTimeout(function(){
+													var comnt1 = "", comnt2 = "", comnt3 = "", comnt4 = "";
+													for(var i=0; i<description2.length; i++){
+														for(var j=0; j<rater.length; j++){
+															if(description2[i].formContentId == rater[j].formContentId){
+																switch(rater[j].category){
+																	case "상사":
+																		comnt1 = comnt1 + description2[i].comment;
+																		break;
+																	case "동료(팀내)":
+																		comnt2 = comnt2 + description2[i].comment;
+																		break;
+																	case "동료(팀외)":
+																		comnt3 = comnt3 + description2[i].comment;
+																		break;
+																	case "부하":
+																		comnt4 = comnt4 + description2[i].comment;
+																		break;
+																}
+															}
+														}
+													}
+													
+													for(var i=1; i<=4; i++){
+														eval("oData2[3].Description" + i + "_2 = comnt" + i);
+													}
+
+
+													console.log("rating");
+													console.log(rating);
+
+													make360Table($('#job_layout'), $('#job_comment'), 0 );
+													make360Table($('#cooperation_layout'), $('#cooperation_comment'), 1 );
+													if(oData2[0].section2 == "X"){
+														make360Table($('#leadership_layout'), $('#leadership_comment'), 2 );
+													}
+													
+													// 강점/보완점 Table
+													var totallayout = $('#totalcomment_layout'); 
+													var totalBody = [
+														'<tr>',
+															'<td style="text-align:center">', "상사", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description1_1) || '', '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description1_2) || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "동료(팀내)", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description2_1) || '', '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description2_2) || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "동료(팀외)", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description3_1) || '', '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description3_2) || '', '</td>',
+														'</tr>',
+														'<tr>',
+															'<td style="text-align:center">', "부하", '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description4_1) || '', '</td>',
+															'<td style="text-align:left; padding-left:10px;">', onChangeComment(oData2[3].Description4_2) || '', '</td>',
+														'</tr>'
+													].join('');
+
+													var totalBody2 = [
+														'<table style="width:100%;">',
+															'<colgroup>',
+																'<col style="width:20%"/><col style="width:40%" /><col style="width:40%" />',
+															'</colgroup>',
+															'<thead>',
+																'<tr><th>평가자</th><th>강점</th><th>보완점</th></tr>',
+															'</thead>',
+															'<tbody>',
+															totalBody,
+															'</tbody>',
+														'</table>'
+														].join('');
+				
+													totallayout.html(totalBody2);	
+												});
+											});
+										}
+									});
+										
 								});
 									
 								}.bind(this),
