@@ -120,6 +120,8 @@
 			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vBukrs = oController.getUserGubun();
+			var vThumUp = $.app.byId(oController.PAGEID + "_ThumUp");
+			var vThumDown = $.app.byId(oController.PAGEID + "_ThumDown");
 			
 			var sendObject = {};
 			// Header
@@ -142,6 +144,17 @@
 						oController.RegistModel.setData({FormData: oCopiedRow});
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
+
+						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
+							vThumUp.toggleStyleClass("button-HiTokTok-check", true);
+							vThumDown.toggleStyleClass("button-HiTokTok-check", false);
+						}
+						
+						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
+							vThumUp.toggleStyleClass("button-HiTokTok-check", false);
+							vThumDown.toggleStyleClass("button-HiTokTok-check", true);
+						}
+
 						oController.setComments();
 					}
 				},
@@ -922,20 +935,24 @@
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
-				Zgood : ""
+				Zgood : "X"
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
-				oSendData.Zgood = "X";
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(false);
 				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) + 1);
+				vThumUp.toggleStyleClass("button-HiTokTok-check", true);
+				vThumDown.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "");
+				oSendData.Zcanc = "X";
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(true);
 				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) - 1);
+				vThumUp.toggleStyleClass("button-HiTokTok-check", false);
+				vThumDown.toggleStyleClass("button-HiTokTok-check", false);
 			}
 
 			var sendObject = {};
@@ -970,20 +987,24 @@
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
-				Zbed : ""
+				Zbed : "X"
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
-				oSendData.Zbed = "X";
 				vThumUp.setEnabled(false);
 				vThumDown.setEnabled(true);
 				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) + 1);
+				vThumUp.toggleStyleClass("button-HiTokTok-check", false);
+				vThumDown.toggleStyleClass("button-HiTokTok-check", true);
 			}else {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "");
+				oSendData.Zcanc = "X";
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(true);
 				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) - 1);
+				vThumUp.toggleStyleClass("button-HiTokTok-check", false);
+				vThumDown.toggleStyleClass("button-HiTokTok-check", false);
 			}
 			
 
@@ -1021,20 +1042,24 @@
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
-				Zgood : ""
+				Zgood : "X"
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
-				oSendData.Zgood = "X";
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(false);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
+				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", true);
+				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
+				oSendData.Zcanc = "X";
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(true);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) - 1);
+				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", false);
+				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}
 			
 
@@ -1073,20 +1098,24 @@
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
-				Zbed : ""
+				Zbed : "X"
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
-				oSendData.Zbed = "X";
 				this.g_CommGood.setEnabled(false);
 				this.g_CommBed.setEnabled(true);
 				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) + 1);
+				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", false);
+				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", true);
 			}else {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "");
+				oSendData.Zcanc = "X";
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(true);
 				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) - 1);
+				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", false);
+				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}
 			
 
@@ -1126,20 +1155,24 @@
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
 				Seqnr3 : this.g_ReHiSeqnr2.getText(),
-				Zgood : ""
+				Zgood : "X"
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
-				oSendData.Zgood = "X";
 				this.g_ReCommGood.setEnabled(true);
 				this.g_ReCommBed.setEnabled(false);
 				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) + 1);
+				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", true);
+				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "");
+				oSendData.Zcanc = "X";
 				this.g_ReCommGood.setEnabled(true);
 				this.g_ReCommBed.setEnabled(true);
 				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) - 1);
+				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", false);
+				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}
 			
 
@@ -1178,20 +1211,24 @@
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
-				Zbed : ""
+				Zbed : "X"
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
-				oSendData.Zbed = "X";
 				this.g_ReCommBed.setEnabled(true);
 				this.g_ReCommGood.setEnabled(false);
 				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) + 1);
+				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", false);
+				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", true);
 			}else {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "");
+				oSendData.Zcanc = "X";
 				this.g_ReCommBed.setEnabled(true);
 				this.g_ReCommGood.setEnabled(true);
 				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) - 1);
+				this.g_ReCommGood.toggleStyleClass("button-HiTokTok-check", false);
+				this.g_ReCommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}
 
 			var sendObject = {};
