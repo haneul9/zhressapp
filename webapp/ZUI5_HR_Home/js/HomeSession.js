@@ -567,7 +567,7 @@ callLogoutActionPage: function() {
 
 callLogoutIndexPage: function() {
 
-	$('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; }).attr('src', '/index.html');
+	$('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; });
 },
 
 pernr: function() {
