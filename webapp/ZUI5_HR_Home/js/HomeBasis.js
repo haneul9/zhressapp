@@ -599,6 +599,7 @@ odataCsrfToken: function(o, namespace, async) {
 
 	return $.getJSON({
 		async: typeof async !== 'undefined' ? async : true,
+		cache: false, // 매우 중요
 		url: this.s4hanaURL(namespace),
 		headers: {
 			'x-csrf-token': 'Fetch'
