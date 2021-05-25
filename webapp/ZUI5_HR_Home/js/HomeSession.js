@@ -554,8 +554,10 @@ logout: function() {
 
 callLogoutPage: function() {
 
-	// $('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', '/Logout.html');
-	this.callLogoutActionPage();
+	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke',
+	logoutAction = 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
+
+	$('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', logoutAction);
 },
 
 callLogoutActionPage: function() {
@@ -568,6 +570,9 @@ callLogoutActionPage: function() {
 
 callLogoutIndexPage: function() {
 
+	setTimeout(function() {
+		location.href = '/Logout.html';
+	}, 3000);
 	// $('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; }).attr('src', '/index.html');
 },
 
