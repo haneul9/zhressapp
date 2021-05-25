@@ -922,20 +922,20 @@
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
-				Zgood : "X"
+				Zgood : ""
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
+				oSendData.Zgood = "X";
+				vThumUp.setEnabled(true);
+				vThumDown.setEnabled(false);
+				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) + 1);
 			}else {
-				MessageBox.error(oController.getBundleText("MSG_56014"), { title: oController.getBundleText("LABEL_00149")});
-				return;
+				vThumUp.setEnabled(true);
+				vThumDown.setEnabled(true);
+				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) - 1);
 			}
-			
-			// vThumUp.setEnabled(true);
-			// vThumDown.setEnabled(false);
-			
-			this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) + 1);
 
 			var sendObject = {};
 			// Header
@@ -969,19 +969,21 @@
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
-				Zbed : "X"
+				Zbed : ""
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
+				oSendData.Zbed = "X";
+				vThumUp.setEnabled(false);
+				vThumDown.setEnabled(true);
+				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) + 1);
 			}else {
-				MessageBox.error(oController.getBundleText("MSG_56015"), { title: oController.getBundleText("LABEL_00149")});
-				return;
+				vThumUp.setEnabled(true);
+				vThumDown.setEnabled(true);
+				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) - 1);
 			}
 			
-			// vThumUp.setEnabled(false);
-			// vThumDown.setEnabled(true);
-			this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1010,25 +1012,28 @@
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_CommGoodText = oEvent.getSource().getParent().getItems()[1];
+			this.g_CommGood = oEvent.getSource();
+			this.g_CommBed = oEvent.getSource().getParent().getItems()[5];
 
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
-				Zgood : "X"
+				Zgood : ""
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
+				oSendData.Zgood = "X";
+				this.g_CommGood.setEditable(true);
+				this.g_CommBed.setEditable(false);
+				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 			}else {
-				MessageBox.error(oController.getBundleText("MSG_56014"), { title: oController.getBundleText("LABEL_00149")});
-				return;
+				this.g_CommGood.setEditable(true);
+				this.g_CommBed.setEditable(true);
+				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) - 1);
 			}
 			
-			// vThumUp.setEnabled(true);
-			// vThumDown.setEnabled(false);
-			
-			this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1058,24 +1063,28 @@
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_CommBedText = oEvent.getSource().getParent().getItems()[3];
+			this.g_CommGood = oEvent.getSource().getParent().getItems()[4];
+			this.g_CommBed = oEvent.getSource();
 			
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
-				Zbed : "X"
+				Zbed : ""
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
+				oSendData.Zbed = "X";
+				this.g_CommGood.setEditable(false);
+				this.g_CommBed.setEditable(true);
+				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) + 1);
 			}else {
-				MessageBox.error(oController.getBundleText("MSG_56015"), { title: oController.getBundleText("LABEL_00149")});
-				return;
+				this.g_CommGood.setEditable(true);
+				this.g_CommBed.setEditable(true);
+				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) - 1);
 			}
 			
-			// vThumUp.setEnabled(false);
-			// vThumDown.setEnabled(true);
-			this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1105,23 +1114,29 @@
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[2];
 			this.g_ReCommGoodText = oEvent.getSource().getParent().getItems()[1];
+			this.g_ReCommGood = oEvent.getSource();
+			this.g_ReCommBed = oEvent.getSource().getParent().getItems()[5];
 
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
 				Seqnr3 : this.g_ReHiSeqnr2.getText(),
-				Zgood : "X"
+				Zgood : ""
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
+				oSendData.Zgood = "X";
+				this.g_ReCommGood.setEditable(true);
+				this.g_ReCommBed.setEditable(false);
+				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) + 1);
 			}else {
-				MessageBox.error(oController.getBundleText("MSG_56014"), { title: oController.getBundleText("LABEL_00149")});
-				return;
+				this.g_ReCommGood.setEditable(true);
+				this.g_ReCommBed.setEditable(true);
+				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) - 1);
 			}
 			
-			this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
@@ -1151,22 +1166,27 @@
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[2];
 			this.g_ReCommBedText = oEvent.getSource().getParent().getItems()[3];
+			this.g_ReCommGood = oEvent.getSource();
+			this.g_ReCommBed = oEvent.getSource().getParent().getItems()[5];
 			
 			var oSendData = {
 				Sdate : oRowData.Sdate,
 				Seqnr : oRowData.Seqnr,
 				Seqnr2 : this.g_HiSeqnr2.getText(),
-				Zbed : "X"
+				Zbed : ""
 			};
 			
 			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
+				oSendData.Zbed = "X";
+				this.g_ReCommBed.setEditable(true);
+				this.g_ReCommGood.setEditable(false);
+				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) + 1);
 			}else {
-				MessageBox.error(oController.getBundleText("MSG_56015"), { title: oController.getBundleText("LABEL_00149")});
-				return;
+				this.g_ReCommBed.setEditable(true);
+				this.g_ReCommGood.setEditable(true);
+				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) - 1);
 			}
-
-			this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) + 1);
 
 			var sendObject = {};
 			// Header
