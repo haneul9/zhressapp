@@ -932,6 +932,7 @@
 				vThumDown.setEnabled(false);
 				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) + 1);
 			}else {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "");
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(true);
 				this.RegistModel.setProperty("/FormData/Zgood", parseInt(this.RegistModel.getProperty("/FormData/Zgood")) - 1);
@@ -979,6 +980,7 @@
 				vThumDown.setEnabled(true);
 				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) + 1);
 			}else {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "");
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(true);
 				this.RegistModel.setProperty("/FormData/Zbed", parseInt(this.RegistModel.getProperty("/FormData/Zbed")) - 1);
@@ -1029,6 +1031,7 @@
 				this.g_CommBed.setEditable(false);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 			}else {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
 				this.g_CommGood.setEditable(true);
 				this.g_CommBed.setEditable(true);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) - 1);
@@ -1080,6 +1083,7 @@
 				this.g_CommBed.setEditable(true);
 				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) + 1);
 			}else {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "");
 				this.g_CommGood.setEditable(true);
 				this.g_CommBed.setEditable(true);
 				this.g_CommBedText.setText(parseInt(this.g_CommBedText.getText()) - 1);
@@ -1132,6 +1136,7 @@
 				this.g_ReCommBed.setEditable(false);
 				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) + 1);
 			}else {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "");
 				this.g_ReCommGood.setEditable(true);
 				this.g_ReCommBed.setEditable(true);
 				this.g_ReCommGoodText.setText(parseInt(this.g_ReCommGoodText.getText()) - 1);
@@ -1183,6 +1188,7 @@
 				this.g_ReCommGood.setEditable(false);
 				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) + 1);
 			}else {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "");
 				this.g_ReCommBed.setEditable(true);
 				this.g_ReCommGood.setEditable(true);
 				this.g_ReCommBedText.setText(parseInt(this.g_ReCommBedText.getText()) - 1);
