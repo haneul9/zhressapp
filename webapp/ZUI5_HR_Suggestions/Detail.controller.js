@@ -245,12 +245,14 @@
 														icon: "sap-icon://thumb-up",
 														press: oController.OnCommThumbUp.bind(oController),
 														text: "{i18n>LABEL_56020}" // 좋아요
-													}).addStyleClass("button-light-sm"),
+													}).addStyleClass("button-light-sm")
+													.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y"),
 													new sap.m.Button({ 
 														icon: "sap-icon://thumb-down",
 														press: oController.OnCommThumbDown.bind(oController),
 														text: "{i18n>LABEL_56021}" // 싫어요
-													}).addStyleClass("button-light-sm"),
+													}).addStyleClass("button-light-sm")
+													.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N"),
 													new sap.m.Button({
 														press: oController.onCommentSubBtn.bind(oController),
 														icon: "sap-icon://comment",
@@ -391,13 +393,15 @@
 															new sap.m.Button({ 
 																icon: "sap-icon://thumb-up",
 																press: oController.OnReCommThumbUp.bind(oController),
-																text: "{i18n>LABEL_56020}" 
-															}).addStyleClass("button-light-sm"),
-															new sap.m.Button({ // 싫어요
+																text: "{i18n>LABEL_56020}" // 좋아요
+															}).addStyleClass("button-light-sm")
+															.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y"),
+															new sap.m.Button({
 																icon: "sap-icon://thumb-down",
 																press: oController.OnReCommThumbDown.bind(oController),
 																text: "{i18n>LABEL_56021}" // 싫어요
-															}).addStyleClass("button-light-sm"),
+															}).addStyleClass("button-light-sm")
+															.toggleStyleClass("button-HiTokTok-check", localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N"),
 															new sap.m.Button({
 																press: oController.onSubCommentReBtn.bind(oController),
 																text: "{i18n>LABEL_56013}" // 수정
