@@ -50,8 +50,8 @@
 		
 		onAfterShow: function() {
 
+			this.getDetailData(this);
             this.onBeforeOpenDetailDialog(this);
-            this.getDetailData(this);
 			BusyIndicator.hide();
         },
 

@@ -788,7 +788,7 @@
 			this.g_CanBtn = oEvent.getSource().getParent().getItems()[6];
 			this.g_HiBox = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[0];
 			this.g_HiInputPword = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[0].getItems()[1];
-			this.g_CoDate = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[2].getItems()[0];
+			this.g_CoDate = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[1].getItems()[0];
 			this.g_HiPword = oPWord;
 			this.g_ReGubun = "R";
 			

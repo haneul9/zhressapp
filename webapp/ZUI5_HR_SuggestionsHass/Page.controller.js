@@ -67,42 +67,18 @@
 				fitContainer: true,
 				items: [
 					new sap.ui.core.Icon({
-						visible: {
-							path: "Zgood",
-							formatter: function(v) {
-								return v !== "0" && Common.checkNull(!v);
-							}
-						},
 						src: "sap-icon://thumb-up"
 					})
 					.addStyleClass("icon-HiTokTok ok"),
 					new sap.m.Text({
-						visible: {
-							path: "Zgood",
-							formatter: function(v) {
-								return v !== "0" && Common.checkNull(!v);
-							}
-						},
 						width: "auto",
 						text: "{Zgood}"
 					}).addStyleClass("mr-12px font-12px"),
 					new sap.ui.core.Icon({
-						visible: {
-							path: "Zbed",
-							formatter: function(v) {
-								return v !== "0" && Common.checkNull(!v);
-							}
-						},
 						src: "sap-icon://thumb-down"
 					})
 					.addStyleClass("icon-HiTokTok no"),
 					new sap.m.Text({
-						visible: {
-							path: "Zbed",
-							formatter: function(v) {
-								return v !== "0" && Common.checkNull(!v);
-							}
-						},
 						width: "auto",
 						text: "{Zbed}"
 					}).addStyleClass("font-12px")
