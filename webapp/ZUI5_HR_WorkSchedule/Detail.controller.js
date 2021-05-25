@@ -136,10 +136,15 @@ sap.ui.define(
 
             changeDate : function(oEvent){
                 var oController = $.app.getController($.app.CONTEXT_PATH + ".Detail");
-                if(oEvent && oEvent.getParameters().valid == false){
-                    MessageBox.alert(oController.getBundleText("MSG_02047"), {title: oController.getBundleText("LABEL_00149")}); // 잘못된 일자형식입니다.
-                    oEvent.getSource().setValue("");
-                    return;
+
+                if(oEvent){
+                    if(oEvent.getParameters().valid == false){
+                        MessageBox.alert(oController.getBundleText("MSG_02047"), {title: oController.getBundleText("LABEL_00149")}); // 잘못된 일자형식입니다.
+                        oEvent.getSource().setValue("");
+                        return;
+                    }
+                   
+                    this.oModel.setProperty("/Copy", null);
                 }
 
                 var oData = this.oModel.getProperty("/Data1");
@@ -149,8 +154,6 @@ sap.ui.define(
                         pernr.push(oData[i].Pernr);
                     }
                 }
-
-                this.oModel.setProperty("/Copy", null);
 
                 this.oModel.setProperty("/Data1", []);
                 for(var i=0; i<pernr.length; i++){
@@ -233,10 +236,10 @@ sap.ui.define(
                             continue;
                         }
 
-                        // 사후신청의 경우 Cbchk == "2" 인 데이터만 추가
-                        if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST && data1.Cbchk != "2"){
-                            continue;
-                        }
+                        // // 사후신청의 경우 Cbchk == "2" 인 데이터만 추가
+                        // if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST && data1.Cbchk != "2"){
+                        //     continue;
+                        // }
                         
                         data1.Idx = oData.length;
                         data1.EditMode = data1.Status == "" || data1.Status == "AA" ? true : false;
@@ -660,19 +663,16 @@ sap.ui.define(
                                     if(data.Url) {
                                         Common.openPopup.call(oController, data.Url);
                                     }
-            
-                                    // this.search.call(this);
-            
-                                    // if(conType === WorkSchedule.ProcessType.SAVE) {
-                                    //     this.searchDetailData.call(this);
-                                    // } else if(conType !== WorkSchedule.ProcessType.APPROVE_CANCEL) {
-                                    //     this.oDetailDialog.close();
-                                    // }
                                     
                                     if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL){
                                         oController.resetTarget(oController, data);
                                     } else {
-                                        oController.onBack(oController);
+                                        if(Prcty == WorkSchedule.ProcessType.SAVE){
+                                            // 2021-05-25 저장 시 리스트 이동 없이 근무일 데이터 재조회
+                                            oController.changeDate();
+                                        } else {
+                                            oController.onBack(oController);
+                                        }
                                     }
                                 }.bind(this)
                             });
