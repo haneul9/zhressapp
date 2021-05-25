@@ -46,7 +46,7 @@ sap.ui.define(
 											dateValue: "{Begda}",
 											secondDateValue: "{Endda}",
 											delimiter: "~",
-											width: "210px"
+											width: "225px"
 										})
 									]
 								}).addStyleClass("search-field-group"),
