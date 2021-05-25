@@ -135,6 +135,7 @@ sap.ui.define(
             },
 
             changeDate : function(oEvent){
+                var oController = $.app.getController($.app.CONTEXT_PATH + ".Detail");
                 if(oEvent && oEvent.getParameters().valid == false){
                     MessageBox.alert(oController.getBundleText("MSG_02047"), {title: oController.getBundleText("LABEL_00149")}); // 잘못된 일자형식입니다.
                     oEvent.getSource().setValue("");
@@ -825,17 +826,19 @@ sap.ui.define(
              * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
              */
             openOrgSearchDialog: function (oEvent) {
-                SearchOrg.oController = this.oController;
+                var oController = $.app.getController($.app.CONTEXT_PATH + ".Detail");
+                
+                SearchOrg.oController = oController;
                 SearchOrg.vActionType = "Multi";
                 SearchOrg.vCallControlId = oEvent.getSource().getId();
                 SearchOrg.vCallControlType = "MultiInput";
 
-                if (!this.oOrgSearchDialog) {
-                    this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
-                    $.app.getView().addDependent(this.oOrgSearchDialog);
+                if (!oController.oOrgSearchDialog) {
+                    oController.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", oController);
+                    $.app.getView().addDependent(oController.oOrgSearchDialog);
                 }
 
-                this.oOrgSearchDialog.open();
+                oController.oOrgSearchDialog.open();
             },
 
             getLocalSessionModel: Common.isLOCAL() ? function () {
