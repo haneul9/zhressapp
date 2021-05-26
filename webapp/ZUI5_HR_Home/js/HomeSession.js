@@ -532,7 +532,7 @@ logout: function() {
 						'</div>',
 						'<div class="form-group my-3 text-center d-none">',
 							'<div class="feedback-message valid-feedback d-block my-0" style="font-size:100%">',
-								'로그아웃 처리에 10 ~ 15초 정도의 시간이 소요됩니다.<br />로그인 화면이 나타날 때까지 기다려주세요.',
+								'로그아웃 처리에 다소 시간이 소요됩니다.<br />로그아웃 될때까지 기다려 주세요.',
 							'</div>',
 						'</div>',
 					'</div>',
