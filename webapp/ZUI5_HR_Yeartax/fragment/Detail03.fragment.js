@@ -45,15 +45,14 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03", {
 														}).addStyleClass("Font14 helpText PaddingRight10 PaddingTop6"),
 														new sap.m.Button("yeaUploader_AttachFileDelete", {
 															text : "파일삭제",
-															icon : "sap-icon://delete",
-															// press : oController.onDeleteAttachFile,
+															press : oController.onDeleteAttachFile,
 															visible : {
 																path : "EFname",
 																formatter : function(fVal){
 																	return fVal ? true : false;
 																}
 															}
-														})
+														}).addStyleClass("button-delete")
 													]
 												})]
 								 })]
