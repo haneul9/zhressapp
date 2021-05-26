@@ -545,7 +545,8 @@ logout: function() {
 
 		$('#ehr-logout-modal .modal-body').append([
 			'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',
-			'<iframe class="d-none" name="single-sign-out-second-iframe"></iframe>'
+			'<iframe class="d-none" name="single-sign-out-second-iframe"></iframe>',
+			'<iframe class="d-none" name="scp-logout-iframe"></iframe>'
 		]);
 
 		this.singleSignOut();
@@ -564,15 +565,22 @@ singleSignOut: function() {
 singleSignOutSecond: function() {
 
 	setTimeout(function() {
-		$('iframe[name="single-sign-out-second-iframe"]').on('load', this.moveToLogoutPage.bind(this)).attr('src', this.logoutEndpoint.call(this));
+		$('iframe[name="single-sign-out-second-iframe"]').on('load', this.scpLogout.bind(this)).attr('src', this.logoutEndpoint.call(this));
 	}.bind(this), 5000);
 },
 
-moveToLogoutPage: function() {
+scpLogout: function() {
 
 	setTimeout(function() {
-		location.href = '/Logout.html';
-	}, 5000);
+		$('iframe[name="scp-logout-iframe"]').on('load', this.moveToIndexPage.bind(this)).attr('src', '/Logout.html');
+	}.bind(this), 5000);
+},
+
+moveToIndexPage: function() {
+
+	setTimeout(function() {
+		location.href = '/index' + (this._gateway.isMobile() ? 'Mobile' : '') + '.html';
+	}.bind(this), 5000);
 },
 
 logoutEndpoint: function() {

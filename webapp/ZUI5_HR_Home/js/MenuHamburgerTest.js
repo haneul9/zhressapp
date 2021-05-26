@@ -294,11 +294,6 @@ urlData: function(url) {
 	}
 },
 
-menuData: function() {
-
-	return $.extend(true, {}, this.items);
-},
-
 // Top menu item html 생성
 topMenuItem: function(top) {
 
