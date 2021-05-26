@@ -521,16 +521,23 @@ logout: function() {
 						'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
 					'</div>',
 					'<div class="modal-body">',
-						'<div class="d-flex flex-column align-items-center">',
-							'<p>로그아웃하시겠습니까?</p>',
+						'<div class="form-group my-3 text-center">',
+							'로그아웃하시겠습니까?',
+						'</div>',
+						'<div class="form-group my-0 text-center">',
 							'<button type="button" class="btn btn-primary fn-logout">',
-								'<span class="spinner-border spinner-border-sm mb-2px mr-5px d-none" role="status" aria-hidden="true"></span>',
+								'<span class="spinner-border spinner-border-sm mb-2px mr-8px d-none" role="status" aria-hidden="true"></span>',
 								'로그아웃',
 							'</button>',
 						'</div>',
+						'<div class="form-group my-3 text-center d-none">',
+							'<div class="feedback-message valid-feedback d-block my-0" style="font-size:100%">',
+								'로그아웃 처리에 10 ~ 15초 정도의 시간이 소요됩니다.<br />로그인 화면이 나타날 때까지 기다려주세요.',
+							'</div>',
+						'</div>',
 					'</div>',
 					'<div class="modal-footer">',
-						'<button type="button" class="btn btn-light fn-logout-cancel" data-dismiss="modal">취소</button>',
+						'<button type="button" class="btn btn-light" data-dismiss="modal">취소</button>',
 					'</div>',
 				'</div>',
 			'</div>',
@@ -541,7 +548,8 @@ logout: function() {
 			.prop('disabled', true)
 			.find('.spinner-border').toggleClass('d-none', false);
 
-		$('#ehr-logout-modal .fn-logout-cancel').prop('disabled', true);
+		$('#ehr-logout-modal .feedback-message').parent().toggleClass('d-none', false);
+		$('#ehr-logout-modal [data-dismiss="modal"]').prop('disabled', true);
 
 		$('#ehr-logout-modal .modal-body').append([
 			'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',
