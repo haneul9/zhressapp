@@ -157,11 +157,13 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), { /
 			text: {
 				parts: [
 					{ path: columnInfo.id },
+					{ path: "Status1" },
 					{ path: "UrlA" },
+					{ path: "Status2" },
 					{ path: "UrlA1" }
 				],
-				formatter: function(v, UrlA, UrlA1) {
-					this.toggleStyleClass("mimic-link", !!UrlA || !!UrlA1);
+				formatter: function(v, Status1, UrlA, Status2, UrlA1) {
+					this.toggleStyleClass("mimic-link", (Status1 !== "AA" && UrlA) || (Status2 !== "AA" && UrlA1));
 					return v;
 				}
 			}

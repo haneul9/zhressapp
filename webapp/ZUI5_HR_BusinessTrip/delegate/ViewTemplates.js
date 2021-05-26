@@ -55,10 +55,11 @@ return { // 출장 신청/정산 view templates
 			text: {
 				parts: [
 					{ path: columnInfo.id },
+					{ path: "Status1" },
 					{ path: "UrlA" }
 				],
-				formatter: function(v, UrlA) {
-					this.toggleStyleClass("mimic-link", !!UrlA);
+				formatter: function(v, Status1, UrlA) {
+					this.toggleStyleClass("mimic-link", Status1 !== "AA" && UrlA);
 					return v;
 				}
 			}
