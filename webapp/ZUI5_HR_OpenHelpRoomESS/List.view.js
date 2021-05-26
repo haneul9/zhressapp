@@ -87,7 +87,7 @@ sap.ui.define([
 					new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
 						fitContainer: true,
 						width: "auto",
-						// height: "600px",
+						height: "800px",
 						visible: {
 							path: "/PDFData/Url",
 							formatter: function(v) {

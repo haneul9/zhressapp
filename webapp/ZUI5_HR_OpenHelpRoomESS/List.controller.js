@@ -188,8 +188,8 @@ sap.ui.define([
 
 						}else{
 							jQuery.sap.addUrlWhitelist("https", "esslddev.lottechem.com");
-							jQuery.sap.addUrlWhitelist("http", "ssvess1d", "7097");
 							jQuery.sap.addUrlWhitelist("https", "essprd.lottechem.com");
+							// jQuery.sap.addUrlWhitelist("http", "ssvess1d", "7097");
 
 							// oNoDataBox.setVisible(false);
 							oController.OpenHelpModel.setProperty("/Export", rExportData);
