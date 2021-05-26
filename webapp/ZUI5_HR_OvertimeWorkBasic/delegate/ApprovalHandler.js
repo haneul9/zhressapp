@@ -389,10 +389,9 @@ sap.ui.define(
                             Subty: elem.Awart,
                             Beguz: elem.BeguzT + elem.BeguzM,
                             Enduz: elem.EnduzT + elem.EnduzM,
-                            Repla: this.getReplaText.call(this, elem.Repla),
                             Comment: null
                         }));
-                    }.bind(this));
+                    });
 
                     ODataService.OvertimeApplySetByProcess.call(
                         this.oController, 
@@ -411,12 +410,6 @@ sap.ui.define(
                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: Process.bind(this)
                 });
-            },
-
-            getReplaText: function(vRepla) {
-                if(!vRepla) return "";
-
-                return [vRepla, "(", this.oModel.getProperty("/Replas").filter(function(o) { return o.Text === vRepla; })[0].Code, ")"].join("");
             },
 
             /**
@@ -450,7 +443,7 @@ sap.ui.define(
                                             EnduzM: templateData.EnduzM,
                                             Awart: templateData.Awart,
                                             Atext: templateData.Atext,
-                                            Repla: templateData.ReplaTx,
+                                            Repla: "${ReplaTx}(${Repla})".interpolate(templateData.ReplaTx, templateData.Repla),
                                             Jobco: templateData.Jobco,
                                             Comment: null
                                         }
