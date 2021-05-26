@@ -524,13 +524,13 @@ logout: function() {
 						'<div class="d-flex flex-column align-items-center">',
 							'<p>로그아웃하시겠습니까?</p>',
 							'<button type="button" class="btn btn-primary fn-logout">',
-								'<span class="spinner-border spinner-border-sm mr-5px d-none" role="status" aria-hidden="true"></span>',
+								'<span class="spinner-border spinner-border-sm mb-2px mr-5px d-none" role="status" aria-hidden="true"></span>',
 								'로그아웃',
 							'</button>',
 						'</div>',
 					'</div>',
 					'<div class="modal-footer">',
-						'<button type="button" class="btn btn-light" data-dismiss="modal">취소</button>',
+						'<button type="button" class="btn btn-light fn-logout-cancel" data-dismiss="modal">취소</button>',
 					'</div>',
 				'</div>',
 			'</div>',
@@ -540,6 +540,8 @@ logout: function() {
 		$(e.currentTarget)
 			.prop('disabled', true)
 			.find('.spinner-border').toggleClass('d-none', false);
+
+		$('#ehr-logout-modal .fn-logout-cancel').prop('disabled', true);
 
 		$('#ehr-logout-modal .modal-body').append([
 			'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',

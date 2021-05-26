@@ -5,7 +5,7 @@
 <!--
 	<meta http-equiv="refresh" content="0; url=UnderConstruction.html" />
 -->
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <title>Hi HR</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -38,9 +38,27 @@
 <script src="ZUI5_HR_Home/js/lib/jquery.jscrollpane.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/Chart.bundle.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/chartjs-plugin-datalabels.min.js"></script>
 <script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
+<script src="ZUI5_HR_Home/js/HomeSession.js"></script>
 <script src="ZUI5_HR_Home/js/HomeI18n.js"></script>
+<script src="ZUI5_HR_Home/js/HomeMFA.js"></script>
+<script src="ZUI5_HR_Home/js/MenuMegaDropdown.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/AbstractPortlet.js"></script>
+<script src="ZUI5_HR_Home/js/portlets/EmployeePortlet.js"></script><!--				P101 개인정보 -->
+<script src="ZUI5_HR_Home/js/portlets/NoticePortlet.js"></script><!--				P102 공지사항 -->
+<script src="ZUI5_HR_Home/js/portlets/QuickLinkPortlet.js"></script><!--			P103 바로가기 -->
+<script src="ZUI5_HR_Home/js/portlets/FavoriteMenuPortlet.js"></script><!--			P104 즐겨찾는 메뉴 -->
+<script src="ZUI5_HR_Home/js/portlets/CalendarPortlet.js"></script><!--				P105 팀 달력 -->
+<script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--			P106 하이톡톡 -->
+<script src="ZUI5_HR_Home/js/portlets/EvalGoalPortlet.js"></script><!--				P107 목표관리 -->
+<script src="ZUI5_HR_Home/js/portlets/EvalGoalProgressingPortlet.js"></script><!--	P108 팀원 목표 진척율 -->
+<script src="ZUI5_HR_Home/js/portlets/WorkstimeStatusPortlet.js"></script><!--		P109 My Working Time -->
+<script src="ZUI5_HR_Home/js/portlets/VacationPortlet.js"></script><!--				P110 휴가사용현황 -->
+<script src="ZUI5_HR_Home/js/portlets/VacationForHQPortlet.js"></script><!--		P111 연차사용현황 : 임원용 -->
+<script src="ZUI5_HR_Home/js/portlets/LanguageScorePortlet.js"></script><!--		P112 외국어 등급 현황 -->
+<script src="ZUI5_HR_Home/js/PortletsTest.js"></script>
 <script src="common/SearchEvelResultForPrint.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/stackblur-canvas@^1/dist/stackblur.min.js"></script>    
@@ -48,7 +66,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.13/svg.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.7/highcharts.js"></script> 
 <script>
-
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event) { history.pushState(null, document.title, location.href); });
 $( document ).ready(function() {
 	var _gateway = window._gateway = new HomeGateway();
 	window._basis = new HomeBasis(_gateway);

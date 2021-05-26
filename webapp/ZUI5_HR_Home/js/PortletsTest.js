@@ -1,4 +1,4 @@
-/* global Chart EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet VacationForHQPortlet */
+/* global Chart EmployeePortlet NoticePortlet QuickLinkPortlet FavoriteMenuPortlet CalendarPortlet HiTalkTalkPortlet EvalGoalPortlet EvalGoalProgressingPortlet WorkstimeStatusPortlet VacationPortlet VacationForHQPortlet LanguageScorePortlet */
 function Portlets(_gateway) {
 
 	this._gateway = _gateway;
@@ -26,7 +26,8 @@ init: function() {
 		'P108': EvalGoalProgressingPortlet,	// 팀원 목표 진척율
 		'P109': WorkstimeStatusPortlet,		// My Working Time
 		'P110': VacationPortlet,			// 휴가사용현황
-		'P111': VacationForHQPortlet		// 연차사용현황 : 임원용
+		'P111': VacationForHQPortlet,		// 연차사용현황 : 임원용
+		'P112': LanguageScorePortlet		// 외국어 등급 현황
 	};
 
 	Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
