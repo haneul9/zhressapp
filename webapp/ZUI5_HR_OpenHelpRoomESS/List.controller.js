@@ -3,11 +3,9 @@ sap.ui.define([
 	"../common/CommonController",
 	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator"
+	"sap/m/MessageBox"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, MessageBox, BusyIndicator) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, MessageBox) {
 	"use strict";
 
 	
@@ -75,7 +73,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn5 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.OpenhelpTableIn1) { //값을 제대로 받아 왔을 때
 						Common.log(oData);
 						var rDatas1 = oData.OpenhelpTableIn1.results;
@@ -86,8 +84,10 @@ sap.ui.define([
 						$.each(rDatas1, function(i, o) {
 							delete o.__metadata;
 
+							var mapId = null;
+
 							if (o.L4id && o.L4use === "X") {
-								var mapId = [o.L1id, o.L2id, o.L3id].join();
+								mapId = [o.L1id, o.L2id, o.L3id].join();
 								if (treeMap[mapId]) {
 									treeMap[mapId].push($.extend(o, {title: o.L4txt}));
 								} else {
@@ -95,7 +95,7 @@ sap.ui.define([
 								}
 
 							} else if (o.L3id && o.L3use === "X") {
-								var mapId = [o.L1id, o.L2id, ""].join();
+								mapId = [o.L1id, o.L2id, ""].join();
 								if (treeMap[mapId]) {
 									treeMap[mapId].push($.extend(o, {title: o.L3txt}));
 								} else {
@@ -108,7 +108,7 @@ sap.ui.define([
 								}
 
 							} else if (o.L2id && o.L2use === "X") {
-								var mapId = [o.L1id, "", ""].join();
+								mapId = [o.L1id, "", ""].join();
 								if (treeMap[mapId]) {
 									treeMap[mapId].push($.extend(o, {title: o.L2txt}));
 								} else {
@@ -121,7 +121,7 @@ sap.ui.define([
 								}
 
 							} else if (o.L1id && Common.checkNull(o.L2id)) {
-								var mapId = [o.L1id, "", ""].join();
+								mapId = [o.L1id, "", ""].join();
 								o.title = o.L1txt;
 								o.nodes = treeMap[mapId] = [];
 								tree.push(o);
@@ -132,14 +132,14 @@ sap.ui.define([
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+					MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
 						title: oController.getBundleText("LABEL_09030")
 					});
 				}
 			});
 		},
 		
-		onSelectTree: function(oEvent) { //Tree선택
+		onSelectTree: function() { //Tree선택
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var oTree = $.app.byId(oController.PAGEID + "_Tree");
@@ -169,7 +169,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn5 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData) {
 						Common.log(oData);
 						var rExportData = oData.OpenhelpExport.results[0];
@@ -187,6 +187,10 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/PDFData", []);
 
 						}else{
+							jQuery.sap.addUrlWhitelist("https", "esslddev.lottechem.com");
+							jQuery.sap.addUrlWhitelist("https", "essprd.lottechem.com");
+							// jQuery.sap.addUrlWhitelist("http", "ssvess1d", "7097");
+
 							// oNoDataBox.setVisible(false);
 							oController.OpenHelpModel.setProperty("/Export", rExportData);
 							oController.OpenHelpModel.setProperty("/TopData", rTopData);
@@ -194,9 +198,9 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
 							oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
-							// oController.getPDFView();
 							
-							oController.openPDF(oController);
+							// oController.getPDFView();
+							// oController.openPDF(oController);
 						}
 						oController.onBeforeOpenDetailDialog();
 						
@@ -207,7 +211,7 @@ sap.ui.define([
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+					MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
 						title: oController.getBundleText("LABEL_09030")
 					});
 				}
@@ -329,22 +333,6 @@ sap.ui.define([
 			});
 	
 			oController.UploadFileModel.setProperty("/PDFFile", Datas.Data[0]);
-		},
-		
-		onFileChange2: function() {
-			/*var oFileUpload= $.app.byId(this.PAGEID + "_FileUpload"),
-				aFileList = [],
-				files = oFileUpload.mProperties;*/
-	
-			if (files) {
-				files.New = true;
-				files.Fname = files.value;
-				files.Type = files.fileType[0];
-
-				aFileList.push(files);
-	
-				this.UploadFileModel.setProperty("/Data", aFileList);
-			}
 		},
 		
 		uploadFile2: function () {
