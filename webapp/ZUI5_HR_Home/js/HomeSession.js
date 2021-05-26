@@ -563,14 +563,16 @@ singleSignOut: function() {
 
 singleSignOutSecond: function() {
 
-	$('iframe[name="single-sign-out-second-iframe"]').on('load', this.moveToLogoutPage.bind(this)).attr('src', this.logoutEndpoint.call(this));
+	setTimeout(function() {
+		$('iframe[name="single-sign-out-second-iframe"]').on('load', this.moveToLogoutPage.bind(this)).attr('src', this.logoutEndpoint.call(this));
+	}.bind(this), 2000);
 },
 
 moveToLogoutPage: function() {
 
 	setTimeout(function() {
 		location.href = '/Logout.html';
-	}, 3000);
+	}, 2000);
 },
 
 logoutEndpoint: function() {
