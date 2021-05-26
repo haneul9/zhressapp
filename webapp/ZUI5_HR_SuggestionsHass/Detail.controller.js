@@ -79,7 +79,7 @@
             this.PWordModel.setData({Data: {}});
 
             if(oEvent.data){
-                this.getDetailData(oEvent.data.vSdate, oEvent.data.vSeqnr, "O");
+                this.getDetailData(oEvent.data.vSdate, oEvent.data.vSeqnr);
             }
 			Common.log("onBeforeShow");
 		},
@@ -101,7 +101,7 @@
             });
         },
 
-		getDetailData: function(Sdate, Seqnr, New) { // 상세정보
+		getDetailData: function(Sdate, Seqnr) { // 상세정보
 			var oController = this.getView().getController();
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vBukrs = oController.getUserGubun();
@@ -109,8 +109,6 @@
 			var vThumDown = $.app.byId(oController.PAGEID + "_ThumDown");
 			
 			var sendObject = {};
-
-			if(New === "O")	sendObject.IEss = "X";
 
 			// Header
 			sendObject.ISdate = Sdate;
