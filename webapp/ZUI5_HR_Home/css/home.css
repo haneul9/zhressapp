@@ -377,7 +377,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown .dropdown-toggle::after {top:.75rem}
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown ul {background-color:#fff; padding:.5rem 0; margin-left:0; margin-right:0} /*3depth 영역*/
 .navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a {color:#777; font-size:1rem; font-weight:400; text-decoration:none} /*3depth*/
-.navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a::before{content:'ㄴ'; font-size:12px; padding-right:6px}
+.navbar-mobile .nav-item .dropdown-menu .dropdown-item.dropdown li a::before{content:'ㄴ'; font-size:12px; padding-right:6px} 
+
 /* logout btn 생략시 */
 .navbar-logo-center {position:fixed;width:100%;text-align: center;margin:0 -1rem;padding:0 1rem}
 .navbar-mobile button {z-index: 999;}
