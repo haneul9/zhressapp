@@ -3478,50 +3478,40 @@ sap.ui.define([
         onDeleteAttachFile : function(oEvent) {
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
             var oController = oView.getController();
-            
-            // if(!oController.loadDialog) {
-            // 	oController.loadDialog = new sap.m.Dialog({showHeader : false}); 			
-            // 	oController.loadDialog.addContent(new sap.m.BusyIndicator({text : "파일 삭제 중입니다. 잠시만 기다려 주십시오."}));
-            // 	oController.getView().addDependent(oController.loadDialog);
-            // } else {
-            // 	oController.loadDialog.removeAllContent();
-            // 	oController.loadDialog.destroyContent();
-            // 	oController.loadDialog.addContent(new sap.m.BusyIndicator({text : "파일 삭제 중입니다. 잠시만 기다려 주십시오."}));
-            // }
-            // if(!oController.loadDialog.isOpen()) {
-            // 	oController.loadDialog.open();
-            // }
-            
-            oController._BusyDialog.open();
-            
-            var oModel = sap.ui.getCore().getModel("ZHR_YEARTAX_SRV");
-            oModel.remove(
-                    "/YeaPdfDel(Pernr='" + oController._Pernr + "',Zyear='" + oController._Zyear + "')",
-                    null,
-                    function (oData, response) {
-                        MessageBox.alert("파일을 삭제하였습니다.", {title : "안내"});
-                        console.log("Sucess Doc Attach File Delete !!!");
-    //					oController.onTab2Refresh(oController);
-                    },
-                    function (oError) {
-                        var Err = {};
-                        if(rError2.response) {
-                            Err = window.JSON.parse(rError2.response.body);
-                            MessageBox.alert(Err.error.message.value);
-                        } else {
-                            MessageBox.alert(rError2);
-                        }
-                        rError = oError;
+                        
+            MessageBox.confirm("삭제하시겠습니까?", {
+                actions : ["YES", "NO"],
+                onClose : function(fVal){
+                    if(fVal && fVal == "YES"){
+                        oController._BusyDialog.open();
+                        setTimeout(function(){                
+                            var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
+                            oModel.remove(
+                                    "/YeartaxPdfUploadSet(IPernr='" + oController._Pernr + "',ITyear='" + oController._Zyear + "')",
+                                    null,
+                                    function (oData, response) {
+                                        MessageBox.alert("파일을 삭제하였습니다.", {title : "안내"});
+                                        console.log("Sucess Doc Attach File Delete !!!");
+                                    },
+                                    function (oError) {
+                                        var Err = {};
+                                        if(rError2.response) {
+                                            Err = window.JSON.parse(rError2.response.body);
+                                            MessageBox.alert(Err.error.message.value);
+                                        } else {
+                                            MessageBox.alert(rError2);
+                                        }
+                                        rError = oError;
+                                    }
+                            );
+                            
+                            oController._BusyDialog.close();
+                            
+                            oController.refreshAttachFileList(oController);
+                        }, 100); 
                     }
-            );
-            
-            // if(oController.loadDialog && oController.loadDialog.isOpen()) {
-            // 	oController.loadDialog.close();
-            // }
-            
-            oController._BusyDialog.close();
-            
-            oController.refreshAttachFileList(oController);
+                }
+            });          
         },
         
         onDownloadAttachFile : function(oEvent) {
