@@ -565,14 +565,14 @@ singleSignOutSecond: function() {
 
 	setTimeout(function() {
 		$('iframe[name="single-sign-out-second-iframe"]').on('load', this.moveToLogoutPage.bind(this)).attr('src', this.logoutEndpoint.call(this));
-	}.bind(this), 2000);
+	}.bind(this), 5000);
 },
 
 moveToLogoutPage: function() {
 
 	setTimeout(function() {
 		location.href = '/Logout.html';
-	}, 2000);
+	}, 5000);
 },
 
 logoutEndpoint: function() {
