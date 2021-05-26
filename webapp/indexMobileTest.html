@@ -32,6 +32,7 @@
 <script src="ZUI5_HR_Home/js/lib/jquery.jscrollpane.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/bootstrap.bundle.min.js"></script>
 <script src="ZUI5_HR_Home/js/lib/Chart.bundle.min.js"></script>
+<script src="ZUI5_HR_Home/js/lib/chartjs-plugin-datalabels.min.js"></script>
 <script src="ZUI5_HR_Home/js/HomeGateway.js"></script>
 <script src="ZUI5_HR_Home/js/HomeBasis.js"></script>
 <script src="ZUI5_HR_Home/js/HomeSession.js"></script>
@@ -45,8 +46,9 @@
 <script src="ZUI5_HR_Home/js/portlets/HiTalkTalkPortlet.js"></script><!--			P108 하이톡톡 -->
 <script src="ZUI5_HR_Home/js/portlets/EvalGoalPortlet.js"></script><!--				P107 목표관리 -->
 <script src="ZUI5_HR_Home/js/portlets/EvalGoalProgressingPortlet.js"></script><!--	P108 팀원 목표 진척율 -->
-<script src="ZUI5_HR_Home/js/portlets/WorkstimeStatusPortlet.js"></script><!--		P109 자율출퇴근 관리 -->
-<script src="ZUI5_HR_Home/js/portlets/VacationPortlet.js"></script><!--				P110 근태신청 -->
+<script src="ZUI5_HR_Home/js/portlets/WorkstimeStatusPortlet.js"></script><!--		P109 My Working Time -->
+<script src="ZUI5_HR_Home/js/portlets/VacationPortlet.js"></script><!--				P110 휴가사용현황 -->
+<script src="ZUI5_HR_Home/js/portlets/VacationForHQPortlet.js"></script><!--		P111 연차사용현황 : 임원용 -->
 <script src="ZUI5_HR_Home/js/PortletsMobileTest.js"></script>
 <script>
 history.pushState(null, document.title, location.href);
@@ -108,7 +110,9 @@ window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 	<button class="navbar-toggler pl-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand ehr-logo" href="javascript:;"></a>
+
+	<div class="navbar-logo-center"><a class="navbar-brand ehr-logo" href="javascript:;"></a></div>
+
 	<button class="navbar-toggler pr-0 fn-logout-confirm" type="button">
 		<svg width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
 			<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
