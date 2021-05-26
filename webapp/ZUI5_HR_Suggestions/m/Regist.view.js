@@ -211,7 +211,7 @@ sap.ui.define([
                                         }
                                     })
                                 ]
-                            })
+                            }).addStyleClass("mt-0")
                         ]
 					}),
                     new sap.m.VBox(oController.PAGEID + "_IsHideBox", {
