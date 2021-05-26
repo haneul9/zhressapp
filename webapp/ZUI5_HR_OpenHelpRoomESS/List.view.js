@@ -1,9 +1,7 @@
 sap.ui.define([
 	"../common/Common",
-	"../common/PageHelper",
-	"../common/HoverIcon",
-	"../common/ZHR_TABLES"
-], function (Common, PageHelper, HoverIcon, ZHR_TABLES) {
+	"../common/PageHelper"
+], function (Common, PageHelper) {
 "use strict";
 
 	sap.ui.jsview($.app.APP_ID, {
@@ -86,30 +84,30 @@ sap.ui.define([
 					// 		})
 					// 	]
 					// }),
-					// new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
-					// 	fitContainer: true,
-					// 	width: "auto",
-					// 	height: "600px",
-					// 	visible: {
-					// 		path: "/PDFData/Url",
-					// 		formatter: function(v) {
-					// 			if(v) return true;
-					// 			else return false;
-					// 		}
-					// 	},
-					// 	items: [
-					// 		new sap.m.PDFViewer({
-					// 			displayType: sap.m.PDFViewerDisplayType.Embedded,
-					// 			source: "{/PDFData/Url}",
-					// 			sourceValidationFailed: function(oEvent) {
-					// 				oEvent.preventDefault();
-					// 			},
-					// 			layoutData: new sap.m.FlexItemData({
-					// 				growFactor: 1
-					// 			})
-					// 		})
-					// 	]
-					// }).addStyleClass("mt-20px"),
+					new sap.m.FlexBox(oController.PAGEID + "_PDFBox", {
+						fitContainer: true,
+						width: "auto",
+						// height: "600px",
+						visible: {
+							path: "/PDFData/Url",
+							formatter: function(v) {
+								if(v) return true;
+								else return false;
+							}
+						},
+						items: [
+							new sap.m.PDFViewer({
+								displayType: sap.m.PDFViewerDisplayType.Embedded,
+								source: "{/PDFData/Url}",
+								sourceValidationFailed: function(oEvent) {
+									oEvent.preventDefault();
+								},
+								layoutData: new sap.m.FlexItemData({
+									growFactor: 1
+								})
+							})
+						]
+					}).addStyleClass("mt-20px"),
 					new sap.m.HBox(oController.PAGEID + "_FileUploadBox", {
 						alignItems: sap.m.FlexAlignItems.Center,
 						fitContainer: true,
