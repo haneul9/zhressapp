@@ -471,8 +471,26 @@ common.makeTable = {
 											},
 											textAlign : "Center",
 											tooltip : " "
-										}).addStyleClass("FontFamily");
+										});
 							break; 
+						case "Error":
+							oTemplate = new sap.ui.commons.TextView({
+											text : {
+												path : "Error",
+												formatter : function(fVal){
+													this.removeStyleClass("color-red bold");
+													
+													if(fVal === oController.getBundleText("LABEL_64029")){ // 비정상
+														this.addStyleClass("color-red bold");
+													}
+
+													return fVal;
+												}
+											},
+											textAlign : "Center",
+											tooltip : " "
+										});
+							break;
 					}
 					break;
 				default:
