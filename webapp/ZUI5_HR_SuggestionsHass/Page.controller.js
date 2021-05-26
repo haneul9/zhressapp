@@ -58,6 +58,28 @@
 			return Common.checkNull(regex)? "" : regex;
 		},
 
+		// setNumTitle: function() {
+		// 	return new sap.ui.commons.TextView({
+		// 		textAlign: "Begin",
+		// 		text: {
+		// 			parts: [{path: "Title"}, {path: "Znumb"}],
+		// 			formatter: function(v1, v2) {
+		// 				if (v1) {
+		// 					return v2 + ". " + v1;
+		// 				}
+		// 				return "";
+		// 			}
+		// 		}
+		// 	});
+		// },
+
+		setNumTitle: function() {
+			return new sap.ui.commons.TextView({
+				textAlign: "Begin",
+				text: "{Title}"
+			});
+		},
+
 		getMainTitle: function() {
 			return new sap.m.HBox({
 				justifyContent: sap.m.FlexJustifyContent.End,
