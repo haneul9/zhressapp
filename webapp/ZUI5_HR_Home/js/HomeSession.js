@@ -523,7 +523,10 @@ logout: function() {
 					'<div class="modal-body">',
 						'<div class="d-flex flex-column align-items-center">',
 							'<p>로그아웃하시겠습니까?</p>',
-							'<button type="button" class="btn btn-primary fn-logout">로그아웃</button>',
+							'<button type="button" class="btn btn-primary fn-logout">',
+								'<span class="spinner-border spinner-border-sm mr-5px d-none" role="status" aria-hidden="true"></span>',
+								'로그아웃',
+							'</button>',
 						'</div>',
 					'</div>',
 					'<div class="modal-footer">',
@@ -534,17 +537,16 @@ logout: function() {
 		'</div>'
 	].join('')).appendTo('body')
 	.on('click', '.fn-logout', function(e) {
-		$(e.currentTarget).prop('disabled', true);
-
-		this._gateway.spinner();
+		$(e.currentTarget)
+			.prop('disabled', true)
+			.find('.spinner-border').toggleClass('d-none', false);
 
 		$('#ehr-logout-modal .modal-body').append([
-			'<iframe class="d-none" name="logout-page-iframe"></iframe>',
-			'<iframe class="d-none" name="logout-action-iframe"></iframe>',
-			'<iframe class="d-none" name="logout-index-iframe"></iframe>'
+			'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',
+			'<iframe class="d-none" name="single-sign-out-second-iframe"></iframe>'
 		]);
 
-		this.callLogoutPage();
+		this.singleSignOut();
 	}.bind(this))
 	.on('hidden.bs.modal', function() {
 		$(this).remove();
@@ -552,28 +554,27 @@ logout: function() {
 	.modal();
 },
 
-callLogoutPage: function() {
+singleSignOut: function() {
 
-	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke',
-	logoutAction = 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
-
-	$('iframe[name="logout-page-iframe"]').on('load', this.callLogoutActionPage.bind(this)).attr('src', logoutAction);
+	$('iframe[name="single-sign-out-iframe"]').on('load', this.singleSignOutSecond.bind(this)).attr('src', this.logoutEndpoint.call(this));
 },
 
-callLogoutActionPage: function() {
+singleSignOutSecond: function() {
 
-	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke',
-	logoutAction = 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
-
-	$('iframe[name="logout-action-iframe"]').on('load', this.callLogoutIndexPage.bind(this)).attr('src', logoutAction);
+	$('iframe[name="single-sign-out-second-iframe"]').on('load', this.moveToLogoutPage.bind(this)).attr('src', this.logoutEndpoint.call(this));
 },
 
-callLogoutIndexPage: function() {
+moveToLogoutPage: function() {
 
 	setTimeout(function() {
 		location.href = '/Logout.html';
 	}, 3000);
-	// $('iframe[name="logout-index-iframe"]').on('load', function() { location.href = '/Logout.html'; }).attr('src', '/index.html');
+},
+
+logoutEndpoint: function() {
+
+	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke';
+	return 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
 },
 
 pernr: function() {
