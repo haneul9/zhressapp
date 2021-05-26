@@ -629,6 +629,11 @@ sap.ui.define([
 						}
 						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
 					}
+
+					oData.TrainingOutApplyTableIn3.results.forEach(function(e) {
+						e.Url = e.Url.replace(/retriveScpAttach/, "retriveAttach");
+					});
+					
 					oController.ApplyModel.setProperty("/FileData", oData.TrainingOutApplyTableIn3.results);
 				},
 				error: function(oResponse) {
