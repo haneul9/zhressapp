@@ -839,11 +839,11 @@ sap.ui.define(
                         },
                         error: function (oResponse) {
                             common.Common.log(oResponse);
-                            rAmountT = oController.DetailModel.getProperty("/FormData/BasicT");
+                            rAmountT = oController.DetailModel.getProperty("/FormData/AmountT");
                         }
                     });
                 } else {
-                    rAmountT = oController.DetailModel.getProperty("/FormData/BasicT");
+                    rAmountT = oController.DetailModel.getProperty("/FormData/AmountT");
                 }
 
                 oController.DetailModel.setProperty("/FormData/AmountT", rAmountT);
