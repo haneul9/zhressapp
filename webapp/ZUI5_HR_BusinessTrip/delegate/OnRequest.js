@@ -82,7 +82,7 @@ var OnRequest = { // 출장 event handler
 		if (p.Status1 !== "AA" && columnId === "RequestListTableZzokT" && p.UrlA) { // 결재상태
 			this.openWindow({ name: "smoin-approval-popup", width: 700, height: 350, url: p.UrlA });
 
-		} else if (p.Status2 !== "AA" && columnId === "RequestListTableBtStatT" && p.UrlA1) { // 승인상태
+		} else if (p.Status2 !== "AA" && columnId === "RequestListTableBtStatT" && p.UrlA1) { // 정산결재상태
 			this.openWindow({ name: "smoin-approval-popup", width: 700, height: 350, url: p.UrlA1 });
 
 		} else {

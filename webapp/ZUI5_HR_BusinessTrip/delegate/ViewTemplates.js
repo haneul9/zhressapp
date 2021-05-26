@@ -48,6 +48,23 @@ return { // 출장 신청/정산 view templates
 		});
 	},
 
+	getColorTextTemplate: function(columnInfo) {
+
+		return new sap.m.Text({
+			textAlign: sap.ui.core.HorizontalAlign.Center,
+			text: {
+				parts: [
+					{ path: columnInfo.id },
+					{ path: "UrlA" }
+				],
+				formatter: function(v, UrlA) {
+					this.toggleStyleClass("mimic-link", !!UrlA);
+					return v;
+				}
+			}
+		});
+	},
+
 	getCardApprDateTemplate: function(columnInfo) {
 
 		return new sap.m.Text({
