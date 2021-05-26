@@ -75,7 +75,13 @@ sap.ui.define(
                                                                         editable : {
                                                                             path : "Offyn",
                                                                             formatter : function(fVal){
-                                                                                return (fVal == "" || fVal == "1") ? true : false;
+                                                                                if(fVal == "2"){ // 2021-05-26 현재일 06시 이전인 경우 시작시간 변경 가능
+                                                                                    var hours = new Date().getHours();
+
+                                                                                    return hours < 6 ? true : false;
+                                                                                } else {
+                                                                                    return (fVal == "" || fVal == "1") ? true : false;
+                                                                                }                                                                                
                                                                             }
                                                                         },
                                                                         change : function(oEvent){
