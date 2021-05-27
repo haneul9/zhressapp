@@ -8,7 +8,7 @@ sap.ui.define([
 	sap.ui.jsview($.app.APP_ID, {
 		
 		_colModel: [
-			{id: "Pchk", 		label: ""				   /* CheckBox */,	plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "auto", templateGetter:"getCheckBox"},
+			{id: "Pchk", 		label: "{i18n>LABEL_47058}"/* CheckBox */,	plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "auto", templateGetter:"getCheckBox"},
 			{id: "EdotyT", 		label: "{i18n>LABEL_40013}"/* 구분 */,		plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto"},
 			{id: "Reqdt", 		label: "{i18n>LABEL_40014}"/* 제출일 */,	plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true, width: "10%"},
 			{id: "Edkaj",  		label: "{i18n>LABEL_40015}"/* 교육과정 */,  plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "20%", align: sap.ui.core.HorizontalAlign.Left},

@@ -39,7 +39,7 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
             var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
@@ -48,7 +48,7 @@
 			var Sdate = this.getParameterByName("Sdate"),
 				Skey = this.getParameterByName("Skey");
 
-			if (!this.alreadyDetailShown && Sdate && Skey) {
+			if (!this.alreadyDetailShown && Sdate && Skey && oEvent.data.New !== "X") {
 				var oList = {
 					Sdate: Sdate,
 					Seqnr: Skey

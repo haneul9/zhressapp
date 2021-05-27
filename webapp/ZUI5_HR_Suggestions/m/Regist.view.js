@@ -81,19 +81,7 @@ sap.ui.define([
 						height: "40px",
 						justifyContent: sap.m.FlexJustifyContent.Start,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "auto", "Left").addStyleClass("sub-title mr-5px pt-5px"), // 댓글
-                            new sap.m.Text({
-                                width: "auto",
-                                text: {
-                                    path: "CommSum",
-                                    formatter: function(v) {
-                                        if(Common.checkNull(v) || v === 0) return ""; 
-                                        else {
-                                            return oController.getBundleText("MSG_56016").interpolate(v);
-                                        }
-                                    }
-                                }
-                            }).addStyleClass("font-12px")
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "auto", "Left").addStyleClass("sub-title mr-5px pt-5px") // 댓글
 						]
 					}),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {

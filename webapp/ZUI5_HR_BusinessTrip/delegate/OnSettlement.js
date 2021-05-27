@@ -78,15 +78,15 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		var columnId = oEvent.getParameter("columnId"),
 		p = oEvent.getParameter("rowBindingContext").getProperty();
 
-		// if (p.Status1 !== "AA" && columnId === "SettlementListTableBtStatT" && p.UrlA) { // 승인상태
-		// 	this.openWindow({ name: "smoin-approval-popup", width: 700, height: 350, url: p.UrlA });
+		if (p.Status1 !== "AA" && columnId === "SettlementListTableBtStatT" && p.UrlA) { // 정산결재상태
+			this.openWindow({ name: "smoin-approval-popup", width: 700, height: 350, url: p.UrlA });
 
-		// } else {
+		} else {
 			p.isEnameEditable = false;
 
 			OnSettlement.openSettlementDetailDialog.call(this, p);
 
-		// }
+		}
 	},
 
 	// 신청 : 출장정산 대상 근태정보 선택 dialog

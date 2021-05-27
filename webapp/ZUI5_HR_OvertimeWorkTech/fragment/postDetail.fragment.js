@@ -114,121 +114,91 @@ sap.ui.define(
 														editable: false
 													}).addStyleClass("checkbox-label")
 												]
-											}).addStyleClass("search-field-group")
-										]
-									}).addStyleClass("search-inner-vbox"),
-									new sap.m.VBox({
-										width: "55%",
-										items: [
-											new sap.m.HBox({
-												items: [
-													this.getLabel("{i18n>LABEL_00191}", false), // 사번
-													new sap.m.Text({
-														text: "{/Detail/Header/Pernr}"
-													}).addStyleClass("mx-10px")
-												]
 											}).addStyleClass("search-field-group"),
 											new sap.m.HBox({
 												items: [
-													this.getLabel("{i18n>LABEL_32028}", false), // 입문/출문시간
+													this.getLabel("{i18n>LABEL_32014}", true), // 근무시간
+													new sap.m.Select({
+														required: true,
+														width: "65px",
+														selectedKey: "{/Detail/Header/OtbetmT}",
+														items: {
+															path: "/Hours",
+															template: new sap.ui.core.ListItem({
+																key: "{Code}",
+																text: "{Text}"
+															}),
+															templateShareable: true
+														},
+														editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
+														change: PostHandler.checkFormControl.bind(PostHandler)
+													}).addStyleClass("custom-select-time"),
 													new sap.m.Text({
-														text: "{/Detail/Header/EntbeW}"
-													}).addStyleClass("mx-10px")
+														text: ":"
+													}).addStyleClass("mx-2px"),
+													new sap.m.Select({
+														required: true,
+														width: "65px",
+														selectedKey: "{/Detail/Header/OtbetmM}",
+														items: {
+															path: "/Minutes30",
+															template: new sap.ui.core.ListItem({
+																key: "{Code}",
+																text: "{Text}"
+															}),
+															templateShareable: true
+														},
+														editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
+														change: PostHandler.checkFormControl.bind(PostHandler)
+													}).addStyleClass("custom-select-time"),
+													new sap.m.Text({
+														text: "~"
+													}).addStyleClass("mx-3px"),
+													new sap.m.Select({
+														required: true,
+														width: "65px",
+														selectedKey: "{/Detail/Header/OtentmT}",
+														items: {
+															path: "/Hours",
+															template: new sap.ui.core.ListItem({
+																key: "{Code}",
+																text: "{Text}"
+															}),
+															templateShareable: true
+														},
+														editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
+														change: PostHandler.checkFormControl.bind(PostHandler)
+													}).addStyleClass("custom-select-time"),
+													new sap.m.Text({
+														text: ":"
+													}).addStyleClass("mx-2px"),
+													new sap.m.Select({
+														required: true,
+														width: "65px",
+														selectedKey: "{/Detail/Header/OtentmM}",
+														items: {
+															path: "/Minutes30",
+															template: new sap.ui.core.ListItem({
+																key: "{Code}",
+																text: "{Text}"
+															}),
+															templateShareable: true
+														},
+														editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
+														change: PostHandler.checkFormControl.bind(PostHandler)
+													}).addStyleClass("custom-select-time"),
+													new HoverIcon({
+														src: "sap-icon://information",
+														hover: function (oEvent) {
+															Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_32003")); // 근무의 시작, 종료시간을 입력하세요.
+														},
+														leave: function (oEvent) {
+															Common.onPressTableHeaderInformation.call(oController, oEvent);
+														}
+													})
+													.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue ml-20px")
 												]
-											}).addStyleClass("search-field-group")
-										]
-									}).addStyleClass("search-inner-vbox")
-								]
-							}),
-							new sap.m.HBox({
-								items: [
-									this.getLabel("{i18n>LABEL_32014}", true), // 근무시간
-									new sap.m.Select({
-										required: true,
-										width: "65px",
-										selectedKey: "{/Detail/Header/OtbetmT}",
-										items: {
-											path: "/Hours",
-											template: new sap.ui.core.ListItem({
-												key: "{Code}",
-												text: "{Text}"
-											}),
-											templateShareable: true
-										},
-										editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
-										change: PostHandler.checkFormControl.bind(PostHandler)
-									}).addStyleClass("custom-select-time"),
-									new sap.m.Text({
-										text: ":"
-									}).addStyleClass("mx-2px"),
-									new sap.m.Select({
-										required: true,
-										width: "65px",
-										selectedKey: "{/Detail/Header/OtbetmM}",
-										items: {
-											path: "/Minutes30",
-											template: new sap.ui.core.ListItem({
-												key: "{Code}",
-												text: "{Text}"
-											}),
-											templateShareable: true
-										},
-										editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
-										change: PostHandler.checkFormControl.bind(PostHandler)
-									}).addStyleClass("custom-select-time"),
-									new sap.m.Text({
-										text: "~"
-									}).addStyleClass("mx-3px"),
-									new sap.m.Select({
-										required: true,
-										width: "65px",
-										selectedKey: "{/Detail/Header/OtentmT}",
-										items: {
-											path: "/Hours",
-											template: new sap.ui.core.ListItem({
-												key: "{Code}",
-												text: "{Text}"
-											}),
-											templateShareable: true
-										},
-										editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
-										change: PostHandler.checkFormControl.bind(PostHandler)
-									}).addStyleClass("custom-select-time"),
-									new sap.m.Text({
-										text: ":"
-									}).addStyleClass("mx-2px"),
-									new sap.m.Select({
-										required: true,
-										width: "65px",
-										selectedKey: "{/Detail/Header/OtentmM}",
-										items: {
-											path: "/Minutes30",
-											template: new sap.ui.core.ListItem({
-												key: "{Code}",
-												text: "{Text}"
-											}),
-											templateShareable: true
-										},
-										editable: "{= ${/Detail/Header/Pernr} === '' || ${/Detail/IsViewMode} ? false : true }",
-										change: PostHandler.checkFormControl.bind(PostHandler)
-									}).addStyleClass("custom-select-time"),
-									new HoverIcon({
-										src: "sap-icon://information",
-										hover: function (oEvent) {
-											Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_32003")); // 근무의 시작, 종료시간을 입력하세요.
-										},
-										leave: function (oEvent) {
-											Common.onPressTableHeaderInformation.call(oController, oEvent);
-										}
-									})
-									.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue ml-20px")
-								]
-							}).addStyleClass("search-field-group border-bt-none"),
-							new sap.m.HBox({
-								items: [
-									new sap.m.VBox({
-										width: "45%",
-										items: [
+											}).addStyleClass("search-field-group"),
 											new sap.m.HBox({
 												items: [
 													this.getLabel("{i18n>LABEL_32034}", false), // 제외시간(휴게)
@@ -350,7 +320,8 @@ sap.ui.define(
 															})
 														]
 													})
-												]
+												],
+												visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
 											}).addStyleClass("search-field-group"),
 											new sap.m.HBox({
 												items: [
@@ -358,13 +329,50 @@ sap.ui.define(
 													new sap.m.Text({
 														text: "{/Detail/Header/ComtmW}"
 													}).addStyleClass("mx-10px")
-												]
+												],
+												visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
 											}).addStyleClass("search-field-group")
 										]
 									}).addStyleClass("search-inner-vbox"),
 									new sap.m.VBox({
 										width: "55%",
 										items: [
+											new sap.m.HBox({
+												items: [
+													this.getLabel("{i18n>LABEL_00191}", false), // 사번
+													new sap.m.Text({
+														text: "{/Detail/Header/Pernr}"
+													}).addStyleClass("mx-10px")
+												]
+											}).addStyleClass("search-field-group"),
+											new sap.m.HBox({
+												items: [
+													this.getLabel("{i18n>LABEL_32028}", false), // 입문/출문시간
+													new sap.m.Text({
+														text: "{/Detail/Header/EntbeW}"
+													}).addStyleClass("mx-10px")
+												]
+											}).addStyleClass("search-field-group"),
+											new sap.m.HBox({
+												items: [
+													this.getLabel("{i18n>LABEL_32029}", false), // 총 근로시간
+													new sap.m.Text({
+														width: "160px",
+														text: "{/Detail/Header/TottmW}"
+													}).addStyleClass("mx-10px"),
+													this.getLabel("{i18n>LABEL_32030}", false, "140px").addStyleClass("label-wrap"), // 월누적 연장근로시간\n(사후결재 기준)
+													new sap.m.Text({
+														text: "{/Detail/Header/MottmW}"
+													}).addStyleClass("mx-10px")
+												],
+												visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? true : false }"
+											}).addStyleClass("search-field-group"),
+											new sap.m.HBox({
+												items: [
+													new sap.ui.core.HTML({ content: "<div></div>" })
+												],
+												visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
+											}).addStyleClass("search-field-group"),
 											new sap.m.HBox({
 												items: [
 													this.getLabel("{i18n>LABEL_32039}", false), // 제외시간(기타)
@@ -486,7 +494,8 @@ sap.ui.define(
 															})
 														]
 													})
-												]
+												],
+												visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
 											}).addStyleClass("search-field-group"),
 											new sap.m.HBox({
 												items: [
@@ -499,7 +508,8 @@ sap.ui.define(
 													new sap.m.Text({
 														text: "{/Detail/Header/MottmW}"
 													}).addStyleClass("mx-10px")
-												]
+												],
+												visible: "{= ${/Detail/Header/Bukrs3} === '1000' ? false : true }"
 											}).addStyleClass("search-field-group")
 										]
 									}).addStyleClass("search-inner-vbox")

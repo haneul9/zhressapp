@@ -42,13 +42,13 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey")))
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey") && oEvent.data.New !== "X"))
 				this.onSelectDetail(false);
         },
 
@@ -56,6 +56,28 @@
 			var regex = parent._gateway.parameter(name);
 			
 			return Common.checkNull(regex)? "" : regex;
+		},
+
+		// setNumTitle: function() {
+		// 	return new sap.ui.commons.TextView({
+		// 		textAlign: "Begin",
+		// 		text: {
+		// 			parts: [{path: "Title"}, {path: "Znumb"}],
+		// 			formatter: function(v1, v2) {
+		// 				if (v1) {
+		// 					return v2 + ". " + v1;
+		// 				}
+		// 				return "";
+		// 			}
+		// 		}
+		// 	});
+		// },
+
+		setNumTitle: function() {
+			return new sap.ui.commons.TextView({
+				textAlign: "Begin",
+				text: "{Title}"
+			});
 		},
 
 		getMainTitle: function() {

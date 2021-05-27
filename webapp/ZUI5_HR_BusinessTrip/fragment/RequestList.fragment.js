@@ -135,33 +135,51 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), { /
 		.bindRows("/");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [
-			{ id: "DtRqst",      label: "{i18n>LABEL_19201}"/* 신청일     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
-			{ id: "BtStartdat",  label: "{i18n>LABEL_19202}"/* 출장시작일 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
-			{ id: "BtEnddat",    label: "{i18n>LABEL_19203}"/* 출장종료일 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
-			{ id: "Title",       label: "{i18n>LABEL_19204}"/* 출장명     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "21%", align: sap.ui.core.HorizontalAlign.Left },
-			{ id: "BtPurpose1T", label: "{i18n>LABEL_19205}"/* 출장구분   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
-			{ id: "ZzokT",       label: "{i18n>LABEL_19206}"/* 결재상태   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getColorTextTemplate", templateGetterOwner: this },
-			{ id: "BtStatT",     label: "{i18n>LABEL_19207}"/* 승인상태   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getColorTextTemplate", templateGetterOwner: this },
-			{ id: "Zzdocno",     label: "{i18n>LABEL_19208}"/* 신청번호   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "9%" },
-			{ id: "BtrpnT",      label: "{i18n>LABEL_19209}"/* 신청자     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
-			{ id: "BtbpnT",      label: "{i18n>LABEL_19210}"/* 출장자     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" }
+			{ id: "DtRqst",      label: "{i18n>LABEL_19201}"/* 신청일       */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "BtStartdat",  label: "{i18n>LABEL_19202}"/* 출장시작일   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "BtEnddat",    label: "{i18n>LABEL_19203}"/* 출장종료일   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "Title",       label: "{i18n>LABEL_19204}"/* 출장명       */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "21%", align: sap.ui.core.HorizontalAlign.Left },
+			{ id: "BtPurpose1T", label: "{i18n>LABEL_19205}"/* 출장구분     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
+			{ id: "ZzokT",       label: "{i18n>LABEL_19206}"/* 결재상태     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getLinkMimic1Template", templateGetterOwner: this },
+			{ id: "BtStatT",     label: "{i18n>LABEL_19207}"/* 정산결재상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getLinkMimic2Template", templateGetterOwner: this },
+			{ id: "Zzdocno",     label: "{i18n>LABEL_19208}"/* 신청번호     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "9%" },
+			{ id: "BtrpnT",      label: "{i18n>LABEL_19209}"/* 신청자       */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
+			{ id: "BtbpnT",      label: "{i18n>LABEL_19210}"/* 출장자       */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" }
 		]);
 
 		return oTable;
 	},
 
-	getColorTextTemplate: function(columnInfo) {
+	getLinkMimic1Template: function(columnInfo) {
 
 		return new sap.m.Text({
 			textAlign: sap.ui.core.HorizontalAlign.Center,
 			text: {
 				parts: [
 					{ path: columnInfo.id },
-					{ path: "UrlA" },
+					{ path: "Status1" },
+					{ path: "UrlA" }
+				],
+				formatter: function(v, Status1, UrlA) {
+					this.toggleStyleClass("mimic-link", Status1 !== "AA" && !!UrlA);
+					return v;
+				}
+			}
+		});
+	},
+
+	getLinkMimic2Template: function(columnInfo) {
+
+		return new sap.m.Text({
+			textAlign: sap.ui.core.HorizontalAlign.Center,
+			text: {
+				parts: [
+					{ path: columnInfo.id },
+					{ path: "Status2" },
 					{ path: "UrlA1" }
 				],
-				formatter: function(v, UrlA, UrlA1) {
-					this.toggleStyleClass("mimic-link", !!UrlA || !!UrlA1);
+				formatter: function(v, Status2, UrlA1) {
+					this.toggleStyleClass("mimic-link", Status2 !== "AA" && !!UrlA1);
 					return v;
 				}
 			}

@@ -46,13 +46,13 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey")) {
+			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey") && oEvent.data.New !== "X") {
 				this.onSelectDetail(false);
 			} else {
 				if (localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {
@@ -63,6 +63,28 @@
 
 		getParameterByName: function(name) {
 			return parent._gateway.isMobile() ? (UriParameters.fromQuery(document.location.search).get(name) || "") : (parent._gateway.parameter(name) || "");
+		},
+
+		// setNumTitle: function() {
+		// 	return new sap.ui.commons.TextView({
+		// 		textAlign: "Begin",
+		// 		text: {
+		// 			parts: [{path: "Title"}, {path: "Znumb"}],
+		// 			formatter: function(v1, v2) {
+		// 				if (v1) {
+		// 					return v2 + ". " + v1;
+		// 				}
+		// 				return "";
+		// 			}
+		// 		}
+		// 	});
+		// },
+
+		setNumTitle: function() {
+			return new sap.ui.commons.TextView({
+				textAlign: "Begin",
+				text: "{Title}"
+			});
 		},
 
 		getMainTitle: function() {

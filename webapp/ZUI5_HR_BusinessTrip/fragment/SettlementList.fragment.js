@@ -40,7 +40,7 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "SettlementList"].join("."), 
 							delimiter: "~",
 							width: "240px"
 						}),
-						new sap.m.Label({ text: "{i18n>LABEL_19102}" }), // 결재상태
+						new sap.m.Label({ text: "{i18n>LABEL_19104}" }), // 정산결재상태
 						new sap.m.ComboBox({
 							width: "100px",
 							selectedKey: "{IBtStat}",
@@ -137,37 +137,19 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "SettlementList"].join("."), 
 		.bindRows("/");
 
 		ZHR_TABLES.makeColumn(oController, oTable, [
-			{ id: "BtSettledat", label: "{i18n>LABEL_19211}"/* 정산일     */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
-			{ id: "BtStartdat",  label: "{i18n>LABEL_19202}"/* 출장시작일 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
-			{ id: "BtEnddat",    label: "{i18n>LABEL_19203}"/* 출장종료일 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
-			{ id: "Title",       label: "{i18n>LABEL_19204}"/* 출장명     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "22%", align: sap.ui.core.HorizontalAlign.Left },
-			{ id: "BtPurpose1T", label: "{i18n>LABEL_19205}"/* 출장구분   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
-			// { id: "BtStatT",     label: "{i18n>LABEL_19207}"/* 승인상태   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getColorTextTemplate", templateGetterOwner: this },
-			{ id: "BtStatT",     label: "{i18n>LABEL_19207}"/* 승인상태   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "8%" },
-			{ id: "ZzdocnoApp",  label: "{i18n>LABEL_19208}"/* 신청번호   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "8%" },
-			{ id: "Zzdocno",     label: "{i18n>LABEL_19212}"/* 정산번호   */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "8%" },
-			{ id: "BtrpnT",      label: "{i18n>LABEL_19209}"/* 신청자     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
-			{ id: "BtbpnT",      label: "{i18n>LABEL_19210}"/* 출장자     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" }
+			{ id: "BtSettledat", label: "{i18n>LABEL_19211}"/* 정산일       */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "BtStartdat",  label: "{i18n>LABEL_19202}"/* 출장시작일   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "BtEnddat",    label: "{i18n>LABEL_19203}"/* 출장종료일   */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getDateTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "Title",       label: "{i18n>LABEL_19204}"/* 출장명       */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "22%", align: sap.ui.core.HorizontalAlign.Left },
+			{ id: "BtPurpose1T", label: "{i18n>LABEL_19205}"/* 출장구분     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
+			{ id: "BtStatT",     label: "{i18n>LABEL_19207}"/* 정산결재상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "8%", templateGetter: "getColorTextTemplate", templateGetterOwner: ViewTemplates },
+			{ id: "ZzdocnoApp",  label: "{i18n>LABEL_19208}"/* 신청번호     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "8%" },
+			{ id: "Zzdocno",     label: "{i18n>LABEL_19212}"/* 정산번호     */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "8%" },
+			{ id: "BtrpnT",      label: "{i18n>LABEL_19209}"/* 신청자       */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" },
+			{ id: "BtbpnT",      label: "{i18n>LABEL_19210}"/* 출장자       */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%" }
 		]);
 
 		return oTable;
-	},
-
-	getColorTextTemplate: function (columnInfo) {
-
-		return new sap.m.Text({
-			textAlign: sap.ui.core.HorizontalAlign.Center,
-			text: {
-				parts: [
-					{ path: columnInfo.id },
-					{ path: "UrlA" }
-				],
-				formatter: function (v, UrlA) {
-					this.toggleStyleClass("mimic-link", !!UrlA);
-					return v;
-				}
-			}
-		});
 	}
 
 });

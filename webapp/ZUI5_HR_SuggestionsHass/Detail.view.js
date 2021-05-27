@@ -191,19 +191,6 @@
 								fitContainer: true,
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "auto", "Left").addStyleClass("sub-title pt-9px mr-10px"), // 댓글
-									new sap.m.Text({
-										width: "auto",
-										textAlign: "Begin",
-										text: {
-											path: "CommSum",
-											formatter: function(v) {
-												if(Common.checkNull(v) || v === 0) return ""; 
-												else {
-													return oController.getBundleText("MSG_56016").interpolate(v);
-												}
-											}
-										}
-									}).addStyleClass("pt-12px font-14px mr-12px"),
 									new sap.ui.core.Icon({
 										src: "sap-icon://information"
 									})

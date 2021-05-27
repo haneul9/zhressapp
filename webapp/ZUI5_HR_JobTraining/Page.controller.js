@@ -1380,6 +1380,10 @@ sap.ui.define([
 						oController.AttModel.setProperty("/OJTResult", oController.ApplyModel.getProperty("/OJTResult"));
 						oAttTable.setVisibleRowCount(vLength > 5 ? 5 : vLength);
 					}
+
+					oData.TrainingOjtApplyTableIn2.results.forEach(function(e) {
+						e.Url = e.Url.replace(/retriveScpAttach/, "retriveAttach");
+					});
 					oController.ApplyModel.setProperty("/FileData", oData.TrainingOjtApplyTableIn2.results);
 				},
 				error: function(oResponse) {
