@@ -697,7 +697,7 @@ common.Common = {
         }
 
         return result === "E" ? true : false;
-    },,
+    },
     sendPush: function (p) {
         if (window._init_sequence_logging) {
             $.app.log("common.Common.sendPush called.");
