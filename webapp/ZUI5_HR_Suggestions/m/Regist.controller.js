@@ -1001,7 +1001,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") == null) {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(false);
@@ -1053,7 +1053,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") == null) {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
 				vThumUp.setEnabled(false);
 				vThumDown.setEnabled(true);
@@ -1107,15 +1107,15 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") == null) {
+				// localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(false);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", true);
 				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
+				// localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
 				oSendData.Zcanc = "X";
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(true);
@@ -1162,7 +1162,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") == null) {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
 				this.g_CommGood.setEnabled(false);
 				this.g_CommBed.setEnabled(true);
@@ -1218,7 +1218,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") == null) {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
 				this.g_ReCommGood.setEnabled(true);
 				this.g_ReCommBed.setEnabled(false);
@@ -1274,7 +1274,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") !== "N") {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") == null) {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed", "N");
 				this.g_ReCommBed.setEnabled(true);
 				this.g_ReCommGood.setEnabled(false);
