@@ -109,9 +109,9 @@
         navBack: function() {
             sap.ui.getCore().getEventBus().publish("nav", "to", {
                 id: [$.app.CONTEXT_PATH, "Page"].join($.app.getDeviceSuffix()),
-				// data: { 
-                //     New: "X"
-                // }
+				data: { 
+                    New: "X"
+                }
             });
         },
 
@@ -121,7 +121,7 @@
 			
 			var sendObject = {};
 
-			// if(New === "O")	sendObject.IEss = "X";
+			if(New === "O")	sendObject.IEss = "X";
 
 			// Header
 			sendObject.ISdate = oController.RegistModel.getProperty("/FormData/Sdate");
@@ -167,7 +167,7 @@
 				// var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
 				// var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
 
-				// if((Common.checkNull(e.Zdel) && oController.RegistModel.getProperty("/SubCommentData").length === 0) || oController.RegistModel.getProperty("/SubCommentData").some(function(ele) { return ele.Seqnr2 === e.Seqnr2 || (ele.Seqnr2 !== e.Seqnr2 && Common.checkNull(e.Zdel)); })) {
+				if((Common.checkNull(e.Zdel) && oController.RegistModel.getProperty("/SubCommentData").length === 0) || oController.RegistModel.getProperty("/SubCommentData").some(function(ele) { return ele.Seqnr2 === e.Seqnr2 || (ele.Seqnr2 !== e.Seqnr2 && Common.checkNull(e.Zdel)); })) {
 					oCommentBox.addItem(
 						new sap.m.VBox({
 							fitContainer: true,
@@ -315,9 +315,9 @@
 						.addStyleClass("custom-HiTokTok-comment mt-5px")
 					);
 	
-					oController.setSubComments(e, i);
-					// vIndex = vIndex + 1;
-				// }
+					oController.setSubComments(e, vIndex);
+					vIndex = vIndex + 1;
+				}
 			});
 		},
 
