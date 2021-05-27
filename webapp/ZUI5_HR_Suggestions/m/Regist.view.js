@@ -263,42 +263,6 @@ sap.ui.define([
 							})
 						]
 					}),
-                    new sap.m.HBox(oController.PAGEID + "_ThumsBox", {
-						justifyContent: sap.m.FlexJustifyContent.End,
-						alignContent: sap.m.FlexAlignContent.End,
-						alignItems: sap.m.FlexAlignItems.End,
-						width: "100%",
-						fitContainer: true,
-						items: [
-							new sap.ui.core.Icon({
-								src: "sap-icon://thumb-up"
-							})
-							.addStyleClass("icon-HiTokTok ok"),
-							new sap.m.Text({
-                                width: "auto",
-                                text: "{Zgood}"
-                            }).addStyleClass("mr-12px font-12px"),
-							new sap.ui.core.Icon({
-								src: "sap-icon://thumb-down"
-							})
-							.addStyleClass("icon-HiTokTok no"),
-							new sap.m.Text({
-                                width: "auto",
-                                text: "{Zbed}"
-                            }).addStyleClass("mr-12px font-12px"),
-							new sap.m.Button(oController.PAGEID + "_ThumUp", { // 좋아요
-								icon: "sap-icon://thumb-up",
-								press: oController.OnThumbUp.bind(oController),
-								text: "{i18n>LABEL_56020}" // 좋아요
-							}).addStyleClass("button-light-sm mr-8px"),
-							new sap.m.Button(oController.PAGEID + "_ThumDown", { // 싫어요
-								icon: "sap-icon://thumb-down",
-								press: oController.OnThumbDown.bind(oController),
-								text: "{i18n>LABEL_56021}" // 싫어요
-							}).addStyleClass("button-light-sm")
-						]
-					})
-					.addStyleClass("custom-HiTokTok-group border-bottom-no"),
 					new sap.m.HBox({
 						items: [
                             sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
