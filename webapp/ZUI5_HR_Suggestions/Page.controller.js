@@ -46,13 +46,13 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey")) {
+			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey") && oEvent.data.New !== "X") {
 				this.onSelectDetail(false);
 			} else {
 				if (localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {

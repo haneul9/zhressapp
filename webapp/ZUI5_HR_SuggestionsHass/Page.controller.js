@@ -42,13 +42,13 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey")))
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey") && oEvent.data.New !== "X"))
 				this.onSelectDetail(false);
         },
 

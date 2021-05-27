@@ -97,7 +97,10 @@
 
         navBack: function() {
             sap.ui.getCore().getEventBus().publish("nav", "to", {
-                id: [$.app.CONTEXT_PATH, "Page"].join($.app.getDeviceSuffix())
+                id: [$.app.CONTEXT_PATH, "Page"].join($.app.getDeviceSuffix()),
+				data: { 
+                    New: "X"
+                }
             });
         },
 
