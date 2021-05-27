@@ -29,7 +29,7 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Message", {
                         "<span>{i18n>MSG_39010}</span>"
                 })
             ]
-        }).addStyleClass("p-15px");
+        });
 
         /* 
             ※ 단축근무 반영시간
@@ -48,7 +48,7 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Message", {
                 })
             ],
             visible : (oController.getSessionInfoByKey("Persa").substring(0,1) == "D" ? true : false)
-        }).addStyleClass("pl-15px pr-15px pb-15px");
+        });
 
         var oMatrix = new sap.ui.commons.layout.MatrixLayout({
             columns: 1,
@@ -59,7 +59,7 @@ sap.ui.jsfragment("ZUI5_HR_Pregnant.fragment.Message", {
                         new sap.ui.commons.layout.MatrixLayoutCell({
                             content: [new sap.m.VBox({
                                           items : [oMessage, oMessage2]
-                                      })],
+                                      }).addStyleClass("p-15px")],
                             hAlign: "Begin",
                             vAlign: "Middle"
                         })
