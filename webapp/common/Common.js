@@ -697,6 +697,27 @@ common.Common = {
         }
 
         return result === "E" ? true : false;
+    },,
+    sendPush: function (p) {
+        if (window._init_sequence_logging) {
+            $.app.log("common.Common.sendPush called.");
+        }
+
+        if(!((p || {}).title && (p || {}).body && (p || {}).token)) {
+            return false;
+        }
+
+        $.post({
+            url: common.Common.getJavaOrigin($.app.getController(), "/push"),
+            data: p,
+            async: false,
+            success: function (data) {
+                common.Common.log([].slice.call(data));
+            },
+            error: function () {
+                common.Common.log([].slice.call(arguments));
+            }
+        });
     },
     usePrivateLog: function (p) {
 
