@@ -709,6 +709,7 @@ common.Common = {
 
         $.post({
             url: common.Common.getJavaOrigin($.app.getController(), "/push"),
+            dataType: 'text',
             data: p,
             async: false,
             success: function (data) {
