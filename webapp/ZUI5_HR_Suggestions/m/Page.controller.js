@@ -48,21 +48,21 @@
 			var Sdate = this.getParameterByName("Sdate"),
 				Skey = this.getParameterByName("Skey");
 
-			if (!this.alreadyDetailShown && Sdate && Skey && oEvent.data.New !== "X") {
-				var oList = {
-					Sdate: Sdate,
-					Seqnr: Skey
-				};
+			// if (!this.alreadyDetailShown && Sdate && Skey && oEvent.data.New !== "X") {
+			// 	var oList = {
+			// 		Sdate: Sdate,
+			// 		Seqnr: Skey
+			// 	};
 
-				sap.ui.getCore().getEventBus().publish("nav", "to", {
-					id: [$.app.CONTEXT_PATH, "Regist"].join($.app.getDeviceSuffix()),
-					data: {
-						RowData: oList
-					}
-				});
+			// 	sap.ui.getCore().getEventBus().publish("nav", "to", {
+			// 		id: [$.app.CONTEXT_PATH, "Regist"].join($.app.getDeviceSuffix()),
+			// 		data: {
+			// 			RowData: oList
+			// 		}
+			// 	});
 
-				this.alreadyDetailShown = true;
-			}
+			// 	this.alreadyDetailShown = true;
+			// }
         },
 
 		getParameterByName: function(name) {
