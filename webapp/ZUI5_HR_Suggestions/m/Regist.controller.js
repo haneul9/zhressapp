@@ -1106,17 +1106,17 @@
 				Seqnr2 : this.g_HiSeqnr2.getText(),
 				Zgood : "X"
 			};
-			localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "X");
+			localStorage.setItem("abcde", "X");
 
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
+			if(localStorage.getItem("abcde") !== "Y") {
+				localStorage.setItem("abcde", "Y");
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(false);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", true);
 				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
-				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
+				localStorage.setItem("abcde", "");
 				oSendData.Zcanc = "X";
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(true);
