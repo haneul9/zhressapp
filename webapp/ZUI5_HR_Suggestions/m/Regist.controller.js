@@ -164,8 +164,8 @@
 			oCommentBox.destroyItems();
 
 			vCommData.forEach(function(e, i) {
-				// var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
-				// var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
+				var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
+				var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
 
 				if((Common.checkNull(e.Zdel) && oController.RegistModel.getProperty("/SubCommentData").length === 0) || oController.RegistModel.getProperty("/SubCommentData").some(function(ele) { return ele.Seqnr2 === e.Seqnr2 || (ele.Seqnr2 !== e.Seqnr2 && Common.checkNull(e.Zdel)); })) {
 					oCommentBox.addItem(
@@ -267,17 +267,17 @@
 										new sap.m.Button({ 
 											icon: "sap-icon://thumb-up",
 											text: "{i18n>LABEL_56020}", // 좋아요
-											// enabled: (vGood === false && vBed === false) || vGood,
+											enabled: (vGood === false && vBed === false) || vGood,
 											press: oController.OnCommThumbUp.bind(oController)
-										}).addStyleClass("button-light-sm"),
-										// .toggleStyleClass("button-HiTokTok-check", vGood),
+										}).addStyleClass("button-light-sm")
+										.toggleStyleClass("button-HiTokTok-check", vGood),
 										new sap.m.Button({ 
 											icon: "sap-icon://thumb-down",
 											text: "{i18n>LABEL_56021}", // 싫어요
-											// enabled: (vGood === false && vBed === false) || vBed,
+											enabled: (vGood === false && vBed === false) || vBed,
 											press: oController.OnCommThumbDown.bind(oController)
-										}).addStyleClass("button-light-sm"),
-										// .toggleStyleClass("button-HiTokTok-check", vBed),
+										}).addStyleClass("button-light-sm")
+										.toggleStyleClass("button-HiTokTok-check", vBed),
 										new sap.m.Button({
 											press: oController.onCommentSubBtn.bind(oController),
 											icon: "sap-icon://comment",
@@ -329,8 +329,8 @@
 			if(Common.checkNull(!index) || index === 0){ // 저장된 대댓글 Setting
 				vSubCommentData.forEach(function(e) {
 					if(e.Seqnr2 === oEvent.Seqnr2) {
-						// var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
-						// var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
+						var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
+						var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
 
 						oCommentBox.getItems()[index].getItems()[3].setVisible(true);
 						oCommentBox.getItems()[index].getItems()[3].addItem(
@@ -431,17 +431,17 @@
 											new sap.m.Button({ // 좋아요
 												icon: "sap-icon://thumb-up",
 												text: "{i18n>LABEL_56020}",
-												// enabled: (vGood === false && vBed === false) || vGood,
+												enabled: (vGood === false && vBed === false) || vGood,
 												press: oController.OnReCommThumbUp.bind(oController)
-											}).addStyleClass("button-light-sm"),
-											// .toggleStyleClass("button-HiTokTok-check", vGood),
+											}).addStyleClass("button-light-sm")
+											.toggleStyleClass("button-HiTokTok-check", vGood),
 											new sap.m.Button({ // 싫어요
 												icon: "sap-icon://thumb-down",
 												text: "{i18n>LABEL_56021}",
-												// enabled: (vGood === false && vBed === false) || vBed,
+												enabled: (vGood === false && vBed === false) || vBed,
 												press: oController.OnReCommThumbDown.bind(oController)
-											}).addStyleClass("button-light-sm"),
-											// .toggleStyleClass("button-HiTokTok-check", vBed),
+											}).addStyleClass("button-light-sm")
+											.toggleStyleClass("button-HiTokTok-check", vBed),
 											new sap.m.Button({
 												press: oController.onSubCommentReBtn.bind(oController),
 												text: "{i18n>LABEL_56013}" // 수정
@@ -1001,7 +1001,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") == null) {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
 				vThumUp.setEnabled(true);
 				vThumDown.setEnabled(false);
@@ -1053,7 +1053,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") == null) {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
 				vThumUp.setEnabled(false);
 				vThumDown.setEnabled(true);
@@ -1106,17 +1106,16 @@
 				Seqnr2 : this.g_HiSeqnr2.getText(),
 				Zgood : "X"
 			};
-			localStorage.setItem("abcde", "X");
-
-			if(localStorage.getItem("abcde") !== "Y") {
-				localStorage.setItem("abcde", "Y");
+			
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(false);
 				this.g_CommGoodText.setText(parseInt(this.g_CommGoodText.getText()) + 1);
 				this.g_CommGood.toggleStyleClass("button-HiTokTok-check", true);
 				this.g_CommBed.toggleStyleClass("button-HiTokTok-check", false);
 			}else {
-				localStorage.setItem("abcde", "");
+				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed", "");
 				oSendData.Zcanc = "X";
 				this.g_CommGood.setEnabled(true);
 				this.g_CommBed.setEnabled(true);
@@ -1163,7 +1162,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") == null) {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
 				this.g_CommGood.setEnabled(false);
 				this.g_CommBed.setEnabled(true);
@@ -1219,7 +1218,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") == null) {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
 				this.g_ReCommGood.setEnabled(true);
 				this.g_ReCommBed.setEnabled(false);
@@ -1275,7 +1274,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") == null) {
+			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 				localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed", "N");
 				this.g_ReCommBed.setEnabled(true);
 				this.g_ReCommGood.setEnabled(false);
