@@ -15,6 +15,8 @@ sap.ui.define(
                 $.app.setModel("ZHR_COMMON_SRV");
                 $.app.setModel("ZHR_BENEFIT_SRV");
 
+                oController.setupView();
+
                 var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
                     selectionMode: "None",
                     enableColumnReordering: false,
