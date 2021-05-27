@@ -102,7 +102,7 @@
 		},
 		
 		onAfterShow: function() {
-            this.onBeforeOpenDetailDialog();
+            // this.onBeforeOpenDetailDialog();
 			BusyIndicator.hide();
         },
 
