@@ -134,7 +134,7 @@ sap.ui.define(
                     oController.openOrgSearchDialog(oEvent);
             },
 
-            changeDate : function(oEvent){
+            changeDate : function(oEvent, Flag){
                 var oController = $.app.getController($.app.CONTEXT_PATH + ".Detail");
 
                 if(oEvent){
@@ -144,10 +144,10 @@ sap.ui.define(
                         return;
                     }
                    
-                    this.oModel.setProperty("/Copy", null);
+                    oController.oModel.setProperty("/Copy", null);
                 }
 
-                var oData = this.oModel.getProperty("/Data1");
+                var oData = oController.oModel.getProperty("/Data1");
                 var pernr = [];
                 for(var i=0; i<oData.length; i++){
                     if(i==0 || (oData[i].Pernr != oData[i-1].Pernr)){
@@ -155,28 +155,37 @@ sap.ui.define(
                     }
                 }
 
-                this.oModel.setProperty("/Data1", []);
+                oController.oModel.setProperty("/Data1", []);
+
                 for(var i=0; i<pernr.length; i++){
-                    this.addTarget({Objid : pernr[i]});
-                }
+                    oController.addTarget({Objid : pernr[i]}, (i == pernr.length - 1 ? "Z" : Flag));
+                }                
             },
 
-            addTarget : function(data){
+            addTarget : function(data, Flag){ // Flag == "X": 저장 또는 신청 후 데이터 재조회
+                // 2021-05-27 부서 선택 로직 추가
                 // 부서 선택 시 return
-                if(data.Otype && data.Otype == "O"){
-					return;
-				}
+                // if(data.Otype && data.Otype == "O"){
+				// 	return;
+				// }
+
+                var vData = {
+                    Bfchk: this.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.PRIOR ? WorkSchedule.PRIOR : WorkSchedule.POST,
+                    Begda: moment(this.oModel.getProperty("/Data/Begda")).hours(10).toDate(),
+                    Endda: moment(this.oModel.getProperty("/Data/Endda")).hours(10).toDate(),
+                    Tttyp : "O"
+                };
+
+                if(data.Otype == "O"){
+                    vData.Orgeh = data.Objid;
+                } else {
+                    vData.Pernr = data.Objid;
+                }
 
                 var result = ODataService.WorktimeApplySet.call(
                     this, 
                     WorkSchedule.ProcessType.CODE, 
-                    {
-                        Bfchk: this.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.PRIOR ? WorkSchedule.PRIOR : WorkSchedule.POST,
-                        Pernr: data.Objid,
-                        Begda: moment(this.oModel.getProperty("/Data/Begda")).hours(10).toDate(),
-                        Endda: moment(this.oModel.getProperty("/Data/Endda")).hours(10).toDate(),
-                        Tttyp : "O"
-                    }
+                    vData
                 );
 
                 if(result.Worktimetab1.length == 0 && result.Worktimetab2.length == 0){
@@ -188,7 +197,7 @@ sap.ui.define(
                     var oData = oController.oModel.getProperty("/Data1");
 
                     // 이미 추가된 대상자가 있는 경우, 동일부서의 대상자만 추가할 수 있음
-                    if(oData.length){
+                    if(oData.length && oData.length > 0){
                         if(oData[0].Orgeh != result.Worktimetab1[0].Orgeh){
                             MessageBox.alert(oController.getBundleText("MSG_55021"), { // 동일부서 내의 대상자만 추가할 수 있습니다.
                                 title: oController.getBundleText("LABEL_00149")
@@ -283,7 +292,7 @@ sap.ui.define(
                     }
 
                     // 결재정보
-                    if(count == result.Worktimetab1.length){
+                    if(!Flag && count == result.Worktimetab1.length){
                         if(oController.oModel.getProperty("/Data/Key") == WorkSchedule.Tab.POST){
                             MessageBox.alert(oController.getBundleText("MSG_55023").split("(")[0], { // 대상 근무일의 승인된 사전신청건이 없습니다. (${Ename}, ${Pernr})
                                 title: oController.getBundleText("LABEL_00149")
@@ -294,7 +303,7 @@ sap.ui.define(
                             });
                         }
                          
-                         return false;
+                        return false;
                     } else {
                         if(oData.length != 0 && oController.oModel.getProperty("/Data2").length == 0){
                             for(var i=0; i<result.Worktimetab2.length; i++){
@@ -310,6 +319,12 @@ sap.ui.define(
                             oController.oModel.setProperty("/Data2", result.Worktimetab2);
                             
                             Common.adjustVisibleRowCount(sap.ui.getCore().byId(oController.PAGEID + "_ApprovalLineTable"), 3, oController.oModel.getProperty("/Data2").length);
+                        }
+                    }
+
+                    if(Flag && Flag == "Z"){
+                        if( oController.oModel.getProperty("/Data1").length == 0 ){
+                            oController.onBack(oController);
                         }
                     }
                     
@@ -486,14 +501,15 @@ sap.ui.define(
                 var oIndices = oTable.getSelectedIndices();
 
                 // validation check
-                if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL){
+                // 2021-05-27 저장/신청 시에도 선택한 데이터만 처리되도록 변경
+                // if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL){
                     if(oIndices.length == 0){
                         MessageBox.alert(oController.getBundleText("MSG_00066"), { // 대상 항목을 선택하세요.
                             title: oController.getBundleText("LABEL_00149")
                         });
                         return;
                     }
-                } 
+                // } 
                 
                 var confirmMessage = "", successMessage = "";
                 if(Prcty == WorkSchedule.ProcessType.SAVE){
@@ -596,40 +612,80 @@ sap.ui.define(
                 } else {
                     var oData = oController.oModel.getProperty("/Data1");
                     var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oController.getSessionInfoByKey("Dtfmt")});
-                    for(var i=0; i<oData.length; i++){
+
+                    // 2021-05-27 선택한 대상자만 처리
+                    for(var i=0; i<oIndices.length; i++){
+                        var sPath = oTable.getContextByIndex(oIndices[i]).sPath;
+                        var data = oTable.getModel().getProperty(sPath);
+
                         // validation check
-                        if(!oData[i].Tprog){ 
-                            MessageBox.alert(oController.getBundleText("MSG_55024") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                        if(!data.Tprog){ 
+                            MessageBox.alert(oController.getBundleText("MSG_55024") + " (" + dateFormat.format(data.Schda) + ", " + data.Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             }); // 일근유형을 선택하세요.                            
                             return;
-                        } else if(!oData[i].WkbuzT || !oData[i].WkbuzM || !oData[i].WkeuzT || !oData[i].WkeuzM){
-                            MessageBox.alert(oController.getBundleText("MSG_55025") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                        } else if(!data.WkbuzT || !data.WkbuzM || !data.WkeuzT || !data.WkeuzM){
+                            MessageBox.alert(oController.getBundleText("MSG_55025") + " (" + dateFormat.format(data.Schda) + ", " + data.Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             });  // 근무시간을 입력하세요.                           
                             return;
-                        } else if(!oData[i].Faprs){
-                            MessageBox.alert(oController.getBundleText("MSG_55026") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                        } else if(!data.Faprs){
+                            MessageBox.alert(oController.getBundleText("MSG_55026") + " (" + dateFormat.format(data.Schda) + ", " + data.Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             }); // 사유구분을 선택하세요.                            
                             return;
-                        } else if(!oData[i].Ovres || oData[i].Ovres.trim() == ""){
-                            MessageBox.alert(oController.getBundleText("MSG_55027") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                        } else if(!data.Ovres || data.Ovres.trim() == ""){
+                            MessageBox.alert(oController.getBundleText("MSG_55027") + " (" + dateFormat.format(data.Schda) + ", " + data.Ename + ")", {
                                 title: oController.getBundleText("LABEL_00149")
                             }); // 사유를 입력하세요.                            
                             return;
                         }
 
-                        payload.Worktimetab1.push($.extend(true, {}, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oData[i]), {
-                            Schda: moment(oData[i].Schda).hours(10).toDate(),
-                            Wkbuzc: oData[i].WkbuzT && oData[i].WkbuzM ? oData[i].WkbuzT + oData[i].WkbuzM : null,
-                            Wkeuzc: oData[i].WkeuzT && oData[i].WkeuzM ? oData[i].WkeuzT + oData[i].WkeuzM : null,
-                            Trbuzc: oData[i].TrbuzT && oData[i].TrbuzM && oData[i].TreuzT && oData[i].TreuzM ? oData[i].TrbuzT + oData[i].TrbuzM : null,
-                            Treuzc: oData[i].TrbuzT && oData[i].TrbuzM && oData[i].TreuzT && oData[i].TreuzM ? oData[i].TreuzT + oData[i].TreuzM : null,
-                            Trbu1c: oData[i].Trbu1T && oData[i].Trbu1M && oData[i].Treu1T && oData[i].Treu1M ? oData[i].Trbu1T + oData[i].Trbu1M : null,
-                            Treu1c: oData[i].Trbu1T && oData[i].Trbu1M && oData[i].Treu1T && oData[i].Treu1M ? oData[i].Treu1T + oData[i].Treu1M : null
+                        payload.Worktimetab1.push($.extend(true, {}, Common.copyByMetadata(oModel, "WorktimeApplyTab1", data), {
+                            Schda: moment(data.Schda).hours(10).toDate(),
+                            Wkbuzc: data.WkbuzT && data.WkbuzM ? data.WkbuzT + data.WkbuzM : null,
+                            Wkeuzc: data.WkeuzT && data.WkeuzM ? data.WkeuzT + data.WkeuzM : null,
+                            Trbuzc: data.TrbuzT && data.TrbuzM && data.TreuzT && data.TreuzM ? data.TrbuzT + data.TrbuzM : null,
+                            Treuzc: data.TrbuzT && data.TrbuzM && data.TreuzT && data.TreuzM ? data.TreuzT + data.TreuzM : null,
+                            Trbu1c: data.Trbu1T && data.Trbu1M && data.Treu1T && data.Treu1M ? data.Trbu1T + data.Trbu1M : null,
+                            Treu1c: data.Trbu1T && data.Trbu1M && data.Treu1T && data.Treu1M ? data.Treu1T + data.Treu1M : null
                         }));
                     }
+
+                    // for(var i=0; i<oData.length; i++){
+                    //     // validation check
+                    //     if(!oData[i].Tprog){ 
+                    //         MessageBox.alert(oController.getBundleText("MSG_55024") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                    //             title: oController.getBundleText("LABEL_00149")
+                    //         }); // 일근유형을 선택하세요.                            
+                    //         return;
+                    //     } else if(!oData[i].WkbuzT || !oData[i].WkbuzM || !oData[i].WkeuzT || !oData[i].WkeuzM){
+                    //         MessageBox.alert(oController.getBundleText("MSG_55025") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                    //             title: oController.getBundleText("LABEL_00149")
+                    //         });  // 근무시간을 입력하세요.                           
+                    //         return;
+                    //     } else if(!oData[i].Faprs){
+                    //         MessageBox.alert(oController.getBundleText("MSG_55026") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                    //             title: oController.getBundleText("LABEL_00149")
+                    //         }); // 사유구분을 선택하세요.                            
+                    //         return;
+                    //     } else if(!oData[i].Ovres || oData[i].Ovres.trim() == ""){
+                    //         MessageBox.alert(oController.getBundleText("MSG_55027") + " (" + dateFormat.format(oData[i].Schda) + ", " + oData[i].Ename + ")", {
+                    //             title: oController.getBundleText("LABEL_00149")
+                    //         }); // 사유를 입력하세요.                            
+                    //         return;
+                    //     }
+
+                    //     payload.Worktimetab1.push($.extend(true, {}, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oData[i]), {
+                    //         Schda: moment(oData[i].Schda).hours(10).toDate(),
+                    //         Wkbuzc: oData[i].WkbuzT && oData[i].WkbuzM ? oData[i].WkbuzT + oData[i].WkbuzM : null,
+                    //         Wkeuzc: oData[i].WkeuzT && oData[i].WkeuzM ? oData[i].WkeuzT + oData[i].WkeuzM : null,
+                    //         Trbuzc: oData[i].TrbuzT && oData[i].TrbuzM && oData[i].TreuzT && oData[i].TreuzM ? oData[i].TrbuzT + oData[i].TrbuzM : null,
+                    //         Treuzc: oData[i].TrbuzT && oData[i].TrbuzM && oData[i].TreuzT && oData[i].TreuzM ? oData[i].TreuzT + oData[i].TreuzM : null,
+                    //         Trbu1c: oData[i].Trbu1T && oData[i].Trbu1M && oData[i].Treu1T && oData[i].Treu1M ? oData[i].Trbu1T + oData[i].Trbu1M : null,
+                    //         Treu1c: oData[i].Trbu1T && oData[i].Trbu1M && oData[i].Treu1T && oData[i].Treu1M ? oData[i].Treu1T + oData[i].Treu1M : null
+                    //     }));
+                    // }
                 }
 
                 if(payload.Worktimetab1.length == 0){
@@ -667,12 +723,13 @@ sap.ui.define(
                                     if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL){
                                         oController.resetTarget(oController, data);
                                     } else {
-                                        if(Prcty == WorkSchedule.ProcessType.SAVE){
+                                        // if(Prcty == WorkSchedule.ProcessType.SAVE){
                                             // 2021-05-25 저장 시 리스트 이동 없이 근무일 데이터 재조회
-                                            oController.changeDate();
-                                        } else {
-                                            oController.onBack(oController);
-                                        }
+                                            // 2021-05-27 선택된 데이터만 저장/신청되므로 리스트 이동 없이 근무일 데이터 재조회
+                                            oController.changeDate(null, "X");
+                                        // } else {
+                                        //     oController.onBack(oController);
+                                        // }
                                     }
                                 }.bind(this)
                             });
