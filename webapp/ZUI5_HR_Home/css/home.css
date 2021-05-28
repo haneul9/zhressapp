@@ -363,7 +363,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .navbar.navbar-mobile .navbar-brand {padding-top:.5625rem; padding-bottom:.375rem; margin-right:0}
 .navbar-mobile .navbar-nav .dropdown-menu {border-radius:0; font-size:1rem; background-color:#fff; border:0; margin:0 -1rem; padding:.5rem 1rem}
 .navbar-mobile .navbar-toggler {border:none}
-.navbar-mobile .navbar-collapse {position:absolute; z-index:3; top:3.5625rem; left:1rem; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7; border-bottom:1px solid #d2d2d2;}
+.navbar-mobile .navbar-collapse {position:absolute; z-index:20; top:3.5625rem; left:1rem; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7; border-bottom:1px solid #d2d2d2;}
 .navbar-mobile .nav-item {font-weight:700; color:#333} /*1depth*/
 .navbar-mobile .navbar-nav .nav-link {padding:.75rem 1rem; margin:0 -1rem; font-size:17px; border-bottom:1px solid #d2d2d2}
 .navbar-mobile .navbar-nav .nav-item.dropdown.show .nav-link {border-bottom:none; color:#0854a0}
