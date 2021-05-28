@@ -64,8 +64,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .col-mega-menu .navbar .nav-link a:hover, .col-mega-menu .navbar .nav-link a.active, .col-mega-menu li a:hover, .col-mega-menu li a.active {color:#064975; text-decoration:none; font-weight:500}
 .col-mega-menu i {font-size:.75rem; color:#064975; cursor:pointer}
 .col-mega-menu i.far.fa-star {color:#b2b2b2}
-.menu-mss > .nav-link, .menu-mss .col-mega-menu li a {color:#783936 !important}
-.menu-hass > .nav-link, .menu-hass .col-mega-menu li a {color:#137826 !important}
+.menu-mss > .nav-link, .menu-mss .col-mega-menu li a, .menu-mss .menu-link-item {color:#783936 !important}
+.menu-hass > .nav-link, .menu-hass .col-mega-menu li a, .menu-hass .menu-link-item {color:#137826 !important}
 
 .ehr-body {position:relative; overflow-y:hidden}
 .ehr-body .container-fluid {height:100%}
@@ -366,7 +366,6 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .navbar-mobile .navbar-collapse {position:absolute; z-index:3; top:3.5625rem; left:1rem; width:100%; margin:0 -1rem; padding:0 1rem; background-color:#f7f7f7; border-bottom:1px solid #d2d2d2;}
 .navbar-mobile .nav-item {font-weight:700; color:#333} /*1depth*/
 .navbar-mobile .navbar-nav .nav-link {padding:.75rem 1rem; margin:0 -1rem; font-size:17px; border-bottom:1px solid #d2d2d2}
-.navbar-mobile .navbar-nav li.nav-item:last-child .nav-link {border-bottom:none}
 .navbar-mobile .navbar-nav .nav-item.dropdown.show .nav-link {border-bottom:none; color:#0854a0}
 .navbar-mobile .dropdown-item.dropdown.show .dropdown-toggle {color:#0854a0; font-weight:500}
 .navbar-mobile .navbar-nav .active>.nav-link {color:#333}

@@ -582,7 +582,6 @@ generate: function(reload) {
 	loginInfo = this._gateway.loginInfo();
 
 	return this._gateway.post({
-		// url: 'ZUI5_HR_Home/menu.json',
 		url: url,
 		data: {
 			IPernr: this._gateway.pernr(),

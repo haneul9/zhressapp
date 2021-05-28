@@ -302,7 +302,7 @@ topMenuItem: function(top) {
 	var subMenuBlock = this.subMenuBlock(top);
 	if (subMenuBlock) {
 		return [
-			'<li class="nav-item dropdown">',
+			'<li class="nav-item dropdown${style-classes}">'.interpolate(top.styleClasses ? (' ' + top.styleClasses) : ''),
 				'<a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${title}</a>'.interpolate(top.title),
 				subMenuBlock,
 			'</li>'
@@ -310,7 +310,7 @@ topMenuItem: function(top) {
 	} else {
 		var urlData = this.urlData(top.url);
 		return [
-			'<li class="nav-item">',
+			'<li class="nav-item${style-classes}">'.interpolate(top.styleClasses ? (' ' + top.styleClasses) : ''),
 				'<a class="nav-link" href="${href}"${url}${menu-id}>${title}</a>'.interpolate(
 					urlData.getScript(),
 					urlData.getUrl(),
@@ -342,7 +342,7 @@ subMenuBlock: function(menu) {
 			var urlData = this.urlData(item.url);
 			return [
 				'<li class="dropdown-item">',
-					'<a href="${href}"${url}${menu-id}>${title}</a>'.interpolate(
+					'<a href="${href}" class="menu-link-item"${url}${menu-id}>${title}</a>'.interpolate(
 						urlData.getScript(),
 						urlData.getUrl(),
 						!item.menuId ? '' : ' data-menu-id="${menu-id}"'.interpolate(item.menuId),
