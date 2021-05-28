@@ -66,6 +66,7 @@
 		setThumUp: function() {
 			return new sap.m.HBox({
 				width: "100%",
+				justifyContent: sap.m.FlexJustifyContent.Center,
 				fitContainer: true,
 				items: [
 					new sap.ui.core.Icon({
@@ -82,6 +83,7 @@
 
 		setThumDown: function() {
 			return new sap.m.HBox({
+				justifyContent: sap.m.FlexJustifyContent.Center,
 				width: "100%",
 				fitContainer: true,
 				items: [
