@@ -67,6 +67,7 @@
 
 		setThumUp: function() {
 			return new sap.m.HBox({
+				justifyContent: sap.m.FlexJustifyContent.Center,
 				width: "100%",
 				fitContainer: true,
 				items: [
@@ -84,6 +85,7 @@
 
 		setThumDown: function() {
 			return new sap.m.HBox({
+				justifyContent: sap.m.FlexJustifyContent.Center,
 				width: "100%",
 				fitContainer: true,
 				items: [
