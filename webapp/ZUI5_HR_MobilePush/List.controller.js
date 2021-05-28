@@ -30,23 +30,19 @@ sap.ui.define([
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
-			// this.getView().addStyleClass("sapUiSizeCompact");
-			// this.getView().setModel($.app.getModel("i18n"), "i18n");
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");
 		},
 
 		onBeforeShow: function(oEvent){
 			var oController = this;
 		
-			 if(!oController._ListCondJSonModel.getProperty("/Data")){
-			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
-			 	var today = new Date();
-			 	
+			 if(!oController._ListCondJSonModel.getProperty("/Data")){			 	
 				var	vData = {
 					Data : {
 						Key : 0,
 						HeadTxt : "",
-						BodyTxt : ""
+						BodyTxt : "",
+						Dtfmt : oController.getSessionInfoByKey("Dtfmt")
 					}
 				};
 				
@@ -72,21 +68,7 @@ sap.ui.define([
 			      }
 			});
 		},
-		
-		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_MobilePush.List");
-			var oController = oView.getController();
-		
-		},
-		
-		onChangeDate : function(oEvent){
-			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // // 잘못된 일자형식입니다.
-				oEvent.getSource().setValue("");
-				return;
-			}
-		},
-		
+				
 		resetTable : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MobilePush.List");
 			var oController = oView.getController();
@@ -400,41 +382,37 @@ sap.ui.define([
 				createData.AppPushAlarmLogSet.push({HeadTxt : oData.HeadTxt, BodyTxt : oData.BodyTxt});
 			}
 
-			console.log(createData);
-
 			var process = function(){
 				createData.IPernr = oController.getSessionInfoByKey("Pernr");
 				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				createData.IConType = "2";
+				createData.AppPushAlarmLogSet = [];
 
 				if(oData.Key == 0){
 					var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
 					var oTableData = oTable.getModel().getProperty("/Data");
-	
-					if(oTableData.length == 0){
-						MessageBox.alert(oController.getBundleText("MSG_72009"), { // 대상자가 없습니다.
-							title : oController.getBundleText("LABEL_00149")
-						});
-						return;
-					}
 	
 					for(var i=0; i<oTableData.length; i++){						
 						if(oTableData[i].Token == ""){
 							continue;
 						}
 
-						Common.sendPush({
-							title: oTableData[i].HeadTxt == "" ? " " : oTableData[i].HeadTxt,
-							body: oTableData[i].BodyTxt == "" ? " " : oTableData[i].BodyTxt,
-							token: oTableData[i].Token
-						});
+						if(Common.sendPush({
+								title: oTableData[i].HeadTxt == "" ? " " : oTableData[i].HeadTxt,
+								body: oTableData[i].BodyTxt == "" ? " " : oTableData[i].BodyTxt,
+								token: oTableData[i].Token
+						   }) != false){
+							createData.AppPushAlarmLogSet.push({Pernr : oTableData[i].Pernr, HeadTxt : oTableData[i].HeadTxt, BodyTxt : oTableData[i].BodyTxt});
+						} 
 					}
 				} else {
-					Common.sendPush({
-						title: oController._ListCondJSonModel.getProperty("/Data/HeadTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/HeadTxt"),
-						body: oController._ListCondJSonModel.getProperty("/Data/BodyTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/BodyTxt"),
-						token: "/topic/news"
-					});
+					if(Common.sendPush({
+							title: oController._ListCondJSonModel.getProperty("/Data/HeadTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/HeadTxt"),
+							body: oController._ListCondJSonModel.getProperty("/Data/BodyTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/BodyTxt"),
+							token: "/topic/news"
+					   }) != false){
+						createData.AppPushAlarmLogSet.push({HeadTxt : oData.HeadTxt, BodyTxt : oData.BodyTxt});
+					}
 				}
 
 				var oModel = $.app.getModel("ZHR_COMMON_SRV");
@@ -462,6 +440,7 @@ sap.ui.define([
 				oController._BusyDialog.close();
 
 				if(oController.Error == "E"){
+					oController.Error = "";
 					MessageBox.error(oController.ErrorMessage);
 					return;
 				}
