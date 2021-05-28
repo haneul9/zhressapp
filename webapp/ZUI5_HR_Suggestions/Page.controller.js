@@ -146,7 +146,11 @@
 					
 					if (oData && oData.TableIn1) {
 						Common.log(oData);
-						var rDatas = oData.TableIn1.results;
+						var rDatas = oData.TableIn1.results.map(function(ele) {
+							return $.extend(true, ele, {
+								Znumb: Number(ele.Znumb)
+							});
+						});
 						oController.TableModel.setData({Data: rDatas}); 
 					}
 				},
