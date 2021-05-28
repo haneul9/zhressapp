@@ -1902,8 +1902,9 @@ sap.ui.define([
                                                 data.NavYeartax0881Data.results[i].Otham = data.NavYeartax0881Data.results[i].Otham ? common.Common.numberWithCommas(data.NavYeartax0881Data.results[i].Otham) : "";
                                                 break;
                                             case "P0881E6": // 주택임대차대출
-            //									data.NavYeartax0881Data.results[i].Regnr = data.NavYeartax0881Data.results[i].Ldreg == "" ? "" :
-                                                                                            // data.NavYeartax0881Data.results[i].Ldreg.substring(0,6) + "-" + data.NavYeartax0881Data.results[i].Ldreg.substring(6,13);
+            									data.NavYeartax0881Data.results[i].Ldreg2 = data.NavYeartax0881Data.results[i].Ldreg == "" ? "" :
+                                                                                            data.NavYeartax0881Data.results[i].Ldreg.substring(0,6) + "-" 
+                                                                                                + data.NavYeartax0881Data.results[i].Ldreg.substring(6,7) + "******";
                                                 data.NavYeartax0881Data.results[i].Rcbeg = dateFormat.format(data.NavYeartax0881Data.results[i].Rcbeg);
                                                 data.NavYeartax0881Data.results[i].Rcend = dateFormat.format(data.NavYeartax0881Data.results[i].Rcend);
                                                 data.NavYeartax0881Data.results[i].Inrat = parseFloat(data.NavYeartax0881Data.results[i].Inrat);
@@ -1927,9 +1928,11 @@ sap.ui.define([
                                                 // 												"-" + data.NavYeartax0881Data.results[i].Regnr.substring(3,5) + 
                                                 // 												"-" + data.NavYeartax0881Data.results[i].Regnr.substring(5,10);
                                                 // }
+                                                data.NavYeartax0881Data.results[i].Ldreg2 = data.NavYeartax0881Data.results[i].Ldreg;
+
                                                 if(data.NavYeartax0881Data.results[i].Ldreg.length == 13){
-                                                    data.NavYeartax0881Data.results[i].Ldreg = data.NavYeartax0881Data.results[i].Ldreg.substring(0,6) + "-"
-                                                                                                + data.NavYeartax0881Data.results[i].Ldreg.substring(6);
+                                                    data.NavYeartax0881Data.results[i].Ldreg2 = data.NavYeartax0881Data.results[i].Ldreg.substring(0,6) + "-"
+                                                                                                + data.NavYeartax0881Data.results[i].Ldreg.substring(6,7) + "******";
                                                 }
                                                 break;
                                         }
@@ -1990,35 +1993,38 @@ sap.ui.define([
                     
                     for(var i=0; i<oData.length; i++){
                         if(!oData[i].Zflnts || oData[i].Zflnts == ""){
+                            var name = "(" + oData[i].Stext + "-" + oData[i].Emnam + ")";
+
                             if(!oData[i].Supnr){
                                 if(oData[i].Medty == "I"){
                                     
                                 } else {
-                                    MessageBox.error("사업자등록번호를 입력하여 주십시오.");
+                                    MessageBox.error("사업자등록번호를 입력하여 주십시오." + name);
+                                    oController._BusyDialog.close();
                                     return;
                                 }
                             } else if(oController.check_busino(oData[i].Supnr.replace(/[^0-9]/g, "")) == false && oData[i].Mepcd != "1"){
-                                MessageBox.error("사업자등록번호가 올바르지 않습니다.");
+                                MessageBox.error("사업자등록번호가 올바르지 않습니다." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Supnm || oData[i].Supnm.trim() == ""){
-                                MessageBox.error("상호명을 입력하여 주십시오.");
+                                MessageBox.error("상호명을 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Mepcd || oData[i].Mepcd == "0"){
-                                MessageBox.error("증빙코드를 선택하여 주십시오.");
+                                MessageBox.error("증빙코드를 선택하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(oData[i].Mesty == true && oData[i].Mepcd != "5"){
-                                MessageBox.error("안경구입비의 경우 증빙코드 '기타 의료비 영수증'을 선택하여 주십시오.");
+                                MessageBox.error("안경구입비의 경우 증빙코드 '기타 의료비 영수증'을 선택하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Mecnt){
-                                MessageBox.error("건수를 입력하여 주십시오.");
+                                MessageBox.error("건수를 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Meamt){
-                                MessageBox.error("금액을 입력하여 주십시오.");
+                                MessageBox.error("금액을 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             }
@@ -2026,7 +2032,7 @@ sap.ui.define([
                             if(oData[i].Mesty == "I"){ // 실손 의료비 제외
                                 
                             } else {
-                                MessageBox.error("사업자등록번호를 입력하여 주십시오.");
+                                MessageBox.error("사업자등록번호를 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } 
@@ -2082,24 +2088,26 @@ sap.ui.define([
                         
                     for(var i=0; i<oData.length; i++){
                         if(!oData[i].Zflnts || oData[i].Zflnts == ""){
+                            var name = "(" + oData[i].Stext + "-" + oData[i].Emnam + ")";
+
                             if(!oData[i].Docod || oData[i].Docod == "0"){
-                                MessageBox.error("기부금 유형을 선택하여 주십시오.");
+                                MessageBox.error("기부금 유형을 선택하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Donum || oData[i].Donum.trim() == ""){
-                                MessageBox.error("사업자등록번호를 입력하여 주십시오.");
+                                MessageBox.error("사업자등록번호를 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(oController.check_busino(oData[i].Donum) == false){
-                                MessageBox.error("사업자등록번호가 올바르지 않습니다.");
+                                MessageBox.error("사업자등록번호가 올바르지 않습니다." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Donam || oData[i].Donam.trim() == ""){
-                                MessageBox.error("기부처명을 입력하여 주십시오.");
+                                MessageBox.error("기부처명을 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Doamt){
-                                MessageBox.error("금액을 입력하여 주십시오.");
+                                MessageBox.error("금액을 입력하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             }
@@ -2166,8 +2174,10 @@ sap.ui.define([
                         case "P088101": // 보험료
                             for(var i=0; i<oData.length; i++){					
                                 if(!oData[i].Zflnts || oData[i].Zflnts == ""){
+                                    var name = "(" + oData[i].Stext + "-" + oData[i].Emnam + ")";
+
                                     if(!oData[i].Ntsam && !oData[i].Otham){
-                                        MessageBox.error("기타금액을 입력하여 주십시오.");
+                                        MessageBox.error("기타금액을 입력하여 주십시오." + name);
                                         oController._BusyDialog.close();
                                         return;
                                     }
@@ -2193,12 +2203,14 @@ sap.ui.define([
                         case "P088102": // 교육비
                             for(var i=0; i<oData.length; i++){
                                 if(!oData[i].Zflnts || oData[i].Zflnts == ""){
+                                    var name = "(" + oData[i].Stext + "-" + oData[i].Emnam + ")";
+
                                     if(!oData[i].Edulv || oData[i].Edulv == "0"){
-                                        MessageBox.error("교육단계를 선택하여 주십시오.");
+                                        MessageBox.error("교육단계를 선택하여 주십시오." + name);
                                         oController._BusyDialog.close();
                                         return;
                                     } else if(!oData[i].Ntsam && !oData[i].Otham){
-                                        MessageBox.error("기타금액을 입력하여 주십시오.");
+                                        MessageBox.error("기타금액을 입력하여 주십시오." + name);
                                         oController._BusyDialog.close();
                                         return;
                                     }
@@ -2233,12 +2245,14 @@ sap.ui.define([
                         case "P088107": // 제로페이
                             for(var i=0; i<oData.length; i++){
                                 if(!oData[i].Zflnts || oData[i].Zflnts == ""){
+                                    var name = "(" + oData[i].Stext + "-" + oData[i].Emnam + ")";
+
                                     if(!oData[i].Cadme || oData[i].Cadme == "0"){
-                                        MessageBox.error("사용구분을 선택하여 주십시오.");
+                                        MessageBox.error("사용구분을 선택하여 주십시오." + name);
                                         oController._BusyDialog.close();
                                         return;
                                     } else if(!oData[i].Ntsam && !oData[i].Otham){
-                                        MessageBox.error("기타금액을 입력하여 주십시오.");
+                                        MessageBox.error("기타금액을 입력하여 주십시오." + name);
                                         oController._BusyDialog.close();
                                         return;
                                     }
@@ -2304,10 +2318,10 @@ sap.ui.define([
                                     detail.Pernr = oPernr;
                                     detail.Seqnr = (i+1) + "";
                                     detail.Ldnam = oData[i].Ldnam;
-                                    detail.Ldreg = (oData[i].Regnr.indexOf("*") != -1) ? oData[i].Ldreg : oData[i].Regnr.replace(/[^0-9]/g, "");
+                                    detail.Ldreg = (oData[i].Ldreg.indexOf("*") != -1) ? oData[i].Ldreg : oData[i].Ldreg.replace(/[^0-9]/g, "");
                                     detail.Rcbeg = "\/Date(" + common.Common.getTime(oData[i].Rcbeg) + ")\/";
                                     detail.Rcend = "\/Date(" + common.Common.getTime(oData[i].Rcend) + ")\/";
-                                    detail.Inrat = oData[i].Inrat;
+                                    detail.Inrat = oData[i].Inrat + "";
                                     detail.Pricp = oData[i].Pricp.replace(/[^0-9]/g, "");
                                     detail.Intrs = oData[i].Intrs.replace(/[^0-9]/g, "");
                                     detail.Zflnts = oData[i].Zflnts;
@@ -2359,9 +2373,9 @@ sap.ui.define([
                                     detail.Seqnr = (i+1) + "";
                                     detail.Ldnam = oData[i].Ldnam;
                                     // detail.Ldreg = (oData[i].Regnr.indexOf("*") != -1) ? oData[i].Ldreg : oData[i].Regnr.replace(/[^0-9]/g, "");
-                                    detail.Ldreg = oData[i].Ldreg;
+                                    detail.Ldreg = oData[i].Ldreg.replace(/[^0-9]/g, "");
                                     detail.Houty = oData[i].Houty;
-                                    detail.Flrar = oData[i].Flrar;
+                                    detail.Flrar = oData[i].Flrar.replace(/[^0-9]/g, "");
                                     detail.Addre = oData[i].Addre;
                                     detail.Rcbeg = "\/Date(" + common.Common.getTime(oData[i].Rcbeg) + ")\/";
                                     detail.Rcend = "\/Date(" + common.Common.getTime(oData[i].Rcend) + ")\/";
@@ -2987,31 +3001,52 @@ sap.ui.define([
                         break;
                     case "inputregnr":
                         oTemplate = new sap.m.Input({
-                                        value : "{" + col_info[i].id + "}",
+                                        value : "{" + col_info[i].id + "2}",
                                         editable : "{Editable}",
                                         width : "100%",
                                         maxLength : 15,
+                                        customData : [new sap.ui.core.CustomData({key : "", value : "{}"}),
+                                                      new sap.ui.core.CustomData({key : "", value : oTable}),
+                                                      new sap.ui.core.CustomData({key : "", value : col_info[i].id})],
                                         change : function(oEvent){
                                             var value = oEvent.getParameters().value.replace(/[^0-9]/g, "");
-                                            
-                                            oEvent.getSource().setValue(value.substring(0,6) + "-" + value.substring(6,13));
+                                            var Idx = oEvent.getSource().getCustomData()[0].getValue().Idx;
+                                            var oTable = oEvent.getSource().getCustomData()[1].getValue();
+                                            var oJSONModel = oTable.getModel();
+                                            var id = oEvent.getSource().getCustomData()[2].getValue();
+
+                                            oJSONModel.setProperty("/Data/" + Idx + "/" + id + "2", value.substring(0,6) + "-" + value.substring(6,7) + "******");
+                                            oJSONModel.setProperty("/Data/" + Idx + "/" + id, value.substring(0,6) + "-" + value.substring(6,13));
+                                            // oEvent.getSource().setValue(value.substring(0,6) + "-" + value.substring(6,13));
                                         }
                                     }).addStyleClass("FontFamily");
                         break;
                     case "inputregnr2":
                         oTemplate = new sap.m.Input({
-                                        value : "{" + col_info[i].id + "}",
+                                        value : "{" + col_info[i].id + "2}",
                                         editable : "{Editable}",
                                         width : "100%",
                                         maxLength : 15,
+                                        customData : [new sap.ui.core.CustomData({key : "", value : "{}"}),
+                                                      new sap.ui.core.CustomData({key : "", value : oTable}),
+                                                      new sap.ui.core.CustomData({key : "", value : col_info[i].id})],
                                         change : function(oEvent){
                                             var value = oEvent.getParameters().value.replace(/[^0-9]/g, "");
+                                            var Idx = oEvent.getSource().getCustomData()[0].getValue().Idx;
+                                            var oTable = oEvent.getSource().getCustomData()[1].getValue();
+                                            var oJSONModel = oTable.getModel();
+                                            var id = oEvent.getSource().getCustomData()[2].getValue();
+
                                             // 주민등록번호
                                             if(value.length > 10){
-                                                oEvent.getSource().setValue(value.substring(0,6) + "-" + value.substring(6,13));
+                                                oJSONModel.setProperty("/Data/" + Idx + "/" + id + "2", value.substring(0,6) + "-" + value.substring(6,7) + "******");
+                                                 oJSONModel.setProperty("/Data/" + Idx + "/" + id, value.substring(0,6) + "-" + value.substring(6,13));
+                                                // oEvent.getSource().setValue(value.substring(0,6) + "-" + value.substring(6,13));
                                             // 사업자번호
                                             } else {
-                                                oEvent.getSource().setValue(value.substring(0,3) + "-" + value.substring(3,5) + "-" + value.substring(5,10));
+                                                oJSONModel.setProperty("/Data/" + Idx + "/" + id + "2", value.substring(0,3) + "-" + value.substring(3,5) + "-" + value.substring(5,10));
+                                                oJSONModel.setProperty("/Data/" + Idx + "/" + id, value.substring(0,3) + "-" + value.substring(3,5) + "-" + value.substring(5,10));
+                                                // oEvent.getSource().setValue(value.substring(0,3) + "-" + value.substring(3,5) + "-" + value.substring(5,10));
                                             }
                                         }
                                     }).addStyleClass("FontFamily");
@@ -3056,7 +3091,7 @@ sap.ui.define([
                                         text : {
                                             path : col_info[i].id,
                                             formatter : function(fVal){
-                                                return fVal ? fVal.substring(0,6) + "-" + fVal.substring(6,13) : "";
+                                                return fVal ? fVal.substring(0,6) + "-" + fVal.substring(6,7) + "******" : "";
                                             }
                                         },
                                         textAlign : "Center"
