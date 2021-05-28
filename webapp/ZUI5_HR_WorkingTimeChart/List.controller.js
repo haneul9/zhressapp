@@ -550,19 +550,19 @@ sap.ui.define([
                 Langu: oController.getSessionInfoByKey("Langu"),
                 Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
-                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : "")
+                Mssty: ($.app.APP_AUTH == "M" ? $.app.APP_AUTH : ""),
+				autoClose : false
             },
-            callback = function(o) {
-                oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
-				oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
-               
+            callback = function(o) {               
                 if(o.Otype == "P"){
-                	oController._ListCondJSonModel.setProperty("/Data/Pernr", o.Objid);
+                	sap.m.MessageBox.error(oBundleText.getText("MSG_46004")); // 부서를 선택하여 주십시오.
+					return;
                 } else if(o.Otype == "O"){
                 	oController._ListCondJSonModel.setProperty("/Data/Orgeh", o.Objid);
                 }
                 
                 oController._ListCondJSonModel.setProperty("/Data/Ename", o.Stext);
+				oController.OrgOfIndividualHandler.getDialog().close();
             };
     
             oController.OrgOfIndividualHandler = OrgOfIndividualHandler.get(oController, initData, callback);	
@@ -591,6 +591,10 @@ sap.ui.define([
 		// },
 
 		onESSelectPerson : function(data){
+			// 부서만 선택 가능
+			sap.m.MessageBox.error(oBundleText.getText("MSG_46004")); // 부서를 선택하여 주십시오.
+			return;
+
 			var oController = $.app.getController();
 
 			oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");

@@ -9,9 +9,11 @@
 .icon-HiTokTok {width:1.25rem; height:1.25rem;line-height:1.25rem;color:#555;font-size: .8125rem;border-radius: 50%;margin-right:4px;}
 .icon-HiTokTok.ok {background-color:#e3f1fc;}
 .icon-HiTokTok.no {background-color:#feebeb;}
-.custom-HiTokTok-group {align-items:center;align-content:center;height:45px;border-bottom:1px solid #ededed}
+.custom-HiTokTok-group {align-items:center;align-content:center;height:45px;/*border-bottom:1px solid #ededed}*/}
 .custom-HiTokTok-content {align-items:center;align-content:center;height:45px;}
 .border-bottom-no {border-bottom:0;}
+.custom-HiTokTok-comment .ml-20px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
+.custom-HiTokTok-comment .ml-16px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
 .custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0;border-bottom:1px solid #ededed}
 .custom-HiTokTok-comment .sapMInputBaseInner.sapMTextAreaInner.sapMTextAreaGrow {padding:.5rem 1.5rem;}
 .custom-HiTokTok-write {background-color: #f3f4f4;padding:10px;margin:10px 0}
@@ -19,9 +21,8 @@
 .button-HiTokTok-check .sapMBtnInner {border-color:#0854A0;background-color:#ebf5fe}
 
 /* Mobile */
-.app-content-container-mobile .custom-HiTokTok-group {height:auto;}
-.app-content-container-mobile .custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0 !important;border-bottom:1px solid #ededed !important}
-.app-content-container-mobile .custom-HiTokTok-comment .button-group {flex-wrap:wrap;margin:0;padding-top:.25rem;border-bottom:0}
+.app-content-container-mobile .custom-HiTokTok-group {align-items:center;align-content:center;height:auto;border-bottom:0}
+.app-content-container-mobile .custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0 !important;/*border-bottom:1px solid #ededed !important*/border-bottom:0 !important}
+.app-content-container-mobile .custom-HiTokTok-comment .button-group {flex-wrap:wrap;margin:0;padding-top:.25rem;border-bottom:1px solid #ededed}
 .app-content-container-mobile .custom-HiTokTok-comment .button-group .sapMBtn.button-light-sm {margin:.375rem 0;padding-top:0;padding-left:.25rem;}
-
-/* 0526 */
+.custom-HiTokTok-line {border-bottom:1px solid #ccc}

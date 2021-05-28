@@ -36,8 +36,6 @@ sap.ui.define(
                 var oController = this;
 
                 if (!oController._ListCondJSonModel.getProperty("/Data")) {
-                    var oLoginData = $.app.getModel("session").getData();
-
                     // 인사영역
                     var oWerks = sap.ui.getCore().byId(oController.PAGEID + "_Werks");
                     oWerks.destroyItems();
@@ -51,8 +49,8 @@ sap.ui.define(
                             new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
                             new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
                             new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
-                            new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oLoginData.Percod),
-                            new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oLoginData.Bukrs)
+                            new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
+                            new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Bukrs"))
                         ],
                         success: function (data) {
                             if (data && data.results.length) {
@@ -92,12 +90,12 @@ sap.ui.define(
 
                     var vData = {
                         Data: {
-                            Werks: oLoginData.Persa,
+                            Werks: oController.getSessionInfoByKey("Persa"),
                             Tmdat: dateFormat.format(new Date()),
-                            Pernr: $.app.getModel("session").getData().Pernr,
-                            Langu: $.app.getModel("session").getData().Langu,
+                            Pernr: oController.getSessionInfoByKey("Pernr"),
+                            Langu: oController.getSessionInfoByKey("Langu"),
                             Auth: $.app.getAuth(),
-							Chief : $.app.getModel("session").getData().Chief
+							Chief : oController.getSessionInfoByKey("Chief")
                         }
                     };
 
@@ -106,8 +104,8 @@ sap.ui.define(
                         .byId(oController.PAGEID + "_Orgeh")
                         .addToken(
                             new sap.m.Token({
-                                key: $.app.getModel("session").getData().Orgeh,
-                                text: $.app.getModel("session").getData().Stext
+                                key: oController.getSessionInfoByKey("Orgeh"),
+                                text: oController.getSessionInfoByKey("Stext")
                             })
                         );
 

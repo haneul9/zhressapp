@@ -39,6 +39,23 @@
 						width: "100%",
 						fitContainer: true,
 						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "130px", "Right"), //비공개
+							new sap.m.CheckBox({ 
+								select: oController.setHideTokTok.bind(oController),
+								selected: {
+									path: "Hide",
+									formatter: function(v) {
+										return v === "X";
+									}
+								}
+							})
+						]
+					})
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						width: "100%",
+						fitContainer: true,
+						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "130px", "Right", true), // 제목
                             new sap.m.Input({
                                 width: "100%",
@@ -191,20 +208,20 @@
 								fitContainer: true,
 								items: [
 									ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "auto", "Left").addStyleClass("sub-title pt-9px mr-10px"), // 댓글
-									new sap.ui.core.Icon({
-										src: "sap-icon://information"
-									})
-									.addStyleClass("color-icon-blue mr-5px pt-14px"),
-									new sap.m.Text({
-										width: "auto",
-										textAlign: "Begin",
-										text: "{i18n>MSG_56006}"
-									}).addStyleClass("pt-12px")
+									// new sap.ui.core.Icon({
+									// 	src: "sap-icon://information"
+									// })
+									// .addStyleClass("color-icon-blue mr-5px pt-14px"),
+									// new sap.m.Text({
+									// 	width: "auto",
+									// 	textAlign: "Begin",
+									// 	text: "{i18n>MSG_56006}"
+									// }).addStyleClass("pt-12px")
 								]
 							})
 						]
 					})
-					.addStyleClass("mt-10px"),
+					.addStyleClass("custom-HiTokTok-line mt-10px"),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
 						fitContainer: true,
 						items: []
@@ -213,7 +230,7 @@
 						fitContainer: true,
 						items: [
 							new sap.m.HBox({
-								justifyContent: sap.m.FlexJustifyContent.End,
+							//	justifyContent: sap.m.FlexJustifyContent.End,
 								fitContainer: true,
 								items: [
 									new sap.m.Input({
@@ -226,7 +243,16 @@
 									new sap.m.Button({
 										press: oController.onDialogSaveBtn.bind(oController),
 										text: "{i18n>LABEL_56016}" // 저장
-									}).addStyleClass("button-dark mt-4px")
+									}).addStyleClass("button-dark mt-4px"),
+									new sap.ui.core.Icon({
+										src: "sap-icon://information"
+									})
+									.addStyleClass("color-icon-blue ml-20px mr-5px pt-14px"),
+									new sap.m.Text({
+										width: "auto",
+										textAlign: "Begin",
+										text: "{i18n>MSG_56006}"
+									}).addStyleClass("pt-12px")
 								]
 							}).addStyleClass("custom-comment"),
 							new sap.m.HBox({

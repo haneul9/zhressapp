@@ -27,7 +27,7 @@ sap.ui.jsview("ZUI5_HR_LeaveUseChart.List", {
                                     editable : (gAuth == "H" ? true : false)
                                 }),
                                 new sap.m.Label({
-							    	text: oBundleText.getText("LABEL_48002"), // 부서/사원
+							    	text: oBundleText.getText("LABEL_00155"), // 부서
 							    }),
                                 new sap.m.Input({
                                     width: "200px",

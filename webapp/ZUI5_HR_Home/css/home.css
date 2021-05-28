@@ -123,9 +123,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 [device="mobile"] .portlet-employee .employee-information div:nth-of-type(2) {width:70%}
 [device="mobile"] .portlet-employee .employee-information div:nth-of-type(3) {width:70%}
 .portlet-employee .employee-photo {display:flex; justify-content:center; position:absolute; top:61px; right:20px; width:90px; height:135px; overflow:hidden; background-color:#fff}
-/* .portlet-employee .employee-photo {position:absolute; top:76px; right:18px; width:106px; height:106px; overflow:hidden; background-color:#fff} */
-/* [device="mobile"] .portlet-employee .employee-photo {width:64px; height:91px} */
-[device="mobile"] .portlet-employee .employee-photo {width:73px; height:100px}
+[device="mobile"] .portlet-employee .employee-photo {width:66px; height:99px} 
 .portlet-employee .employee-photo img {z-index:1; height:100%}
 .portlet-employee .employee-photo.nobody {background-color:#f2f2f2}
 .portlet-employee .employee-photo.nobody img {top:7%; left:15%; width:100%}
