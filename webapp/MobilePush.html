@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=NWOXyTJK_vgMLIZExdCcjI0nNJegQxs2GF8PCBZMYck" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=RH-st053oiEuw9gS_Ck05AuUrjhSxamDHdO8Fkf8Jb4" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=WWGDBnpJGE7YBqRoV2obYRY7Ah1yvfznbuCh14PI2vQ" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=xaDCzJYzLbvT5p1gZUwtUSPVCOu09U6bGQSn2N_NOA4" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=c61yamPOfQNkExV5rDd4cKEQDwPGU6I-L06tAAlCvBo" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=3e7W-BZ49bJAhlDl7AiXrmNn05xzjTsO30lii_HnwmA" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=jmpyB3WQzGFAcb5vdct5VSSE_K5pcsi0a15-CPPkX-Y" as="font" type="font/woff2" />
+	<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root?objectId=effvCat-1q2-PczgsRxsfGqiRSakCRmiBzjf0HZqT6A" as="font" type="font/woff2" />
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+	<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
+	<link rel="stylesheet" type="text/css" href="css/matrixenhance.css">
+	<script src="common/AppPrefilter.js"></script>
+	<script id="sap-ui-bootstrap"
+			src="resources/sap-ui-cachebuster/sap-ui-core.js"
+			data-sap-ui-theme="sap_fiori_3"
+			data-sap-ui-appCacheBuster="./"
+			data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
+			data-sap-ui-compatVersion="edge"
+			data-sap-ui-async="true"
+			data-sap-ui-frameOptions="allow"
+			data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap">
+	</script>
+	<script src="common/moment-with-locales.js"></script>
+		<script src="common/AppBasis.js"></script>
+		<script>	
+			var gDtfmt = "yyyy-MM-dd",
+				gPercod = "",
+				gPersa = "",
+		        gMolga = "",
+		        gDcpfm = "",
+		        gEeapp = "",
+		        gPernr = "",
+				gBukrs = "";
+				
+			var oBundleText = $.app.geti18nResource();
+			
+			function startAppInit() {
+				var contextPath = "ZUI5_HR_MobilePush";
+				$.extend(true, $.app, {
+					CONTEXT_PATH: contextPath,
+					APP_SFMAIN_ID: "ZUI5_SF.SFMain",
+					APP_ID: [contextPath, "List"].join("."),
+					APP_AUTH: $.app.Auth.HASS,
+					APP_TILE: oBundleText.getText("LABEL_72001"), // Mobile Push 발송
+					LOG: {
+						ENABLE_SUCCESS: true
+					}
+				});
+		
+				$.app.init();
+			}
+		</script>
+		
+		<style type="text/css">
+			/** m.panel 관련 standard css 변경 **/
+			.sapMPanelContent:not(.sapMPanelBGTransparent) {
+			    border-bottom: 0 !important;
+			}
+			
+			.sapMPanel>.sapMPanelHdr, .sapMPanelWrappingDiv, .sapMPanelWrappingDivTb {
+			    border-bottom: 0 !important;
+			}
+			
+			.button-default .sapUiIcon{
+				line-height: 2.215rem !important;
+			}
+			
+			.custom-input{width : calc(100% - 105px) !important;}
+		</style>
+	</head>
+	<body id="ui-body" class="sapUiBody" oncontextmenu='return false' ondragstart='return false' onselectstart='return false'>
+		<div class="app-preparing">
+			<div class="spinner"></div>
+			<div>화면 생성중입니다. 잠시만 기다려주세요.</div>
+		</div>
+	</body>
+</html>

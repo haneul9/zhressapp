@@ -491,6 +491,21 @@ common.makeTable = {
 											tooltip : " "
 										});
 							break;
+						case "HeadTxt":
+						case "BodyTxt":
+							oTemplate = new sap.m.Input({
+											value : "{" + col_info[i].id + "}",
+											width : "100%",
+											placeholder : "{i18n>MSG_72001}", // 최대 한글 24자, 영문 48자까지 가능
+											visible : {
+												path : "Token",
+												formatter : function(fVal){
+													return fVal != "" ? true : false;
+												}
+											},
+											maxLength : common.Common.getODataPropertyLength("ZHR_COMMON_SRV", "AppPushAlarmLog", col_info[i].id)
+										});
+							break;
 					}
 					break;
 				default:
