@@ -326,7 +326,7 @@
 									visible: false,
 									items: []
 								})
-								.addStyleClass("ml-20px")
+								.addStyleClass("ml-20px gcomment")
 							]
 						}).addStyleClass("custom-HiTokTok-comment") 
 					);
@@ -367,7 +367,16 @@
 														maxLength: 10,
 														value: e.Pword,
 														type: sap.m.InputType.Password
-													}).addStyleClass("mr-10px")
+													}).addStyleClass("mr-10px"),
+													new sap.ui.core.Icon({
+														src: "sap-icon://information"
+													})
+													.addStyleClass("color-icon-blue ml-20px mr-5px pt-14px"),
+													new sap.m.Text({
+														width: "auto",
+														textAlign: "Begin",
+														text: "{i18n>MSG_56006}"
+													}).addStyleClass("pt-12px")
 												]
 											}).addStyleClass("custom-HiTokTok-group mt-10px"),
 											new sap.m.HBox({
@@ -487,13 +496,23 @@
 									new sap.m.HBox({
 										justifyContent: sap.m.FlexJustifyContent.Start,
 										fitContainer: true,
+										width:"50%",
 										items: [
 											ViewTemplates.getLabel("header", "{i18n>LABEL_56012}", "auto", "Right", true).addStyleClass("mr-8px mt-10px"), // 비밀번호
 											new sap.m.Input({
 												width: "150px",
 												maxLength: 10,
 												type: sap.m.InputType.Password
-											}).addStyleClass("mr-10px")
+											}).addStyleClass("mr-10px"),
+											new sap.ui.core.Icon({
+												src: "sap-icon://information"
+											})
+											.addStyleClass("color-icon-blue ml-20px mr-5px"),
+											new sap.m.Text({
+												width: "auto",
+												textAlign: "Begin",
+												text: "{i18n>MSG_56006}"
+											})
 										]
 									}).addStyleClass("custom-HiTokTok-group mt-10px"),
 									new sap.m.HBox({
@@ -501,7 +520,7 @@
 										alignContent: sap.m.FlexAlignContent.End,
 										alignItems: sap.m.FlexAlignItems.End,
 										fitContainer: true,
-										width: "100%",
+										width: "50%",
 										items: [
 											new sap.m.Text({
 												text: ""

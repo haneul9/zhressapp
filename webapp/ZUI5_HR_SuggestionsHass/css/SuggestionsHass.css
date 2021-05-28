@@ -10,6 +10,8 @@
 .custom-HiTokTok-group {align-items:center;align-content:center;height:45px;border-bottom:1px solid #ededed}
 .custom-HiTokTok-content {align-items:center;align-content:center;height:45px;}
 .border-bottom-no {border-bottom:0;}
+.custom-HiTokTok-comment .ml-20px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
+.custom-HiTokTok-comment .ml-16px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
 .custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0;border-bottom:1px solid #ededed}
 .custom-HiTokTok-comment .sapMInputBaseInner.sapMTextAreaInner.sapMTextAreaGrow {padding:.5rem 1.5rem;}
 .custom-HiTokTok-write {background-color: #f3f4f4;padding:10px;margin:10px 0}

@@ -332,10 +332,10 @@
 									visible: false,
 									items: []
 								})
-								.addStyleClass("ml-16px")
+								.addStyleClass("ml-16px gcomment")
 							]
 						})
-						.addStyleClass("custom-HiTokTok-comment mt-5px")
+						.addStyleClass("custom-HiTokTok-comment")
 					);
 	
 					oController.setSubComments(e, vIndex);

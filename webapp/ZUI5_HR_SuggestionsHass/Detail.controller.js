@@ -342,7 +342,7 @@
 									visible: false,
 									items: []
 								})
-								.addStyleClass("ml-20px")
+								.addStyleClass("ml-20px gcomment")
 							]
 						}).addStyleClass("custom-HiTokTok-comment")
 					);

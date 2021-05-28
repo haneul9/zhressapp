@@ -83,52 +83,57 @@ sap.ui.define([
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_56015}", "auto", "Left").addStyleClass("sub-title mr-5px pt-5px") // 댓글
 						]
-					}),
+					}).addStyleClass("custom-HiTokTok-line"),
 					new sap.m.VBox(oController.PAGEID + "_CommentBox", {
                         fitContainer: true,
 						items: []
 					}),
-                    new sap.m.HBox({
-                        justifyContent: sap.m.FlexJustifyContent.End,
+					new sap.m.VBox({
                         fitContainer: true,
 						items: [
-                            new HoverIcon({
-                                src: "sap-icon://information",
-                                hover: function(oEvent) {
-                                    Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_56006")); // ※ 알파벳,숫자,특수기호를 포함해 6~10자리로 입력하세요.
-                                },
-                                leave: function(oEvent) {
-                                    Common.onPressTableHeaderInformation.call(oController, oEvent);
-                                }
+                            new sap.m.HBox({
+                            //    justifyContent: sap.m.FlexJustifyContent.End,
+                                fitContainer: true,
+                                items: [                            
+                                    new sap.m.Input({
+                                        width: "170px",
+                                    //    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                        maxLength: 10,
+                                        value: "{Pword}",
+                                        type: sap.m.InputType.Password,
+                                        placeholder: "{i18n>MSG_56013}"
+                                    }).addStyleClass("mr-8px"),                                    
+                                    new sap.m.Button({
+                                        press: oController.onDialogSaveBtn.bind(oController),
+                                        text: "{i18n>LABEL_56016}" // 저장
+                                    }).addStyleClass("button-dark mt-4px"),
+                                    new HoverIcon({
+                                        src: "sap-icon://information",
+                                        hover: function(oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_56006")); // ※ 알파벳,숫자,특수기호를 포함해 6~10자리로 입력하세요.
+                                        },
+                                        leave: function(oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                        }
+                                    })
+                                    .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue mt-10px")                           
+                                ]
                             })
-                            .addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue mt-10px"),
-                            new sap.m.Input({
-                                width: "170px",
-                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                maxLength: 10,
-                                value: "{Pword}",
-                                type: sap.m.InputType.Password,
-                                placeholder: "{i18n>MSG_56013}"
-                            }).addStyleClass("mr-8px"),
-                            new sap.m.Button({
-								press: oController.onDialogSaveBtn.bind(oController),
-								text: "{i18n>LABEL_56016}" // 저장
-							}).addStyleClass("button-dark mt-4px")
+                            .addStyleClass("mt-10px"),
+                            new sap.m.HBox({
+                                fitContainer: true,
+                                items: [
+                                    new sap.m.TextArea({
+                                        rows: 3,
+                                        width: "100%",
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                        value:"{Detail}",
+                                        maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
+                                    })
+                                ]
+                            })
                         ]
-                    })
-                    .addStyleClass("mt-10px"),
-                    new sap.m.HBox({
-						fitContainer: true,
-						items: [
-							new sap.m.TextArea({
-								rows: 3,
-								width: "100%",
-                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								value:"{Detail}",
-								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn3", "Detail", false)
-							})
-						]
-					})
+					}).addStyleClass("custom-HiTokTok-write")
 				]
 			})
 			.setModel(oController.CommentModel)
