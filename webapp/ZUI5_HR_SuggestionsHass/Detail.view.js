@@ -39,6 +39,23 @@
 						width: "100%",
 						fitContainer: true,
 						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56009}", "130px", "Right"), //비공개
+							new sap.m.CheckBox({ 
+								select: oController.setHideTokTok.bind(oController),
+								selected: {
+									path: "Hide",
+									formatter: function(v) {
+										return v === "X";
+									}
+								}
+							})
+						]
+					})
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox({
+						width: "100%",
+						fitContainer: true,
+						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_56006}", "130px", "Right", true), // 제목
                             new sap.m.Input({
                                 width: "100%",

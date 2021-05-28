@@ -8,12 +8,14 @@
 	sap.ui.jsview($.app.APP_ID, {
 		
 		_ColModel: [
-			{id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,		plabel: "", resize: true, span: 2, type: "template",  sort: true,  filter: true,  width: "auto", templateGetter: "setNumTitle"},
-			{id: "Title1",label: "{i18n>LABEL_56006}" /* 제목 */,       plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "auto", templateGetter: "getMainTitle"},
-			// {id: "Zreply",label: "{i18n>LABEL_56023}" /* 댓글횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
+			{id: "Znumb", label: "{i18n>LABEL_56024}" /* No. */,		plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "3%"},
+			{id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,       plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Left},
+			{id: "Zgood", label: "{i18n>LABEL_56020}" /* 좋아요 */,       plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumUp"},
+			{id: "Zbed",  label: "{i18n>LABEL_56021}" /* 싫어요 */,       plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumDown"},
+			{id: "Zreply",label: "{i18n>LABEL_56023}" /* 댓글횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
 			{id: "Zread", label: "{i18n>LABEL_56022}" /* 조회횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
-			{id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,		plabel: "", resize: true, span: 0, type: "date",	sort: true,  filter: true,  width: "10%"},
-			{id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "15%", templateGetter: "getChangeDate"}
+			{id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,		plabel: "", resize: true, span: 0, type: "date",	sort: true,  filter: true,  width: "8%"},
+			{id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "13%", templateGetter: "getChangeDate"}
 		],
 		
 		getControllerName: function () {
@@ -55,6 +57,7 @@
 							}).addStyleClass("button-search"),
 							new sap.m.Button({
 								press: oController.onPressNotice.bind(oController),
+								tooltip: " ",
 								icon: "sap-icon://bell" // 알림
 							}).addStyleClass("button-light w-36px ml-8px")
 						]

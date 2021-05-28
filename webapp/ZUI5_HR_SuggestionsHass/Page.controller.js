@@ -48,8 +48,13 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey") && oEvent.data.New !== "X"))
+			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey") && oEvent.data.New !== "X")){
 				this.onSelectDetail(false);
+			}else {
+				if (localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {
+					this.onPressNotice();
+				}
+			}
         },
 
 		getParameterByName: function(name) {
@@ -58,33 +63,8 @@
 			return Common.checkNull(regex)? "" : regex;
 		},
 
-		// setNumTitle: function() {
-		// 	return new sap.ui.commons.TextView({
-		// 		textAlign: "Begin",
-		// 		text: {
-		// 			parts: [{path: "Title"}, {path: "Znumb"}],
-		// 			formatter: function(v1, v2) {
-		// 				if (v1) {
-		// 					return v2 + ". " + v1;
-		// 				}
-		// 				return "";
-		// 			}
-		// 		}
-		// 	});
-		// },
-
-		setNumTitle: function() {
-			return new sap.ui.commons.TextView({
-				textAlign: "Begin",
-				text: "{Title}"
-			});
-		},
-
-		getMainTitle: function() {
+		setThumUp: function() {
 			return new sap.m.HBox({
-				justifyContent: sap.m.FlexJustifyContent.End,
-				alignContent: sap.m.FlexAlignContent.End,
-				alignItems: sap.m.FlexAlignItems.End,
 				width: "100%",
 				fitContainer: true,
 				items: [
@@ -95,7 +75,16 @@
 					new sap.m.Text({
 						width: "auto",
 						text: "{Zgood}"
-					}).addStyleClass("mr-12px font-12px"),
+					}).addStyleClass("font-12px")
+				]
+			});
+		},
+
+		setThumDown: function() {
+			return new sap.m.HBox({
+				width: "100%",
+				fitContainer: true,
+				items: [
 					new sap.ui.core.Icon({
 						src: "sap-icon://thumb-down"
 					})
@@ -183,6 +172,16 @@
         onPressSer: function() { // 조회
             this.onTableSearch();
         },
+
+		onPressNotice: function() {
+
+			if (!this.oNoticeDialog) {
+				this.oNoticeDialog = sap.ui.jsfragment([$.app.CONTEXT_PATH, "Notice"].join(".fragment."), this);
+				$.app.getView().addDependent(this.oNoticeDialog);
+			}
+
+			this.oNoticeDialog.open();
+		},
 		
 		onSelectedRow: function(oEvent) {
 			var oController = $.app.getController();
