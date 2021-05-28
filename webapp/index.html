@@ -157,6 +157,10 @@ function initHome() {
 				_gateway.toggleMenu(show);
 			}, 0);
 		});
+
+	if (_gateway.isDEV() || _gateway.isQAS()) {
+		$('.fn-logout-confirm').parent().toggleClass('d-none', false);
+	}
 }
 
 $(window).resize(function() {
@@ -209,7 +213,7 @@ window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 					</a>
 				</li>
 				<!-- 로그아웃 -->
-				<li class="nav-item">
+				<li class="nav-item d-none">
 					<a class="nav-link fn-logout-confirm" href="javascript:;">
 						<i class="fas fa-sign-out-alt"></i>
 						<span id="text-logout"></span>
