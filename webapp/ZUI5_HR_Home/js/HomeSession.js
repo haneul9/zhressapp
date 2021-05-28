@@ -548,16 +548,21 @@ logout: function() {
 			.prop('disabled', true)
 			.find('.spinner-border').toggleClass('d-none', false);
 
-		$('#ehr-logout-modal .feedback-message').parent().toggleClass('d-none', false);
 		$('#ehr-logout-modal [data-dismiss="modal"]').prop('disabled', true);
 
-		$('#ehr-logout-modal .modal-body').append([
-			'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',
-			'<iframe class="d-none" name="single-sign-out-second-iframe"></iframe>',
-			'<iframe class="d-none" name="scp-logout-iframe"></iframe>'
-		]);
+		location.href = this.scpLogoutEndpoint();
+		// if (this._gateway.isMobile()) {
+		// } else {
+		// 	$('#ehr-logout-modal .feedback-message').parent().toggleClass('d-none', false);
 
-		this.singleSignOut();
+		// 	$('#ehr-logout-modal .modal-body').append([
+		// 		'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',
+		// 		'<iframe class="d-none" name="single-sign-out-second-iframe"></iframe>',
+		// 		'<iframe class="d-none" name="scp-logout-iframe"></iframe>'
+		// 	]);
+
+		// 	this.singleSignOut();
+		// }
 	}.bind(this))
 	.on('hidden.bs.modal', function() {
 		$(this).remove();
@@ -567,31 +572,40 @@ logout: function() {
 
 singleSignOut: function() {
 
-	$('iframe[name="single-sign-out-iframe"]').on('load', this.singleSignOutSecond.bind(this)).attr('src', this.logoutEndpoint.call(this));
+	$('iframe[name="single-sign-out-iframe"]').on('load', this.singleSignOutSecond.bind(this)).attr('src', this.iasLogoutEndpoint.call(this));
 },
 
 singleSignOutSecond: function() {
 
 	setTimeout(function() {
-		$('iframe[name="single-sign-out-second-iframe"]').on('load', this.scpLogout.bind(this)).attr('src', this.logoutEndpoint.call(this));
+		$('iframe[name="single-sign-out-second-iframe"]').on('load', this.scpLogout.bind(this)).attr('src', this.iasLogoutEndpoint.call(this));
 	}.bind(this), 5000);
 },
 
 scpLogout: function() {
 
 	setTimeout(function() {
-		$('iframe[name="scp-logout-iframe"]').on('load', this.moveToIndexPage.bind(this)).attr('src', '/Logout.html');
+		$('iframe[name="scp-logout-iframe"]').on('load', this.moveToIndexPage.bind(this)).attr('src', this.scpLogoutEndpoint.call(this));
 	}.bind(this), 5000);
+},
+
+scpLogoutEndpoint: function() {
+
+	var params = $.param({
+		home: '/index${}.html'.interpolate(this._gateway.isMobile() ? 'Mobile' : ''),
+		ias: this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke'
+	});
+	return '/Logout.html?' + params;
 },
 
 moveToIndexPage: function() {
 
 	setTimeout(function() {
-		location.href = '/index' + (this._gateway.isMobile() ? 'Mobile' : '') + '.html';
+		location.href = '/index${}.html'.interpolate(this._gateway.isMobile() ? 'Mobile' : '');
 	}.bind(this), 5000);
 },
 
-logoutEndpoint: function() {
+iasLogoutEndpoint: function() {
 
 	var ias = this._gateway.isPRD() ? 'af0dpm2pj' : 'axs5k0vke';
 	return 'https://${ias}.accounts.ondemand.com/saml2/idp/slo/${ias}.accounts.ondemand.com'.interpolate(ias, ias);
