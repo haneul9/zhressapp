@@ -148,7 +148,11 @@
 						Common.log(oData);
 						var rDatas = oData.TableIn1.results.map(function(ele) {
 							return $.extend(true, ele, {
-								Znumb: Number(ele.Znumb)
+								Znumb: Number(ele.Znumb),
+								Zgood: Number(ele.Zgood),
+								Zbed: Number(ele.Zbed),
+								Zreply: Number(ele.Zreply),
+								Zread: Number(ele.Zread)
 							});
 						});
 						oController.TableModel.setData({Data: rDatas}); 
