@@ -7,7 +7,7 @@
 .icon-HiTokTok {width:1.25rem; height:1.25rem;line-height:1.25rem;color:#555;font-size: .8125rem;border-radius: 50%;margin-right:4px;}
 .icon-HiTokTok.ok {background-color:#e3f1fc;}
 .icon-HiTokTok.no {background-color:#feebeb;}
-.custom-HiTokTok-group {align-items:center;align-content:center;height:45px;border-bottom:1px solid #ededed}
+.custom-HiTokTok-group {align-items:center;align-content:center;height:45px;/*border-bottom:1px solid #ededed*/}
 .custom-HiTokTok-content {align-items:center;align-content:center;height:45px;}
 .border-bottom-no {border-bottom:0;}
 .custom-HiTokTok-comment .ml-20px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
@@ -17,3 +17,4 @@
 .custom-HiTokTok-write {background-color: #f3f4f4;padding:10px;margin:10px 0}
 .custom-HiTokTok-write .custom-input .sapMInputBaseContentWrapper{height:36px;margin:1px 0}
 .button-HiTokTok-check .sapMBtnInner {border-color:#0854A0;background-color:#ebf5fe}
+.custom-HiTokTok-line {border-bottom:1px solid #ccc}
