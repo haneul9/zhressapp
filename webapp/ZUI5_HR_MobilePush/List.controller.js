@@ -130,6 +130,7 @@ sap.ui.define([
 
 			SearchUser1.oController = oController;
 			SearchUser1.dialogContentHeight = 480;
+			SearchUser1.searchAuth = "A";
 
 			if (!oController.oAddPersonDialog) {
 				oController.oAddPersonDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", oController);

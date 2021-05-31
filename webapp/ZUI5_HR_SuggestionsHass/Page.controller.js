@@ -145,8 +145,8 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.IGubun = "H";
             sendObject.IConType = "0";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
-			sendObject.IEndda = oSearchDate.getSecondDateValue();
+			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
+			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
             sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
 			// Navigation property
 			sendObject.TableIn1 = [];

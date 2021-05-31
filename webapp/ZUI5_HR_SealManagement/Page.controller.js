@@ -144,8 +144,8 @@ sap.ui.define(
                 // Header
                 sendObject.IPernr = vPernr;
                 sendObject.IBukrs = vBukrs2;
-                sendObject.IBegda = Common.adjustGMTOdataFormat(vDate1);
-                sendObject.IEndda = Common.adjustGMTOdataFormat(vDate2);
+                sendObject.IBegda = moment(vDate1).hours(10).toDate();
+                sendObject.IEndda = moment(vDate2).hours(10).toDate();
                 // Navigation property
                 sendObject.RegalsealExport = [];
                 sendObject.RegalsealTableIn1 = [];

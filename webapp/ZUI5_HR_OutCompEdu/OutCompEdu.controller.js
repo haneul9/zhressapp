@@ -257,8 +257,8 @@ sap.ui.define([
 			sendObject.IEmpid = vPernr;
 			sendObject.IBukrs = vBukrs2;
 			sendObject.IConType = "1";
-			sendObject.IBegda = Common.checkNull(vZyear1) || Common.checkNull(vMonth1) ? undefined : Common.adjustGMTOdataFormat(vBDate);
-			sendObject.IEndda = Common.checkNull(vZyear1) || Common.checkNull(vMonth1) ? undefined : Common.adjustGMTOdataFormat(vEDate);
+			sendObject.IBegda = Common.checkNull(vZyear1) || Common.checkNull(vMonth1) ? undefined : moment(vBDate).hours(10).toDate();
+			sendObject.IEndda = Common.checkNull(vZyear1) || Common.checkNull(vMonth1) ? undefined : moment(vEDate).hours(10).toDate();
 			sendObject.IEdoty = vGubun === "ALL" ? "" : vGubun;
 			sendObject.IRepst = vStatus === "ALL" ? "" : vStatus;
 			sendObject.IEdsta = vIsReport === "ALL" ? "" : vIsReport;
@@ -598,8 +598,8 @@ sap.ui.define([
 			sendObject.IEmpid = vPernr;
 			sendObject.IBukrs = vBukrs2;
 			sendObject.IConType = "1";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(vBDate);
-			sendObject.IEndda = Common.adjustGMTOdataFormat(vEDate);
+			sendObject.IBegda = moment(vBDate).hours(10).toDate();
+			sendObject.IEndda = moment(vEDate).hours(10).toDate();
 			sendObject.IEdoty = vGubun === "ALL" ? "" : vGubun;
 			sendObject.IEdsta = vStatus === "ALL" ? "" : vStatus;
 			sendObject.IRepst = vIsReport === "ALL" ? "" : vIsReport;

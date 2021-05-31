@@ -55,7 +55,7 @@
 			if (this.getParameterByName("Sdate") && this.getParameterByName("Skey") && oEvent.data.New !== "X") {
 				this.onSelectDetail(false);
 			} else {
-				if (localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {
+				if (localStorage && localStorage.getItem("ehr.suggestions.notice.confirmed") !== "Y") {
 					this.onPressNotice();
 				}
 			}
@@ -135,8 +135,8 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.IGubun = "E";
 			sendObject.IConType = "0";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
-			sendObject.IEndda = oSearchDate.getSecondDateValue();
+			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
+			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
 			sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
 			// Navigation property
 			sendObject.TableIn1 = [];

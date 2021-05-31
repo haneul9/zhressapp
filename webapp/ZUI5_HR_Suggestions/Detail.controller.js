@@ -151,7 +151,7 @@
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
 
-						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
 							vThumUp.toggleStyleClass("button-HiTokTok-check", true);
 							vThumDown.toggleStyleClass("button-HiTokTok-check", false);
 							vThumUp.setEnabled(true);
@@ -161,7 +161,7 @@
 							vThumDown.setEnabled(true);
 						}
 						
-						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
 							vThumUp.toggleStyleClass("button-HiTokTok-check", false);
 							vThumDown.toggleStyleClass("button-HiTokTok-check", true);
 							vThumUp.setEnabled(false);
@@ -188,12 +188,15 @@
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
 			var vCommData = oController.RegistModel.getProperty("/CommentData");
 			var vIndex = 0;
+			var vGood = false, vBed = false;
 
 			oCommentBox.destroyItems();
 
 			vCommData.forEach(function(e, i) {
-				var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
-				var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
+				if(localStorage) {
+					vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
+					vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
+				}
 
 				if((Common.checkNull(e.Zdel) && oController.RegistModel.getProperty("/SubCommentData").length === 0) || oController.RegistModel.getProperty("/SubCommentData").some(function(ele) { return ele.Seqnr2 === e.Seqnr2 || (ele.Seqnr2 !== e.Seqnr2 && Common.checkNull(e.Zdel)); })) {
 					oCommentBox.addItem(
@@ -341,12 +344,15 @@
 			var oController = this.getView().getController();
 			var vSubCommentData = oController.RegistModel.getProperty("/SubCommentData");
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
+			var vGood = false, vBed = false;
 
 			if(Common.checkNull(!index) || index === 0){ // 저장된 대댓글 Setting
 				vSubCommentData.forEach(function(e) {
 					if(e.Seqnr2 === oEvent.Seqnr2) {
-						var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
-						var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
+						if(localStorage) {
+							vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
+							vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
+						}
 
 						oCommentBox.getItems()[index].getItems()[2].setVisible(true);
 						oCommentBox.getItems()[index].getItems()[2].addItem(
@@ -987,7 +993,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") === "Y") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") === "Y") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1000,7 +1006,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
 							vThumUp.setEnabled(true);
 							vThumDown.setEnabled(false);
@@ -1040,7 +1046,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") === "N") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") === "N") 
 				oSendData.Zcanc = "X";			
 
 			var sendObject = {};
@@ -1053,7 +1059,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
 							vThumUp.setEnabled(false);
 							vThumDown.setEnabled(true);
@@ -1095,7 +1101,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") === "Y") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") === "Y") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1108,7 +1114,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
 							oController.g_CommGood.setEnabled(true);
 							oController.g_CommBed.setEnabled(false);
@@ -1150,7 +1156,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") === "N") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") === "N") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1163,7 +1169,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
 							oController.g_CommGood.setEnabled(false);
 							oController.g_CommBed.setEnabled(true);
@@ -1207,7 +1213,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") === "Y") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") === "Y") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1220,7 +1226,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
 							oController.g_ReCommGood.setEnabled(true);
 							oController.g_ReCommBed.setEnabled(false);
@@ -1264,7 +1270,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") === "N") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") === "N") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1277,7 +1283,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".bedconfirmed") !== "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".bedconfirmed", "N");
 							oController.g_ReCommBed.setEnabled(true);
 							oController.g_ReCommGood.setEnabled(false);
