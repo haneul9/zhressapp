@@ -51,6 +51,7 @@ init: function(callback) {
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
+		this.checkExternalIP(),								// 외부망 여부 확인
 		this.retrieveClientIP(),							// 접속자 IP 조회
 		this.retrieveSFUserName(),							// 사번 조회
 		this.retrieveSessionToken(),						// Session token 조회
@@ -58,7 +59,6 @@ init: function(callback) {
 	])
 	.then(function() {
 		return Promise.all([
-			this.checkExternalIP(),							// 외부망 여부 확인
 			this.retrieveSFUserPhoto(),						// SF 사진 조회
 			this.retrieveSFUserLocale(),					// SF 언어 조회
 			this.encodePernr()								// 암호화 사번 조회
@@ -105,12 +105,12 @@ alreadyChekckedIn: function() {
 dkdlTlqpfmffls: function(resolve) {
 
 	var options = {
-		title: 'Mobile : 대상자 사번 입력',
+		title: '대상자 사번 입력',
 		html: [
 			'<div class="form-group m-3">',
 				'<label for="dkdlTl-qpfmffls">대상자 사번을 입력하세요.</label>',
 				'<input type="text" maxlength="30" class="form-control" id="dkdlTl-qpfmffls" />',
-				'<div class="invalid-feedback value-required">비밀번호를 입력하세요.</div>',
+				'<div class="invalid-feedback value-required">대상자 사번을 입력하세요.</div>',
 			'</div>'
 		].join(''),
 		show: function() {
@@ -147,6 +147,23 @@ dkdlTlqpfmffls: function(resolve) {
 	};
 
 	this._gateway.confirm(options);
+},
+
+checkExternalIP: function() {
+
+	return $.getJSON({
+		url: '/essproxy/check2FA',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.checkExternalIP success', arguments).log();
+
+			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result === 'E');
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.checkExternalIP');
+
+			sessionStorage.removeItem('ehr.client.ip.external');
+		}.bind(this)
+	}).promise();
 },
 
 retrieveClientIP: function() {
@@ -237,22 +254,6 @@ retrieveSessionToken: function() {
 			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.retrieveSessionToken');
 
 			sessionStorage.removeItem('ehr.session.token');
-		}.bind(this)
-	}).promise();
-},
-checkExternalIP: function() {
-
-	return $.getJSON({
-		url: '/essproxy/check2FA',
-		success: function(data) {
-			this._gateway.prepareLog('HomeSession.checkExternalIP success', arguments).log();
-
-			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result === 'E');
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.checkExternalIP');
-
-			sessionStorage.removeItem('ehr.client.ip.external');
 		}.bind(this)
 	}).promise();
 },
