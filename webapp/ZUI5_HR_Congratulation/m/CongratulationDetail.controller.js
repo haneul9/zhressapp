@@ -601,7 +601,7 @@ sap.ui.define(
                 oPayload.TableIn = [];
                 oPayload.TableIn.push({
                     Pernr: vPernr,
-                    StartDate: Common.adjustGMTOdataFormat(vDetailData.StartDate),
+                    StartDate: moment(vDetailData.StartDate).hours(10).toDate(),
                     Type: vDetailData.Type
                 });
 

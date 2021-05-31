@@ -250,7 +250,7 @@ sap.ui.define(
                 var vBukrs = "";
                 
                 var sendObject = {
-                    Datum: Common.adjustGMTOdataFormat(vDate),
+                    Datum: moment(vDate).hours(10).toDate(),
                     Pernr: vPernr,
                     BukrsExport: []
                 };
@@ -775,7 +775,7 @@ sap.ui.define(
                 oPayload.TableIn = [];
                 oPayload.TableIn.push({
                     Pernr: vPernr,
-                    StartDate: Common.adjustGMTOdataFormat(vDetailData.StartDate),
+                    StartDate: moment(vDetailData.StartDate).hours(10).toDate(),
                     Type: vDetailData.Type
                 });
 

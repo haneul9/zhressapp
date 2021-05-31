@@ -217,8 +217,8 @@ sap.ui.define([
 			sendObject.IBukrs = vBukrs;
 			sendObject.IEmpid = vPernr;
             sendObject.IConType = "1";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
-			sendObject.IEndda = oSearchDate.getSecondDateValue();
+			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
+			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
 			// Navigation property
 			sendObject.DispatchApplyExport = [];
 			sendObject.DispatchApplyTableIn1 = [];
