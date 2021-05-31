@@ -34,14 +34,14 @@ check: function(callback) {
 	}
 
 	return Promise.all([
-		this.isTargetIP(),		// MFA 대상 IP인지 확인
 		this.isTargetPernr()	// MFA 대상 사번인지 확인
 	])
 	.then(function() {
 		if (this._gateway.parameter('dlswmddlvlfdygkqslek') === 'true') {
 			this.confirm();
 		} else {
-			// this.targetIP = sessionStorage.getItem('ehr.client.network') === "E";
+			// MFA 대상 IP인지 확인
+			this.targetIP = sessionStorage.getItem('ehr.client.ip.external') === "E";
 
 			if (this._gateway.parameter('xptmxmwhagkrpTtmqslek') !== 'true') {
 				if (this.targetIP && this.targetPernr) {
@@ -69,18 +69,6 @@ check: function(callback) {
 			}
 		});
 	}.bind(this));
-},
-
-isTargetIP: function() {
-
-	return $.getJSON({
-		url: '/essproxy/check2FA',
-		success: function(data) {
-			this.targetIP = (data || {}).result === 'E';
-
-			this._gateway.prepareLog('HomeMFA.isTargetIP success : ' + this.targetIP, arguments).log();
-		}.bind(this)
-	}).promise();
 },
 
 isTargetPernr: function() {

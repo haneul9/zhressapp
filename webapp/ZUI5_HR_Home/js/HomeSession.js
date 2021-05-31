@@ -14,7 +14,6 @@ function HomeSession(_gateway, callback) {
 		ehr.mfa.done
 		ehr.client.ip
 		ehr.client.ip.external
-		ehr.client.network
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -51,8 +50,7 @@ init: function(callback) {
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
 
 	Promise.all([
-		this.checkExternalIP(),								// 외부망 여부 확인
-		this.retrieveClientIP(),							// 접속자 IP 조회
+		this.retrieveClientIP(),							// 접속자 IP 조회, 외부망 여부 확인
 		this.retrieveSFUserName(),							// 사번 조회
 		this.retrieveSessionToken(),						// Session token 조회
 		this._gateway.odataCsrfToken({}, 'ZHR_COMMON_SRV')	// 최초 CSRF token fetch 호출 이후 간헐적으로 발생하는 token validation failed 오류방지를 위해 encodePernr 호출전 미리 한 번 호출
@@ -149,23 +147,6 @@ dkdlTlqpfmffls: function(resolve) {
 	this._gateway.confirm(options);
 },
 
-checkExternalIP: function() {
-
-	return $.getJSON({
-		url: '/essproxy/check2FA',
-		success: function(data) {
-			this._gateway.prepareLog('HomeSession.checkExternalIP success', arguments).log();
-
-			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result);
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.checkExternalIP');
-
-			sessionStorage.removeItem('ehr.client.ip.external');
-		}.bind(this)
-	}).promise();
-},
-
 retrieveClientIP: function() {
 
 	return $.getJSON({
@@ -174,13 +155,13 @@ retrieveClientIP: function() {
 			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
 
 			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
-			// sessionStorage.setItem('ehr.client.network', data.result);
+			sessionStorage.setItem('ehr.client.ip.external', data.result);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.retrieveClientIP');
 
 			sessionStorage.removeItem('ehr.client.ip');
-			sessionStorage.removeItem('ehr.client.network');
+			sessionStorage.removeItem('ehr.client.ip.external');
 		}.bind(this)
 	}).promise();
 },
