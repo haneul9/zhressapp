@@ -183,12 +183,16 @@
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
 			var vCommData = oController.RegistModel.getProperty("/CommentData");
 			var vIndex = 0;
+			var vGood = false, vBed = false;
 
 			oCommentBox.destroyItems();
 
 			vCommData.forEach(function(e, i) {
-				// var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
-				// var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
+
+				if(localStorage) {
+					vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".goodconfirmed") === "Y";
+					vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + e.Seqnr2 + ".bedconfirmed") === "N";
+				}
 
 				if((Common.checkNull(e.Zdel) && oController.RegistModel.getProperty("/SubCommentData").length === 0) || oController.RegistModel.getProperty("/SubCommentData").some(function(ele) { return ele.Seqnr2 === e.Seqnr2 || (ele.Seqnr2 !== e.Seqnr2 && Common.checkNull(e.Zdel)); })) {
 					oCommentBox.addItem(
@@ -348,12 +352,16 @@
 			var oController = this.getView().getController();
 			var vSubCommentData = oController.RegistModel.getProperty("/SubCommentData");
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
+			var vGood = false;
+			var vBed = false;
 
 			if(Common.checkNull(!index) || index === 0){ // 저장된 대댓글 Setting
 				vSubCommentData.forEach(function(e) {
 					if(e.Seqnr2 === oEvent.Seqnr2) {
-						// var vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
-						// var vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
+						if(localStorage) {
+							vGood = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".goodconfirmed") === "Y";
+							vBed = localStorage.getItem("ehr.suggestions." + oController.RegistModel.getProperty("/FormData/Sdate") + oController.RegistModel.getProperty("/FormData/Seqnr") + oEvent.Seqnr2 + e.Seqnr3 + ".bedconfirmed") === "N";
+						}
 
 						oCommentBox.getItems()[index].getItems()[3].setVisible(true);
 						oCommentBox.getItems()[index].getItems()[3].addItem(
@@ -1024,8 +1032,9 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") === "Y") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") === "Y") {
 				oSendData.Zcanc = "X";
+			}
 
 			var sendObject = {};
 			// Header
