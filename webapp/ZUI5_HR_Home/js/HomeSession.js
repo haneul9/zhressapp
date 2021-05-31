@@ -580,18 +580,6 @@ logout: function() {
 		$('#ehr-logout-modal [data-dismiss="modal"]').prop('disabled', true);
 
 		location.href = this.scpLogoutEndpoint();
-		// if (this._gateway.isMobile()) {
-		// } else {
-		// 	$('#ehr-logout-modal .feedback-message').parent().toggleClass('d-none', false);
-
-		// 	$('#ehr-logout-modal .modal-body').append([
-		// 		'<iframe class="d-none" name="single-sign-out-iframe"></iframe>',
-		// 		'<iframe class="d-none" name="single-sign-out-second-iframe"></iframe>',
-		// 		'<iframe class="d-none" name="scp-logout-iframe"></iframe>'
-		// 	]);
-
-		// 	this.singleSignOut();
-		// }
 	}.bind(this))
 	.on('hidden.bs.modal', function() {
 		$(this).remove();

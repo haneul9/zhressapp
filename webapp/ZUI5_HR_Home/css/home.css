@@ -77,6 +77,9 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .ehr-body.menu-loaded .container-fluid {padding:0}
 .ehr-body.menu-loaded .jspVerticalBar {display:none}
 
+.mobile-notice-modal ol > li {margin-top:.3rem}
+.mobile-notice-modal ul > li + li {margin-top:.7rem}
+
 .portlet-masonry {padding-bottom:1.5rem}
 .portlet-col {flex-basis:412px; min-width:412px; width:412px}
 [device="mobile"] .portlet-col {min-width:100%}
@@ -329,7 +332,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .modal-header .modal-title {line-height:2.75}
 .modal-header h4 {font-size:1rem}
 .modal-header .close {font-size:2rem;font-weight:400; padding:.25rem; margin:0}
-.modal-footer {border-top:1px solid #d9d9d9; padding:0 20px 0 0}
+.modal-footer {border-top:1px solid #d9d9d9; padding:0 20px}
 .modal-body .btn, .modal-footer .btn {height:36px; border-radius:.1875rem; padding:0 20px; font-size:.875rem} 
 .modal-body .btn.btn-primary, .modal-footer .btn.btn-primary {background-color:#0070bd; color:#fff; border:1px solid #0070bd}
 .modal-footer .btn.btn-primary:hover {background-color:#064975; border:1px solid #064975}
