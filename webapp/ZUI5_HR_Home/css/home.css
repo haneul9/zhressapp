@@ -77,8 +77,8 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .ehr-body.menu-loaded .container-fluid {padding:0}
 .ehr-body.menu-loaded .jspVerticalBar {display:none}
 
-.mobile-notice-modal ol > li {margin-top:.3rem}
-.mobile-notice-modal ul > li + li {margin-top:.7rem}
+.mobile-notice-modal ol > li {margin-top:.7rem}
+.mobile-notice-modal ul > li {margin-top:.3rem}
 
 .portlet-masonry {padding-bottom:1.5rem}
 .portlet-col {flex-basis:412px; min-width:412px; width:412px}
