@@ -43,7 +43,7 @@ sap.ui.jsview("ZUI5_HR_MobilePush.List", {
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [
-										new sap.m.Label({text : "{i18n>LABEL_72003}", textAlign : "Center", width : "100px"}).addStyleClass("bold pr-5px pt-10px"), // 제목
+										new sap.m.Text({text : "{i18n>LABEL_72003}", textAlign : "Center", width : "100px"}).addStyleClass("bold pr-5px pt-10px"), // 제목
 										new sap.m.Input({
 											value : "{HeadTxt}",
 											maxLength : common.Common.getODataPropertyLength("ZHR_COMMON_SRV", "AppPushAlarmLog", "HeadTxt"),
@@ -56,7 +56,7 @@ sap.ui.jsview("ZUI5_HR_MobilePush.List", {
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [
-										new sap.m.Label({text : "{i18n>LABEL_72004}", textAlign : "Center", width : "100px"}).addStyleClass("bold pr-5px pt-10px"), // 본문
+										new sap.m.Text({text : "{i18n>LABEL_72004}", textAlign : "Center", width : "100px"}).addStyleClass("bold pr-5px pt-10px"), // 본문
 										new sap.m.Input({
 											value : "{BodyTxt}",
 											maxLength : common.Common.getODataPropertyLength("ZHR_COMMON_SRV", "AppPushAlarmLog", "BodyTxt"),
