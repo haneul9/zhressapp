@@ -152,6 +152,7 @@ retrieveClientIP: function() {
 			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
 
 			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
+			// sessionStorage.setItem('ehr.client.network', data.result);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveClientIP');
