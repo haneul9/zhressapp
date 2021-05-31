@@ -12,8 +12,8 @@ function HomeSession(_gateway, callback) {
 		ehr.odata.destination
 		ehr.session.token
 		ehr.mfa.done
-		ehr.
-		ehr.external.ip
+		ehr.client.ip
+		ehr.client.external
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
