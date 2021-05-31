@@ -75,15 +75,15 @@ AppPrefilter.prototype.checkMenuId = function() {
 
 AppPrefilter.prototype.checkMenuAuthority = function() {
 
-	var menuInfo = (parent.window._menu && parent.window._menu.menuDataMap) ? parent.window._menu.menuDataMap[this.parameterMap.mid] : null,
-	result = { hasMenuAuthority: true },
+	// var menuInfo = (parent.window._menu && parent.window._menu.menuDataMap) ? parent.window._menu.menuDataMap[this.parameterMap.mid] : null,
+	var result = { hasMenuAuthority: true },
 	loginInfo = this._gateway.loginInfo();
 
-	if(menuInfo) {
-		result.hasMenuAuthority = true;
-		result.ECheckPw = menuInfo.CheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
-		result.EPinfo = menuInfo.Pinfo;
-	} else {
+	// if(menuInfo) {
+	// 	result.hasMenuAuthority = true;
+	// 	result.ECheckPw = menuInfo.CheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
+	// 	result.EPinfo = menuInfo.Pinfo;
+	// } else {
 		this._gateway.post({
 			async: false,
 			url: "ZHR_COMMON_SRV/GetMenuidRoleSet",
@@ -126,7 +126,7 @@ AppPrefilter.prototype.checkMenuAuthority = function() {
 			result.jqXHR.message = "error.unauthorized";
 			throw result.jqXHR;
 		}
-	}
+	// }
 
 	return result;
 };
