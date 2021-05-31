@@ -133,8 +133,8 @@
 			// Header
 			sendObject.IPernr = vPernr;
 			sendObject.IBukrs = vBukrs;
-			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
-			sendObject.IEndda = oSearchDate.getSecondDateValue();
+			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
+			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
             sendObject.IConType = "1";
 			// Navigation property
 			sendObject.EducationfundApplyExport = [];

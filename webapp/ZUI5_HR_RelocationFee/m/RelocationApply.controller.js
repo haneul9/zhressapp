@@ -146,7 +146,7 @@
 			if(oEvent) {
 				// Header
 				sendObject.Pernr = vPernr;
-				sendObject.Datum = Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Zactdt"));
+				sendObject.Datum = moment(oController.DetailModel.getProperty("/FormData/Zactdt")).hours(10).toDate();
 				// Navigation property
 				sendObject.BukrsExport = [];
 				

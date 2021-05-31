@@ -72,8 +72,8 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.IZrolgb = "H";
             sendObject.IConType = "1";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(vDate1);
-			sendObject.IEndda = vDate2;
+			sendObject.IBegda = moment(vDate1).hours(10).toDate();
+			sendObject.IEndda = moment(vDate2).hours(10).toDate();
 			sendObject.IEname = Common.checkNull(oEnameInput.getValue()) ? "" : oEnameInput.getValue();
 			// Navigation property
 			sendObject.TableIn1 = [];

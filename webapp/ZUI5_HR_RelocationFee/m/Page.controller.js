@@ -91,8 +91,8 @@
 			// Header
 			sendObject.IPernr = vPernr;
             sendObject.IGubun = "1";
-			sendObject.IBegda = Common.adjustGMTOdataFormat(oSearchDate.getDateValue());
-			sendObject.IEndda = oSearchDate.getSecondDateValue();
+			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
+			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
 			// Navigation property
 			sendObject.NewPostTableIn1 = [];
 			

@@ -185,8 +185,8 @@
                 var vPernr = oController.getUserId(); 
                     
                 var oSendDate = {};
-				oSendDate.Lecbe =  Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Lecbe"));
-				oSendDate.Lecen =  Common.adjustGMTOdataFormat(oController.DetailModel.getProperty("/FormData/Lecen"));
+				oSendDate.Lecbe =  moment(oController.DetailModel.getProperty("/FormData/Lecbe")).hours(10).toDate();
+				oSendDate.Lecen =  moment(oController.DetailModel.getProperty("/FormData/Lecen")).hours(10).toDate();
 
                 if(Common.checkNull(oController.DetailModel.getProperty("/FormData/Zlangu"))) return;
 

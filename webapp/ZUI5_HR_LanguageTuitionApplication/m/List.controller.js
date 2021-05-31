@@ -62,8 +62,8 @@
                 IEmpid: vPernr,
                 IBukrs: vBukrs2,
                 IConType: "1",
-                IBegda: Common.adjustGMTOdataFormat(oSearchDate.getDateValue()),
-                IEndda: oSearchDate.getSecondDateValue(),
+                IBegda: moment(oSearchDate.getDateValue()).hours(10).toDate(),
+                IEndda: moment(oSearchDate.getSecondDateValue()).hours(10).toDate(),
                 LanguPayApplyExport: [],
                 LanguPayApplyTableIn: [],
                 LanguPayApplyTableIn3: []
