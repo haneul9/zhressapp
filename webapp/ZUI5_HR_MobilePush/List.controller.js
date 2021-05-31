@@ -3,21 +3,19 @@ sap.ui.define([
 	"common/CommonController",
 	"common/JSONModelHelper",
 	"common/PageHelper",
-	"common/AttachFileAction",
     "common/SearchOrg",
     "common/SearchUser1",
-    "common/OrgOfIndividualHandler",
-    "common/DialogHandler",
 	"sap/m/MessageBox"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler, MessageBox) {
+	function (Common, CommonController, JSONModelHelper, PageHelper, SearchOrg, SearchUser1, MessageBox) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_MobilePush.List", {
 
+		/** AppPushAlarmHeaderSet : 1-Token 2-Log 3-(전체)부서장 token정보 리턴 4-(전체)비밀번호 확인 **/ 
+
 		PAGEID: "ZUI5_HR_MobilePushList",
 		_BusyDialog : new sap.m.BusyDialog(),
 		_ListCondJSonModel : new sap.ui.model.json.JSONModel(),
-		_Columns : [],
 		
 		onInit: function () {
 			this.setupView()
@@ -55,27 +53,21 @@ sap.ui.define([
 			
 			oController.resetTable(oEvent);
 		},
-		
-		onBack : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_MobilePush.List");
-			var oController = oView.getController();
-		
-			sap.ui.getCore().getEventBus().publish("nav", "to", {
-			      id : oController._ListCondJSonModel.getProperty("/Data/FromPageId"),
-			      data : {
-			    	  FromPageId : "ZUI5_HR_MobilePush.List",
-			    	  Data : {}
-			      }
-			});
-		},
-				
+
 		resetTable : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MobilePush.List");
 			var oController = oView.getController();
 		
 			var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
-				oTable.getModel().setData({Data : []});
-				oTable.setVisibleRowCount(1);
+
+			var column = oTable.getColumns();
+			for(var i=0; i<column.length; i++){
+				column[i].setSorted(false);
+				column[i].setFiltered(false);
+			}
+
+			oTable.getModel().setData({Data : []});
+			oTable.setVisibleRowCount(1);
 		},
 
 		// 전송대상 라디오버튼 변경 event
@@ -193,7 +185,7 @@ sap.ui.define([
 				oNewData.push(oData[i]);
 			}
 
-			// 선택한 대상자 추가
+			// 선택한 대상자 추가 - token 여부 체크
 			var createData = {AppPushAlarmTokenSet : []};
 			for(var i=0; i<oIndices.length; i++){
 				var sPath = oSearchTable.getContextByIndex(oIndices[i]).sPath;
@@ -209,9 +201,6 @@ sap.ui.define([
 				if(check == "X") continue;
 
 				createData.AppPushAlarmTokenSet.push({Pernr : data.Pernr});
-
-				// data.Idx = oNewData.length;
-				// oNewData.push(data);
 			}
 
 			createData.IPernr = oController.getSessionInfoByKey("Pernr");
@@ -251,7 +240,6 @@ sap.ui.define([
 				}
 			});
 			
-
 			oTable.getModel().setData({Data : oNewData});
 			oTable.bindRows("/Data");
 
@@ -268,7 +256,7 @@ sap.ui.define([
 			oController.oAddPersonDialog.close();
 		},
 
-		// 삭제
+		// 대상자 삭제
 		onPressDeleteTarget : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MobilePush.List");
 			var oController = oView.getController();
@@ -349,6 +337,7 @@ sap.ui.define([
 					return;
 				}
 
+				var target = 0;
 				for(var i=0; i<oTableData.length; i++){
 					if(oTableData[i].Token == ""){
 						tokenyn = "N";
@@ -362,10 +351,10 @@ sap.ui.define([
 						return;
 					}
 					
-					createData.AppPushAlarmLogSet.push({Pernr : oTableData[i].Pernr, HeadTxt : oTableData[i].HeadTxt, BodyTxt : oTableData[i].BodyTxt});
+					target++;
 				}
 
-				if(createData.AppPushAlarmLogSet.length == 0){
+				if(target == 0){
 					MessageBox.alert(oController.getBundleText("MSG_72011"), { // 발송 가능한 대상자가 없습니다.
 						title : oController.getBundleText("LABEL_00149")
 					});
@@ -378,15 +367,12 @@ sap.ui.define([
 					});
 					return;
 				}
-
-				createData.AppPushAlarmLogSet.push({HeadTxt : oData.HeadTxt, BodyTxt : oData.BodyTxt});
 			}
 
 			var process = function(){
 				createData.IPernr = oController.getSessionInfoByKey("Pernr");
 				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				createData.IConType = "2";
-				createData.AppPushAlarmLogSet = [];
 
 				if(oData.Key == 0){
 					var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
@@ -405,57 +391,118 @@ sap.ui.define([
 							createData.AppPushAlarmLogSet.push({Pernr : oTableData[i].Pernr, HeadTxt : oTableData[i].HeadTxt, BodyTxt : oTableData[i].BodyTxt});
 						} 
 					}
-				} else {
-					if(Common.sendPush({
-							title: oController._ListCondJSonModel.getProperty("/Data/HeadTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/HeadTxt"),
-							body: oController._ListCondJSonModel.getProperty("/Data/BodyTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/BodyTxt"),
-							token: "/topic/news"
-					   }) != false){
-						createData.AppPushAlarmLogSet.push({HeadTxt : oData.HeadTxt, BodyTxt : oData.BodyTxt});
-					}
-				}
-
-				var oModel = $.app.getModel("ZHR_COMMON_SRV");
-				oModel.create("/AppPushAlarmHeaderSet", createData, {
-					success: function(data, res){
-						if(data){
-							
-						}
-					},
-					error: function (oError) {
-						var Err = {};
-						oController.Error = "E";
+					
+					var oModel = $.app.getModel("ZHR_COMMON_SRV");
+					oModel.create("/AppPushAlarmHeaderSet", createData, {
+						success: function(data, res){
+							if(data){
 								
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-							else oController.ErrorMessage = Err.error.message.value;
-						} else {
-							oController.ErrorMessage = oError.toString();
+							}
+						},
+						error: function (oError) {
+							var Err = {};
+							oController.Error = "E";
+									
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+								else oController.ErrorMessage = Err.error.message.value;
+							} else {
+								oController.ErrorMessage = oError.toString();
+							}
 						}
+					});
+
+					oController._BusyDialog.close();
+
+					if(oController.Error == "E"){
+						oController.Error = "";
+						MessageBox.error(oController.ErrorMessage);
+						return;
 					}
-				});
 
-				oController._BusyDialog.close();
-
-				if(oController.Error == "E"){
-					oController.Error = "";
-					MessageBox.error(oController.ErrorMessage);
-					return;
-				}
-
-				MessageBox.success(oController.getBundleText("MSG_72012"), { // Mobile Push 발송되었습니다.
-					title: oController.getBundleText("LABEL_00149"),
-					onClose : function(){
-						if(oData.Key == 0){
+					MessageBox.success(oController.getBundleText("MSG_72012"), { // Mobile Push 발송되었습니다.
+						title: oController.getBundleText("LABEL_00149"),
+						onClose : function(){
 							oController.resetTable();
+							oController._ListCondJSonModel.setProperty("/Data/HeadTxt", "");
+							oController._ListCondJSonModel.setProperty("/Data/BodyTxt", "");	
 						}
+					});
+				} else {
+					// 전체 push 발송 전 부서장 비밀번호 발송 및 확인 로직 추가					
+					createData.IConType = "3";
+					createData.AppPushAlarmCheckSet = [];
 
-						oController._ListCondJSonModel.setProperty("/Data/HeadTxt", "");
-						oController._ListCondJSonModel.setProperty("/Data/BodyTxt", "");	
+					var oConfirmData = [];
+					var oModel = $.app.getModel("ZHR_COMMON_SRV");
+					oModel.create("/AppPushAlarmHeaderSet", createData, {
+						success: function(data, res){
+							if(data && data.AppPushAlarmCheckSet.results.length){
+								oConfirmData.push(data.AppPushAlarmCheckSet.results[0]);
+							}
+						},
+						error: function (oError) {
+							var Err = {};
+							oController.Error = "E";
+									
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+								else oController.ErrorMessage = Err.error.message.value;
+							} else {
+								oController.ErrorMessage = oError.toString();
+							}
+						}
+					});
+
+					oController._BusyDialog.close();
+
+					if(oController.Error == "E"){
+						oController.Error = "";
+						MessageBox.error(oController.ErrorMessage);
+						return;
 					}
-				});
+
+					if(oConfirmData.length > 0){
+						if(oConfirmData[0].Token == ""){
+										 	 // 부서장(${Ename} ${Zposttx})의 핸드폰에 Hi HR App이 설치되어 있지 않습니다. 설치 후 진행하시기 바랍니다.
+							MessageBox.alert(oController.getBundleText("MSG_72014").interpolate(oConfirmData[0].Ename, oConfirmData[0].Zposttx), { 
+								title : oController.getBundleText("LABEL_00149")
+							});
+							return;
+						} else {
+							if(!oController._CernmDialog){
+								oController._CernmDialog = sap.ui.jsfragment("ZUI5_HR_MobilePush.fragment.Cernm", oController);
+								oView.addDependent(oController._CernmDialog);
+							}
+
+							// 비밀번호 push 발송
+							$.post({
+								url: common.Common.getJavaOrigin($.app.getController(), "/pushAuth"),
+								dataType: 'text',
+								data: {
+									token: oConfirmData[0].Token,
+									body: oConfirmData[0].Cernm
+								},
+								async: false,
+								success: function (data) {
+									common.Common.log([].slice.call(data));
+								},
+								error: function () {
+									common.Common.log([].slice.call(arguments));
+								}
+							});
+
+							oConfirmData[0].Cernm2 = "";
+
+							oController._CernmDialog.getModel().setData({Data : oConfirmData[0]});
+							oController._CernmDialog.open();
+						}
+					}
+				}
 			};
 												   // 발송이 불가능한 대상자는 제외합니다.					// Mobile Push 발송을 진행할까요?
 			var confirmMessage = (tokenyn == "N" ? oController.getBundleText("MSG_72008") + "\n" : "") + oController.getBundleText("MSG_72010");
@@ -469,12 +516,116 @@ sap.ui.define([
 						setTimeout(process, 100);
 					}
 				}
-			})
+			});
+		},
+
+		// 전체 푸시 발송 전 인증번호 확인
+		onPushCheck : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_MobilePush.List");
+			var oController = oView.getController();
+
+			var oData = oController._CernmDialog.getModel().getProperty("/Data");
+			
+			if(oData.Cernm2.trim() == ""){
+				MessageBox.alert(oController.getBundleText("MSG_72015"), { // 비밀번호를 입력하세요.
+					title : oController.getBundleText("LABEL_00149")
+				});
+				return;
+			}
+
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var createData = {};
+				createData.IPernr = oController.getSessionInfoByKey("Pernr");
+				createData.ILangu = oController.getSessionInfoByKey("Langu");
+				createData.IConType = "4";
+				createData.AppPushAlarmCheckSet = [{Pernr : oData.Pernr, Cernm : oData.Cernm2}];
+
+			oModel.create("/AppPushAlarmHeaderSet", createData, {
+				success: function(data, res){
+					if(data){
+						
+					}
+				},
+				error: function (oError) {
+					var Err = {};
+					oController.Error = "E";
+							
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			});
+
+			if(oController.Error == "E"){
+				oController.Error = "";
+				MessageBox.error(oController.ErrorMessage);
+				return;
+			}
+
+			// 전체 모바일 푸시 발송 + 로그 저장
+				createData.IConType = "2";
+				createData.AppPushAlarmLogSet = [{
+					HeadTxt : oController._ListCondJSonModel.getProperty("/Data/HeadTxt"),
+					BodyTxt : oController._ListCondJSonModel.getProperty("/Data/BodyTxt")
+				}];
+
+			if(common.Common.getOperationMode() == "PRD"){
+				Common.log("PUSH : ALL");
+				if(Common.sendPush({
+						title: oController._ListCondJSonModel.getProperty("/Data/HeadTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/HeadTxt"),
+						body: oController._ListCondJSonModel.getProperty("/Data/BodyTxt") == "" ? " " : oController._ListCondJSonModel.getProperty("/Data/BodyTxt"),
+						token: "/topic/news"
+				}) == false){
+					MessageBox.alert(oController.getBundleText("MSG_72016"), { // Mobile Push 발송 중 오류가 발생하였습니다.
+						title : oController.getBundleText("LABEL_00149")
+					});
+					return;
+				}
+			}
+
+			oModel.create("/AppPushAlarmHeaderSet", createData, {
+				success: function(data, res){
+					if(data){
+						
+					}
+				},
+				error: function (oError) {
+					var Err = {};
+					oController.Error = "E";
+							
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			});
+
+			if(oController.Error == "E"){
+				oController.Error = "";
+				MessageBox.error(oController.ErrorMessage);
+				return;
+			}
+
+			MessageBox.success(oController.getBundleText("MSG_72012"), { // Mobile Push 발송되었습니다.
+				title: oController.getBundleText("LABEL_00149"),
+				onClose : function(){
+					oController._ListCondJSonModel.setProperty("/Data/HeadTxt", "");
+					oController._ListCondJSonModel.setProperty("/Data/BodyTxt", "");
+					oController._CernmDialog.close();
+				}
+			});
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {
-			// return new JSONModelHelper({name: "20180126"});
-			// return new JSONModelHelper({name: "20130126"});
 			return new JSONModelHelper({name: "20090028"});
 		} : null
 		
