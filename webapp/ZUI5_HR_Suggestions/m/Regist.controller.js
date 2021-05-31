@@ -303,7 +303,7 @@
 											text: "{i18n>LABEL_56021}", // 싫어요
 											enabled: (vGood === false && vBed === false) || vBed,
 											press: oController.OnCommThumbDown.bind(oController)
-										}).addStyleClass("button-light-sm"),
+										}).addStyleClass("button-light-sm")
 										.toggleStyleClass("button-HiTokTok-check", vBed),
 										new sap.m.Button({
 											press: oController.onCommentSubBtn.bind(oController),
