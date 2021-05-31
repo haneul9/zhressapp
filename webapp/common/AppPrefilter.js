@@ -75,58 +75,62 @@ AppPrefilter.prototype.checkMenuId = function() {
 
 AppPrefilter.prototype.checkMenuAuthority = function() {
 
-	// var menuInfo = (parent.window._menu && parent.window._menu.menuDataMap) ? parent.window._menu.menuDataMap[this.parameterMap.mid] : null,
+	try {
+		var menuData = (parent && parent._menu && parent._menu.menuDataMap) ? parent._menu.menuDataMap[this.parameterMap.mid] : null;
+		return {
+			hasMenuAuthority: true,
+			ECheckPw: menuData.CheckPw, // 비밀번호 재확인이 필요한 메뉴인지 여부
+			EPinfo: menuData.Pinfo
+		};
+	} catch(e) {
+		// DO NOTHING
+	}
+
 	var result = { hasMenuAuthority: true },
 	loginInfo = this._gateway.loginInfo();
 
-	// if(menuInfo) {
-	// 	result.hasMenuAuthority = true;
-	// 	result.ECheckPw = menuInfo.CheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
-	// 	result.EPinfo = menuInfo.Pinfo;
-	// } else {
-		this._gateway.post({
-			async: false,
-			url: "ZHR_COMMON_SRV/GetMenuidRoleSet",
-			data: {
-				IPernr: loginInfo.Pernr,
-				IBukrs: loginInfo.Bukrs,
-				IMenid: this.parameterMap.mid,
-				IMobile: this._gateway.isMobile() ? 'X' : '',
-				IPcip: loginInfo.Ipadd,
-				Export: []
-			},
-			success: function(data) {
-				this._gateway.prepareLog("common.AppPrefilter.checkMenuAuthority success.", arguments).log();
-	
-				// ERole !== 'X' 이면 권한이 없는 것이지만 권한이 없으면 아래 error function으로 처리됨
-				var ExportResult = (((((data || {}).d || {}).Export || {}).results || [])[0] || {});
-				result.EPinfo = ExportResult.EPinfo; // EmpBasicInfoBox 표시 여부
-	
-				if (/^webide/i.test(location.host)) {
-					result.ECheckPw = "";
-				} else {
-					result.ECheckPw = ExportResult.ECheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
-				}
-			}.bind(this),
-			error: function(jqXHR) {
-				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
-	
-				if (/^webide/i.test(location.host)) {
-					result.hasMenuAuthority = true;
-					result.ECheckPw = ""; // 비밀번호 재확인이 필요한 메뉴인지 여부
-					result.EPinfo = "X"; // EmpBasicInfoBox 표시 여부
-				} else {
-					result.hasMenuAuthority = false;
-					result.jqXHR = jqXHR;
-				}
-			}.bind(this)
-		});
-	
-		if (!result.hasMenuAuthority) {
-			result.jqXHR.message = "error.unauthorized";
-			throw result.jqXHR;
-		}
-	// }
+	this._gateway.post({
+		async: false,
+		url: "ZHR_COMMON_SRV/GetMenuidRoleSet",
+		data: {
+			IPernr: loginInfo.Pernr,
+			IBukrs: loginInfo.Bukrs,
+			IMenid: this.parameterMap.mid,
+			IMobile: this._gateway.isMobile() ? 'X' : '',
+			IPcip: loginInfo.Ipadd,
+			Export: []
+		},
+		success: function(data) {
+			this._gateway.prepareLog("common.AppPrefilter.checkMenuAuthority success.", arguments).log();
+
+			// ERole !== 'X' 이면 권한이 없는 것이지만 권한이 없으면 아래 error function으로 처리됨
+			var ExportResult = (((((data || {}).d || {}).Export || {}).results || [])[0] || {});
+			result.EPinfo = ExportResult.EPinfo; // EmpBasicInfoBox 표시 여부
+
+			if (/^webide/i.test(location.host)) {
+				result.ECheckPw = "";
+			} else {
+				result.ECheckPw = ExportResult.ECheckPw; // 비밀번호 재확인이 필요한 메뉴인지 여부
+			}
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, "common.AppPrefilter.checkMenuAuthority");
+
+			if (/^webide/i.test(location.host)) {
+				result.hasMenuAuthority = true;
+				result.ECheckPw = ""; // 비밀번호 재확인이 필요한 메뉴인지 여부
+				result.EPinfo = "X"; // EmpBasicInfoBox 표시 여부
+			} else {
+				result.hasMenuAuthority = false;
+				result.jqXHR = jqXHR;
+			}
+		}.bind(this)
+	});
+
+	if (!result.hasMenuAuthority) {
+		result.jqXHR.message = "error.unauthorized";
+		throw result.jqXHR;
+	}
 
 	return result;
 };
