@@ -12,6 +12,8 @@ function HomeSession(_gateway, callback) {
 		ehr.odata.destination
 		ehr.session.token
 		ehr.mfa.done
+		ehr.
+		ehr.external.ip
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -55,6 +57,7 @@ init: function(callback) {
 	])
 	.then(function() {
 		return Promise.all([
+			this.retrieveIPProperty(),						// IP 속성 조회 : 외부망 체크용
 			this.retrieveSFUserPhoto(),						// SF 사진 조회
 			this.retrieveSFUserLocale(),					// SF 언어 조회
 			this.encodePernr()								// 암호화 사번 조회
@@ -152,11 +155,13 @@ retrieveClientIP: function() {
 			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
 
 			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
+			sessionStorage.setItem('ehr.client.external', false); // trace API 변경 후 알맞은 변수로 수정
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveClientIP');
 
 			sessionStorage.removeItem('ehr.client.ip');
+			sessionStorage.removeItem('ehr.client.external');
 		}.bind(this)
 	}).promise();
 },

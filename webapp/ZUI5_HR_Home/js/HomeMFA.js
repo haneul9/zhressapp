@@ -76,6 +76,8 @@ isTargetIP: function() {
 		success: function(data) {
 			this.targetIP = (data || {}).result === 'E';
 
+			sessionStorage.setItem('ehr.external.ip', this.targetIP);
+
 			this._gateway.prepareLog('HomeMFA.isTargetIP success : ' + this.targetIP, arguments).log();
 		}.bind(this)
 	}).promise();
