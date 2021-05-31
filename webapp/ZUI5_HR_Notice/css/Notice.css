@@ -7,4 +7,6 @@
     padding: .25em .4em; font-size: 10.5px; line-height: 1; text-align: center; white-space: nowrap; vertical-align: baseline;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;}
 .FontRed-Ml3px { color: #cc1919; margin-left: 3px;}
-.font14px { font-size: 14px;}
+.font14px {font-size: 14px;}
+.custom-line {line-height:1.2 !important}
+.sapUiTv {font-weight:400}
