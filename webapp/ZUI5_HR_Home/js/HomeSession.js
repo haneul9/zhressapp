@@ -12,6 +12,9 @@ function HomeSession(_gateway, callback) {
 		ehr.odata.destination
 		ehr.session.token
 		ehr.mfa.done
+		ehr.client.ip
+		ehr.client.ip.external
+		ehr.client.network
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -55,6 +58,7 @@ init: function(callback) {
 	])
 	.then(function() {
 		return Promise.all([
+			this.checkExternalIP(),							// 외부망 여부 확인
 			this.retrieveSFUserPhoto(),						// SF 사진 조회
 			this.retrieveSFUserLocale(),					// SF 언어 조회
 			this.encodePernr()								// 암호화 사번 조회
@@ -95,7 +99,8 @@ alreadyChekckedIn: function() {
 	return !!sessionStorage.getItem('ehr.session.token');
 },
 /*
-DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
+1. DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
+2. PRD SF에 hpjt0857로 접속시 SM 업무를 위해 사번 입력 popup 제공
 */
 dkdlTlqpfmffls: function(resolve) {
 
@@ -152,11 +157,13 @@ retrieveClientIP: function() {
 			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
 
 			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
+			// sessionStorage.setItem('ehr.client.network', data.result);
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveClientIP');
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.retrieveClientIP');
 
 			sessionStorage.removeItem('ehr.client.ip');
+			sessionStorage.removeItem('ehr.client.network');
 		}.bind(this)
 	}).promise();
 },
@@ -168,16 +175,19 @@ _retrieveSFUserName: function(resolve) {
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserName success', arguments).log();
 
-			sessionStorage.setItem('ehr.sf-user.name', data.name);
+			if (this._gateway.isPRD() && /hpjt0832/i.test(data.name)) {
+				this.dkdlTlqpfmffls(resolve);
+			} else {
+				sessionStorage.setItem('ehr.sf-user.name', data.name);
+			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveSFUserName');
 
 			sessionStorage.removeItem('ehr.sf-user.name');
-		}.bind(this),
-		complete: function() {
+
 			resolve();
-		}
+		}.bind(this)
 	});
 },
 /*
@@ -224,9 +234,25 @@ retrieveSessionToken: function() {
 			}
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveSessionToken');
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.retrieveSessionToken');
 
 			sessionStorage.removeItem('ehr.session.token');
+		}.bind(this)
+	}).promise();
+},
+checkExternalIP: function() {
+
+	return $.getJSON({
+		url: '/essproxy/check2FA',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.checkExternalIP success', arguments).log();
+
+			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result === 'E');
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.checkExternalIP');
+
+			sessionStorage.removeItem('ehr.client.ip.external');
 		}.bind(this)
 	}).promise();
 },

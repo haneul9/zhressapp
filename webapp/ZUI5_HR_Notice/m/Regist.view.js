@@ -55,7 +55,7 @@
                                 width: "auto",
                                 textAlign: "Begin",
                                 text: "{ApernTxt}"
-                            }).addStyleClass("line-height-24")
+                            }).addStyleClass("custom-line pt-10px")
 						]
 					}),
 					new sap.m.HBox({
@@ -109,7 +109,7 @@
                                     }
                                 },
 								editable: false
-                            })
+                            }).addStyleClass("mt-5px ml--6px")
 						]
 					}),
                     new sap.m.VBox({

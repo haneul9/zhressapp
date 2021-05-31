@@ -99,7 +99,7 @@
                                     new sap.m.Text({
                                         text : "{Title}",
                                         textAlign : "Begin"
-                                    }).addStyleClass("L2P13Font font-14px"),
+                                    }).addStyleClass("L2P13Font font-14px font-bold"),
                                     new sap.m.HBox({
                                         justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
                                         items: [

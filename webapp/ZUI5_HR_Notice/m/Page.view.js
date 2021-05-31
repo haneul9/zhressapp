@@ -91,7 +91,7 @@
                                                             return "";
                                                         }else{
                                                             var oList = [
-                                                                '<span class="font14px">' + v1 + '</span>',
+                                                                '<span class="font14px font-bold">' + v1 + '</span>',
                                                                 v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
                                                                 v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
                                                             ].join("");
