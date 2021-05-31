@@ -2375,7 +2375,7 @@ sap.ui.define([
                                     // detail.Ldreg = (oData[i].Regnr.indexOf("*") != -1) ? oData[i].Ldreg : oData[i].Regnr.replace(/[^0-9]/g, "");
                                     detail.Ldreg = oData[i].Ldreg.replace(/[^0-9]/g, "");
                                     detail.Houty = oData[i].Houty;
-                                    detail.Flrar = oData[i].Flrar.replace(/[^0-9]/g, "");
+                                    detail.Flrar = oData[i].Flrar;
                                     detail.Addre = oData[i].Addre;
                                     detail.Rcbeg = "\/Date(" + common.Common.getTime(oData[i].Rcbeg) + ")\/";
                                     detail.Rcend = "\/Date(" + common.Common.getTime(oData[i].Rcend) + ")\/";
