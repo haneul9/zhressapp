@@ -374,7 +374,8 @@ getMenuTree: function(data) {
 		menuDataMap[o.Menid] = {
 			menuId: o.Menid,
 			// title: o.Mentx,
-			url: o.Meurl
+			url: o.Meurl,
+			Pinfo: o.Pinfo
 		};
 	});
 	$.map(results.TableIn3, function(o) { // Level 2 메뉴의 하위 메뉴 목록 생성
@@ -392,6 +393,7 @@ getMenuTree: function(data) {
 		menu.Mnid1 = o.Mnid1;
 		menu.Mnid2 = o.Mnid2;
 		menu.Mnid3 = o.Mnid3;
+		menu.CheckPw = o.CheckPw;
 
 		if (level2SubMenuMap[o.Mnid2]) {
 			level2SubMenuMap[o.Mnid2].push(menu);
