@@ -13,7 +13,8 @@ function HomeSession(_gateway, callback) {
 		ehr.session.token
 		ehr.mfa.done
 		ehr.client.ip
-		ehr.client.external
+		ehr.client.ip.external
+		ehr.client.network
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -57,6 +58,7 @@ init: function(callback) {
 	])
 	.then(function() {
 		return Promise.all([
+			this.checkExternalIP(),							// 외부망 여부 확인
 			this.retrieveSFUserPhoto(),						// SF 사진 조회
 			this.retrieveSFUserLocale(),					// SF 언어 조회
 			this.encodePernr()								// 암호화 사번 조회
@@ -155,13 +157,13 @@ retrieveClientIP: function() {
 			this._gateway.prepareLog('HomeSession.retrieveClientIP success', arguments).log();
 
 			sessionStorage.setItem('ehr.client.ip', data.Ipadd.split(',')[0]);
-			sessionStorage.setItem('ehr.client.external', false); // trace API 변경 후 알맞은 변수로 수정
+			// sessionStorage.setItem('ehr.client.network', data.result);
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveClientIP');
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.retrieveClientIP');
 
 			sessionStorage.removeItem('ehr.client.ip');
-			sessionStorage.removeItem('ehr.client.external');
+			sessionStorage.removeItem('ehr.client.network');
 		}.bind(this)
 	}).promise();
 },
@@ -232,9 +234,25 @@ retrieveSessionToken: function() {
 			}
 		}.bind(this),
 		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveSessionToken');
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.retrieveSessionToken');
 
 			sessionStorage.removeItem('ehr.session.token');
+		}.bind(this)
+	}).promise();
+},
+checkExternalIP: function() {
+
+	return $.getJSON({
+		url: '/essproxy/check2FA',
+		success: function(data) {
+			this._gateway.prepareLog('HomeSession.checkExternalIP success', arguments).log();
+
+			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result === 'E');
+		}.bind(this),
+		error: function(jqXHR) {
+			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.checkExternalIP');
+
+			sessionStorage.removeItem('ehr.client.ip.external');
 		}.bind(this)
 	}).promise();
 },

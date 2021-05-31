@@ -647,32 +647,6 @@ common.Common = {
 
         return p.async ? promise : encrypted;
     },
-    activeClientTrace: function (p) {
-        if (window._init_sequence_logging) {
-            $.app.log("common.Common.activeClientTrace called.");
-        }
-
-        var traceInfo,
-            async = typeof p.async === "boolean" ? p.async : true,
-            success = typeof p.success === "function" ? function (data) {
-                p.success(JSON.parse(data));
-            } : function (data) {
-                traceInfo = JSON.parse(data);
-            },
-            error = typeof p.error === "function" ? p.error : function () {
-                common.Common.log([].slice.call(arguments));
-            };
-
-        var promise = $.post({
-            url: common.Common.getJavaOrigin($.app.getController(), "/trace"),
-            data: {},
-            async: async,
-            success: success,
-            error: error
-        }).promise();
-
-        return p.async ? promise : traceInfo;
-    },
     isExternalIP: function () {
         if (window._init_sequence_logging) {
             $.app.log("common.Common.checkProxyIP called.");
@@ -832,7 +806,7 @@ common.Common = {
     },
     retrieveSFUserLocale: function () {
         if (window._init_sequence_logging) {
-            $.app.log("common.Common.activeClientTrace called.");
+            $.app.log("common.Common.retrieveSFUserLocale called.");
         }
 
         var Langu = sessionStorage.getItem("ehr.sf-user.locale");

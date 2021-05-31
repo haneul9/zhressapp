@@ -41,6 +41,8 @@ check: function(callback) {
 		if (this._gateway.parameter('dlswmddlvlfdygkqslek') === 'true') {
 			this.confirm();
 		} else {
+			// this.targetIP = sessionStorage.getItem('ehr.client.network') === "E";
+
 			if (this._gateway.parameter('xptmxmwhagkrpTtmqslek') !== 'true') {
 				if (this.targetIP && this.targetPernr) {
 					this.confirm();

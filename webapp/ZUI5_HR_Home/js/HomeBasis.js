@@ -1,6 +1,6 @@
 function HomeBasis(_gateway) {
 
-	this.ODataDestination = { SF: 'SF', S4HANA: 'S4HANA', ETC: 'ETC' };
+	this.ODataDestination = { SF: 'SF', S4HANA: 'S4HANA', JAVA: 'JAVA', ETC: 'ETC' };
 	this.paramMap = this.parameterMap(location.search);
 	this.metadataMap = {};
 
