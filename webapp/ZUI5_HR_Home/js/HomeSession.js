@@ -57,7 +57,6 @@ init: function(callback) {
 	])
 	.then(function() {
 		return Promise.all([
-			this.retrieveIPProperty(),						// IP 속성 조회 : 외부망 체크용
 			this.retrieveSFUserPhoto(),						// SF 사진 조회
 			this.retrieveSFUserLocale(),					// SF 언어 조회
 			this.encodePernr()								// 암호화 사번 조회
@@ -98,7 +97,8 @@ alreadyChekckedIn: function() {
 	return !!sessionStorage.getItem('ehr.session.token');
 },
 /*
-DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
+1. DEV/QAS 모바일 접속시 테스트를 위해 사번 입력 popup 제공
+2. PRD SF에 hpjt0857로 접속시 SM 업무를 위해 사번 입력 popup 제공
 */
 dkdlTlqpfmffls: function(resolve) {
 
@@ -173,16 +173,19 @@ _retrieveSFUserName: function(resolve) {
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserName success', arguments).log();
 
-			sessionStorage.setItem('ehr.sf-user.name', data.name);
+			if (this._gateway.isPRD() && /hpjt0832/i.test(data.name)) {
+				this.dkdlTlqpfmffls(resolve);
+			} else {
+				sessionStorage.setItem('ehr.sf-user.name', data.name);
+			}
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.SF, jqXHR, 'HomeSession.retrieveSFUserName');
 
 			sessionStorage.removeItem('ehr.sf-user.name');
-		}.bind(this),
-		complete: function() {
+
 			resolve();
-		}
+		}.bind(this)
 	});
 },
 /*
