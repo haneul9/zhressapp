@@ -265,7 +265,7 @@ SF의 개인 사진 조회
 retrieveSFUserPhoto: function() {
 
 	return $.getJSON({
-		url: "/odata/v2/Photo",
+		url: "/odata/fix/Photo",
 		data: {
 			$select: 'mimeType,photo',
 			$filter: "userId eq '${userId}' and photoType eq 1".interpolate(this.pernr())
@@ -293,7 +293,7 @@ SF의 언어를 조회하여 Home 화면에 적용
 retrieveSFUserLocale: function() {
 
 	return $.getJSON({
-		url: "/odata/v2/User('${pernr}')".interpolate(this.pernr()),
+		url: "/odata/fix/User('${pernr}')".interpolate(this.pernr()),
 		data: {
 			$select: 'defaultLocale'
 		},
