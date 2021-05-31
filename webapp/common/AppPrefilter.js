@@ -75,7 +75,7 @@ AppPrefilter.prototype.checkMenuId = function() {
 
 AppPrefilter.prototype.checkMenuAuthority = function() {
 
-	var menuInfo = parent.window._menu.menuDataMap[this.parameterMap.mid],
+	var menuInfo = (parent.window._menu && parent.window._menu.menuDataMap) ? parent.window._menu.menuDataMap[this.parameterMap.mid] : null,
 	result = { hasMenuAuthority: true },
 	loginInfo = this._gateway.loginInfo();
 
