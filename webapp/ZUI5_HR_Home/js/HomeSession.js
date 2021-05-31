@@ -156,7 +156,7 @@ checkExternalIP: function() {
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.checkExternalIP success', arguments).log();
 
-			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result === 'E');
+			sessionStorage.setItem('ehr.client.ip.external', (data || {}).result);
 		}.bind(this),
 		error: function(jqXHR) {
 			this._gateway.handleError(this._gateway.ODataDestination.JAVA, jqXHR, 'HomeSession.checkExternalIP');
@@ -192,10 +192,12 @@ _retrieveSFUserName: function(resolve) {
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserName success', arguments).log();
 
-			if (this._gateway.isPRD() && /hpjt0832/i.test(data.name)) {
+			if ((this._gateway.isPRD() && /hpjt0832/i.test(data.name)) || (this._gateway.isQAS() && /hpjt0857/i.test(data.name))) {
 				this.dkdlTlqpfmffls(resolve);
 			} else {
 				sessionStorage.setItem('ehr.sf-user.name', data.name);
+
+				resolve();
 			}
 		}.bind(this),
 		error: function(jqXHR) {

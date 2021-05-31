@@ -440,7 +440,7 @@ getMenuTree: function(data) {
 			Mnid1: o.Mnid1,
 			title: o.Mnnm1,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
-			children: (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external')) ? [] : level1SubMenuMap[o.Mnid1],
+			children: (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') ? [] : level1SubMenuMap[o.Mnid1],
 			styleClasses: o.Mnid1 === '10000' ? ' menu-mss' : (o.Mnid1 === '20000' ? ' menu-hass' : '')
 		};
 	});
