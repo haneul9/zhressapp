@@ -146,7 +146,7 @@
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
 
-						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".goodconfirmed") === "Y") {
 							vThumUp.toggleStyleClass("button-HiTokTok-check", true);
 							vThumDown.toggleStyleClass("button-HiTokTok-check", false);
 							vThumUp.setEnabled(true);
@@ -156,7 +156,7 @@
 							vThumDown.setEnabled(true);
 						}
 						
-						if(localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oCopiedRow.Sdate + oCopiedRow.Seqnr + ".bedconfirmed") === "N") {
 							vThumUp.toggleStyleClass("button-HiTokTok-check", false);
 							vThumDown.toggleStyleClass("button-HiTokTok-check", true);
 							vThumUp.setEnabled(false);
@@ -294,17 +294,17 @@
 										new sap.m.Button({ 
 											icon: "sap-icon://thumb-up",
 											text: "{i18n>LABEL_56020}", // 좋아요
-											// enabled: (vGood === false && vBed === false) || vGood,
+											enabled: (vGood === false && vBed === false) || vGood,
 											press: oController.OnCommThumbUp.bind(oController)
-										}).addStyleClass("button-light-sm"),
-										// .toggleStyleClass("button-HiTokTok-check", vGood),
+										}).addStyleClass("button-light-sm")
+										.toggleStyleClass("button-HiTokTok-check", vGood),
 										new sap.m.Button({ 
 											icon: "sap-icon://thumb-down",
 											text: "{i18n>LABEL_56021}", // 싫어요
-											// enabled: (vGood === false && vBed === false) || vBed,
+											enabled: (vGood === false && vBed === false) || vBed,
 											press: oController.OnCommThumbDown.bind(oController)
 										}).addStyleClass("button-light-sm"),
-										// .toggleStyleClass("button-HiTokTok-check", vBed),
+										.toggleStyleClass("button-HiTokTok-check", vBed),
 										new sap.m.Button({
 											press: oController.onCommentSubBtn.bind(oController),
 											icon: "sap-icon://comment",
@@ -462,17 +462,17 @@
 											new sap.m.Button({ // 좋아요
 												icon: "sap-icon://thumb-up",
 												text: "{i18n>LABEL_56020}",
-												// enabled: (vGood === false && vBed === false) || vGood,
+												enabled: (vGood === false && vBed === false) || vGood,
 												press: oController.OnReCommThumbUp.bind(oController)
-											}).addStyleClass("button-light-sm"),
-											// .toggleStyleClass("button-HiTokTok-check", vGood),
+											}).addStyleClass("button-light-sm")
+											.toggleStyleClass("button-HiTokTok-check", vGood),
 											new sap.m.Button({ // 싫어요
 												icon: "sap-icon://thumb-down",
 												text: "{i18n>LABEL_56021}",
-												// enabled: (vGood === false && vBed === false) || vBed,
+												enabled: (vGood === false && vBed === false) || vBed,
 												press: oController.OnReCommThumbDown.bind(oController)
-											}).addStyleClass("button-light-sm"),
-											// .toggleStyleClass("button-HiTokTok-check", vBed),
+											}).addStyleClass("button-light-sm")
+											.toggleStyleClass("button-HiTokTok-check", vBed),
 											new sap.m.Button({
 												press: oController.onSubCommentReBtn.bind(oController),
 												text: "{i18n>LABEL_56013}" // 수정
@@ -1046,7 +1046,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed") !== "Y") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".goodconfirmed", "Y");
 							vThumUp.setEnabled(true);
 							vThumDown.setEnabled(false);
@@ -1086,7 +1086,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") === "N") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") === "N") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1099,7 +1099,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed") !== "N") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + ".bedconfirmed", "N");
 							vThumUp.setEnabled(false);
 							vThumDown.setEnabled(true);
@@ -1141,7 +1141,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") === "Y") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".goodconfirmed") === "Y") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1154,7 +1154,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".goodconfirmed", "Y");
 							oController.g_CommGood.setEnabled(true);
 							oController.g_CommBed.setEnabled(false);
@@ -1197,7 +1197,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") === "N") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + ".bedconfirmed") === "N") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1210,7 +1210,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + ".bedconfirmed", "N");
 							oController.g_CommGood.setEnabled(false);
 							oController.g_CommBed.setEnabled(true);
@@ -1254,7 +1254,7 @@
 				Zgood : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") === "Y") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".goodconfirmed") === "Y") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1267,7 +1267,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".goodconfirmed") !== "Y") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".goodconfirmed", "Y");
 							oController.g_ReCommGood.setEnabled(true);
 							oController.g_ReCommBed.setEnabled(false);
@@ -1311,7 +1311,7 @@
 				Zbed : "X"
 			};
 			
-			if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") === "N") 
+			if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + this.g_HiSeqnr2.getText() + this.g_ReHiSeqnr2.getText() + ".bedconfirmed") === "N") 
 				oSendData.Zcanc = "X";
 
 			var sendObject = {};
@@ -1324,7 +1324,7 @@
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 						Common.log(oData);
-						if(localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".bedconfirmed") !== "N") {
+						if(localStorage && localStorage.getItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".bedconfirmed") !== "N") {
 							localStorage.setItem("ehr.suggestions." + oRowData.Sdate + oRowData.Seqnr + oController.g_HiSeqnr2.getText() + oController.g_ReHiSeqnr2.getText() + ".bedconfirmed", "N");
 							oController.g_ReCommBed.setEnabled(true);
 							oController.g_ReCommGood.setEnabled(false);
