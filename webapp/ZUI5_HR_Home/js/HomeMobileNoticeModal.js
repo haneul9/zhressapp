@@ -31,12 +31,12 @@ init: function() {
 	}
 
 	$(this.ui()).appendTo('body')
-		.on('click', '.fn-url-copy', function() {
-			navigator.clipboard.writeText('https://mdm.lottechem.com/')
-				.then(function() {
-					$('#mobile-notice-modal .valid-feedback').show();
-				});
-		})
+		// .on('click', '.fn-url-copy', function() {
+		// 	navigator.clipboard.writeText('https://mdm.lottechem.com/')
+		// 		.then(function() {
+		// 			$('#mobile-notice-modal .valid-feedback').show();
+		// 		});
+		// })
 		.on('hidden.bs.modal', function() {
 
 			if ($('#mobile-notice-modal-suppress-reopen').prop('checked')) {
@@ -71,17 +71,17 @@ ui: function() {
 							'<li>',
 								'업데이트 방법',
 								'<ul>',
-									'<li>아래 URL에서 설치파일 다운로드하여 재설치</li>',
+									'<li>크롬 브라우저에 아래 URL을 입력 후,<br />설치파일 다운로드하여 재설치</li>',
 								'</ul>',
 							'</li>',
 						'</ol>',
 						'<div class="mt-3 text-center">',
 							'<a href="javascript:;" class="fn-url-copy">https://mdm.lottechem.com/</a>',
-							'<button type="button" class="btn btn-sm btn-outline-primary fn-url-copy" style="margin-left:22px; height:24px; padding:0 14px">복사</button>',
+							// '<button type="button" class="btn btn-sm btn-outline-primary fn-url-copy" style="margin-left:22px; height:24px; padding:0 14px">복사</button>',
 						'</div>',
-						'<div class="valid-feedback mt-3 text-center" style="font-size:100%">',
-							'URL 주소가 복사되었습니다. 복사한 주소를 웹브라우저에 붙여넣기 하세요.',
-						'</div>',
+						// '<div class="valid-feedback mt-3 text-center" style="font-size:100%">',
+						// 	'URL 주소가 복사되었습니다. 복사한 주소를 웹브라우저에 붙여넣기 하세요.',
+						// '</div>',
 					'</div>',
 					'<div class="modal-footer justify-content-between">',
 						'<div class="form-check">',
