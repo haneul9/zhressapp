@@ -75,7 +75,7 @@ fill: function() {
 				}
 
 				list.prepend($.map(TableIn2, function(o) {
-					var date = moment(o.Edate).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
+					var date = moment(Number((o.Edate || '').replace(/\D/g, ''))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 					o.DtfmtDate = date;
 
 					return [
