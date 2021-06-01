@@ -686,21 +686,21 @@ sap.ui.define(
                     ) {
                         //고희 & 칠순
                         vMsg = vMsg.replace("year1", vYear - 69);
-                        vMsg = vMsg.replace("year2", vYear - 67);
+                        vMsg = vMsg.replace("year2", new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear() - 68);
                         vMsg = vMsg.replace("month1", vMonth);
-                        vMsg = vMsg.replace("month2", vMonth);
-                        vMsg = vMsg.replace("date1", common.Common.lpad(parseInt(vDate), 2));
-                        vMsg = vMsg.replace("date2", common.Common.lpad(parseInt(vDate - 1), 2));
+                        vMsg = vMsg.replace("month2", new Date(new Date().setDate(new Date().getDate() - 1)).getMonth() + 1);
+                        vMsg = vMsg.replace("date1", Common.lpad(parseInt(vDate), 2));
+                        vMsg = vMsg.replace("date2", Common.lpad(parseInt(new Date(new Date().setDate(vDate - 1)).getDate()), 2));
                         oBirthDayDate.setMinDate(new Date(vYear - 69, 1, 1));
-                        oBirthDayDate.setMaxDate(new Date(vYear - 67, 12, 0));
+                        oBirthDayDate.setMaxDate(new Date(vYear - 68, 12, 0));
                     } else {
                         //회갑 & 환갑
                         vMsg = vMsg.replace("year1", vYear - 60);
-                        vMsg = vMsg.replace("year2", vYear - 58);
+                        vMsg = vMsg.replace("year2", new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear() - 58);
                         vMsg = vMsg.replace("month1", vMonth);
-                        vMsg = vMsg.replace("month2", vMonth);
-                        vMsg = vMsg.replace("date1", common.Common.lpad(parseInt(vDate), 2));
-                        vMsg = vMsg.replace("date2", common.Common.lpad(parseInt(vDate - 1), 2));
+                        vMsg = vMsg.replace("month2", new Date(new Date().setDate(new Date().getDate() - 1)).getMonth() + 1);
+                        vMsg = vMsg.replace("date1", Common.lpad(parseInt(vDate), 2));
+                        vMsg = vMsg.replace("date2", Common.lpad(parseInt(new Date(new Date().setDate(vDate - 1)).getDate()), 2));
                         oBirthDayDate.setMinDate(new Date(vYear - 60, 1, 1));
                         oBirthDayDate.setMaxDate(new Date(vYear - 58, 12, 0));
                     }
