@@ -75,8 +75,9 @@ fill: function() {
 				}
 
 				list.prepend($.map(TableIn2, function(o) {
-					var date = moment(Number((o.Edate || '').replace(/\D/g, ''))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
-					o.DtfmtDate = date;
+					var Dtfmt = this._gateway.loginInfo('Dtfmt').toUpperCase(),
+					date = moment(Number((o.Edate || '').replace(/\D/g, ''))).format(Dtfmt);
+					o.DtfmtDate = moment(Number((o.Sdate || '').replace(/\D/g, ''))).format(Dtfmt);
 
 					return [
 						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
