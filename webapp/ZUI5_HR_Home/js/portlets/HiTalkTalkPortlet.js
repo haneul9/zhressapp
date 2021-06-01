@@ -76,6 +76,8 @@ fill: function() {
 
 				list.prepend($.map(TableIn6, function(o) {
 					var date = moment(o.Sdate).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
+					o.DtfmtDate = date;
+
 					return [
 						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
@@ -122,12 +124,12 @@ itemUrl: function(o) {
 
 	if (this.mobile()) {
 		return [
-			' data-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
+			' data-url="${url}?Sdate=${DtfmtDate}&Skey=${Skey}"'.interpolate(this.url(), o.DtfmtDate, o.Skey),
 			' data-menu-id="${menu-id}"'.interpolate(this.mid())
 		].join('');
 	} else {
 		return [
-			' data-popup-menu-url="${url}?Sdate=${Sdate}&Skey=${Skey}"'.interpolate(this.url(), o.Sdate, o.Skey),
+			' data-popup-menu-url="${url}?Sdate=${DtfmtDate}&Skey=${Skey}"'.interpolate(this.url(), o.DtfmtDate, o.Skey),
 			' data-menu-id="${menu-id}"'.interpolate(this.mid())
 		].join('');
 	}
