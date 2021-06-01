@@ -526,16 +526,16 @@ sap.ui.define(
                         vMsg = vMsg.replace("year2", vYear - 67);
                         vMsg = vMsg.replace("month1", vMonth);
                         vMsg = vMsg.replace("month2", vMonth);
-                        vMsg = vMsg.replace("date1", common.Common.lpad(parseInt(vDate), 2));
-                        vMsg = vMsg.replace("date2", common.Common.lpad(parseInt(vDate - 1), 2));
+                        vMsg = vMsg.replace("date1", Common.lpad(parseInt(vDate), 2));
+                        vMsg = vMsg.replace("date2", Common.lpad(parseInt(new Date(new Date().setDate(vDate - 1)).getDate()), 2));
                     } else {
                         //회갑 & 환갑
                         vMsg = vMsg.replace("year1", vYear - 59);
                         vMsg = vMsg.replace("year2", vYear - 57);
                         vMsg = vMsg.replace("month1", vMonth);
                         vMsg = vMsg.replace("month2", vMonth);
-                        vMsg = vMsg.replace("date1", common.Common.lpad(parseInt(vDate), 2));
-                        vMsg = vMsg.replace("date2", common.Common.lpad(parseInt(vDate - 1), 2));
+                        vMsg = vMsg.replace("date1", Common.lpad(parseInt(vDate), 2));
+                        vMsg = vMsg.replace("date2", Common.lpad(parseInt(new Date(new Date().setDate(vDate - 1)).getDate()), 2));
                     }
                     var vMsg2 = oController.getBundleText("MSG_08112");
                     vMsg2 = vMsg2.replace("바랍니다.", "바랍니다. \n");
