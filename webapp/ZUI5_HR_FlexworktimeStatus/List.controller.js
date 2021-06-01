@@ -448,13 +448,13 @@ sap.ui.define([
 						createData.IMobyn = "";
 						createData.IZappSeq = "99";
 						createData.IAppkey = (oData.Appkey1 ? oData.Appkey1 : "");
-
-					if(oData.Status == "" || oData.Status == "AA" || oData.Status == "JJ"){
-						createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
-						createData.IPrcty = "1";
-					} else {
+					
+					if(oData.Status == "00"){
 						createData.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Datum)) + ")\/";
 						createData.IPrcty = "2";
+					} else {
+						createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+						createData.IPrcty = "1";
 					}
 
 					oModel.create("/ApprListSet", createData, {
@@ -591,7 +591,7 @@ sap.ui.define([
 				sap.m.MessageBox.error(oController.getBundleText("MSG_48017")); // 잘못된 시간형식입니다.
 				oEvent.getSource().setValue("");
 				return;
-			} else if(oEvent && m){
+			} else if(oEvent && m && oEvent.getParameters().value){
 				if(parseInt(oEvent.getParameters().value.substring(2,4)) % m != 0){
 					sap.m.MessageBox.error(oController.getBundleText("MSG_69009").replace("MM", m)); // 시간은 MM분 단위로 입력하여 주십시오.
 					oEvent.getSource().setValue("");
@@ -1274,6 +1274,7 @@ sap.ui.define([
 					createData.Prcty = "2";
 					
 				var oData = sap.ui.getCore().byId(oController.PAGEID + "_Table").getModel().getProperty("/Data");
+				// var oPush = [], dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oController.getSessionInfoByKey("Dtfmt")});
 				for(var i=0; i<oData.length; i++){
 					var detail = {};
 						detail.Datum = "\/Date(" + common.Common.getTime(oData[i].Datum) + ")\/";
@@ -1281,8 +1282,40 @@ sap.ui.define([
 						detail.Enduz = oData[i].Enduz;
 						detail.Lnctm = oData[i].Lnctm;
 						detail.Adbtm = oData[i].Adbtm ? oData[i].Adbtm.replace(":", "") : "";
-						detail.Monyn = oData[i].Monyn;
+						detail.Monyn = oData[i].Monyn; // 1-기본근무 2-추가휴게 3-전체
 						detail.Appkey1 = oData[i].Appkey1;
+
+					// if(detail.Monyn == "1" || detail.Monyn == "3"){
+					// 	// title : [Hi HR] ${Ename} 근무시간 변경 알림
+					// 	// body : ${Datum} ${Time}(법정휴게 ${Lnctm}, 추가휴게 ${Adbtm})
+					// 	var oLnctm = "";
+					// 	switch(oData[i].Lnctm){
+					// 		case "1":
+					// 			oLnctm = "00:30";
+					// 			 break;
+					// 		case "2":
+					// 			oLnctm = "01:00";
+					// 			break;
+					// 		case "3":
+					// 			oLnctm = "01:30";
+					// 			break;
+					// 		case "4":
+					// 			oLnctm = "02:00";
+					// 			break;
+					// 		default:
+					// 			oLnctm = "-";
+					// 			break;
+					// 	};
+
+					// 	oPush.push({
+					// 		title : oController.getBundleText("MSG_69011").interpolate(oData[i].Ename),
+					// 		body : oController.getBundleText("MSG_69012")
+					// 				.interpolate(dateFormat.format(oData[i].Datum), 
+					// 							 (detail.Beguz.substring(0,2) + ":" + detail.Beguz.substring(2,4) + "~" + detail.Enduz.substring(0,2) + ":" + detail.Enduz.substring(2,4)),
+					// 							 oLnctm,
+					// 							 (oData[i].Adbtm ? oData[i].Adbtm : "-"))
+					// 	});
+					// }
 					
 					createData.FlexWorktime1Nav.push(detail);
 				}
@@ -1301,15 +1334,16 @@ sap.ui.define([
 					createData.FlexWorktime2Nav.push(detail);
 				}
 				
+				var oChief = "";
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
 						if(data){
-							
+							// oChief = data.Chief == "00000000" ? "" : data.Chief;
 						}
 					},
 					error: function (oError) {
 				    	var Err = {};
-				    	oController.Error = "E";
+				    	oController.Error = "E"; 	
 								
 						if (oError.response) {
 							Err = window.JSON.parse(oError.response.body);
@@ -1329,6 +1363,11 @@ sap.ui.define([
 					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
 				}
+
+				// 2021-05-31 근무시간 변경 시 조직장에게 push 알림 발송
+				// if(oPush.length > 0){
+				// 	if(oController.sendPush(oPush, oChief) == false) return;
+				// }
 				
 				sap.m.MessageBox.success(oController.getBundleText("MSG_00017"), { // 저장되었습니다.
 					onClose : function(oEvent){
@@ -1346,6 +1385,95 @@ sap.ui.define([
 					}
 				}
 			});
+		},
+
+		// 2021-05-31 근무시간 변경 시 조직장에게 push 알림 발송
+		sendPush : function(oPush, oChief){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
+			var oController = oView.getController();
+			
+			if(oChief != ""){
+				var oModel = $.app.getModel("ZHR_COMMON_SRV");
+
+				// 조직장 token 조회
+				var createData = {AppPushAlarmTokenSet : [{Pernr : oChief}], AppPushAlarmLogSet : []};
+					createData.IPernr = oController.getSessionInfoByKey("Pernr");
+					createData.ILangu = oController.getSessionInfoByKey("Langu");
+					createData.IConType = "1";
+				var oToken = "";
+
+				oModel.create("/AppPushAlarmHeaderSet", createData, {
+					success: function(data){
+						if(data){
+							if(data.AppPushAlarmTokenSet && data.AppPushAlarmTokenSet.results){
+								var data1 = data.AppPushAlarmTokenSet.results;
+								
+								oToken = data1[0].Token;
+							}
+						}
+					},
+					error: function (oError) {
+						var Err = {};
+						oController.Error = "E";
+								
+						if (oError.response) {
+							Err = window.JSON.parse(oError.response.body);
+							var msg1 = Err.error.innererror.errordetails;
+							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+							else oController.ErrorMessage = Err.error.message.value;
+						} else {
+							oController.ErrorMessage = oError.toString();
+						}
+					}
+				});
+
+				if(oController.Error == "E"){
+					oController.Error = "";
+					MessageBox.error(oController.ErrorMessage);
+					return false;
+				}
+
+				if(oToken != ""){
+					createData.IConType = "2";
+
+					for(var i=0; i<oPush.length; i++){
+						if(Common.sendPush({
+							title: oPush[i].title,
+							body: oPush[i].body,
+							token: oToken
+						}) != false){
+							createData.AppPushAlarmLogSet.push({Pernr : oChief, HeadTxt : oPush[i].title, BodyTxt : oPush[i].body});
+						} 
+					}
+
+					oModel.create("/AppPushAlarmHeaderSet", createData, {
+						success: function(data){
+							if(data){
+								
+							}
+						},
+						error: function (oError) {
+							var Err = {};
+							oController.Error = "E";
+									
+							if (oError.response) {
+								Err = window.JSON.parse(oError.response.body);
+								var msg1 = Err.error.innererror.errordetails;
+								if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+								else oController.ErrorMessage = Err.error.message.value;
+							} else {
+								oController.ErrorMessage = oError.toString();
+							}
+						}
+					});
+
+					if(oController.Error == "E"){
+						oController.Error = "";
+						MessageBox.error(oController.ErrorMessage);
+						return false;
+					}
+				}
+			}
 		},
 		
 		makeTable : function(oController, oTable, col_info){
@@ -1466,7 +1594,7 @@ sap.ui.define([
 												 new sap.ui.core.Item({key : "2", text : "01:00"}),
 												 new sap.ui.core.Item({key : "3", text : "01:30"}),
 												 new sap.ui.core.Item({key : "4", text : "02:00"})],
-										change : oController.onChangeModyn,  
+										change : oController.onChangeModyn,
 										customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
 										editable : {
 											path : "Offyn",
