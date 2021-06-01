@@ -523,7 +523,7 @@ sap.ui.define(
                     ) {
                         //고희 & 칠순
                         vMsg = vMsg.replace("year1", vYear - 69);
-                        vMsg = vMsg.replace("year2", new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear() - 67);
+                        vMsg = vMsg.replace("year2", new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear() - 68);
                         vMsg = vMsg.replace("month1", vMonth);
                         vMsg = vMsg.replace("month2", new Date(new Date().setDate(new Date().getDate() - 1)).getMonth() + 1);
                         vMsg = vMsg.replace("date1", Common.lpad(parseInt(vDate), 2));
