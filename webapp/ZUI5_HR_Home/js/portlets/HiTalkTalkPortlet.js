@@ -60,6 +60,9 @@ fill: function() {
 					} else {
 						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
 					}
+
+					this.spinner(false);
+					
 					return;
 				}
 
