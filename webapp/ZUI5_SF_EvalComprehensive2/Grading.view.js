@@ -61,11 +61,6 @@ sap.ui.jsview(SUB_APP_ID, { // 종합평가 : 수행
 							press: oController.onPressConfirm.bind(oController),
 							text: "{i18n>LABEL_11102}" // 평가완료
 						})
-						.addStyleClass("button-dark"),
-						new sap.m.Button({
-							press: oController.onPrint.bind(oController),
-							text: "프린트" 
-						})
 						.addStyleClass("button-dark")
 					]
 				})
