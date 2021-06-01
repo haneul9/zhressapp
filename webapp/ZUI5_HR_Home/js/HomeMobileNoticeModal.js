@@ -31,6 +31,12 @@ init: function() {
 	}
 
 	$(this.ui()).appendTo('body')
+		.on('click', '.fn-url-copy', function() {
+			navigator.clipboard.writeText('https://mdm.lottechem.com/')
+				.then(function() {
+					$('#mobile-notice-modal .valid-feedback').show();
+				});
+		})
 		.on('hidden.bs.modal', function() {
 
 			if ($('#mobile-notice-modal-suppress-reopen').prop('checked')) {
@@ -56,14 +62,22 @@ ui: function() {
 						// '<div class="text-center"><img src="images/img-android-setting2.png" /></div>',
 						'<ol>',
 							'<li>',
-								'업데이트 사유(기능개선사항)',
+								'업데이트 내용',
 								'<ul>',
-									'<li>신청시 첨부파일을 사진촬영해 즉시 처리 가능</li>',
-									'<li>Hi톡톡 좋아요 기능 적용</li>',
+									'<li>신청 메뉴에서 사진촬영하여 즉시 첨부 가능</li>',
+									'<li>Hi 톡톡 좋아요 기능 개선</li>',
 								'</ul>',
 							'</li>',
 							'<li>',
-								'업데이트 방법 : <a href="https://mdm.lottechem.com/">MDM 로그인 (lottechem.com)</a>',
+								'업데이트 방법',
+								'<ul>',
+									'<li>설치파일 다운로드하여 재설치<br />',
+									'<a href="javascript:;" class="fn-url-copy">https://mdm.lottechem.com/</a></li>',
+									'<button type="button" class="btn btn-sm btn-outline-primary fn-url-copy" style="margin-left:22px; height:24px; padding:0 14px">복사</button>',
+								'</ul>',
+								'<div class="valid-feedback text-center" style="font-size:100%">',
+									'복사한 주소를 웹브라우저에 붙여넣기 하세요.',
+								'</div>',
 							'</li>',
 						'</ol>',
 					'</div>',
