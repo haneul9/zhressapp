@@ -52,58 +52,66 @@ fill: function() {
 
 	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsSet", {
 			IMode: 'R',
 			IConType: '4',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
 			TableIn4: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('FavoriteMenuPortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('FavoriteMenuPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			this.items = this._gateway.odataResults(data).TableIn4;
+				this.items = result.TableIn4.results;
 
-			var list = this.$(), jspPane; // 메뉴 즐겨찾기 추가/제거를 반복하다보면 scroll이 없어졌다가 다시 생성되어야하는 시점에 생성되지 않는 버그가 있어 따로 jspPane 변수를 사용함
-			if (!this.items.length) {
-				if (list.data('jsp')) {
-					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
-				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
+				var list = this.$(), jspPane; // 메뉴 즐겨찾기 추가/제거를 반복하다보면 scroll이 없어졌다가 다시 생성되어야하는 시점에 생성되지 않는 버그가 있어 따로 jspPane 변수를 사용함
+				if (!this.items.length) {
+					if (list.data('jsp')) {
+						list.find('.list-group-item').remove().end()
+							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
+					} else {
+						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
+					}
+					return;
 				}
-				return;
-			}
 
-			if (list.data('jsp')) {
-				jspPane = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-			}
+				if (list.data('jsp')) {
+					jspPane = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+				}
 
-			if (this._gateway.isMobile()) {
-				this.items = this.items.splice(0, 8);
-			}
+				if (this._gateway.isMobile()) {
+					this.items = this.items.splice(0, 8);
+				}
 
-			(jspPane || list).prepend($.map(this.items, function(o) {
-				return [
-					'<a href="#" class="list-group-item list-group-item-action"${data-url}>'.interpolate(this.itemUrl(o)),
-						'<div title="${title}">'.interpolate(o.Mname), o.Mname, '</div>',
-					'</a>'
-				].join('');
-			}.bind(this)).join(''));
+				(jspPane || list).prepend($.map(this.items, function(o) {
+					return [
+						'<a href="#" class="list-group-item list-group-item-action"${data-url}>'.interpolate(this.itemUrl(o)),
+							'<div title="${title}">'.interpolate(o.Mname), o.Mname, '</div>',
+						'</a>'
+					].join('');
+				}.bind(this)).join(''));
 
-			if (list.data('jsp')) {
-				list.data('jsp').reinitialise();
-			}
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'FavoriteMenuPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+				if (list.data('jsp')) {
+					list.data('jsp').reinitialise();
+				}
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'FavoriteMenuPortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 onceAfter: function() {
 

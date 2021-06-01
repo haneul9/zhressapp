@@ -48,12 +48,13 @@ clearSessionStorage: function() {
 init: function(callback) {
 
 	sessionStorage.setItem('ehr.odata.destination', this._gateway.s4hanaDestination());
+	this._gateway.setModel("ZHR_COMMON_SRV");
 
 	Promise.all([
 		this.retrieveClientIP(),							// 접속자 IP 조회, 외부망 여부 확인
 		this.retrieveSFUserName(),							// 사번 조회
-		this.retrieveSessionToken(),						// Session token 조회
-		this._gateway.odataCsrfToken({}, 'ZHR_COMMON_SRV')	// 최초 CSRF token fetch 호출 이후 간헐적으로 발생하는 token validation failed 오류방지를 위해 encodePernr 호출전 미리 한 번 호출
+		this.retrieveSessionToken()						// Session token 조회
+		// this._gateway.odataCsrfToken({}, 'ZHR_COMMON_SRV')	// 최초 CSRF token fetch 호출 이후 간헐적으로 발생하는 token validation failed 오류방지를 위해 encodePernr 호출전 미리 한 번 호출
 	])
 	.then(function() {
 		return Promise.all([
@@ -402,123 +403,136 @@ locale: function() {
 
 encodePernr: function() {
 
-	var url = 'ZHR_COMMON_SRV/PernrEncodingSet',
-	pernr = this.pernr();
-
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+			pernr = this.pernr();
+		
+		oModel.create("/PernrEncodingSet", {
 			Pernr: pernr,
 			PernrEncodeNav: [{ Pernr: pernr }]
-		},
-		success: function(data) {
-			this._gateway.prepareLog('HomeSession.encodePernr ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('HomeSession.encodePernr ${url} success'.interpolate("ZHR_COMMON_SRV/PernrEncodingSet"), arguments).log();
 
-			if (data && data.d) {
-				sessionStorage.setItem('ehr.odata.user.percod', data.d.Percod);
-			} else {
+				if (result) {
+					sessionStorage.setItem('ehr.odata.user.percod', result.Percod);
+				} else {
+					sessionStorage.removeItem('ehr.odata.user.percod');
+				}
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.encodePernr ' + "ZHR_COMMON_SRV/PernrEncodingSet");
+				
 				sessionStorage.removeItem('ehr.odata.user.percod');
-			}
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.encodePernr ' + url);
-
-			sessionStorage.removeItem('ehr.odata.user.percod');
-		}.bind(this)
-	});
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 
 retrieveLoginInfo: function() {
 
-	var Percod = sessionStorage.getItem('ehr.odata.user.percod'),
-	Langu = sessionStorage.getItem('ehr.sf-user.language');
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+		Percod = sessionStorage.getItem('ehr.odata.user.percod'),
+		Langu = sessionStorage.getItem('ehr.sf-user.language');
+		
+		oModel.read("/EmpLoginInfoSet", {
+			asyn: true,
+			filters: [
+				new sap.ui.model.Filter("Lpmid", sap.ui.model.FilterOperator.EQ, "HACTA"),
+				new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, Percod),
+				new sap.ui.model.Filter("Langu", sap.ui.model.FilterOperator.EQ, Langu),
+				new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+				new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+				new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+				new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, "")
+			],
+			success: function(oData) {
+				this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();
 
-	return $.getJSON({
-		url: this._gateway.s4hanaURL('ZHR_COMMON_SRV/EmpLoginInfoSet'),
-		data: {
-			$filter: [
-				"Lpmid eq 'HACTA'",
-				"Percod eq '${Percod}'",
-				"Langu eq '${Langu}'",
-				"ICusrid eq '${ICusrid}'",	// 암호화 로그인 사번
-				"ICusrse eq '${ICusrse}'",	// Token
-				"ICusrpn eq '${ICusrpn}'",	// 로그인 사번
-				"ICmenuid eq ''"			// 메뉴 ID 불필요
-			].join(' and ').interpolate(
-				Percod,
-				Langu,
-				sessionStorage.getItem('ehr.odata.user.percod'),
-				sessionStorage.getItem('ehr.session.token'),
-				sessionStorage.getItem('ehr.sf-user.name')
-			)
-		},
-		success: function(data) {
-			this._gateway.prepareLog('HomeSession.retrieveLoginInfo success', arguments).log();
+				if (oData.results) {
+					var result = oData.results[0];
+					result.Dtfmt = result.Dtfmt || 'yyyy-MM-dd';
+					result.Langu = sessionStorage.getItem('ehr.sf-user.language') || result.Langu;
+					result.Ipadd = sessionStorage.getItem('ehr.client.ip');
+					this.loginInfo(result);
+				} else {
+					sessionStorage.removeItem('ehr.odata.user');
+				}
 
-			var result = this._gateway.odataResults(data);
-			if (result) {
-				delete result.__metadata;
-				result.Dtfmt = result.Dtfmt || 'yyyy-MM-dd';
-				result.Langu = sessionStorage.getItem('ehr.sf-user.language') || result.Langu;
-				result.Ipadd = sessionStorage.getItem('ehr.client.ip');
-				this.loginInfo(result);
-			} else {
+				resolve({ data: oData });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveLoginInfo');
+
 				sessionStorage.removeItem('ehr.odata.user');
-			}
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveLoginInfo');
-
-			sessionStorage.removeItem('ehr.odata.user');
-		}.bind(this)
-	}).promise();
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 
 sessionToken: function() {
 
-	var url = 'ZHR_COMMON_SRV/SessionInfoSet';
-
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/SessionInfoSet", {
 			ICusrid: sessionStorage.getItem('ehr.odata.user.percod'),	// 암호화 사번
 			ICusrse: sessionStorage.getItem('ehr.session.token'),		// Token
 			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			Export: []
-		},
-		success: function() {
-			this._gateway.prepareLog('HomeSession.sessionToken ${url} success'.interpolate(url), arguments).log();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + url);
-		}.bind(this)
-	});
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('HomeSession.sessionToken ${url} success'.interpolate("ZHR_COMMON_SRV/SessionInfoSet"), arguments).log();
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.sessionToken ' + "ZHR_COMMON_SRV/SessionInfoSet");
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 
 registerToken: function() {
 
-	var url = 'ZHR_COMMON_SRV/PernrTokenSet',
-	token = this._gateway.parameter("token"),
-	percod = sessionStorage.getItem('ehr.odata.user.percod');
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+		token = this._gateway.parameter("token"),
+		percod = sessionStorage.getItem('ehr.odata.user.percod');
 
-	if (token === undefined || token === null || token === '') {
-		// throw new Error("Token is blank.");
-		return null;
-	}
-
-	return this._gateway.post({
-		url: url,
-		data: {
-			Percod: percod,
-			Token: token
-		},
-		success: function() {
-			this._gateway.prepareLog('HomeSession.registerToken ${token} success'.interpolate(token), arguments).log();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + url);
-		}.bind(this)
-	});
+		if (token === undefined || token === null || token === '') {
+			// throw new Error("Token is blank.");
+			resolve();
+		} else {
+			oModel.create("/PernrTokenSet", {
+				Percod: percod,
+				Token: token
+			}, {
+				async: true,
+				success: function(result) {
+					this._gateway.prepareLog('HomeSession.registerToken ${token} success'.interpolate(token), arguments).log();
+	
+					resolve({ data: result });
+				}.bind(this),
+				error: function(jqXHR) {
+					this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.registerToken ' + "ZHR_COMMON_SRV/PernrTokenSet");
+					
+					reject(jqXHR);
+				}.bind(this)
+			});
+		}
+	}.bind(this));
 },
 
 logout: function() {
@@ -628,23 +642,28 @@ loginInfo: function(loginInfo) {
 
 authenticateADAccount: function(pw) {
 
-	var url = 'ZHR_COMMON_SRV/PerPasswordSet';
-
-	return this._gateway.post({
-		async: false,
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+		url = 'ZHR_COMMON_SRV/PerPasswordSet';
+		
+		oModel.create("/PerPasswordSet", {
 			Empid: this._gateway.pernr(),
 			Perpw: pw,
 			PernrPWNav: []
-		},
-		success: function() {
-			this._gateway.prepareLog('HomeSession.authenticateADAccount ${url} success'.interpolate(url), arguments).log();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount ' + url);
-		}.bind(this)
-	});
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('HomeSession.authenticateADAccount ${url} success'.interpolate(url), arguments).log();
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.authenticateADAccount ' + url);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 
 confirmADPW: function(o) {
@@ -707,11 +726,11 @@ confirmADPW: function(o) {
 
 usePrivateLog: function(o) {
 
-	var url = 'ZHR_COMMON_SRV/SaveConnEhrLogSet';
-
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+		url = 'ZHR_COMMON_SRV/SaveConnEhrLogSet';
+		
+		oModel.create("/SaveConnEhrLogSet", {
 			ILangu: sessionStorage.getItem('ehr.sf-user.language'),
 			TableIn: [{
 				Usrid: sessionStorage.getItem('ehr.odata.user.percod'),
@@ -720,14 +739,20 @@ usePrivateLog: function(o) {
 				Func: o.func || '',
 				Mobile: this._gateway.isMobile() ? 'X' : ''
 			}]
-		},
-		success: function() {
-			this._gateway.prepareLog('HomeSession.usePrivateLog ${url} success'.interpolate(url), arguments).log();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.usePrivateLog ' + url);
-		}.bind(this)
-	});
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('HomeSession.usePrivateLog ${url} success'.interpolate(url), arguments).log();
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.usePrivateLog ' + url);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 }
 
 });

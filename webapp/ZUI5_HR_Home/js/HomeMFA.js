@@ -73,19 +73,25 @@ check: function(callback) {
 
 isTargetPernr: function() {
 
-	var url = 'ZHR_COMMON_SRV/TwoFactorAuthCheckSet';
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.read("/TwoFactorAuthCheckSet", {
+			asyn: true,
+			filters: [
+				new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+				new sap.ui.model.Filter("Device", sap.ui.model.FilterOperator.EQ, this._gateway.isMobile() ? 'M' : '')
+			],
+			success: function(oData) {
+				this.targetPernr = oData.results[0].Authyn === 'Y';
 
-	return $.getJSON({
-		url: this._gateway.s4hanaURL(url),
-		data: {
-			$filter: "Percod eq '${Percod}' and Device eq '${Device}'".interpolate(sessionStorage.getItem('ehr.odata.user.percod'), this._gateway.isMobile() ? 'M' : '')
-		},
-		success: function(data) {
-			this.targetPernr = this._gateway.odataResults(data).Authyn === 'Y';
+				this._gateway.prepareLog('HomeMFA.isTargetPernr success : ' + this.targetPernr, arguments).log();
 
-			this._gateway.prepareLog('HomeMFA.isTargetPernr success : ' + this.targetPernr, arguments).log();
-		}.bind(this)
-	}).promise();
+				resolve({ data: oData });
+			}.bind(this),
+			error: reject
+		});
+	}.bind(this));
 },
 
 confirm: function() {
@@ -198,20 +204,18 @@ requestCode: function(type) {
 			return;
 		}
 
-		var url = 'ZHR_COMMON_SRV/TwoFactorAuthNumberSet';
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
 
-		this._gateway.post({
-			url: url,
-			data: {
-				Ttype: type,
-				Cernm: code,
-				Percod: sessionStorage.getItem('ehr.odata.user.percod')
-			},
+		oModel.create("/TwoFactorAuthNumberSet", {
+			Ttype: type,
+			Cernm: code,
+			Percod: sessionStorage.getItem('ehr.odata.user.percod')
+		}, {
 			success: function(data) {
 				this._gateway.prepareLog('HomeMFA.requestCode success', arguments).log();
 
 				if (type === this.CODE.REQUEST) {
-					this.sendPush(data.d, type);
+					this.sendPush(data.results, type);
 				} else {
 					this.setStatus(this.STATUS.DONE, type);
 					this.done();

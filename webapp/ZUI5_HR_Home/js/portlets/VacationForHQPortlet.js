@@ -75,44 +75,54 @@ onceBefore: function() {
 
 fill: function() {
 
+	this._gateway.setModel("ZHR_LEAVE_APPL_SRV");
+
 	var url = 'ZHR_LEAVE_APPL_SRV/YeaQuotaMainSet';
 	var loginInfo = this._gateway.loginInfo();
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_LEAVE_APPL_SRV");
+		
+		oModel.create("/YeaQuotaMainSet", {
 			IPernr: loginInfo.Pernr,
 			ILangu: loginInfo.Langu,
 			YeaQuotaNav: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('VacationForHQPortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('VacationForHQPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			var YeaQuotaNav = this._gateway.odataResults(data).YeaQuotaNav;
+				var YeaQuotaNav = result.YeaQuotaNav.results;
 
-			if (!YeaQuotaNav.length) {
-				this.cardBody().find('.blue-banner-value').text('0%');
-				return;
-			}
+				if (!YeaQuotaNav.length) {
+					this.cardBody().find('.blue-banner-value').text('0%');
+					return;
+				}
 
-			var totalPercentage = YeaQuotaNav.shift();
-			this.cardBody().find('.blue-banner-value').text(String.toNumber(totalPercentage.Userte) + '%');
+				var totalPercentage = YeaQuotaNav.shift();
+				this.cardBody().find('.blue-banner-value').text(String.toNumber(totalPercentage.Userte) + '%');
 
-			// this.chart.data.datasets[0].barThickness = YeaQuotaNav.length === 1 ? 40 : 20;
-			$.map(YeaQuotaNav, function(o) {
-				this.chart.data.labels.push(o.HgradeT);
-				this.chart.data.datasets[0].data.push(String.toNumber(o.Userte));
-			}.bind(this));
+				// this.chart.data.datasets[0].barThickness = YeaQuotaNav.length === 1 ? 40 : 20;
+				$.map(YeaQuotaNav, function(o) {
+					this.chart.data.labels.push(o.HgradeT);
+					this.chart.data.datasets[0].data.push(String.toNumber(o.Userte));
+				}.bind(this));
 
-			this.chart.update();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'VacationForHQPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+				this.chart.update();
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'VacationForHQPortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 changeLocale: function() {
 

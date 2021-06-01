@@ -18,6 +18,8 @@ homeBasis: function(_basis) {
 	$.extend(HomeGateway.prototype, {
 		prepareLog: _basis.prepareLog.bind(_basis),
 		log: _basis.log.bind(_basis),
+		setModel: _basis.setModel.bind(_basis),
+		getModel: _basis.getModel.bind(_basis),
 		functionName: _basis.functionName.bind(_basis),
 		parameter: _basis.parameter.bind(_basis),
 		parameterMap: _basis.parameterMap.bind(_basis),

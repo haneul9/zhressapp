@@ -111,41 +111,49 @@ fill: function() {
 		return new Promise(function(v) { v(); });
 	}
 
-	return this._gateway.post({
-		url: url, // ZHR_COMMON_SRV/MainContentsSet
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsSet", {
 			IMode: 'R',
 			IConType: '1',
 			IPernr: this._gateway.pernr(),
 			ILangu: loginInfo.Langu,
 			TableIn1: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('EmployeePortlet.fill ${} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('EmployeePortlet.fill ${} success'.interpolate(url), arguments).log();
 
-			var TableIn1 = this._gateway.odataResults(data).TableIn1[0] || {},
-				CdaysYy = String.toNumber(TableIn1.CdaysYy), CdaysMm = String.toNumber(TableIn1.CdaysMm), CdaysDd = String.toNumber(TableIn1.CdaysDd),
-				OddaysYy = String.toNumber(TableIn1.OddaysYy), OddaysMm = String.toNumber(TableIn1.OddaysMm), OddaysDd = String.toNumber(TableIn1.OddaysDd);
+				var TableIn1 = result.TableIn1.results[0] || {},
+					CdaysYy = String.toNumber(TableIn1.CdaysYy), CdaysMm = String.toNumber(TableIn1.CdaysMm), CdaysDd = String.toNumber(TableIn1.CdaysDd),
+					OddaysYy = String.toNumber(TableIn1.OddaysYy), OddaysMm = String.toNumber(TableIn1.OddaysMm), OddaysDd = String.toNumber(TableIn1.OddaysDd);
 
-			this.$()
-				.find('#cdays').html([
-					CdaysYy === 0 ? '' : '<span class="d-day">${CdaysYy}</span><span>년</span>'.interpolate(CdaysYy),
-					CdaysMm === 0 ? '' : '<span class="d-day">${CdaysMm}</span><span>개월</span>'.interpolate(CdaysMm),
-					CdaysDd === 0 ? '' : '<span class="d-day">${CdaysDd}</span><span>일</span>'.interpolate(CdaysDd)
-				].join('')).end()
-				.find('#odays').html([
-					OddaysYy === 0 ? '' : '<span class="d-day">${OddaysYy}</span><span>년</span>'.interpolate(OddaysYy),
-					OddaysMm === 0 ? '' : '<span class="d-day">${OddaysMm}</span><span>개월</span>'.interpolate(OddaysMm),
-					OddaysDd === 0 ? '' : '<span class="d-day">${OddaysDd}</span><span>일</span>'.interpolate(OddaysDd)
-				].join(''));
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+				this.$()
+					.find('#cdays').html([
+						CdaysYy === 0 ? '' : '<span class="d-day">${CdaysYy}</span><span>년</span>'.interpolate(CdaysYy),
+						CdaysMm === 0 ? '' : '<span class="d-day">${CdaysMm}</span><span>개월</span>'.interpolate(CdaysMm),
+						CdaysDd === 0 ? '' : '<span class="d-day">${CdaysDd}</span><span>일</span>'.interpolate(CdaysDd)
+					].join('')).end()
+					.find('#odays').html([
+						OddaysYy === 0 ? '' : '<span class="d-day">${OddaysYy}</span><span>년</span>'.interpolate(OddaysYy),
+						OddaysMm === 0 ? '' : '<span class="d-day">${OddaysMm}</span><span>개월</span>'.interpolate(OddaysMm),
+						OddaysDd === 0 ? '' : '<span class="d-day">${OddaysDd}</span><span>일</span>'.interpolate(OddaysDd)
+					].join(''));
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 changeLocale: function() {
 

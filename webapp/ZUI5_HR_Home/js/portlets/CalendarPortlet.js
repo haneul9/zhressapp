@@ -83,28 +83,59 @@ fill: function() {
 	var url = 'ZHR_COMMON_SRV/MainContentsCalSet',
 	loginInfo = this._gateway.loginInfo();
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsCalSet", {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
 			IMonth: this.yearMonth,
-			IDatum: Date.toODataString(true),
+			IDatum: moment().hours(9).toDate(),
 			TableIn1: [],	// 달력 : 일자/요일키/휴일flag(근무 일정상 휴일)/휴무(2001)정보 여부 flag
 			TableIn2: []	// 본인 근태 : 휴무유형명, 시작일, 종료일
-		},
-		success: function(data) {
-			this._gateway.prepareLog('CalendarPortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('CalendarPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			var results = this._gateway.odataResults(data),
-			pattern = this.pattern.moment;
+				var results = result,
+				pattern = this.pattern.moment;
 
-			/*
-				this.calendarMap = {
-					20210401: {
-						holiday: false,
-						absence: false,
+				/*
+					this.calendarMap = {
+						20210401: {
+							holiday: false,
+							absence: false,
+							absenceStart: false,
+							absenceBetween: false,
+							absenceEnd: false,
+							vacation: [],
+							education: [],
+							biztrip: [],
+							telecommuting: [],
+							birthday: []
+						},
+						...,
+						20210430: {
+							holiday: false,
+							absence: false,
+							absenceStart: false,
+							absenceBetween: false,
+							absenceEnd: false,
+							vacation: [],
+							education: [],
+							biztrip: [],
+							telecommuting: [],
+							birthday: []
+						}
+					};
+				*/
+				var calendarMap = this.calendarMap = {};
+				$.map(results.TableIn1.results, function(o) {
+					calendarMap[moment(o.Datum).format(pattern)] = {
+						holiday: o.HolFlag === 'X',
+						absence: false, // o.P2001Flag === 'X',
 						absenceStart: false,
 						absenceBetween: false,
 						absenceEnd: false,
@@ -113,56 +144,33 @@ fill: function() {
 						biztrip: [],
 						telecommuting: [],
 						birthday: []
-					},
-					...,
-					20210430: {
-						holiday: false,
-						absence: false,
-						absenceStart: false,
-						absenceBetween: false,
-						absenceEnd: false,
-						vacation: [],
-						education: [],
-						biztrip: [],
-						telecommuting: [],
-						birthday: []
-					}
-				};
-			*/
-			var calendarMap = this.calendarMap = {};
-			$.map(results.TableIn1, function(o) {
-				calendarMap[moment(Number.fromODataDate(o.Datum)).format(pattern)] = {
-					holiday: o.HolFlag === 'X',
-					absence: false, // o.P2001Flag === 'X',
-					absenceStart: false,
-					absenceBetween: false,
-					absenceEnd: false,
-					vacation: [],
-					education: [],
-					biztrip: [],
-					telecommuting: [],
-					birthday: []
-				};
-			});
+					};
+				});
 
-			$.map(results.TableIn2, function(o) { // 본인 근태
-				this.setAbsence(o);
-			}.bind(this));
+				$.map(results.TableIn2.results, function(o) { // 본인 근태
+					this.setAbsence(o);
+				}.bind(this));
 
-			this.calendar().datepicker('refresh');
+				this.calendar().datepicker('refresh');
 
-			var today = moment();
-			if (this.yearMonth === today.format('YYYYMM')) {
-				this.retrieveDailyReport(today.format(pattern));
-			}
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+				var today = moment();
+				if (this.yearMonth === today.format('YYYYMM')) {
+					this.retrieveDailyReport(today.format(pattern));
+				}
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 setAbsence: function(o) {
 
@@ -188,8 +196,8 @@ setAbsence: function(o) {
 },
 toDateTextArray: function(begda, endda) {
 
-	begda = !begda ? moment() : moment(Number.fromODataDate(begda));
-	endda = !endda ? moment() : moment(Number.fromODataDate(endda));
+	begda = !begda ? moment() : moment(begda);
+	endda = !endda ? moment() : moment(endda);
 
 	var pattern = this.pattern.moment;
 	return $.map(new Array(moment.duration(endda.diff(begda)).days() + 1), function(n, i) {
@@ -202,9 +210,10 @@ retrieveDailyReport: function(dateText) {
 	loginInfo = this._gateway.loginInfo(),
 	calendarMap = this.calendarMap[dateText];
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsCalSet", {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -215,27 +224,32 @@ retrieveDailyReport: function(dateText) {
 			TableIn5: [], // 부서 출장 인원 : 이름/직위명/기간
 			TableIn6: [], // 부서 재택 인원 : 이름/직위명/기간
 			TableIn7: []  // 부서 생일 인원 : 이름/직위명/양음력 표기
-		},
-		success: function(data) {
-			this._gateway.prepareLog('CalendarPortlet.retrieveDailyReport ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('CalendarPortlet.retrieveDailyReport ${url} success'.interpolate(url), arguments).log();
 
-			var results = this._gateway.odataResults(data);
+				calendarMap.vacation = result.TableIn3.results;			// 휴가
+				calendarMap.education = result.TableIn4.results;		// 교육
+				calendarMap.biztrip = result.TableIn5.results;			// 출장
+				calendarMap.telecommuting = result.TableIn6.results;	// 재택
+				calendarMap.birthday = result.TableIn7.results;			// 생일
 
-			calendarMap.vacation = results.TableIn3;		// 휴가
-			calendarMap.education = results.TableIn4;		// 교육
-			calendarMap.biztrip = results.TableIn5;			// 출장
-			calendarMap.telecommuting = results.TableIn6;	// 재택
-			calendarMap.birthday = results.TableIn7;		// 생일
+				this.renderDailyReport(dateText);
 
-			this.renderDailyReport(dateText);
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.retrieveDailyReport ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.retrieveDailyReport ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 renderDailyReport: function(dateText) {
 
@@ -474,10 +488,10 @@ period: function(o) {
 
 	var result = [];
 	if (o.Begda) {
-		result.push(moment(Number.fromODataDate(o.Begda)).format(this.pattern.period));
+		result.push(moment(o.Begda).format(this.pattern.period));
 	}
 	if (o.Endda && o.Endda !== o.Begda) {
-		result.push(moment(Number.fromODataDate(o.Endda)).format(this.pattern.period));
+		result.push(moment(o.Endda).format(this.pattern.period));
 	}
 	return result.join(' ~ ');
 },
