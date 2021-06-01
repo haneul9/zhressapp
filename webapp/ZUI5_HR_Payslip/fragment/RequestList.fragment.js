@@ -15,11 +15,30 @@ sap.ui.define(
             },
 
             getSearchHBox: function (oController) {
+
+                var oHBox = new sap.m.HBox({
+                    items:[ new sap.m.Label({
+                                textAlign:"Begin",
+                                text: oController.getBundleText("LABEL_47144")// 								
+                            }),new sap.m.Input({
+                                valueHelpRequest: function(oEvent){oController.searchOrgehPernr.call(oController,oEvent,"X");},
+                                valueHelpOnly: true,
+                                showValueHelp: true,
+                                width: "240px",
+                                value : "{Ename}"
+                            })
+                    ],
+                    visible : $.app.APP_AUTH =="H" ? true : false
+                }).addStyleClass("search-field-group pr-40px");
+
+                
                 return new sap.m.HBox({
                     fitContainer: true,
                     items: [
+                        oHBox,
                         new sap.m.HBox({
                             items: [
+
                                 new sap.m.Label({ text: "{i18n>LABEL_54010}" }), //대상 년도
                                 new sap.m.Select({
                                     width: "120px",
