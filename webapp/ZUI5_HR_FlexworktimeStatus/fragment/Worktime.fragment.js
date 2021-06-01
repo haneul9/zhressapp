@@ -67,8 +67,8 @@ sap.ui.jsfragment("ZUI5_HR_FlexworktimeStatus.fragment.Worktime", {
 													selectedKey : "{Lnctm}",
 													width : "100%",
 													items : [new sap.ui.core.Item({key : "0", text : ""}),
-															 new sap.ui.core.Item({key : "1", text : "01:00"}),
-															 new sap.ui.core.Item({key : "2", text : "00:30"}),
+															 new sap.ui.core.Item({key : "1", text : "00:30"}),
+															 new sap.ui.core.Item({key : "2", text : "01:00"}),
 															 new sap.ui.core.Item({key : "3", text : "01:30"}),
 															 new sap.ui.core.Item({key : "4", text : "02:00"})]
 												})],
