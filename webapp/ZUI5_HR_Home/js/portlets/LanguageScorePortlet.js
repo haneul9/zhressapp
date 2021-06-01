@@ -63,6 +63,9 @@ fill: function() {
 					} else {
 						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
 					}
+
+					this.spinner(false);
+					
 					return;
 				}
 

@@ -76,6 +76,9 @@ fill: function() {
 					} else {
 						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
 					}
+
+					this.spinner(false);
+					
 					return;
 				}
 
