@@ -95,13 +95,13 @@ function initHome() {
 		window._portlet.generate(); // Portlet 설정 조회 및 생성
 	}, 0);
 
-	if (_gateway.isMobile()) {
-		setTimeout(function() {
-			new HomeMobileNoticeModal({
-				os: /Android/i.test(navigator.userAgent) ? 'aos' : (/iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'ios' : 'os')
-			});
-		}, 0);
-	}
+	// if (_gateway.isMobile()) {
+	// 	setTimeout(function() {
+	// 		new HomeMobileNoticeModal({
+	// 			os: /Android/i.test(navigator.userAgent) ? 'aos' : (/iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'ios' : 'os')
+	// 		});
+	// 	}, 0);
+	// }
 
 	$(document).on('click', 'a.ehr-logo', _gateway.restoreHome.bind(_gateway));
 	$(document).on('click', '.fn-logout-confirm', _gateway.logout.bind(_gateway));
