@@ -19,12 +19,20 @@ $.map(location.search.replace(/\?/, '').split(/&/), function(v) {
 	paramMap[pair[0]] = decodeURIComponent(pair[1]);
 });
 
-setTimeout(function() {
-	location.href = paramMap.home;
-}, 1000);
-
+var redirect;
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+	redirect = paramMap.home || 'indexMobile.html';
+} else {
+	redirect = paramMap.home || 'index.html';
 }
+
+if (paramMap.pernr) {
+	redirect += ('?pernr=' + paramMap.pernr);
+}
+
+setTimeout(function() {
+	location.href = redirect;
+}, 1000);
 
 });
 </script>
