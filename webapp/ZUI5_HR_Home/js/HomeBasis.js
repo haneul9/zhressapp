@@ -680,6 +680,16 @@ handleError: function(destination, jqXHR, loggingName, showModal) {
 			}
 			window._basis.log('HomeBasis.handleError error 403', message);
 
+		} else if(!error.message) {
+			var errorJSON = JSON.parse(jqXHR.response.body);
+
+            if (errorJSON.error.innererror.errordetails && errorJSON.error.innererror.errordetails.length) {
+                message = errorJSON.error.innererror.errordetails[0].message;
+            } else if (errorJSON.error.message) {
+                message = errorJSON.error.message.value;
+            } else {
+                message = "Error";
+            }
 		} else {
 			message = (error.message || {}).value;
 			if (message === 'An exception was raised') {
@@ -707,6 +717,22 @@ handleError: function(destination, jqXHR, loggingName, showModal) {
 	}
 
 	return { message: message };
+},
+getModel: function(serviceName) {
+	return sap.ui.getCore().getModel(serviceName);
+},
+setModel: function(serviceName) {
+	if(this.getModel(serviceName) !== undefined) return;
+
+	try {
+		var oModel = new sap.ui.model.odata.ODataModel(this.s4hanaURL(serviceName), true, undefined, undefined, undefined, undefined, undefined, false);
+		oModel.setCountSupported(false);
+		sap.ui.getCore().setModel(oModel, serviceName);
+
+		this._gateway.prepareLog('HomeSession.setOdataCommonModel success', arguments).log();
+	} catch(ex) {
+		this._gateway.handleError(this._gateway.ODataDestination.S4HANA, ex, 'HomeSession.setOdataCommonModel');
+	}
 },
 functionName: function(f) {
 

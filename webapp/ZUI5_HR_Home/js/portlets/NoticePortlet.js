@@ -37,61 +37,69 @@ fill: function() {
 
 	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsSet", {
 			IMode: 'R',
 			IConType: '2',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
 			TableIn2: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('NoticePortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('NoticePortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			var list = this.$(),
-			TableIn2 = this._gateway.odataResults(data).TableIn2;
-			if (!TableIn2.length) {
-				if (list.data('jsp')) {
-					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
-				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
+				var list = this.$(),
+				TableIn2 = result.TableIn2.results;
+				if (!TableIn2.length) {
+					if (list.data('jsp')) {
+						list.find('.list-group-item').remove().end()
+							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
+					} else {
+						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
+					}
+					return;
 				}
-				return;
-			}
 
-			if (list.data('jsp')) {
-				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-			}
+				if (list.data('jsp')) {
+					list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+				}
 
-			if (this.mobile()) {
-				TableIn2 = TableIn2.splice(0, 8);
-			}
+				if (this.mobile()) {
+					TableIn2 = TableIn2.splice(0, 8);
+				}
 
-			list.prepend($.map(TableIn2, function(o) {
-				var date = moment(Number((o.Edate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
-				return [
-					'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
-						'<div class="portlet-bbs-item">',
-							'<div class="portlet-bbs-title">',
-								'<span class="portlet-bbs-title-text" title="${title}">${title}</span>'.interpolate(o.Title, o.Title),
-								o.Newitem === 'X' ? '<span class="badge badge-primary badge-pill">N</span>' : '',
-								o.Impor === 'X' ? '<i class="fas fa-exclamation-circle"></i>' : '',
+				list.prepend($.map(TableIn2, function(o) {
+					var date = moment(o.Edate).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
+					return [
+						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
+							'<div class="portlet-bbs-item">',
+								'<div class="portlet-bbs-title">',
+									'<span class="portlet-bbs-title-text" title="${title}">${title}</span>'.interpolate(o.Title, o.Title),
+									o.Newitem === 'X' ? '<span class="badge badge-primary badge-pill">N</span>' : '',
+									o.Impor === 'X' ? '<i class="fas fa-exclamation-circle"></i>' : '',
+								'</div>',
+								'<small class="portlet-bbs-date">${date}</small>'.interpolate(date),
 							'</div>',
-							'<small class="portlet-bbs-date">${date}</small>'.interpolate(date),
-						'</div>',
-					'</a>'
-				].join('');
-			}.bind(this)).join(''));
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'NoticePortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+						'</a>'
+					].join('');
+				}.bind(this)).join(''));
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'NoticePortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 onceAfter: function() {
 

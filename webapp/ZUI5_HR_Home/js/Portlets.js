@@ -445,11 +445,12 @@ save: function(o) {
 		});
 	}
 
-	var url = 'ZHR_COMMON_SRV/PortletInfoSet';
+	var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+	url = 'ZHR_COMMON_SRV/PortletInfoSet';
 
-	this._gateway.post({
-		url: url,
-		data: {
+	oModel.create(
+		"/PortletInfoSet",
+		{
 			IMode: 'U',
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
@@ -457,14 +458,96 @@ save: function(o) {
 			IDatum: Date.toODataString(),
 			TableIn2: saveItems
 		},
-		success: function(data) {
-			this._gateway.prepareLog('Portlets.save ${url} success'.interpolate(url), arguments).log();
+		{
+			success: function() {
+				this._gateway.prepareLog('Portlets.save ${url} success'.interpolate(url), arguments).log();
 
-			if (typeof success === 'function') {
-				success();
-			} else {
+				if (typeof success === 'function') {
+					success();
+				} else {
+					setTimeout(function() {
+						if (!$('.portlet-col .portlet:not(.portlet-employee)').length) {
+							$('.portlet-col[data-position="2"]').html([
+								'<div class="portlet-data-not-found">',
+									'<div>',
+										'<span>선택된 Portlet이 없습니다.</span>',
+									'</div>',
+									'<div class="mt-3">',
+										'<a href="javascript:;" data-toggle="modal" data-target="#portlet-personalization"><i class="fas fa-user-cog"></i> 설정</a>',
+										' 버튼을 클릭하여 Portlet을 선택하세요.',
+									'</div>',
+								'</div>'
+							].join(''));
+						} else {
+							$('.portlet-data-not-found').remove();
+						}
+					}, 0);
+				}
+			}.bind(this),
+			error: function(jqXHR) {
+				var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Portlets.save ' + url).message || '알 수 없는 오류가 발생하였습니다.';
+				if (typeof error === 'function') {
+					error(message);
+				} else {
+					this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message) });
+				}
+			}.bind(this)
+		}
+	);
+},
+
+generate: function() {
+
+	setTimeout(this.initSwitchModal.bind(this), 0);
+
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+		url = 'ZHR_COMMON_SRV/PortletInfoSet',
+		loginInfo = this._gateway.loginInfo();
+		
+		oModel.create("/PortletInfoSet", {
+			IMode: 'R',
+			IPernr: this._gateway.pernr(),
+			IBukrs: loginInfo.Bukrs,
+			ILangu: loginInfo.Langu,
+			IDatum: Date.toODataString(),
+			TableIn1: [],
+			TableIn2: []
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('Portlets.generate ${url} success'.interpolate(url), arguments).log();
+
+				$('.ehr-body .container-fluid').html([
+					'<div class="portlet-masonry-wrapper mx-auto">',
+						'<div class="row portlet-masonry">',
+							'<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="1"></div>',
+							'<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="2"></div>',
+							'<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="3"></div>',
+						'</div>',
+					'</div>'
+				].join(''));
+
+				var TableIn2Map = {},
+				selected = [];
+
+				$.map(result.TableIn2.results, function(o) {
+					TableIn2Map[o.Potid] = o;
+				});
+
+				this.itemMap = {};
+				this.items = $.map(result.TableIn1.results, function(o) {
+					if (this.portletTypeMap[o.Potid]) {
+						$.extend(o, TableIn2Map[o.Potid]);
+						if (o.Fixed !== 'X' && o.Zhide !== 'X') {
+							selected.push(1);
+						}
+						return this.itemMap[o.Potid] = new this.portletTypeMap[o.Potid](this._gateway, o);
+					}
+				}.bind(this));
+
 				setTimeout(function() {
-					if (!$('.portlet-col .portlet:not(.portlet-employee)').length) {
+					if (!selected.length) {
 						$('.portlet-col[data-position="2"]').html([
 							'<div class="portlet-data-not-found">',
 								'<div>',
@@ -476,132 +559,58 @@ save: function(o) {
 								'</div>',
 							'</div>'
 						].join(''));
-					} else {
-						$('.portlet-data-not-found').remove();
 					}
 				}, 0);
-			}
-		}.bind(this),
-		error: function(jqXHR) {
-			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Portlets.save ' + url).message || '알 수 없는 오류가 발생하였습니다.';
-			if (typeof error === 'function') {
-				error(message);
-			} else {
-				this._gateway.alert({ title: '오류', html: ['<p>', '</p>'].join(message) });
-			}
-		}.bind(this)
-	});
-},
 
-generate: function() {
+				this.items.sort(function(item1, item2) {
+					return (item1.column() * 100 + item1.row()) - (item2.column() * 100 + item2.row());
+				});
 
-	setTimeout(this.initSwitchModal.bind(this), 0);
-
-	var url = 'ZHR_COMMON_SRV/PortletInfoSet',
-	loginInfo = this._gateway.loginInfo();
-
-	return this._gateway.post({
-		url: url,
-		data: {
-			IMode: 'R',
-			IPernr: this._gateway.pernr(),
-			IBukrs: loginInfo.Bukrs,
-			ILangu: loginInfo.Langu,
-			IDatum: Date.toODataString(),
-			TableIn1: [],
-			TableIn2: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('Portlets.generate ${url} success'.interpolate(url), arguments).log();
-
-			$('.ehr-body .container-fluid').html([
-				'<div class="portlet-masonry-wrapper mx-auto">',
-					'<div class="row portlet-masonry">',
-						'<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="1"></div>',
-						'<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="2"></div>',
-						'<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 portlet-col" data-position="3"></div>',
-					'</div>',
-				'</div>'
-			].join(''));
-
-			var results = this._gateway.odataResults(data),
-			TableIn2Map = {},
-			selected = [];
-
-			$.map(results.TableIn2, function(o) {
-				TableIn2Map[o.Potid] = o;
-			});
-
-			this.itemMap = {};
-			this.items = $.map(results.TableIn1, function(o) {
-				if (this.portletTypeMap[o.Potid]) {
-					$.extend(o, TableIn2Map[o.Potid]);
-					if (o.Fixed !== 'X' && o.Zhide !== 'X') {
-						selected.push(1);
+				$.map(this.items, function(item) {
+					if (item.use()) {
+						item.appendTo('[data-position="${column}"].portlet-col'.interpolate(item.column()), true); // Portlet UI rendering
 					}
-					return this.itemMap[o.Potid] = new this.portletTypeMap[o.Potid](this._gateway, o);
-				}
-			}.bind(this));
+				});
 
-			setTimeout(function() {
-				if (!selected.length) {
-					$('.portlet-col[data-position="2"]').html([
-						'<div class="portlet-data-not-found">',
-							'<div>',
-								'<span>선택된 Portlet이 없습니다.</span>',
-							'</div>',
-							'<div class="mt-3">',
-								'<a href="javascript:;" data-toggle="modal" data-target="#portlet-personalization"><i class="fas fa-user-cog"></i> 설정</a>',
-								' 버튼을 클릭하여 Portlet을 선택하세요.',
-							'</div>',
-						'</div>'
-					].join(''));
-				}
-			}, 0);
+				$('.portlet-col').sortable({
+					containment: '.portlet-masonry',
+					connectWith: '.portlet-col',
+					items: '.portlet:not(.portlet-employee)',
+					handle: '.card-header',
+					revert: 'invalid',
+					cursor: 'move',
+					cursorAt: { top: 5 },
+					tolerance: 'pointer',
+					update: this.save.bind(this) // event, ui
+				});
 
-			this.items.sort(function(item1, item2) {
-				return (item1.column() * 100 + item1.row()) - (item2.column() * 100 + item2.row());
-			});
+				$('.card-header').disableSelection();
 
-			$.map(this.items, function(item) {
-				if (item.use()) {
-					item.appendTo('[data-position="${column}"].portlet-col'.interpolate(item.column()), true); // Portlet UI rendering
-				}
-			});
+				this._gateway.spinner(false);
 
-			$('.portlet-col').sortable({
-				containment: '.portlet-masonry',
-				connectWith: '.portlet-col',
-				items: '.portlet:not(.portlet-employee)',
-				handle: '.card-header',
-				revert: 'invalid',
-				cursor: 'move',
-				cursorAt: { top: 5 },
-				tolerance: 'pointer',
-				update: this.save.bind(this) // event, ui
-			});
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Portlets.generate ' + url);
 
-			$('.card-header').disableSelection();
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'Portlets.generate ' + url);
+				$('.ehr-body .container-fluid').html([
+					'<div class="portlet-masonry-wrapper mx-auto">',
+						'<div class="portlet-data-not-found"><span>조회된 Portlet 정보가 없습니다.</span></div>',
+					'</div>'
+				].join(''));
 
-			$('.ehr-body .container-fluid').html([
-				'<div class="portlet-masonry-wrapper mx-auto">',
-					'<div class="portlet-data-not-found"><span>조회된 Portlet 정보가 없습니다.</span></div>',
-				'</div>'
-			].join(''));
+				this._gateway.alert({ title: '오류', html: [
+					'<p>Portlet 정보를 조회하지 못했습니다.',
+					'화면을 새로고침 해주세요.<br />',
+					'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.</p>'
+				].join('<br />') });
 
-			this._gateway.alert({ title: '오류', html: [
-				'<p>Portlet 정보를 조회하지 못했습니다.',
-				'화면을 새로고침 해주세요.<br />',
-				'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.</p>'
-			].join('<br />') });
-		}.bind(this),
-		complete: function() {
-			this._gateway.spinner(false);
-		}.bind(this)
-	});
+				this._gateway.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 }
 
 });

@@ -56,17 +56,17 @@ fill: function() {
 	}.bind(this));
 },
 getTargetReports: function(goalId, resolve) { // 평가대상 확인여부
-	var url = 'ZHR_COMMON_SRV/CommonCodeListHeaderSet';
-
-	return this._gateway.post({
-		url: url,
-		data: {
-			ICodeT : "066",
-            NavCommonCodeList : []
-		},
-		success: function(data) {
+	var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+	url = 'ZHR_COMMON_SRV/CommonCodeListHeaderSet';
+	
+	oModel.create("/CommonCodeListHeaderSet", {
+		ICodeT : "066",
+		NavCommonCodeList : []
+	}, {
+		async: true,
+		success: function(result) {
 			this._gateway.prepareLog('EvalGoalProgressingPortlet.fill ${url} success'.interpolate(url), arguments).log();
-			var oTargetList = this._gateway.odataResults(data).NavCommonCodeList;
+			var oTargetList = result.NavCommonCodeList.results;
 			this.targetList = oTargetList;
 			this.retrieveDirectReports(goalId, resolve);
 		}.bind(this),

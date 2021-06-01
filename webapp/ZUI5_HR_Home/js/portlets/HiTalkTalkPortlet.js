@@ -37,59 +37,67 @@ fill: function() {
 
 	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsSet", {
 			IMode: 'R',
 			IConType: '6',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
 			TableIn6: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('HiTalkTalkPortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('HiTalkTalkPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			var list = this.$(),
-			TableIn6 = this._gateway.odataResults(data).TableIn6;
-			if (!TableIn6.length) {
-				if (list.data('jsp')) {
-					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
-				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
+				var list = this.$(),
+				TableIn6 = result.TableIn6.results;
+				if (!TableIn6.length) {
+					if (list.data('jsp')) {
+						list.find('.list-group-item').remove().end()
+							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
+					} else {
+						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
+					}
+					return;
 				}
-				return;
-			}
 
-			if (list.data('jsp')) {
-				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-			}
+				if (list.data('jsp')) {
+					list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+				}
 
-			if (this.mobile()) {
-				TableIn6 = TableIn6.splice(0, 8);
-			}
+				if (this.mobile()) {
+					TableIn6 = TableIn6.splice(0, 8);
+				}
 
-			list.prepend($.map(TableIn6, function(o) {
-				var date = moment(Number((o.Sdate || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
-				return [
-					'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
-						'<div class="portlet-bbs-item">',
-							'<div class="portlet-bbs-title">',
-								'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes, o.Stitle),
+				list.prepend($.map(TableIn6, function(o) {
+					var date = moment(o.Sdate).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
+					return [
+						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
+							'<div class="portlet-bbs-item">',
+								'<div class="portlet-bbs-title">',
+									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes, o.Stitle),
+								'</div>',
+								'<small class="portlet-bbs-date">${date}</small>'.interpolate(date),
 							'</div>',
-							'<small class="portlet-bbs-date">${date}</small>'.interpolate(date),
-						'</div>',
-					'</a>'
-				].join('');
-			}.bind(this)).join(''));
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HiTalkTalkPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+						'</a>'
+					].join('');
+				}.bind(this)).join(''));
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HiTalkTalkPortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 onceAfter: function() {
 

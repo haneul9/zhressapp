@@ -362,14 +362,14 @@ subMenuBlock: function(menu) {
 
 getMenuTree: function(data) {
 
-	var results = this._gateway.odataResults(data),
+	var results = data,
 	level1SubMenuMap = {},
 	level2SubMenuMap = {},
 	menuUrlMap = this.menuUrlMap = {},
 	menuDataMap = this.menuDataMap = {},
 	menuFavorites = this.menuFavorites = [];
 
-	$.map(results.TableIn4, function(o) {
+	$.map(results.TableIn4.results, function(o) {
 		menuUrlMap[o.Meurl] = o.Menid;
 		menuDataMap[o.Menid] = {
 			menuId: o.Menid,
@@ -378,7 +378,7 @@ getMenuTree: function(data) {
 			Pinfo: o.Pinfo
 		};
 	});
-	$.map(results.TableIn3, function(o) { // Level 2 메뉴의 하위 메뉴 목록 생성
+	$.map(results.TableIn3.results, function(o) { // Level 2 메뉴의 하위 메뉴 목록 생성
 		if (o.Hide === 'X') {
 			return;
 		}
@@ -401,7 +401,7 @@ getMenuTree: function(data) {
 			level2SubMenuMap[o.Mnid2] = [menu];
 		}
 	});
-	$.map(results.TableIn2, function(o) { // Level 1 메뉴의 하위 메뉴 목록 생성
+	$.map(results.TableIn2.results, function(o) { // Level 1 메뉴의 하위 메뉴 목록 생성
 		if (o.Hide === 'X') {
 			return;
 		}
@@ -425,7 +425,7 @@ getMenuTree: function(data) {
 		}
 	});
 
-	return $.map(results.TableIn1, function(o) {
+	return $.map(results.TableIn1.results, function(o) {
 		if (o.Hide === 'X') {
 			return;
 		}
@@ -448,12 +448,12 @@ getMenuTree: function(data) {
 
 generate: function() {
 
-	var url = 'ZHR_COMMON_SRV/GetMnlvSet',
-	loginInfo = this._gateway.loginInfo();
-
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+		url = 'ZHR_COMMON_SRV/GetMnlvSet',
+		loginInfo = this._gateway.loginInfo();
+		
+		oModel.create("/GetMnlvSet", {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -462,69 +462,75 @@ generate: function() {
 			TableIn2: [],
 			TableIn3: [],
 			TableIn4: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('MenuHamburger.generate ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('MenuHamburger.generate ${url} success'.interpolate(url), arguments).log();
 
-			this.items = this.getMenuTree(data);
+				this.items = this.getMenuTree(result);
 
-			if (!this.items.length) {
+				if (!this.items.length) {
+					this.items = [{ title: '조회된 메뉴 목록이 없습니다.' }];
+				}
+
+				$(this.parentSelector).html(
+					this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function(top) {
+						return this.topMenuItem(top);
+					}.bind(this)).join(''))
+				)
+				.find('.dropdown-item').on('click', function(e) {
+					var t = $(this),
+					toggle = t.children('.dropdown-toggle');
+					if (!toggle.length) {
+						return;
+					}
+
+					var anchor = $(e.target);
+					if (!anchor.is('a') || !/^javascript/i.test(anchor.attr('href'))) {
+						e.preventDefault();
+						e.stopPropagation();
+					}
+
+					var block = toggle.offsetParent('.dropdown-menu');
+					if (block.hasClass('show')) {
+						block.removeClass('show');
+						toggle.next().removeClass('show');
+					} else {
+						block.parent().find('.show').removeClass('show');
+						block.addClass('show');
+						toggle.next().addClass('show');
+					}
+				}).end()
+				.find('a[data-url]').on('click', this.handleUrl.bind(this));
+
+				$('.navbar .dropdown').on('hidden.bs.dropdown', function() {
+					$(this).find('li.dropdown,ul.dropdown-menu').removeClass('show open');
+				});
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MenuHamburger.generate ' + url).message;
+
 				this.items = [{ title: '조회된 메뉴 목록이 없습니다.' }];
-			}
+				$(this.parentSelector).html(
+					this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function(top) {
+						return this.topMenuItem(top);
+					}.bind(this)).join(''))
+				);
 
-			$(this.parentSelector).html(
-				this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function(top) {
-					return this.topMenuItem(top);
-				}.bind(this)).join(''))
-			)
-			.find('.dropdown-item').on('click', function(e) {
-				var t = $(this),
-				toggle = t.children('.dropdown-toggle');
-				if (!toggle.length) {
-					return;
-				}
+				this._gateway.alert({ title: '오류', html: [
+					'<p>메뉴를 조회하지 못했습니다.',
+					'화면을 새로고침 해주세요.<br />',
+					'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.',
+					'시스템 오류 메세지 : ' + message,
+					'</p>'
+				].join('<br />') });
 
-				var anchor = $(e.target);
-				if (!anchor.is('a') || !/^javascript/i.test(anchor.attr('href'))) {
-					e.preventDefault();
-					e.stopPropagation();
-				}
-
-				var block = toggle.offsetParent('.dropdown-menu');
-				if (block.hasClass('show')) {
-					block.removeClass('show');
-					toggle.next().removeClass('show');
-				} else {
-					block.parent().find('.show').removeClass('show');
-					block.addClass('show');
-					toggle.next().addClass('show');
-				}
-			}).end()
-			.find('a[data-url]').on('click', this.handleUrl.bind(this));
-
-			$('.navbar .dropdown').on('hidden.bs.dropdown', function() {
-				$(this).find('li.dropdown,ul.dropdown-menu').removeClass('show open');
-			});
-		}.bind(this),
-		error: function(jqXHR) {
-			var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'MenuHamburger.generate ' + url).message;
-
-			this.items = [{ title: '조회된 메뉴 목록이 없습니다.' }];
-			$(this.parentSelector).html(
-				this.ul.replace(/\$\{[^{}]*\}/, $.map(this.items, function(top) {
-					return this.topMenuItem(top);
-				}.bind(this)).join(''))
-			);
-
-			this._gateway.alert({ title: '오류', html: [
-				'<p>메뉴를 조회하지 못했습니다.',
-				'화면을 새로고침 해주세요.<br />',
-				'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.',
-				'시스템 오류 메세지 : ' + message,
-				'</p>'
-			].join('<br />') });
-		}.bind(this)
-	});
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 
 toggleMenu: function() {}/* HomeGateway undefined 방지 */

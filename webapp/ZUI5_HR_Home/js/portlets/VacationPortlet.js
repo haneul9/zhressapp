@@ -59,138 +59,147 @@ checkNull: function (v) {
 
 fill: function() {
 
-	var url = 'ZHR_LEAVE_APPL_SRV/VacationQuotaSet';
-    var oEmpInfo = this._gateway.loginInfo();
+    this._gateway.setModel("ZHR_LEAVE_APPL_SRV");
 
-	return this._gateway.post({
-		url: url,
-		data: {
+    return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_LEAVE_APPL_SRV"),
+        url = 'ZHR_LEAVE_APPL_SRV/VacationQuotaSet',
+        oEmpInfo = this._gateway.loginInfo();
+		
+		oModel.create("/VacationQuotaSet", {
 			IPernr : oEmpInfo.Pernr,
             IBukrs : oEmpInfo.Bukrs,
             ILangu : oEmpInfo.Langu,
             IMolga : oEmpInfo.Molga,
-            IDatum : "\/Date(" + this.getTime(new Date()) + ")\/",
+            IDatum : moment().hours(9).toDate(),
             ICorre : "X",
             VacationQuotaNav : []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('VacationPortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('VacationPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			var list = this.$(),
-                oVacationData = this._gateway.odataResults(data).VacationQuotaNav;
+                var list = this.$(),
+                    oVacationData = result.VacationQuotaNav.results;
 
-            if (!oVacationData.length) {
-                list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">휴가사용 현황 데이터가 없습니다.</a>');
-                return;
-            }
+                if (!oVacationData.length) {
+                    list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">휴가사용 현황 데이터가 없습니다.</a>');
+                    return;
+                }
 
-			list.append([
-                '<canvas id="vacChart" class="ChartClass"></canvas>',
-                '<div class="vac-header">',
-                    '<div style="width:40%;">',
-                        "구분",
+                list.append([
+                    '<canvas id="vacChart" class="ChartClass"></canvas>',
+                    '<div class="vac-header">',
+                        '<div style="width:40%;">',
+                            "구분",
+                        '</div>',
+                        '<div style="width: 20%; text-align: right;">',
+                            "발생",
+                        '</div>',
+                        '<div style="width: 20%; text-align: right;">',
+                            "사용",
+                        '</div>',
+                        '<div style="width: 20%; text-align: right;">',
+                            "잔여",
+                        '</div>',
                     '</div>',
-                    '<div style="width: 20%; text-align: right;">',
-                        "발생",
-                    '</div>',
-                    '<div style="width: 20%; text-align: right;">',
-                        "사용",
-                    '</div>',
-                    '<div style="width: 20%; text-align: right;">',
-                        "잔여",
-                    '</div>',
-                '</div>',
-                '<div class="vacationTable" class="vac-body"></div>'
-            ].join(''));
-
-            var vChartId = document.getElementById('vacChart').getContext('2d');
-            var vList1 = [],
-                vList2 = [],
-                vList3 = [];
-            
-            oVacationData.forEach(function(e, i) {
-                if(i > 2) return;
-
-                var vKtext = e.Ktext, // 구분
-                    vAnzhl = parseFloat(e.Anzhl), // 발생
-                    vKverb = parseFloat(e.Kverb), // 사용
-                    vReman = parseFloat(e.Reman); // 잔여
-
-                $('.vacationTable').append([
-                '<div class="vac-body">',
-                    '<div style="width: 40%;">',
-                        vKtext,
-                    '</div>',
-                    '<div style="width: 20%; text-align: right;">',
-                        vAnzhl,
-                    '</div>',
-                    '<div style="width: 20%; text-align: right;">',
-                        vKverb,
-                    '</div>',
-                    '<div style="width: 20%; text-align: right;">',
-                        vReman,
-                    '</div>',
-                '</div>'
+                    '<div class="vacationTable" class="vac-body"></div>'
                 ].join(''));
 
-                vList1.push(vKtext);
-                vList2.push(vKverb);
-                vList3.push(vReman);
-            });
+                var vChartId = document.getElementById('vacChart').getContext('2d');
+                var vList1 = [],
+                    vList2 = [],
+                    vList3 = [];
+                
+                oVacationData.forEach(function(e, i) {
+                    if(i > 2) return;
 
-            var chart = new Chart(vChartId, { // type : 'bar' = 막대차트를 의미합니다. 
-                type: 'bar',
-                data: { 
-                    labels: vList1, 
-                    datasets: [
-                        { 
-                            label: '사용',
-                            // maxBarThickness: "40px",
-                            // barPercentage: 0.6,
-                            // categoryPercentage: 0.6,
-                            barThickness: oVacationData.length === 1 ? 40 : 20,
-                            backgroundColor: 'rgb(141, 198, 63)', 
-                            data: vList2
-                        },
-                        {
-                            label: '잔여',
-                            // maxBarThickness: "40px",
-                            // barPercentage: 0.6,
-                            // categoryPercentage: 0.6,
-                            barThickness: oVacationData.length === 1 ? 40 : 20,
-                            backgroundColor: 'rgb(221, 238, 197)',
-                            data: vList3
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                fontColor : "rgb(153, 153, 153)",
-                                fontSize : 8,
-                                beginAtZero: true
+                    var vKtext = e.Ktext, // 구분
+                        vAnzhl = parseFloat(e.Anzhl), // 발생
+                        vKverb = parseFloat(e.Kverb), // 사용
+                        vReman = parseFloat(e.Reman); // 잔여
+
+                    $('.vacationTable').append([
+                    '<div class="vac-body">',
+                        '<div style="width: 40%;">',
+                            vKtext,
+                        '</div>',
+                        '<div style="width: 20%; text-align: right;">',
+                            vAnzhl,
+                        '</div>',
+                        '<div style="width: 20%; text-align: right;">',
+                            vKverb,
+                        '</div>',
+                        '<div style="width: 20%; text-align: right;">',
+                            vReman,
+                        '</div>',
+                    '</div>'
+                    ].join(''));
+
+                    vList1.push(vKtext);
+                    vList2.push(vKverb);
+                    vList3.push(vReman);
+                });
+
+                var chart = new Chart(vChartId, { // type : 'bar' = 막대차트를 의미합니다. 
+                    type: 'bar',
+                    data: { 
+                        labels: vList1, 
+                        datasets: [
+                            { 
+                                label: '사용',
+                                // maxBarThickness: "40px",
+                                // barPercentage: 0.6,
+                                // categoryPercentage: 0.6,
+                                barThickness: oVacationData.length === 1 ? 40 : 20,
+                                backgroundColor: 'rgb(141, 198, 63)', 
+                                data: vList2
+                            },
+                            {
+                                label: '잔여',
+                                // maxBarThickness: "40px",
+                                // barPercentage: 0.6,
+                                // categoryPercentage: 0.6,
+                                barThickness: oVacationData.length === 1 ? 40 : 20,
+                                backgroundColor: 'rgb(221, 238, 197)',
+                                data: vList3
                             }
-                        }]
+                        ]
                     },
-                    plugins: {
-                        datalabels: {
-                            color: '#064975'
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fontColor : "rgb(153, 153, 153)",
+                                    fontSize : 8,
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
+                        plugins: {
+                            datalabels: {
+                                color: '#064975'
+                            }
                         }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
+                    },
+                    plugins: [ChartDataLabels]
+                });
 
-            $('.ChartClass').append([chart]);
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'VacationPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+                $('.ChartClass').append([chart]);
+
+                this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+                this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'VacationPortlet.fill ' + url);
+                
+                this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 changeLocale: function() {
 
