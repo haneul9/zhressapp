@@ -1213,10 +1213,11 @@ sap.ui.define([
 					}
 				}
 				
+				var oChief = "";
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
 						if(data){
-							
+							oChief = data.Chief == "00000000" ? "" : data.Chief;
 						}
 					},
 					error: function (oError) {
@@ -1240,6 +1241,48 @@ sap.ui.define([
 					oController.Error = "";
 					sap.m.MessageBox.error(oController.ErrorMessage);
 					return;
+				}
+
+				// 2021-06-01 근무시간 변경 시 조직장에게 push 알림 발송
+				if(oData.Monyn == "1" || oData.Monyn == "3"){
+					var oPush = [], 
+						dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oController.getSessionInfoByKey("Dtfmt")}),
+						oLnctm = "",
+						oAdbtm = "";
+
+					switch(oData.Lnctm){ // 법정휴게
+						case "1":
+							oLnctm = "00:30";
+							break;
+						case "2":
+							oLnctm = "01:00";
+							break;
+						case "3":
+							oLnctm = "01:30";
+							break;
+						case "4":
+							oLnctm = "02:00";
+							break;
+						default:
+							oLnctm = "-";
+							break;
+					};
+
+					// 추가휴게
+					oAdbtm = (!oData2[0].Adbtm || oData2[0].Adbtm == "") ? "-" : (oData2[0].Adbtm.substring(0,2) + ":" + oData2[0].Adbtm.substring(2,4));
+
+					// title : [Hi HR] ${Ename} 근무시간 변경 알림
+					// body : ${Datum} ${Time} (법정휴게 ${Lnctm}, 추가휴게 ${Adbtm})
+					oPush.push({
+						title : oController.getBundleText("MSG_69011").interpolate(oData.Ename),
+						body : oController.getBundleText("MSG_69012")
+								.interpolate(dateFormat.format(oData.Datum), 
+											 (oData.Beguz.substring(0,2) + ":" + oData.Beguz.substring(2,4) + "~" + oData.Enduz.substring(0,2) + ":" + oData.Enduz.substring(2,4)),
+											 oLnctm,
+											 oAdbtm)
+					});
+
+					if(oController.sendPush(oPush, oChief) == false) return;
 				}
 				
 				sap.m.MessageBox.success(oController.getBundleText("MSG_00061"), { // 신청되었습니다.
@@ -1274,7 +1317,8 @@ sap.ui.define([
 					createData.Prcty = "2";
 					
 				var oData = sap.ui.getCore().byId(oController.PAGEID + "_Table").getModel().getProperty("/Data");
-				// var oPush = [], dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oController.getSessionInfoByKey("Dtfmt")});
+				var oPush = [], dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : oController.getSessionInfoByKey("Dtfmt")});
+
 				for(var i=0; i<oData.length; i++){
 					var detail = {};
 						detail.Datum = "\/Date(" + common.Common.getTime(oData[i].Datum) + ")\/";
@@ -1285,37 +1329,37 @@ sap.ui.define([
 						detail.Monyn = oData[i].Monyn; // 1-기본근무 2-추가휴게 3-전체
 						detail.Appkey1 = oData[i].Appkey1;
 
-					// if(detail.Monyn == "1" || detail.Monyn == "3"){
-					// 	// title : [Hi HR] ${Ename} 근무시간 변경 알림
-					// 	// body : ${Datum} ${Time}(법정휴게 ${Lnctm}, 추가휴게 ${Adbtm})
-					// 	var oLnctm = "";
-					// 	switch(oData[i].Lnctm){
-					// 		case "1":
-					// 			oLnctm = "00:30";
-					// 			 break;
-					// 		case "2":
-					// 			oLnctm = "01:00";
-					// 			break;
-					// 		case "3":
-					// 			oLnctm = "01:30";
-					// 			break;
-					// 		case "4":
-					// 			oLnctm = "02:00";
-					// 			break;
-					// 		default:
-					// 			oLnctm = "-";
-					// 			break;
-					// 	};
-
-					// 	oPush.push({
-					// 		title : oController.getBundleText("MSG_69011").interpolate(oData[i].Ename),
-					// 		body : oController.getBundleText("MSG_69012")
-					// 				.interpolate(dateFormat.format(oData[i].Datum), 
-					// 							 (detail.Beguz.substring(0,2) + ":" + detail.Beguz.substring(2,4) + "~" + detail.Enduz.substring(0,2) + ":" + detail.Enduz.substring(2,4)),
-					// 							 oLnctm,
-					// 							 (oData[i].Adbtm ? oData[i].Adbtm : "-"))
-					// 	});
-					// }
+					if(detail.Monyn == "1" || detail.Monyn == "3"){
+						var oLnctm = "";
+						switch(oData[i].Lnctm){
+							case "1":
+								oLnctm = "00:30";
+								 break;
+							case "2":
+								oLnctm = "01:00";
+								break;
+							case "3":
+								oLnctm = "01:30";
+								break;
+							case "4":
+								oLnctm = "02:00";
+								break;
+							default:
+								oLnctm = "-";
+								break;
+						};
+						
+						// title : [Hi HR] ${Ename} 근무시간 변경 알림
+						// body : ${Datum} ${Time} (법정휴게 ${Lnctm}, 추가휴게 ${Adbtm})
+						oPush.push({
+							title : oController.getBundleText("MSG_69011").interpolate(oData[i].Ename),
+							body : oController.getBundleText("MSG_69012")
+									.interpolate(dateFormat.format(oData[i].Datum), 
+												 (detail.Beguz.substring(0,2) + ":" + detail.Beguz.substring(2,4) + "~" + detail.Enduz.substring(0,2) + ":" + detail.Enduz.substring(2,4)),
+												 oLnctm,
+												 (oData[i].Adbtm ? oData[i].Adbtm : "-"))
+						});
+					}
 					
 					createData.FlexWorktime1Nav.push(detail);
 				}
@@ -1338,7 +1382,7 @@ sap.ui.define([
 				oModel.create("/FlexworktimeSummarySet", createData, {
 					success: function(data, res){
 						if(data){
-							// oChief = data.Chief == "00000000" ? "" : data.Chief;
+							oChief = data.Chief == "00000000" ? "" : data.Chief;
 						}
 					},
 					error: function (oError) {
@@ -1364,10 +1408,10 @@ sap.ui.define([
 					return;
 				}
 
-				// 2021-05-31 근무시간 변경 시 조직장에게 push 알림 발송
-				// if(oPush.length > 0){
-				// 	if(oController.sendPush(oPush, oChief) == false) return;
-				// }
+				// 2021-06-01 근무시간 변경 시 조직장에게 push 알림 발송
+				if(oPush.length > 0){
+					if(oController.sendPush(oPush, oChief) == false) return;
+				}
 				
 				sap.m.MessageBox.success(oController.getBundleText("MSG_00017"), { // 저장되었습니다.
 					onClose : function(oEvent){
@@ -1387,7 +1431,7 @@ sap.ui.define([
 			});
 		},
 
-		// 2021-05-31 근무시간 변경 시 조직장에게 push 알림 발송
+		// 2021-06-01 근무시간 변경 시 조직장에게 push 알림 발송
 		sendPush : function(oPush, oChief){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FlexworktimeStatus.List");
 			var oController = oView.getController();
@@ -1472,6 +1516,8 @@ sap.ui.define([
 						MessageBox.error(oController.ErrorMessage);
 						return false;
 					}
+				} else {
+					Common.log("조직장", oChief ," HI HR APP 미설치");
 				}
 			}
 		},
