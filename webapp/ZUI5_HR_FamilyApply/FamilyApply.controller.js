@@ -705,6 +705,9 @@ sap.ui.define([
 			if(s.length>0&&s.length<7&&isNaN(s)){
 				$.app.byId(oId).setValue();
 			}
+			if(!/\*/.test(oEvent.getSource().getValue())) {
+				s = s.replace(/-/g, "");
+			}
 			if($.app.byId(oId).getValue().search("-")==-1){
 				isNaN(s)?$.app.byId(oId).setValue():null;
 			}
