@@ -958,10 +958,6 @@ sap.ui.define(
                         Pop2: [] 
                     });
 
-                    if (!oController.oDialog) {
-                        oController.oDialog = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", oController);
-                        $.app.getView().addDependent(oController.oDialog);
-					}
 				}
 
                 if ((New === "N" && Flag === "A100" && oController._MedDateChange === "X")
@@ -977,15 +973,15 @@ sap.ui.define(
                         Pop2: [oController._tData] 
                     });
 
-                    if (!oController.oDialog2) {
-                        oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
-                        $.app.getView().addDependent(oController.oDialog2);
-					}
                 }
 				
 				oController._onDialog = New;
 				
                 if (Flag === "1000") {
+                    if (!oController.oDialog) {
+                        oController.oDialog = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", oController);
+                        $.app.getView().addDependent(oController.oDialog);
+					}
 					
 					setTimeout(function () {
                         if(!oController.oDialog.isOpen()) oController.oDialog.open();
@@ -993,6 +989,10 @@ sap.ui.define(
                         if(oController.oDialog2) oController.oDialog2.close();
                     }, 10);
                 } else if (Flag === "A100") {
+                    if (!oController.oDialog2) {
+                        oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
+                        $.app.getView().addDependent(oController.oDialog2);
+					}
 					
 					setTimeout(function () {
                         if(!oController.oDialog2.isOpen()) oController.oDialog2.open();
