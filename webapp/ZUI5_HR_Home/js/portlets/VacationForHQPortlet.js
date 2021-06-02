@@ -96,6 +96,9 @@ fill: function() {
 
 				if (!YeaQuotaNav.length) {
 					this.cardBody().find('.blue-banner-value').text('0%');
+
+					this.spinner(false);
+					
 					return;
 				}
 
