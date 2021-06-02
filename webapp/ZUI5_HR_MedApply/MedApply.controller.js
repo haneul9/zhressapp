@@ -945,7 +945,7 @@ sap.ui.define(
                     return ;
                 }
                 
-                if (New === "N" && oController._MedDateChange === "X") {
+                if (New === "N" && oController._MedDateChange === "X" && oController._GubunBukrs !== Flag) {
                     oController.initTdata(Flag);
 
                     if(Flag === "A100") 
