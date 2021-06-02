@@ -1143,47 +1143,6 @@ sap.ui.define(
                     });
 				}
 				
-<<<<<<< HEAD
-				var vData={ IConType:"1",
-							IBukrs:oController._Bukrs,
-							IPernr:oSessionData.Pernr,
-							ILangu:oSessionData.Langu,
-							IMolga:oSessionData.Molga,
-							IBegda:moment(vFirstDate).hours(10).toDate(),
-							IEndda:moment(vSecondDate).hours(10).toDate(),
-							IStatus:oSel.getSelectedKey(),
-							IDatum:"\/Date("+new Date().getTime()+")\/",
-							MedicalApplyExport:[],
-							MedicalApplyTableIn:[],
-							MedicalApplyTableIn0:[],
-							MedicalApplyTableIn3:[],
-							MedicalApplyTableIn4:[],
-							MedicalApplyTableIn5:[],
-							MedicalApplyTableInH:[]
-							};
-
-				oModel.create("/MedicalApplySet", vData, 
-						{success:function(data,res){
-							if(data&&data.MedicalApplyTableIn.results.length){
-								data.MedicalApplyTableIn.results.forEach(function(e){
-									aData.oData.push(e);
-								});
-								data.MedicalApplyTableIn.results.length>10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(data.MedicalApplyTableIn.results.length);
-							}
-							if(data&&data.MedicalApplyExport.results.length){
-								oController._onClose=data.MedicalApplyExport.results[0].Close;
-							}
-						},
-						error:function (oError) {
-							var Err = {};						
-							if (oError.response) {
-								Err = window.JSON.parse(oError.response.body);
-								var msg1 = Err.error.innererror.errordetails;
-								if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-								else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							} else {
-								sap.m.MessageBox.alert(oError.toString());
-=======
                 return vTmp;
             },
 
@@ -1389,7 +1348,6 @@ sap.ui.define(
 						for (var i = 1; i <= 2; i++) {
 							if(COMMON_ATTACH_FILES.getFileLength(oController, "00" + i) != 0) {
 								uFiles.push("00" + i);
->>>>>>> fix-med
 							}
 						}
 						
