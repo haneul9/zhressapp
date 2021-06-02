@@ -2018,7 +2018,7 @@ sap.ui.define([
                                 oController._BusyDialog.close();
                                 return;
                             } else if(!oData[i].Medty){
-                                MessageBox.error("의료종류를 선택하여 주십시오." + name);
+                                MessageBox.error("의료비 유형을 선택하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
                             } else if(oData[i].Medty == "X" && oData[i].Mepcd != "5"){ // else if(oData[i].Mesty == true && oData[i].Mepcd != "5"){
@@ -2844,6 +2844,7 @@ sap.ui.define([
                 if(oSubty == "P0812List" || oSubty == "P0812ListY15") {
                     vData.Subty = vData.Subty;
                     vData.Subtx = vData.Stext;
+                    if(oSubty == "P0812ListY15") vData.Medty = "0"; // 의료비-의료비 유형 기본값 '기타'로 설정
                 } else {
                     vData.Depty = vData.Subty;
                     vData.Deptx = vData.Stext;
@@ -3155,7 +3156,7 @@ sap.ui.define([
                             case "Mepcd": // 의료비-의료증빙코드
                                 oPath += "'899' and ICodty eq 'PKR_MEPCD'";
                                 break;
-                            case "Medty": // 의료비-의료종류
+                            case "Medty": // 의료비-의료비 유형
                                 oPath += "'899' and ICodty eq 'PKR_MEDTY'";
                                 break;
                             case "Cadme": // 신용카드/현금영수증/제로페이-사용구분
