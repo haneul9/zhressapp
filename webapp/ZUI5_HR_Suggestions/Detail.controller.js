@@ -36,6 +36,7 @@
 		g_CommBed: "",			// 해당 댓글의 싫어요 Btn 
 		g_CommGoodText: "",		// 해당 댓글의 좋아요 Text
 		g_CommBedText: "",		// 해당 댓글의 싫어요 Text
+		g_CommDateText: "",		// 해당 댓글의 날짜 text
 		g_ReHiSeqnr2: "",		// 해당 대댓글의 시퀀스번호 Text
 		g_ReDetail: "",			// 해당 대댓글의 신규작성시 내용
 		g_ReHiPword: "",		// 해당 대댓글의 비밀번호 Text
@@ -48,6 +49,7 @@
 		g_ReCommBed: "",		// 해당 대댓글의 싫어요 Btn
 		g_ReCommGoodText: "",	// 해당 대댓글의 좋아요 Text
 		g_ReCommBedText: "",	// 해당 대댓글의 싫어요 Text
+		g_ReCommDateText: "",	// 해당 대댓글의 날짜 Text
 
 		getUserId: function() {
 
@@ -217,7 +219,16 @@
 													maxLength: 10,
 													value: e.Pword,
 													type: sap.m.InputType.Password
-												}).addStyleClass("mr-10px")
+												}).addStyleClass("mr-10px"),
+												new sap.ui.core.Icon({
+													src: "sap-icon://information"
+												})
+												.addStyleClass("color-icon-blue ml-20px mr-5px pt-14px"),
+												new sap.m.Text({
+													width: "300px",
+													textAlign: "Begin",
+													text: "{i18n>MSG_56006}"
+												}).addStyleClass("pt-12px")
 											]
 										}).addStyleClass("custom-HiTokTok-group mt-10px"),
 										new sap.m.HBox({
@@ -379,7 +390,7 @@
 													})
 													.addStyleClass("color-icon-blue ml-20px mr-5px pt-14px"),
 													new sap.m.Text({
-														width: "auto",
+														width: "300px",
 														textAlign: "Begin",
 														text: "{i18n>MSG_56006}"
 													}).addStyleClass("pt-12px")
@@ -515,7 +526,7 @@
 											})
 											.addStyleClass("color-icon-blue ml-20px mr-5px"),
 											new sap.m.Text({
-												width: "auto",
+												width: "300px",
 												textAlign: "Begin",
 												text: "{i18n>MSG_56006}"
 											})
@@ -632,6 +643,7 @@
 			this.g_ReSaveBtn = oEvent.getSource().getParent().getItems()[7];
 			this.g_ReCanBtn = oEvent.getSource().getParent().getItems()[9];
 			this.g_RePwordBox = oEvent.getSource().getParent().getParent().getParent().getItems()[0];
+			this.g_ReCommDateText = oEvent.getSource().getParent().getParent().getItems()[0];
 			this.g_RePwordInput = oEvent.getSource().getParent().getParent().getParent().getItems()[0].getItems()[1];
 			this.g_ReDetail = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[0];
 			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[2];
@@ -842,6 +854,7 @@
 			this.g_ReBtn = oEvent.getSource().getParent().getItems()[7];
 			this.g_SaveBtn = oEvent.getSource().getParent().getItems()[8];
 			this.g_CanBtn = oEvent.getSource().getParent().getItems()[10];
+			this.g_CommDateText = oEvent.getSource().getParent().getParent().getItems()[0];
 			this.g_HiBox = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[0].getItems()[0];
 			this.g_HiInputPword = oEvent.getSource().getParent().getParent().getParent().getItems()[0].getItems()[1];
 			this.g_HiPword = oPWord;
@@ -938,6 +951,7 @@
 				this.g_ReCanBtn.setVisible(true);
 				this.g_RePwordBox.setVisible(true);
 				this.g_ReDetail.setEditable(true);
+				this.g_ReCommDateText.setVisible(false);
 			}else {
 				oController.onSubCommentDelete();
 			}
@@ -959,6 +973,7 @@
 				this.g_SaveBtn.setVisible(true);
 				this.g_CanBtn.setVisible(true);
 				this.g_HiBox.setVisible(true);
+				this.g_CommDateText.setVisible(false);
 			}else {
 				this.onCommentDelete();
 			}
