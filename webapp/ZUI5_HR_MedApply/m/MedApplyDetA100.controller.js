@@ -665,9 +665,10 @@ sap.ui.define(
 					
 					oSel4.setSelectedKey();
 				}
+                
+                oController.onCal(oController._Bukrs);
 				
                 if (oController._onDialog != "M") {
-                    oController.onCal(oController._Bukrs);
                     oController.eqFunc();
                 }
             },
