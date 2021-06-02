@@ -2,9 +2,10 @@ jQuery.sap.require("sap.f.GridContainerSettings");
 sap.ui.define(
     [
         "common/Common",
-        "common/Formatter"
+        "common/Formatter",
+		"common/PageHelper"
     ],
-    function (Common, Formatter) {
+    function (Common, Formatter, PageHelper) {
         "use strict";
 
         sap.ui.jsview("ZUI5_HR_Dashboard.DashboardList", {
@@ -20,13 +21,13 @@ sap.ui.define(
                 var oTitle = new sap.ui.commons.layout.MatrixLayout({
 					columns : 1,
 					width : "100%",
-					rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+					rows : [/*new sap.ui.commons.layout.MatrixLayoutRow({
 								cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 											 content : [new sap.m.Text({text : oBundleText.getText("LABEL_05101")}).addStyleClass("title")], // 목표/평가 Dashboard
 											 hAlign : "Begin",
 											 vAlign : "Middle"
 										 })]
-							}),
+							}),*/
 							new sap.ui.commons.layout.MatrixLayoutRow({height : "2rem"}),
 							new sap.ui.commons.layout.MatrixLayoutRow({
 								cells : [new sap.ui.commons.layout.MatrixLayoutCell({
@@ -107,41 +108,55 @@ sap.ui.define(
 							})]
 				});
 				
-				// var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-				// 	columns : 1,
-				// 	width : "100%",
-				// 	rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-				// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-				// 							 content : [oContent],
-				// 							 hAlign : "Center",
-				// 							 vAlign : "Middle"
-				// 						 })] 
-				// 			})]
-				// });
-				
-				var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-					// title: "{i18n>LABEL_03101}",
-					title : "평가 Overview",
-					showHeader : false,
-					content: [new sap.m.ScrollContainer(oController.PAGEID + "_ScrollContainer", {
-								  horizontal : true,
-								  vertical : false,
-								  width : "100%",
-								  content : [new sap.m.FlexBox({
-											     justifyContent : "Center",
-											     fitContainer : true,
-											     items : [oContent]
-										     })]
-							  })],
-					// content : [new sap.m.FlexBox({
-					// 			   justifyContent : "Center",
-					// 			   fitContainer : true,
-					// 			   items : [oContent]
-					// 		   })],
-					footer : []
+				var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+					columns : 1,
+					width : "100%",
+					rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+								cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+											 content : [oContent],
+											 hAlign : "Center",
+											 vAlign : "Middle"
+										 })] 
+							})]
 				});
 				
-				oPage.addStyleClass("WhiteBackground");
+				// var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+				// 	// title: "{i18n>LABEL_03101}",
+				// 	title : "평가 Overview",
+				// 	showHeader : false,
+				// 	content: [new sap.m.ScrollContainer(oController.PAGEID + "_ScrollContainer", {
+				// 				  horizontal : true,
+				// 				  vertical : false,
+				// 				  width : "100%",
+				// 				  content : [new sap.m.FlexBox({
+				// 							     justifyContent : "Center",
+				// 							     fitContainer : true,
+				// 							     items : [oContent]
+				// 						     })]
+				// 			  })],
+				// 	// content : [new sap.m.FlexBox({
+				// 	// 			   justifyContent : "Center",
+				// 	// 			   fitContainer : true,
+				// 	// 			   items : [oContent]
+				// 	// 		   })],
+				// 	footer : []
+				// });
+				
+				// oPage.addStyleClass("WhiteBackground");
+
+				var oPage = new PageHelper({
+                    idPrefix: oController.PAGEID,
+                    contentItems: [new sap.m.ScrollContainer(oController.PAGEID + "_ScrollContainer", {
+									   horizontal : true,
+									   vertical : false,
+									   width : "100%",
+									   content : [new sap.m.FlexBox({
+													  justifyContent : "Center",
+													  fitContainer : true,
+													  items : [oContent]
+												  })]
+									})]
+                });
 				
 				oPage.setModel(oController._ListCondJSonModel);
 				oPage.bindElement("/Data");

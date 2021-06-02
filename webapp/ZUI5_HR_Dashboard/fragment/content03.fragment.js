@@ -154,10 +154,18 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content03", {
 									  	  icon : "sap-icon://display-more",
 									  	  type : "Ghost",
 									  	  press : function(){
-										  	  	window.open(
-										  	  		(common.Common.getOperationMode() == "DEV" ? "https://hcm10preview.sapsf.com" : "https://performancemanager10.successfactors.com")
-										  	  			+ "/sf/customExternalModule?urlName=EvalAchvCompGradeConfirmApp&moduleId=PERFORMANCE"
-										  	  	);
+										  	  	// window.open(
+										  	  	// 	(common.Common.getOperationMode() == "DEV" ? "https://hcm10preview.sapsf.com" : "https://performancemanager10.successfactors.com")
+										  	  	// 		+ "/sf/customExternalModule?urlName=EvalAchvCompGradeConfirmApp&moduleId=PERFORMANCE"
+										  	  	// );
+												var url = "";
+												if(common.Common.isLOCAL() == true){
+													url = "/webapp/index.html?popup=EvalAchvCompGradeConfirmApp.html&mid=1820&pernr=" + oController.getSessionInfoByKey("Pernr");
+												} else {
+													url = "/index.html?popup=EvalAchvCompGradeConfirmApp.html&mid=1820";
+												}
+
+												window.open(url);
 									  	  }
 									  }),
 									  new sap.m.ToolbarSpacer({width : "10px"})]

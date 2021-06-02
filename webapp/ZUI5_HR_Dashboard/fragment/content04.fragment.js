@@ -133,8 +133,17 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content04", {
 									  	  type : "Ghost",
 									  	  visible : true,
 									  	  press : function(){
-									  	  		var domain = (common.Common.getOperationMode() == "DEV" ? "hcm10preview.sapsf.com" : "performancemanager10.successfactors.com");
-									  	  		window.open("https://" + domain + "/sf/customExternalModule?urlName=EvalComprehensive&moduleId=PERFORMANCE");
+									  	  		// var domain = (common.Common.getOperationMode() == "DEV" ? "hcm10preview.sapsf.com" : "performancemanager10.successfactors.com");
+									  	  		// window.open("https://" + domain + "/sf/customExternalModule?urlName=EvalComprehensive&moduleId=PERFORMANCE");
+
+												var url = "";
+												if(common.Common.isLOCAL() == true){
+													url = "/webapp/index.html?popup=EvalComprehensive2.html&mid=1830&pernr=" + oController.getSessionInfoByKey("Pernr");
+												} else {
+													url = "/index.html?popup=EvalComprehensive2.html&mid=1830";
+												}
+	
+												window.open(url);
 									  	  }
 									  }),
 									  new sap.m.ToolbarSpacer({width : "10px"})]

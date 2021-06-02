@@ -59,13 +59,22 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content02", {
 									  	  type : "Ghost",
 									  	  //press : oContrler.onPressDetail2
 									  	  press : function(oEvent){
-									  	  	  var url = "/sf/customExternalModule?urlName=EvalGoal&moduleId=PERFORMANCE";
+									  	  	//   var url = "/sf/customExternalModule?urlName=EvalGoal&moduleId=PERFORMANCE";
 									  	  	  
-									  	  	  if(common.Common.getOperationMode() == "DEV"){
-													window.open("https://hcm10preview.sapsf.com" + url);
-											  } else {
-													window.open("https://performancemanager10.successfactors.com" + url);
-											  }
+									  	  	//   if(common.Common.getOperationMode() == "DEV"){
+											// 		window.open("https://hcm10preview.sapsf.com" + url);
+											//   } else {
+											// 		window.open("https://performancemanager10.successfactors.com" + url);
+											//   }
+											
+											var url = "";
+											if(common.Common.isLOCAL() == true){
+												url = "/webapp/index.html?popup=EvalGoal.html&mid=1860&pernr=" + oController.getSessionInfoByKey("Pernr");
+											} else {
+												url = "/index.html?popup=EvalGoal.html&mid=1860";
+											}
+
+											window.open(url);
 									  	  }
 									  }),
 									  new sap.m.ToolbarSpacer({width : "10px"})]

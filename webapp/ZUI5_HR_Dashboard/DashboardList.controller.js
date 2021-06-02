@@ -41,8 +41,11 @@ sap.ui.define([
 			var bus2 = sap.ui.getCore().getEventBus();
 			bus2.subscribe("app", "ResizeWindow", this.SmartSizing, this);
 			
-			this.SmartSizing();
-			$(window).resize(function(){this.SmartSizing();});
+			var oController = this;
+			oController.SmartSizing();
+			$(window).resize(function(){
+				oController.SmartSizing();
+			});
 		},
 		
 		onBeforeShow : function(oEvent){
@@ -130,38 +133,69 @@ sap.ui.define([
 			
 			var oYear = oController._ListCondJSonModel.getProperty("/Data/Year");
 		
-			if(oYear == "2020"){
-				switch(common.Common.getOperationMode()){
-					case "DEV":
-						oTemplateId1 = "703";
-						oTemplateId2 = "719";
-						break;
-					case "QAS":
-						oTemplateId1 = "500";
-						oTemplateId2 = "502";
-						break;
-					case "PRD":
-						oTemplateId1 = "500";
-						oTemplateId2 = "502";
-						break;
-				}
-			} else if(oYear == "2021") {
-				switch(common.Common.getOperationMode()){
-					case "DEV":
-						oTemplateId1 = "779";
-						oTemplateId2 = "";
-						break;
-					case "QAS":
-						oTemplateId1 = "520";
-						oTemplateId2 = "";
-						break;
-					case "PRD":
-						oTemplateId1 = "520";
-						oTemplateId2 = "";
-						break;
-				}
-			}
+			// if(oYear == "2020"){
+			// 	switch(common.Common.getOperationMode()){
+			// 		case "DEV":
+			// 			oTemplateId1 = "703";
+			// 			oTemplateId2 = "719";
+			// 			break;
+			// 		case "QAS":
+			// 			oTemplateId1 = "500";
+			// 			oTemplateId2 = "502";
+			// 			break;
+			// 		case "PRD":
+			// 			oTemplateId1 = "500";
+			// 			oTemplateId2 = "502";
+			// 			break;
+			// 	}
+			// } else if(oYear == "2021") {
+			// 	switch(common.Common.getOperationMode()){
+			// 		case "DEV":
+			// 			oTemplateId1 = "779";
+			// 			oTemplateId2 = "";
+			// 			break;
+			// 		case "QAS":
+			// 			oTemplateId1 = "520";
+			// 			oTemplateId2 = "";
+			// 			break;
+			// 		case "PRD":
+			// 			oTemplateId1 = "520";
+			// 			oTemplateId2 = "";
+			// 			break;
+			// 	}
+			// }
 			
+			// 2021-05-24 평가문서 template id 조회로직 변경
+			new JSONModelHelper().url("/odata/v2/FormTemplate?$filter=formTemplateType eq 'Review' and formTemplateName like '" + oYear + "년 업적%25'")
+								.setAsync(false)
+								.attachRequestCompleted(function(){
+									var data = this.getData().d;
+									
+									if(data && data.results.length){
+										oTemplateId1 = data.results[0].formTemplateId;
+									}
+								})
+								.attachRequestFailed(function() {
+									console.log("fail : 업적/역량평가 template id 조회");
+									return;
+								})
+								.load();
+			
+			new JSONModelHelper().url("/odata/v2/FormTemplate?$filter=formTemplateType eq '360' and formTemplateName like '" + oYear + "년 다면%25'")
+								.setAsync(false)
+								.attachRequestCompleted(function(){
+									var data = this.getData().d;
+									
+									if(data && data.results.length){
+										oTemplateId2 = data.results[0].formTemplateId;
+									}
+								})
+								.attachRequestFailed(function() {
+									console.log("fail : 다면평가 template id 조회");
+									return;
+								})
+								.load();
+								
 			// if(oTemplateId1 == "" || oTemplateId2 == ""){
 			// 	sap.m.MessageBox.error(oBundleText.getText("MSG_05004")); // 목표/다면평가 template id 조회 시 오류가 발생하였습니다.
 			// 	return;
@@ -183,7 +217,7 @@ sap.ui.define([
 			
 			var vData = {Data : []}, vData2 = {Data : []};
 			
-			new JSONModelHelper().url("/odata/v2/User('" + ($.app.getModel("session").getData().Pernr * 1) + "')/directReports")
+			new JSONModelHelper().url("/odata/v2/User('" + (oController.getSessionInfoByKey("Pernr") * 1) + "')/directReports")
 								.select("userId")
 								.select("nickname")
 								.select("title")
@@ -260,7 +294,7 @@ sap.ui.define([
 							if(vData.Data[i].userId == photo[j].userId){
 								check = "X";
 								var tmp = {};
-								Object.assign(tmp, vData.Data[i], photo[j]);
+								$.extend(true, tmp, vData.Data[i], photo[j]);
 								
 								vData2.Data.push(tmp);
 							}
@@ -333,10 +367,10 @@ sap.ui.define([
 											.attachRequestFailed(function(error) {
 												if(error.getParameters() && error.getParameters().message == "error"){
 													var message = JSON.parse(error.getParameters().responseText).error.message.value;
-													sap.m.MessageBox.error(message);
+													// sap.m.MessageBox.error(message);
 													reject();
 												} else {
-													sap.m.MessageBox.error(error);
+													// sap.m.MessageBox.error(error);
 													reject();
 												}
 											})
@@ -361,10 +395,10 @@ sap.ui.define([
 											.attachRequestFailed(function(error) {
 												if(error.getParameters() && error.getParameters().message == "error"){
 													var message = JSON.parse(error.getParameters().responseText).error.message.value;
-													sap.m.MessageBox.error(message);
+													// sap.m.MessageBox.error(message);
 													reject();
 												} else {
-													sap.m.MessageBox.error(error);
+													// sap.m.MessageBox.error(error);
 													reject();
 												}
 											})
@@ -459,10 +493,10 @@ sap.ui.define([
 												.attachRequestFailed(function(error) {
 													if(error.getParameters() && error.getParameters().message == "error"){
 														var message = JSON.parse(error.getParameters().responseText).error.message.value;
-														sap.m.MessageBox.error(message);
+														// sap.m.MessageBox.error(message);
 														reject();
 													} else {
-														sap.m.MessageBox.error(error);
+														// sap.m.MessageBox.error(error);
 														reject();
 													}
 												})
@@ -1200,42 +1234,45 @@ sap.ui.define([
 			
 			// 업적, 역량평가 점수 조회
 			var vData2 = [];
-			for(var i=0; i<vData.length; i++){
-				promise2.push(
-					new Promise(function(resolve, reject){
-						new JSONModelHelper().url("/odata/v2/FormHeader")
-											.select("currentStep")
-											.select("formDataId")
-											.select("formDataStatus")
-											.select("formAuditTrails/formContentId")
-											.select("formAuditTrails/auditTrailRecipient")
-											.expand("formAuditTrails")
-											.filter("formTemplateId eq " + oController._ListCondJSonModel.getProperty("/Data/TemplateId1") + " and formDataStatus ne 4 and formSubjectId eq '" + vData[i].userId + "'")
-											.attachRequestCompleted(function(){
-													var data = this.getData().d;
-													
-													if(data && data.results.length){
-														for(var i=0; i<data.results.length; i++){
-															vData2.push(data.results[i]);
+			if(oController._ListCondJSonModel.getProperty("/Data/TemplateId1") != ""){
+				for(var i=0; i<vData.length; i++){
+					promise2.push(
+						new Promise(function(resolve, reject){
+							new JSONModelHelper().url("/odata/v2/FormHeader")
+												.select("currentStep")
+												.select("formDataId")
+												.select("formDataStatus")
+												.select("formAuditTrails/formContentId")
+												.select("formAuditTrails/auditTrailRecipient")
+												.expand("formAuditTrails")
+												.filter("formTemplateId eq " + oController._ListCondJSonModel.getProperty("/Data/TemplateId1") +
+														" and formDataStatus ne 4 and formSubjectId eq '" + vData[i].userId + "'")
+												.attachRequestCompleted(function(){
+														var data = this.getData().d;
+														
+														if(data && data.results.length){
+															for(var i=0; i<data.results.length; i++){
+																vData2.push(data.results[i]);
+															}
 														}
+														
+														resolve();
+												})
+												.attachRequestFailed(function(error) {
+													if(error.getParameters() && error.getParameters().message == "error"){
+														var message = JSON.parse(error.getParameters().responseText).error.message.value;
+														sap.m.MessageBox.error(message);
+													} else {
+														sap.m.MessageBox.error(error);
 													}
-													
-													resolve();
-											})
-											.attachRequestFailed(function(error) {
-												if(error.getParameters() && error.getParameters().message == "error"){
-													var message = JSON.parse(error.getParameters().responseText).error.message.value;
-													sap.m.MessageBox.error(message);
-												} else {
-													sap.m.MessageBox.error(error);
-												}
-												reject();
-											})
-											.load()
-					})
-				);
+													reject();
+												})
+												.load()
+						})
+					);
+				}
 			}
-			
+						
 			// new JSONModelHelper().url("/odata/v2/FormHeader")
 			// 					 .select("currentStep")
 			// 					 .select("formDataId")
@@ -1269,7 +1306,8 @@ sap.ui.define([
 			// 2021-04-12 다면평가 template 이 존재하지 않는 경우 skip
 			if(oController._ListCondJSonModel.getProperty("/Data/TemplateId2") != ""){
 				new JSONModelHelper().url("/odata/v2/FormHeader")
-								.filter("formTemplateId eq " + oController._ListCondJSonModel.getProperty("/Data/TemplateId2") + " and formDataStatus ne 4 and formSubjectId in " + oController._UserList)
+								.filter("formTemplateId eq " + oController._ListCondJSonModel.getProperty("/Data/TemplateId2") + 
+										" and formDataStatus ne 4 and formSubjectId in " + oController._UserList)
 								.select("currentStep")
 								.select("formDataId")
 								.select("formDataStatus")
@@ -1371,7 +1409,8 @@ sap.ui.define([
 				for(var i=0; i<oFormId.length; i++){
 					promise.push(
 						new Promise(function(resolve, reject){
-							new JSONModelHelper().url("/odata/v2/TalentRatings?$filter=formDataId eq " + oFormId[i].formDataId + "L and formContentId eq " + oFormId[i].formContentId + "L")
+							new JSONModelHelper().url("/odata/v2/TalentRatings?$filter=formDataId eq " + oFormId[i].formDataId + 
+													  "L and formContentId eq " + oFormId[i].formContentId + "L")
 												.attachRequestCompleted(function(){
 														var data = this.getData().d;
 														
@@ -1583,7 +1622,7 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 			var createData = {TableIn : []};
 				createData.IAppye = oController._ListCondJSonModel.getProperty("/Data/Year");
-				createData.IPernr = $.app.getModel("session").getData().Pernr;
+				createData.IPernr = oController.getSessionInfoByKey("Pernr");
 				createData.ISessty = oController._ListCondJSonModel.getProperty("/Data/Sessty");
 				
 			oModel.create("/FinalEvalResultSet", createData, {

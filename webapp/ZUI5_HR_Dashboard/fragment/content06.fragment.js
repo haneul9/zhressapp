@@ -132,10 +132,19 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content06", {
 									  	  icon : "sap-icon://display-more",
 									  	  type : "Ghost",
 									  	  press : function(){
-										  	  	window.open(
-										  	  		(common.Common.getOperationMode() == "DEV" ? "https://hcm10preview.sapsf.com" : "https://performancemanager10.successfactors.com")
-										  	  			+ "/sf/customExternalModule?urlName=Eval360ReviewApp&moduleId=PERFORMANCE"
-										  	  	);
+										  	  	// window.open(
+										  	  	// 	(common.Common.getOperationMode() == "DEV" ? "https://hcm10preview.sapsf.com" : "https://performancemanager10.successfactors.com")
+										  	  	// 		+ "/sf/customExternalModule?urlName=Eval360ReviewApp&moduleId=PERFORMANCE"
+										  	  	// );
+
+												var url = "";
+												if(common.Common.isLOCAL() == true){
+													url = "/webapp/index.html?popup=Eval360ReviewApp.html&mid=1870&pernr=" + oController.getSessionInfoByKey("Pernr");
+												} else {
+													url = "/index.html?popup=Eval360ReviewApp.html&mid=1870";
+												}
+	
+												window.open(url);
 									  	  }
 									  }),
 									  new sap.m.ToolbarSpacer({width : "10px"})]
