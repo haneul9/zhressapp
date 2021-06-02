@@ -1790,6 +1790,8 @@ sap.ui.define([
                                         
                                         data.Yeartax0812DataSet.results[i].Mesty = data.Yeartax0812DataSet.results[i].Mesty == "X" ? true : false;
                                         data.Yeartax0812DataSet.results[i].Surpg = data.Yeartax0812DataSet.results[i].Surpg == "X" ? true : false;
+
+                                        data.Yeartax0812DataSet.results[i].Medty = data.Yeartax0812DataSet.results[i].Medty == "" ? "0" : data.Yeartax0812DataSet.results[i].Medty;
                                         
                                         // data.Yeartax0812DataSet.results[i].Supnr = data.Yeartax0812DataSet.results[i].Supnr == "" ? "" : 
                                         // 													data.Yeartax0812DataSet.results[i].Supnr.substring(0,3) + "-" 
@@ -2015,7 +2017,11 @@ sap.ui.define([
                                 MessageBox.error("증빙코드를 선택하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
-                            } else if(oData[i].Mesty == true && oData[i].Mepcd != "5"){
+                            } else if(!oData[i].Medty){
+                                MessageBox.error("의료종류를 선택하여 주십시오." + name);
+                                oController._BusyDialog.close();
+                                return;
+                            } else if(oData[i].Medty == "X" && oData[i].Mepcd != "5"){ // else if(oData[i].Mesty == true && oData[i].Mepcd != "5"){
                                 MessageBox.error("안경구입비의 경우 증빙코드 '기타 의료비 영수증'을 선택하여 주십시오." + name);
                                 oController._BusyDialog.close();
                                 return;
@@ -2053,6 +2059,7 @@ sap.ui.define([
                             detail.Mecnt = oData[i].Mecnt ? (oData[i].Mecnt + "").replace(/[^0-9]/g, "") : "";
                             detail.Meamt = oData[i].Meamt ? oData[i].Meamt.replace(/[^0-9]/g, "") : "";
                             detail.Zflnts = oData[i].Zflnts;
+                            detail.Medty = oData[i].Medty == "0" ? "" : oData[i].Medty;
                         
                         createData.Yeartax0812DataSet.push(detail);
                     }
@@ -3148,6 +3155,9 @@ sap.ui.define([
                             case "Mepcd": // 의료비-의료증빙코드
                                 oPath += "'899' and ICodty eq 'PKR_MEPCD'";
                                 break;
+                            case "Medty": // 의료비-의료종류
+                                oPath += "'899' and ICodty eq 'PKR_MEDTY'";
+                                break;
                             case "Cadme": // 신용카드/현금영수증/제로페이-사용구분
                                 oPath += "'801'";
                                 break;
@@ -3194,8 +3204,12 @@ sap.ui.define([
                         oModel.read(oPath, null, null, false,
                             function(data, oResponse) {
                                 if(data && data.results.length){
-                                    for(var i=0; i<data.results.length; i++){
-                                        oTemplate.addItem(new sap.ui.core.Item({key : data.results[i].Code, text : data.results[i].Text}));
+                                    for(var j=0; j<data.results.length; j++){
+                                        if(col_info[i].id == "Medty"){
+                                            data.results[j].Code = data.results[j].Code == "" ? "0" : data.results[j].Code;
+                                        }
+
+                                        oTemplate.addItem(new sap.ui.core.Item({key : data.results[j].Code, text : data.results[j].Text}));
                                     }
                                 }
                             },

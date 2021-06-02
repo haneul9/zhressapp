@@ -57,8 +57,9 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0812ListY15", {
 			 			{id: "Mepcd", label : "증빙코드", plabel : "", span : 0, type : "combobox", editable : true, sort : true, filter : true, width : "300px"},
 			 			{id: "Mecnt", label : "건수", plabel : "", span : 0, type : "input", editable : true, sort : true, filter : true, width : "80px"},
 			 			{id: "Meamt", label : "금액", plabel : "", span : 0, type : "input", editable : true, sort : true, filter : true, width : "130px"},
-			 			{id: "Mesty", label : "안경구입비", plabel : "", span : 0, type : "radiobutton2", editable : true, sort : true, filter : true, width : "100px"},
-			 			{id: "Surpg", label : "난임시술비", plabel : "", span : 0, type : "radiobutton2", editable : true, sort : true, filter : true, width : "100px"},
+			 			// {id: "Mesty", label : "안경구입비", plabel : "", span : 0, type : "radiobutton2", editable : true, sort : true, filter : true, width : "100px"},
+			 			// {id: "Surpg", label : "난임시술비", plabel : "", span : 0, type : "radiobutton2", editable : true, sort : true, filter : true, width : "100px"},
+						{id: "Medty", label : "증빙코드", plabel : "", span : 0, type : "combobox", editable : true, sort : true, filter : true, width : "200px"},
 			 			{id: "Zflnts", label : "", plabel : "", span : 0, type : "pdf", editable : true, sort : true, filter : true, width : "40px"}];
 		
 		oController.makeTable(oController, oTable, col_info);
