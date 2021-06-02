@@ -945,23 +945,24 @@ sap.ui.define(
                     return ;
                 }
                 
-                if (New === "N" || (New === "N" && oController._MedDateChange === "O" && oController._GubunBukrs !== Flag)) {
+                if (New === "N" || (New === "N" && oController._MedDateChange === "O" && !oController.oDialog.open() && Flag === "1000")) {
                     oController.initTdata(Flag);
 
-                    if(Flag === "A100") 
-                        oController._DataModel.setData({
-                            Pop1: [],
-                            Pop2: [oController._tData] 
-                        });
-                    else
-                        oController._DataModel.setData({
-                            Pop1: [oController._tData],
-                            Pop2: [] 
-                        });
-
-                    oController._GubunBukrs = Flag;
+                    oController._DataModel.setData({
+                        Pop1: [oController._tData],
+                        Pop2: [] 
+                    });
 				}
 
+                if (New === "N" || (New === "N" && oController._MedDateChange === "O" && !oController.oDialog2.open() && Flag === "A100")) {
+                    oController.initTdata(Flag);
+
+                    oController._DataModel.setData({
+                        Pop1: [],
+                        Pop2: [oController._tData] 
+                    });
+                }
+				
 				oController._onDialog = New;
 				
                 if (Flag === "1000") {
