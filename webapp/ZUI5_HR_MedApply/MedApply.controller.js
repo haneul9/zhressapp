@@ -945,45 +945,47 @@ sap.ui.define(
                     return ;
                 }
                 
-                if ((New === "N" && Flag === "1000") || (New === "N" && oController._MedDateChange === "O" && oController.oDialog && Common.checkNull(oController.oDialog.open()) && Flag === "1000")) {
+                if ((New === "N" && Flag === "1000") || (New === "N" && oController._MedDateChange === "O" && (oController.oDialog || {}).isOpen() === false && Flag === "1000")) {
                     oController.initTdata(Flag);
 
                     oController._DataModel.setData({
                         Pop1: [oController._tData],
                         Pop2: [] 
                     });
+
+                    if (!oController.oDialog) {
+                        oController.oDialog = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", oController);
+                        $.app.getView().addDependent(oController.oDialog);
+					}
 				}
 
-                if ((New === "N" && Flag === "A100") || (New === "N" && oController._MedDateChange === "O" && oController.oDialog2 && Common.checkNull(oController.oDialog2.open()) && Flag === "A100")) {
+                if ((New === "N" && Flag === "A100") || (New === "N" && oController._MedDateChange === "O" && (oController.oDialog2 || {}).isOpen() === false && Flag === "A100")) {
                     oController.initTdata(Flag);
 
                     oController._DataModel.setData({
                         Pop1: [],
                         Pop2: [oController._tData] 
                     });
+
+                    if (!oController.oDialog2) {
+                        oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
+                        $.app.getView().addDependent(oController.oDialog2);
+					}
                 }
 				
 				oController._onDialog = New;
 				
                 if (Flag === "1000") {
-                    if (!oController.oDialog) {
-                        oController.oDialog = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", oController);
-                        $.app.getView().addDependent(oController.oDialog);
-					}
 					
 					setTimeout(function () {
-                        if(!oController.oDialog.open()) oController.oDialog.open();
+                        if(!oController.oDialog.isOpen()) oController.oDialog.open();
                         
                         if(oController.oDialog2) oController.oDialog2.close();
                     }, 10);
                 } else if (Flag === "A100") {
-                    if (!oController.oDialog2) {
-                        oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
-                        $.app.getView().addDependent(oController.oDialog2);
-					}
 					
 					setTimeout(function () {
-                        if(!oController.oDialog2.open()) oController.oDialog2.open();
+                        if(!oController.oDialog2.isOpen()) oController.oDialog2.open();
 
                         if(oController.oDialog) oController.oDialog.close();
                     }, 10);
