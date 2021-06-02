@@ -1,592 +1,874 @@
-$.sap.require("common.PickOnlyDatePicker");
-$.sap.require("common.EmpBasicInfoBoxCustomHass");
-sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
-    createContent: function (oController) {
-        var oRow,oCell,oMat,c=sap.ui.commons;
-        for(var i=17;i<56;i++) { 
-            window["oLabel"+(i-17)] = oController.getTxt("LABEL_470"+i,i);
-        }
-        var oLabel39=oController.getTxt("LABEL_47087",56);
-        var oSelector1=new sap.m.Select(oController.PAGEID+"_dSel1",{width:"80%",selectedKey:"{PatiName}",change:oController.changeSel,editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})
-        ,oSelector2=new sap.m.Select(oController.PAGEID+"_dSel2",{width:"80%",selectedKey:"{HospType}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }},change:oController.changeSel2});
+sap.ui.define(
+    [
+        "common/Common",
+        "common/HoverIcon",
+        "common/PickOnlyDatePicker",
+        "common/EmpBasicInfoBoxCustomHass",
+        "fragment/COMMON_ATTACH_FILES",
+        "sap/ui/commons/layout/MatrixLayout",
+        "sap/ui/commons/layout/MatrixLayoutRow",
+        "sap/ui/commons/layout/MatrixLayoutCell"
+    ],
+    function (Common, HoverIcon, PickOnlyDatePicker, EmpBasicInfoBoxCustomHass, COMMON_ATTACH_FILES, MatrixLayout, MatrixLayoutRow, MatrixLayoutCell) {
+        "use strict";
 
-        var oPerInfo=new sap.m.HBox(oController.PAGEID+"_PerInfo",{
-            justifyContent: "Start",
-            visible:false,
-            width : "100%",
-            items: [common.EmpBasicInfoBoxCustomHass.renderHeader()]
-        });
+        sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", {
+            createContent: function (oController) {
 
-        var oMat=new sap.ui.commons.layout.MatrixLayout({
-            columns:6,
-            widths:['140px','','140px','','140px',''] 
-        });
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:6,content:oPerInfo});
-        oRow.addCell(oCell);
-        oMat.addRow(oRow);
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-		oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-			colSpan:6,
-			content:new sap.ui.core.HTML({content:"<div style='height:5px;'/>"})
-		});
-		oRow.addCell(oCell);
-		oMat.addRow(oRow);
+                var oDialog = new sap.m.Dialog(oController.PAGEID + "_Dialog", {
+                    title: "{i18n>LABEL_47001}",  // 의료비 신청
+                    contentWidth: "1700px",
+                    beforeOpen: oController.onAfterOpen,
+                    afterOpen: oController.onAfterLoad,
+                    content: [
+                        new sap.m.FlexBox({
+                            justifyContent: "Center",
+                            fitContainer: true,
+                            items: [
+                                new sap.ui.commons.layout.VerticalLayout({
+                                    content: [
+                                        this.buildPanelFirst(oController),  // sap.m.Panel
+                                        this.buildPanelSecond(oController)  // sap.m.Panel
+                                    ]
+                                })
+                            ]
+                        }).addStyleClass("paddingbody")
+                    ],
+                    buttons: [
+                        new sap.m.Button({
+                            text: "{i18n>LABEL_47101}", // 저장
+                            press: oController.onDialogBaseSaveBtn.bind(oController),
+                            visible: {
+                                parts: [{ path: "Close" }, { path: "Status" }],
+                                formatter: function (fVal, fVal2) {
+                                    return ((fVal2 === "AA" || fVal2 === "88") && fVal !== "X") ? true : false;
+                                }
+                            }
+                        }).addStyleClass("button-light"),
+                        new sap.m.Button({
+                            text: "{i18n>LABEL_47006}", // 신청
+                            press: function () {
+                                oController.onSave("1000");
+                            },
+                            visible: {
+                                parts: [{ path: "Close" }, { path: "Status" }],
+                                formatter: function (fVal, fVal2) {
+                                    return (Common.checkNull(fVal2) && fVal !== "X") ? true : false;
+                                }
+                            }
+                        }).addStyleClass("button-search"),
+                        new sap.m.Button({
+                            text: "{i18n>LABEL_47149}", // 삭제
+                            press: oController.onDialogBaseDelBtn.bind(oController),
+                            visible: {
+                                parts: [{ path: "Close" }, { path: "Status" }],
+                                formatter: function (fVal, fVal2) {
+                                    return ((fVal2 === "AA" || fVal2 === "88") && fVal !== "X") ? true : false;
+                                }
+                            }
+                        }).addStyleClass("button-delete"),
+                        new sap.m.Button({
+                            text: "{i18n>LABEL_00133}",   // 닫기
+                            press: oController.onClose
+                        }).addStyleClass("button-default")
+                    ]
+                }).setModel(oController._DataModel);
 
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel0}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[new common.PickOnlyDatePicker({width:"50%",
-        displayFormat: gDtfmt,
-        placeholder: gDtfmt,
-        value : {
-            path : "MedDate", 
-            type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
-        },
-        valueFormat: "yyyy-MM-dd",editable:false})]}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel1}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oSelector1]}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel2}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",editable:false,maxLength:13,value:"{RelationTx}",
-                                                          customData:new sap.ui.core.CustomData({key:"Rel",value:"{Relation}"}),editable:false})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel3}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[oSelector2,new HoverIcon({            
-            src: "sap-icon://information",
-            hover: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47039"));
+                return oDialog;
             },
-            leave: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent);
-            }
-        }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue font-14px pt-5px")]}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel4}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({showValueHelp: true,
-                                            width:"80%",
-                                            valueHelpOnly: true,
-                                            value:"{HospName}",
-                                            valueHelpRequest: oController.onSearchMed,editable:{parts:[{path:"Close"},{path:"Status"}],
-                                            formatter:function(fVal,fVal2){
-                                                if(fVal2==""){
-                                                    return fVal=="X"?false:true;
-                                                }else{
-                                                    return false;
-                                                }
-                                            }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel5}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.m.Input({width:"80%",editable:false,maxLength:13,value:"{Comid}",editable:false})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat.addRow(oRow);
 
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel6}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",colSpan:3,content:new sap.m.Input({width:"100%",value:"{DiseName}",maxLength:50,editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel7}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:new sap.ui.commons.TextView({
-            text : {
-                path : "Begda", 
-                type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
+            buildPanelFirst: function(oController) {
+
+                var aMatrixRows = [
+                    new MatrixLayoutRow({
+                        cells: [
+                            new MatrixLayoutCell({
+                                colSpan: 6,
+                                content: new sap.m.HBox(oController.PAGEID + "_PerInfo", {
+                                    justifyContent: "Start",
+                                    visible: false,
+                                    width: "100%",
+                                    items: [
+                                        EmpBasicInfoBoxCustomHass.renderHeader()
+                                    ]
+                                })
+                            })
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            new MatrixLayoutCell({
+                                colSpan: 6,
+                                content: new sap.ui.core.HTML({ content: "<div style='height:5px;'/>" })
+                            })
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 진료일
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47003}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: [
+                                    new PickOnlyDatePicker({
+                                        width: "50%",
+                                        displayFormat: gDtfmt,
+                                        placeholder: gDtfmt,
+                                        value: {
+                                            path: "MedDate",
+                                            type: new sap.ui.model.type.Date({ pattern: "yyyy-MM-dd" })
+                                        },
+                                        valueFormat: "yyyy-MM-dd",
+                                        editable: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        },
+                                        change: oController.getBukrs.bind(oController)
+                                    })
+                                ]
+                            }).addStyleClass("DataCell"),
+                            // 환자명
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47009}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: [
+                                    new sap.m.Select(oController.PAGEID + "_dSel1", {
+                                        width: "80%",
+                                        selectedKey: "{PatiName}",
+                                        change: oController.changeSel,
+                                        editable: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        }
+                                    })
+                                ]
+                            }).addStyleClass("DataCell"),
+                            // 관계
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47010}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: [
+                                    new sap.m.Input({
+                                        width: "80%",
+                                        editable: false,
+                                        maxLength: 13,
+                                        value: "{RelationTx}",
+                                        customData: new sap.ui.core.CustomData({ key: "Rel", value: "{Relation}" })
+                                    })
+                                ]
+                            }).addStyleClass("DataCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 의료기관
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47020}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: [
+                                    new sap.m.Select(oController.PAGEID + "_dSel2", {
+                                        width: "80%",
+                                        selectedKey: "{HospType}",
+                                        editable: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        },
+                                        change: oController.changeSel2
+                                    }),
+                                    new HoverIcon({
+                                        src: "sap-icon://information",
+                                        hover: function (oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47039"));  // * 치과(보철)의 급여 진료비는 치과(일반)으로 신청하시기 바랍니다.
+                                        },
+                                        leave: function (oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                        }
+                                    }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue font-14px pt-5px")
+                                ]
+                            }).addStyleClass("DataCell"),
+                            // 의료기관명
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47021}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: new sap.m.Input({
+                                    showValueHelp: true,
+                                    width: "80%",
+                                    valueHelpOnly: true,
+                                    value: "{HospName}",
+                                    valueHelpRequest: oController.onSearchMed,
+                                    editable: {
+                                        parts: [{ path: "Close" }, { path: "Status" }],
+                                        formatter: function (fVal, fVal2) {
+                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell"),
+                            // 사업자등록번호
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47022}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: new sap.m.Input({
+                                    width: "80%",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: "{Comid}"
+                                })
+                            }).addStyleClass("DataCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 진료내용
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47023}", textAlign: "End", required: true})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                colSpan: 3,
+                                content: new sap.m.Input({
+                                    width: "100%",
+                                    value: "{DiseName}",
+                                    maxLength: 50,
+                                    editable: {
+                                        parts: [{ path: "Close" }, { path: "Status" }],
+                                        formatter: function (fVal, fVal2) {
+                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell"),
+                            // 신청일
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47024}", textAlign: "End", required: false})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: new sap.ui.commons.TextView({
+                                    text: {
+                                        path: "Begda",
+                                        type: new sap.ui.model.type.Date({ pattern: "yyyy-MM-dd" })
+                                    },
+                                    textAlign: "Center"
+                                }).addStyleClass("FontFamily")
+                            }).addStyleClass("DataCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 5대암 여부
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: [
+                                    new HoverIcon({
+                                        src: "sap-icon://information",
+                                        hover: function (oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47002")); // ο 위, 간, 폐, 대장, 유방 / 심근경색, 뇌졸증 : 비급여 부분 500만원/年 추가 지원
+                                        },
+                                        leave: function (oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                        }
+                                    }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                                    new sap.m.Label({text: "{i18n>LABEL_47025}", textAlign: "End", required: false}).addStyleClass("label-wauto")
+                                ]
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                content: [
+                                    new MatrixLayout({
+                                        columns: 2,
+                                        widths: ["20%"],
+                                        rows: [
+                                            new MatrixLayoutRow({
+                                                cells: [
+                                                    new MatrixLayoutCell({
+                                                        content: new sap.m.CheckBox(oController.PAGEID + "_Chk1", {
+                                                            selected: "{Chk1}",
+                                                            select: oController.onChk1,
+                                                            editable: {
+                                                                parts: [{ path: "Status" }, { path: "Relation" }],
+                                                                formatter: function (fVal2, fVal3) {
+                                                                    return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && (fVal3 === "01" || fVal3 === "02")) ? true : false;
+                                                                }
+                                                            }
+                                                        })
+                                                    }),
+                                                    new MatrixLayoutCell({
+                                                        content: COMMON_ATTACH_FILES.renderer(oController, "001")
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    })
+                                ]
+                            }).addStyleClass("DataCell"),
+                            // 난임 여부
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: [
+                                    new HoverIcon({
+                                        src: "sap-icon://information",
+                                        hover: function (oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47003"));
+                                        },
+                                        leave: function (oEvent) {
+                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                        }
+                                    }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                                    new sap.m.Label({text: "{i18n>LABEL_47026}", textAlign: "End", required: false}).addStyleClass("label-wauto")
+                                ]
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                colSpan: 3,
+                                content: new MatrixLayout({
+                                    columns: 2,
+                                    widths: ["20%"],
+                                    rows: [
+                                        new MatrixLayoutRow({
+                                            cells: [
+                                                new MatrixLayoutCell({
+                                                    content: new sap.m.CheckBox(oController.PAGEID + "_Chk2", {
+                                                        selected: "{Chk2}",
+                                                        select: oController.onChk2,
+                                                        editable: {
+                                                            parts: [{ path: "Status" }, { path: "Relation" }],
+                                                            formatter: function (fVal2, fVal3) {
+                                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && (fVal3 === "01" || fVal3 === "02")) ? true : false;
+                                                            }
+                                                        }
+                                                    })
+                                                }),
+                                                new MatrixLayoutCell({
+                                                    content: COMMON_ATTACH_FILES.renderer(oController, "002")
+                                                })
+                                            ]
+                                        })
+                                    ]
+                                })
+                            }).addStyleClass("DataCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 비고
+                            new MatrixLayoutCell({
+                                hAlign: "Right",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47027}", textAlign: "End", required: false})
+                            }).addStyleClass("LabelCell"),
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                colSpan: 5,
+                                content: new sap.m.Input({
+                                    width: "100%",
+                                    value: "{Remark}",
+                                    maxLength: 100,
+                                    editable: {
+                                        parts: [{ path: "Close" }, { path: "Status" }],
+                                        formatter: function (fVal, fVal2) {
+                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell")
+                        ]
+                    })
+                ];
+
+                return new sap.m.Panel({
+                    expanded: true,
+                    expandable: false,
+                    content: new MatrixLayout({
+                        columns: 6,
+                        widths: ["140px", "", "140px", "", "140px", ""],
+                        rows: aMatrixRows
+                    })
+                });
             },
-            textAlign : "Center"
-        }).addStyleClass("FontFamily")}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat.addRow(oRow);
 
-        
-        var miniMat=new sap.ui.commons.layout.MatrixLayout({
-            columns:2,
-            widths:['20%']
-        }); 
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-            content:new sap.m.CheckBox(oController.PAGEID+"_Chk1",{selected:"{Chk1}",select:oController.onChk1,editable:{parts:[{path:"Close"},{path:"Status"},{path:"Relation"}],
-            formatter:function(fVal,fVal2,fVal3){
-                if(fVal2==""){
-                    return fVal3!="01"&&fVal3!="02"?false:true;
-                    return fVal=="X"?false:true;
-                }else{
-                    return false;
-                }
-            }}})
-        });
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-            content:fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
-        });
-        oRow.addCell(oCell);
-        miniMat.addRow(oRow);
+            buildPanelSecond: function(oController) {
 
-        var miniMat2=new sap.ui.commons.layout.MatrixLayout({
-            columns:2,
-            widths:['20%']
-        }); 
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-            content:new sap.m.CheckBox(oController.PAGEID+"_Chk2",{selected:"{Chk2}",select:oController.onChk2,editable:{parts:[{path:"Close"},{path:"Status"},{path:"Relation"}],
-                    formatter:function(fVal,fVal2,fVal3){
-                        if(fVal2==""){
-                            return fVal3!="01"&&fVal3!="02"?false:true;
-                            return fVal=="X"?false:true;
-                        }else{
-                            return false;
+                var aFirstRows = [
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 구분
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47030}", textAlign: "Center", required: false}),
+                                rowSpan: 2
+                            }).addStyleClass("LabelCell"),
+                            // 급여
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47031}", textAlign: "Center", required: false}),
+                                colSpan: 2
+                            }).addStyleClass("LabelCell"),
+                            // 비급여
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47032}", textAlign: "Center", required: false}),
+                                colSpan: 7
+                            }).addStyleClass("LabelCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 입원/외래
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47033}", textAlign: "Center", required: false}),
+                                colSpan: 2
+                            }).addStyleClass("LabelCell"),
+                            // 입원
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47034}", textAlign: "Center", required: false}),
+                                colSpan: 4
+                            }).addStyleClass("LabelCell"),
+                            // 외래
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47035}", textAlign: "Center", required: false}),
+                                colSpan: 3
+                            }).addStyleClass("LabelCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 진료항목
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47036}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 본인부담금
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47037}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 전액본인부담
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47087}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 진찰료
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47038}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 입원료
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47039}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 식대
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47040}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // CT/MRI/초음파
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47041}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 선택진료료
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47042}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // CT/MRI/초음파
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47041}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            // 보철/기타
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47044}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 진료비
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47045}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp1", Path: "Zkibbm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp2", Path: "Zkijbm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp3", Path: "Znijcm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp4", Path: "Zniiwm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp5", Path: "Znisdm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp6", Path: "Znoctm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp7", Path: "Znomrm"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp8", Path: "Znocum"}),
+                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp9", Path: "Znobcm"})
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 지원대상금액
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47046}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell"),
+                            this.getSupportAmountInput("Zkiobd"),
+                            this.getSupportAmountInput("Zkijbd"),
+                            this.getSupportAmountInput("Znijcd"),
+                            this.getSupportAmountInput("Zniiwd"),
+                            this.getSupportAmountInput("Znisdd"),
+                            this.getSupportAmountInput("Znoctd"),
+                            this.getSupportAmountInput("Znomrd"),
+                            this.getSupportAmountInput("Znocud"),
+                            this.getSupportAmountInput("Znobcd")
+                        ]
+                    }),
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 총 수납금액
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47048}", textAlign: "Center", required: true})
+                            }).addStyleClass("LabelCell totalLine"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "Mycharge",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            } else {
+                                                return fVal;
+                                            }
+                                        },
+                                        editable: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell totalLine"),
+                            // 할인금액
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47118}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell totalLine"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    liveChange: oController.onLiveMoney,
+                                    maxLength: 13,
+                                    value: "{Zdsctm}",
+                                    editable: {
+                                        parts: [{ path: "Close" }, { path: "Status" }],
+                                        formatter: function (fVal, fVal2) {
+                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell totalLine"),
+                            // 총 지원대상금액
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47049}", textAlign: "Center", required: true})
+                            }).addStyleClass("LabelCell totalLine"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "BaseAmt",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            }
+                                        },
+                                        editable: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell totalLine"),
+                            // 회사 지원금액
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47050}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell totalLine"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "SuppAmt",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            }
+                                        },
+                                        editable: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell totalLine"),
+                            new MatrixLayoutCell({ colSpan: 2 }).addStyleClass("DataCell totalLine")
+                        ]
+                    })
+                ];
+
+                var aSecondRows = [
+                    new MatrixLayoutRow({
+                        cells: [
+                            // 잔여한도확인
+                            new MatrixLayoutCell(oController.PAGEID + "_HideBtn", {
+                                hAlign: "Center",
+                                content: [
+                                    new sap.m.Button({
+                                        text: "{i18n>LABEL_47051}",
+                                        press: function () {
+                                            oController.onCal("1000");
+                                        },
+                                        visible: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        }
+                                    }).addStyleClass("button-light"),
+                                    new sap.m.Label({
+                                        text: "{i18n>LABEL_47051}",
+                                        textAlign: "Center",
+                                        required: false,
+                                        visible: {
+                                            parts: [{ path: "Close" }, { path: "Status" }],
+                                            formatter: function (fVal, fVal2) {
+                                                return !((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            }
+                                        }
+                                    })
+                                ]
+                            }),
+                            // 일반 질병 잔여 한도
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47052}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell border-left-no"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "Zmedrl",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell"),
+                            // 5대암 잔여 한도
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47053}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell border-left-no"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "Zfvcrl",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell"),
+                            // 난임 잔여 한도
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47054}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell border-left-no"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "Ziftrl",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell"),
+                            // 치과(보철) 잔여 한도
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Label({text: "{i18n>LABEL_47055}", textAlign: "Center", required: false})
+                            }).addStyleClass("LabelCell border-left-no"),
+                            new MatrixLayoutCell({
+                                hAlign: "Center",
+                                content: new sap.m.Input({
+                                    width: "90%",
+                                    textAlign: "Right",
+                                    editable: false,
+                                    maxLength: 13,
+                                    value: {
+                                        path: "Zdbcrl",
+                                        formatter: function (fVal) {
+                                            if (fVal != "" && fVal != null) {
+                                                return common.Common.numberWithCommas(fVal.replace(/\,/g, "")).trim();
+                                            }
+                                        }
+                                    }
+                                })
+                            }).addStyleClass("DataCell")
+                        ]
+                    })
+                ];
+
+                return new sap.m.Panel({
+                    expanded: true,
+                    expandable: false,
+                    headerToolbar: [
+                        new sap.m.Toolbar({
+                            content: [
+                                new sap.ui.core.HTML({ content: "<span class='sub-title'>" + oController.getBundleText("LABEL_47028") + "</span>" }), // 진료비 내역
+                                new sap.m.ToolbarSpacer({ width: "20px" }),
+                                new sap.ui.core.HTML({ content: "<span style='font-size:14px;color:#da291c;'>" + oController.getBundleText("LABEL_47029") + "</span>" }), // ※ 진료일자별 건건이 입력 (일자 별 영수증 첨부), 잔여 한도가 0원인 경우 해당 진료항목으로 의료비를 신청하실 수 없습니다.
+                                new sap.m.ToolbarSpacer(),
+                                new sap.ui.core.HTML({ content: "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyWay.pptx' style='font-size:14px;color:#0070bd !important;' download>" + oController.getBundleText("LABEL_47150") + "</a>" }),    // 의료비 신청 예시
+                                new sap.m.Text({ text: "│" }).addStyleClass("ml-0 mnw-0 font-14px color-blue"),
+                                new sap.ui.core.HTML({ content: "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;padding-right:15px;' download>" + oController.getBundleText("LABEL_47143") + "</a>" })    // 치과(보철) 회사 양식
+                            ]
+                        })
+                    ],
+                    content: [
+                        new MatrixLayout({
+                            columns: 10,
+                            widths: ["140px", "", "", "", "", "", "", "", "", ""],
+                            rows: aFirstRows
+                        }),
+                        new sap.ui.core.HTML({ content: "<div style='height:20px;'/>" }),
+                        new MatrixLayout({
+                            columns: 9,
+                            width : "100%",
+                            widths: ["140px", "140px", "", "140px", "", "140px", "", "140px", ""],
+                            rows: aSecondRows
+                        }),
+                        new sap.m.VBox({
+                            fitContainer: true,
+                            width: "100%",
+                            items: [
+                                new sap.m.VBox({
+                                    fitContainer: true,
+                                    width: "100%",
+                                    items: [
+                                        new sap.m.Text({ text: "{i18n>MSG_47038}", textAlign: "Begin", width: "auto" }),
+                                        new sap.m.Text({ text: "{i18n>MSG_47047}", textAlign: "Begin", width: "auto" }),
+                                        new sap.m.Text({ text: "{i18n>MSG_47048}", textAlign: "Begin", width: "auto" })
+                                    ]
+                                }).addStyleClass("msgBox mt-20px"),
+                                COMMON_ATTACH_FILES.renderer(oController, "009")
+                            ]
+                        })
+                    ]
+                });
+            },
+
+            getExpensesInput: function(oController, param) {
+                
+                return new MatrixLayoutCell({
+                    hAlign: "Center",
+                    content: new sap.m.Input(param.Id, {
+                        width: "90%",
+                        textAlign: "Right",
+                        liveChange: oController.onLiveMoney,
+                        maxLength: 13,
+                        value: "{${path}}".interpolate(param.Path),
+                        editable: {
+                            parts: [{ path: "Close" }, { path: "Status" }],
+                            formatter: function (fVal, fVal2) {
+                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                            }
                         }
-                    }}})
-        });
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-            content:fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
-        });
-        oRow.addCell(oCell);
-        miniMat2.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:[new HoverIcon({            
-            src: "sap-icon://information",
-            hover: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47002"));
+                    })
+                }).addStyleClass("DataCell");
             },
-            leave: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent);
+
+            getSupportAmountInput: function(path) {
+
+                return new MatrixLayoutCell({
+                    hAlign: "Center",
+                    content: new sap.m.Input({
+                        width: "90%",
+                        textAlign: "Right",
+                        editable: false,
+                        maxLength: 13,
+                        value: "{${path}}".interpolate(path)
+                    })
+                }).addStyleClass("DataCell");
             }
-        })
-        .addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),oLabel8]}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",content:[miniMat]}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:[new HoverIcon({            
-            src: "sap-icon://information",
-            hover: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47003"));
-            },
-            leave: function(oEvent) {
-                common.Common.onPressTableHeaderInformation.call(oController, oEvent);
-            }
-        }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),oLabel9]}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",colSpan:3,content:miniMat2}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Right",content:oLabel10}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Begin",colSpan:5,content:new sap.m.Input({width:"100%",value:"{Remark}",maxLength:100,editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat.addRow(oRow);
-
-        var oPanel1 = new sap.m.Panel({
-			expanded:true,
-			expandable:false,
-			content:oMat
-		});
-
-        var oMat2=new sap.ui.commons.layout.MatrixLayout({
-            columns:10,
-            widths:['140px','','','','','','','','','']
         });
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel13,rowSpan:2}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel14,colSpan:2}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel15,colSpan:7}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oMat2.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel16,colSpan:2}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel17,colSpan:4}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel18,colSpan:3}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oMat2.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel19}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel20}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel39}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel21}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel22}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel23}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel24}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel25}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel26}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel27}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oMat2.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel28}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp1",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkibbm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp2",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zkijbm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp3",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znijcm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp4",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zniiwm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp5",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znisdm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp6",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znoctm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp7",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znomrm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp8",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znocum}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input(oController.PAGEID+"_Inp9",{width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Znobcm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat2.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel29}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Zkiobd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Zkijbd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Znijcd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Zniiwd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Znisdd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Znoctd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Znomrd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Znocud}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",editable:false,maxLength:13,value:"{Znobcd}"})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat2.addRow(oRow);
-
-        // oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel30}).addStyleClass("LabelCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",colSpan:2,content:fragment.COMMON_ATTACH_FILES.renderer(oController,"003")}).addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell().addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell().addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell().addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"004")}).addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"005")}).addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"006")}).addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:fragment.COMMON_ATTACH_FILES.renderer(oController,"007")}).addStyleClass("DataCell");
-        // oRow.addCell(oCell);
-        // oMat2.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel31}).addStyleClass("LabelCell totalLine ");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"Mycharge",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }else{
-                return fVal;
-            }
-        },editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}}})}).addStyleClass("DataCell totalLine");
-        oRow.addCell(oCell);
-
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:
-        new sap.ui.core.HTML({content:"<span style='font-weight:bold;font-size:14px;'>"+oController.getBundleText("LABEL_47118")+"</span>"})}).addStyleClass("LabelCell totalLine");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",liveChange:oController.onLiveMoney,maxLength:13,value:"{Zdsctm}",editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}})}).addStyleClass("DataCell totalLine");
-        oRow.addCell(oCell);
-
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel32}).addStyleClass("LabelCell totalLine");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"BaseAmt",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }
-        },editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}}})}).addStyleClass("DataCell totalLine");
-        oRow.addCell(oCell);
-
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel33}).addStyleClass("LabelCell totalLine");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"SuppAmt",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }
-        },editable:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}}})}).addStyleClass("DataCell totalLine");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({colSpan:2}).addStyleClass("DataCell totalLine");
-        oRow.addCell(oCell);
-        oMat2.addRow(oRow);
- 
-        var oMat3=new sap.ui.commons.layout.MatrixLayout({
-            columns:9,
-            widths:['140px','140px','','140px','','140px','','140px','']
-        });
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Button({text:oBundleText.getText("LABEL_47051"),
-            press:function(){oController.onCal("1000")},visible:{parts:[{path:"Close"},{path:"Status"}],
-        formatter:function(fVal,fVal2){
-            if(fVal2==""){
-                return fVal=="X"?false:true;
-            }else{
-                return false;
-            }
-        }}}).addStyleClass("button-light")});
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel35}).addStyleClass("LabelCell border-left-no");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"Zmedrl",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel36}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"Zfvcrl",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel37}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"Ziftrl",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:oLabel38}).addStyleClass("LabelCell");
-        oRow.addCell(oCell);
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",content:new sap.m.Input({width:"90%",textAlign:"Right",
-        editable:false,maxLength:13,value:{path:"Zdbcrl",formatter:function(fVal){
-            if(fVal!=""&&fVal!=null){
-                return common.Common.numberWithCommas(fVal.replace(/\,/g,"")).trim()
-            }
-        }}})}).addStyleClass("DataCell");
-        oRow.addCell(oCell);
-        oMat3.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({
-            colSpan:9,
-            content:new sap.ui.core.HTML({content:"<div style='height:20px;'></div>"})
-        });
-        oRow.addCell(oCell);
-        oMat3.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({ 
-            colSpan:9,
-            content:new sap.ui.core.HTML({content:"<div style='height:3px;'></div><div class='msgBox'><span>"+oController.getBundleText("MSG_47038")+"</span></div>"})
-        });
-        oRow.addCell(oCell);
-        oMat3.addRow(oRow);
-
-        oRow=new sap.ui.commons.layout.MatrixLayoutRow();
-        oCell=new sap.ui.commons.layout.MatrixLayoutCell({hAlign:"Center",colSpan:9,content:fragment.COMMON_ATTACH_FILES.renderer(oController,"009")});
-        oRow.addCell(oCell);
-        oMat3.addRow(oRow);
-
-        var oPanel2 = new sap.m.Panel({
-			headerToolbar : [new sap.m.Toolbar({content:[
-                            new sap.ui.core.HTML({content:"<span class='sub-title'>"+oBundleText.getText("LABEL_47028")+"</span>"}),
-                            new sap.m.ToolbarSpacer({width:"20px"}),new sap.ui.core.HTML({content:"<span style='font-size:14px;color:#da291c;'>"+oBundleText.getText("LABEL_47029")+"</span>"}),
-                            new sap.m.ToolbarSpacer(),
-                            new sap.ui.core.HTML({content:
-                                "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;padding-right:15px;'>"+oController.getBundleText("LABEL_47143")+"</a>"})
-                            ]})],
-			expanded:true,
-			expandable:false,
-			content:[oMat2,new sap.ui.core.HTML({content:"<div style='height:20px;'/>"}),oMat3]
-		});
-
-        var oVert=new sap.ui.commons.layout.VerticalLayout({
-            content:[oPanel1,oPanel2]
-        });
-
-        var oContent = new sap.m.FlexBox({
-            justifyContent: "Center",
-            fitContainer: true,
-            items: [oVert]
-        }).addStyleClass("paddingbody");
-
-        var oDialog = new sap.m.Dialog(oController.PAGEID+"_Dialog",{
-            content: [oContent],
-            title: oBundleText.getText("LABEL_47001"),
-            buttons: [
-                new sap.m.Button({
-                    press: function(){oController.onSave("1000")},
-                    text: "{i18n>LABEL_47006}" // 신청
-                    ,visible:{parts:[{path:"Close"},{path:"Status"}],
-                    formatter:function(fVal,fVal2){
-                        if(fVal2==""){
-                            return fVal=="X"?false:true;
-                        }else{
-                            return false;
-                        }
-                    }}}).addStyleClass("button-search"),
-                new sap.m.Button({text:oBundleText.getText("LABEL_00133"),press:oController.onClose}).addStyleClass("button-default")],
-            contentWidth: "1700px",
-            beforeOpen : oController.onAfterOpen,
-            afterOpen : oController.onAfterLoad
-        }).setModel(oController._DataModel);	
-
-        return oDialog;
-}});
+    }
+);

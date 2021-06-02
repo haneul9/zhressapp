@@ -286,14 +286,16 @@ fragment.COMMON_ATTACH_FILES = {
 	hideLine : function(oAttachbox){
 		if(oAttachbox.getModel().getProperty("/Settings/Mode")=="S"){
 			if(oAttachbox.getModel().getProperty("/Data").length!=0){
-				$("#"+oAttachbox.getId()).children()[0].style.display="none";
+				if($("#"+oAttachbox.getId()).children()[0])
+					$("#"+oAttachbox.getId()).children()[0].style.display="none";
 			}
 		}
 	},
 
 	availLine : function(vPage){
 		if($.app.byId(this.PAGEID + "_ATTACHBOX"+vPage).getModel().getProperty("/Settings/Mode")=="S"){
-			$("#"+this.PAGEID + "_ATTACHBOX"+vPage).children()[0].style.display="";			
+			if($("#"+this.PAGEID + "_ATTACHBOX"+vPage).children()[0])
+				$("#"+this.PAGEID + "_ATTACHBOX"+vPage).children()[0].style.display="";			
 		}
 	},
 
