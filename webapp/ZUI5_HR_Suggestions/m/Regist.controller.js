@@ -636,6 +636,8 @@
 
 		onSubCommentReBtn: function(oEvent) { // 대댓글 수정
 			var oView = $.app.byId("ZUI5_HR_Suggestions.m.Regist");
+			if(Common.checkNull(!this.g_HiSeqnr2)) this.g_HiSeqnr2 = "";
+			if(Common.checkNull(!this.g_ReHiSeqnr2)) this.g_ReHiSeqnr2 = "";
 			this.g_ReHiPword = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReWritBtn = oEvent.getSource().getParent().getItems()[2];
 			this.g_ReSaveBtn = oEvent.getSource().getParent().getItems()[3];
@@ -644,6 +646,8 @@
 			this.g_RePwordInput = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[0].getItems()[1];
 			this.g_ReDetail = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[0];
 			this.g_ReDate = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[1].getItems()[0];
+			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[2];
+			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 
 			if (!this._CommentModel) {
 				this._CommentModel = sap.ui.jsfragment("ZUI5_HR_Suggestions.m.fragment.PassWordCheck", this);
@@ -661,6 +665,9 @@
 			var vBukrs = oController.getUserGubun();
 			var oRowData = this.RegistModel.getProperty("/FormData");
 			var oCommData = {};
+
+			if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+			if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 
 			this.g_ReDetail = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[0];
 			this.g_RePwordInput = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[0].getItems()[1];
@@ -698,6 +705,8 @@
 					Common.log(oData);
 					oController.CommentModel.setData({Data: {}});
 					oController.getDetailData(oController);
+					if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+					if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 					BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -713,6 +722,8 @@
 		onSubCommentDeBtn: function(oEvent) { // 삭제
 			var oController = this;
 			var oView = $.app.byId("ZUI5_HR_Suggestions.m.Regist");
+			if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+			if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 			this.g_RePwordInput = oEvent.getSource().getParent().getParent().getItems()[0].getItems()[0].getItems()[1];
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReHiSeqnr2 = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[2];
@@ -767,6 +778,8 @@
 						sap.m.MessageBox.alert(oController.getBundleText("MSG_56009"), { title: oController.getBundleText("MSG_08107")});
 						oController.CommentModel.setData({Data: {}});
 						oController.getDetailData(oController);
+						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+						if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 						BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -812,6 +825,8 @@
 					Common.log(oData);
 					oController.CommentModel.setData({Data: {}});
 					oController.getDetailData(oController);
+					if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+					if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 					BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -831,6 +846,8 @@
 		onCommentReBtn: function(oEvent) { // 댓글 수정
 			var oPWord = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[0];
 			var oView = $.app.byId("ZUI5_HR_Suggestions.m.Regist");
+			if(Common.checkNull(!this.g_HiSeqnr2)) this.g_HiSeqnr2 = "";
+			if(Common.checkNull(!this.g_ReHiSeqnr2)) this.g_ReHiSeqnr2 = "";
 			this.g_Input = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[2];
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReCommBtn = oEvent.getSource().getParent().getItems()[2];
@@ -857,6 +874,8 @@
 		onCommentDeBtn: function(oEvent) {
 			var oController = this;
 			var oView = $.app.byId("ZUI5_HR_Suggestions.m.Regist");
+			if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+			if(Common.checkNull(!this.g_ReHiSeqnr2)) this.g_ReHiSeqnr2 = "";
 			this.g_HiPword = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[0];
 			this.g_HiSeqnr2 = oEvent.getSource().getParent().getParent().getItems()[1].getItems()[1];
 			this.g_ReGubun = "D";
@@ -908,6 +927,8 @@
 						sap.m.MessageBox.alert(oController.getBundleText("MSG_56009"), { title: oController.getBundleText("MSG_08107")});
 						oController.CommentModel.setData({Data: {}});
 						oController.getDetailData(oController);
+						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+						if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 						BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -947,13 +968,6 @@
 
 		ReCommentCheck: function() { // 대댓글 수정/삭제 비밀번호 확인
 			var oController = this.getView().getController();
-			var vPword = oController.PWordModel.getProperty("/Data/PassWord");
-			
-
-			// PassWord Check
-			if(oController.g_ReHiPword.getText() !== vPword){
-				return MessageBox.error(oController.getBundleText("MSG_56011"), { title: oController.getBundleText("LABEL_00149")});
-			}
 
 			if(oController.g_ReGubun === "RR"){
 				this.g_ReWritBtn.setVisible(false);
@@ -972,15 +986,9 @@
 
 		CommentUserCheck: function() { // 댓글 수정/삭제 비밀번호 확인
 			var oController = this.getView().getController();
-			var vPword = oController.PWordModel.getProperty("/Data/PassWord");
 			
 			if(this.g_ReGubun === "RR" || this.g_ReGubun === "RD")
 				return oController.ReCommentCheck();
-
-			// PassWord Check
-			if(vPword !== this.g_HiPword.getText()){
-				return MessageBox.error(oController.getBundleText("MSG_56011"), { title: oController.getBundleText("LABEL_00149")});
-			}
 
 			if(this.g_ReGubun === "R"){
 				this.g_Input.setEditable(true);
@@ -999,23 +1007,50 @@
 		},
 
 		onDialogPwordBtn: function() { // PassWord Dialog 확인
-			var vPassWord = this.RegistModel.getProperty("/FormData/Pword");
-			var vPword = this.PWordModel.getProperty("/Data/PassWord");
+			var oController = this;
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var oRowData = this.RegistModel.getProperty("/FormData");
+			var vBukrs = this.getUserGubun();
 
-			if(Common.checkNull(!this.g_ReGubun)){
-				return this.CommentUserCheck();
-			}
-			// PassWord Check
-			if(vPword !== vPassWord){
-				return MessageBox.error(this.getBundleText("MSG_56011"), { title: this.getBundleText("LABEL_00149")});
-			}
+			var oSendData = {
+				Sdate : oRowData.Sdate,
+				Seqnr : oRowData.Seqnr,
+				Seqnr2 : Common.checkNull(this.g_HiSeqnr2) ? undefined : this.g_HiSeqnr2.getText(),
+				Seqnr3 : Common.checkNull(this.g_ReHiSeqnr2) ? undefined : this.g_ReHiSeqnr2.getText(),
+				Pword : oController.PWordModel.getProperty("/Data/PassWord")
+			};
 
-			if(this.g_Pword === "R")
-				this.RegistModel.setProperty("/Gubun", "X");
-			else if(this.g_Pword === "D")
-				this.onDeleteData();
+			var sendObject = {};
+			// Header
+			sendObject.IConType = "5";
+			sendObject.IBukrs = vBukrs;
+			// Navigation property
+			sendObject.TableIn5 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn5", oSendData)];
+
+			oModel.create("/SuggestionBoxSet", sendObject, {
+				success: function(oData, oResponse) {
+						Common.log(oData);
+						if(Common.checkNull(!oController.g_ReGubun)){
+							return oController.CommentUserCheck();
+						}
 			
-            this._CommentModel.close();
+						if(oController.g_Pword === "R")
+							oController.RegistModel.setProperty("/Gubun", "X");
+						else if(oController.g_Pword === "D")
+							oController.onDeleteData();
+						
+						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+						if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
+
+						oController._CommentModel.close();
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
 		},
 
 		OnThumbUp: function() { // 좋아요

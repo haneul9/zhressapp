@@ -702,6 +702,8 @@
 					Common.log(oData);
 					oController.CommentModel.setData({Data: {}});
 					oController.getDetailData(oRowData.Sdate, oRowData.Seqnr);
+					if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+					if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 					BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -771,6 +773,8 @@
 						sap.m.MessageBox.alert(oController.getBundleText("MSG_56009"), { title: oController.getBundleText("MSG_08107")});
 						oController.CommentModel.setData({Data: {}});
 						oController.getDetailData(oRowData.Sdate, oRowData.Seqnr);
+						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+						if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 						BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -816,6 +820,8 @@
 					Common.log(oData);
 					oController.CommentModel.setData({Data: {}});
 					oController.getDetailData(oRowData.Sdate, oRowData.Seqnr);
+					if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+					if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 					BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -911,6 +917,8 @@
 						sap.m.MessageBox.alert(oController.getBundleText("MSG_56009"), { title: oController.getBundleText("MSG_08107")});
 						oController.CommentModel.setData({Data: {}});
 						oController.getDetailData(oRowData.Sdate, oRowData.Seqnr);
+						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+						if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
 						BusyIndicator.hide();
 				},
 				error: function(oResponse) {
@@ -976,18 +984,45 @@
 		},
 
 		onDialogPwordBtn: function() { // PassWord Dialog 확인
-			var vPassWord = this.RegistModel.getProperty("/FormData/Pword");
-			var vPword = this.PWordModel.getProperty("/Data/PassWord");
+			var oController = this;
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var oRowData = this.RegistModel.getProperty("/FormData");
+			var vBukrs = this.getUserGubun();
 
-			if(Common.checkNull(!this.g_ReGubun)){
-				return this.CommentUserCheck();
-			}
-			// PassWord Check
-			if(vPword !== vPassWord){
-				return MessageBox.error(this.getBundleText("MSG_56011"), { title: this.getBundleText("LABEL_00149")});
-			}
-			
-			this._CommentModel.close();
+			var oSendData = {
+				Sdate : oRowData.Sdate,
+				Seqnr : oRowData.Seqnr,
+				Seqnr2 : Common.checkNull(this.g_HiSeqnr2) ? undefined : this.g_HiSeqnr2.getText(),
+				Seqnr3 : Common.checkNull(this.g_ReHiSeqnr2) ? undefined : this.g_ReHiSeqnr2.getText(),
+				Pword : oController.PWordModel.getProperty("/Data/PassWord")
+			};
+
+			var sendObject = {};
+			// Header
+			sendObject.IConType = "5";
+			sendObject.IBukrs = vBukrs;
+			// Navigation property
+			sendObject.TableIn5 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn5", oSendData)];
+
+			oModel.create("/SuggestionBoxSet", sendObject, {
+				success: function(oData, oResponse) {
+						Common.log(oData);
+						if(Common.checkNull(!this.g_ReGubun)){
+							return this.CommentUserCheck();
+						}
+						
+						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
+						if(Common.checkNull(!oController.g_ReHiSeqnr2)) oController.g_ReHiSeqnr2 = "";
+
+						oController._CommentModel.close();
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
 		},
 
 		OnThumbUp: function() { // 좋아요
