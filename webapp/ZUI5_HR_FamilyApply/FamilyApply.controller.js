@@ -814,24 +814,26 @@ sap.ui.define([
 				sap.m.MessageBox.alert(oMsg);
 				return false;
 			}	
+			
 			var vRegChk=common.Check_Regno.isValidJuminNo(oPro.Regno.split("-")[0]+oPro.Regno.split("-")[1]);
 			if((parseInt(oPro.Regno.split("-")[0])>=201001)&&(oPro.Regno.split("-")[1].substring(0,1)=="3"||oPro.Regno.split("-")[1].substring(0,1)=="4"
-				||oPro.Regno.split("-")[1].substring(0,1)=="7"||oPro.Regno.split("-")[1].substring(0,1)=="8")){}else{
-					if(!vRegChk){
-						sap.m.MessageBox.show(
-							oBundleText.getText("MSG_44013"), {				
-							icon: sap.m.MessageBox.Icon.INFORMATION,				
-							title: oBundleText.getText("LABEL_35023"),				
-							actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
-							onClose: function(fVal) {
-								if(fVal=="YES"){
-									oController.onSaveProcess(oController);
-								}
-							}				
-						});
-						return false;
-					}	
-				}				
+				||oPro.Regno.split("-")[1].substring(0,1)=="7"||oPro.Regno.split("-")[1].substring(0,1)=="8")){
+			}else{
+				if(!/\*/.test(oPro.Regnot) && !vRegChk){
+					sap.m.MessageBox.show(
+						oBundleText.getText("MSG_44013"), {				
+						icon: sap.m.MessageBox.Icon.INFORMATION,				
+						title: oBundleText.getText("LABEL_35023"),				
+						actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],				
+						onClose: function(fVal) {
+							if(fVal=="YES"){
+								oController.onSaveProcess(oController);
+							}
+						}				
+					});
+					return false;
+				}	
+			}				
 			return true;
 		},
 
