@@ -945,7 +945,7 @@ sap.ui.define(
                     return ;
                 }
                 
-                if (New === "N" || (New === "N" && oController._MedDateChange === "O" && !oController.oDialog.open() && Flag === "1000")) {
+                if ((New === "N" && Flag === "1000") || (New === "N" && oController._MedDateChange === "O" && !oController.oDialog.open() && Flag === "1000")) {
                     oController.initTdata(Flag);
 
                     oController._DataModel.setData({
@@ -954,7 +954,7 @@ sap.ui.define(
                     });
 				}
 
-                if (New === "N" || (New === "N" && oController._MedDateChange === "O" && !oController.oDialog2.open() && Flag === "A100")) {
+                if ((New === "N" && Flag === "A100") || (New === "N" && oController._MedDateChange === "O" && !oController.oDialog2.open() && Flag === "A100")) {
                     oController.initTdata(Flag);
 
                     oController._DataModel.setData({
