@@ -126,9 +126,9 @@ sap.ui.define(
                                             return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     },
-                                    change: function () {
+                                    change: function (oEvent) {
                                         oController._MedDateChange = "O";
-                                        oController.getBukrs();
+                                        oController.getBukrs(oEvent);
                                     }
                                 })
                             }).addStyleClass("DataCell"),

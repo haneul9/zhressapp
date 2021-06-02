@@ -290,15 +290,15 @@ sap.ui.define(
             getBukrs: function (vDatum) {
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
-                vDatum = Common.checkNull(vDatum) ? new Date() : moment(vDatum.getSource().getDateValue()).hours(10).toDate();
+                var vDatum2 = Common.checkNull(vDatum) ? new Date() : moment(vDatum.getSource().getDateValue()).hours(10).toDate();
 				
-				oController._MedDate = vDatum;
+				oController._MedDate = vDatum2;
 				
                 oModel.create(
                     "/MedicalBukrsImportSet",
                     { 
                         Pernr: oController._vPernr,
-                        Datum: vDatum,
+                        Datum: vDatum2,
                         MedicalBukrsExport: []
                     },
                     {
