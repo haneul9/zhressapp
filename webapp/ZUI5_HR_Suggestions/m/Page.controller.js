@@ -50,7 +50,7 @@
 
 			if (!this.alreadyDetailShown && Sdate && Skey && oEvent.data.New !== "X") {
 				var oList = {
-					Sdate: Sdate,
+					Sdate: moment(Sdate).hours(9).toDate(),
 					Seqnr: Skey
 				};
 

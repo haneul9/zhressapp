@@ -84,27 +84,35 @@ fill: function() {
 
 	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
+		
+		oModel.create("/MainContentsSet", {
 			IMode: 'R',
 			IConType: '3',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
 			TableIn3: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('QuickLinkPortlet.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('QuickLinkPortlet.fill ${url} success'.interpolate(url), arguments).log();
 
-			this.render(this._gateway.odataResults(data).TableIn3);
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'QuickLinkPortlet.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+				this.render(result.TableIn3.results);
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'QuickLinkPortlet.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 changeLocale: function() {
 
@@ -220,28 +228,32 @@ save: function() {
 		return o;
 	});
 
-	var url = 'ZHR_COMMON_SRV/MainContentsSet';
+	var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
+	url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	this._gateway.post({
-		url: url,
-		data: {
+	oModel.create(
+		"/MainContentsSet", 
+		{
 			IMode: 'U',
 			IConType: '3',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
 			TableIn3: this.urlList
-		},
-		success: function() {
-			this._gateway.prepareLog('QuickLinkPortlet.save ${url} success'.interpolate(url), arguments).log();
-			this.render(this.urlList);
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'QuickLinkPortlet.save ' + url, true);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+		}, 
+		{
+			success: function() {
+				this._gateway.prepareLog('QuickLinkPortlet.save ${url} success'.interpolate(url), arguments).log();
+				this.render(this.urlList);
+
+				this.spinner(false);
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'QuickLinkPortlet.save ' + url, true);
+
+				this.spinner(false);
+			}.bind(this)
+		}
+	);
 },
 clearResource: function() {
 

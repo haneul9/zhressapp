@@ -219,7 +219,7 @@
 		onSelectDetail: function(Gubun, Path){
 			var oController = $.app.getController();
 			var oView = $.app.byId("ZUI5_HR_Notice.Page");
-			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : oController.getParameterByName("Sdate");
+			var vSdate = Gubun ? oController.TableModel.getProperty(Path).Sdate : moment(oController.getParameterByName("Sdate")).hours(9).toDate();
 			var vSeqnr = Gubun ? oController.TableModel.getProperty(Path).Seqnr : oController.getParameterByName("Seqnr");
 			
 			if (!oController._RegistModel) {

@@ -159,25 +159,13 @@ var On = { // 종합평가 event handler
 	
 	// Table 평가결과 column icon click event handler
 	pressEvalResultDialogIcon: function(oEvent) {
-		// Common.log("pressEvalResultDialogIcon", oEvent.getSource().getBindingContext().getProperty());
-
-		// if (!this.EvalResultDialog) {
-		// 	this.EvalResultDialog = sap.ui.jsfragment("fragment.EvalResult2", this);
-		// 	this.getView().addDependent(this.EvalResultDialog);
-		// }
-
 		var data = oEvent.getSource().getBindingContext().getProperty();
-		// SearchEvalResult.oController = this;
-		// SearchEvalResult.Year = data.Appye;
-		// SearchEvalResult.Grade5 = data.Cograde;
-		// SearchEvalResult.userId = data.Pernr;
-		
-		// this.EvalResultDialog.open();
-		window.open("../webapp/indexTest.html?Pernr=" + data.Pernr+ "&Year=" + data.Appye, "pop", "width=1200,height=850, scrollbars=yes, resizable=no");
-		// window.open("../webapp/indexTest.html?Pernr=" + data.Pernr+ "&Year=" + data.Appye ,'평가결과','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
-	
+		localStorage.setItem('item1', data.Appye);
+		localStorage.setItem('item2', data.Pernr);
+		var vUrl = "../webapp/EvalDialog.html"; 
+		// var vUrl = "../webapp/indexTest.html"; 
+		window.open(vUrl, "pop", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=1250,height=900, top=top, left=left");
 	},
-	
 
 	// Table 인사기록카드 column icon click event handler
 	pressEmpProfileDialogIcon: function(oEvent) {

@@ -35,94 +35,110 @@ ui: function() {
 },
 fill: function() {
 
-	var url = 'ZHR_PERS_INFO_SRV/LanguScoreSet';
+	this._gateway.setModel("ZHR_PERS_INFO_SRV");
 
-	return this._gateway.post({
-		url: url,
-		data: {
+	return new Promise(function (resolve, reject) {
+		var oModel = this._gateway.getModel("ZHR_PERS_INFO_SRV"),
+		url = 'ZHR_PERS_INFO_SRV/LanguScoreSet';
+		
+		oModel.create("/LanguScoreSet", {
 			IPernr: this._gateway.pernr(),
-			IDatum: Date.toODataString(true),
+			IDatum: moment().hours(9).toDate(),
 			IBukrs: this._gateway.loginInfo('Bukrs2'),
 			IMolga: this._gateway.loginInfo('Molga'),
 			ILangu: "3",
 			TableIn: []
-		},
-		success: function(data) {
-			this._gateway.prepareLog('LanguageScore.fill ${url} success'.interpolate(url), arguments).log();
+		}, {
+			async: true,
+			success: function(result) {
+				this._gateway.prepareLog('LanguageScore.fill ${url} success'.interpolate(url), arguments).log();
 
-			var list = this.$(),
-				TableIn = this._gateway.odataResults(data).TableIn;
+				var list = this.$(),
+					TableIn = result.TableIn.results;
 
-			if (!TableIn.length) {
-				if (list.data('jsp')) {
-					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
-				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
+				if (!TableIn.length) {
+					if (list.data('jsp')) {
+						list.find('.list-group-item').remove().end()
+							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
+					} else {
+						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
+					}
+
+					this.spinner(false);
+					
+					return;
 				}
-				return;
-			}
 
-			list.append([
-                '<div class="table-header">',
-                    '<div style="width:55%;">',
-                        "어종/평가구분",
-                    '</div>',
-                    '<div style="width: 30%;">',
-                        "만료예정일",
-                    '</div>',
-                    '<div style="width: 15%;">',
-                        "성적",
-                    '</div>',
-                '</div>',
-                '<div class="languageTable" class="table-body"></div>'
-            ].join(''));
-
-			if (list.data('jsp')) {
-				list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-			}
-
-			// MSS 권한 -> MSS 링크로 변경
-			if(window._menu.ownMenuDataMap["1720"]) {
-				this.url(window._menu.menuDataMap["1720"].url);
-				this.mid("1720");
-
-				this.$().parent().parent().find('.card-header :button').eq(1)
-					.attr('data-url', this.url())
-					.attr('data-menu-id', this.mid());
-			}
-
-			TableIn.filter(function(elem) {
-				return moment(Number((elem.Endda || '0').replace(/\/Date\((\d+)\)\//, '$1'))).isAfter(moment());
-			})
-			.sort(function(a, b) {
-				return moment(Number((b.Endda || '0').replace(/\/Date\((\d+)\)\//, '$1'))) - moment(Number((a.Endda || '0').replace(/\/Date\((\d+)\)\//, '$1')));
-			})
-			.forEach(function(e) {
-				var date = moment(Number((e.Endda || '0').replace(/\/Date\((\d+)\)\//, '$1'))).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
-
-                $('.languageTable').append([
-					'<div class="table-body">',
-						'<div style="width: 55%;">',
-							e.ZlanguTxt + " " + e.ZltypeTxt,
+				list.append([
+					'<div class="table-header">',
+						'<div style="width:55%;">',
+							"어종/평가구분",
 						'</div>',
 						'<div style="width: 30%;">',
-							date,
+							"만료예정일",
 						'</div>',
 						'<div style="width: 15%;">',
-							e.Acqpot,
+							"성적",
 						'</div>',
-					'</div>'
-                ].join(''));
-			}.bind(this));
-		}.bind(this),
-		error: function(jqXHR) {
-			this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'LanguageScore.fill ' + url);
-		}.bind(this),
-		complete: function() {
-			this.spinner(false);
-		}.bind(this)
-	});
+					'</div>',
+					'<div class="languageTable" class="table-body"></div>'
+				].join(''));
+
+				if (list.data('jsp')) {
+					list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
+				}
+
+				// MSS 권한 -> MSS 링크로 변경
+				try {
+					if(window._menu.ownMenuDataMap && window._menu.ownMenuDataMap["1720"]) {
+						this.url(window._menu.menuDataMap["1720"].url);
+						this.mid("1720");
+
+						this.$().parent().parent().find('.card-header :button').eq(1)
+							.attr('data-url', this.url())
+							.attr('data-menu-id', this.mid());
+					}
+				} catch(e) {
+					// skip
+				}
+
+				TableIn.filter(function(elem) {
+					return moment(elem.Endda).isAfter(moment());
+				})
+				.sort(function(a, b) {
+					return moment(b.Endda) - moment(a.Endda);
+				})
+				.forEach(function(e) {
+					var date = moment(e.Endda).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
+
+					$('.languageTable').append([
+						'<div class="table-body">',
+							'<div style="width: 55%;">',
+								e.ZlanguTxt + " " + e.ZltypeTxt,
+							'</div>',
+							'<div style="width: 30%;">',
+								date,
+							'</div>',
+							'<div style="width: 15%;">',
+								e.Acqpot,
+							'</div>',
+						'</div>'
+					].join(''));
+				}.bind(this));
+
+				this.spinner(false);
+
+				resolve({ data: result });
+			}.bind(this),
+			error: function(jqXHR) {
+				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'LanguageScore.fill ' + url);
+
+				this.spinner(false);
+				
+				reject(jqXHR);
+			}.bind(this)
+		});
+	}.bind(this));
 },
 onceAfter: function() {
 

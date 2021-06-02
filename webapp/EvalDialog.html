@@ -69,14 +69,22 @@
 history.pushState(null, document.title, location.href);
 window.addEventListener('popstate', function (event) { history.pushState(null, document.title, location.href); });
 $( document ).ready(function() {
+	$( window ).resize( function() {
+		window.resizeTo(1250,900);
+	});
+	window.addEventListener('resize', function(event){
+  // do stuff here
+	});
 	var _gateway = window._gateway = new HomeGateway();
 	window._basis = new HomeBasis(_gateway);
 	var vZyear = localStorage.getItem('item1'),
 		vPernr = localStorage.getItem('item2');
-	console.log(vZyear);
-	console.log(vPernr);
 	localStorage.clear();
-	new SearchEvelResultForPrint(_gateway, vPernr, vZyear);
+	if(vZyear && vPernr){
+		if(vZyear != "" && vPernr != ""){
+			new SearchEvelResultForPrint(_gateway, vPernr, vZyear);
+		}
+	}
 });
 
 </script>
@@ -103,21 +111,35 @@ $( document ).ready(function() {
 	header a {margin-left:auto;font-size:20px;font-weight:bold;}
 	header a:hover{text-decoration: none;}
 	header a:link, header a:hover, header a:active {color:#777}
+
+	.menu-spinner-wrapper {position:absolute; z-index:18; display:flex; justify-content:center; align-items:center; width:100%; height:calc(100%);}
+	.menu-spinner {display:block; top:calc(50% - 4px); left:calc(50% - 4px)}
 </style>
 
 </head>
 <body>
-
+<div class="menu-spinner-wrapper">
+	<div class="spinner menu-spinner"></div>
+</div>
 <div id="header_layout">	
 	<header>
 		<h1>평가결과 조회</h1>
 		<!-- <a href="window.close();">X</a> -->
-		<a onClick="javascript:window.close('','_parent','');">X</a>
+		<a onClick="javascript:window.close('','_parent','');" style="cursor: pointer !important;" >X</a>
 	</header>
 	<div style="width: 100%;text-align:right;padding-top:10px"><input type="button" value="프린트" onclick="onPrint()"></div>
 	<!-- //HEADER -->
 	<script language="javascript">
 		function onPrint(){
+			var spinner =  function(on) {
+
+				setTimeout(function() {
+					console.log("adsfasdf_",on);
+					$('.menu-spinner-wrapper').toggleClass('d-none', !on);
+				}, 0);
+			};
+			spinner(true);
+
 			var doc = new jsPDF({
 				orientation: "portrait",
 				// format: [200, 400]
@@ -156,7 +178,7 @@ $( document ).ready(function() {
 						var img = canvas.toDataURL('image/png');
 						doc.addPage();
 						var vWidth = canvas.width * 1 / 6,
-						    vHeight = canvas.height * 1 / 6;
+							vHeight = canvas.height * 1 / 6;
 						//  시작x, 시작y, 넓이, 높이
 						doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
 				});
@@ -172,11 +194,12 @@ $( document ).ready(function() {
 						var img = canvas.toDataURL('image/png');
 						doc.addPage();
 						var vWidth = canvas.width * 1 / 6,
-						    vHeight = canvas.height * 1 / 6;
+							vHeight = canvas.height * 1 / 6;
 						//  시작x, 시작y, 넓이, 높이
 						doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
 						doc.save('file-name.pdf');
-					}, 3000);
+						spinner(false);
+					}, 300);
 				});
 			}else{
 				html2canvas(document.getElementById("page2"), {
@@ -193,14 +216,16 @@ $( document ).ready(function() {
 						var img = canvas.toDataURL('image/png');
 						doc.addPage();
 						var vWidth = canvas.width * 1 / 6,
-						    vHeight = canvas.height * 1 / 6;
+							vHeight = canvas.height * 1 / 6;
 						//  시작x, 시작y, 넓이, 높이
 						doc.addImage(img, 'PNG', 2, 2, vWidth, vHeight); 
 						doc.save('file-name.pdf');
-					}, 3000);
+						spinner(false);
+					}, 300);
 				});
 			}
-    }
+			
+	}
 
 
 
@@ -222,22 +247,22 @@ $( document ).ready(function() {
 		<div>
 			<div style="display:flex;justify-content:center;font-size:12px">
 				<div style="width:45px;margin-right:8px;">
-					<div id="val1" style="text-align:center;color:#3fa45b;font-weight:bold;">87.62</div>
+					<div id="Val1" style="text-align:center;color:#3fa45b;font-weight:bold;"></div>
 					<div style="background:#3fa45b;width:45px;height:45px"></div>
 					<div style="text-align:center;">종합</div>				
 				</div>
 				<div style="width:45px;margin-right:8px;">
-					<div id="val2" style="text-align:center;font-weight:bold;">90</div>
+					<div id="Val2" style="text-align:center;font-weight:bold;"></div>
 					<div style="background:#848f94;width:45px;height:45px"></div>
 					<div style="text-align:center;">직무</div>				
 				</div>
 				<div style="width:45px;margin-right:8px;">
-					<div id="val3" style="text-align:center;font-weight:bold;">85</div>
+					<div id="Val3" style="text-align:center;font-weight:bold;"></div>
 					<div style="background:#848f94;width:45px;height:45px"></div>
 					<div style="text-align:center;">협업</div>				
 				</div>
-				<div style="width:45px;margin-right:8px;">
-					<div id="val4" style="text-align:center;font-weight:bold;">87.51</div>
+				<div id="Val4_layout" style="width:45px;margin-right:8px;visibility: hidden;">
+					<div id="Val4" style="text-align:center;font-weight:bold;"></div>
 					<div style="background:#848f94;width:45px;height:45px"></div>
 					<div style="text-align:center;">리더십</div>				
 				</div>
@@ -247,11 +272,6 @@ $( document ).ready(function() {
 
 <!-- 평가 Table List  -->
 	<div id="overivew_layout"></div>
-	<!-- <div>
-		<div id="performance_layout" style="width:50%;float:left"></div>
-		<div style="width:50%;float:right"><canvas id="competency_layout" width="300" height="200"></canvas></div>
-	</div> -->
-
 	<div style="display:flex;padding-top:20px;">
 		<div style="width:50%;padding-right:20px;">
 			<div style="font-weight:bold;padding-bottom:6px;">&gt; 업적평가</div>
@@ -316,17 +336,6 @@ $( document ).ready(function() {
 	</div>
 	
 </div>
-
-<!-- <div>
-	<div style="width:50%;float:left">
-		<table>
-
-		</table>
-	
-	</div>
-	<div style="width:50%;float:right"><canvas id="competency_layout" width="300" height="200"></canvas></div>
-</div> -->
-
 
 </body>
 </html>

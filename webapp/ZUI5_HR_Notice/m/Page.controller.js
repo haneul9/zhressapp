@@ -56,7 +56,7 @@
 
 			if (!this.alreadyDetailShown && Sdate && Seqnr) {
 				var oList = {
-					Sdate: Sdate,
+					Sdate: moment(Sdate).hours(9).toDate(),
 					Seqnr: Seqnr
 				};
 

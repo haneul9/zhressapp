@@ -3,9 +3,11 @@ sap.ui.define(
         "common/Common", //
         "common/CommonController",
 		"sap/ui/model/json/JSONModel",
-		"sap/m/MessageBox"
+		"sap/m/MessageBox",
+        "common/OrgOfIndividualHandler",
+        "common/DialogHandler"
     ],
-    function (Common, CommonController, JSONModel, MessageBox) {
+    function (Common, CommonController, JSONModel, MessageBox,OrgOfIndividualHandler,DialogHandler) {
         "use strict";
 
         return CommonController.extend($.app.APP_ID, {
@@ -308,6 +310,87 @@ sap.ui.define(
                 oController._DetailDialog.setBusyIndicatorDelay(0);
                 oController._DetailDialog.setBusy(true);
                 setTimeout(search, 100);
+            },
+            
+            // searchOrgehPernr : function(oEvent){
+            //     var oController=this;
+            //     var oSessionData=oController._SessionData;
+            //     var oId=oEvent.getSource().getId();
+            //     $.app.byId(oId).setValue();
+            //     $.app.byId(oId).removeAllCustomData();
+            //     oController._vPernr=oSessionData.Pernr;
+            //     $.app.byId(oId).addCustomData(new sap.ui.core.CustomData({key:"Pernr",value:oController._vPernr}));
+            //     var initData = {
+            //         Percod: $.app.getModel("session").getData().Percod,
+            //         Bukrs: $.app.getModel("session").getData().Bukrs2,
+            //         Langu: $.app.getModel("session").getData().Langu,
+            //         Molga: $.app.getModel("session").getData().Molga,
+            //         Datum: new Date(),
+            //         Mssty: "",
+            //         autoClose : false
+            //     };
+            //     var callback = function(o) {
+            //         if(o.Otype == "O"){
+            //             sap.m.MessageBox.error(oController.getBundleText("MSG_48016")); // 대상자를 선택하여 주십시오.
+            //             return;
+            //         }
+            //         $.app.byId(oId).setValue(o.Stext);
+            //         $.app.byId(oId).removeAllCustomData();
+            //         $.app.byId(oId).addCustomData(new sap.ui.core.CustomData({value:o.Objid,key:"Pernr"}));
+            //         oController._vPernr=o.Objid;
+            //         oController.OrgOfIndividualHandler.getDialog().close();
+            //     };
+    
+            //     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);	
+            //     DialogHandler.open(this.OrgOfIndividualHandler);
+            // },
+
+            /**
+             * @brief [공통]부서/사원 조직도호출
+             */
+             onESSelectPerson : function(Data){
+                var oController = $.app.getController();
+                oController._ListCondJSonModel.setProperty("/Data/Pernr",Data.Pernr);
+                oController._ListCondJSonModel.setProperty("/Data/Ename",Data.Ename);
+                sap.ui.getCore().byId(common.SearchUser1.oController.PAGEID + "_ES_Dialog").close();
+                this.OrgOfIndividualHandler.getDialog().close();
+            },
+    
+            displayMultiOrgSearchDialog: function(oEvent) {
+                return !$.app.getController().EmployeeSearchCallOwner 
+                        ? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
+                        : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
+            },
+    
+            getOrgOfIndividualHandler: function() {
+                return this.OrgOfIndividualHandler;
+            },
+
+            searchOrgehPernr: function (oEvent) {
+                var oController = $.app.getController();
+                var initData = {
+                        Percod: this.getSessionInfoByKey("Percod"),
+                        Bukrs: this.getSessionInfoByKey("Bukrs2"),
+                        Langu: this.getSessionInfoByKey("Langu"),
+                        Molga: this.getSessionInfoByKey("Molga"),
+                        Datum: new Date(),
+                        Mssty: $.app.getAuth()
+                    },
+                    callback = function (o) {
+                        if(o.Otype == "O"){
+                            sap.m.MessageBox.error(oController.getBundleText("MSG_48016")); // 대상자를 선택하여 주십시오.
+                            return;
+                        }
+                       
+                        if (o.Otype === "P") {
+                            oController._ListCondJSonModel.setProperty("/Data/Pernr",o.Objid);
+                            oController._ListCondJSonModel.setProperty("/Data/Ename",o.Stext);
+                            oController.OrgOfIndividualHandler.getDialog().close();
+                        }
+                    };
+
+                this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);
+                DialogHandler.open(this.OrgOfIndividualHandler);
             },
 
             getLocalSessionModel: Common.isLOCAL()
