@@ -110,7 +110,7 @@ sap.ui.define([
 			var oController = oView.getController();
 		
 			var oPhoto = "";
-			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + Pernr + "' and photoType eq '1'")
+			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + (Pernr * 1) + "' and photoType eq '1'")
 				 .select("photo")
 				 .setAsync(false)
 				 .attachRequestCompleted(function(){
