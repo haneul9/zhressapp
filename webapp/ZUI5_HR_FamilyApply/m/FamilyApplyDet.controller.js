@@ -540,11 +540,13 @@ sap.ui.define([
 			if(oPro.Fgbdt=="Invalid Date"){
 				oMsg=oBundleText.getText("MSG_44019");
 			}
-			if(oPro.Regno.trim()==""){
-				oMsg=oBundleText.getText("MSG_44008");
-			}
-			if(oPro.Regno.length!=14){
-				oMsg=oBundleText.getText("MSG_44019");
+			if(!/\*/.test(oPro.Regnot)) {
+				if(oPro.Regno.trim()==""){
+					oMsg=oBundleText.getText("MSG_44008");
+				}
+				if(oPro.Regno.length!=14){
+					oMsg=oBundleText.getText("MSG_44019");
+				}
 			}
 			if($.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0].Opener=="X"&&oController._onDialog=="N"){
 				if(AttachFileAction.getFileLength(oController) === 0) {
