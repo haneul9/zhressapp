@@ -225,7 +225,7 @@
 												})
 												.addStyleClass("color-icon-blue ml-20px mr-5px pt-14px"),
 												new sap.m.Text({
-													width: "300px",
+													width: "330px",
 													textAlign: "Begin",
 													text: "{i18n>MSG_56006}"
 												}).addStyleClass("pt-12px")
@@ -390,7 +390,7 @@
 													})
 													.addStyleClass("color-icon-blue ml-20px mr-5px pt-14px"),
 													new sap.m.Text({
-														width: "300px",
+														width: "330px",
 														textAlign: "Begin",
 														text: "{i18n>MSG_56006}"
 													}).addStyleClass("pt-12px")
@@ -526,7 +526,7 @@
 											})
 											.addStyleClass("color-icon-blue ml-20px mr-5px"),
 											new sap.m.Text({
-												width: "300px",
+												width: "330px",
 												textAlign: "Begin",
 												text: "{i18n>MSG_56006}"
 											})
