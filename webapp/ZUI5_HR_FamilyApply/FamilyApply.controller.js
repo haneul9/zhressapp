@@ -867,7 +867,7 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID+"_Helid").getSelected()?vData2.FamilyupdateTablein1[0].Helid="X":vData2.FamilyupdateTablein1[0].Helid="";
 			$.app.byId(oController.PAGEID+"_Zzclass").getSelected()?vData2.FamilyupdateTablein1[0].Zzclass="2":vData2.FamilyupdateTablein1[0].Zzclass="1";
 			
-			if(/\*/.test(vData2.FamilyupdateTablein1[0].Regnot)) {
+			if(vData2.FamilyupdateTablein1[0].Regno === "") {
 				vData2.FamilyupdateTablein1[0].Fasex = "";
 			} else {
 				vData2.FamilyupdateTablein1[0].Regno.split("-")[1].substring(0,1) == "1" || vData2.FamilyupdateTablein1[0].Regno.split("-")[1].substring(0,1) == "3" 
@@ -887,11 +887,9 @@ sap.ui.define([
 			}else{
 				vData2.FamilyupdateTablein1[0].Fgbdt=null;
 			}			
-			if(!/\*/.test(vData2.FamilyupdateTablein1[0].Regnot) && vData2.FamilyupdateTablein1[0].Regno !== "") {
-				vData2.FamilyupdateTablein1[0].Regno.search("-") != -1 
-					? vData2.FamilyupdateTablein1[0].Regno = vData2.FamilyupdateTablein1[0].Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]
-					: null;
-			}
+			vData2.FamilyupdateTablein1[0].Regno.search("-") != -1 
+				? vData2.FamilyupdateTablein1[0].Regno = vData2.FamilyupdateTablein1[0].Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]
+				: null;
 			
 			delete vData2.FamilyupdateTablein1[0].Opener;
 			
