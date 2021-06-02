@@ -128,7 +128,7 @@ sap.ui.define(
                                     },
                                     change: function () {
                                         oController._MedDateChange = "O";
-                                        oController.getBukrs().bind(oController);
+                                        oController.getBukrs();
                                     }
                                 })
                             }).addStyleClass("DataCell"),
