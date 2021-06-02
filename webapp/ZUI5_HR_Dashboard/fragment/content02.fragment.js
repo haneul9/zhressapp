@@ -69,9 +69,9 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content02", {
 											
 											var url = "";
 											if(common.Common.isLOCAL() == true){
-												url = "/webapp/index.html?popup=EvalGoal.html&mid=1860&pernr=" + oController.getSessionInfoByKey("Pernr");
+												url = "/webapp/index.html?popup=EvalGoal.html&mid=1830&pernr=" + oController.getSessionInfoByKey("Pernr");
 											} else {
-												url = "/index.html?popup=EvalGoal.html&mid=1860";
+												url = "/index.html?popup=EvalGoal.html&mid=1830";
 											}
 
 											window.open(url);

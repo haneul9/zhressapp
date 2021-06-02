@@ -139,9 +139,9 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content06", {
 
 												var url = "";
 												if(common.Common.isLOCAL() == true){
-													url = "/webapp/index.html?popup=Eval360ReviewApp.html&mid=1870&pernr=" + oController.getSessionInfoByKey("Pernr");
+													url = "/webapp/index.html?popup=Eval360ReviewApp.html&mid=1860&pernr=" + oController.getSessionInfoByKey("Pernr");
 												} else {
-													url = "/index.html?popup=Eval360ReviewApp.html&mid=1870";
+													url = "/index.html?popup=Eval360ReviewApp.html&mid=1860";
 												}
 	
 												window.open(url);

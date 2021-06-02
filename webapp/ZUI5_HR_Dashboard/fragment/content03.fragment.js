@@ -160,9 +160,9 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content03", {
 										  	  	// );
 												var url = "";
 												if(common.Common.isLOCAL() == true){
-													url = "/webapp/index.html?popup=EvalAchvCompGradeConfirmApp.html&mid=1820&pernr=" + oController.getSessionInfoByKey("Pernr");
+													url = "/webapp/index.html?popup=EvalAchvCompGradeConfirmApp.html&mid=1850&pernr=" + oController.getSessionInfoByKey("Pernr");
 												} else {
-													url = "/index.html?popup=EvalAchvCompGradeConfirmApp.html&mid=1820";
+													url = "/index.html?popup=EvalAchvCompGradeConfirmApp.html&mid=1850";
 												}
 
 												window.open(url);

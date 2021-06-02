@@ -138,9 +138,9 @@ sap.ui.jsfragment("ZUI5_HR_Dashboard.fragment.content04", {
 
 												var url = "";
 												if(common.Common.isLOCAL() == true){
-													url = "/webapp/index.html?popup=EvalComprehensive2.html&mid=1830&pernr=" + oController.getSessionInfoByKey("Pernr");
+													url = "/webapp/index.html?popup=EvalComprehensive2.html&mid=1840&pernr=" + oController.getSessionInfoByKey("Pernr");
 												} else {
-													url = "/index.html?popup=EvalComprehensive2.html&mid=1830";
+													url = "/index.html?popup=EvalComprehensive2.html&mid=1840";
 												}
 	
 												window.open(url);
