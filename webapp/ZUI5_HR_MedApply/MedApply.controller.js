@@ -944,6 +944,22 @@ sap.ui.define(
                     MessageBox.error(oController.getBundleText("MSG_47046"), { title: oController.getBundleText("LABEL_00149")});
                     return ;
                 }
+
+                if(New === "N" && Flag === "1000") {
+                    if (!oController.oDialog) {
+                        oController.initTdata(Flag);
+                        oController.oDialog = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", oController);
+                        $.app.getView().addDependent(oController.oDialog);
+					}
+                }
+
+                if(New === "N" && Flag === "A100") {
+                    if (!oController.oDialog2) {
+                        oController.initTdata(Flag);
+                        oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
+                        $.app.getView().addDependent(oController.oDialog2);
+					}
+                }
                 
                 if ((New === "N" && Flag === "1000" && oController._MedDateChange === "X") 
                     || (New === "N" 
