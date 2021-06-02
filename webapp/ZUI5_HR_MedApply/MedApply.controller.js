@@ -945,7 +945,7 @@ sap.ui.define(
                     return ;
                 }
                 
-                if ((New === "N" && Flag === "1000") 
+                if ((New === "N" && Flag === "1000" && oController._MedDateChange === "X") 
                     || (New === "N" 
                         && oController._MedDateChange === "O" 
                         && (oController.oDialog && oController.oDialog.isOpen() === false )
@@ -964,7 +964,7 @@ sap.ui.define(
 					}
 				}
 
-                if ((New === "N" && Flag === "A100")
+                if ((New === "N" && Flag === "A100" && oController._MedDateChange === "X")
                     || (New === "N" 
                         && oController._MedDateChange === "O" 
                         && (oController.oDialog2 && oController.oDialog2.isOpen() === false )
