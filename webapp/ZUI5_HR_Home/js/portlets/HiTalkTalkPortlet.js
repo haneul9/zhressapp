@@ -77,12 +77,13 @@ fill: function() {
 				list.prepend($.map(TableIn6, function(o) {
 					var date = moment(o.Sdate).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
 					o.DtfmtDate = date;
+					o.Snotes = o.Snotes.replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/g, "");
 
 					return [
 						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
 								'<div class="portlet-bbs-title">',
-									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes, o.Stitle),
+									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), o.Stitle),
 								'</div>',
 								'<small class="portlet-bbs-date">${date}</small>'.interpolate(date),
 							'</div>',
