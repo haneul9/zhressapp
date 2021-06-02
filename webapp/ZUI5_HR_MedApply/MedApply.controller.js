@@ -38,6 +38,7 @@ sap.ui.define(
 			_Hass: "",
 			_GubunBukrs: "",
 			_NewGubun: "",
+            _MedDateChange: "",
 			
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
@@ -944,7 +945,7 @@ sap.ui.define(
                     return ;
                 }
                 
-                if (New === "N") {
+                if (New === "N" && oController._MedDateChange === "X") {
                     oController.initTdata(Flag);
 
                     if(Flag === "A100") 
@@ -1371,6 +1372,7 @@ sap.ui.define(
                 oController._Bukrs = oData.Bukrs;
                 oController._GubunBukrs = oData.Bukrs;
                 oController._NewGubun = "X";
+                oController._MedDateChange = "X";
 
                 if(oData.Bukrs === "A100") {
                     if(oController._tData.Ptamt !== "0") oController._tData.Ptamt = Common.numberWithCommas(oController._tData.Ptamt);

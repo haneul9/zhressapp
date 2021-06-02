@@ -126,7 +126,10 @@ sap.ui.define(
                                             return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     },
-                                    change: oController.getBukrs.bind(oController)
+                                    change: function () {
+                                        oController._MedDateChange = "O";
+                                        oController.getBukrs().bind(oController);
+                                    }
                                 })
                             }).addStyleClass("DataCell"),
                             // 가족관계

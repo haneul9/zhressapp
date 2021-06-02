@@ -161,6 +161,7 @@ sap.ui.define(
 										text: "{i18n>LABEL_47006}", // 신청
                                         press: function () {
                                             oController._NewGubun = "O";
+                                            oController._MedDateChange = "X";
                                             oController.getBukrs();
                                         }
                                     }).addStyleClass("button-light"),
