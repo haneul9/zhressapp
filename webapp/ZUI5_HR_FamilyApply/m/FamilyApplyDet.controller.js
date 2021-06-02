@@ -472,6 +472,9 @@ sap.ui.define([
 			if(s.length>0&&s.length<7&&isNaN(s)){
 				$.app.byId(oId).setValue();
 			}
+			if(!/\*/.test(oEvent.getSource().getValue())) {
+				s = s.replace(/-/g, "");
+			}
 			if($.app.byId(oId).getValue().search("-")==-1){
 				isNaN(s)?$.app.byId(oId).setValue():null;
 			}
@@ -630,8 +633,15 @@ sap.ui.define([
 			$.app.byId(oController.PAGEID+"_Livid").getSelected()?vData2.FamilyupdateTablein1[0].Livid="X":vData2.FamilyupdateTablein1[0].Livid="";
 			$.app.byId(oController.PAGEID+"_Helid").getSelected()?vData2.FamilyupdateTablein1[0].Helid="X":vData2.FamilyupdateTablein1[0].Helid="";
 			$.app.byId(oController.PAGEID+"_Zzclass").getSelected()?vData2.FamilyupdateTablein1[0].Zzclass="2":vData2.FamilyupdateTablein1[0].Zzclass="1";
-			vData2.FamilyupdateTablein1[0].Regno.split("-")[1].substring(0,1)=="1"||vData2.FamilyupdateTablein1[0].Regno.split("-")[1].substring(0,1)=="3"?
-			vData2.FamilyupdateTablein1[0].Fasex="1":vData2.FamilyupdateTablein1[0].Fasex="2";
+			
+			if(vData2.FamilyupdateTablein1[0].Regno === "") {
+				vData2.FamilyupdateTablein1[0].Fasex = "";
+			} else {
+				vData2.FamilyupdateTablein1[0].Regno.split("-")[1].substring(0,1) == "1" || vData2.FamilyupdateTablein1[0].Regno.split("-")[1].substring(0,1) == "3" 
+					? vData2.FamilyupdateTablein1[0].Fasex="1"
+					: vData2.FamilyupdateTablein1[0].Fasex="2";
+			}
+
 			if(oPro.Zzbdate!=""&&oPro.Zzbdate!=null&&oPro.Zzbdate!="Invalid Date"){
 				vData2.FamilyupdateTablein1[0].Zzbdate=dateFormat.format(vData2.FamilyupdateTablein1[0].Zzbdate);
 				vData2.FamilyupdateTablein1[0].Zzbdate=new Date(vData2.FamilyupdateTablein1[0].Zzbdate+"T09:00:00");
@@ -644,7 +654,11 @@ sap.ui.define([
 			}else{
 				vData2.FamilyupdateTablein1[0].Fgbdt=null;
 			}			
-			vData2.FamilyupdateTablein1[0].Regno.search("-")!=-1?vData2.FamilyupdateTablein1[0].Regno=vData2.FamilyupdateTablein1[0].Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]:null;
+			
+			vData2.FamilyupdateTablein1[0].Regno.search("-")!=-1
+				? vData2.FamilyupdateTablein1[0].Regno = vData2.FamilyupdateTablein1[0].Regno.split("-")[0]+vData2.FamilyupdateTablein1[0].Regno.split("-")[1]
+				: null;
+			
 			delete vData2.FamilyupdateTablein1[0].Opener;
 			
 			oModel.create("/FamilyupdateSet", vData2, {
