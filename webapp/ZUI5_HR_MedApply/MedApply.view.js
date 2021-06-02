@@ -162,6 +162,7 @@ sap.ui.define(
                                         press: function () {
                                             oController._NewGubun = "O";
                                             oController._MedDateChange = "X";
+                                            oController._NewGubun = oController.getSessionInfoByKey("Bukrs3");
                                             oController.getBukrs();
                                         }
                                     }).addStyleClass("button-light"),
