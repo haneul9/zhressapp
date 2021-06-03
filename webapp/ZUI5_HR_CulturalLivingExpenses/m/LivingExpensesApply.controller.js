@@ -126,7 +126,7 @@ sap.ui.define(
 						sendObject.IBukrs = vBukrs2;
 						sendObject.ISpmon = vSpmon;
 						// Navigation property
-						sendObject.CultureTableIn1 = [oCopiedData];
+						sendObject.CultureTableIn1 = Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData);
 						
 						oTableData.forEach(function(elem) {elem.Waers = "KRW"});
 						oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
@@ -192,7 +192,7 @@ sap.ui.define(
 						sendObject.IBukrs = vBukrs2;
 						sendObject.ISpmon = vSpmon;
 						// Navigation property
-						sendObject.CultureTableIn1 = [oCopiedData];
+						sendObject.CultureTableIn1 = Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData);
 						
 						oTableData.forEach(function(elem) {elem.Waers = "KRW"});
 						oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
@@ -245,7 +245,7 @@ sap.ui.define(
 						sendObject.IBukrs = vBukrs2;
 						sendObject.ISpmon = vSpmon;
 						// Navigation property
-						sendObject.CultureTableIn1 = [oFormData];
+						sendObject.CultureTableIn1 = Common.copyByMetadata(oModel, "CultureTableIn1", oFormData);
 						oTableData.forEach(function(elem) {delete elem.Checked});
 						sendObject.CultureTableIn2 = oTableData;
 						
