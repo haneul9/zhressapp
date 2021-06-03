@@ -141,8 +141,6 @@ sap.ui.define(
 								BusyIndicator.hide();
 							},
 							error: function (oError) {
-								oListController.onTableSearch();
-								oController.navBack();
 								Common.log(oError);
 								BusyIndicator.hide();
 							}
@@ -207,8 +205,6 @@ sap.ui.define(
 								BusyIndicator.hide();
 							},
 							error: function (oError) {
-								oListController.onTableSearch();
-								oController.navBack();
 								Common.log(oError);
 								BusyIndicator.hide();
 							}
@@ -257,8 +253,6 @@ sap.ui.define(
 								BusyIndicator.hide();
 							},
 							error: function (oError) {
-								oListController.onTableSearch();
-								oController.navBack();
 								BusyIndicator.hide();
 								Common.log(oError);
 							}

@@ -500,7 +500,7 @@ sap.ui.define([
 					sendObject.IBukrs = vBukrs2;
 					sendObject.ISpmon = vSpmon;
 					// Navigation property
-					sendObject.CultureTableIn1 = [oFormData];
+					sendObject.CultureTableIn1 = Common.copyByMetadata(oModel, "CultureTableIn1", oFormData);
 					sendObject.CultureTableIn2 = oTableData;
 					
 					oModel.create("/CultureImportSet", sendObject, {
@@ -511,8 +511,6 @@ sap.ui.define([
 							BusyIndicator.hide();
 						},
 						error: function (oError) {
-							oController.onTableSearch();
-							oController._DetailModel.close();
 							BusyIndicator.hide();
 							Common.log(oError);
 						}
@@ -578,8 +576,6 @@ sap.ui.define([
 							BusyIndicator.hide();
 						},
 						error: function (oError) {
-							oController.onTableSearch();
-							oController._DetailModel.close();
 							Common.log(oError);
 							BusyIndicator.hide();
 						}
@@ -643,8 +639,6 @@ sap.ui.define([
 							BusyIndicator.hide();
 						},
 						error: function (oError) {
-							oController.onTableSearch();
-							oController._DetailModel.close();
 							Common.log(oError);
 							BusyIndicator.hide();
 						}
@@ -691,8 +685,6 @@ sap.ui.define([
 							BusyIndicator.hide();
 						},
 						error: function (oError) {
-							oController.onTableSearch();
-							oController._DetailModel.close();
 							BusyIndicator.hide();
 							Common.log(oError);
 						}
