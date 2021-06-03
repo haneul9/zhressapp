@@ -944,23 +944,51 @@ sap.ui.define(
                     MessageBox.error(oController.getBundleText("MSG_47046"), { title: oController.getBundleText("LABEL_00149")});
                     return ;
                 }
+
+                if(New === "N" && Flag === "1000") {
+                    if (!oController.oDialog) {
+                        oController.initTdata(Flag);
+                        oController.oDialog = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup", oController);
+                        $.app.getView().addDependent(oController.oDialog);
+					}
+                }
+
+                if(New === "N" && Flag === "A100") {
+                    if (!oController.oDialog2) {
+                        oController.initTdata(Flag);
+                        oController.oDialog2 = sap.ui.jsfragment("ZUI5_HR_MedApply.fragment.popup2", oController);
+                        $.app.getView().addDependent(oController.oDialog2);
+					}
+                }
                 
-                if ((New === "N" && Flag === "1000") || (New === "N" && oController._MedDateChange === "O" && oController.oDialog && Common.checkNull(oController.oDialog.open()) && Flag === "1000")) {
+                if ((New === "N" && Flag === "1000" && oController._MedDateChange === "X") 
+                    || (New === "N" 
+                        && oController._MedDateChange === "O" 
+                        && (oController.oDialog && oController.oDialog.isOpen() === false )
+                        && Flag === "1000")
+                ) {
                     oController.initTdata(Flag);
 
                     oController._DataModel.setData({
                         Pop1: [oController._tData],
                         Pop2: [] 
                     });
+
 				}
 
-                if ((New === "N" && Flag === "A100") || (New === "N" && oController._MedDateChange === "O" && oController.oDialog2 && Common.checkNull(oController.oDialog2.open()) && Flag === "A100")) {
+                if ((New === "N" && Flag === "A100" && oController._MedDateChange === "X")
+                    || (New === "N" 
+                        && oController._MedDateChange === "O" 
+                        && (oController.oDialog2 && oController.oDialog2.isOpen() === false )
+                        && Flag === "A100")
+                ) {
                     oController.initTdata(Flag);
 
                     oController._DataModel.setData({
                         Pop1: [],
                         Pop2: [oController._tData] 
                     });
+
                 }
 				
 				oController._onDialog = New;
@@ -972,7 +1000,7 @@ sap.ui.define(
 					}
 					
 					setTimeout(function () {
-                        if(!oController.oDialog.open()) oController.oDialog.open();
+                        if(!oController.oDialog.isOpen()) oController.oDialog.open();
                         
                         if(oController.oDialog2) oController.oDialog2.close();
                     }, 10);
@@ -983,7 +1011,7 @@ sap.ui.define(
 					}
 					
 					setTimeout(function () {
-                        if(!oController.oDialog2.open()) oController.oDialog2.open();
+                        if(!oController.oDialog2.isOpen()) oController.oDialog2.open();
 
                         if(oController.oDialog) oController.oDialog.close();
                     }, 10);

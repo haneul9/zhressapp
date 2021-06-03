@@ -19,7 +19,7 @@ sap.ui.define(
                 var oHBox = new sap.m.HBox({
                     items:[ new sap.m.Label({
                                 textAlign:"Begin",
-                                text: oController.getBundleText("LABEL_47144")// 								
+                                text: oController.getBundleText("LABEL_50002")//대상자 								
                             }),new sap.m.Input({
                                 valueHelpRequest: function(oEvent){oController.searchOrgehPernr.call(oController,oEvent,"X");},
                                 valueHelpOnly: true,

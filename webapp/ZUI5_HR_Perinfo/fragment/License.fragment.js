@@ -75,9 +75,9 @@ sap.ui.define(
                                                         oController.onLicenseDblClick("3");
                                                     },
                                                     visible: {
-                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                        formatter: function (v1, v2) {
-                                                            if (v1 == "E" && v2 === "Y") return true;
+                                                        parts: [{ path: "Auth" }],
+                                                        formatter: function (v1) {
+                                                            if (v1 == "E") return true;
                                                             else return false;
                                                         }
                                                     }
@@ -88,9 +88,9 @@ sap.ui.define(
                                                         oController.onLicenseDblClick("2");
                                                     },
                                                     visible: {
-                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                        formatter: function (v1, v2) {
-                                                            if (v1 == "E" && v2 === "Y") return true;
+                                                        parts: [{ path: "Auth" }],
+                                                        formatter: function (v1) {
+                                                            if (v1 == "E") return true;
                                                             else return false;
                                                         }
                                                     }
@@ -101,9 +101,9 @@ sap.ui.define(
                                                         oController.onLicenseDblClick("4");
                                                     },
                                                     visible: {
-                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                        formatter: function (v1, v2) {
-                                                            if (v1 == "E" && v2 === "Y") return true;
+                                                        parts: [{ path: "Auth" }],
+                                                        formatter: function (v1) {
+                                                            if (v1 == "E") return true;
                                                             else return false;
                                                         }
                                                     }
