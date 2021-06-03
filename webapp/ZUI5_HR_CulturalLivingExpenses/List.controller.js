@@ -565,7 +565,7 @@ sap.ui.define([
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData)];
 					
 					oTableData.forEach(function(elem) {elem.Waers = "KRW"});
-					oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
+					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
 					sendObject.CultureTableIn2 = oTableData;
 					
 					oModel.create("/CultureImportSet", sendObject, {
@@ -628,7 +628,7 @@ sap.ui.define([
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData)];
 					
 					oTableData.forEach(function(elem) {elem.Waers = "KRW"});
-					oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
+					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
 					sendObject.CultureTableIn2 = oTableData;
 					
 					oModel.create("/CultureImportSet", sendObject, {
