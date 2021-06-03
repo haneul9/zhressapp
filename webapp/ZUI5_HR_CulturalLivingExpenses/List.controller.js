@@ -501,7 +501,7 @@ sap.ui.define([
 					sendObject.ISpmon = vSpmon;
 					// Navigation property
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oFormData)];
-					sendObject.CultureTableIn2 = [Common.copyByMetadata(oModel, "CultureTableIn2", oTableData)];
+					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
@@ -566,7 +566,7 @@ sap.ui.define([
 					
 					oTableData.forEach(function(elem) {elem.Waers = "KRW"});
 					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
-					sendObject.CultureTableIn2 = [Common.copyByMetadata(oModel, "CultureTableIn2", oTableData)];
+					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
@@ -629,7 +629,7 @@ sap.ui.define([
 					
 					oTableData.forEach(function(elem) {elem.Waers = "KRW"});
 					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
-					sendObject.CultureTableIn2 = [Common.copyByMetadata(oModel, "CultureTableIn2", oTableData)];
+					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
@@ -675,7 +675,7 @@ sap.ui.define([
 					sendObject.ISpmon = vSpmon;
 					// Navigation property
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oFormData)];
-					sendObject.CultureTableIn2 = [Common.copyByMetadata(oModel, "CultureTableIn2", oTableData)];
+					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
