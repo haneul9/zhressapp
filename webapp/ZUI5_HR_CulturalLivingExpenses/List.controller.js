@@ -638,7 +638,7 @@ sap.ui.define([
 						oSendTable.push(Common.copyByMetadata(oModel, "CultureTableIn2", elem));
 					});
 					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
-					sendObject.CultureTableIn2 = oTableData;
+					sendObject.CultureTableIn2 = oSendTable;
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,

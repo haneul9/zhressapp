@@ -102,6 +102,7 @@ sap.ui.define(
 				var oFormData = oListController.DetailModel.getProperty("/FormData"),
 					oCopiedData = {};
 				var sendObject = {};
+				var oSendTable = [];
 				delete oTableData.Status;
 				delete oTableData.vPay;
 				
@@ -128,10 +129,13 @@ sap.ui.define(
 						// Navigation property
 						sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData)];
 						
-						oTableData.forEach(function(elem) {elem.Waers = "KRW"});
-						oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
+						oTableData.forEach(function(elem) {
+							elem.Waers = "KRW";
+							oSendTable.push(Common.copyByMetadata(oModel, "CultureTableIn2", elem));
+						});
+						// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
 						oTableData.forEach(function(elem) {delete elem.Checked});
-						sendObject.CultureTableIn2 = oTableData;
+						sendObject.CultureTableIn2 = oSendTable;
 						
 						oModel.create("/CultureImportSet", sendObject, {
 							async: true,
@@ -167,6 +171,7 @@ sap.ui.define(
 				var oFormData = oListController.DetailModel.getProperty("/FormData"),
 					oCopiedData = {};
 				var sendObject = {};
+				var oSendTable = [];
 				delete oTableData.Status;
 				delete oTableData.vPay;
 				delete oTableData.Checked;
@@ -192,10 +197,13 @@ sap.ui.define(
 						// Navigation property
 						sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData)];
 						
-						oTableData.forEach(function(elem) {elem.Waers = "KRW"});
-						oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
+						oTableData.forEach(function(elem) {
+							elem.Waers = "KRW";
+							oSendTable.push(Common.copyByMetadata(oModel, "CultureTableIn2", elem));
+						});
+						// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
 						oTableData.forEach(function(elem) {delete elem.Checked});
-						sendObject.CultureTableIn2 = oTableData;
+						sendObject.CultureTableIn2 = oSendTable;
 						
 						oModel.create("/CultureImportSet", sendObject, {
 							async: true,
