@@ -318,12 +318,13 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun(); 
 			var vRowIndex = oEvent.mParameters.rowBindingContext.sPath.slice(6);
+			var oCopiedRow = $.extend(true, {}, oRowData);
 			
 			oController.DetailModel.setProperty("/TableData", []);
 			oController.DetailModel.setProperty("/FormData", []);
 			oController.TextViewModel.setProperty("/FileData", {});
 			oController.DetailModel.setProperty("/LogData/Gubun","");
-			oController.DetailModel.setProperty("/FormData", oRowData);
+			oController.DetailModel.setProperty("/FormData", oCopiedRow);
 			
 			if (!oController._DetailModel) {
 				oController._DetailModel = sap.ui.jsfragment("ZUI5_HR_CulturalLivingExpenses.fragment.CulturalLivingExpensesDetail", oController);
@@ -334,7 +335,7 @@ sap.ui.define([
 				oRequestBtn = $.app.byId(oController.PAGEID + "_RequestBtn"),
 				oSaveBtn= $.app.byId(oController.PAGEID + "_SaveBtn");
 				
-			if(oRowData.Spmon !== oController.DetailModel.getProperty("/LogData/ESpmon")){
+			if(oCopiedRow.Spmon !== oController.DetailModel.getProperty("/LogData/ESpmon")){
 				if(oController.DetailModel.getProperty("/LogData/EButton") !== "X")
 					oRewirteBtn.setVisible(false);
 					
@@ -343,7 +344,7 @@ sap.ui.define([
 				
 			}
 			
-			if(oRowData.Status === "10" && Common.checkNull(!oRowData.Notes) && oRowData.Spmon !== oController.DetailModel.getProperty("/LogData/ESpmon"))
+			if(oCopiedRow.Status === "10" && Common.checkNull(!oCopiedRow.Notes) && oCopiedRow.Spmon !== oController.DetailModel.getProperty("/LogData/ESpmon"))
 				oRewirteBtn.setVisible(true); 
 			
 			oController.onPressBtnVisble();
@@ -501,7 +502,7 @@ sap.ui.define([
 					sendObject.ISpmon = vSpmon;
 					// Navigation property
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oFormData)];
-					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
+					sendObject.CultureTableIn2 = oTableData;
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
@@ -536,6 +537,7 @@ sap.ui.define([
 			var oFormData = oController.DetailModel.getProperty("/FormData"),
 				oCopiedData = {};
 			var sendObject = {};
+			var oSendTable = [];
 			delete oTableData.Status;
 			delete oTableData.vPay;
 			
@@ -564,9 +566,12 @@ sap.ui.define([
 					// Navigation property
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData)];
 					
-					oTableData.forEach(function(elem) {elem.Waers = "KRW"});
+					oTableData.forEach(function(elem) {
+						elem.Waers = "KRW";
+						oSendTable.push(Common.copyByMetadata(oModel, "CultureTableIn2", elem));
+					});
 					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
-					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
+					sendObject.CultureTableIn2 = oSendTable;
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
@@ -601,6 +606,7 @@ sap.ui.define([
 			var oFormData = oController.DetailModel.getProperty("/FormData"),
 				oCopiedData = {};
 			var sendObject = {};
+			var oSendTable = [];
 			delete oTableData.Status;
 			delete oTableData.vPay;
 			
@@ -627,9 +633,12 @@ sap.ui.define([
 					// Navigation property
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oCopiedData)];
 					
-					oTableData.forEach(function(elem) {elem.Waers = "KRW"});
+					oTableData.forEach(function(elem) {
+						elem.Waers = "KRW";
+						oSendTable.push(Common.copyByMetadata(oModel, "CultureTableIn2", elem));
+					});
 					// oTableData.forEach(function(elem) {elem.Usedt.setDate(elem.Usedt.getDate() + 1)});
-					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
+					sendObject.CultureTableIn2 = oTableData;
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
@@ -675,7 +684,7 @@ sap.ui.define([
 					sendObject.ISpmon = vSpmon;
 					// Navigation property
 					sendObject.CultureTableIn1 = [Common.copyByMetadata(oModel, "CultureTableIn1", oFormData)];
-					sendObject.CultureTableIn2 = Common.copyByMetadata(oModel, "CultureTableIn2", oTableData);
+					sendObject.CultureTableIn2 = oTableData;
 					
 					oModel.create("/CultureImportSet", sendObject, {
 						async: true,
