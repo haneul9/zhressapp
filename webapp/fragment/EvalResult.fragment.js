@@ -104,13 +104,13 @@ sap.ui.jsfragment("fragment.EvalResult", {
 		
 		// (선택여부), 평가연도, 업적평가, 역량평가, 다면평가, 1차평가, 2차평가, 평가세션
 		var col_info = [{id: "Select", label : "", plabel : "", span : 0, type : "select", sort : false, filter : false, width : "50px"},
-						{id: "Appye", label : common.SearchEvalResult.oBundleText.getText("LABEL_12101"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Grade1", label : common.SearchEvalResult.oBundleText.getText("LABEL_12102"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Grade2", label : common.SearchEvalResult.oBundleText.getText("LABEL_12103"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Grade3", label : common.SearchEvalResult.oBundleText.getText("LABEL_12104"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Grade4", label : common.SearchEvalResult.oBundleText.getText("LABEL_12105"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Grade5", label : common.SearchEvalResult.oBundleText.getText("LABEL_12106"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Grade6", label : common.SearchEvalResult.oBundleText.getText("LABEL_12107"), plabel : "", span : 0, type : "string", sort : false, filter : false}];
+						{id: "Appye", label : common.SearchEvalResult.oController.getBundleText("LABEL_12101"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Grade1", label : common.SearchEvalResult.oController.getBundleText("LABEL_12102"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Grade2", label : common.SearchEvalResult.oController.getBundleText("LABEL_12103"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Grade3", label : common.SearchEvalResult.oController.getBundleText("LABEL_12104"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Grade4", label : common.SearchEvalResult.oController.getBundleText("LABEL_12105"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Grade5", label : common.SearchEvalResult.oController.getBundleText("LABEL_12106"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Grade6", label : common.SearchEvalResult.oController.getBundleText("LABEL_12107"), plabel : "", span : 0, type : "string", sort : false, filter : false}];
 						
 		common.makeTable.makeColumn(oController, oTable, col_info);
 		
@@ -153,11 +153,11 @@ sap.ui.jsfragment("fragment.EvalResult", {
 														 			}
 														 		}
 														 		
-														 		return common.SearchEvalResult.oBundleText.getText("LABEL_12108"); // 업적 & 역량평가
+														 		return common.SearchEvalResult.oController.getBundleText("LABEL_12108"); // 업적 & 역량평가
 														 	}
 														 }
 													 })],
-							title : common.SearchEvalResult.oBundleText.getText("LABEL_12108"), // 업적 & 역량평가
+							title : common.SearchEvalResult.oController.getBundleText("LABEL_12108"), // 업적 & 역량평가
 							subSections : [new sap.uxap.ObjectPageSubSection({
 											   title : "",	
 											   blocks : [common.SearchEvalResult.makeMatrix4().bindElement("/Data2")]
@@ -179,11 +179,11 @@ sap.ui.jsfragment("fragment.EvalResult", {
 														 			}
 														 		}
 														 		
-														 		return common.SearchEvalResult.oBundleText.getText("LABEL_12104"); // 다면평가
+														 		return common.SearchEvalResult.oController.getBundleText("LABEL_12104"); // 다면평가
 														 	}
 														 }
 													 })],
-							title : common.SearchEvalResult.oBundleText.getText("LABEL_12104"), // 다면평가
+							title : common.SearchEvalResult.oController.getBundleText("LABEL_12104"), // 다면평가
 							subSections : [new sap.uxap.ObjectPageSubSection({
 											   title : "",	
 											   blocks : [new sap.ui.layout.VerticalLayout({
@@ -210,7 +210,7 @@ sap.ui.jsfragment("fragment.EvalResult", {
 		oSectionLayout.bindElement("/user");
 		
 		var oDialog = new sap.m.Dialog({
-			title : common.SearchEvalResult.oBundleText.getText("LABEL_12100"), // 평가결과 조회
+			title : common.SearchEvalResult.oController.getBundleText("LABEL_12100"), // 평가결과 조회
 			contentWidth : "1500px",
 			contentHeight : "1500px",
 			content : [oSectionLayout],
@@ -218,7 +218,7 @@ sap.ui.jsfragment("fragment.EvalResult", {
 			afterOpen : common.SearchEvalResult.onAfterOpen,
 			endButton : [new sap.m.Button({
 							 type : "Emphasized",
-							 text : common.SearchEvalResult.oBundleText.getText("LABEL_06122"), // 닫기
+							 text : common.SearchEvalResult.oController.getBundleText("LABEL_06122"), // 닫기
 							 press : function(){oDialog.close();}
 						 })]
 		});

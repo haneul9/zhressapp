@@ -87,16 +87,16 @@ sap.ui.jsfragment("fragment.EvalHistory", {
 			  fitContainer: true,
 			  items: [new sap.m.FlexBox({
 						  direction: "Column",
-						  items: [new sap.m.FlexBox({
+						  items: [/*new sap.m.FlexBox({
 									  alignItems: "End",
 									  fitContainer: true,
 									  items: [new sap.m.Text({text: oBundleText.getText("LABEL_07001")}).addStyleClass("app-title")] // 평가이력
-								  }).addStyleClass("app-title-container"),
-								  new sap.ui.core.HTML({content : "<div style='height:40px' />"}),
+								  }).addStyleClass("app-title-container"),*/
+								  new sap.ui.core.HTML({content : "<div style='height:40px' />"}), 
 						  		  oHeader, new sap.ui.core.HTML({content : "<div style='height:40px' />"}), 
 						  		  oTable, new sap.ui.core.HTML({content : "<div style='height:10px' />"})]
-					  }).addStyleClass("app-content-container")]
-		}).addStyleClass("app-content-body");
+					  })] // .addStyleClass("app-content-container")
+		}); // .addStyleClass("app-content-body")
 		
 		oContent.setModel(common.SearchEvalHistory._JSONModel);
 		oContent.bindElement("/Data");

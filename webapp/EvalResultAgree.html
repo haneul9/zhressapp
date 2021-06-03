@@ -34,19 +34,33 @@
 
 	function startAppInit() {
 
-		checkAppPrefilter();
+		// checkAppPrefilter();
 
-		sap.ui.getCore().attachInit(function() {
-			sap.ui.localResources("ZUI5_SF_EvalResultAgree");
+		// sap.ui.getCore().attachInit(function() {
+		// 	sap.ui.localResources("ZUI5_SF_EvalResultAgree");
 
-			var oview = sap.ui.jsview("app", "ZUI5_SF_EvalResultAgree.AppMain");
-			$("body").fadeOut("slow",function(){
-				$("#ui-body").empty();
-				$("#ui-body").removeAttr('style');
-				oview.placeAt("ui-body");
-				$(this).fadeIn("slow");
-			});
+		// 	var oview = sap.ui.jsview("app", "ZUI5_SF_EvalResultAgree.AppMain");
+		// 	$("body").fadeOut("slow",function(){
+		// 		$("#ui-body").empty();
+		// 		$("#ui-body").removeAttr('style');
+		// 		oview.placeAt("ui-body");
+		// 		$(this).fadeIn("slow");
+		// 	});
+		// });
+
+		var contextPath = "ZUI5_SF_EvalResultAgree";
+		$.extend(true, $.app, {
+			CONTEXT_PATH: contextPath,
+			APP_SFMAIN_ID: "ZUI5_SF.SFMain",
+			APP_ID: [contextPath, "EvalResultAgreeList"].join("."),
+			APP_AUTH: $.app.Auth.ESS,
+			APP_TILE: "결과합의/이의제기",
+			LOG: {
+				ENABLE_SUCCESS: true
+			}
 		});
+
+		$.app.init();
 	}
 	</script>
 	</head>

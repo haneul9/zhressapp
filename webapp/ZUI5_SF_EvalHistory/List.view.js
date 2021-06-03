@@ -1,6 +1,8 @@
 $.sap.require("common.Common");
 $.sap.require("common.Formatter");
 $.sap.require("common.makeTable");
+$.sap.require("common.makeTable");
+$.sap.require("common.PageHelper");
 
 sap.ui.jsview("ZUI5_SF_EvalHistory.List", {
 	
@@ -91,11 +93,15 @@ sap.ui.jsview("ZUI5_SF_EvalHistory.List", {
 				
 		/////////////////////////////////////////////////////////
 
-		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-			customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-			// content: [oContent]
-			content : [sap.ui.jsfragment("fragment.EvalHistory", oController).getContent()]
-		}).addStyleClass("app-content");
+		// var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+		// 	customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
+		// 	// content: [oContent]
+		// 	content : [sap.ui.jsfragment("fragment.EvalHistory", oController).getContent()]
+		// }).addStyleClass("app-content");
+
+		var oPage = new common.PageHelper({
+			contentItems: [sap.ui.jsfragment("fragment.EvalHistory", oController).getContent()[0]]
+		});
 		
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");

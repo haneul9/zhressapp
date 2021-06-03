@@ -215,7 +215,44 @@ sap.ui.define([
 				
 			oController._UserList = ""; 
 			
-			var vData = {Data : []}, vData2 = {Data : []};
+			var vData = {Data : []}, 
+				vData2 = {Data : []},
+				oCode = [];
+			
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var createData = {NavCommonCodeList : [], ICodeT : "066"};
+			oModel.create("/CommonCodeListHeaderSet", createData, {
+				success: function(data, res){
+					if(data){
+						if(data.NavCommonCodeList && data.NavCommonCodeList .results){
+							var data1 = data.NavCommonCodeList.results;
+							
+							for(var i=0; i<data1.length; i++){
+								oCode.push(data1[i].Code);
+							}
+						}
+					}
+				},
+				error: function (oError) {
+			    	var Err = {};
+			    	oController.Error = "E";
+							
+					if (oError.response) {
+						Err = window.JSON.parse(oError.response.body);
+						var msg1 = Err.error.innererror.errordetails;
+						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+						else oController.ErrorMessage = Err.error.message.value;
+					} else {
+						oController.ErrorMessage = oError.toString();
+					}
+				}
+			});
+
+			if(oController.Error == "E"){
+				oController.Error = "";
+				sap.m.MessageBox.error(oController.ErrorMessage);
+				return;
+			}
 			
 			new JSONModelHelper().url("/odata/v2/User('" + (oController.getSessionInfoByKey("Pernr") * 1) + "')/directReports")
 								.select("userId")
@@ -226,6 +263,7 @@ sap.ui.define([
 								.select("division")
 								.select("jobCode")
 								.select("custom04")
+								.select("custom07")
 								.setAsync(false)
 								.attachRequestCompleted(function(){
 										var data = this.getData().d;
@@ -233,6 +271,14 @@ sap.ui.define([
 										if(data && data.results.length){
 											for(var i=0; i<data.results.length; i++){
 												if(data.results[i].custom04 != null) continue; // 평가 대상 제외
+
+												var check = "";
+												for(var j=0; j<oCode.length; j++){
+													if(data.results[i].custom07 == oCode[j]){
+														check = "X";
+													}
+												}
+												if(check == "") continue;
 												
 												if(i==0){
 													oController._UserList = data.results[i].userId;

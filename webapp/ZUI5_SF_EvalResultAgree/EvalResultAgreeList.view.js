@@ -1,3 +1,4 @@
+jQuery.sap.require("common.PageHelper");
 sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 
 	/** Specifies the Controller belonging to this View. 
@@ -13,6 +14,14 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 	 * @memberOf controller.main
 	 */
 	createContent: function (oController) {
+		$.app.setModel("ZHR_APPRAISAL_SRV");
+		// jQuery.sap.require("common.SearchEvalResultAgree");
+		// jQuery.sap.require("common.JSONModelHelper");
+		// jQuery.sap.require("common.makeTable");
+		// jQuery.sap.includeStyleSheet("css/dashboard.css");
+		
+		// common.SearchEvalResultAgree.oController = oController;
+		
 		// var oHeader = new sap.ui.commons.layout.MatrixLayout({
 		// 	columns : 3,
 		// 	width : "100%",
@@ -38,7 +47,7 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 						 }),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell(),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
-		// 						 	 content : [new sap.m.FormattedText(oController.PAGEID + "_Status", {
+		// 						 	 content : [new sap.m.FormattedText(common.SearchEvalResultAgree.PAGEID + "_Status", {
 		// 									 	 	width: "42px",
 		// 									 	 	height: "42px", 
 		// 									 	 	htmlText: "<em>Loading</em>"
@@ -50,7 +59,7 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// });
 		
 		// // 평가결과
-		// var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
+		// var oTable = new sap.ui.table.Table(common.SearchEvalResultAgree.PAGEID + "_Table", {
 		// 		enableColumnReordering : false,
 		// 		enableColumnFreeze : false,
 		// 		columnHeaderHeight : 35,
@@ -70,13 +79,13 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 	widths : ["", "24px", ""],
 		// 	rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-		// 							 content : [new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Content1")],
+		// 							 content : [new sap.ui.layout.VerticalLayout(common.SearchEvalResultAgree.PAGEID + "_Content1")],
 		// 							 hAlign : "Begin",
 		// 							 vAlign : "Top"
 		// 						 }),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell(),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
-		// 						 	 content : [new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Content2")],
+		// 						 	 content : [new sap.ui.layout.VerticalLayout(common.SearchEvalResultAgree.PAGEID + "_Content2")],
 		// 						 	 hAlign : "Begin",
 		// 						 	 vAlign : "Top"
 		// 						 })]
@@ -84,13 +93,13 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 			new sap.ui.commons.layout.MatrixLayoutRow({height : "10px"}),
 		// 			new sap.ui.commons.layout.MatrixLayoutRow({
 		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-		// 							 content : [new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Content3")],
+		// 							 content : [new sap.ui.layout.VerticalLayout(common.SearchEvalResultAgree.PAGEID + "_Content3")],
 		// 							 hAlign : "Begin",
 		// 							 vAlign : "Top"
 		// 						 }),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell(),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
-		// 						 	 content : [new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Content4")],
+		// 						 	 content : [new sap.ui.layout.VerticalLayout(common.SearchEvalResultAgree.PAGEID + "_Content4")],
 		// 						 	 hAlign : "Begin",
 		// 						 	 vAlign : "Top"
 		// 						 })]
@@ -100,7 +109,13 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 		// 							 content : [new sap.m.Toolbar({
 		// 										 	height : "44px",
-		// 										 	content : [new sap.m.Text({text : oBundleText.getText("LABEL_15013")}).addStyleClass("Font18 Font700")] // 이의제기 사유
+		// 										 	visible : {
+		// 										 		path : "Flag",
+		// 										 		formatter : function(fVal){
+		// 										 			return fVal == null ? true : false;
+		// 										 		}
+		// 										 	},
+		// 										 	content : [new sap.m.Text({text : oController.getBundleText("LABEL_15013")}).addStyleClass("Font18 Font700")] // 이의제기 사유
 		// 										}).addStyleClass("toolbarNoBottomLine padding0")],
 		// 							 hAlign : "Begin",
 		// 							 vAlign : "Middle",
@@ -119,11 +134,30 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 										 		formatter : function(fVal){
 		// 										 			return fVal == "30" ? true : false;
 		// 										 		}
+		// 										 	},
+		// 										 	visible : {
+		// 										 		path : "Flag",
+		// 										 		formatter : function(fVal){
+		// 										 			return fVal == null ? true : false;
+		// 										 		}
 		// 										 	}
 		// 										}).addStyleClass("FontFamily")],
 		// 							 hAlign : "Begin",
 		// 							 vAlign : "Middle",
 		// 							 colSpan : 3
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.ui.core.HTML({
+		// 										 	content : "<div style='height:10px' />",
+		// 										 	visible : {
+		// 										 		path : "Flag",
+		// 										 		formatter : function(fVal){
+		// 										 			return fVal == null ? true : false;
+		// 										 		}
+		// 										 	}
+		// 										})]
 		// 						 })]
 		// 			})]
 		// });
@@ -145,61 +179,78 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell(),
 		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
 		// 						 	 content : [new sap.m.Toolbar({
-		// 											 content : [new sap.m.Text({text : oBundleText.getText("LABEL_15001")}).addStyleClass("Font18 Font700"), // 평가결과
+		// 											 content : [new sap.m.Text({text : oController.getBundleText("LABEL_15001")}).addStyleClass("Font18 Font700"), // 평가결과
 		// 														new sap.m.ToolbarSpacer(),
 		// 														new sap.m.Button({
-		// 															text : oBundleText.getText("LABEL_15002"), // 평가설문
+		// 															text : oController.getBundleText("LABEL_15002"), // 평가설문
 		// 															type : "Emphasized",
 		// 															width : "100px",
 		// 															visible : {
-		// 																path : "Evstaus",
-		// 																formatter : function(fVal){
-		// 																	return fVal == "20" ? true : false;
+		// 																parts : [{path : "Flag"}, {path : "Evstaus"}],
+		// 																formatter : function(fVal1, fVal2){
+		// 																	if(fVal1 == "X"){
+		// 																		return false;
+		// 																	} else {
+		// 																		return fVal2 == "20" ? true : false;
+		// 																	}
 		// 																}
 		// 															},
-		// 															press : oController.onPressSurvey
+		// 															press : common.SearchEvalResultAgree.onPressSurvey
 		// 														}).addStyleClass("button-height"),
 		// 														new sap.m.Button({
-		// 															text : oBundleText.getText("LABEL_15003"), // 결과합의
+		// 															text : oController.getBundleText("LABEL_15003"), // 결과확인 2020-01-05 결과합의→결과확인 텍스트 변경
 		// 															type : "Emphasized",
 		// 															width : "100px",
 		// 															visible : {
-		// 																path : "Evstaus",
-		// 																formatter : function(fVal){
-		// 																	return fVal == "30" ? true : false;
+		// 																parts : [{path : "Flag"}, {path : "Evstaus"}],
+		// 																formatter : function(fVal1, fVal2){
+		// 																	if(fVal1 == "X"){
+		// 																		return false;
+		// 																	} else {
+		// 																		return fVal2 == "30" ? true : false;
+		// 																	}
 		// 																}
 		// 															},
 		// 															press : function(oEvent){
-		// 																oController.onPressSave(oEvent, "50");
+		// 																common.SearchEvalResultAgree.onPressSave(oEvent, "50");
 		// 															}
 		// 														}).addStyleClass("button-height"),
 		// 														new sap.m.Button({
-		// 															text : oBundleText.getText("LABEL_15004"), // 이의제기
+		// 															text : oController.getBundleText("LABEL_15004"), // 이의제기
 		// 															type : "Emphasized",
 		// 															width : "100px",
 		// 															visible : {
-		// 																path : "Evstaus",
-		// 																formatter : function(fVal){
-		// 																	return fVal == "30" ? true : false;
+		// 																parts : [{path : "Flag"}, {path : "Evstaus"}],
+		// 																formatter : function(fVal1, fVal2){
+		// 																	if(fVal1 == "X"){
+		// 																		return false;
+		// 																	} else {
+		// 																		return fVal2 == "30" ? true : false;
+		// 																	}
 		// 																}
 		// 															},
 		// 															press : function(oEvent){
-		// 																oController.onPressSave(oEvent, "40");
+		// 																common.SearchEvalResultAgree.onPressSave(oEvent, "40");
 		// 															}
 		// 														}).addStyleClass("button-height"),
 		// 														new sap.m.MessageStrip({
 		// 															type : "Information",
 		// 															showIcon : true,
-		// 															text : oBundleText.getText("MSG_15019"), // 종합평가 완료 시에만 결과합의 및 이의제기가 활성화 됩니다.
+		// 															text : oController.getBundleText("MSG_15019"), // 종합평가 완료 시에만 결과확인 및 이의제기가 활성화 됩니다.
 		// 															visible : {
 		// 																path : "Evstaus",
-		// 																formatter : function(fVal){
-		// 																	if(fVal == ""){
-		// 																		return true;
-		// 																	} else if(fVal && parseFloat(fVal) < 20) {
-		// 																		return true;
-		// 																	} else {
+		// 																parts : [{path : "Flag"}, {path : "Evstaus"}],
+		// 																formatter : function(fVal1, fVal2){
+		// 																	if(fVal1 == "X"){
 		// 																		return false;
+		// 																	} else {
+		// 																		if(fVal2 == ""){
+		// 																			return true; 
+		// 																		} else if(fVal2 && parseFloat(fVal2) < 20){
+		// 																			return true;
+		// 																		} else {
+		// 																			return false;
+		// 																		}
 		// 																	}
 		// 																}
 		// 															}
@@ -224,12 +275,20 @@ sap.ui.jsview("ZUI5_SF_EvalResultAgree.EvalResultAgreeList", {
 		// 			})]
 		// });
 		
-		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-			title : "평가결과 합의/이의제기",
-			showHeader : false,
-			content: [new sap.ui.jsfragment("fragment.EvalResultAgree", oController).getContent()],
-			// content : [oContent],
-			footer : []
+		// oContent.setModel(common.SearchEvalResultAgree._JSONModel);
+		// oContent.bindElement("/Data");
+		
+		// var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+		// 	title : "평가결과 합의/이의제기",
+		// 	showHeader : false,
+		// 	content: [new sap.ui.jsfragment("fragment.EvalResultAgree", oController).getContent()],
+		// 	// content : [oContent],
+		// 	footer : []
+		// });
+
+		var oPage = new common.PageHelper({
+			// idPrefix: oController.PAGEID,
+			contentItems: [new sap.ui.jsfragment("fragment.EvalResultAgree", oController).getContent()[0]]
 		});
 		
 		oPage.addStyleClass("WhiteBackground");

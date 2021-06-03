@@ -16,7 +16,7 @@ common.SearchEvalHistory = {
 			Data : {
 				Appye : new Date().getFullYear() + "",
 				Pernr : (common.SearchEvalHistory.userId && common.SearchEvalHistory.userId != "") ? 
-							common.SearchEvalHistory.userId : common.SearchEvalHistory.oController.getView().getModel("session").getData().Pernr
+							common.SearchEvalHistory.userId : common.SearchEvalHistory.oController.getSessionInfoByKey("Pernr")
 			}
 		};
 		
@@ -44,7 +44,7 @@ common.SearchEvalHistory = {
 		var userId = common.SearchEvalHistory._JSONModel.getProperty("/Data/Pernr");
 		var oData = {};
 		
-		new JSONModelHelper().url("/odata/v2/User('" + parseFloat(userId) + "')")
+		new JSONModelHelper().url("/odata/v2/User('" + (userId * 1) + "')")
 							 .select("userId")
 							 .select("nickname")
 							 .select("title")
@@ -71,7 +71,7 @@ common.SearchEvalHistory = {
 							 })
 							 .load();
 
-			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + userId + "' and photoType eq '1'")
+			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + (userId * 1) + "' and photoType eq '1'")
 								 .select("photo")
 								 .setAsync(false)
 								 .attachRequestCompleted(function(){

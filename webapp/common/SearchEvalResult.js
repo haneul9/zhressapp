@@ -13,24 +13,24 @@ common.SearchEvalResult = {
 	_BusyDialog : new sap.m.BusyDialog(),
 	
 	// 번역  
-	oBundleText : jQuery.sap.resources({
-		url : "i18n/i18n.properties?" + new Date().getTime(),
-		locale : sap.ui.getCore().getConfiguration().getLanguage()
-	}),
+	// oBundleText : jQuery.sap.resources({
+	// 	url : "i18n/i18n.properties?" + new Date().getTime(),
+	// 	locale : sap.ui.getCore().getConfiguration().getLanguage()
+	// }),
 	
 	onBeforeOpen : function(oEvent){
-		if(sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV") == undefined){
-			var param = $.map(location.search.replace(/\?/, "").split(/&/), function(p) {
-					var pair = p.split(/=/);
-					if (pair[0] === "s4hana") { return pair[1]; }
-				})[0],
-				destination = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
+		// if(sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV") == undefined){
+		// 	var param = $.map(location.search.replace(/\?/, "").split(/&/), function(p) {
+		// 			var pair = p.split(/=/);
+		// 			if (pair[0] === "s4hana") { return pair[1]; }
+		// 		})[0],
+		// 		destination = (common.Common.isPRD() || param === "legacy") ? "/s4hana" : "/s4hana-pjt";
 				
-			var oModel = new sap.ui.model.odata.ODataModel(destination + "/sap/opu/odata/sap/ZHR_APPRAISAL_SRV/", true, undefined, undefined, undefined, undefined, undefined, false);
-				oModel.setCountSupported(false);
-				oModel.setRefreshAfterChange(false);
-			sap.ui.getCore().setModel(oModel, "ZHR_APPRAISAL_SRV");
-		}
+		// 	var oModel = new sap.ui.model.odata.ODataModel(destination + "/sap/opu/odata/sap/ZHR_APPRAISAL_SRV/", true, undefined, undefined, undefined, undefined, undefined, false);
+		// 		oModel.setCountSupported(false);
+		// 		oModel.setRefreshAfterChange(false);
+		// 	sap.ui.getCore().setModel(oModel, "ZHR_APPRAISAL_SRV");
+		// }
 		
 		var oData = [{ // 직무만족도
 						Score1 : 0, Score2 : 0, Score3 : 0, Score4 : 0,
@@ -130,15 +130,15 @@ common.SearchEvalResult = {
 			} else {
 				data = [{
 							Type : "Warning",
-							Text : common.SearchEvalResult.oBundleText.getText("MSG_12010") // 평가문서 조회 대기중
+							Text : common.SearchEvalResult.oController.getBundleText("MSG_12010") // 평가문서 조회 대기중
 						},
 						{
 							Type : "Warning",
-							Text : common.SearchEvalResult.oBundleText.getText("MSG_12018") // 평가항목 조회 대기중
+							Text : common.SearchEvalResult.oController.getBundleText("MSG_12018") // 평가항목 조회 대기중
 						},
 						{
 							Type : "Warning",
-							Text : common.SearchEvalResult.oBundleText.getText("MSG_12019") // 평가점수 조회 대기중
+							Text : common.SearchEvalResult.oController.getBundleText("MSG_12019") // 평가점수 조회 대기중
 						}];
 						
 				setTimeout(function(){
@@ -351,7 +351,7 @@ common.SearchEvalResult = {
 		// 							}
 									
 		// 							if(formContentId == "" || formDataId == ""){
-		// 								sap.m.MessageBox.error(common.SearchEvalResult.oBundleText.getText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
+		// 								sap.m.MessageBox.error(common.SearchEvalResult.oController.getBundleText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
 		// 									onClose : function(){
 		// 										common.SearchEvalResult._StatusMessage.close();
 		// 										$(".spinner-evalresult")["hide"]();
@@ -623,7 +623,7 @@ common.SearchEvalResult = {
 		oJSONModel2.setData(vData2);
 		
 		if(id == ""){
-			sap.m.MessageBox.error(common.SearchEvalResult.oBundleText.getText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
+			sap.m.MessageBox.error(common.SearchEvalResult.oController.getBundleText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
 				onClose : function(){
 					common.SearchEvalResult._StatusMessage.close();
 					$(".spinner-evalresult")["hide"]();
@@ -672,16 +672,35 @@ common.SearchEvalResult = {
 			return;
 		}
 							 
+		// template ID 조회
+		var oTemplateId = "";
 		var formDataId = "", formContentId = "";
-		new JSONModelHelper().url("/odata/fix/FormHeader")
-							 .select("currentStep")
-							 .select("formDataId")
-							 .select("formDataStatus")
-							 .select("formLastContent")
-							 .expand("formLastContent")
-							 .filter("formTemplateId eq " + (common.Common.getOperationMode() == "DEV" ? "703" : "500") + " and formDataStatus ne 4 and formSubjectId in " + userId)
-							 .setAsync(false)
-							 .attachRequestCompleted(function(){
+		new JSONModelHelper().url("/odata/v2/FormTemplate?$filter=formTemplateType eq 'Review' and formTemplateName like '" + common.SearchEvalResultAgree.Appye + "년 업적%25'")
+								.setAsync(false)
+								.attachRequestCompleted(function(){
+									var data = this.getData().d;
+									
+									if(data && data.results.length){
+										oTemplateId = data.results[0].formTemplateId;
+									}
+								})
+								.attachRequestFailed(function() {
+									console.log("fail : 업적/역량평가 template id 조회");
+									return;
+								})
+								.load();
+								
+		if(oTemplateId != ""){
+			new JSONModelHelper().url("/odata/fix/FormHeader")
+								.select("currentStep")
+								.select("formDataId")
+								.select("formDataStatus")
+								.select("formLastContent")
+								.expand("formLastContent")
+								.filter("formTemplateId eq " + oTemplateId //(common.Common.getOperationMode() == "DEV" ? "703" : "500") 
+										+ " and formDataStatus ne 4 and formSubjectId in " + userId)
+								.setAsync(false)
+								.attachRequestCompleted(function(){
 									var data = this.getData().d;
 									
 									if(data && data.results.length){
@@ -690,19 +709,20 @@ common.SearchEvalResult = {
 											formContentId = data.results[0].formLastContent.formContentId;
 										}
 									}
-							 })
-							 .attachRequestFailed(function(error) {
-								 if(error.getParameters() && error.getParameters().message == "error"){
-								 	 var message = JSON.parse(error.getParameters().responseText).error.message.value;
-								 	 sap.m.MessageBox.error(message);
-								 } else {
-								 	 sap.m.MessageBox.error(error);
-								 }
-							 })
-							 .load();
+								})
+								.attachRequestFailed(function(error) {
+									if(error.getParameters() && error.getParameters().message == "error"){
+										var message = JSON.parse(error.getParameters().responseText).error.message.value;
+										sap.m.MessageBox.error(message);
+									} else {
+										sap.m.MessageBox.error(error);
+									}
+								})
+								.load();
+		}
 		
 		if(formDataId == "" || formContentId == ""){
-			sap.m.MessageBox.error(common.SearchEvalResult.oBundleText.getText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
+			sap.m.MessageBox.error(common.SearchEvalResult.oController.getBundleText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
 				onClose : function(){
 					common.SearchEvalResult._StatusMessage.close();
 					$(".spinner-evalresult")["hide"]();
@@ -772,7 +792,7 @@ common.SearchEvalResult = {
 										// 			break;
 										// 	}
 											
-										// 	vData2 = {Data : [{Name : common.SearchEvalResult.oBundleText.getText("LABEL_12115"), Rating1 : 0, Rating2 : 0}]};
+										// 	vData2 = {Data : [{Name : common.SearchEvalResult.oController.getBundleText("LABEL_12115"), Rating1 : 0, Rating2 : 0}]};
 											
 										// 	for(var i=0; i<rating.length; i++){
 										// 		var check = "";
@@ -925,7 +945,23 @@ common.SearchEvalResult = {
 		// 1. 평가문서 조회
 		var formDataId = "", formContentId = [];
 			
-		var templateID = (common.Common.getOperationMode() == "DEV" ? "719" : "502");
+		var templateID = ""; //(common.Common.getOperationMode() == "DEV" ? "719" : "502");
+		new JSONModelHelper().url("/odata/v2/FormTemplate?$filter=formTemplateType eq '360' and formTemplateName like '" + common.SearchEvalResult.Year + "년 다면%25'")
+								.setAsync(false)
+								.attachRequestCompleted(function(){
+									var data = this.getData().d;
+									
+									if(data && data.results.length){
+										templateID = data.results[0].formTemplateId;
+									}
+								})
+								.attachRequestFailed(function() {
+									console.log("fail : 다면평가 template id 조회");
+									return;
+								})
+								.load();
+		if(templateID == "") return;
+
 		var userId = common.SearchEvalResult._JSONModel.getProperty("/user/userId");
 		
 		new JSONModelHelper().url("/odata/fix/FormHeader?$filter=formTemplateId eq " + templateID + " and formDataStatus ne 4 and formSubjectId eq '" + userId + "'")
@@ -968,7 +1004,7 @@ common.SearchEvalResult = {
 		formContentId.sort();
 		
 		if(formDataId == "" || formContentId.length == 0){
-			// sap.m.MessageBox.error(common.SearchEvalResult.oBundleText.getText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
+			// sap.m.MessageBox.error(common.SearchEvalResult.oController.getBundleText("MSG_12001"), { // 평가문서가 존재하지 않습니다.
 			// 	onClose : function(){
 					common.SearchEvalResult._StatusMessage.close();
 					$(".spinner-evalresult")["hide"]();
@@ -1025,7 +1061,7 @@ common.SearchEvalResult = {
 		common.SearchEvalResult._JSONModel.setProperty("/user/rating", (rating == 0 ? "" : rating.toFixed(2)));
 		
 		// 평가문서 조회 완료
-		common.SearchEvalResult._MessageJSONModel.setProperty("/Data/0", {Type : "Success", Text : common.SearchEvalResult.oBundleText.getText("MSG_12014")});
+		common.SearchEvalResult._MessageJSONModel.setProperty("/Data/0", {Type : "Success", Text : common.SearchEvalResult.oController.getBundleText("MSG_12014")});
 
 		// comment 태그 수정
 		var onChangeComment = function(comment){
@@ -1281,17 +1317,17 @@ common.SearchEvalResult = {
 								// 2021-05-17 Category.length == 2 삭제 
 								// if(text.length == 3 && category.length == 2){
 								if(text.length == 3 ){
-									if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06110")) != -1){ // 지시형
+									if(text.indexOf(common.SearchEvalResult.oController.getBundleText("LABEL_06110")) != -1){ // 지시형
 										score1++;
-									} else if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06111")) != -1){ // 비전형
+									} else if(text.indexOf(common.SearchEvalResult.oController.getBundleText("LABEL_06111")) != -1){ // 비전형
 										score2++;
-									} else if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06112")) != -1){ // 솔선형
+									} else if(text.indexOf(common.SearchEvalResult.oController.getBundleText("LABEL_06112")) != -1){ // 솔선형
 										score3++;
-									} else if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06113")) != -1){ // 친화형
+									} else if(text.indexOf(common.SearchEvalResult.oController.getBundleText("LABEL_06113")) != -1){ // 친화형
 										score4++;
-									} else if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06114")) != -1){ // 육성형
+									} else if(text.indexOf(common.SearchEvalResult.oController.getBundleText("LABEL_06114")) != -1){ // 육성형
 										score5++;
-									} else if(text.indexOf(common.SearchEvalResult.oBundleText.getText("LABEL_06115")) != -1){ // 민주형
+									} else if(text.indexOf(common.SearchEvalResult.oController.getBundleText("LABEL_06115")) != -1){ // 민주형
 										score6++;
 									} else {
 										eval("oData2[(itemId[i].itemIndex)].Description" + a + " = category[b] + '</p>'");
@@ -1314,24 +1350,24 @@ common.SearchEvalResult = {
 				// 점수 summary 데이터 생성
 				var summary = [{
 									key : "9",
-									label : common.SearchEvalResult.oBundleText.getText("LABEL_06125"), // 종합
+									label : common.SearchEvalResult.oController.getBundleText("LABEL_06125"), // 종합
 									value : common.SearchEvalResult._JSONModel.getProperty("/user/rating") * 1
 							   },
 							   {
 						   			key : "0",
-									label : common.SearchEvalResult.oBundleText.getText("LABEL_06126"), // 직무
+									label : common.SearchEvalResult.oController.getBundleText("LABEL_06126"), // 직무
 									value : parseFloat(oData2[0].Total).toFixed(2) * 1
 							   },
 							   {
 								 	key : "1",
-									label : common.SearchEvalResult.oBundleText.getText("LABEL_06127"), // 협업
+									label : common.SearchEvalResult.oController.getBundleText("LABEL_06127"), // 협업
 									value : parseFloat(oData2[1].Total).toFixed(2) * 1
 							   }];
 							   
 				if(common.SearchEvalResult._JSONModel.getProperty("/Data/0/section2") == "X"){
 					summary.push({
 						key : "2",
-						label : common.SearchEvalResult.oBundleText.getText("LABEL_06128"), // 리더십
+						label : common.SearchEvalResult.oController.getBundleText("LABEL_06128"), // 리더십
 						value : parseFloat(oData2[2].Total).toFixed(2) * 1
 					});
 				}
@@ -1339,7 +1375,7 @@ common.SearchEvalResult = {
 				common.SearchEvalResult._JSONModel.setProperty("/summary", summary);
 				
 				// 평가 점수 조회 완료
-				common.SearchEvalResult._MessageJSONModel.setProperty("/Data/2", {Type : "Success", Text : common.SearchEvalResult.oBundleText.getText("MSG_12021")});
+				common.SearchEvalResult._MessageJSONModel.setProperty("/Data/2", {Type : "Success", Text : common.SearchEvalResult.oController.getBundleText("MSG_12021")});
 	 		});
 		});
 		
@@ -1517,7 +1553,7 @@ common.SearchEvalResult = {
 		 			}
 		 			
 		 			// 평가 항목 조회 완료
-		 			common.SearchEvalResult._MessageJSONModel.setProperty("/Data/1", {Type : "Success", Text : common.SearchEvalResult.oBundleText.getText("MSG_12020")});
+		 			common.SearchEvalResult._MessageJSONModel.setProperty("/Data/1", {Type : "Success", Text : common.SearchEvalResult.oController.getBundleText("MSG_12020")});
 					common.SearchEvalResult._JSONModel.setProperty("/Data", oData2);
 					
 					setTimeout(function(){
@@ -1538,19 +1574,19 @@ common.SearchEvalResult = {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "30px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								}).addStyleClass("Label"),
 								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06104")}).addStyleClass("FontFamily")], // 점수
+									content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06104")}).addStyleClass("FontFamily")], // 점수
 									hAlign : "Center",
 									vAlign : "Middle"
 								}).addStyleClass("Label")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1572,7 +1608,7 @@ common.SearchEvalResult = {
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1594,7 +1630,7 @@ common.SearchEvalResult = {
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1616,7 +1652,7 @@ common.SearchEvalResult = {
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1646,7 +1682,7 @@ common.SearchEvalResult = {
 						height : "30px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Text({
-												    text : (Flag == "0" ? common.SearchEvalResult.oBundleText.getText("MSG_06001") : common.SearchEvalResult.oBundleText.getText("MSG_06002")),
+												    text : (Flag == "0" ? common.SearchEvalResult.oController.getBundleText("MSG_06001") : common.SearchEvalResult.oController.getBundleText("MSG_06002")),
 												    textAlign : "Center"
 											    }).addStyleClass("Font14 FontGray paddingTop38")],
 									 hAlign : "Center",
@@ -1654,12 +1690,12 @@ common.SearchEvalResult = {
 									 rowSpan : 5
 								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06105")}).addStyleClass("FontFamily")], // 응답내용
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06105")}).addStyleClass("FontFamily")], // 응답내용
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label")]
@@ -1672,7 +1708,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1690,7 +1726,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1708,7 +1744,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1726,7 +1762,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1746,7 +1782,7 @@ common.SearchEvalResult = {
 						height : "35px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Text({		  // 직무만족도													협업만족도
-												 	text : (Flag == "0" ? common.SearchEvalResult.oBundleText.getText("LABEL_06118") : common.SearchEvalResult.oBundleText.getText("LABEL_06119"))
+												 	text : (Flag == "0" ? common.SearchEvalResult.oController.getBundleText("LABEL_06118") : common.SearchEvalResult.oController.getBundleText("LABEL_06119"))
 												}).addStyleClass("Font18 Font700")],
 									 hAlign : "Begin",
 									 vAlign : "Middle",
@@ -1780,19 +1816,19 @@ common.SearchEvalResult = {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "30px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06104")}).addStyleClass("FontFamily")], // 점수
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06104")}).addStyleClass("FontFamily")], // 점수
 								 	 hAlign : "Center", 
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1814,7 +1850,7 @@ common.SearchEvalResult = {
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1836,7 +1872,7 @@ common.SearchEvalResult = {
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1858,7 +1894,7 @@ common.SearchEvalResult = {
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1887,48 +1923,48 @@ common.SearchEvalResult = {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "30px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({ // ~의 리더십 스타일은 ( )이다.
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("MSG_06003"), textAlign : "Center"}).addStyleClass("Font14 FontGray paddingTop38")],
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("MSG_06003"), textAlign : "Center"}).addStyleClass("Font14 FontGray paddingTop38")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Top",
 								 	 rowSpan : 5
 								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06103")}).addStyleClass("FontFamily")], // 평가자
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06110")}).addStyleClass("FontFamily")], // 지시형
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06110")}).addStyleClass("FontFamily")], // 지시형
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06111")}).addStyleClass("FontFamily")], // 비전형
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06111")}).addStyleClass("FontFamily")], // 비전형
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06112")}).addStyleClass("FontFamily")], // 솔선형
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06112")}).addStyleClass("FontFamily")], // 솔선형
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06113")}).addStyleClass("FontFamily")], // 친화형
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06113")}).addStyleClass("FontFamily")], // 친화형
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06114")}).addStyleClass("FontFamily")], // 육성형
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06114")}).addStyleClass("FontFamily")], // 육성형
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06115")}).addStyleClass("FontFamily")], // 민주형
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06115")}).addStyleClass("FontFamily")], // 민주형
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06123")}).addStyleClass("FontFamily")], // 기타
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06123")}).addStyleClass("FontFamily")], // 기타
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label")]
@@ -1941,7 +1977,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -1989,7 +2025,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2037,7 +2073,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2085,7 +2121,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2134,7 +2170,7 @@ common.SearchEvalResult = {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "35px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06120")}).addStyleClass("Font18 Font700")], // 리더십 만족도
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06120")}).addStyleClass("Font18 Font700")], // 리더십 만족도
 									 hAlign : "Begin",
 									 vAlign : "Middle",
 									 colSpan : 3
@@ -2167,7 +2203,7 @@ common.SearchEvalResult = {
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "35px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06121")}).addStyleClass("Font18 Font700")], // 강점/보완점
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06121")}).addStyleClass("Font18 Font700")], // 강점/보완점
 									 hAlign : "Begin",
 									 vAlign : "Middle",
 									 colSpan : 3
@@ -2176,17 +2212,17 @@ common.SearchEvalResult = {
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "30px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06103")}).addStyleClass("FontFamily")],
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06103")}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06116")}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06116")}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06117")}).addStyleClass("FontFamily")],
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06117")}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label")]
@@ -2199,7 +2235,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06106")}).addStyleClass("FontFamily")], // 상사
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2222,7 +2258,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06107")}).addStyleClass("FontFamily")], // 동료(팀내)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2245,7 +2281,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06108")}).addStyleClass("FontFamily")], // 동료(팀외)
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2268,7 +2304,7 @@ common.SearchEvalResult = {
 							}
 						},
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_06109")}).addStyleClass("FontFamily")], // 부하
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data"),
@@ -2306,10 +2342,10 @@ common.SearchEvalResult = {
 		
 		// No., 목표, 진척률, 수시평가, 1차평가
 		var col_info = [{id: "Idx", label : "No.", plabel : "", span : 0, type : "string", sort : true, filter : true, width : "70px"},
-						{id: "name", label : common.SearchEvalResult.oBundleText.getText("LABEL_12109"), plabel : "", span : 0, type : "string", sort : true, filter : true, align : "Begin"},
-						{id: "done", label : common.SearchEvalResult.oBundleText.getText("LABEL_12110"), plabel : "", span : 0, type : "progress", sort : true, filter : true, width : "180px"},
-						{id: "customScore", label : common.SearchEvalResult.oBundleText.getText("LABEL_12111"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "100px"},
-						{id: "rating", label : common.SearchEvalResult.oBundleText.getText("LABEL_12112"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "100px"}];
+						{id: "name", label : common.SearchEvalResult.oController.getBundleText("LABEL_12109"), plabel : "", span : 0, type : "string", sort : true, filter : true, align : "Begin"},
+						{id: "done", label : common.SearchEvalResult.oController.getBundleText("LABEL_12110"), plabel : "", span : 0, type : "progress", sort : true, filter : true, width : "180px"},
+						{id: "customScore", label : common.SearchEvalResult.oController.getBundleText("LABEL_12111"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "100px"},
+						{id: "rating", label : common.SearchEvalResult.oController.getBundleText("LABEL_12112"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "100px"}];
 
 		common.makeTable.makeColumn(common.SearchEvalResult.oController, oTable, col_info);
 		common.make
@@ -2318,17 +2354,17 @@ common.SearchEvalResult = {
 			dimensions : [
 				{
 					axis : 1,
-					name : common.SearchEvalResult.oBundleText.getText("LABEL_12116"), // 평가 항목
+					name : common.SearchEvalResult.oController.getBundleText("LABEL_12116"), // 평가 항목
 					value : "{Compgrptx}"
 				}
 			],
 			measures : [
 				{
-					name : common.SearchEvalResult.oBundleText.getText("LABEL_12117"), // 본인평가점수
+					name : common.SearchEvalResult.oController.getBundleText("LABEL_12117"), // 본인평가점수
 					value : "{Comppnt1}"  
 				},
 				{
-					name : common.SearchEvalResult.oBundleText.getText("LABEL_12118"), // 평가점수
+					name : common.SearchEvalResult.oController.getBundleText("LABEL_12118"), // 평가점수
 					value : "{Comppnt2}"  
 				}
 			],
@@ -2350,12 +2386,12 @@ common.SearchEvalResult = {
 				new sap.viz.ui5.controls.common.feeds.FeedItem({
 					uid : "categoryAxis",
 					type : "Dimension",
-                    values : [common.SearchEvalResult.oBundleText.getText("LABEL_12116")]
+                    values : [common.SearchEvalResult.oController.getBundleText("LABEL_12116")]
 				}),
 				new sap.viz.ui5.controls.common.feeds.FeedItem({
 					uid : "valueAxis",
 					type : "Measure",
-                    values : [common.SearchEvalResult.oBundleText.getText("LABEL_12117"), common.SearchEvalResult.oBundleText.getText("LABEL_12118")]
+                    values : [common.SearchEvalResult.oController.getBundleText("LABEL_12117"), common.SearchEvalResult.oController.getBundleText("LABEL_12118")]
 				})
 			],
 			vizProperties : {
@@ -2423,13 +2459,13 @@ common.SearchEvalResult = {
 			widths : ["", "24px", ""],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_12102")}).addStyleClass("Font18 Font700")], // 업적평가
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_12102")}).addStyleClass("Font18 Font700")], // 업적평가
 									 hAlign : "Begin",
 									 vAlign : "Middle"
 								 }),
 								 new sap.ui.commons.layout.MatrixLayoutCell(),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_12103")}).addStyleClass("Font18 Font700")], // 역량평가
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_12103")}).addStyleClass("Font18 Font700")], // 역량평가
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
 								 })]
@@ -2451,13 +2487,13 @@ common.SearchEvalResult = {
 					new sap.ui.commons.layout.MatrixLayoutRow({height : "10px"}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_12113")}).addStyleClass("Font18 Font700")], // 업적평가 1차 평가자 의견
+									 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_12113")}).addStyleClass("Font18 Font700")], // 업적평가 1차 평가자 의견
 									 hAlign : "Begin",
 									 vAlign : "Middle"
 								 }),
 								 new sap.ui.commons.layout.MatrixLayoutCell(),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oBundleText.getText("LABEL_12114")}).addStyleClass("Font18 Font700")], // 역량평가 1차 평가자 의견
+								 	 content : [new sap.m.Text({text : common.SearchEvalResult.oController.getBundleText("LABEL_12114")}).addStyleClass("Font18 Font700")], // 역량평가 1차 평가자 의견
 								 	 hAlign : "Begin",
 								 	 vAlign : "Middle"
 								 })]

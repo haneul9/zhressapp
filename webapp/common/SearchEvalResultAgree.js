@@ -13,8 +13,8 @@ common.SearchEvalResultAgree = {
 	_BusyDialog : new sap.m.BusyDialog(),
 	
 	onBeforeOpen : function(oEvent){
-		// common.SearchEvalResultAgree.Appye = common.SearchEvalResultAgree.Appye ? common.SearchEvalResultAgree.Appye : (new Date().getFullYear() + "");
-		common.SearchEvalResultAgree.Appye = common.SearchEvalResultAgree.Appye ? common.SearchEvalResultAgree.Appye : "2020";
+		common.SearchEvalResultAgree.Appye = common.SearchEvalResultAgree.Appye ? common.SearchEvalResultAgree.Appye : (new Date().getFullYear() + "");
+		// common.SearchEvalResultAgree.Appye = common.SearchEvalResultAgree.Appye ? common.SearchEvalResultAgree.Appye : "2020";
 		
 		common.SearchEvalResultAgree._JSONModel.setData({Data : {Flag : "X"}});           
 		
@@ -44,15 +44,8 @@ common.SearchEvalResultAgree = {
 		if(common.SearchEvalResultAgree.userId){
 			userId = common.SearchEvalResultAgree.userId;
 		} else {
-			// var mEmpLoginInfo = sap.ui.getCore().getModel("EmpLoginInfo");
-			// var vEmpLoginInfo = mEmpLoginInfo.getProperty("/EmpLoginInfoSet");
-
-			// userId = vEmpLoginInfo[0].name == "sfdev1" || vEmpLoginInfo[0].name == "sfdev3" ? "20060040" : vEmpLoginInfo[0].name; // 20140120
-			// common.SearchEvalResultAgree.userId = userId;
-			
-			var oView = common.SearchEvalResultAgree.oController.getView();
-				userId = oView.getModel("session").getData().Pernr;
-				common.SearchEvalResultAgree.userId = userId;
+			userId = common.SearchEvalResultAgree.oController.getSessionInfoByKey("Pernr");
+			common.SearchEvalResultAgree.userId = userId;
 		}
 		
 		var oData = {};
@@ -122,7 +115,7 @@ common.SearchEvalResultAgree = {
 		// 평가상태 및 평가연도 설정 - 조회된 데이터의 1번째 평가상태값
 		var vData = sap.ui.getCore().byId(common.SearchEvalResultAgree.PAGEID + "_Table").getModel().getProperty("/Data/0");
 		if(!vData){
-			sap.m.MessageBox.error(oBundleText.getText("MSG_15018")); // 데이터가 존재하지 않습니다.
+			sap.m.MessageBox.error(common.SearchEvalResultAgree.oController.getBundleText("MSG_15018")); // 데이터가 존재하지 않습니다.
 			return;
 		}
 		
@@ -135,8 +128,8 @@ common.SearchEvalResultAgree = {
 			oTable.destroyColumns();
 			
 						// 상태, 평가연도
-		var col_info = [{id: "Evstaustx", label : oBundleText.getText("LABEL_15005"), plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Appye", label : oBundleText.getText("LABEL_15006"), plabel : "", span : 0, type : "string", sort : false, filter : false}];
+		var col_info = [{id: "Evstaustx", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15005"), plabel : "", span : 0, type : "string", sort : false, filter : false},
+						{id: "Appye", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15006"), plabel : "", span : 0, type : "string", sort : false, filter : false}];
 			
 		for(var i=1; i<=4; i++){
 			eval("var oLayout" + i + " = sap.ui.getCore().byId(common.SearchEvalResultAgree.PAGEID + '_Content" + i + "');");
@@ -162,7 +155,7 @@ common.SearchEvalResultAgree = {
 			}
 		};
 			
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {TableIn2 : []};
 			createData.IConType = "3";
 			createData.IAppye = common.SearchEvalResultAgree._JSONModel.getProperty("/Data/Appye");
@@ -178,29 +171,29 @@ common.SearchEvalResultAgree = {
 							common.SearchEvalResultAgree._JSONModel.setProperty("/Data/Btn08", data.TableIn2.results[0].Btn08);
 							
 							if(data.TableIn2.results[0].Btn01 == "X"){ // 업적평가
-								col_info.push({id: "Pepnt", label : oBundleText.getText("LABEL_15007"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+								col_info.push({id: "Pepnt", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15007"), plabel : "", span : 0, type : "string", sort : false, filter : false});
 								addContent(common.SearchEvalResultAgree.onMakeContent1());
 							}
 							
 							if(data.TableIn2.results[0].Btn02 == "X"){ // 역량평가
-								col_info.push({id: "Cepnt", label : oBundleText.getText("LABEL_15008"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+								col_info.push({id: "Cepnt", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15008"), plabel : "", span : 0, type : "string", sort : false, filter : false});
 								addContent(common.SearchEvalResultAgree.onMakeContent2());
 							}
 							
 							if(data.TableIn2.results[0].Btn03 == "X"){ // 다면평가
-								col_info.push({id: "Mepnt", label : oBundleText.getText("LABEL_15009"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+								col_info.push({id: "Mepnt", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15009"), plabel : "", span : 0, type : "string", sort : false, filter : false});
 							}
 							
 							if(data.TableIn2.results[0].Btn04 == "X"){ // 1차평가
-								col_info.push({id: "Pegrade", label : oBundleText.getText("LABEL_15010"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+								col_info.push({id: "Pegrade", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15010"), plabel : "", span : 0, type : "string", sort : false, filter : false});
 							}
 							
 							if(data.TableIn2.results[0].Btn05 == "X"){ // 2차평가
-								col_info.push({id: "Pegrade2", label : oBundleText.getText("LABEL_15011"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+								col_info.push({id: "Pegrade2", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15011"), plabel : "", span : 0, type : "string", sort : false, filter : false});
 							}
 							
 							if(data.TableIn2.results[0].Btn06 == "X"){ // 종합등급
-								col_info.push({id: "Cograde", label : oBundleText.getText("LABEL_15012"), plabel : "", span : 0, type : "string", sort : false, filter : false});
+								col_info.push({id: "Cograde", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15012"), plabel : "", span : 0, type : "string", sort : false, filter : false});
 							}
 							
 							if(data.TableIn2.results[0].Btn07 == "X"){ // 업적평가 1차평가자 의견
@@ -250,7 +243,7 @@ common.SearchEvalResultAgree = {
 		var oJSONModel = oTable.getModel();
 		var vData = {Data : []};
 		
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {TableIn : []};
 			createData.IConType = "2";
 			createData.IAppye = common.SearchEvalResultAgree.Appye;
@@ -420,7 +413,7 @@ common.SearchEvalResultAgree = {
 		
 		if(id == ""){
 			$(".spinner-evalresult")["hide"]();
-			sap.m.MessageBox.error(oBundleText.getText("MSG_12001")); // 평가문서가 존재하지 않습니다.
+			sap.m.MessageBox.error(common.SearchEvalResultAgree.oController.getBundleText("MSG_12001")); // 평가문서가 존재하지 않습니다.
 			return;	
 		}
 		
@@ -458,14 +451,33 @@ common.SearchEvalResultAgree = {
 							 })
 							 .load();
 							 
+		// template ID 조회
+		var oTemplateId = "";
+		new JSONModelHelper().url("/odata/v2/FormTemplate?$filter=formTemplateType eq 'Review' and formTemplateName like '" + common.SearchEvalResultAgree.Appye + "년 업적%25'")
+								.setAsync(false)
+								.attachRequestCompleted(function(){
+									var data = this.getData().d;
+									
+									if(data && data.results.length){
+										oTemplateId = data.results[0].formTemplateId;
+									}
+								})
+								.attachRequestFailed(function() {
+									console.log("fail : 업적/역량평가 template id 조회");
+									return;
+								})
+								.load();
+
 		var formDataId = "", formContentId = "";
-		new JSONModelHelper().url("/odata/fix/FormHeader")
+		if(oTemplateId != ""){
+			new JSONModelHelper().url("/odata/fix/FormHeader")
 							 .select("currentStep")
 							 .select("formDataId")
 							 .select("formDataStatus")
 							 .select("formLastContent")
 							 .expand("formLastContent")
-							 .filter("formTemplateId eq " + (common.Common.getOperationMode() == "DEV" ? "703" : "500") + " and formDataStatus ne 4 and formSubjectId in " + userId)
+							 .filter("formTemplateId eq " + oTemplateId + // + (common.Common.getOperationMode() == "DEV" ? "703" : "500") +
+							 		 " and formDataStatus ne 4 and formSubjectId in " + userId)
 							 .setAsync(false)
 							 .attachRequestCompleted(function(){
 									var data = this.getData().d;
@@ -486,10 +498,11 @@ common.SearchEvalResultAgree = {
 								 }
 							 })
 							 .load();
+		}
 		
 		if(formDataId == "" || formContentId == ""){
 			$(".spinner-evalresult")["hide"]();
-			sap.m.MessageBox.error(oBundleText.getText("MSG_12001")); // 평가문서가 존재하지 않습니다.
+			sap.m.MessageBox.error(common.SearchEvalResultAgree.oController.getBundleText("MSG_12001")); // 평가문서가 존재하지 않습니다.
 			return;
 		}
 		
@@ -522,19 +535,19 @@ common.SearchEvalResultAgree = {
 												if(data.results[0].pmReviewContentDetail.results[0].customSections.results[i].sectionName == "역량평가 의견"){
 													// 역량평가 1차 평가자 의견
 													var comment2 = data.results[0].pmReviewContentDetail.results[0].customSections.results[i].othersRatingComment.results;
-													for(var j=0; j<comment2.length; j++){
-														if(comment2[j].commentLabel == "평가자 의견" || comment2[j].commentLabel == "Manager's Comments"){
-															common.SearchEvalResultAgree._JSONModel.setProperty("/Data/Comment2", comment2[j].comment);
-														}
-													}
+													// for(var j=0; j<comment2.length; j++){
+														// if(comment2[j].commentLabel == "평가자 의견" || comment2[j].commentLabel == "Manager's Comments"){
+															common.SearchEvalResultAgree._JSONModel.setProperty("/Data/Comment2", comment2[0].comment);
+														// }
+													// }
 												} else if(data.results[0].pmReviewContentDetail.results[0].customSections.results[i].sectionName == "업적평가 의견"){
 													// 업적평가 1차 평가자 의견
 													var comment1 = data.results[0].pmReviewContentDetail.results[0].customSections.results[i].othersRatingComment.results;
-													for(var j=0; j<comment1.length; j++){
-														if(comment1[j].commentLabel == "평가자 의견" || comment1[j].commentLabel == "Manager's Comments"){
-															common.SearchEvalResultAgree._JSONModel.setProperty("/Data/Comment1", comment1[j].comment);
-														}
-													}
+													// for(var j=0; j<comment1.length; j++){
+														// if(comment1[j].commentLabel == "평가자 의견" || comment1[j].commentLabel == "Manager's Comments"){
+															common.SearchEvalResultAgree._JSONModel.setProperty("/Data/Comment1", comment1[0].comment);
+														// }
+													// }
 												}
 											}
 										}
@@ -572,7 +585,7 @@ common.SearchEvalResultAgree = {
 		oJSONModel2.setData(vData2);
 		
 		// 역량평가 결과
-		var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+		var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 		var createData = {CompResultsNav : []};
 			createData.Pernr = common.SearchEvalResultAgree._JSONModel.getProperty("/Data/userId");
 			createData.Appye = common.SearchEvalResultAgree._JSONModel.getProperty("/Data/Appye");
@@ -620,12 +633,12 @@ common.SearchEvalResultAgree = {
 		
 		// validation check
 		if(vEvstaus == "40" && (!oIsstxt || oIsstxt.trim() == "")){
-			sap.m.MessageBox.error(oBundleText.getText("MSG_15013")); // 이의제기 사유는 필수입력입니다.
+			sap.m.MessageBox.error(common.SearchEvalResultAgree.oController.getBundleText("MSG_15013")); // 이의제기 사유는 필수입력입니다.
 			return;
 		}
 		
 		var onProcess = function(){
-			var oModel = sap.ui.getCore().getModel("ZHR_APPRAISAL_SRV");
+			var oModel = $.app.getModel("ZHR_APPRAISAL_SRV");
 			var createData = {TableIn : []};
 				createData.IConType = "1";
 				createData.IAppye = common.SearchEvalResultAgree._JSONModel.getProperty("/Data/Appye");
@@ -687,11 +700,11 @@ common.SearchEvalResultAgree = {
 		
 		var confirmMessage = "", successMessage = "";
 		if(vEvstaus == "40"){
-			confirmMessage = oBundleText.getText("MSG_15014"); // 이의제기 하시겠습니까?
-			successMessage = oBundleText.getText("MSG_15015"); // 이의제기 완료되었습니다.
+			confirmMessage = common.SearchEvalResultAgree.oController.getBundleText("MSG_15014"); // 이의제기 하시겠습니까?
+			successMessage = common.SearchEvalResultAgree.oController.getBundleText("MSG_15015"); // 이의제기 완료되었습니다.
 		} else {
-			confirmMessage = oBundleText.getText("MSG_15016"); // 결과확인 하시겠습니까?   // 2020-01-06 결과합의→결과확인 텍스트 변경
-			successMessage = oBundleText.getText("MSG_15017"); // 결과확인 완료되었습니다.
+			confirmMessage = common.SearchEvalResultAgree.oController.getBundleText("MSG_15016"); // 결과확인 하시겠습니까?   // 2020-01-06 결과합의→결과확인 텍스트 변경
+			successMessage = common.SearchEvalResultAgree.oController.getBundleText("MSG_15017"); // 결과확인 완료되었습니다.
 		}
 		
 		sap.m.MessageBox.confirm(confirmMessage, {
@@ -722,9 +735,9 @@ common.SearchEvalResultAgree = {
 		
 		// No., 목표, 진척률, 1차평가
 		var col_info = [{id: "Idx", label : "No.", plabel : "", span : 0, type : "string", sort : true, filter : true, width : "70px"},
-						{id: "name", label : oBundleText.getText("LABEL_12109"), plabel : "", span : 0, type : "string", sort : true, filter : true, align : "Begin"},
-						{id: "done", label : oBundleText.getText("LABEL_12110"), plabel : "", span : 0, type : "progress", sort : true, filter : true, width : "200px"},
-						{id: "rating", label : oBundleText.getText("LABEL_12112"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "130px"}];
+						{id: "name", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12109"), plabel : "", span : 0, type : "string", sort : true, filter : true, align : "Begin"},
+						{id: "done", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12110"), plabel : "", span : 0, type : "progress", sort : true, filter : true, width : "200px"},
+						{id: "rating", label : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12112"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "130px"}];
 
 		common.makeTable.makeColumn(common.SearchEvalResultAgree.oController, oTable, col_info);
 		
@@ -735,7 +748,7 @@ common.SearchEvalResultAgree = {
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Toolbar({
 									 				height : "44px",
-												 	content : [new sap.m.Text({text : oBundleText.getText("LABEL_15007")}).addStyleClass("Font18 Font700")] // 업적평가
+												 	content : [new sap.m.Text({text : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15007")}).addStyleClass("Font18 Font700")] // 업적평가
 												}).addStyleClass("toolbarNoBottomLine padding0")],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
@@ -759,17 +772,17 @@ common.SearchEvalResultAgree = {
 			dimensions : [
 				{
 					axis : 1,
-					name : oBundleText.getText("LABEL_12116"), // 평가 항목
+					name : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12116"), // 평가 항목
 					value : "{Compgrptx}"
 				}
 			],
 			measures : [
 				{
-					name : oBundleText.getText("LABEL_12117"), // 1차평가점수
+					name : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12117"), // 1차평가점수
 					value : "{Comppnt1}"  
 				},
 				{
-					name : oBundleText.getText("LABEL_12118"), // 동일 Grade 평균 점수
+					name : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12118"), // 동일 Grade 평균 점수
 					value : "{Comppnt2}"
 				}
 			],
@@ -791,12 +804,12 @@ common.SearchEvalResultAgree = {
 				new sap.viz.ui5.controls.common.feeds.FeedItem({
 					uid : "categoryAxis",
 					type : "Dimension",
-                    values : [oBundleText.getText("LABEL_12116")]
+                    values : [common.SearchEvalResultAgree.oController.getBundleText("LABEL_12116")]
 				}),
 				new sap.viz.ui5.controls.common.feeds.FeedItem({
 					uid : "valueAxis",
 					type : "Measure",
-                    values : [oBundleText.getText("LABEL_12117"), oBundleText.getText("LABEL_12118")]
+                    values : [common.SearchEvalResultAgree.oController.getBundleText("LABEL_12117"), common.SearchEvalResultAgree.oController.getBundleText("LABEL_12118")]
 				})
 			],
 			vizProperties : {
@@ -864,7 +877,7 @@ common.SearchEvalResultAgree = {
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Toolbar({
 									 				 height : "44px",
-												 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_15008")}).addStyleClass("Font18 Font700")] // 역량평가
+												 	 content : [new sap.m.Text({text : common.SearchEvalResultAgree.oController.getBundleText("LABEL_15008")}).addStyleClass("Font18 Font700")] // 역량평가
 												 }).addStyleClass("toolbarNoBottomLine padding0")],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
@@ -891,7 +904,7 @@ common.SearchEvalResultAgree = {
 						cells :  [new sap.ui.commons.layout.MatrixLayoutCell({
 									  content : [new sap.m.Toolbar({
 									 				 height : "44px",
-												 	 content : [new sap.m.Text({text : oBundleText.getText("LABEL_12113")}).addStyleClass("Font18 Font700")] // 업적평가 1차평가자 의견
+												 	 content : [new sap.m.Text({text : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12113")}).addStyleClass("Font18 Font700")] // 업적평가 1차평가자 의견
 												 }).addStyleClass("toolbarNoBottomLine padding0")],
 									  hAlign : "Begin",
 									  vAlign : "Middle"
@@ -918,7 +931,7 @@ common.SearchEvalResultAgree = {
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Toolbar({
 									 				height : "44px",
-												 	content : [new sap.m.Text({text : oBundleText.getText("LABEL_12114")}).addStyleClass("Font18 Font700")] // 역량평가 1차평가자 의견
+												 	content : [new sap.m.Text({text : common.SearchEvalResultAgree.oController.getBundleText("LABEL_12114")}).addStyleClass("Font18 Font700")] // 역량평가 1차평가자 의견
 												}).addStyleClass("toolbarNoBottomLine padding0")],
 									 hAlign : "Begin",
 									 vAlign : "Middle"

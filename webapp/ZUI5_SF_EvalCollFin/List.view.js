@@ -1,5 +1,6 @@
 $.sap.require("common.Common");
 $.sap.require("common.Formatter");
+$.sap.require("common.PageHelper");
 $.sap.require("common.makeTable");
 
 sap.ui.jsview("ZUI5_SF_EvalCollFin.List", {
@@ -23,18 +24,29 @@ sap.ui.jsview("ZUI5_SF_EvalCollFin.List", {
 		}
 		
 		var oSearchFlexBox = new sap.m.FlexBox({
-			fitContainer: true,
-			items: [new sap.m.FlexBox({
-						items: [new sap.m.Label({text: oBundleText.getText("LABEL_20007")}), // 평가연도
-								oAppye]
-					}).addStyleClass("search-field-group"),
-					new sap.m.FlexBox({
-						items: [new sap.m.Button({
+            fitContainer: true,
+            items: [
+                new sap.m.FlexBox({
+                    // 검색
+                    items: [
+                        new sap.m.FlexBox({
+                            items: [
+								new sap.m.Label({text: oBundleText.getText("LABEL_20007")}), // 평가연도
+								oAppye
+                            ]
+                        }).addStyleClass("search-field-group"),
+                        new sap.m.FlexBox({
+                            items: [
+                                new sap.m.Button({
 									text: oBundleText.getText("LABEL_00100"), // 조회
 									press : oController.onPressSearch
-								}).addStyleClass("button-light")]
-					}).addStyleClass("button-group")]
-		}).addStyleClass("search-box");
+								}).addStyleClass("button-light")
+                            ]
+                        }).addStyleClass("button-group")
+                    ]
+                })
+            ]
+        }).addStyleClass("search-box search-bg pb-7px mt-16px");
 		
 		var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
 			enableColumnReordering : false,
@@ -101,10 +113,10 @@ sap.ui.jsview("ZUI5_SF_EvalCollFin.List", {
 						{id: "Zposttx", label : oBundleText.getText("LABEL_20011"), plabel : "", span : 0, type : "string", sort : true, filter : true},
 						{id: "Evorgtx", label : oBundleText.getText("LABEL_20012"), plabel : "", span : 0, type : "string", sort : true, filter : true, width : "180px"},
 						// 1차평가(업적,역량,다면,등급)
-						{id: "Pepnt", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20014"), span : 4, type : "string", sort : true, filter : true, width : "70px"},
-						{id: "Cepnt", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20015"), span : 0, type : "string", sort : true, filter : true, width : "70px"},
-						{id: "Mepnt", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20016"), span : 0, type : "string", sort : true, filter : true, width : "70px"},
-						{id: "Pegrade", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20017"), span : 0, type : "string", sort : true, filter : true, width : "70px"},
+						{id: "Pepnt", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20014"), span : 4, type : "string", sort : true, filter : true, width : "55px"},
+						{id: "Cepnt", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20015"), span : 0, type : "string", sort : true, filter : true, width : "55px"},
+						{id: "Mepnt", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20016"), span : 0, type : "string", sort : true, filter : true, width : "55px"},
+						{id: "Pegrade", label : oBundleText.getText("LABEL_20013"), plabel : oBundleText.getText("LABEL_20017"), span : 0, type : "string", sort : true, filter : true, width : "55px"},
 						// 2차평가,종합등급,1차평가자,2차평가자,평가세션자
 						{id: "Pegrade2", label : oBundleText.getText("LABEL_20018"), plabel : "", span : 0, type : "string", sort : true, filter : true},
 						{id: "Cograde", label : oBundleText.getText("LABEL_20019"), plabel : "", span : 0, type : "string", sort : true, filter : true},
@@ -112,9 +124,11 @@ sap.ui.jsview("ZUI5_SF_EvalCollFin.List", {
 						{id: "Ename2st", label : oBundleText.getText("LABEL_20021"), plabel : "", span : 0, type : "string", sort : true, filter : true},
 						{id: "Ename3st", label : oBundleText.getText("LABEL_20022"), plabel : "", span : 0, type : "string", sort : true, filter : true},
 						// 과거이력(...),평가결과,사원정보,이의제기 처리
-						{id: "Pgrade1", label : oBundleText.getText("LABEL_20023"), plabel2 : oController.PAGEID + "_Year1", span : 3, type : "string", sort : true, filter : true, width : "70px"},
+						{id: "Pgrade1", label : oBundleText.getText("LABEL_20023"), plabel2 : oController.PAGEID + "_Year1", span : 5, type : "string", sort : true, filter : true, width : "70px"},
 						{id: "Pgrade2", label : oBundleText.getText("LABEL_20023"), plabel2 : oController.PAGEID + "_Year2", span : 0, type : "string", sort : true, filter : true, width : "70px"},
 						{id: "Pgrade3", label : oBundleText.getText("LABEL_20023"), plabel2 : oController.PAGEID + "_Year3", span : 0, type : "string", sort : true, filter : true, width : "70px"},
+						{id: "Pgrade4", label : oBundleText.getText("LABEL_20023"), plabel2 : oController.PAGEID + "_Year4", span : 0, type : "string", sort : true, filter : true, width : "70px"},
+						{id: "Pgrade5", label : oBundleText.getText("LABEL_20023"), plabel2 : oController.PAGEID + "_Year5", span : 0, type : "string", sort : true, filter : true, width : "70px"},
 						{id: "Pernr", label : oBundleText.getText("LABEL_20024"), plabel : "", span : 0, type : "evalresult", sort : true, filter : true, width : "50px"},
 						{id: "Pernr", label : oBundleText.getText("LABEL_20025"), plabel : "", span : 0, type : "empprofile", sort : true, filter : true, width : "50px"},
 						{id: "Isstxt", label : oBundleText.getText("LABEL_20030"), plabel : "", span : 0, type : "collfin", sort : true, filter : true, width : "80px"}];
@@ -236,27 +250,31 @@ sap.ui.jsview("ZUI5_SF_EvalCollFin.List", {
 			content : [oTable]
 		}).addStyleClass("custom-icon-tab-bar mt-40px");
 		
-		var oContent = new sap.m.FlexBox({
-			  justifyContent: "Center",
-			  fitContainer: true,
-			  items: [new sap.m.FlexBox({
-						  direction: "Column",
-						  items: [new sap.m.FlexBox({
-									  alignItems: "End",
-									  fitContainer: true,
-									  items: [new sap.m.Text({text: oBundleText.getText("LABEL_20001")}).addStyleClass("app-title")] // 결과조회
-								  }).addStyleClass("app-title-container"),
-								  oSearchFlexBox,
-								  oIcontabbar]
-					  }).addStyleClass("app-content-container-wide")]
-		}).addStyleClass("app-content-body");
+		// var oContent = new sap.m.FlexBox({
+		// 	  justifyContent: "Center",
+		// 	  fitContainer: true,
+		// 	  items: [new sap.m.FlexBox({
+		// 				  direction: "Column",
+		// 				  items: [new sap.m.FlexBox({
+		// 							  alignItems: "End",
+		// 							  fitContainer: true,
+		// 							  items: [new sap.m.Text({text: oBundleText.getText("LABEL_20001")}).addStyleClass("app-title")] // 결과조회
+		// 						  }).addStyleClass("app-title-container"),
+		// 						  oSearchFlexBox,
+		// 						  oIcontabbar]
+		// 			  }).addStyleClass("app-content-container-wide")]
+		// }).addStyleClass("app-content-body");
 				
 		/////////////////////////////////////////////////////////
 
-		var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-			customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-			content: [oContent]
-		}).addStyleClass("app-content");
+		// var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+		// 	customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
+		// 	content: [oContent]
+		// }).addStyleClass("app-content");
+
+		var oPage = new common.PageHelper({
+			contentItems: [oSearchFlexBox, oIcontabbar]
+		});
 		
 		oPage.setModel(oController._ListCondJSonModel);
 		oPage.bindElement("/Data");

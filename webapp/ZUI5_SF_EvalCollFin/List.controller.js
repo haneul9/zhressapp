@@ -66,7 +66,7 @@ sap.ui.define([
 			if(!oData.Appye){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_20001")); // 평가연도를 선택하여 주십시오.
 				return;
-			} else if(!oView.getModel("session").getData().Pernr || oView.getModel("session").getData().Pernr == "00000000"){
+			} else if(!oController.getSessionInfoByKey("Pernr") || oController.getSessionInfoByKey("Pernr") == "00000000"){
 				sap.m.MessageBox.error(oBundleText.getText("MSG_18001")); // 사번이 전송되지 않았습니다.
 				return;
 			}
@@ -88,6 +88,8 @@ sap.ui.define([
 				sap.ui.getCore().byId(oController.PAGEID + "_Year1").setText(((oData.Appye * 1) - 1));
 				sap.ui.getCore().byId(oController.PAGEID + "_Year2").setText(((oData.Appye * 1) - 2));
 				sap.ui.getCore().byId(oController.PAGEID + "_Year3").setText(((oData.Appye * 1) - 3));
+				sap.ui.getCore().byId(oController.PAGEID + "_Year4").setText(((oData.Appye * 1) - 4));
+				sap.ui.getCore().byId(oController.PAGEID + "_Year5").setText(((oData.Appye * 1) - 5));
 				
 				var count1 = 0, count2 = 0, count3 = 0, count4 = 0;
 				
@@ -95,7 +97,7 @@ sap.ui.define([
 				
 				var createData = {TableIn : []};
 					createData.IConType = "1";
-					createData.IEmpid = oView.getModel("session").getData().Pernr;
+					createData.IEmpid = oController.getSessionInfoByKey("Pernr");
 					createData.IAppye = oData.Appye;
 					
 				oModel.create("/EvaAgreeListSet", createData, {
@@ -217,7 +219,7 @@ sap.ui.define([
 					createData.IConType = "2";
 					createData.IEmpid = oData.Pernr;
 					createData.IAppye = oData.Appye;
-					createData.IRvper = oView.getModel("session").getData().Pernr;
+					createData.IRvper = oController.getSessionInfoByKey("Pernr");
 					createData.IRvtxt = oData.Rvtxt;
 					createData.IRvdat = common.Common.adjustGMTOdataFormat(new Date());
 					createData.IRvtim = common.Common.getCurrentTimeOdataFormat();
