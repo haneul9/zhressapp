@@ -57,7 +57,6 @@ sap.ui.define(
 
             onAfterShow: function () {
                 this.SearchModel.setData({ User: {}});
-                this.onSetInfo(this.getSessionInfoByKey("name"));
                 this.onTableSearch();
                 this.DetailModel.setProperty("/Bukrs", this.getUserGubun());
             },

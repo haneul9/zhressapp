@@ -34,7 +34,7 @@ sap.ui.define(
                     items: [ 
                         new sap.m.HBox({
                             items: [
-                                new sap.m.Label({text: "{i18n>LABEL_26027}" }), // 사원
+                                new sap.m.Label({text: "{i18n>LABEL_08007}" }), // 대상자
                                 new sap.m.Input(oController.PAGEID + "_EmpInput", {
                                     width: "140px",
                                     value: "{Ename}",
