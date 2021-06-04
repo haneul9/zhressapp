@@ -46,7 +46,9 @@ sap.ui.define(
 
             onAfterShow: function () {
                 var oController = $.app.getController();
-                oController.onPressSearch();
+                if($.app.getAuth() != "H"){
+                    oController.onPressSearch();
+                }
             },
 
             onPressSearch: function () {
