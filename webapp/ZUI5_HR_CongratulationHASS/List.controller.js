@@ -379,6 +379,7 @@ sap.ui.define(
                     Bukrs: $.app.getModel("session").getData().Bukrs2,
                     Langu: $.app.getModel("session").getData().Langu,
                     Molga: $.app.getModel("session").getData().Molga,
+                    Actty: "H",
                     Datum: new Date(),
                     Mssty: "",
                 },
