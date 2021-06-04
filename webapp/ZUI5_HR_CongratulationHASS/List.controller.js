@@ -116,8 +116,8 @@ sap.ui.define(
 
             onPressSer: function() {
 
-                if(Common.checkNull(oController.SearchModel.getProperty("/User/Pernr"))) {
-                    MessageBox.error(oController.getBundleText("MSG_08120"), { title: oController.getBundleText("LABEL_00149")});
+                if(Common.checkNull(this.SearchModel.getProperty("/User/Pernr"))) {
+                    MessageBox.error(this.getBundleText("MSG_08120"), { title: this.getBundleText("LABEL_00149")});
 					return true;
                 }
 
