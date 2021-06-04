@@ -41,6 +41,7 @@ sap.ui.define(
                 this.oModel.setData({
                     Dtfmt: "yyyy-MM-dd",
                     Auth: $.app.getAuth(), 
+                    Extryn : Common.isExternalIP() === true ? "X" : "",
                     IsSearch: false,
                     IsPossibleExcelButton: false,   // 엑셀 버튼 활성화 여부
                     SearchConditions: { // 검색조건

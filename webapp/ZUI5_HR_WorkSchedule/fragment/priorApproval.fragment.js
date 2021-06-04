@@ -107,7 +107,17 @@ sap.ui.define(
                                 }).addStyleClass("button-light"),
                                 new sap.m.Button({
                                     press: PriorHandler.pressBatchApply.bind(PriorHandler),
-                                    visible : ($.app.getAuth() == $.app.Auth.HASS ? true : false),
+                                    // visible : ($.app.getAuth() == $.app.Auth.HASS ? true : false),
+                                    visible : {
+                                        parts : [{path : "/Auth"}, {path : "/Extryn"}],
+                                        formatter : function(fVal1, fVal2){
+                                            if(fVal1 == $.app.Auth.HASS){
+                                                return fVal2 == "X" ? false : true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
                                     text: "{i18n>LABEL_55051}" // 일괄신청
                                 }).addStyleClass("button-light"),
                                 new sap.m.Button({
