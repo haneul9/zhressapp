@@ -1279,10 +1279,10 @@ sap.ui.define([
 				}	
 			});
 
-			if(oList.length > 1){
-				MessageBox.error(oController.getBundleText("MSG_40034"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
+			// if(oList.length > 1){
+			// 	MessageBox.error(oController.getBundleText("MSG_40034"), { title: oController.getBundleText("MSG_08107")});
+			// 	return ;
+			// }
 
 			if(oCopyRow.Status1 !== "AA") {
 				MessageBox.error(oController.getBundleText("MSG_40036"), { title: oController.getBundleText("MSG_08107")});
@@ -1294,6 +1294,12 @@ sap.ui.define([
 				//신청 클릭시 발생하는 이벤트
 				if (fVal && fVal == oController.getBundleText("LABEL_70054")) { // 결재요청
 
+					var oSendList = [];
+
+					oList.forEach(function(e){
+						oSendList.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", e))
+					});
+
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
@@ -1302,7 +1308,7 @@ sap.ui.define([
 					sendObject.IBukrs = vBukrs2;
 					// Navigation property
 					sendObject.TrainingOjtApplyExport = [];
-					sendObject.TrainingOjtApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", oCopyRow)];
+					sendObject.TrainingOjtApplyTableIn1 = oSendList;
 					
 					oModel.create("/TrainingOjtApplySet", sendObject, {
 						success: function(oData, oResponse) {
@@ -2024,10 +2030,19 @@ sap.ui.define([
 					MessageBox.error(oController.getBundleText("MSG_70018"), { title: oController.getBundleText("MSG_08107")});
 					return ;
 				}
+
+				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0){
+					MessageBox.error(oController.getBundleText("MSG_70020"), { title: oController.getBundleText("MSG_08107")});
+					return true;
+				}
 	
 				oController.AttModel.getProperty("/Data").forEach(function(e) {
 					var oAttList1 = {};
-					oAttList1.Sobid = e.Pernr;
+					if(e.Pernr === oController.getSessionInfoByKey("name"))
+						oAttList1.Sobid = e.Sobid;
+					else
+						oAttList1.Sobid = e.Pernr;
+
 					oAttList1.Valpt = e.Valpt;
 					oAttList1.Stdaz = e.Stdaz;
 					oAttList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyLearner", oAttList1));
@@ -2044,9 +2059,8 @@ sap.ui.define([
 					uFiles.push("001");
 		
 					if(vEdoty === "2") {
-						if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") !== 0) {
-							uFiles.push("002");
-						}
+						uFiles.push("002");
+						
 						if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") !== 0) {
 							uFiles.push("003");
 						}
@@ -2164,6 +2178,11 @@ sap.ui.define([
 				return ;
 			}
 
+			if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0){
+				MessageBox.error(oController.getBundleText("MSG_70020"), { title: oController.getBundleText("MSG_08107")});
+				return true;
+			}
+
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
@@ -2198,10 +2217,8 @@ sap.ui.define([
 					var uFiles = [];
 
 					uFiles.push("001");
+					uFiles.push("002");
 
-					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") !== 0) {
-						uFiles.push("002");
-					}
 					if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") !== 0) {
 						uFiles.push("003");
 					}
@@ -2289,6 +2306,7 @@ sap.ui.define([
 
 			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 평가서
 				Appnm: Common.checkNull(!vAppnm2) ? vAppnm2 : vAppnm,
+				Required: true,
 				Mode: "S",
 				UseMultiCategories: true,
 				CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
