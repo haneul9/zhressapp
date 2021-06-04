@@ -544,6 +544,11 @@ sap.ui.define(
             addTargetTableByOne: function(data) {
                 var vListData = this.oModel.getProperty("/List");
 
+                if(Common.isExternalIP() && vListData.length > 0) {
+                    MessageBox.alert("외부망 접속이므로 1명단위만 신청 가능합니다.");
+                    return;
+                }
+
                 vListData.push({
                     Pernr: data.Objid,
                     Ename: data.Stext,
@@ -575,6 +580,11 @@ sap.ui.define(
                 var vListData = this.oModel.getProperty("/List");
 
                 if(!data.length) return;
+
+                if(Common.isExternalIP() && (vListData.length > 0 || data.length > 1)) {
+                    MessageBox.alert("외부망 접속이므로 1명단위만 신청 가능합니다.");
+                    return;
+                }
                 
                 this.oModel.setProperty(
                     "/List",
