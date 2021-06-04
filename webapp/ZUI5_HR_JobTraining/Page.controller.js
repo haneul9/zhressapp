@@ -150,6 +150,7 @@ sap.ui.define([
 								formatter: function(v1, v2) {
 									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
+									if(v2 === "AA") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40071") + "</a>";
 								}
 							}, 
 							visible: {
