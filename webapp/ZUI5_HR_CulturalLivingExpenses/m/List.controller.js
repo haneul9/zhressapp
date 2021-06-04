@@ -204,7 +204,7 @@ sap.ui.define([
 				oView.addDependent(oController._DetailModel);
 			}
 			
-			oTableData.push({"Usedt": oInputData.Usedt, "Usetx": oInputData.Usetx, "Betrg": oInputData.Betrg, "UsecdT": oInputData.UsecdT, "Pernr": vPernr, "Spmon": vDate});
+			oTableData.push({"Usedt": oInputData.Usedt, "Usetx": oInputData.Usetx, "Betrg": oInputData.Betrg, "UsecdT": oInputData.UsecdT, "Usecd": oInputData.Usecd, "Pernr": vPernr, "Spmon": vDate});
 			oController.DetailModel.setProperty("/TableData",oTableData);
 			oController.getAddPrice();
 			oController._DetailModel.close();
