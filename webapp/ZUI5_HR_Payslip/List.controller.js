@@ -42,6 +42,9 @@ sap.ui.define(
 
                 oController._ListCondJSonModel.setProperty("/Year", vYear);
                 oController._ListCondJSonModel.setProperty("/Data", { Year: "" + curDate.getFullYear(), Pernr: vPernr, Langu: this.getSessionInfoByKey("Langu"), Bukrs: this.getSessionInfoByKey("Bukrs") });
+                if($.app.getAuth() == "H"){
+                    oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
+                }
             },
 
             onAfterShow: function () {
@@ -57,6 +60,11 @@ sap.ui.define(
 				var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
                 var vCondiData = oController._ListCondJSonModel.getProperty("/Data");
                 var vData = { Data: [] };
+                if(vCondiData.Pernr == ""){
+                    // 대상자를 선택 후 조회하시기 바랍니다.
+                    MessageBox.error(oController.getBundleText("MSG_54002"));
+                    return;
+                }
 
                 var search = function () {
                     var oPath = "";
