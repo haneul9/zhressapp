@@ -1284,6 +1284,13 @@ sap.ui.define([
 			// 	return ;
 			// }
 
+			oList.forEach(function(ele) {
+				if(!(ele.Status1 === "99" && ele.Edoty === "1")){
+					MessageBox.error(oController.getBundleText("MSG_40045"), { title: oController.getBundleText("MSG_08107")});
+					return ;
+				}
+			});
+
 			if(oCopyRow.Status1 !== "AA") {
 				MessageBox.error(oController.getBundleText("MSG_40036"), { title: oController.getBundleText("MSG_08107")});
 				return ;
