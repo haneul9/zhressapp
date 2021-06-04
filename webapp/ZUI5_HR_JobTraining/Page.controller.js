@@ -1264,6 +1264,7 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var oTableData = this.TableModel.getProperty("/Data");
 			var oCopyRow = {};
+			var isReturn = false;
 
 			if(oTableData.every(function(e) {return e.Pchk !== true})){
 				MessageBox.error(oController.getBundleText("MSG_40035"), { title: oController.getBundleText("MSG_08107")});
@@ -1284,9 +1285,7 @@ sap.ui.define([
 			// 	return ;
 			// }
 
-			oList.forEach(function(ele) {
-				var isReturn = false;
-				
+			oList.forEach(function(ele) {			
 				if(!(ele.Status1 === "99" && ele.Edoty === "1")){
 					MessageBox.error(oController.getBundleText("MSG_40045"), { title: oController.getBundleText("MSG_08107")});
 					return isReturn = true;
