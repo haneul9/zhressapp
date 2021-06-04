@@ -380,7 +380,6 @@ sap.ui.define(
                     Langu: $.app.getModel("session").getData().Langu,
                     Molga: $.app.getModel("session").getData().Molga,
                     Datum: new Date(),
-                    Actty: "A",
                     Mssty: "",
                 },
                 callback = function(o) {
