@@ -1285,7 +1285,7 @@ sap.ui.define([
 			// }
 
 			oList.forEach(function(ele) {			
-				if(!((ele.Status1 === "99" && ele.Edoty === "1") || (ele.Status1 === "99" && ele.Edoty === "2"))){
+				if(!((ele.Status1 === "AA" && ele.Edoty === "1") || (ele.Status1 === "AA" && ele.Edoty === "2"))){
 					MessageBox.error(oController.getBundleText("MSG_40045"), { title: oController.getBundleText("MSG_08107")});
 					return isReturn = true;
 				}
