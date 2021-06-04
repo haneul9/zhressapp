@@ -1263,7 +1263,6 @@ sap.ui.define([
 			var vBukrs2 = oController.getUserGubun();
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var oTableData = this.TableModel.getProperty("/Data");
-			var oCopyRow = {};
 			var isReturn = false;
 
 			if(oTableData.every(function(e) {return e.Pchk !== true})){
@@ -1276,7 +1275,6 @@ sap.ui.define([
 			oTableData.forEach(function(e){
 				if(e.Pchk) {
 					oList.push(e);
-					oCopyRow = e;
 				}	
 			});
 
@@ -1293,11 +1291,6 @@ sap.ui.define([
 			});
 
 			if(isReturn) return;
-
-			if(oCopyRow.Status1 !== "AA") {
-				MessageBox.error(oController.getBundleText("MSG_40036"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
 
 			BusyIndicator.show(0);
 			var onProcessApply = function (fVal) {
