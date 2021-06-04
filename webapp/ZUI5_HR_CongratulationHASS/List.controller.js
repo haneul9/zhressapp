@@ -57,8 +57,7 @@ sap.ui.define(
 
             onAfterShow: function () {
                 this.SearchModel.setData({ User: {}});
-                var oTable = $.app.byId(this.PAGEID + "_Table");
-                Common.adjustAutoVisibleRowCount.call(oTable);
+                this.TableModel.setData({ Data: [] });
                 this.DetailModel.setProperty("/Bukrs", this.getUserGubun());
             },
 
