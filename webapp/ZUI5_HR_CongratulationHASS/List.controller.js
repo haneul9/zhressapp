@@ -57,7 +57,6 @@ sap.ui.define(
 
             onAfterShow: function () {
                 this.SearchModel.setData({ User: {}});
-                this.onTableSearch();
                 this.DetailModel.setProperty("/Bukrs", this.getUserGubun());
             },
 
@@ -116,6 +115,12 @@ sap.ui.define(
             },
 
             onPressSer: function() {
+
+                if(Common.checkNull(oController.SearchModel.getProperty("/User/Pernr"))) {
+                    MessageBox.error(oController.getBundleText("MSG_08120"), { title: oController.getBundleText("LABEL_00149")});
+					return true;
+                }
+
                 this.onTableSearch();
             },
 
@@ -230,6 +235,11 @@ sap.ui.define(
 
                 // Data setting
                 oController.DetailModel.setData({ FormData: [] });
+
+                if(Common.checkNull(oController.SearchModel.getProperty("/User/Pernr"))) {
+                    MessageBox.error(oController.getBundleText("MSG_08119"), { title: oController.getBundleText("LABEL_00149")});
+					return true;
+                }
 
                 if (!oController._DetailModel) {
                     oController._DetailModel = sap.ui.jsfragment("ZUI5_HR_CongratulationHASS.fragment.CongratulationDetail", oController);
