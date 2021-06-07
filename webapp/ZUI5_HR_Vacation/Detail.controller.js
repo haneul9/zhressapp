@@ -1485,7 +1485,9 @@ sap.ui.define([
 								actions : ["YES", "NO"],
 								onClose : function(fVal){
 									if(fVal && fVal == "YES"){
-										setTimeout(function(){parent._gateway.redirect("Congratulation.html");}, 100);
+										setTimeout(function(){
+											parent._gateway.redirect($.app.getAuth() == $.app.Auth.HASS ? "CongratulationHASS.html" : "Congratulation.html");
+										}, 100);
 									} else {
 										oController.onBack();
 									}
