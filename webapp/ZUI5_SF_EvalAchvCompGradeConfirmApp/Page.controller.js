@@ -1,12 +1,22 @@
 sap.ui.define([
 	"./delegate/On",
 	"./delegate/OwnFunctions",
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
 	"sap/m/MessageBox",
+	"sap/ui/core/BusyIndicator",
 	"sap/ui/model/json/JSONModel"
-], function (On, OwnFunctions, Common, CommonController, JSONModelHelper, MessageBox, JSONModel) {
+], function (
+	On,
+	OwnFunctions,
+	Common,
+	CommonController,
+	JSONModelHelper,
+	MessageBox,
+	BusyIndicator,
+	JSONModel
+) {
 "use strict";
 
 return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
@@ -23,15 +33,10 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 	SelfRatingsRequests: [],
 	PreviousSteps: ["평가 준비", "본인 평가", "부서장 평가", "업적평가 등급결정"],
 	GroupingCriteriaMap: null,
-	FormTemplateIdMap: {
-		DEV: "703",
-		QAS: "500",
-		PRD: "500"
-	},
 
 	getUserId: function() {
 
-		return this.getView().getModel("session").getData().name;
+		return this.getSessionInfoByKey("name");
 	},
 
 	getEvalProfileDialogHandler: function() {
@@ -39,7 +44,7 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 		return this.EvalProfileDialogHandler;
 	},
 
-	onInit: function () {
+	onInit: function() {
 		Common.log("onInit");
 
 		this.setupView()
@@ -54,20 +59,65 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 
 		this.LoginUserId = this.getUserId();
 
-		OwnFunctions.retrieveExceptionSettings(this);
-		OwnFunctions.retrieveGroupingCriteria(this);
-		OwnFunctions.initMessagePopover(this);
-		OwnFunctions.initSearchModel(this);
-		OwnFunctions.initCountModel(this);
-		OwnFunctions.initEvalGradeComboModel(this);
-
-		this.FormTemplateId = this.FormTemplateIdMap[Common.getOperationMode()];
+		OwnFunctions.initSearchModel.call(this);
+		OwnFunctions.retrieveGroupingCriteria.call(this);
 	},
 
 	onAfterShow: function() {
 		Common.log("onAfterShow");
 
-		On.pressSearch.bind(this)();
+		OwnFunctions.retrieveExceptionSettings.call(this);
+		OwnFunctions.initMessagePopover.call(this);
+		OwnFunctions.initCountModel.call(this);
+		OwnFunctions.initEvalGradeComboModel.call(this);
+
+		Promise.all([
+			this.retrieveFormTemplateId(this.SearchModel.getProperty("/EvalYear")),
+			this.retrieveGoalID()
+		])
+		.then(function() {
+			On.pressSearch.call(this);
+		}.bind(this));
+	},
+
+	// Form Template Id 조회
+	retrieveFormTemplateId: function(year) {
+
+		return new JSONModelHelper()
+			.url("/odata/v2/FormTemplate")
+			.select("formTemplateId")
+			.filter("formTemplateType eq 'Review'")
+			.filter("formTemplateName like '${year}년 업적%'".interpolate(year))
+			.attachRequestCompleted(function() {
+				Common.log("FormTemplate complete : 'Review', '${year}년 업적%'".interpolate(year), arguments, this);
+
+				this.getController().FormTemplateId = (this.getResults().pop() || {}).formTemplateId;
+			})
+			.attachRequestFailed(function() {
+				Common.log("FormTemplate fail : 'Review', '${year}년 업적%'".interpolate(year), arguments);
+			})
+			.load()
+			.promise();
+	},
+
+	// Goal ID 조회
+	retrieveGoalID: function() {
+
+		return new JSONModelHelper()
+			.url("/odata/v2/GoalPlanTemplate")
+			.select("id")
+			.select("defaultTemplate")
+			.filter("defaultTemplate eq true")
+			.attachRequestCompleted(function() {
+				var id = this.getController().GoalID = (this.getResults().pop() || {}).id;
+
+				$.app.LOG.DATA.GoalID = {success: arguments, model: this, value: id};
+			})
+			.attachRequestFailed(function() {
+				$.app.LOG.DATA.GoalID = {failure: arguments, model: this};
+			})
+			.load()
+			.promise();
 	},
 
 	retrieveDirectReports: function() {
@@ -99,8 +149,7 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 		var directReports = this.DirectReportsModel.getResults();
 		if ($.app.LOG.ENABLE_SUCCESS) { Common.log("DirectReports success", directReports); }
 
-		var oController = this,
-		selectedYear = $.app.byId("YearComboBox").getSelectedKey(),
+		var selectedYear = $.app.byId("YearComboBox").getSelectedKey(),
 		orgSet = [], orgMap = {},
 		groupMap = {
 			"All":      {count: 0, appraiseeList: [], appraiseeMap: {}}, // All
@@ -126,7 +175,7 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 				orgMap[o.division] = true;
 			}
 
-			var groupCode = oController.GroupingCriteriaMap[o.custom07], group = groupMap[groupCode];
+			var groupCode = this.GroupingCriteriaMap[o.custom07], group = groupMap[groupCode];
 			if (groupCode && group) {
 				o.group = groupCode;
 				group.count++;
@@ -143,21 +192,34 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 
 				$.app.LOG.DATA[o.userId] = {};
 
-				formHeaderModels.push(oController.retrieveFormHeader(o.userId));
-				goalModels.push(oController.retrieveGoal(o.userId));
-				goalModels.push(oController.retrieveActivity(o.userId));
-				goalModels.push(oController.retrieveAchievement(o.userId));
+				formHeaderModels.push(this.retrieveFormHeader(o.userId));
+				goalModels.push(this.retrieveGoal(o.userId));
+				// goalModels.push(this.retrieveActivity(o.userId));
+				// goalModels.push(this.retrieveAchievement(o.userId));
 			}
-		});
+		}.bind(this));
 
 		// 조직 combobox items reset
-		OwnFunctions.resetOrgComboBoxItems.bind(this)(orgSet);
+		OwnFunctions.resetOrgComboBoxItems.call(this, orgSet);
 
 		// 그룹 combobox items reset
-		OwnFunctions.resetGroupComboBoxItems.bind(this)(groupMap);
+		OwnFunctions.resetGroupComboBoxItems.call(this, groupMap);
 
 		Common.log("selectedYear", selectedYear);
 		Common.log("groupMap", groupMap);
+
+		if (!directReports.length) {
+			this.MessagePopover.getModel().setProperty("/Messages", [
+				{ type: "Success", title: this.getBundleText("MSG_03015") }, // 피평가자별 평가문서 정보 조회 완료
+				{ type: "Success", title: this.getBundleText("MSG_03016") }, // 피평가자별 목표 항목 정보 조회 완료
+				{ type: "Success", title: this.getBundleText("MSG_03017") }, // 피평가자별 본인평가 항목 정보 조회 완료
+				{ type: "Success", title: this.getBundleText("MSG_03018") }, // 피평가자별 본인평가 항목별 점수 조회 완료
+				{ type: "Success", title: this.getBundleText("MSG_03019") }  // 피평가자별 1차평가 결과 조회 완료
+			]);
+			this.MessagePopover.toggle($.app.byId("async-spinner"));
+			$.app.spinner(false);
+			return;
+		}
 
 		$.map(groupMap, function(o) {
 			o.appraiseeList.sort(function(o1, o2) {
@@ -186,34 +248,34 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 			promises // 개인별 평가문서, 목표 개수, 활동 개수, 실적 개수조회
 		)
 		.then(function() {
-			OwnFunctions.startGridTableUpdating(true, oController);
+			OwnFunctions.startGridTableUpdating.call(this, true);
 
-			$.app.byId("async-messages").getModel().setProperty("/Messages/1", {type: "Success", title: $.app.getBundleText("MSG_03015")}); // 피평가자별 평가문서 정보 조회 완료
+			$.app.byId("async-messages").getModel().setProperty("/Messages/1", { type: "Success", title: $.app.getBundleText("MSG_03015") }); // 피평가자별 평가문서 정보 조회 완료
 
 			// 평가문서 조회 후 본인 업적평가 항목, 본인 역량평가 항목, 1차 업적평가/역량평가 점수 조회
 			return Promise.all(
-				$.map(oController.RatingsRequests, function(m) {
+				$.map(this.RatingsRequests, function(m) {
 					return m.load().promise();
 				})
 			);
-		})
+		}.bind(this))
 		.then(function() {
-			$.app.byId("async-messages").getModel().setProperty("/Messages/2", {type: "Success", title: $.app.getBundleText("MSG_03016")}); // 피평가자별 목표 항목 정보 조회 완료
-			$.app.byId("async-messages").getModel().setProperty("/Messages/3", {type: "Success", title: $.app.getBundleText("MSG_03017")}); // 피평가자별 본인평가 항목 정보 조회 완료
-			$.app.byId("async-messages").getModel().setProperty("/Messages/5", {type: "Success", title: $.app.getBundleText("MSG_03019")}); // 피평가자별 1차평가 결과 조회 완료
+			$.app.byId("async-messages").getModel().setProperty("/Messages/2", { type: "Success", title: $.app.getBundleText("MSG_03016") }); // 피평가자별 목표 항목 정보 조회 완료
+			$.app.byId("async-messages").getModel().setProperty("/Messages/3", { type: "Success", title: $.app.getBundleText("MSG_03017") }); // 피평가자별 본인평가 항목 정보 조회 완료
+			$.app.byId("async-messages").getModel().setProperty("/Messages/5", { type: "Success", title: $.app.getBundleText("MSG_03019") }); // 피평가자별 1차평가 결과 조회 완료
 
 			// 본인 업적평가 점수, 본인 역량평가 점수 조회
 			return Promise.all(
-				$.map(oController.SelfRatingsRequests, function(m) {
+				$.map(this.SelfRatingsRequests, function(m) {
 					return m.load().promise();
 				})
 			);
-		})
+		}.bind(this))
 		.then(function() {
-			OwnFunctions.startGridTableUpdating(false, oController);
+			OwnFunctions.startGridTableUpdating.call(this, false);
 
 			// 점수 계산
-			var calculations = $.map(oController.DirectReportsModel.getProperty("/GroupMap/All/appraiseeList"), function(o) {
+			var calculations = $.map(this.DirectReportsModel.getProperty("/GroupMap/All/appraiseeList"), function(o) {
 				return new Promise(function(resolve) {
 					setTimeout(function() {
 						$.app.LOG.DATA[o.userId]["00 성명"] = o.nickname;
@@ -249,19 +311,19 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 			});
 
 			return Promise.all(calculations);
-		})
+		}.bind(this))
 		.then(function() {
 			setTimeout(function() {
-				$.app.getController().TableModel.refresh();
-			}, 500);
+				this.TableModel.refresh();
+			}.bind(this), 500);
 
-			$.app.byId("async-messages").getModel().setProperty("/Messages/4", {type: "Success", title: $.app.getBundleText("MSG_03018")}); // 피평가자별 본인평가 항목별 점수 조회 완료
+			$.app.byId("async-messages").getModel().setProperty("/Messages/4", { type: "Success", title: $.app.getBundleText("MSG_03018") }); // 피평가자별 본인평가 항목별 점수 조회 완료
 
 			setTimeout(function() {
 				$.app.spinner(false);
 				$.app.byId("async-messages").toggle($.app.byId("async-spinner"));
 			}, 1500);
-		})
+		}.bind(this))
 		.catch(function() {
 			if ($.app.LOG.ENABLE_FAILURE) { Common.log("grid data retrieval error", arguments); }
 		});
@@ -271,7 +333,7 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 	retrieveGoal: function(pUserId) {
 
 		return new JSONModelHelper()
-			.url("/odata/v2/Goal_2")
+			.url("/odata/v2/Goal_" + this.GoalID)
 			.filter("userId eq '${pUserId}'".interpolate(pUserId))
 			.inlinecount()
 			.attachRequestCompleted(function() {
@@ -535,10 +597,9 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 			});
 	},
 
-	submitBatch: function(Appraisees, sendToNextStep) {
+	submitBatch: function(Appraisees, resolve, reject) {
 
-		var oController = this,
-		batchChangeOperations = [],
+		var batchChangeOperations = [],
 		oDataBatchModel = new sap.ui.model.odata.ODataModel("/odata/v2", {
 			json: true,
 			useBatch: true,
@@ -584,43 +645,72 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 
 				var responses = oData.__batchResponses;
 				if (responses && responses[0] && responses[0].response && responses[0].response.statusCode !== "200") {
-					oController.getView().setBusy(false);
+					BusyIndicator.hide();
 
-					MessageBox.error([oController.getBundleText("MSG_00018"), "", responses[0].message, (responses[0].response || {}).statusText].join("\n")); // 저장중 오류가 발생하였습니다.
+					MessageBox.error([this.getBundleText("MSG_00018"), "", responses[0].message, (responses[0].response || {}).statusText].join("\n")); // 저장중 오류가 발생하였습니다.
+					reject();
 					return;
 				}
 
-				if (typeof sendToNextStep === "function") {
-					oController.sendToNextStep.bind(oController)();
-				} else {
-					oController.getView().setBusy(false);
-
-					MessageBox.success(oController.getBundleText("MSG_00017")); // 저장되었습니다.
-				}
-			},
-			function (oError) {
+				resolve();
+			}.bind(this),
+			function (oResponse) {
 				if ($.app.LOG.ENABLE_FAILURE) { Common.log("batch error", arguments); }
 
-				var msg;
-				if (oError.response) {
-					var error = JSON.parse(oError.response.body).error;
-
-					msg = error.innererror.errordetails;
-
-					if (msg && msg.length) {
-						msg = error.innererror.errordetails[0].message;
-					} else {
-						msg = error.message.value;
-					}
-				} else {
-					msg = oError.toString();
+				var errData = Common.parseError(oResponse);
+				if (errData.Error && errData.Error === "E") {
+					MessageBox.error(errData.ErrorMessage, {
+						title: this.getBundleText("LABEL_09029") // 확인
+					});
 				}
 
-				oController.getView().setBusy(false);
+				BusyIndicator.hide();
 
-				MessageBox.error(msg);
+				reject();
+			}.bind(this),
+			true // async
+		);
+	},
+
+	sendResultToS4Hana: function(Appraisees, resolve, reject) {
+
+		var year = $.app.byId("YearComboBox").getSelectedKey();
+
+		$.app.getModel("ZHR_APPRAISAL_SRV").create(
+			"/EvalUploadSet",
+			{
+				ILangu: this.getSessionInfoByKey("Langu"),
+				TableIn: $.map(Appraisees, function(o) {
+					return Common.copyByMetadata("ZHR_APPRAISAL_SRV", "entityType", "EvalUploadTableIn", {
+						Zyear: year,				// 기준년도
+						Pernr: o.formSubjectId,		// 사번
+						Evorgeh: o.department,		// 평가부서
+						Mgrpnr: this.LoginUserId,	// 평가자사번
+						Pepnt: o.firstAchievement,	// 업적점수
+						Cepnt: o.firstCompetency,	// 역량점수
+						Pegrade: o.evaluationGrade	// 업적등급
+					});
+				}.bind(this))
 			},
-			true
+			{
+				success: function() {
+					if ($.app.LOG.ENABLE_SUCCESS) { Common.log("sendResultToS4Hana success", arguments); }
+
+					resolve();
+				},
+				error: function(oResponse) {
+					if ($.app.LOG.ENABLE_FAILURE) { Common.log("sendResultToS4Hana error", arguments); }
+
+					var errData = Common.parseError(oResponse);
+					if (errData.Error && errData.Error === "E") {
+						MessageBox.error(errData.ErrorMessage, {
+							title: this.getBundleText("LABEL_09029") // 확인
+						});
+					}
+
+					reject();
+				}
+			}
 		);
 	},
 
@@ -642,25 +732,25 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 				.attachRequestFailed(function() {
 					if ($.app.LOG.ENABLE_FAILURE) { Common.log("sendToNextStep(formDataId:${this.getContextData().formDataId}) fail".interpolate(this.getContextData().formDataId), arguments, this); }
 				})
-				.load();
+				.load()
+				.promise();
 		});
 
-		var oController = this;
 		Promise.all(promises)
 			.then(function() {
 				if ($.app.LOG.ENABLE_SUCCESS) { Common.log("sendToNextStep complete", arguments); }
 
 				var groupNames = [],
-				FilterComboBoxType = oController.SearchModel.getProperty("/FilterComboBoxType"),
+				FilterComboBoxType = this.SearchModel.getProperty("/FilterComboBoxType"),
 				org = FilterComboBoxType ? $.app.byId("OrgComboBox").getSelectedKey() : null,
 				groupCode = $.app.byId("GroupComboBox").getSelectedKey(),
-				messages = [oController.getBundleText("MSG_03006")]; // 확정되었습니다.
+				messages = [this.getBundleText("MSG_03006")]; // 확정되었습니다.
 
-				$.map(oController.DirectReportsModel.getProperty("/GroupMap"), function(o, k) {
+				$.map(this.DirectReportsModel.getProperty("/GroupMap"), function(o, k) {
 					if (k !== "All") {
 						if (FilterComboBoxType) {
 							$.each(o.appraiseeList, function(i, p) {
-								if ($.inArray(p.currentStep, oController.PreviousSteps) > -1 && org !== p.division) {
+								if ($.inArray(p.currentStep, this.PreviousSteps) > -1 && org !== p.division) {
 									groupNames.push(p.division);
 									return false;
 								}
@@ -668,7 +758,7 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 						} else {
 							if (k !== groupCode) {
 								$.each(o.appraiseeList, function(i, p) {
-									if ($.inArray(p.currentStep, oController.PreviousSteps) > -1) {
+									if ($.inArray(p.currentStep, this.PreviousSteps) > -1) {
 										groupNames.push(k);
 										return false;
 									}
@@ -679,20 +769,20 @@ return CommonController.extend($.app.APP_ID, { // 업적&역량 평가
 				});
 
 				if (groupNames.length) { // 평가등급이 확정되지 않은 피평가자 그룹이 있다면 안내문을 추가로 보여줌
-					messages.push(oController.getBundleText("MSG_03022", [groupNames.join(", ")])); // 평가할 그룹이 남아있습니다. 계속 평가 진행해주시기 바랍니다.\n(평가할 그룹 : {0})
+					messages.push(this.getBundleText("MSG_03022", [groupNames.join(", ")])); // 평가할 그룹이 남아있습니다. 계속 평가 진행해주시기 바랍니다.\n(평가할 그룹 : {0})
 				}
 
-				oController.getView().setBusy(false);
+				BusyIndicator.hide();
 				MessageBox.success(messages.join("\n\n"));
 
-				setTimeout(On.pressSearch.bind(oController), 3000); // SF에서 transaction 처리 시간이 걸리므로 충분한 시간 뒤에 재조회
-			})
+				setTimeout(On.pressSearch.bind(this), 3000); // SF에서 transaction 처리 시간이 걸리므로 충분한 시간 뒤에 재조회
+			}.bind(this))
 			.catch(function() {
 				if ($.app.LOG.ENABLE_FAILURE) { Common.log("sendToNextStep error", arguments); }
 
-				oController.getView().setBusy(false);
-				MessageBox.error(oController.getBundleText("MSG_03007")); // 확정 작업중 오류가 발생하였습니다.
-			});
+				BusyIndicator.hide();
+				MessageBox.error(this.getBundleText("MSG_03007")); // 확정 작업중 오류가 발생하였습니다.
+			}.bind(this));
 	},
 
 	getLocalSessionModel: Common.isLOCAL() ? function() {

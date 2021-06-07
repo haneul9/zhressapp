@@ -1,12 +1,20 @@
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/Search360Review",
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/Search360Review",
 	"sap/m/MessageBox",
 	"sap/ui/export/Spreadsheet",
 	"sap/ui/model/json/JSONModel"
-], function (Common, CommonController, JSONModelHelper, Search360Review, MessageBox, Spreadsheet, JSONModel) {
+], function(
+	Common,
+	CommonController,
+	JSONModelHelper,
+	Search360Review,
+	MessageBox,
+	Spreadsheet,
+	JSONModel
+) {
 "use strict";
 
 return CommonController.extend($.app.APP_ID, { // 평가현황
@@ -22,17 +30,16 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 	SelfRatingsRequests: [],
 	EmpGradeMap: null,
 	FormTemplateIdMap: {
-		DEV: {"PM": "703", "360": "719"},
-		QAS: {"PM": "500", "360": "502"},
-		PRD: {"PM": "500", "360": "502"}
+		"PM": null,
+		"360": null
 	},
 
 	getUserId: function() {
 
-		return this.getView().getModel("session").getData().name;
+		return this.getSessionInfoByKey("name");
 	},
 
-	onInit: function () {
+	onInit: function() {
 		Common.log("onInit");
 
 		this.setupView()
@@ -41,7 +48,7 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 				onAfterShow: this.onAfterShow
 			}, this);
 
-		Common.log("onInit session", this.getView().getModel("session").getData());
+		Common.log("onInit session", this.getSessionModel().getData());
 	},
 
 	onBeforeShow: function(oEvent) {
@@ -49,10 +56,17 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 
 		this.retrieveEmpGrade(this);
 
+		var minYear = 2020,
+		today = new Date(),
+		currentYear = today.getFullYear() - (today.getMonth() < 2 ? 1 : 0),
+		suffix = this.getBundleText("LABEL_00143"), // 년
+		comboBoxItems = $.map(new Array(currentYear - minYear + 1), function(v, i) {
+			var value = String(currentYear - i);
+			return {value: value, text: value + suffix};
+		});
+
 		this.SearchModel.setData({
-			EvalYears: [
-				{value: "2020", text: "2020년"}
-			]
+			EvalYears: comboBoxItems
 		});
 
 		this.TableModel.setProperty("/IconTabFilterCountMap", {
@@ -80,12 +94,6 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 		.setModel(new sap.ui.model.json.JSONModel());
 	},
 
-	onAfterShow: function() {
-		Common.log("onAfterShow");
-
-		this.onPressSearch();
-	},
-
 	retrieveEmpGrade: function(oController) {
 
 		new JSONModelHelper()
@@ -95,6 +103,71 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 			})
 			.attachRequestFailed(function() {
 				Common.log("EmpGrade fail", arguments);
+			})
+			.load();
+	},
+
+	onAfterShow: function() {
+		Common.log("onAfterShow");
+
+		var selectedYear = $.app.byId("YearsCombo").getSelectedKey();
+
+		Promise.all([
+			this.retrievePMFormTemplateId(selectedYear),
+			this.retrieve360FormTemplateId(selectedYear)
+		])
+		.then(function() {
+			this.onPressSearch();
+		}.bind(this));
+	},
+
+	/*
+	 * 로그인한 사용자(팀장)의 directReports(피평가자) 조회
+	 */
+	onPressSearch: function() {
+		Common.log("onPressSearch");
+
+		$.app.spinner(true);
+
+		this.LoginUserId = this.getUserId();
+
+		this.MessagePopover.getModel().setProperty("/Messages", [
+			{type: "Warning", title: $.app.getBundleText("MSG_04002")}, // 피평가자 목록 조회중
+			{type: "Warning", title: $.app.getBundleText("MSG_04003")}, // 피평가자별 평가문서 정보 조회 대기중
+			{type: "Warning", title: $.app.getBundleText("MSG_04004")}, // 피평가자별 본인평가 항목 정보 조회 대기중
+			{type: "Warning", title: $.app.getBundleText("MSG_04005")}, // 피평가자별 본인평가 항목별 점수 조회 대기중
+			{type: "Warning", title: $.app.getBundleText("MSG_04006")}, // 피평가자별 1차평가 결과 조회 대기중
+			{type: "Warning", title: $.app.getBundleText("MSG_04007")}  // 피평가자별 다면평가 결과 조회 대기중
+		]);
+		this.MessagePopover.toggle($.app.byId("async-spinner"));
+
+		var yearsCombo = $.app.byId("YearsCombo"), selectedYear = yearsCombo.getSelectedKey();
+		if (!selectedYear) {
+			MessageBox.warning(this.getBundleText("MSG_04001"), { // 평가연도를 선택하세요.
+				onClose: function() {
+					yearsCombo.focus();
+				}
+			});
+			$.app.spinner(false);
+			return;
+		}
+
+		$.app.byId("TeamsMultiCombo").setEnabled(false);
+
+		this.RatingsRequests = [];
+		this.SelfRatingsRequests = [];
+
+		this.DirectReportsModel = new JSONModelHelper()
+			.url("/odata/v2/User('${this.LoginUserId}')/directReports".interpolate(this.LoginUserId))
+			.select("userId")	  // 사번
+			.select("nickname")   // 성명
+			.select("title")	  // 직위
+			.select("custom01")   // 직급
+			.select("custom04")   // 평가제외자(값이 있으면 평가제외 대상)
+			.select("department") // 부서
+			.attachRequestCompleted(this.successDirectReports.bind(this))
+			.attachRequestFailed(function() {
+				if ($.app.LOG.ENABLE_FAILURE) Common.log("DirectReports failure", arguments);
 			})
 			.load();
 	},
@@ -214,61 +287,40 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 		this.ReviewDialog.open();
 	},
 
-	/*
-	 * User list로부터 department Set을 생성하여 반환
-	 */
-	resetComboBoxItems: function(pUsers) {
+	onChangeTeamsComboBox: function(oEvent) {
 
-		var oController = this;
+		var keys = oEvent.getSource().getSelectedKeys();
 		setTimeout(function() {
-			var departmentMap = {}, departmentSet = [];
-			$.each(pUsers, function(i, o) {
-				var department = departmentMap[o.department];
-				if (!department) {
-					departmentMap[o.department] = true;
-					departmentSet.push({value: o.department, text: o.department});
+			var countMap = {
+				"step0": 0, // 전체
+				"step1": 0, // 본인 평가
+				"step2": 0, // 부서장 평가
+				"step3": 0, // 업적평가 등급결정
+				"step4": 0, // 종합평가 준비
+				"step5": 0, // 종합평가
+				"step6": 0, // HR확인
+				"step7": 0, // 결과확인
+				"step8": 0  // 평가완료
+			},
+			Appraisees = $.map(this.DirectReportsModel.getProperty("/MergeGroupList"), function(o) {
+				++countMap.step0;
+					 if (o.currentStep === "본인 평가")			++countMap.step1;
+				else if (o.currentStep === "부서장 평가")		++countMap.step2;
+				else if (o.currentStep === "업적평가 등급결정")	++countMap.step3;
+				else if (o.currentStep === "종합평가 준비")		++countMap.step4;
+				else if (o.currentStep === "종합평가")			++countMap.step5;
+				else if (o.currentStep === "HR확인")			++countMap.step6;
+				else if (o.currentStep === "결과확인")			++countMap.step7;
+				else if (o.currentStep === "평가완료")			++countMap.step8;
+
+				if (!keys.length || $.inArray(o.department, keys) > -1) {
+					return o;
 				}
 			});
 
-			setTimeout(function() {
-				oController.SearchModel.setProperty("/Teams", departmentSet);
-				$.app.byId("TeamsMultiCombo").setEnabled(true);
-			}, 0);
-		}, 0);
-	},
-
-	onChangeComboBox: function(oEvent) {
-
-		var countMap = {
-			"step0": 0, // 전체
-			"step1": 0, // 본인 평가
-			"step2": 0, // 부서장 평가
-			"step3": 0, // 업적평가 등급결정
-			"step4": 0, // 종합평가 준비
-			"step5": 0, // 종합평가
-			"step6": 0, // HR확인
-			"step7": 0, // 결과확인
-			"step8": 0  // 평가완료
-		},
-		keys = oEvent.getSource().getSelectedKeys(),
-		Appraisees = $.map(this.DirectReportsModel.getProperty("/MergeGroupList"), function(o) {
-			++countMap.step0;
-			     if (o.currentStep === "본인 평가")			++countMap.step1;
-			else if (o.currentStep === "부서장 평가")		++countMap.step2;
-			else if (o.currentStep === "업적평가 등급결정")	++countMap.step3;
-			else if (o.currentStep === "종합평가 준비")		++countMap.step4;
-			else if (o.currentStep === "종합평가")			++countMap.step5;
-			else if (o.currentStep === "HR확인")			++countMap.step6;
-			else if (o.currentStep === "결과확인")			++countMap.step7;
-			else if (o.currentStep === "평가완료")			++countMap.step8;
-
-			if (!keys.length || $.inArray(o.department, keys) > -1) {
-				return o;
-			}
-		});
-
-		this.TableModel.setProperty("/IconTabFilterCountMap", countMap);
-		this.TableModel.setProperty("/Appraisees", Appraisees);
+			this.TableModel.setProperty("/IconTabFilterCountMap", countMap);
+			this.TableModel.setProperty("/Appraisees", Appraisees);
+		}.bind(this), 0);
 	},
 
 	onFilterSelect: function (oEvent) {
@@ -296,64 +348,12 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 		}).build();
 	},
 
-	/*
-	 * 로그인한 사용자(팀장)의 directReports(피평가자) 조회
-	 */
-	onPressSearch: function() {
-		Common.log("onPressSearch");
-
-		$.app.spinner(true);
-
-		this.LoginUserId = this.getUserId();
-
-		this.MessagePopover.getModel().setProperty("/Messages", [
-			{type: "Warning", title: $.app.getBundleText("MSG_04002")}, // 피평가자 목록 조회중
-			{type: "Warning", title: $.app.getBundleText("MSG_04003")}, // 피평가자별 평가문서 정보 조회 대기중
-			{type: "Warning", title: $.app.getBundleText("MSG_04004")}, // 피평가자별 본인평가 항목 정보 조회 대기중
-			{type: "Warning", title: $.app.getBundleText("MSG_04005")}, // 피평가자별 본인평가 항목별 점수 조회 대기중
-			{type: "Warning", title: $.app.getBundleText("MSG_04006")}, // 피평가자별 1차평가 결과 조회 대기중
-			{type: "Warning", title: $.app.getBundleText("MSG_04007")}  // 피평가자별 다면평가 결과 조회 대기중
-		]);
-		this.MessagePopover.toggle($.app.byId("async-spinner"));
-
-		var yearsCombo = $.app.byId("YearsCombo"), selectedYear = yearsCombo.getSelectedKey();
-		if (!selectedYear) {
-			MessageBox.warning(this.getBundleText("MSG_04001"), { // 평가연도를 선택하세요.
-				onClose: function() {
-					yearsCombo.focus();
-				}
-			});
-			$.app.spinner(false);
-			return;
-		}
-
-		$.app.byId("TeamsMultiCombo").setEnabled(false);
-
-		this.RatingsRequests = [];
-		this.SelfRatingsRequests = [];
-
-		this.DirectReportsModel = new JSONModelHelper()
-			.url("/odata/v2/User('${this.LoginUserId}')/directReports".interpolate(this.LoginUserId))
-			.select("userId")	  // 사번
-			.select("nickname")   // 성명
-			.select("title")	  // 직위
-			.select("custom01")   // 직급
-			.select("custom04")   // 평가제외자(값이 있으면 평가제외 대상)
-			.select("department") // 부서
-			.attachRequestCompleted(this.successDirectReports.bind(this))
-			.attachRequestFailed(function() {
-				if ($.app.LOG.ENABLE_FAILURE) Common.log("DirectReports failure", arguments);
-			})
-			.load();
-	},
-
 	startGridTableUpdating: function(start) {
 
 		if (start) {
-			var oController = this;
 			this.GridTableUpdateInterval = setInterval(function() {
-				oController.TableModel.setProperty("/Appraisees", oController.DirectReportsModel.getProperty("/MergeGroupList"));
-			}, 300);
+				this.TableModel.setProperty("/Appraisees", this.DirectReportsModel.getProperty("/MergeGroupList"));
+			}.bind(this), 300);
 		} else {
 			clearInterval(this.GridTableUpdateInterval);
 		}
@@ -371,8 +371,7 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 
 		this.resetComboBoxItems(directReports);
 
-		var oController = this,
-		selectedYear = $.app.byId("YearsCombo").getSelectedKey(),
+		var selectedYear = $.app.byId("YearsCombo").getSelectedKey(),
 		countMap = {
 			"step0": 0, // 전체
 			"step1": 0, // 본인 평가
@@ -409,7 +408,7 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 				return;
 			}
 
-			var empGrade = oController.EmpGradeMap[o.custom01];
+			var empGrade = this.EmpGradeMap[o.custom01];
 			if ($.inArray(empGrade, managerGroup) > -1) {
 				o.group = "간부";
 
@@ -432,25 +431,27 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 
 				$.app.LOG.DATA[o.userId] = {};
 
-				formHeaderPMModels.push(oController.retrieveFormHeaderPM(o.userId));
-				formHeader360Models.push(oController.retrieveFormHeader360(o.userId));
-				// goalModels.push(oController.retrieveGoal(o.userId));
-				// goalModels.push(oController.retrieveActivity(o.userId));
-				// goalModels.push(oController.retrieveAchievement(o.userId));
+				formHeaderPMModels.push(this.retrieveFormHeaderPM(o.userId));
+				formHeader360Models.push(this.retrieveFormHeader360(o.userId));
+				// goalModels.push(this.retrieveGoal(o.userId));
+				// goalModels.push(this.retrieveActivity(o.userId));
+				// goalModels.push(this.retrieveAchievement(o.userId));
 			}
-		});
+		}.bind(this));
 
-		Common.log("selectedYear", selectedYear);
-		Common.log("MergeGroupMap", MergeGroupMap);
-		Common.log("ManagerGroupMap", ManagerGroupMap);
-		Common.log("ReportGroupMap", ReportGroupMap);
+		setTimeout(function() {
+			Common.log("selectedYear", selectedYear);
+			Common.log("MergeGroupMap", MergeGroupMap);
+			Common.log("ManagerGroupMap", ManagerGroupMap);
+			Common.log("ReportGroupMap", ReportGroupMap);
+		}, 0);
 
 		ManagerGroupList.sort(function(o1, o2) {
-			return groupOrder[oController.EmpGradeMap[o2.custom01]] - groupOrder[oController.EmpGradeMap[o1.custom01]];
-		});
+			return groupOrder[this.EmpGradeMap[o2.custom01]] - groupOrder[this.EmpGradeMap[o1.custom01]];
+		}.bind(this));
 		ReportGroupList.sort(function(o1, o2) {
-			return groupOrder[oController.EmpGradeMap[o2.custom01]] - groupOrder[oController.EmpGradeMap[o1.custom01]];
-		});
+			return groupOrder[this.EmpGradeMap[o2.custom01]] - groupOrder[this.EmpGradeMap[o1.custom01]];
+		}.bind(this));
 
 		this.DirectReportsModel.setData({
 			ManagerGroupMap: ManagerGroupMap,
@@ -505,18 +506,18 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 			Common.adjustVisibleRowCount(AppraiseesTable, 10, MergeGroupList.length);
 
 			MergeGroupList.sort(function(o1, o2) {
-				return groupOrder[oController.EmpGradeMap[o2.custom01]] - groupOrder[oController.EmpGradeMap[o1.custom01]];
-			});
+				return groupOrder[this.EmpGradeMap[o2.custom01]] - groupOrder[this.EmpGradeMap[o1.custom01]];
+			}.bind(this));
 
-			oController.TableModel.setProperty("/IconTabFilterCountMap", countMap);
+			this.TableModel.setProperty("/IconTabFilterCountMap", countMap);
 
 			// 평가문서 조회 후 본인 업적평가 항목, 본인 역량평가 항목, 1차 업적평가/역량평가 점수, 다면평가 점수 조회
 			return Promise.all(
-				$.map(oController.RatingsRequests, function(m) {
+				$.map(this.RatingsRequests, function(m) {
 					return m.load().promise();
 				})
 			);
-		})
+		}.bind(this))
 		.then(function() {
 			$.app.byId("async-messages").getModel().setProperty("/Messages/2", {type: "Success", title: $.app.getBundleText("MSG_04010")}); // 피평가자별 본인평가 항목 정보 조회 완료
 			$.app.byId("async-messages").getModel().setProperty("/Messages/4", {type: "Success", title: $.app.getBundleText("MSG_04012")}); // 피평가자별 1차평가 결과 조회 완료
@@ -524,16 +525,16 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 
 			// 본인 업적평가 점수, 본인 역량평가 점수 조회
 			return Promise.all(
-				$.map(oController.SelfRatingsRequests, function(m) {
+				$.map(this.SelfRatingsRequests, function(m) {
 					return m.load().promise();
 				})
 			);
-		})
+		}.bind(this))
 		.then(function() {
-			oController.startGridTableUpdating(false);
+			this.startGridTableUpdating(false);
 
 			// 점수 계산
-			var calculations = $.map(oController.DirectReportsModel.getData().MergeGroupList, function(o, i) {
+			var calculations = $.map(this.DirectReportsModel.getData().MergeGroupList, function(o, i) {
 				return new Promise(function(resolve, reject) {
 					setTimeout(function() {
 						$.app.LOG.DATA[o.userId]["00 성명"] = o.nickname;
@@ -570,7 +571,7 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 			});
 
 			return Promise.all(calculations);
-		})
+		}.bind(this))
 		.then(function() {
 			$.app.byId("async-messages").getModel().setProperty("/Messages/3", {type: "Success", title: $.app.getBundleText("MSG_04011")}); // 피평가자별 본인평가 항목별 점수 조회 완료
 			$.app.byId("TeamsMultiCombo").setEnabled(true);
@@ -583,6 +584,69 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 		.catch(function() {
 			if ($.app.LOG.DATA.ENABLE_FAILURE) Common.log("grid data retrieval error", arguments);
 		});
+	},
+
+	/*
+	 * User list로부터 department Set을 생성하여 반환
+	 */
+	resetComboBoxItems: function(pUsers) {
+
+		var oController = this;
+		setTimeout(function() {
+			var departmentMap = {}, departmentSet = [];
+			$.each(pUsers, function(i, o) {
+				var department = departmentMap[o.department];
+				if (!department) {
+					departmentMap[o.department] = true;
+					departmentSet.push({value: o.department, text: o.department});
+				}
+			});
+
+			setTimeout(function() {
+				oController.SearchModel.setProperty("/Teams", departmentSet);
+				$.app.byId("TeamsMultiCombo").setEnabled(true);
+			}, 0);
+		}, 0);
+	},
+
+	// PM Form Template Id 조회
+	retrievePMFormTemplateId: function(year) {
+
+		return new JSONModelHelper()
+			.url("/odata/v2/FormTemplate")
+			.select("formTemplateId")
+			.filter("formTemplateType eq 'Review'")
+			.filter("formTemplateName like '${year}년 업적%'".interpolate(year))
+			.attachRequestCompleted(function() {
+				Common.log("FormTemplate complete : 'Review', '${year}년 업적%'".interpolate(year), arguments, this);
+
+				this.getController().FormTemplateIdMap.PM = (this.getResults().pop() || {}).formTemplateId;
+			})
+			.attachRequestFailed(function() {
+				Common.log("FormTemplate fail : 'Review', '${year}년 업적%'".interpolate(year), arguments);
+			})
+			.load()
+			.promise();
+	},
+
+	// 360 Form Template Id 조회
+	retrieve360FormTemplateId: function(year) {
+
+		return new JSONModelHelper()
+			.url("/odata/v2/FormTemplate")
+			.select("formTemplateId")
+			.filter("formTemplateType eq '360'")
+			.filter("formTemplateName like '${year}년 다면%'".interpolate(year))
+			.attachRequestCompleted(function() {
+				Common.log("FormTemplate complete : '360', '${year}년 다면%'".interpolate(year), arguments, this);
+
+				this.getController().FormTemplateIdMap["360"] = (this.getResults().pop() || {}).formTemplateId;
+			})
+			.attachRequestFailed(function() {
+				Common.log("FormTemplate fail : '360', '${year}년 다면%'".interpolate(year), arguments);
+			})
+			.load()
+			.promise();
 	},
 
 	/*
@@ -699,7 +763,7 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 			.select("formSubjectId")
 			.select("formAuditTrails/formContentId")
 			.select("formAuditTrails/auditTrailRecipient")
-			.filter("formTemplateId eq '${formTemplateId}'".interpolate(this.FormTemplateIdMap[Common.getOperationMode()].PM))
+			.filter("formTemplateId eq '${formTemplateId}'".interpolate(this.FormTemplateIdMap.PM))
 			.filter("formDataStatus ne '4'")
 			.filter("formSubjectId in '${pFormSubjectId}'".interpolate(pFormSubjectId))
 			.expand("formAuditTrails")
@@ -766,7 +830,7 @@ return CommonController.extend($.app.APP_ID, { // 평가현황
 			.select("formSubjectId")
 			.select("formContents/formContentId")
 			.select("formContents/status")
-			.filter("formTemplateId eq '${formTemplateId}'".interpolate(this.FormTemplateIdMap[Common.getOperationMode()]["360"]))
+			.filter("formTemplateId eq '${formTemplateId}'".interpolate(this.FormTemplateIdMap["360"]))
 			.filter("formDataStatus ne '4'")
 			.filter("formContents/status in '${formContentsStatus}'".interpolate(formContentsStatus.join("','")))
 			.filter("formSubjectId in '${pFormSubjectId}'".interpolate(pFormSubjectId))

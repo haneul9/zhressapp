@@ -1,26 +1,27 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/JSONModelHelper",
-	"../../common/JSONModelRequest"
+	"common/Common",
+	"common/Formatter",
+	"common/JSONModelHelper",
+	"common/JSONModelRequest"
 ], function (Common, Formatter, JSONModelHelper, JSONModelRequest) {
 "use strict";
 
 return { // 업적&역량 평가 functions
 
-	retrieveExceptionSettings: function(oController) {
+	retrieveExceptionSettings: function() {
 
-		var worker = new Worker("common/AjaxWorkerOld.js"); // Worker instance 생성
+		var oController = this,
+		selectedYear = Number(oController.SearchModel.getProperty("/EvalYear") || -1),
+		worker = new Worker("common/AjaxWorker.js"); // Worker instance 생성
 		worker.onmessage = function(event) { // Worker로 조회한 결과를 받는 callback binding
 			Common.log("exception-settings success", event);
 			setTimeout(function() {
 				var result = event.data;
 				if (result.success) {
-					var settings = (((result.results || [{}])[0] || {}).d || {}).results,
-					currentYear = new Date().getFullYear();
+					var settings = (((result.results || [{}])[0] || {}).d || {}).results;
 
 					$.each(settings, function(i, o) {
-						if (Number(o.year || 0) === currentYear) {
+						if (Number(o.year || 0) === selectedYear) {
 							oController.SearchModel.setProperty("/FilterComboBoxType", o.code);
 							if (o.code === "A") {
 								$.app.byId("FilterComboBox").setVisible(true);
@@ -37,17 +38,16 @@ return { // 업적&역량 평가 functions
 			worker = undefined;
 		};
 		worker.postMessage({ // Worker 작업 실행
-			list: [{
-				url: "/odata/v2/Background_EvalException",
-				data: new JSONModelRequest()
-					.filter("userId eq '${oController.LoginUserId}'".interpolate(oController.LoginUserId))
-					.getEncodedQueryString()
-			}]
+			url: "/odata/v2/Background_EvalException",
+			data: new JSONModelRequest()
+				.filter("userId eq '${oController.LoginUserId}'".interpolate(oController.LoginUserId))
+				.getEncodedQueryString()
 		});
 	},
 
-	retrieveGroupingCriteria: function(oController) {
+	retrieveGroupingCriteria: function() {
 
+		var oController = this;
 		new JSONModelHelper()
 			.url("./${$.app.CONTEXT_PATH}/grouping-criteria.json".interpolate($.app.CONTEXT_PATH))
 			.attachRequestCompleted(function() {
@@ -59,56 +59,65 @@ return { // 업적&역량 평가 functions
 			.load();
 	},
 
-	initSearchModel: function(oController) {
+	initSearchModel: function() {
 
 		var minYear = 2020,
-		suffix = oController.getBundleText("LABEL_00143"), // 년
-		comboBoxItems = $.map(new Array(new Date().getFullYear() - minYear + 1), function(v, i) {
-			var value = String(minYear + i);
+		today = new Date(),
+		currentYear = today.getFullYear() - (today.getMonth() < 2 ? 1 : 0),
+		suffix = this.getBundleText("LABEL_00143"), // 년
+		comboBoxItems = $.map(new Array(currentYear - minYear + 1), function(v, i) {
+			var value = String(currentYear - i);
 			return {value: value, text: value + suffix};
 		});
 
-		oController.SearchModel.setData({
+		this.SearchModel.setData({
+			EvalYear: String(currentYear),
 			EvalYears: comboBoxItems,
 			Groups: null
 		});
 	},
 
-	initCountModel: function(oController) {
+	initCountModel: function() {
 
-		oController.CountModel.setData({
+		this.CountModel.setData({
 			Criterion: {A: 0, BC: 0, T: 0},
 			Selected: {A: 0, B: 0, C: 0},
 			Ratio: {A: 0, B: 0, C: 0}
 		});
 	},
 
-	initEvalGradeComboModel: function(oController) {
+	initEvalGradeComboModel: function() {
 
-		oController.EvalGradeComboModel.setData({
+		this.EvalGradeComboModel.setData({
 			Grades: [
 				{value: "A", text: "A"},
 				{value: "B", text: "B"},
 				{value: "C", text: "C"}
 			]
 		});
-		oController.getView().setModel(oController.EvalGradeComboModel, "EvalGradeComboModel");
+
+		if (!this.getView().getModel("EvalGradeComboModel")) {
+			this.getView().setModel(this.EvalGradeComboModel, "EvalGradeComboModel");
+		}
 	},
 
-	initMessagePopover: function(oController) {
+	initMessagePopover: function() {
 
-		oController.MessagePopover = new sap.m.MessagePopover("async-messages", {
-			placement: sap.m.VerticalPlacementType.Bottom,
-			items: {
-				path: "/Messages",
-				template: new sap.m.MessageItem({
-					type: "{type}",
-					title: "{title}"
-				})
-			}
-		})
-		.addStyleClass("custom-async-messagepopover")
-		.setModel(new sap.ui.model.json.JSONModel());
+		if (!this.MessagePopover) {
+			this.MessagePopover = new sap.m.MessagePopover("async-messages", {
+				placement: sap.m.VerticalPlacementType.Bottom,
+				items: {
+					path: "/Messages",
+					template: new sap.m.MessageItem({
+						type: "{type}",
+						title: "{title}"
+					})
+				}
+			})
+			.addStyleClass("custom-async-messagepopover");
+		}
+
+		this.MessagePopover.setModel(new sap.ui.model.json.JSONModel());
 	},
 
 	// 조직 combobox items reset
@@ -188,14 +197,14 @@ return { // 업적&역량 평가 functions
 		$.app.byId("GroupComboBox").setSelectedKey(selectedKey);
 	},
 
-	startGridTableUpdating: function(on, oController) {
+	startGridTableUpdating: function(on) {
 
 		if (on) {
-			oController.GridTableUpdateInterval = setInterval(function() {
+			this.GridTableUpdateInterval = setInterval(function() {
 				$.app.byId("GroupComboBox").fireChange();
 			}, 300);
 		} else {
-			clearInterval(oController.GridTableUpdateInterval);
+			clearInterval(this.GridTableUpdateInterval);
 		}
 	}
 

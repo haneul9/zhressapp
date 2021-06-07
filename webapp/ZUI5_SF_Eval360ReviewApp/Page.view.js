@@ -43,6 +43,8 @@ sap.ui.jsview($.app.APP_ID, { // 평가현황
 					items: [
 						new sap.m.Label({text: "{i18n>LABEL_04101}"}), // 평가연도
 						new sap.m.ComboBox("YearsCombo", {
+							change: oController.onAfterShow.bind(oController),
+							selectionChange: oController.onAfterShow.bind(oController),
 							width: "250px",
 							items: {
 								path: "/EvalYears",
@@ -55,8 +57,8 @@ sap.ui.jsview($.app.APP_ID, { // 평가현황
 						.setModel(oController.SearchModel),
 						new sap.m.Label({text: "{i18n>LABEL_04102}"}), // 팀
 						new sap.m.MultiComboBox("TeamsMultiCombo", {
-							selectionChange: oController.onChangeComboBox.bind(oController),
-							selectionFinish: oController.onChangeComboBox.bind(oController),
+							selectionChange: oController.onChangeTeamsComboBox.bind(oController),
+							selectionFinish: oController.onChangeTeamsComboBox.bind(oController),
 							enabled: false,
 							width: "250px",
 							items: {

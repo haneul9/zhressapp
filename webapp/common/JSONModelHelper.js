@@ -1,9 +1,10 @@
 sap.ui.define([
-	"./Common",
-	"./JSONModelRequest",
-	"sap/m/MessageBox",
+	"common/JSONModelRequest",
 	"sap/ui/model/json/JSONModel"
-], function (Common, JSONModelRequest, MessageBox, JSONModel) {
+], function(
+	JSONModelRequest,
+	JSONModel
+) {
 	"use strict";
 
 	// Multiple requests sample : ZUI5_SF_EvalAchvCompItemCleanApp/Page.controller.js -> successHrReports function 참고
@@ -271,17 +272,17 @@ sap.ui.define([
 					this.__promise = Promise.all($.map(args, function(arg, i) {
 						var model = new JSONModel()
 							.attachRequestCompleted(function() {
-								if ($.app.LOG.ENABLE_FAILURE) Common.log("success", i, arguments);
+								if ($.app.LOG.ENABLE_SUCCESS) common.Common.log("success", i, arguments);
 
 								var data = this.getData().d || {};
 								parent.resultsMap[i] = data.results || [];
 
 								if (data.__next) {
-									Common.log("Request success but it has more data to retrieve.", i, data.__next);
+									common.Common.log("Request success but it has more data to retrieve.", i, data.__next);
 								}
 							})
 							.attachRequestFailed(function() {
-								if ($.app.LOG.ENABLE_FAILURE) Common.log("failure", i, arguments);
+								if ($.app.LOG.ENABLE_FAILURE) common.Common.log("failure", i, arguments);
 							});
 
 						return model.loadData.apply(model, arg);
@@ -290,7 +291,7 @@ sap.ui.define([
 						return parent.loadData("common/empty.json", null, true, "GET", false, false, args.mHeaders);
 					})
 					.catch(function() {
-						Common.log("loadDatas error", arguments);
+						common.Common.log("loadDatas error", arguments);
 					});
 				}
 				// single request
@@ -298,12 +299,12 @@ sap.ui.define([
 					this.__promise = this.loadData.apply(this, args);
 					if (args[2] === true) {
 						this.__promise.catch(function() {
-							Common.log("loadData error", arguments);
+							common.Common.log("loadData error", arguments);
 						});
 					}
 				}
 			} catch(e) {
-				Common.log("loadData throws", e);
+				common.Common.log("loadData throws", e);
 				throw e;
 			}
 

@@ -131,7 +131,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.SettlementTargetAbsenceListDial
 						})
 					]
 				})
-				.addStyleClass("info-field-group message-strip"),
+				.addStyleClass("info-field-group message-strip")
 			]
 		})
 		.addStyleClass("info-box mt-8px");

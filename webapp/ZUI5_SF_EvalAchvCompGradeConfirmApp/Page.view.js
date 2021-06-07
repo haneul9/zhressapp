@@ -1,12 +1,20 @@
 sap.ui.define([
 	"./delegate/On",
 	"./delegate/ViewTemplates",
-	"../common/Common",
-	"../common/CustomProgressIndicator",
-	"../common/Formatter",
-	"../common/PageHelper",
-	"../common/ZHR_TABLES"
-], function (On, ViewTemplates, Common, CustomProgressIndicator, Formatter, PageHelper, ZHR_TABLES) {
+	"common/Common",
+	"common/CustomProgressIndicator",
+	"common/Formatter",
+	"common/PageHelper",
+	"common/ZHR_TABLES"
+], function (
+	On,
+	ViewTemplates,
+	Common,
+	CustomProgressIndicator,
+	Formatter,
+	PageHelper,
+	ZHR_TABLES
+) {
 "use strict";
 
 sap.ui.jsview($.app.APP_ID, { // 업적&역량 평가
@@ -50,14 +58,13 @@ sap.ui.jsview($.app.APP_ID, { // 업적&역량 평가
 							items: [
 								new sap.m.Label({width: "60px", text: "{i18n>LABEL_03101}"}), // 평가연도
 								new sap.m.ComboBox("YearComboBox", {
+									change: oController.onAfterShow.bind(oController),
 									width: "250px",
 									items: {
 										path: "/EvalYears",
 										template: new sap.ui.core.ListItem({key: "{value}", text: "{text}"})
 									},
-									selectedKey: {
-										path: "/EvalYears/0/value"
-									}
+									selectedKey: "{/EvalYear}"
 								})
 								.setModel(oController.SearchModel)
 							]
@@ -74,7 +81,7 @@ sap.ui.jsview($.app.APP_ID, { // 업적&역량 평가
 									width: "250px",
 									items: {
 										path: "/Orgs",
-										template: new sap.ui.core.Item({key: "{value}", text: "{text}"})
+										template: new sap.ui.core.ListItem({key: "{value}", text: "{text}"})
 									}
 								})
 								.setModel(oController.SearchModel)
@@ -93,7 +100,7 @@ sap.ui.jsview($.app.APP_ID, { // 업적&역량 평가
 											width: "250px",
 											items: {
 												path: "/Groups",
-												template: new sap.ui.core.Item({key: "{value}", text: "{text}"})
+												template: new sap.ui.core.ListItem({key: "{value}", text: "{text}"})
 											}
 										})
 										.setModel(oController.SearchModel)

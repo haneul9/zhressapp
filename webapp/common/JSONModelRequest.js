@@ -1,9 +1,6 @@
 sap.ui.define([
-	"./Common",
-	"sap/base/security/encodeURLParameters",
-	"sap/m/MessageBox",
-	"sap/ui/model/json/JSONModel"
-], function (Common, encodeURLParameters, MessageBox, JSONModel) {
+	"sap/base/security/encodeURLParameters"
+], function (encodeURLParameters) {
 	"use strict";
 
 	function JSONModelRequest() {

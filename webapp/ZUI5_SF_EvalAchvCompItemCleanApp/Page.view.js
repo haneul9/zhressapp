@@ -8,18 +8,6 @@ sap.ui.define([
 
 sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 
-	_colModel: [
-		{id: "currentStep",         label: "{i18n>LABEL_01301}"/* 상태 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "15%", align: sap.ui.core.HorizontalAlign.Left},
-		{id: "userId",              label: "{i18n>LABEL_01302}"/* 사번 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
-		{id: "nickname",            label: "{i18n>LABEL_01303}"/* 성명 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
-		{id: "title",               label: "{i18n>LABEL_01304}"/* 직위 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
-		{id: "custom01",            label: "{i18n>LABEL_01305}"/* 직급 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
-		{id: "department",          label: "{i18n>LABEL_01306}"/* 부서 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "30%", align: sap.ui.core.HorizontalAlign.Left},
-		{id: "allocatingItemCount", label: "{i18n>LABEL_01308}"/* 기준 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "5%", align: sap.ui.core.HorizontalAlign.Right},
-		{id: "poolItemCount",       label: "{i18n>LABEL_01309}"/* 현재 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "5%", align: sap.ui.core.HorizontalAlign.Right},
-		{id: "diffItemCount",       label: "{i18n>LABEL_01310}"/* 차이 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "5%", align: sap.ui.core.HorizontalAlign.Right, templateGetter: "getDiffItemCountText"}
-	],
-
 	getControllerName: function() {
 		return $.app.APP_ID;
 	},
@@ -35,8 +23,8 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 					items: [
 						new sap.m.Label({text: "{i18n>LABEL_01101}"}), // 평가문서
 						new sap.m.ComboBox("FormsComboBox", {
-							selectionChange: $.proxy(oController.onChangeComboBox, oController),
-							change: $.proxy(oController.onChangeComboBox, oController),
+							selectionChange: oController.onChangeComboBox.bind(oController),
+							change: oController.onChangeComboBox.bind(oController),
 							width: "250px",
 							items: {
 								path: "/FormTemplates",
@@ -46,8 +34,8 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 						.setModel(oController.SearchModel),
 						new sap.m.Label({text: "{i18n>LABEL_01102}"}), // 부문
 						new sap.m.MultiComboBox("DivisionsMultiComboBox", {
-							selectionChange: $.proxy(oController.onChangeComboBox, oController),
-							selectionFinish: $.proxy(oController.onChangeComboBox, oController),
+							selectionChange: oController.onChangeComboBox.bind(oController),
+							selectionFinish: oController.onChangeComboBox.bind(oController),
 							enabled: false,
 							width: "250px",
 							items: {
@@ -58,8 +46,8 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 						.setModel(oController.SearchModel),
 						new sap.m.Label({text: "{i18n>LABEL_01103}"}), // 팀
 						new sap.m.MultiComboBox("TeamsMultiComboBox", {
-							selectionChange: $.proxy(oController.onChangeComboBox, oController),
-							selectionFinish: $.proxy(oController.onChangeComboBox, oController),
+							selectionChange: oController.onChangeComboBox.bind(oController),
+							selectionFinish: oController.onChangeComboBox.bind(oController),
 							enabled: false,
 							width: "250px",
 							items: {
@@ -74,7 +62,7 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 				new sap.m.FlexBox({
 					items: [
 						new sap.m.Button({
-							press: $.proxy(oController.onPressSearch, oController),
+							press: oController.onPressSearch.bind(oController),
 							// icon: "sap-icon://search",
 							text: "{i18n>LABEL_00100}" // 조회
 						})
@@ -112,13 +100,13 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 				new sap.m.FlexBox({
 					items: [
 						new sap.m.Button({
-							press: $.proxy(oController.onPressExcelDownload, oController),
+							press: oController.onPressExcelDownload.bind(oController),
 							// icon: "sap-icon://search",
 							text: "{i18n>LABEL_00129}" // Excel
 						})
 						.addStyleClass("button-light"),
 						new sap.m.Button({
-							press: $.proxy(oController.onPressRemoval, oController),
+							press: oController.onPressRemoval.bind(oController),
 							// icon: "sap-icon://initiative", // sap-icon://restart
 							text: "{i18n>LABEL_01104}" // 설정 실행
 						})
@@ -135,11 +123,7 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 			enableColumnReordering: false,
 			enableColumnFreeze: false,
 			enableBusyIndicator: true,
-			// fixedColumnCount: 6,
-			// visibleRowCount: 1,
-			minAutoRowCount: 10,
-			visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Auto,
-			// visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Interactive,
+			visibleRowCount: 1,
 			showOverlay: false,
 			showNoData: true,
 		    width: "100%",
@@ -151,7 +135,7 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 		.setModel(oController.TableModel)
 		.bindRows("/Appraisees");
 
-		ZHR_TABLES.makeColumn(oController, oTable, this._colModel);
+		ZHR_TABLES.makeColumn(oController, oTable, this.getColumnModel());
 
 		return new PageHelper({
 			contentItems: [
@@ -159,6 +143,39 @@ sap.ui.jsview($.app.APP_ID, { // 평가 항목생성
 				oInfoFlexBox,
 				oTable
 			]
+		});
+	},
+
+	getColumnModel: function() {
+
+		return [
+			{id: "currentStep",         label: "{i18n>LABEL_01301}"/* 상태 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "15%", align: sap.ui.core.HorizontalAlign.Left},
+			{id: "userId",              label: "{i18n>LABEL_01302}"/* 사번 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
+			{id: "nickname",            label: "{i18n>LABEL_01303}"/* 성명 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
+			{id: "title",               label: "{i18n>LABEL_01304}"/* 직위 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
+			{id: "custom01",            label: "{i18n>LABEL_01305}"/* 직급 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "10%"},
+			{id: "department",          label: "{i18n>LABEL_01306}"/* 부서 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width: "30%", align: sap.ui.core.HorizontalAlign.Left},
+			{id: "allocatingItemCount", label: "{i18n>LABEL_01308}"/* 기준 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "5%", align: sap.ui.core.HorizontalAlign.Right},
+			{id: "poolItemCount",       label: "{i18n>LABEL_01309}"/* 현재 */, plabel: "", resize: true, span: 0, type: "string",   sort: true, filter: true, width:  "5%", align: sap.ui.core.HorizontalAlign.Right},
+			{id: "diffItemCount",       label: "{i18n>LABEL_01310}"/* 차이 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width:  "5%", align: sap.ui.core.HorizontalAlign.Right, templateGetter: "getDiffItemCountText", templateGetterOwner: this}
+		];
+	},
+
+	getDiffItemCountText: function() {
+
+		return new sap.m.Text({
+			text: {
+				path: "diffItemCount",
+				formatter: function(v) {
+					if (v > 0) {
+						this.toggleStyleClass("color-info-red", true);
+						return "+" + v;
+					} else {
+						this.toggleStyleClass("color-info-red", false);
+						return v;
+					}
+				}
+			}
 		});
 	}
 

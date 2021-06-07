@@ -1,46 +1,51 @@
 sap.ui.define([
-	"../../common/Common",
-	"../../common/DialogHandler",
-	"../../common/JSONModelHelper",
 	"../../ZUI5_SF_EvalProfile/EvalProfileDialogHandler",
-	"./OwnFunctions",
+	"common/Common",
+	"common/DialogHandler",
 	"sap/m/MessageBox",
-	"sap/ui/core/Fragment",
+	"sap/ui/core/BusyIndicator",
 	"sap/ui/export/Spreadsheet"
-], function(Common, DialogHandler, JSONModelHelper, EvalProfileDialogHandler, OwnFunctions, MessageBox, Fragment, Spreadsheet) {
+], function(
+	EvalProfileDialogHandler,
+	Common,
+	DialogHandler,
+	MessageBox,
+	BusyIndicator,
+	Spreadsheet
+) {
 "use strict";
 
 var On = { // 업적&역량 평가 event handler
 
 	// 검색 영역 조직 combobox change event handler
 	changeOrg: function(oEvent) {
-		this.getView().setBusy(true);
+		BusyIndicator.show(0);
 
 		var org = oEvent.getSource().getSelectedKey();
 		if (!org) {
-			this.getView().setBusy(false);
+			BusyIndicator.hide();
 			return;
 		}
 
-		$.proxy(On.filter, this)($.app.byId("GroupComboBox").getSelectedKey(), org);
+		On.filter.call(this, $.app.byId("GroupComboBox").getSelectedKey(), org);
 
-		this.getView().setBusy(false);
+		BusyIndicator.hide();
 	},
 
 	// 검색 영역 그룹 combobox change event handler
 	changeGroup: function(oEvent) {
-		this.getView().setBusy(true);
+		BusyIndicator.show(0);
 
 		var groupCode = oEvent.getSource().getSelectedKey();
 		if (!groupCode) {
-			this.getView().setBusy(false);
+			BusyIndicator.hide();
 			return;
 		}
 
 		var FilterComboBoxType = this.SearchModel.getProperty("/FilterComboBoxType");
-		$.proxy(On.filter, this)(groupCode, FilterComboBoxType ? $.app.byId("OrgComboBox").getSelectedKey() : null);
+		On.filter.call(this, groupCode, FilterComboBoxType ? $.app.byId("OrgComboBox").getSelectedKey() : null);
 
-		this.getView().setBusy(false);
+		BusyIndicator.hide();
 	},
 
 	filter: function(groupCode, org) {
@@ -89,11 +94,11 @@ var On = { // 업적&역량 평가 event handler
 		]);
 		this.MessagePopover.toggle($.app.byId("async-spinner"));
 
-		var YearComboBox = $.app.byId("YearComboBox"), selectedYear = YearComboBox.getSelectedKey();
+		var selectedYear = this.SearchModel.getProperty("/EvalYear");
 		if (!selectedYear) {
 			MessageBox.warning(this.getBundleText("MSG_03002"), { // 평가연도를 선택하세요.
 				onClose: function() {
-					YearComboBox.focus();
+					$.app.byId("YearComboBox").focus();
 				}
 			});
 			$.app.spinner(false);
@@ -120,7 +125,7 @@ var On = { // 업적&역량 평가 event handler
 	changeGrade: function(oEvent) {
 		Common.log("onChangeGrade", oEvent.getParameters(), oEvent.getSource());
 
-		this.getView().setBusy(true);
+		BusyIndicator.show(0);
 
 		var rowIndex = oEvent.getSource().getCustomData()[0].getValue();
 		this.TableModel.setProperty("/Appraisees/${rowIndex}/evaluationGrade".interpolate(rowIndex), oEvent.getParameters().value);
@@ -136,7 +141,7 @@ var On = { // 업적&역량 평가 event handler
 		this.CountModel.setProperty("/Selected", {A: A, B: B, C: C});
 		this.CountModel.setProperty("/Ratio", {A: (A / total * 100).toFixed(2), B: (B / total * 100).toFixed(2), C: (C / total * 100).toFixed(2)});
 
-		this.getView().setBusy(false);
+		BusyIndicator.hide();
 	},
 
 	// Table 문서 column icon click event handler
@@ -193,11 +198,11 @@ var On = { // 업적&역량 평가 event handler
 	// 저장 button click event handler
 	pressSave: function(sendToNextStep) {
 
-		this.getView().setBusy(true);
+		BusyIndicator.show(0);
 
 		var Appraisees = this.TableModel.getProperty("/Appraisees");
 		if (!Appraisees.length) {
-			this.getView().setBusy(false);
+			BusyIndicator.hide();
 			MessageBox.information(this.getBundleText("MSG_00015")); // 저장할 데이터가 없습니다.
 			return;
 		}
@@ -208,23 +213,38 @@ var On = { // 업적&역량 평가 event handler
 			}
 		}).length === 0;
 		if (!isValidCurrentSteps) {
-			this.getView().setBusy(false);
+			BusyIndicator.hide();
 			MessageBox.error(this.getBundleText("MSG_03003")); // 모든 진행상태가 '업적평가 등급결정'이 아닐 경우 1차 등급 저장 및 확정을 할 수 없습니다.
 			return;
 		}
 
-		this.submitBatch(Appraisees, sendToNextStep);
+		Promise.all([
+			new Promise(function(resolve, reject) {
+				this.submitBatch(Appraisees, resolve, reject);
+			}.bind(this)),
+			new Promise(function(resolve, reject) {
+				this.sendResultToS4Hana(Appraisees, resolve, reject);
+			}.bind(this))
+		])
+		.then(function() {
+			if (typeof sendToNextStep === "function") {
+				this.sendToNextStep.call(this);
+			} else {
+				BusyIndicator.hide();
+				MessageBox.success(this.getBundleText("MSG_00017")); // 저장되었습니다.
+			}
+		}.bind(this));
 	},
 
 	// 확정 button click event handler
 	pressConfirm: function() {
 
-		this.getView().setBusy(true);
+		BusyIndicator.show(0);
 
 		var Appraisees = this.TableModel.getProperty("/Appraisees"), total = Appraisees.length;
 
 		if (total < 1) {
-			this.getView().setBusy(false);
+			BusyIndicator.hide();
 			MessageBox.information(this.getBundleText("MSG_03004")); // 확정할 데이터가 없습니다.
 			return;
 		}
@@ -242,19 +262,19 @@ var On = { // 업적&역량 평가 event handler
 		}).length;
 
 		if (isGradeRequired) {
-			this.getView().setBusy(false);
+			BusyIndicator.hide();
 			MessageBox.error(this.getBundleText("MSG_03020")); // 등급은 모두 필수 입력 항목입니다.
 			return;
 		}
 		if (total < 3) {
 			if (A > 1) {
-				this.getView().setBusy(false);
+				BusyIndicator.hide();
 				MessageBox.error(this.getBundleText("MSG_03021")); // 선택된 그룹의 인원이 2명 이하인 경우 A등급은 1명까지만 부여가능합니다.
 				return;
 			}
 		} else {
 			if ((A / total * 100 > 20) && A > Math.round(total * 0.2)) {
-				this.getView().setBusy(false);
+				BusyIndicator.hide();
 				MessageBox.error(this.getBundleText("MSG_03005")); // A등급은 선택된 그룹 인원의 20%를 초과하여 부여할 수 없으며\n5명 이하 그룹의 경우 1명까지만 부여가능합니다.
 				return;
 			}
@@ -264,9 +284,9 @@ var On = { // 업적&역량 평가 event handler
 		MessageBox.confirm(this.getBundleText("MSG_03023"), { // 1차 평가등급을 확정하시겠습니까?
 			onClose: function(oAction) {
 				if (sap.m.MessageBox.Action.OK === oAction) {
-					$.proxy(On.onPressSave, oController)(oController.sendToNextStep);
+					On.pressSave.call(oController, oController.sendToNextStep);
 				} else {
-					oController.getView().setBusy(false);
+					BusyIndicator.hide();
 				}
 			}
 		});

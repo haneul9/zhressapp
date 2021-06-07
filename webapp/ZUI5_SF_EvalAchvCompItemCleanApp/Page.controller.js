@@ -1,9 +1,9 @@
-/* global Promise:true */
+/* global Promise */
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
-	"../common/JSONModelRequest",
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper",
+	"common/JSONModelRequest",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/export/Spreadsheet",
@@ -21,17 +21,13 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 	TableModel: new JSONModelHelper(),
 	EvalItemFilterModel: null,
 	HrReportsModel: null,
+	RankCodeModel: null,
 	FormHeaderModel: null,
 	RemovalModelMap: null,
-	FormTemplateIdMap: {
-		DEV: {"PM": "703", "360": "719"},
-		QAS: {"PM": "500", "360": "502"},
-		PRD: {"PM": "500", "360": "502"}
-	},
 
 	getUserId: function() {
 
-		return this.getView().getModel("session").getData().name;
+		return this.getSessionInfoByKey("name");
 	},
 
 	onInit: function () {
@@ -42,22 +38,27 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 				onBeforeShow: this.onBeforeShow
 			}, this);
 
-		Common.log("onInit session", this.getView().getModel("session").getData());
+		Common.log("onInit session", this.getSessionModel().getData());
 	},
 
 	onBeforeShow: function(oEvent) {
 		Common.log("onBeforeShow");
 
-		this.SearchModel
-			.url("/odata/v2/FormTemplate")
-			.select("formTemplateId")
-			.select("formTemplateName")
-			.orderby("formTemplateId desc")
-			.attachRequestCompleted(this.successFormTemplate)
-			.attachRequestFailed(function() {
-				Common.log("FormTemplate fail", arguments);
-			})
-			.load();
+		this.SearchModel.setProperty("/FormTemplates", []);
+
+		var currentYear = new Date().getFullYear();
+		Promise.all([
+			this.getFormTemplateModelPromise("Review",	"${year}년 업적%".interpolate(currentYear),		0),
+			this.getFormTemplateModelPromise("360",		"${year}년 다면%".interpolate(currentYear),		1),
+			this.getFormTemplateModelPromise("Review", 	"${year}년 업적%".interpolate(currentYear - 1),	2),
+			this.getFormTemplateModelPromise("360",		"${year}년 다면%".interpolate(currentYear - 1),	3)
+		])
+		.then(function() {
+			this.SearchModel.getProperty("/FormTemplates").sort(function(o1, o2) {
+				return o1.SortOrder - o2.SortOrder;
+			});
+			this.SearchModel.refresh();
+		}.bind(this));
 
 		this.EvalItemFilterModel = new JSONModelHelper()
 			.url("./${$.app.CONTEXT_PATH}/item-map.json".interpolate($.app.CONTEXT_PATH))
@@ -72,52 +73,30 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 		});
 	},
 
-	getFormTemplateId: function(type) {
+	getFormTemplateModelPromise: function(formTemplateType, formTemplateName, sortOrder) {
 
-		return this.FormTemplateIdMap[Common.getOperationMode()][type];
-	},
+		return new JSONModelHelper()
+			.url("/odata/v2/FormTemplate")
+			.select("formTemplateId")
+			.select("formTemplateName")
+			.filter("formTemplateType eq '${formTemplateType}'".interpolate(formTemplateType))
+			.filter("formTemplateName like '${formTemplateName}'".interpolate(formTemplateName))
+			.attachRequestCompleted(function() {
+				Common.log("FormTemplate complete : ${}, ${}".interpolate(formTemplateType, formTemplateName), arguments, this);
 
-	isAssignedFormTemplateId: function(formTemplateId) {
+				var results = this.getResults();
+				if (results && results.length) {
+					var o = results.pop();
+					o.SortOrder = sortOrder;
 
-		var isAssigned = false;
-		$.each(this.FormTemplateIdMap[Common.getOperationMode()], function(k, v) {
-			if (formTemplateId === v) {
-				isAssigned = true;
-				return false;
-			}
-		});
-		return isAssigned;
-	},
-
-	getDiffItemCountText: function() {
-
-		return new sap.m.Text({
-			text: {
-				path: "diffItemCount",
-				formatter: function(v) {
-					if (v > 0) {
-						this.toggleStyleClass("color-info-red", true);
-						return "+" + v;
-					} else {
-						this.toggleStyleClass("color-info-red", false);
-						return v;
-					}
-				}
-			}
-		});
-	},
-
-	successFormTemplate: function() {
-		Common.log("successFormTemplate", this.getResults());
-
-		var oController = this.getController();
-		this.setData({
-			FormTemplates: $.map(this.getResults(), function(o) {
-				if (oController.isAssignedFormTemplateId(o.formTemplateId)) {
-					return o;
+					this.getController().SearchModel.getProperty("/FormTemplates").push(o);
 				}
 			})
-		});
+			.attachRequestFailed(function() {
+				Common.log("FormTemplate fail : ${}, ${}".interpolate(formTemplateType, formTemplateName), arguments);
+			})
+			.load()
+			.promise();
 	},
 
 	successEvalItemFilter: function() {
@@ -136,54 +115,23 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 		});
 	},
 
-	/*
-	 * User list로부터 division Set, department Set을 생성하여 반환
-	 */
-	resetComboBoxItems: function(usersMap) {
-
-		var oController = this;
-		setTimeout(function() {
-			var divisionMap = {}, departmentMap = {}, divisionSet = [], departmentSet = [];
-			$.map(usersMap, function(o, k) {
-				Common.log("resetComboBoxItems", k, o);
-				var division = divisionMap[o.division], department = departmentMap[o.department];
-				if (!division) {
-					divisionMap[o.division] = true;
-					divisionSet.push({value: o.division, text: o.division});
-				}
-				if (!department) {
-					departmentMap[o.department] = true;
-					departmentSet.push({value: o.department, text: o.department});
-				}
-			});
-
-			setTimeout(function() {
-				oController.SearchModel.setProperty("/Divisions", divisionSet);
-				$.app.byId("DivisionsMultiComboBox").setEnabled(true);
-			}, 0);
-
-			setTimeout(function() {
-				oController.SearchModel.setProperty("/Teams", departmentSet);
-				$.app.byId("TeamsMultiComboBox").setEnabled(true);
-			}, 0);
-		}, 0);
-	},
-
 	onChangeComboBox: function(oEvent) {
 		Common.log("onChangeComboBox", arguments);
 
-		if (oEvent.getSource().getId() === "FormsComboBox") {
-			this.onPressSearch();
-		} else {
-			BusyIndicator.show(0);
-			this.setTableData();
-		}
+		var sEventSourceId = oEvent.getSource().getId();
+		setTimeout(function() {
+			if (sEventSourceId === "FormsComboBox") {
+				this.onPressSearch();
+			} else {
+				BusyIndicator.show(0);
+				this.setTableData();
+			}
+		}.bind(this), 0);
 	},
 
 	onPressExcelDownload: function() {
 
-		var oView = this.getView(),
-		tableData = $.app.byId("AppraiseesTable").getModel().getProperty("/Appraisees");
+		var tableData = $.app.byId("AppraiseesTable").getModel().getProperty("/Appraisees");
 		if (!tableData || !tableData.length) {
 			MessageBox.warning(this.getBundleText("MSG_00023")); // 다운로드할 데이터가 없습니다.
 			return;
@@ -192,8 +140,8 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 		new Spreadsheet({
 			worker: false,
 			dataSource: tableData,
-			workbook: {columns: Common.convertColumnArrayForExcel(this, oView._colModel)},
-			fileName: "${fileName}-${datetime}.xlsx".interpolate(this.getBundleText("LABEL_01001"), sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "yyyy-MM-dd"}).format(new Date()))
+			workbook: {columns: Common.convertColumnArrayForExcel(this, this.getView().getColumnModel())},
+			fileName: "${fileName}-${datetime}.xlsx".interpolate(this.getBundleText("LABEL_01001"), sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: this.getSessionInfoByKey("Dtfmt")}).format(new Date()))
 		}).build();
 	},
 
@@ -237,7 +185,92 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 		$.app.byId("DivisionsMultiComboBox").setEnabled(false);
 		$.app.byId("TeamsMultiComboBox").setEnabled(false);
 
-		this.HrReportsModel = new JSONModelHelper()
+		this.HrReportsModel = this.getHrReportsModelHelper();
+
+		Promise.all([
+			this.HrReportsModel.load().promise(),	// 전체 HR Reports 조회
+			new Promise(function(resolve, reject) {
+				setTimeout(function() {
+					return $.app.getModel("ZHR_COMMON_SRV").create(
+						"/CommonCodeListHeaderSet",	// 직급 코드 조회 : 피평가자 filtering 기준
+						{
+							ICodeT: "066",
+							NavCommonCodeList: []
+						},
+						{
+							success: function(oData) {
+								this.RankCodeModel = new JSONModelHelper();
+
+								var NavCommonCodeList = Common.getTableInResults(oData, "NavCommonCodeList"),
+								rankCodeMap = {};
+								$.map(NavCommonCodeList, function(o) {
+									rankCodeMap[o.Code] = true;
+								});
+
+								this.RankCodeModel.setProperty("/RankCodeMap", rankCodeMap);
+
+								resolve();
+							}.bind(this),
+							error: function() {
+								Common.log("rankCode fail", arguments);
+
+								reject();
+							}
+						}
+					);
+				}.bind(this), 0);
+			}.bind(this))
+		])
+		.then(function() {
+			var formTemplateId = $.app.byId("FormsComboBox").getSelectedKey(),
+			rankCodeMap = this.RankCodeModel.getProperty("/RankCodeMap"),
+			hrReportsAll = this.HrReportsModel.getResults(),
+			hrReportsAllMap = {},
+			appraiseeIds = $.map(hrReportsAll, function(o) {
+				if (o.custom04 || !rankCodeMap[o.custom07]) { // 평가제외자 : 값이 있으면 평가에서 제외
+					return;
+				}
+				hrReportsAllMap[o.userId] = $.extend(o, { allocatingItemCount: 0, poolItemCount: 0, diffItemCount: 0, currentStep: "", formDataId: "" });
+				return o.userId;
+			});
+
+			this.HrReportsModel.setProperty("/hrReportsAllMap", hrReportsAllMap);
+
+			Common.log("hrReports", formTemplateId, hrReportsAll, appraiseeIds);
+
+			var appraiseeIdCount = appraiseeIds.length,
+			requests = this.getRequestFormHeader(formTemplateId, appraiseeIds);
+
+			if (appraiseeIdCount > 1000 || requests.isMultipleRequest()) { // $filter in 절 조건값이 1000개를 넘거나 요청 URL 문자열의 길이가 8192 bytes를 초과하는 경우 요청을 분리하여 호출함
+				var oController = this,
+					requestCount = Math.max(Math.ceil(appraiseeIdCount / 1000), requests.getEstimatedRequestCount()), // $filter 조건값 개수로 산정된 요청 횟수와 URL 길이로 산정된 요청 횟수 중 큰 값으로 호출 횟수를 정함
+					spliceLength = Math.ceil(appraiseeIdCount / requestCount); // 선택된 호출 횟수로 $filter 조건값을 분리
+
+				Common.log("FormHeader is multiple requests.", "requestCount: " + requestCount, "spliceLength: " + spliceLength);
+
+				requests = $.map(new Array(requestCount), function () {
+					return oController.getRequestFormHeader(formTemplateId, appraiseeIds.splice(spliceLength)); // 각각의 요청 URL 생성
+				});
+			}
+
+			// 피평가자들의 평가문서 조회
+			this.FormHeaderModel = new JSONModelHelper()
+				.requests(requests) // JSONModelHelper 내부에서 각 요청들을 Promise.all로 호출하여 결과 데이터를 취합해줌
+				.attachRequestCompleted(this.successFormHeader.bind(this))
+				.attachRequestFailed(function () {
+					Common.log("FormHeader fail", arguments);
+					BusyIndicator.hide();
+				})
+				.load();
+
+		}.bind(this));
+
+		this.RemovalModelMap = {};
+	},
+
+	getHrReportsModelHelper: function() {
+
+		return new JSONModelHelper()
 			.url("/odata/v2/User('${this.LoginUserId}')/hrReports".interpolate(this.LoginUserId))
 			.select("userId")          // 사번
 			.select("nickname")        // 성명
@@ -250,14 +283,10 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 			.select("custom08")        // 직책코드 duty
 			.select("division")        // 부문
 			.select("department")      // 부서
-			.attachRequestCompleted($.proxy(this.successHrReports, this))
-			.attachRequestFailed(function() {
+			.attachRequestFailed(function () {
 				Common.log("hrReports fail", arguments);
 				BusyIndicator.hide();
-			})
-			.load();
-
-		this.RemovalModelMap = {};
+			});
 	},
 
 	getRequestFormHeader: function(formTemplateId, appraiseeIds) {
@@ -275,51 +304,6 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 			.filter("formSubjectId in '${appraiseeIds}'".interpolate(appraiseeIds.join("','")))
 			.expand("formAuditTrails")
 			.orderby("currentStep,formSubjectId,formDataId desc");
-	},
-
-	/*
-	 * 피평가자들의 평가문서 조회
-	 */
-	successHrReports: function() {
-
-		var formTemplateId = $.app.byId("FormsComboBox").getSelectedKey(),
-		hrReportsAllMap = {},
-		hrReportsAll = this.HrReportsModel.getResults(),
-		appraiseeIds = $.map(hrReportsAll, function(o) {
-			if (o.custom04) { // 평가제외자 : 값이 있으면 평가에서 제외
-				return;
-			}
-			hrReportsAllMap[o.userId] = $.extend(o, {allocatingItemCount: 0, poolItemCount: 0, diffItemCount: 0, currentStep: "", formDataId: ""});
-			return o.userId;
-		});
-
-		Common.log("successHrReports", formTemplateId, hrReportsAll, appraiseeIds);
-
-		this.HrReportsModel.setProperty("/hrReportsAllMap", hrReportsAllMap);
-
-		var appraiseeIdCount = appraiseeIds.length,
-		requests = this.getRequestFormHeader(formTemplateId, appraiseeIds);
-
-		if (appraiseeIdCount > 1000 || requests.isMultipleRequest()) { // $filter in 절 조건값이 1000개를 넘거나 요청 URL 문자열의 길이가 8192 bytes를 초과하는 경우 요청을 분리하여 호출함
-			var oController = this,
-			requestCount = Math.max(Math.ceil(appraiseeIdCount / 1000), requests.getEstimatedRequestCount()), // $filter 조건값 개수로 산정된 요청 횟수와 URL 길이로 산정된 요청 횟수 중 큰 값으로 호출 횟수를 정함
-			spliceLength = Math.ceil(appraiseeIdCount / requestCount); // 선택된 호출 횟수로 $filter 조건값을 분리
-
-			Common.log("FormHeader is multiple requests.", "requestCount: " + requestCount, "spliceLength: " + spliceLength);
-
-			requests = $.map(new Array(requestCount), function() {
-				return oController.getRequestFormHeader(formTemplateId, appraiseeIds.splice(spliceLength)); // 각각의 요청 URL 생성
-			});
-		}
-
-		this.FormHeaderModel = new JSONModelHelper()
-			.requests(requests) // JSONModelHelper 내부에서 각 요청들을 Promise.all로 호출하여 결과 데이터를 취합해줌
-			.attachRequestCompleted($.proxy(this.successFormHeader, this))
-			.attachRequestFailed(function() {
-				Common.log("FormHeader fail", arguments);
-				BusyIndicator.hide();
-			})
-			.load();
 	},
 
 	/*
@@ -401,8 +385,42 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 
 				oController.resetComboBoxItems(hrReportsMap);
 				oController.HrReportsModel.setProperty("/hrReportsMap", hrReportsMap);
-				$.proxy(oController.setTableData, oController)();
+				oController.setTableData();
 			});
+	},
+
+	/*
+	 * User list로부터 division Set, department Set을 생성하여 반환
+	 */
+	resetComboBoxItems: function(usersMap) {
+
+		var oController = this;
+		setTimeout(function() {
+			var divisionMap = {}, departmentMap = {}, divisionSet = [], departmentSet = [];
+			$.map(usersMap, function(o, k) {
+				Common.log("resetComboBoxItems", k, o);
+
+				var division = divisionMap[o.division], department = departmentMap[o.department];
+				if (!division) {
+					divisionMap[o.division] = true;
+					divisionSet.push({value: o.division, text: o.division});
+				}
+				if (!department) {
+					departmentMap[o.department] = true;
+					departmentSet.push({value: o.department, text: o.department});
+				}
+			});
+
+			setTimeout(function() {
+				oController.SearchModel.setProperty("/Divisions", divisionSet);
+				$.app.byId("DivisionsMultiComboBox").setEnabled(true);
+			}, 0);
+
+			setTimeout(function() {
+				oController.SearchModel.setProperty("/Teams", departmentSet);
+				$.app.byId("TeamsMultiComboBox").setEnabled(true);
+			}, 0);
+		}, 0);
 	},
 
 	setTableData: function() {
@@ -477,7 +495,7 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 		this.TableModel.setProperty("/Appraisees", Appraisees);
 		this.TableModel.setProperty("/AppraiseesMap", AppraiseesMap);
 
-		Common.adjustVisibleRowCount($.app.byId("AppraiseesTable"), 10, Appraisees.length);
+		Common.adjustAutoVisibleRowCount.call($.app.byId("AppraiseesTable"));
 
 		BusyIndicator.hide();
 	},
@@ -615,7 +633,7 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 
 				BusyIndicator.hide();
 
-				$.proxy(oController.onPressSearch, oController)(true);
+				oController.onPressSearch.call(oController, true);
 			})
 			.catch(function() {
 				if ($.app.LOG.ENABLE_FAILURE) Common.log("sendToNextStep error", arguments);
