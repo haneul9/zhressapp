@@ -28,7 +28,7 @@ init: function() {
 		'P110': VacationPortlet,			// 휴가사용현황
 		'P111': VacationForHQPortlet,		// 연차사용현황 : 임원용
 		'P112': LanguageScorePortlet,		// 외국어 등급 현황
-		'P113': EvalCollFinPortlet			// MSS 결과조회
+		// 'P113': EvalCollFinPortlet			// MSS 결과조회
 	};
 
 	Chart.defaults.scale.gridLines.color = 'rgb(242, 242, 242)';
