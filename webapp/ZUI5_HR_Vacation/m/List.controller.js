@@ -92,7 +92,7 @@ sap.ui.define([
 			
 			oTable.removeSelections();
 			
-			var search = function(){
+			// var search = function(){
 				var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : gDtfmt});
 				
 				var oModel = $.app.getModel("ZHR_LEAVE_APPL_SRV");
@@ -148,10 +148,11 @@ sap.ui.define([
 				
 				oController._BusyDialog.close();
 				
-			}
+			// }
 			
-			oController._BusyDialog.open();
-			setTimeout(search, 100);
+			// oController._BusyDialog.open();
+			// setTimeout(search, 100);
+			// setTimeout(search, 0);
 		},
 		
 		onSelectTable : function(oEvent){
