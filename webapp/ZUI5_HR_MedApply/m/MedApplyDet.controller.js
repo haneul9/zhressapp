@@ -1151,60 +1151,63 @@ sap.ui.define(
                 var oController = this.getView().getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var oSendData = oController._DataModel.getProperty("/Pop1/0");
+                var oCal = oController.onCal(oController._Bukrs, "S");
                 var oSessionData = oController._SessionData;
 
                 if(oController.onValid(oController) === false) return;
                 
-                BusyIndicator.show(0);
-                var onProcessSave = function (fVal) {
-                    if (fVal && fVal == oController.getBundleText("LABEL_70047")) { //저장
-                        var sendObject = {};
-                        var uFiles = [];
-
-                        if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") !== 0) uFiles.push("001");
-                        if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") !== 0) uFiles.push("002");
-                        if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "009") !== 0) uFiles.push("009");
-
-                        oSendData.Zfvcgb = (oSendData.Chk1) ? "X" : "";
-						oSendData.Ziftgb = (oSendData.Chk2) ? "X" : "";
-
-                        // 첨부파일 저장
-                        oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
-                        oSendData.Waers = "KRW";
-                        if(oSendData.Zmedrl === oController.getBundleText("MSG_47044")) oSendData.Zmedrl = "9992622744";
+                if(oCal) {
+                    BusyIndicator.show(0);
+                    var onProcessSave = function (fVal) {
+                        if (fVal && fVal == oController.getBundleText("LABEL_70047")) { //저장
+                            var sendObject = {};
+                            var uFiles = [];
     
-                        // Header
-                        sendObject.IPernr = oController._vPernr;
-                        sendObject.IEmpid = oSessionData.Pernr;
-                        sendObject.IConType = "2";
-                        sendObject.IBukrs = oController._Bukrs;
-                        // Navigation property
-                        sendObject.MedicalApplyTableIn = [Common.copyByMetadata(oModel, "MedicalApplyTableIn", oSendData)];
-                        
-                        oModel.create("/MedicalApplySet", sendObject, {
-                            success: function(oData, oResponse) {
-                                Common.log(oData);
-                                BusyIndicator.hide();
-                                sap.m.MessageBox.alert(oController.getBundleText("MSG_70007"), { title: oController.getBundleText("MSG_08107")});
-                                oController.navBack();
-                            },
-                            error: function(oResponse) {
-                                Common.log(oResponse);
-                                sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-                                    title: oController.getBundleText("LABEL_09030")
-                                });
-                                BusyIndicator.hide();
-                            }
-                        });
-                    }
-                    BusyIndicator.hide();
-                };
+                            if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") !== 0) uFiles.push("001");
+                            if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") !== 0) uFiles.push("002");
+                            if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "009") !== 0) uFiles.push("009");
     
-                sap.m.MessageBox.confirm(oController.getBundleText("MSG_70006"), {
-                    title: oController.getBundleText("LABEL_47001"),
-                    actions: [oController.getBundleText("LABEL_70047"), oController.getBundleText("LABEL_00119")],
-                    onClose: onProcessSave
-                });
+                            oSendData.Zfvcgb = (oSendData.Chk1) ? "X" : "";
+                            oSendData.Ziftgb = (oSendData.Chk2) ? "X" : "";
+    
+                            // 첨부파일 저장
+                            oSendData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+                            oSendData.Waers = "KRW";
+                            if(oSendData.Zmedrl === oController.getBundleText("MSG_47044")) oSendData.Zmedrl = "9992622744";
+        
+                            // Header
+                            sendObject.IPernr = oController._vPernr;
+                            sendObject.IEmpid = oSessionData.Pernr;
+                            sendObject.IConType = "2";
+                            sendObject.IBukrs = oController._Bukrs;
+                            // Navigation property
+                            sendObject.MedicalApplyTableIn = [Common.copyByMetadata(oModel, "MedicalApplyTableIn", oSendData)];
+                            
+                            oModel.create("/MedicalApplySet", sendObject, {
+                                success: function(oData, oResponse) {
+                                    Common.log(oData);
+                                    BusyIndicator.hide();
+                                    sap.m.MessageBox.alert(oController.getBundleText("MSG_70007"), { title: oController.getBundleText("MSG_08107")});
+                                    oController.navBack();
+                                },
+                                error: function(oResponse) {
+                                    Common.log(oResponse);
+                                    sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+                                        title: oController.getBundleText("LABEL_09030")
+                                    });
+                                    BusyIndicator.hide();
+                                }
+                            });
+                        }
+                        BusyIndicator.hide();
+                    };
+        
+                    sap.m.MessageBox.confirm(oController.getBundleText("MSG_70006"), {
+                        title: oController.getBundleText("LABEL_47001"),
+                        actions: [oController.getBundleText("LABEL_70047"), oController.getBundleText("LABEL_00119")],
+                        onClose: onProcessSave
+                    });
+                }
             },
 
             onDialogBaseDelBtn: function() {
