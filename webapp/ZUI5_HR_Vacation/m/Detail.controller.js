@@ -445,9 +445,8 @@ sap.ui.define([
 				oController._BusyDialog.close();
 			}
 			
-			// oController._BusyDialog.open();
-			// setTimeout(search, 100);
-			setTimeout(search, 0);
+			oController._BusyDialog.open();
+			setTimeout(search, 50);
 		},
 		
 		// 근태코드 변경
