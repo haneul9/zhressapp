@@ -1151,7 +1151,7 @@ sap.ui.define(
                 var oController = this.getView().getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var oSendData = oController._DataModel.getProperty("/Pop1/0");
-                var oCal = oController.onCal(vSig, "S");
+                var oCal = oController.onCal(oController._Bukrs, "S");
                 var oSessionData = oController._SessionData;
 
                 if(oController.onValid(oController) === false) return;
