@@ -560,7 +560,7 @@ getMenuTree: function(data) {
 	var cutFlag = false;
 	return $.map(results.TableIn1.results, function(o) {
 		if (cutFlag) {
-			return false;
+			return;
 		}
 		if (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') {
 			cutFlag = true;
