@@ -448,7 +448,7 @@ getMenuTree: function(data) {
 
 generate: function() {
 
-	return new Promise(function (resolve, reject) {
+	return new Promise(function(resolve, reject) {
 		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
 		url = 'ZHR_COMMON_SRV/GetMnlvSet',
 		loginInfo = this._gateway.loginInfo();
@@ -519,13 +519,16 @@ generate: function() {
 					}.bind(this)).join(''))
 				);
 
-				this._gateway.alert({ title: '오류', html: [
-					'<p>메뉴를 조회하지 못했습니다.',
-					'화면을 새로고침 해주세요.<br />',
-					'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.',
-					'시스템 오류 메세지 : ' + message,
-					'</p>'
-				].join('<br />') });
+				this._gateway.alert({
+					title: '오류',
+					html: [
+						'<p>메뉴를 조회하지 못했습니다.',
+						'화면을 새로고침 해주세요.<br />',
+						'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.',
+						'시스템 오류 메세지 : ' + message,
+						'</p>'
+					].join('<br />')
+				});
 
 				reject(jqXHR);
 			}.bind(this)

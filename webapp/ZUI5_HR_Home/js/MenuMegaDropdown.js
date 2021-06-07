@@ -558,6 +558,9 @@ getMenuTree: function(data) {
 	});
 
 	return $.map(results.TableIn1.results, function(o) {
+		if (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') {
+			return false;
+		}
 		if (o.Hide === 'X') {
 			return;
 		}
@@ -572,7 +575,7 @@ getMenuTree: function(data) {
 			Mnid1: o.Mnid1,
 			title: o.Mnnm1,
 			url: !o.Menid ? '' : menuDataMap[o.Menid].url,
-			children: (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') ? [] : level1SubMenuMap[o.Mnid1],
+			children: level1SubMenuMap[o.Mnid1],
 			styleClasses: o.Mnid1 === '10000' ? ' menu-mss' : (o.Mnid1 === '20000' ? ' menu-hass' : '')
 		};
 	});
@@ -580,11 +583,11 @@ getMenuTree: function(data) {
 
 generate: function(reload) {
 
-	return new Promise(function (resolve, reject) {
+	return new Promise(function(resolve, reject) {
 		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
 		url = 'ZHR_COMMON_SRV/GetMnlvSet',
 		loginInfo = this._gateway.loginInfo();
-		
+
 		oModel.create("/GetMnlvSet", {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
@@ -648,18 +651,21 @@ generate: function(reload) {
 					}.bind(this)).join(''))
 				);
 
-				this._gateway.alert({ title: '오류', html: [
-					'<p>메뉴를 조회하지 못했습니다.',
-					'화면을 새로고침 해주세요.<br />',
-					'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.',
-					'시스템 오류 메세지 : ' + message,
-					'</p>'
-				].join('<br />') });
+				this._gateway.alert({
+					title: '오류',
+					html: [
+						'<p>메뉴를 조회하지 못했습니다.',
+						'화면을 새로고침 해주세요.<br />',
+						'같은 문제가 반복될 경우 HR 시스템 담당자에게 문의하세요.',
+						'시스템 오류 메세지 : ' + message,
+						'</p>'
+					].join('<br />')
+				});
 
 				setTimeout(function() {
 					$('.ehr-header .menu-spinner-wrapper').toggleClass('d-none', true);
 				}, 0);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});
