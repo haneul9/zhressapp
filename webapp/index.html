@@ -182,6 +182,22 @@ var _gateway = window._gateway = new HomeGateway();
 window._basis = new HomeBasis(_gateway);
 window._session = new HomeSession(_gateway, initHome); // 2FA 처리 포함
 
+setInterval(function () {
+	jQuery.ajax({
+		type: "HEAD",
+		cache: false,
+		url: "./Component.js"
+	}).done(
+		function (result) {
+			_gateway.log("pingServer", "Successfully pinged the server to extend the session");
+		}
+	).fail(
+		function () {
+			_gateway.log("pingServer", "failed to ping the server to extend the session");
+		}
+	);
+}, 900000); //15 minutes(900000)
+
 });
 </script>
 </head>
