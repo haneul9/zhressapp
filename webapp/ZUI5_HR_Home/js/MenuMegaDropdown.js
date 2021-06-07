@@ -557,9 +557,13 @@ getMenuTree: function(data) {
 		}
 	});
 
+	var cutFlag = false;
 	return $.map(results.TableIn1.results, function(o) {
-		if (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') {
+		if (cutFlag) {
 			return false;
+		}
+		if (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') {
+			cutFlag = true;
 		}
 		if (o.Hide === 'X') {
 			return;
