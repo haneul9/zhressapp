@@ -1056,7 +1056,7 @@ sap.ui.define(
                 delete vData.MedicalApplyTableIn[0].PayDate;
 
                 vData.MedicalApplyTableIn[0].Waers = "KRW";
-                // vData.MedicalApplyTableIn[0].Bukrs = vSig;
+                vData.MedicalApplyTableIn[0].Bukrs = vSig;
 				
 				if(vSig == "1000") {
 					vData.IMedDate = oController._DataModel.getProperty("/Pop1/0/MedDate");
