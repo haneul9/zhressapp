@@ -2297,7 +2297,7 @@ sap.ui.define([
 				UseMultiCategories: true,
 				CntnmDifferent: vCntnm === "001" && Common.checkNull(!vAppnm1) ? true : false,
 				CntnmDifferentData: vCntnm === "001" && Common.checkNull(!vAppnm1) ? vList1 : {},
-				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || (vStatus === "AA" && vEdoty === "2") ? true : false
+				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || ((vStatus === "AA" || vStatus === "88") && vEdoty === "2") ? true : false
 			},"001");
 
 			var vAppnm2 = "",
@@ -2321,7 +2321,7 @@ sap.ui.define([
 				UseMultiCategories: true,
 				CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
 				CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList2 : {},
-				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || (vStatus === "AA" && vEdoty === "2") ? true : false
+				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || ((vStatus === "AA" || vStatus === "88") && vEdoty === "2") ? true : false
 			},"002");
 			
 			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 영수증
@@ -2330,7 +2330,7 @@ sap.ui.define([
 				UseMultiCategories: true,
 				CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
 				CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList3 : {},
-				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || (vStatus === "AA" && vEdoty === "2") ? true : false
+				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || ((vStatus === "AA" || vStatus === "88") && vEdoty === "2") ? true : false
 			},"003");
 		},
 
