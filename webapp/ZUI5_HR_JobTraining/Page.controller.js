@@ -886,14 +886,19 @@ sap.ui.define([
 			if(vIs){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
 				this.ApplyModel.setProperty("/Checked", "X");
+				this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
+				this.ApplyModel.setProperty("/FormData/Edgub", "Null"); // 교육유형
+				this.ApplyModel.setProperty("/FormData/Optin", "Null"); // 필수/선택
+				this.ApplyModel.setProperty("/FormData/Rules", "Null"); // 법정/일반
+				this.ApplyModel.setProperty("/FormData/Course", "Null"); // 교육코드
 			}else{
 				this.ApplyModel.setProperty("/TraningCheck", "X");
 				this.ApplyModel.setProperty("/Checked", "");
-				// this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
-				// this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
-				// this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
-				// this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
-				// this.ApplyModel.setProperty("/FormData/Course", ""); // 교육코드
+				this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
+				this.ApplyModel.setProperty("/FormData/Edgub", "Null"); // 교육유형
+				this.ApplyModel.setProperty("/FormData/Optin", "Null"); // 필수/선택
+				this.ApplyModel.setProperty("/FormData/Rules", "Null"); // 법정/일반
+				this.ApplyModel.setProperty("/FormData/Course", "Null"); // 교육코드
 			}
 			this.getTypeCombo(vIs);
 		},
