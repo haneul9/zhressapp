@@ -557,20 +557,12 @@ getMenuTree: function(data) {
 		}
 	});
 
-	if(sessionStorage.getItem('ehr.client.ip.external') === 'E') {
-		results.TableIn1.results = results.TableIn1.results.filter(function(elem) {
-			return elem.Mnid1 !== "90000";
-		});
-	}
-
-	// var cutFlag = false;
+	var cutFlag = false;
 	return $.map(results.TableIn1.results, function(o) {
-		// if (cutFlag) {
-		// 	return;
-		// }
-		// if (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E') {
-		// 	cutFlag = true;
-		// }
+		if (cutFlag || (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E')) {
+			cutFlag = true;
+			return;
+		}
 		if (o.Hide === 'X') {
 			return;
 		}
