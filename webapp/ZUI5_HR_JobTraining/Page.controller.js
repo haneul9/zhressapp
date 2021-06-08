@@ -76,7 +76,7 @@ sap.ui.define([
                 visible: {
 					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 					formatter: function(v1, v2, v3) {
-						return (Common.checkNull(v3) && v1 === "99" && v2 === "1") || v1 === "AA";
+						return (Common.checkNull(v3) && v1 === "99" && v2 === "1") || (v1 === "AA" || v1 === "88");
 					}
 				},
                 selected: "{Pchk}"
@@ -88,7 +88,7 @@ sap.ui.define([
                 visible: {
 					parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
                 selected: "{Pchk}"
@@ -130,6 +130,8 @@ sap.ui.define([
 										case "AA" : vText = oController.getBundleText("LABEL_40071"); break;
 										// 결재완료
 										case "99" : vText = oController.getBundleText("LABEL_40069"); break;
+										// 반려
+										case "88" : vText = oController.getBundleText("LABEL_66004"); break;
 									}
 									return vText;
 								} 
@@ -151,6 +153,7 @@ sap.ui.define([
 									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
 									if(v2 === "AA") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40071") + "</a>";
+									if(v2 === "88") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
 								}
 							}, 
 							visible: {
@@ -183,6 +186,8 @@ sap.ui.define([
 										case "AA" : vText = oController.getBundleText("LABEL_40071"); break;
 										// 결재완료
 										case "99" : vText = oController.getBundleText("LABEL_40069"); break;
+										// 반려
+										case "88" : vText = oController.getBundleText("LABEL_66004"); break;
 									}
 									return vText;
 								} 
@@ -203,6 +208,7 @@ sap.ui.define([
 								formatter: function(v1, v2) {
 									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
+									if(v2 === "88") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
 								}
 							}, 
 							visible: {
@@ -245,7 +251,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
 				value: {
@@ -269,7 +275,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
 				value: {
@@ -2291,7 +2297,7 @@ sap.ui.define([
 				UseMultiCategories: true,
 				CntnmDifferent: vCntnm === "001" && Common.checkNull(!vAppnm1) ? true : false,
 				CntnmDifferentData: vCntnm === "001" && Common.checkNull(!vAppnm1) ? vList1 : {},
-				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || (vStatus === "AA" && vEdoty === "2") ? true : false
+				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || ((vStatus === "AA" || vStatus === "88") && vEdoty === "2") ? true : false
 			},"001");
 
 			var vAppnm2 = "",
@@ -2315,7 +2321,7 @@ sap.ui.define([
 				UseMultiCategories: true,
 				CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
 				CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList2 : {},
-				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || (vStatus === "AA" && vEdoty === "2") ? true : false
+				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || ((vStatus === "AA" || vStatus === "88") && vEdoty === "2") ? true : false
 			},"002");
 			
 			fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 영수증
@@ -2324,7 +2330,7 @@ sap.ui.define([
 				UseMultiCategories: true,
 				CntnmDifferent: Common.checkNull(!vAppnm2) ? true : false,
 				CntnmDifferentData: Common.checkNull(!vAppnm2) ? vList3 : {},
-				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || (vStatus === "AA" && vEdoty === "2") ? true : false
+				Editable: !vStatus || (vStatus === "AA" && vEdoty === "1") || (vStatus === "99" && vEdoty === "1" && vResult === "X") || ((vStatus === "AA" || vStatus === "88") && vEdoty === "2") ? true : false
 			},"003");
 		},
 

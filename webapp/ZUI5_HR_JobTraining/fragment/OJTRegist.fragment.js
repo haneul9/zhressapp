@@ -16,7 +16,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3, v4) {
-						return ((!v1 || v1 === "AA")) || (v3 === "2" && v1 === "AA") || (v1 === "99" && v4 === "X");
+						return ((!v1 || v1 === "AA")) || (v3 === "2" && (v1 === "AA" || v1 === "88")) || (v1 === "99" && v4 === "X");
 					}
 				},
 				items: {
@@ -41,7 +41,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3, v4) {
-						return ((!v1 || v1 === "AA")) || (v3 === "2" && v1 === "AA") || (v1 === "99" && v4 === "X");
+						return ((!v1 || v1 === "AA")) || (v3 === "2" && (v1 === "AA" || v1 === "88")) || (v1 === "99" && v4 === "X");
 					}
 				},
 				items: {
@@ -66,7 +66,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3, v4) {
-						return ((!v1 || v1 === "AA")) || (v3 === "2" && v1 === "AA") || (v1 === "99" && v4 === "X");
+						return ((!v1 || v1 === "AA")) || (v3 === "2" && (v1 === "AA" || v1 === "88")) || (v1 === "99" && v4 === "X");
 					}
 				},
 				items: {
@@ -92,7 +92,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
                 items: {
@@ -114,7 +114,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
                 items: {
@@ -135,7 +135,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
                 items: {
@@ -157,7 +157,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
                 items: {
@@ -214,7 +214,7 @@ sap.ui.define([
                                         editable: {
 											parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 											formatter: function(v1, v2, v3, v4) {
-												return ((!v1 || v1 === "AA") && v2 === "Y") || (v3 === "2" && v1 === "AA" && v2 === "Y") || (v1 === "99" && v2 === "Y" && v4 === "X");
+												return ((!v1 || v1 === "AA") && v2 === "Y") || (v3 === "2" && (v1 === "AA" || v1 === "88") && v2 === "Y") || (v1 === "99" && v2 === "Y" && v4 === "X");
 											}
 										},
                                         value: "{Edkaj}"
@@ -226,7 +226,7 @@ sap.ui.define([
 										visible: {
 											parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}, {path: "/TraningCheck"}],
 											formatter: function(v1, v2, v3, v4) {
-												return !v1 || (v1 === "AA" && v2 === "1" && (!v4 || v4 === "X")) || (v1 === "99" && v2 === "1" && v3 === "X" && (!v4 || v4 === "X")) || (v1 === "AA" && v2 === "2" && (!v4 || v4 === "X"));
+												return !v1 || (v1 === "AA" && v2 === "1" && (!v4 || v4 === "X")) || (v1 === "99" && v2 === "1" && v3 === "X" && (!v4 || v4 === "X")) || ((v1 === "AA" || v1 === "88") && v2 === "2" && (!v4 || v4 === "X"));
 											}
 										}
 									}).addStyleClass("button-search-icon mx-5px"),
@@ -242,7 +242,7 @@ sap.ui.define([
                                         editable: {
                                             parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 											formatter: function(v1, v2, v3) {
-												return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+												return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 											}
                                         }
                                     }),
@@ -302,7 +302,7 @@ sap.ui.define([
 								editable: {
 									parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 									formatter: function(v1, v2, v3) {
-										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 									}
 								}
 							})
@@ -333,7 +333,7 @@ sap.ui.define([
 								editable: {
 									parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 									formatter: function(v1, v2, v3) {
-										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 									}
 								},
 								value: "{Edpeo}"
@@ -366,7 +366,7 @@ sap.ui.define([
 																visible: {
 																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 																	formatter: function(v1, v2, v3) {
-																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 																	}
 																}
 															}).addStyleClass("button-light-sm mr-5px"),
@@ -377,7 +377,7 @@ sap.ui.define([
 																visible: {
 																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 																	formatter: function(v1, v2, v3) {
-																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 																	}
 																}
 															}).addStyleClass("button-light-sm")
@@ -412,7 +412,7 @@ sap.ui.define([
 																visible: {
 																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 																	formatter: function(v1, v2, v3) {
-																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 																	}
 																}
 															}).addStyleClass("button-light-sm ml-5px mr-10px"),
@@ -423,7 +423,7 @@ sap.ui.define([
 																visible: {
 																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 																	formatter: function(v1, v2, v3) {
-																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 																	}
 																}
 															}).addStyleClass("button-light-sm mr-5px"),
@@ -434,7 +434,7 @@ sap.ui.define([
 																visible: {
 																	parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 																	formatter: function(v1, v2, v3) {
-																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+																		return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 																	}
 																}
 															}).addStyleClass("button-light-sm")
@@ -469,7 +469,7 @@ sap.ui.define([
 										editable: {
 											parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 											formatter: function(v1, v2, v3) {
-												return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+												return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 											}
 										}
 									}).addStyleClass("mt-5px"),
@@ -524,7 +524,7 @@ sap.ui.define([
 												visible: {
 													parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 													formatter: function(v1, v2, v3) {
-														return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+														return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 													}
 												}
 											}).addStyleClass("button-light-sm mr-5px"),
@@ -535,7 +535,7 @@ sap.ui.define([
 												visible: {
 													parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 													formatter: function(v1, v2, v3) {
-														return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+														return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 													}
 												}
 											}).addStyleClass("button-light-sm")
@@ -668,7 +668,7 @@ sap.ui.define([
 								editable: {
 									parts: [{path: "Status1"}, {path: "Edoty"}, {path: "/OJTResult"}],
 									formatter: function(v1, v2, v3) {
-										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+										return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 									}
 								}
 							}).addStyleClass("my-5px")
@@ -733,7 +733,7 @@ sap.ui.define([
 						visible: {
 							path: "Status1",
 							formatter: function (v) {
-								return v === "AA";
+								return v === "AA" || v === "88";
 							}
 						}
 					}).addStyleClass("button-light"),
@@ -753,7 +753,7 @@ sap.ui.define([
 						visible: {
 							path: "Status1",
 							formatter: function (v) {
-								return v === "AA";
+								return v === "AA" || v === "88";
 							}
 						}
 					}).addStyleClass("button-delete"),
