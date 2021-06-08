@@ -531,6 +531,14 @@ sap.ui.define([
 									if(oData && oData.Awart != ""){
 										if(oData.Awart == data.VacationTypeNav.results[i].Subty){
 											oController._DetailJSonModel.setProperty("/Data/Halfc", data.VacationTypeNav.results[i].Halfc);
+											oController._DetailJSonModel.setProperty("/Data/Flag2", data.VacationTypeNav.results[i].Flag);
+
+											if(data.VacationTypeNav.results[i].Congt == "X"){
+												oController._DetailJSonModel.setProperty("/Data/Kjdate", data.VacationTypeNav.results[i].Maxtg);
+											} else {
+												oController._DetailJSonModel.setProperty("/Data/Kjdate", "");
+											}
+											
 										}
 									}
 								}
@@ -652,6 +660,7 @@ sap.ui.define([
 					var vData = oEvent.getSource().getSelectedItem().getCustomData()[0].getValue();
 					
 					oController._DetailJSonModel.setProperty("/Data/Halfc", vData.Halfc);
+					oController._DetailJSonModel.setProperty("/Data/Flag2", vData.Flag); // 2021-06-08 경조휴가여부 flag
 					
 					// 경조일수
 					if(vData.Congt == "X"){
@@ -1455,47 +1464,62 @@ sap.ui.define([
 				}
 				
 				if(oData.Flag == "" && Flag == "C"){
-					switch(oData.Awart){
-						case "1501": // 본인결혼
-						case "1502": // 자녀결혼
-						case "1511": // 자녀출생
-						case "1512": // 배우자사망
-						case "1513": // 부친사망
-						case "1514": // 모친사망
-						case "1515": // 배우자 부친사망
-						case "1516": // 배우자 모친사망
-						case "1517": // 자녀사망
-						case "1519": // 형제사망
-						case "1520": // 자매사망
-						case "1521": // 배우자형제사망
-						case "1522": // 배우자자매사망
-						case "1530": // 숭중상
-						case "1537": // 형제결혼
-						case "1538": // 자매결혼
-						case "1539": // 배우자형제자매결혼
-						case "1541": // 조부상
-						case "1542": // 조모상
-						case "1552": // 고희(부)
-						case "1553": // 고희(모)
-						case "1554": // 고희(배우자부)
-						case "1555": // 고희(배우자모)
-						case "1557": // 외조부사망
-						case "1558": // 외조모사망
-							sap.m.MessageBox.success(oController.getBundleText("MSG_48020"), { // 신청되었습니다. 경조금 신청을 위해 해당 화면으로 이동하시겠습니까?
-								actions : ["YES", "NO"],
-								onClose : function(fVal){
-									if(fVal && fVal == "YES"){
-										setTimeout(function(){
-											parent._gateway.redirect($.app.getAuth() == $.app.Auth.HASS ? "CongratulationHASS.html" : "Congratulation.html");
-										}, 100);
-									} else {
-										oController.onBack();
-									}
-								}
-							});
+					// switch(oData.Awart){
+					// 	case "1501": // 본인결혼
+					// 	case "1502": // 자녀결혼
+					// 	case "1511": // 자녀출생
+					// 	case "1512": // 배우자사망
+					// 	case "1513": // 부친사망
+					// 	case "1514": // 모친사망
+					// 	case "1515": // 배우자 부친사망
+					// 	case "1516": // 배우자 모친사망
+					// 	case "1517": // 자녀사망
+					// 	case "1519": // 형제사망
+					// 	case "1520": // 자매사망
+					// 	case "1521": // 배우자형제사망
+					// 	case "1522": // 배우자자매사망
+					// 	case "1530": // 숭중상
+					// 	case "1537": // 형제결혼
+					// 	case "1538": // 자매결혼
+					// 	case "1539": // 배우자형제자매결혼
+					// 	case "1541": // 조부상
+					// 	case "1542": // 조모상
+					// 	case "1552": // 고희(부)
+					// 	case "1553": // 고희(모)
+					// 	case "1554": // 고희(배우자부)
+					// 	case "1555": // 고희(배우자모)
+					// 	case "1557": // 외조부사망
+					// 	case "1558": // 외조모사망
+					// 		sap.m.MessageBox.success(oController.getBundleText("MSG_48020"), { // 신청되었습니다. 경조금 신청을 위해 해당 화면으로 이동하시겠습니까?
+					// 			actions : ["YES", "NO"],
+					// 			onClose : function(fVal){
+					// 				if(fVal && fVal == "YES"){
+					// 					setTimeout(function(){
+					// 						parent._gateway.redirect($.app.getAuth() == $.app.Auth.HASS ? "CongratulationHASS.html" : "Congratulation.html");
+					// 					}, 100);
+					// 				} else {
+					// 					oController.onBack();
+					// 				}
+					// 			}
+					// 		});
 							
-							return;
-							break;
+					// 		return;
+					// 		break;
+					// }
+					if(oData.Flag2 == "X"){
+						sap.m.MessageBox.success(oController.getBundleText("MSG_48020"), { // 신청되었습니다. 경조금 신청을 위해 해당 화면으로 이동하시겠습니까?
+							actions : ["YES", "NO"],
+							onClose : function(fVal){
+								if(fVal && fVal == "YES"){
+									setTimeout(function(){
+										parent._gateway.redirect($.app.getAuth() == $.app.Auth.HASS ? "CongratulationHASS.html" : "Congratulation.html");
+									}, 100);
+								} else {
+									oController.onBack();
+								}
+							}
+						});
+						return;
 					}
 				}
 				
