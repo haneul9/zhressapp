@@ -121,7 +121,10 @@ sap.ui.define(
 
                     if(vMonth <= 3 && vDay < 10){
                         // 기본값 설정
-                         oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 1 );
+                         oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 2 );
+                    }else{
+                        // 기본값 설정
+                        oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 1 );
                     }    
                 }else{
                     // 기본값 설정
