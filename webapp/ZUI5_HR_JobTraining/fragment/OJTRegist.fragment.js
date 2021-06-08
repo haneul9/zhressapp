@@ -753,7 +753,7 @@ sap.ui.define([
 						visible: {
 							path: "Status1",
 							formatter: function (v) {
-								return v1 === "AA" || v1 === "88";
+								return v === "AA" || v === "88";
 							}
 						}
 					}).addStyleClass("button-delete"),
