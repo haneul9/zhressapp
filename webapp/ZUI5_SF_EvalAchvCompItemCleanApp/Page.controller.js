@@ -88,6 +88,7 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 				if (results && results.length) {
 					var o = results.pop();
 					o.SortOrder = sortOrder;
+					o.formTemplateType = formTemplateType;
 
 					this.getController().SearchModel.getProperty("/FormTemplates").push(o);
 				}
@@ -103,8 +104,8 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 		Common.log("successEvalItemFilter", this.getResult());
 
 		var result = this.getResult(), map = {};
-		$.map(result[Common.getOperationMode()], function(o) {
-			map[[o.formTemplateId, o.group, o.itemId].join(",")] = true;
+		$.map(result.mappings, function(o) {
+			map[[o.formTemplateType, o.group, o.itemId].join(",")] = true;
 		});
 
 		this.setData({
@@ -331,7 +332,7 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 
 							var oController = this.getController(),
 							results = this.getResults(),
-							formTemplateId = $.app.byId("FormsComboBox").getSelectedKey(),
+							formTemplateType = $.app.byId("FormsComboBox").getSelectedItem().getBindingContext().getProperty("formTemplateType"),
 							poolItemCount = results.length,
 							allocatingItemCount = 0,
 
@@ -339,7 +340,7 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 							dutyCodes = evalItemFilterData.dutyCodes,
 							dutyGroup = evalItemFilterData.dutyGroup,
 							rankGroup = evalItemFilterData.rankGroup,
-							evalItemFilterMap = oController.EvalItemFilterModel.getData().evalItemFilterMap,
+							evalItemFilterMap = evalItemFilterData.evalItemFilterMap,
 							hrReport = hrReportsMap[o.formSubjectId] = hrReportsAllMap[o.formSubjectId],
 							removalModels = oController.RemovalModelMap[o.formSubjectId];
 
@@ -349,7 +350,7 @@ return CommonController.extend($.app.APP_ID, { // 평가 항목생성
 
 							$.map(results, function(item) {
 								var group = $.inArray(hrReport.custom08, dutyCodes) > -1 ? dutyGroup[hrReport.custom08] : rankGroup[hrReport.custom07];
-								var k = [formTemplateId, group, item.itemId].join(",");
+								var k = [formTemplateType, group, item.itemId].join(",");
 								if (evalItemFilterMap[k]) { // 대상자 직위에 해당하는 평가항목인 경우
 									++allocatingItemCount;
 								} else {
