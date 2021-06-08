@@ -76,7 +76,7 @@ ui: function() {
 							'</li>',
 						'</ol>',
 						'<div class="mt-3 text-center">',
-							'<a href="javascript:;" class="fn-url-copy">https://mdm.lottechem.com/</a>',
+							'https://mdm.lottechem.com',
 							// '<button type="button" class="btn btn-sm btn-outline-primary fn-url-copy" style="margin-left:22px; height:24px; padding:0 14px">복사</button>',
 						'</div>',
 						// '<div class="valid-feedback mt-3 text-center" style="font-size:100%">',
