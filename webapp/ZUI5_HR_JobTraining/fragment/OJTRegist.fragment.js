@@ -16,7 +16,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3, v4) {
-						return ((!v1 || v1 === "AA") && v2 === "Y") || (v3 === "2" && v1 === "AA" && v2 === "Y") || (v1 === "99" && v2 === "Y" && v4 === "X");
+						return ((!v1 || v1 === "AA")) || (v3 === "2" && v1 === "AA") || (v1 === "99" && v4 === "X");
 					}
 				},
 				items: {
@@ -41,7 +41,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3, v4) {
-						return ((!v1 || v1 === "AA") && v2 === "Y") || (v3 === "2" && v1 === "AA" && v2 === "Y") || (v1 === "99" && v2 === "Y" && v4 === "X");
+						return ((!v1 || v1 === "AA")) || (v3 === "2" && v1 === "AA") || (v1 === "99" && v4 === "X");
 					}
 				},
 				items: {
@@ -66,7 +66,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "Status1"}, {path: "/TraningCheck"}, {path: "Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3, v4) {
-						return ((!v1 || v1 === "AA") && v2 === "Y") || (v3 === "2" && v1 === "AA" && v2 === "Y") || (v1 === "99" && v2 === "Y" && v4 === "X");
+						return ((!v1 || v1 === "AA")) || (v3 === "2" && v1 === "AA") || (v1 === "99" && v4 === "X");
 					}
 				},
 				items: {

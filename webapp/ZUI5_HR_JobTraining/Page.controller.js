@@ -883,11 +883,11 @@ sap.ui.define([
 			}else{
 				this.ApplyModel.setProperty("/TraningCheck", "X");
 				this.ApplyModel.setProperty("/Checked", "");
-				this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
-				this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
-				this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
-				this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
-				this.ApplyModel.setProperty("/FormData/Course", ""); // 교육코드
+				// this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
+				// this.ApplyModel.setProperty("/FormData/Edgub", ""); // 교육유형
+				// this.ApplyModel.setProperty("/FormData/Optin", ""); // 필수/선택
+				// this.ApplyModel.setProperty("/FormData/Rules", ""); // 법정/일반
+				// this.ApplyModel.setProperty("/FormData/Course", ""); // 교육코드
 			}
 			this.getTypeCombo(vIs);
 		},
