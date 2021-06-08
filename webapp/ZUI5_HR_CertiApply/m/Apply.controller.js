@@ -75,6 +75,8 @@ sap.ui.define(
                         // 기본값 설정
                         oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear() - 1 );
                     }   
+                }else{
+                    oController.ApplyModel.setProperty("/Data/Zyear", new Date().getFullYear());
                 }
             },
 
