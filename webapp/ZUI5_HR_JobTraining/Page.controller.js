@@ -76,7 +76,7 @@ sap.ui.define([
                 visible: {
 					parts : [{path: "Status1"},{path: "Edoty"}, {path: "RepstT"}],
 					formatter: function(v1, v2, v3) {
-						return (Common.checkNull(v3) && v1 === "99" && v2 === "1") || v1 === "AA";
+						return (Common.checkNull(v3) && v1 === "99" && v2 === "1") || (v1 === "AA" || v1 === "88");
 					}
 				},
                 selected: "{Pchk}"
@@ -88,7 +88,7 @@ sap.ui.define([
                 visible: {
 					parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
                 selected: "{Pchk}"
@@ -251,7 +251,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
 				value: {
@@ -275,7 +275,7 @@ sap.ui.define([
 				editable: {
 					parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 					formatter: function(v1, v2, v3) {
-						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+						return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 					}
 				},
 				value: {
