@@ -886,9 +886,9 @@ sap.ui.define([
 			if(vIs){
 				this.ApplyModel.setProperty("/TraningCheck", "Y");
 				this.ApplyModel.setProperty("/Checked", "X");
-				this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
-
+				
 				if(oEvent !== true){
+					this.ApplyModel.setProperty("/FormData/Edkaj", ""); // 교육과정
 					this.ApplyModel.setProperty("/FormData/Edgub", "Null"); // 교육유형
 					this.ApplyModel.setProperty("/FormData/Optin", "Null"); // 필수/선택
 					this.ApplyModel.setProperty("/FormData/Rules", "Null"); // 법정/일반
