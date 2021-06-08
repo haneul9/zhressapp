@@ -425,12 +425,13 @@ getMenuTree: function(data) {
 		}
 	});
 
-	var cutFlag = false;
+	if (sessionStorage.getItem('ehr.client.ip.external') === 'E') {
+		results.TableIn1.results = results.TableIn1.results.filter(function(o) {
+			return o.Mnid1 !== '90000';
+		});
+	}
+
 	return $.map(results.TableIn1.results, function(o) {
-		if (cutFlag || (o.Mnid1 === '90000' && sessionStorage.getItem('ehr.client.ip.external') === 'E')) {
-			cutFlag = true;
-			return;
-		}
 		if (o.Hide === 'X') {
 			return;
 		}
