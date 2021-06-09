@@ -80,7 +80,7 @@
 
             if(oEvent.data){
                 this.getDetailData(oEvent.data.vSdate, oEvent.data.vSeqnr);
-				this.RegistModel.setProperty("/GubunCombo", oEvent.data.GubunCombo.slice(1));
+				// this.RegistModel.setProperty("/GubunCombo", oEvent.data.GubunCombo.slice(1));
             }
 			Common.log("onBeforeShow");
 		},

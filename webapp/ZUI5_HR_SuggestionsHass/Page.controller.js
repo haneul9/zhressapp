@@ -249,7 +249,7 @@
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
                 id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
                 data: { 
-					GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
+					// GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
                     vSdate: vSdate,
                     vSeqnr: vSeqnr
                 }

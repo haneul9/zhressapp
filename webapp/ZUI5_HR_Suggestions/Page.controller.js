@@ -137,7 +137,7 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.IGubun = "E";
 			sendObject.IConType = "0";
-			sendObject.ITgubun = oController.CodeModel.getProperty("/Data/ITgubun") === "Null" ? "" : oController.CodeModel.getProperty("/Data/ITgubun");
+			// sendObject.ITgubun = oController.CodeModel.getProperty("/Data/ITgubun") === "Null" ? "" : oController.CodeModel.getProperty("/Data/ITgubun");
 			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
 			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
 			sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
@@ -229,7 +229,7 @@
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
                 id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
                 data: { 
-					GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
+					// GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
                     New: "O"
                 }
             });
@@ -251,7 +251,7 @@
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
                 id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
                 data: { 
-					GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
+					// GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
                     vSdate: vSdate,
                     vSeqnr: vSeqnr,
 					New: "X"

@@ -98,7 +98,7 @@
 					oIsHideBox.setVisible(false);
 				}
 
-				this.RegistModel.setProperty("/GubunCombo", oEvent.data.GubunCombo.slice(1));
+				// this.RegistModel.setProperty("/GubunCombo", oEvent.data.GubunCombo.slice(1));
             }
 			Common.log("onBeforeShow");
 		},
