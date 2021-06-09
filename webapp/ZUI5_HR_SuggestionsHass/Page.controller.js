@@ -12,6 +12,7 @@
 		PAGEID: "Page",
 		
 		TableModel: new JSONModelHelper(),
+		CodeModel: new JSONModelHelper(),
 		RegistModel: new JSONModelHelper(),
 
 		getUserId: function() {
@@ -46,6 +47,7 @@
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
+			this.getCodeList();
 			this.onTableSearch();
 
 			if(Common.checkNull(!this.getParameterByName("Sdate")) && Common.checkNull(!this.getParameterByName("Skey") && oEvent.data.New !== "X")){
@@ -145,6 +147,7 @@
 			sendObject.IBukrs = vBukrs;
 			sendObject.IGubun = "H";
             sendObject.IConType = "0";
+			sendObject.ITgubun = oController.CodeModel.getProperty("/Data/ITgubun") === "Null" ? "" : oController.CodeModel.getProperty("/Data/ITgubun");
 			sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
 			sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
             sendObject.ITitle = Common.checkNull(oSearchInput.getValue()) ? "" : oSearchInput.getValue();
@@ -179,6 +182,43 @@
 			Common.adjustAutoVisibleRowCount.call(oTable);
         },
 
+		getCodeList: function() { // CodeList조회
+			var oController = $.app.getController();
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vBukrs = oController.getUserGubun();
+
+			oController.CodeModel.setData({Data: []});
+			
+			var sendObject = {};
+			// Header
+			sendObject.ICodeT = "002";
+			sendObject.IBukrs = vBukrs;
+			sendObject.ICode = "TLK_G";
+			sendObject.ICodty = "EHR";
+			// Navigation property
+			sendObject.NavCommonCodeList = [];
+			
+			oModel.create("/CommonCodeListHeaderSet", sendObject, {
+				success: function(oData, oResponse) {
+					
+					if (oData && oData.NavCommonCodeList) {
+						Common.log(oData);
+						var rDatas = oData.NavCommonCodeList.results;
+
+						rDatas.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_09036") });
+
+						oController.CodeModel.setProperty("/GubunCombo", rDatas);
+						oController.CodeModel.setProperty("/Data/ITgubun", "Null");					}
+				},
+				error: function(oResponse) {
+					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
+		},
+
         onPressSer: function() { // 조회
             this.onTableSearch();
         },
@@ -209,6 +249,7 @@
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
                 id: [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix()),
                 data: { 
+					GubunCombo: oController.CodeModel.getProperty("/GubunCombo"),
                     vSdate: vSdate,
                     vSeqnr: vSeqnr
                 }

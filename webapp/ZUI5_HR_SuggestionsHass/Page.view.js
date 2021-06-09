@@ -16,6 +16,22 @@
 
 			$.app.setModel("ZHR_COMMON_SRV");
 
+			var oGubunCombo = new sap.m.ComboBox({ // 구분
+				selectedKey: "{ITgubun}",
+				width: "200px",
+				items: {
+					path: "/GubunCombo",
+					template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
+				}
+			})
+			.addStyleClass("mr-5px");
+
+			oGubunCombo.addDelegate({
+				onAfterRendering: function () {
+					oGubunCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+				}
+			}, oGubunCombo);
+
 			var vYear = new Date().getFullYear();
 			var vMonth = new Date().getMonth()+1;
 			
@@ -24,6 +40,8 @@
 				items: [ 
 					new sap.m.HBox({
 						items: [
+							new sap.m.Label({text: "{i18n>LABEL_63048}"}), // 구분
+							oGubunCombo.addStyleClass("mr-10px"),
 							new sap.m.Label({text: "{i18n>LABEL_56002}"}), // 검색어(제목)
 							new sap.m.Input(oController.PAGEID + "_SearchInput",{
                                 width: "200px",
@@ -54,7 +72,10 @@
 					})
 					.addStyleClass("button-group")
 				]
-			}).addStyleClass("search-box search-bg pb-7px mt-16px");
+			})
+			.setModel(oController.CodeModel)
+			.bindElement("/Data")
+			.addStyleClass("search-box search-bg pb-7px mt-16px");
 
 			var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
 				selectionMode: sap.ui.table.SelectionMode.None,
@@ -75,15 +96,16 @@
 			.bindRows("/Data");
 			
 			ZHR_TABLES.makeColumn(oController, oTable, [
-				{id: "Znumb", label: "{i18n>LABEL_56024}" /* No. */,       plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "3%"},
-				{id: "Title", label: "{i18n>LABEL_56006}" /* 제목 */,       plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Left},
-				{id: "Zgood", label: "{i18n>LABEL_56020}" /* 좋아요 */,     plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumUp"},
-				{id: "Zbed",  label: "{i18n>LABEL_56021}" /* 싫어요 */,     plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumDown"},
-				{id: "Zreply",label: "{i18n>LABEL_56023}" /* 댓글횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
-				{id: "Zread", label: "{i18n>LABEL_56022}" /* 조회횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
-				{id: "Sdate", label: "{i18n>LABEL_56007}" /* 등록일 */,        plabel: "", resize: true, span: 0, type: "date",    sort: true,  filter: true,  width: "10%"},
-				{id: "Aedtm", label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "15%", templateGetter: "getChangeDate"},
-				{id: "Hide",  label: "{i18n>LABEL_56009}" /* 비공개 */,        plabel: "", resize: true, span: 0, type: "template",sort: true,  filter: true,  width: "5%", templateGetter: "getHide"}
+				{id: "Znumb",	  label: "{i18n>LABEL_56024}" /* No. */,       plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "3%"},
+				{id: "TgubunTxt", label: "{i18n>LABEL_63048}" /* 구분 */,		plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "5%"},
+				{id: "Title", 	  label: "{i18n>LABEL_56006}" /* 제목 */,       plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Left},
+				{id: "Zgood", 	  label: "{i18n>LABEL_56020}" /* 좋아요 */,     plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumUp"},
+				{id: "Zbed",  	  label: "{i18n>LABEL_56021}" /* 싫어요 */,     plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumDown"},
+				{id: "Zreply",	  label: "{i18n>LABEL_56023}" /* 댓글횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
+				{id: "Zread", 	  label: "{i18n>LABEL_56022}" /* 조회횟수 */,   plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "5%"},
+				{id: "Sdate", 	  label: "{i18n>LABEL_56007}" /* 등록일 */,        plabel: "", resize: true, span: 0, type: "date",    sort: true,  filter: true,  width: "10%"},
+				{id: "Aedtm", 	  label: "{i18n>LABEL_56008}" /* 최종변경일/시 */, plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "15%", templateGetter: "getChangeDate"},
+				{id: "Hide",  	  label: "{i18n>LABEL_56009}" /* 비공개 */,        plabel: "", resize: true, span: 0, type: "template",sort: true,  filter: true,  width: "5%", templateGetter: "getHide"}
 			]);
 			
 			return new PageHelper({

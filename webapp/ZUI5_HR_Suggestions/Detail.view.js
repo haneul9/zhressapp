@@ -68,10 +68,41 @@
 
         ApplyingBox: function(oController) {
 
+			var oGubunCombo = new sap.m.ComboBox({ // 구분
+				selectedKey: "{Tgubun}",
+				width: "200px",
+				editable: {
+					parts: [{path: "Sdate"}, {path: "/Gubun"}],
+					formatter: function(v1, v2) {
+						return !v1 || v2 === "X";
+					}
+				},
+				items: {
+					path: "/GubunCombo",
+					template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
+				}
+			})
+			.addStyleClass("mr-5px");
+
+			oGubunCombo.addDelegate({
+				onAfterRendering: function () {
+					oGubunCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+				}
+			}, oGubunCombo);
+
 			return new sap.m.VBox({
                 width: "100%",
 				fitContainer: true,
 				items: [
+					new sap.m.HBox({
+						width: "100%",
+						fitContainer: true,
+						items: [
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_09041}", "130px", "Right", true), // 구분
+                            oGubunCombo
+						]
+					})
+					.addStyleClass("search-field-group"),
 					new sap.m.HBox({
 						width: "100%",
 						fitContainer: true,
