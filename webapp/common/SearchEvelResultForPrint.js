@@ -63,6 +63,8 @@ $.extend(SearchEvelResultForPrint.prototype, {
 			success: function(d) {
 	
 				if(d){ 
+
+					$('#title_layout').text(vZyear + "년도 평가기록카드");
 					$('#Name').text(d.d.nickname);
 					$('#Title').text(d.d.title);
 					$('#Title1').text(d.d.department + " / " + d.d.custom01);
@@ -152,7 +154,7 @@ $.extend(SearchEvelResultForPrint.prototype, {
 						'</colgroup>',
 						'<thead>',
 							'<tr><th>평가연도</th><th>업적평가</th><th>역량평가</th><th>다면평가</th>'+
-							'<th>1차 평가</th><th>2차 평가</th><th>평가세션</th></tr>',
+							'<th>1차 평가</th><th>2차 평가</th><th>종합등급</th></tr>',
 						'</thead>',
 						'<tbody>',
 							vTableBody,

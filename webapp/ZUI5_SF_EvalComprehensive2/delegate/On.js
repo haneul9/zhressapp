@@ -164,6 +164,13 @@ var On = { // 종합평가 event handler
 		localStorage.setItem('item2', data.Pernr);
 		var vUrl = "../webapp/EvalDialog.html"; 
 		// var vUrl = "../webapp/indexTest.html"; 
+
+		if (/^webide/i.test(location.host)) {
+			vUrl = "../webapp/EvalDialog.html"; 
+		} else {
+			vUrl = "/EvalDialog.html"; 
+		}
+
 		window.open(vUrl, "pop", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=1250,height=900, top=top, left=left");
 	},
 

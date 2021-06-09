@@ -60,7 +60,7 @@
 <script src="ZUI5_HR_Home/js/portlets/LanguageScorePortlet.js"></script><!--		P112 외국어 등급 현황 -->
 <script src="ZUI5_HR_Home/js/PortletsTest.js"></script>
 <script src="common/SearchEvelResultForPrint.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/stackblur-canvas@^1/dist/stackblur.min.js"></script>    
 <script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.13/svg.js"></script> 
@@ -237,6 +237,7 @@ $( document ).ready(function() {
 <div id="page1" style="padding:0 20px 20px;">
 
 <!-- 사원정보  -->
+	<div id="title_layout" style="padding-bottom:20px; width:100%;text-align:center;font-weight:bold;font-size:20px;"></div>
 	<div id="name_layout" style="display:flex;padding-bottom:20px; width:100%;">
 		<div style="padding-top:18px;padding-right:10px"><img id="pic_1" style="width: 55px; height: 55px;"></img></div>
 		<div style="padding-top:18px;width:30%;">
@@ -244,7 +245,7 @@ $( document ).ready(function() {
 			<div id="Title" style="display:inline-block"></div>
 			<div id="Title1"></div>
 		</div>	
-		<div>
+		<!-- <div>
 			<div style="display:flex;justify-content:center;font-size:12px">
 				<div style="width:45px;margin-right:8px;">
 					<div id="Val1" style="text-align:center;color:#3fa45b;font-weight:bold;"></div>
@@ -267,7 +268,7 @@ $( document ).ready(function() {
 					<div style="text-align:center;">리더십</div>				
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 <!-- 평가 Table List  -->
@@ -297,7 +298,33 @@ $( document ).ready(function() {
 
 <div id="page2" style="padding:0 20px 20px;">
 	<div id="page2_1">
-		<div style="font-size:16px;font-weight:bold;padding-top:20px;"> 다면평가</div>
+		<div style="display:flex;width:100%;">
+			<div style="font-size:16px;font-weight:bold;padding-top:20px;width:30%;"> 다면평가</div>
+			<div style="width:70%;">
+				<div style="display:flex;justify-content:center;font-size:12px;width:30%;">
+					<div style="width:45px;margin-right:8px;">
+						<div id="Val1" style="text-align:center;color:#3fa45b;font-weight:bold;"></div>
+						<div style="background:#3fa45b;width:45px;height:45px"></div>
+						<div style="text-align:center;">종합</div>				
+					</div>
+					<div style="width:45px;margin-right:8px;">
+						<div id="Val2" style="text-align:center;font-weight:bold;"></div>
+						<div style="background:#848f94;width:45px;height:45px"></div>
+						<div style="text-align:center;">직무</div>				
+					</div>
+					<div style="width:45px;margin-right:8px;">
+						<div id="Val3" style="text-align:center;font-weight:bold;"></div>
+						<div style="background:#848f94;width:45px;height:45px"></div>
+						<div style="text-align:center;">협업</div>				
+					</div>
+					<div id="Val4_layout" style="width:45px;margin-right:8px;visibility: hidden;">
+						<div id="Val4" style="text-align:center;font-weight:bold;"></div>
+						<div style="background:#848f94;width:45px;height:45px"></div>
+						<div style="text-align:center;">리더십</div>				
+					</div>
+				</div>
+			</div>
+		</div>
 		<div style="font-weight:bold;padding-top:20px;padding-bottom:6px;">&gt; 직무 만족도</div>
 		<div style="display:flex;">
 			<div style="width:25%;padding-right:20px;">
