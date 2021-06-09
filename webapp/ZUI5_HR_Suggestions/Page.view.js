@@ -9,7 +9,7 @@
 		
 		_ColModel: [
 			{id: "Znumb", 	  label: "{i18n>LABEL_56024}" /* No. */,		plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "3%"},
-			{id: "TgubunTxt", label: "{i18n>LABEL_63048}" /* 구분 */,		plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "5%"},
+			// {id: "TgubunTxt", label: "{i18n>LABEL_63048}" /* 구분 */,		plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "5%"},
 			{id: "Title", 	  label: "{i18n>LABEL_56006}" /* 제목 */,       plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Left},
 			{id: "Zgood", 	  label: "{i18n>LABEL_56020}" /* 좋아요 */,       plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumUp"},
 			{id: "Zbed",  	  label: "{i18n>LABEL_56021}" /* 싫어요 */,       plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true, width: "5%", templateGetter: "setThumDown"},
@@ -50,8 +50,8 @@
 				items: [ 
 					new sap.m.HBox({
 						items: [
-							new sap.m.Label({text: "{i18n>LABEL_63048}"}), // 구분
-							oGubunCombo.addStyleClass("mr-10px"),
+							// new sap.m.Label({text: "{i18n>LABEL_63048}"}), // 구분
+							// oGubunCombo.addStyleClass("mr-10px"),
 							new sap.m.Label({text: "{i18n>LABEL_56002}"}), // 검색어(제목)
 							new sap.m.Input(oController.PAGEID + "_SearchInput",{
 								width: "200px",

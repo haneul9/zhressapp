@@ -94,15 +94,15 @@
                 width: "100%",
 				fitContainer: true,
 				items: [
-					new sap.m.HBox({
-						width: "100%",
-						fitContainer: true,
-						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_09041}", "130px", "Right", true), // 구분
-                            oGubunCombo
-						]
-					})
-					.addStyleClass("search-field-group"),
+					// new sap.m.HBox({
+					// 	width: "100%",
+					// 	fitContainer: true,
+					// 	items: [
+                    //         ViewTemplates.getLabel("header", "{i18n>LABEL_09041}", "130px", "Right", true), // 구분
+                    //         oGubunCombo
+					// 	]
+					// })
+					// .addStyleClass("search-field-group"),
 					new sap.m.HBox({
 						width: "100%",
 						fitContainer: true,
