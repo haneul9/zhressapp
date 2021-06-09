@@ -1412,11 +1412,11 @@
 			var oController = this.getView().getController();
 			var oFormData = oController.RegistModel.getProperty("/FormData");
 			
-			// 구분
-			if(Common.checkNull(oFormData.Tgubun)){
-				MessageBox.error(oController.getBundleText("MSG_56017"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			}
+			// // 구분
+			// if(Common.checkNull(oFormData.Tgubun)){
+			// 	MessageBox.error(oController.getBundleText("MSG_56017"), { title: oController.getBundleText("LABEL_00149")});
+			// 	return true;
+			// }
 			// 제목
 			if(Common.checkNull(oFormData.Title)){
 				MessageBox.error(oController.getBundleText("MSG_56001"), { title: oController.getBundleText("LABEL_00149")});
