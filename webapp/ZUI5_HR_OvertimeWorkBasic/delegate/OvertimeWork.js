@@ -26,6 +26,7 @@ sap.ui.define(
              */
             Approval: {
                 NONE: "AA",
+                IN_MANAGER: "90",
                 IN_PROCESS: "00",
                 REJECT: "88",
                 DONE: "99"

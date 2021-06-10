@@ -182,9 +182,13 @@ common.AttachFileAction = {
 			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
 				common.AttachFileAction.retrieveFile(vFileInfo);
 			} else {
-				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
-					title: this.getBundleText("LABEL_09029")
-				});
+				if(parent._gateway.isMobile()) {
+					sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
+						title: this.getBundleText("LABEL_09029")
+					});
+				} else {
+					common.AttachFileAction.retrieveFile(vFileInfo);
+				}
 			}
 		} else {
 			var popup = window.open(vFileInfo.Url, '_blank');

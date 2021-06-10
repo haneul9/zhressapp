@@ -12,7 +12,7 @@ fragment.COMMON_ATTACH_FILES = {
 			name: oController.PAGEID + "UploadFile" + vPage,
 			modelName: "ZHR_COMMON_SRV",
 			slug: "",
-			maximumFileSize: 20,
+			maximumFileSize: 10,
 			multiple: true,
 			uploadOnChange: false,
 			mimeType: [], //["image","text","application"],
@@ -22,8 +22,8 @@ fragment.COMMON_ATTACH_FILES = {
 			//uploadUrl : "/sap/opu/odata/sap/ZL2P01GW0001_SRV/FileSet/",
 			uploadComplete: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.uploadComplete(oEvent, vPage);}, oController),
 			uploadAborted: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.uploadAborted(oEvent, vPage);}, oController),
-			fileSizeExceed: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.fileSizeExceed(oEvent, vPage);}, oController),
-			typeMissmatch: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.typeMissmatch.bind(oController, oEvent);}, oController),
+			fileSizeExceed: fragment.COMMON_ATTACH_FILES.fileSizeExceed,
+			typeMissmatch: fragment.COMMON_ATTACH_FILES.typeMissmatch,
 			change: $.proxy(function(oEvent){fragment.COMMON_ATTACH_FILES.onFileChange(oEvent,oController, vPage);}, oController),
 			visible: {
 				parts: [
@@ -216,11 +216,15 @@ fragment.COMMON_ATTACH_FILES = {
 
 		if(common.Common.isExternalIP()) {
 			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
-				common.AttachFileAction.retrieveFile(vFileInfo);
+				fragment.COMMON_ATTACH_FILES.retrieveFile(vFileInfo);
 			} else {
-				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
-					title: this.getBundleText("LABEL_09029")
-				});
+				if(parent._gateway.isMobile()) {
+					sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
+						title: this.getBundleText("LABEL_09029")
+					});
+				} else {
+					fragment.COMMON_ATTACH_FILES.retrieveFile(vFileInfo);
+				}
 			}
 		} else {
 			var popup = window.open(vFileInfo.Url, '_blank');
@@ -328,7 +332,7 @@ fragment.COMMON_ATTACH_FILES = {
 			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"+vPage),
 			oAttachFileList = sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"+vPage),
 			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"+vPage),
-			oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
+			oModel = $.app.getModel("ZHR_COMMON_SRV"),
 			JSonModel = oAttachbox.getModel(),
 			vAttachFileDatas = JSonModel.getProperty("/Data"),
 			vAppnm = JSonModel.getProperty("/Settings/Appnm"),
@@ -368,7 +372,7 @@ fragment.COMMON_ATTACH_FILES = {
 							elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
 
 							if(vUse){
-								if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"){
+								if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
 									if(vPage==elem.Cntnm){
 										elem.New = false;
 										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
@@ -463,21 +467,21 @@ fragment.COMMON_ATTACH_FILES = {
 	 * 첨부파의 크기가 Max Size를 넘었을 경우의 처리내역
 	 */
 	fileSizeExceed: function (oEvent) {
-		var sName = oEvent.getParameter("name"),
-			fSize = oEvent.getParameter("size"),
+		var sName = oEvent.getParameter("fileName"),
+			fSize = oEvent.getParameter("fileSize"),
 			fLimit = oEvent.getSource().getMaximumFileSize(),
-			sMsg = this.getBundleText("MSG_00030");
+			sMsg = "${name} 파일(${size} MB)은 최대 허용 크기 ${limit} MB를 초과하였습니다.";
 
-		sap.m.MessageBox.alert(sMsg.interpolate(sName, fSize, fLimit));
+		sap.m.MessageBox.alert(sMsg.interpolate(sName, fSize.toFixed(1), fLimit));
 	},
 
 	/*
 	 * 첨부파일의 유형이 허용된 파일유형이 아닌 경우의 처리내역
 	 */
 	typeMissmatch: function (oEvent) {
-		var sName = oEvent.getParameter("name"),
-			sType = oEvent.getParameter("type"),
-			sMsg = this.getBundleText("MSG_00029"); // ${name} 파일의 ${type} 은 허용된 파일 확장자가 아닙니다.
+		var sName = oEvent.getParameter("fileName"),
+			sType = oEvent.getParameter("fileType"),
+			sMsg = "${name} 파일의 ${type} 은 허용된 파일 확장자가 아닙니다.";
 
 		sap.m.MessageBox.alert(sMsg.interpolate(sName, sType));
 	},
@@ -562,7 +566,7 @@ fragment.COMMON_ATTACH_FILES = {
 	},
 
 	callDeleteFileService: function(fileInfo) {
-		var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
+		var oModel = $.app.getModel("ZHR_COMMON_SRV"),
 			bReturnFlag = false,
 			sPath = oModel.createKey("/FileListSet", {
 				Appnm: fileInfo.Appnm,
@@ -709,7 +713,7 @@ fragment.COMMON_ATTACH_FILES = {
 	},
 
 	uploadFile: function (vPage) {
-		var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
+		var oModel = $.app.getModel("ZHR_COMMON_SRV"),
 			oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"+vPage),
 			vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [],
 			aDeleteFiles = oAttachbox.getModel().getProperty("/DelelteDatas") || [],
@@ -782,6 +786,7 @@ fragment.COMMON_ATTACH_FILES = {
 
 	//싱글 파일일때만 쓸 것, 멀티파일도 가능 (2021.04~)
 	uploadFiles: function (vPages) {
+		var oModel = $.app.getModel("ZHR_COMMON_SRV");
 		var vFiles = [];
 		var dFiles = [];
 		var vAppnm = "";
@@ -800,8 +805,7 @@ fragment.COMMON_ATTACH_FILES = {
 		};
 
 		for(var i=0;i<vPages.length;i++){
-			var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
-				oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"+vPages[i]),
+			var oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"+vPages[i]),
 				vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [],
 				aDeleteFiles = oAttachbox.getModel().getProperty("/DelelteDatas") || [],
 				oController = this.oView.getController(),
@@ -838,7 +842,7 @@ fragment.COMMON_ATTACH_FILES = {
 							"x-csrf-token": oRequest.headers["x-csrf-token"],
 							"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
 						};
-						if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"){
+						if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"||vPages[a]=="006"){
 							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
 						}else{
 							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
@@ -863,5 +867,19 @@ fragment.COMMON_ATTACH_FILES = {
 		}.bind(this));
 
 		return vAppnm;
+	},
+
+	deleteDocument: function(vPages) {
+		for(var i=0;i<vPages.length;i++){
+			var oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"+vPages[i]),
+				vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [];
+
+			// 파일 삭제
+			if(vAttachDatas.length) {
+				vAttachDatas.forEach(function(elem) {
+					fragment.COMMON_ATTACH_FILES.callDeleteFileService(elem);
+				});
+			}
+		}
 	}
 };

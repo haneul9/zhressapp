@@ -232,6 +232,12 @@ getModel: function(id, viewId) {
 		},
 		refresh: function() {
 			return model.refresh.apply(model, [].slice.call(arguments));
+		},
+		_createRequest: function() {
+			return model._createRequest.apply(model, [].slice.call(arguments));
+		},
+		refreshSecurityToken: function() {
+			return model.refreshSecurityToken.apply(model, [].slice.call(arguments));
 		}
 	};
 },
