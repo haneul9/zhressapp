@@ -504,6 +504,7 @@ sap.ui.define([
 				success: function(oData, oResponse) {
 					Common.log(oData);
 					oController.onTreeSetData();
+					oController.onRefresh(false);
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
