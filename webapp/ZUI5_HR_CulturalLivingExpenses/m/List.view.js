@@ -92,7 +92,7 @@ sap.ui.define([
 					}),
 					new sap.m.Column({
 						width: "auto",
-						hAlign: sap.ui.core.TextAlign.Begin
+						hAlign: sap.ui.core.TextAlign.Center
 					})
 				],    
 				items: {
