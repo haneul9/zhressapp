@@ -15,7 +15,8 @@
 .custom-HiTokTok-comment .ml-20px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
 .custom-HiTokTok-comment .ml-16px.gcomment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-greatcomment.png") no-repeat 0 8px;}
 .custom-HiTokTok-comment .sapMInputBaseReadonly .sapMInputBaseContentWrapper {background:#fff url("../../images/icon-comment.png") no-repeat 0 8px;border:0;border-bottom:1px solid #ededed}
-.custom-HiTokTok-comment .sapMInputBaseInner.sapMTextAreaInner.sapMTextAreaGrow {padding:.5rem 1.5rem;}
+.custom-HiTokTok-comment .sapMInputBaseInner.sapMTextAreaInner.sapMTextAreaGrow {height:100%; padding:.5rem 1.5rem;}
+.custom-HiTokTok-comment .sapMInputBase.sapMTextArea .sapMTextAreaMirror {max-height:none; padding:.9rem}
 .custom-HiTokTok-write {background-color: #f3f4f4;padding:10px;margin:10px 0}
 .custom-HiTokTok-write .custom-input .sapMInputBaseContentWrapper {height:36px;margin:1px 0}
 .button-HiTokTok-check .sapMBtnInner {border-color:#0854A0;background-color:#ebf5fe}

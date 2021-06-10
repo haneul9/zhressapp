@@ -178,7 +178,7 @@
 			});
 		},
 
-        setComments: function() { // Comment Setting
+        setComments: function() { // Comment Setting (댓글)
 			var oController = this.getView().getController();
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
 			var vCommData = oController.RegistModel.getProperty("/CommentData");
@@ -271,12 +271,11 @@
 										new sap.m.TextArea({ 
 											width: "100%",
 											value: e.Detail,
-											layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+											// layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 											growing: true,
 											// height: "100px",
 											editable: false
 										})
-										.addStyleClass("h-100")
 									]
 								}),
 								new sap.m.HBox({
@@ -348,7 +347,7 @@
 			});
 		},
 
-        setSubComments: function(oEvent, index) { // SubComment Setting
+        setSubComments: function(oEvent, index) { // SubComment Setting (대댓글)
 			var oController = this.getView().getController();
 			var vSubCommentData = oController.RegistModel.getProperty("/SubCommentData");
 			var oCommentBox = $.app.byId(oController.PAGEID + "_CommentBox");
@@ -432,11 +431,10 @@
 											new sap.m.TextArea({ 
 												width: "100%",
 												value: e.Detail,
-												layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+												// layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 												growing: true,
 												editable: false
-											})
-											.addStyleClass("h-100"),
+											}),
 											new sap.m.Text({ 
 												text: e.Pword,
 												visible: false
@@ -574,8 +572,7 @@
 										width: "100%",
 										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 										growing: true
-									})
-									.addStyleClass("h-100"),
+									}),
 									new sap.m.Text({ 
 										visible: false
 									})

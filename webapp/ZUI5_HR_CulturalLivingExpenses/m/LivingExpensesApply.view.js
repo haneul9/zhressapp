@@ -85,131 +85,15 @@ sap.ui.define([
 				contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
-					this.getApplyingBox(oController),
-					this.getUsageHistory(oListController,oController),
-					this.fileUpload(oController)
+					this.getApplyingBox(oListController, oController)
 				]
 			})
 			.setModel(oListController.DetailModel)
 			.bindElement("/FormData")
 		},
 		
-		getApplyingBox: function(oController) {
-			return new sap.m.VBox({
-				items: [
-					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21002}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 대상월
-							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								text: {
-									path: "Spmon",
-									formatter:  function(v) {
-										if(v){
-											var vDate = v;
-											var vYear = vDate.slice(0,4);
-											var vMonth = vDate.slice(4,6);
-											
-											return 	vYear + "년 " + vMonth + "월";
-										}else return;
-									} 
-								},
-								textAlign: "End",
-								width: "100%"
-							})
-						]
-					}),
-					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21003}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 신청일
-							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								text: {
-									path: "Apdat",
-									formatter: function (v) {
-										if(v) return Common.DateFormatter(v);
-										else {
-											var vYear = new Date().getFullYear();
-											var vMonth = new Date().getMonth();
-											var vDate = new Date().getDate();
-											return Common.DateFormatter(new Date(vYear, vMonth, vDate));
-										}
-									}
-								},
-								textAlign: "End",
-								width: "100%"
-							})
-						]
-					}),
-					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21030}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 신청금액
-							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								text: {
-									path: "Betrg1",
-									formatter: function(v) {
-										if(v) return common.Common.numberWithCommas(v) + " 원";
-										else return "0 원";
-										
-									}
-								},
-								textAlign: "End",
-								width: "100%"
-							})
-						]
-					}),
-					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21031}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 지원대상금액
-							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								text: {
-									path: "Betrg2",
-									formatter: function(v) {
-										if(v) return common.Common.numberWithCommas(v) + " 원";
-										else return "0 원";
-									}
-								},
-								textAlign: "End",
-								width: "100%"
-							})
-						]
-					}),
-					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21006}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 처리상태
-							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-								text: {
-									path: "StatusT",
-									formatter: function(v) {
-										if(v) return v;
-										else return "신규";
-									} 
-								},
-								textAlign: "End",
-								width: "100%"
-							})
-						]
-					})
-				]
-			})
-			.addStyleClass("vbox-form-mobile");
-		},
-		
-		getUsageHistory: function(oListController, oController) {
-			return new sap.m.FlexBox({
+		getApplyingBox: function(oListController, oController) {
+			var UsageHistory = new sap.m.FlexBox({
 				direction: sap.m.FlexDirection.Column,
 				items: [
 					new sap.m.FlexBox({
@@ -330,14 +214,124 @@ sap.ui.define([
 					.addStyleClass("mt-8px")
 				]
 			});
-		},
-		
-		fileUpload: function(oController) {
-			return new sap.m.FlexBox({
+
+			return new sap.m.VBox({
 				items: [
-					sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+					new sap.m.HBox({
+						height: "40px",
+						alignItems: sap.m.FlexAlignItems.Center,
+						items: [
+							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21002}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 대상월
+							new sap.m.Text({
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								text: {
+									path: "Spmon",
+									formatter:  function(v) {
+										if(v){
+											var vDate = v;
+											var vYear = vDate.slice(0,4);
+											var vMonth = vDate.slice(4,6);
+											
+											return 	vYear + "년 " + vMonth + "월";
+										}else return;
+									} 
+								},
+								textAlign: "End",
+								width: "100%"
+							})
+						]
+					}),
+					new sap.m.HBox({
+						height: "40px",
+						alignItems: sap.m.FlexAlignItems.Center,
+						items: [
+							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21003}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 신청일
+							new sap.m.Text({
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								text: {
+									path: "Apdat",
+									formatter: function (v) {
+										if(v) return Common.DateFormatter(v);
+										else {
+											var vYear = new Date().getFullYear();
+											var vMonth = new Date().getMonth();
+											var vDate = new Date().getDate();
+											return Common.DateFormatter(new Date(vYear, vMonth, vDate));
+										}
+									}
+								},
+								textAlign: "End",
+								width: "100%"
+							})
+						]
+					}),
+					new sap.m.HBox({
+						height: "40px",
+						alignItems: sap.m.FlexAlignItems.Center,
+						items: [
+							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21030}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 신청금액
+							new sap.m.Text({
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								text: {
+									path: "Betrg1",
+									formatter: function(v) {
+										if(v) return common.Common.numberWithCommas(v) + " 원";
+										else return "0 원";
+										
+									}
+								},
+								textAlign: "End",
+								width: "100%"
+							})
+						]
+					}),
+					new sap.m.HBox({
+						height: "40px",
+						alignItems: sap.m.FlexAlignItems.Center,
+						items: [
+							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21031}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 지원대상금액
+							new sap.m.Text({
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								text: {
+									path: "Betrg2",
+									formatter: function(v) {
+										if(v) return common.Common.numberWithCommas(v) + " 원";
+										else return "0 원";
+									}
+								},
+								textAlign: "End",
+								width: "100%"
+							})
+						]
+					}),
+					new sap.m.HBox({
+						height: "40px",
+						alignItems: sap.m.FlexAlignItems.Center,
+						items: [
+							new sap.m.Label({ width: "105px", text: "{i18n>LABEL_21006}", textAlign: "Begin" }).addStyleClass("sub-conRead-title"), // 처리상태
+							new sap.m.Text({
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+								text: {
+									path: "StatusT",
+									formatter: function(v) {
+										if(v) return v;
+										else return "신규";
+									} 
+								},
+								textAlign: "End",
+								width: "100%"
+							})
+						]
+					}),
+					UsageHistory,
+					new sap.m.FlexBox({
+						items: [
+							sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+						]
+					})
 				]
 			})
+			.addStyleClass("vbox-form-mobile");
 		}
 	});
 });
