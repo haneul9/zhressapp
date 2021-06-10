@@ -261,7 +261,7 @@ sap.ui.define([
 						else return "";
 					}
 				}
-			})
+			});
 		},
 
 		getInputTime: function() {
@@ -285,7 +285,7 @@ sap.ui.define([
 						else return "";
 					}
 				}
-			})
+			});
 		},
 
         initDateCreate: function(oController) { // 년과 월로 따로 셋팅하는곳

@@ -731,9 +731,9 @@ sap.ui.define([
 						press: oController.onDialogSaveBtn.bind(oController),
 						text: "{i18n>LABEL_70047}", // 저장,
 						visible: {
-							path: "Status1",
-							formatter: function (v) {
-								return v === "AA" || v === "88";
+							parts : [{path: "Status1"},{path: "Edoty"}],
+							formatter: function (v1, v2) {
+								return (v1 === "AA" && v2 === "1") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 							}
 						}
 					}).addStyleClass("button-light"),
@@ -751,9 +751,9 @@ sap.ui.define([
 						press: oController.onDialogDelBtn.bind(oController),
 						text: "{i18n>LABEL_70011}", // 삭제
 						visible: {
-							path: "Status1",
-							formatter: function (v) {
-								return v === "AA" || v === "88";
+							parts : [{path: "Status1"},{path: "Edoty"}],
+							formatter: function (v1, v2) {
+								return (v1 === "AA" && v2 === "1") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 							}
 						}
 					}).addStyleClass("button-delete"),
