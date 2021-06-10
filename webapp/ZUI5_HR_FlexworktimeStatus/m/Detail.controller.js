@@ -402,7 +402,7 @@ sap.ui.define([
 
 			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
 			// if(oAppName.getItems().length != 0){
-				if(!oData.AppName){
+				if(!oData.AppName && oData.Offyn == "1"){
 					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
 					return;
 				}

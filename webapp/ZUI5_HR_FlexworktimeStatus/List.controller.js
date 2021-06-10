@@ -1168,7 +1168,7 @@ sap.ui.define([
 			// 결재자 리스트가 존재하는 경우 결재자 필수 입력
 			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
 			// if(oAppName.getItems().length != 0){
-				if(!oData.AppName){
+				if(!oData.AppName && oData.Offyn == "1"){
 					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
 					return;
 				}
