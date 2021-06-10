@@ -21,6 +21,7 @@ sap.ui.define([
 		UploadFileModel: new JSONModelHelper(),
 		
 		gSelectedRoute : {}, //선택한 tree경로 담는 곳
+		TreePath : "",
 		
 		getUserId: function() {
 
@@ -205,7 +206,7 @@ sap.ui.define([
 			oController.getHighlight(oController, false);
 		},
 
-		onTreeSetData: function() {
+		onTreeSetData: function(Cancel) {
 			var oController = $.app.getController();
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var oTree = $.app.byId(oController.PAGEID + "_Tree");
@@ -213,7 +214,9 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 
-			this.onRefresh(false);
+			if(Cancel === "Cancel") this.getBtnVisible(oController.TreePath);
+			else this.onRefresh(false);
+
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
 			
 			var sendObject = {};
@@ -264,6 +267,7 @@ sap.ui.define([
 			var oSaveBtn = $.app.byId(oController.PAGEID + "_SaveBtn"),
 				oCanBtn = $.app.byId(oController.PAGEID + "_CancelBtn");
 			var oMenuScroll = $.app.byId(oController.PAGEID + "_MenuScroll");
+			oController.TreePath = vPath;
 
 			if(Common.checkNull(!oEvent)){
 				var vPath = oEvent.mParameters.listItem.getBindingContextPath();
@@ -289,7 +293,7 @@ sap.ui.define([
 				});
 			}else {
 				this.onTreeSetData();
-				if(Common.checkNull(!oEvent)) this.getBtnVisible(vPath);
+				if(Common.checkNull(!oEvent)) this.getBtnVisible(oController.TreePath);
 				
 			}
 		},
@@ -503,8 +507,7 @@ sap.ui.define([
 			oModel.create("/OpenhelpImportSet", sendObject, {
 				success: function(oData, oResponse) {
 					Common.log(oData);
-					oController.onTreeSetData();
-					oController.onRefresh(false);
+					oController.onTreeSetData("Cancel");
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
