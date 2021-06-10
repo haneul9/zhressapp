@@ -2644,7 +2644,7 @@ sap.ui.define(
 						oPro.BaseAmt = "0";
 					}
 
-                    oPro.NsuppAmt = Common.numberWithCommas(parseInt(oPro.BaseAmt.replace(/\,/gi, "")) - parseInt(oPro.SuppAmt.replace(/\,/gi, "")));
+                    //oPro.NsuppAmt = Common.numberWithCommas(parseInt(oPro.BaseAmt.replace(/\,/gi, "")) - parseInt(oPro.SuppAmt.replace(/\,/gi, "")));
                     oPro.Mycharge = Common.numberWithCommas(
                         parseInt(oPro.Zkibbm.replace(/\,/gi, "")) +
                         parseInt(oPro.Zkijbm.replace(/\,/gi, "")) +
