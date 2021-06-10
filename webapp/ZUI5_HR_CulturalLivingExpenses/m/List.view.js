@@ -83,11 +83,11 @@ sap.ui.define([
 				itemPress: oController.onSelectedRow.bind(oController),
 				columns: [
 					new sap.m.Column({
-						width: "30%",
+						width: "40%",
 						hAlign: sap.ui.core.TextAlign.Begin
 					}),
 					new sap.m.Column({
-						width: "40%",
+						width: "30%",
 						hAlign: sap.ui.core.TextAlign.Begin
 					}),
 					new sap.m.Column({
@@ -113,10 +113,10 @@ sap.ui.define([
 									} 
 								},
 								textAlign: "End"
-							}).addStyleClass("L2P13Font"),
+							}).addStyleClass("L2P13Font mr-10px"),
 							new sap.m.Text({
 								text: "{StatusT}",
-								textAlign: "Center"
+								textAlign: "Begin"
 							}).addStyleClass("L2P13Font")
 						]
 					})
