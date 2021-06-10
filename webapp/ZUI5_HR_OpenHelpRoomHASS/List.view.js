@@ -175,7 +175,7 @@ sap.ui.define([
 										}
 									})
 								]
-							}),
+							}).addStyleClass("search-field-group"),
 							new sap.m.HBox({
 								fitContainer: true,
 								items: [
