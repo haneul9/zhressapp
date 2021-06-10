@@ -214,8 +214,9 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
 
+			this.onRefresh(false);
+			
 			if(Cancel === "Cancel") this.getBtnVisible(oController.TreePath);
-			else this.onRefresh(false);
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
 			
