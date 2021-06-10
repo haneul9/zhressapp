@@ -435,7 +435,8 @@
 												layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 												growing: true,
 												editable: false
-											}),
+											})
+											.addStyleClass("h-100"),
 											new sap.m.Text({ 
 												text: e.Pword,
 												visible: false
@@ -573,7 +574,8 @@
 										width: "100%",
 										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 										growing: true
-									}),
+									})
+									.addStyleClass("h-100"),
 									new sap.m.Text({ 
 										visible: false
 									})
