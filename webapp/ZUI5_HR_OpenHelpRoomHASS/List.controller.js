@@ -267,10 +267,10 @@ sap.ui.define([
 			var oSaveBtn = $.app.byId(oController.PAGEID + "_SaveBtn"),
 				oCanBtn = $.app.byId(oController.PAGEID + "_CancelBtn");
 			var oMenuScroll = $.app.byId(oController.PAGEID + "_MenuScroll");
-			oController.TreePath = vPath;
-
+			
 			if(Common.checkNull(!oEvent)){
 				var vPath = oEvent.mParameters.listItem.getBindingContextPath();
+				oController.TreePath = vPath;
 			}
 
 			if(!oMenuScroll.getVisible()) oMenuScroll.setVisible(true);
