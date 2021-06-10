@@ -500,7 +500,7 @@ sap.ui.define([
 					// 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
 					if(oAppName.getItems().length == 0){
 						oController._WorkScheduleDialog.getModel().setProperty("/Data/0/AppName", "");
-						oLayout.addStyleClass("displayNone");
+						// oLayout.addStyleClass("displayNone");
 					} 
 
 					oController._WorkScheduleDialog.open();
@@ -1167,12 +1167,12 @@ sap.ui.define([
 
 			// 결재자 리스트가 존재하는 경우 결재자 필수 입력
 			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
-			if(oAppName.getItems().length != 0){
+			// if(oAppName.getItems().length != 0){
 				if(!oData.AppName){
 					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
 					return;
 				}
-			}
+			// }
 			
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_FLEX_TIME_SRV");

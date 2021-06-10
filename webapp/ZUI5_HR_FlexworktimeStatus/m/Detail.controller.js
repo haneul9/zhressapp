@@ -103,9 +103,9 @@ sap.ui.define([
 					sap.m.MessageBox.error(oController.ErrorMessage);
 				}
 
-				if(oAppName.getItems().length > 0){
+				// if(oAppName.getItems().length > 0){
 					oAppNameRow.removeStyleClass("displayNone");
-				}
+				// }
 			}
 			
 			// 추가휴게시간, 근로시간현황
@@ -401,12 +401,12 @@ sap.ui.define([
 			}
 
 			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
-			if(oAppName.getItems().length != 0){
+			// if(oAppName.getItems().length != 0){
 				if(!oData.AppName){
 					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
 					return;
 				}
-			}
+			// }
 			
 			var createData = {FlexWorktime1Nav : [], FlexWorktime2Nav : [], FlexWorktime5Nav : []}; 
 			
