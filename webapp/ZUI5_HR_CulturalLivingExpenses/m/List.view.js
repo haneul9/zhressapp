@@ -83,12 +83,12 @@ sap.ui.define([
 				itemPress: oController.onSelectedRow.bind(oController),
 				columns: [
 					new sap.m.Column({
-						width: "40%",
+						width: "20%",
 						hAlign: sap.ui.core.TextAlign.Begin
 					}),
 					new sap.m.Column({
-						width: "30%",
-						hAlign: sap.ui.core.TextAlign.Begin
+						width: "20%",
+						hAlign: sap.ui.core.TextAlign.End
 					}),
 					new sap.m.Column({
 						width: "auto",
