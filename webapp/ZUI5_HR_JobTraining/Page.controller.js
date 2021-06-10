@@ -166,12 +166,12 @@ sap.ui.define([
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
 									if(v2 === "AA") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40071") + "</a>";
 									if(v2 === "88") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "01") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "02") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "03") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "04") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "10") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "90") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
+									if(v2 === "01") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40076") + "</a>";
+									if(v2 === "02") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40077") + "</a>";
+									if(v2 === "03") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40078") + "</a>";
+									if(v2 === "04") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40079") + "</a>";
+									if(v2 === "10") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40080") + "</a>";
+									if(v2 === "90") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40081") + "</a>";
 								}
 							}, 
 							visible: {
@@ -239,12 +239,12 @@ sap.ui.define([
 									if(v2 === "99") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40069") + "</a>";
 									if(v2 === "00") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40070") + "</a>";
 									if(v2 === "88") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "01") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "02") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "03") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "04") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "10") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
-									if(v2 === "90") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_66004") + "</a>";
+									if(v2 === "01") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40076") + "</a>";
+									if(v2 === "02") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40077") + "</a>";
+									if(v2 === "03") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40078") + "</a>";
+									if(v2 === "04") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40079") + "</a>";
+									if(v2 === "10") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40080") + "</a>";
+									if(v2 === "90") return "<a href='" + v1 + "' style='color:blue !important'>" + oController.getBundleText("LABEL_40081") + "</a>";
 								}
 							}, 
 							visible: {
