@@ -9,10 +9,10 @@ sap.ui.define([
 	sap.ui.jsfragment("fragment.TextFlexBox", {
 		createContent: function (oController) {
 			
-			return new sap.m.Dialog({
+			var oDialog = new sap.m.Dialog({
 				showHeader: false,
 				contentWidth: "400px",
-				contentHeight: "200px",
+				contentHeight: "auto",
 				horizontalScrolling: false,
 				content: [
 					new sap.m.FlexBox(oController.PAGEID + "_TextFlexBox", {
@@ -22,8 +22,18 @@ sap.ui.define([
 						items: []
 					})
 					.addStyleClass("memo-background")
+				],
+				buttons: [
+					new sap.m.Button({
+						press: function () {
+							oDialog.close();
+						},
+						text: "{i18n>LABEL_21011}", // 닫기
+					}).addStyleClass("button-default custom-button-divide")
 				]
 			})
+
+			return oDialog;
 		}
 	});
 });

@@ -35,7 +35,7 @@ sap.ui.define([
 										text: "{EMessage}",
 										textAlign: "Begin"
 									})
-									.addStyleClass("color-info-red font-12px ml-6px"),
+									.addStyleClass("color-info-red font-12px"),
 									new sap.m.Text({										
 										text: "{EMessage1}",
 										textAlign: "Begin",

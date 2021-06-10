@@ -96,7 +96,7 @@ sap.ui.define([
 										else return false;
 									}
 								}
-							}).addStyleClass("button-default"),
+							}),
 							oFileUploader
 						],
 						visible: {
