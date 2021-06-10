@@ -129,7 +129,12 @@ sap.ui.define([
 							}),
 							new sap.m.Text({
 								width: "250px",
-								text: "{/Export/ChInfo}"
+								text: {
+									parts: [{path: "/Export/ChInfo"}, {path: "/TopData/ZchPernr"}],
+									formatter: function(v1, v2) {
+										return v2 === "00000000" ? "" : v1;
+									}
+								}
 							})
 						]         
 					}).addStyleClass("search-field-group"),
@@ -154,10 +159,11 @@ sap.ui.define([
 										text: {
 											parts: [
 												{ path: "/TopData/Aedtm" },
-												{ path: "/TopData/Aetim" }
+												{ path: "/TopData/Aetim" },
+												{ path: "/TopData/ZchPernr"}
 											],
-											formatter: function (v1, v2) {
-												if(v1 && v2){
+											formatter: function (v1, v2, v3) {
+												if(v1 && v2 && v3 !== "00000000"){
 													var vFullDate = sap.ui.core.format.DateFormat.getDateInstance({ pattern: "YYYY-MM-dd" }).format(v1);
 													var vFullTime = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm:ss" }).format(new Date(v2.ms), true);
 

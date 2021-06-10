@@ -27,10 +27,11 @@ sap.ui.define([
 							visible: {
 								parts: [
 									{path: "Status"}, 
-									{path: "/LogData/EButton"}
+									{path: "/LogData/EButton"},
+									{path: "Zopen"}
 								],
-								formatter: function(v, v1) {
-									if(v === "15" && v1 === "X") return true;
+								formatter: function(v, v1, v2) {
+									if(v === "15" && v1 === "X" && v2 === "X") return true;
 									else return false; 
 								}
 							}
