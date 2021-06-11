@@ -1984,7 +1984,7 @@ sap.ui.define([
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
 				oTeaList1.Sclas = "P";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
@@ -1993,7 +1993,7 @@ sap.ui.define([
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
@@ -2065,7 +2065,7 @@ sap.ui.define([
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
 				oTeaList1.Sclas = "P";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
@@ -2074,7 +2074,7 @@ sap.ui.define([
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
@@ -2241,7 +2241,7 @@ sap.ui.define([
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
 				oTeaList1.Sclas = "P";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
@@ -2250,7 +2250,7 @@ sap.ui.define([
 				var oTeaList1 = {};
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
 				oTeaList1.Sclas = "H";
 				oTeaList2.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTeacher", oTeaList1));
 			});
