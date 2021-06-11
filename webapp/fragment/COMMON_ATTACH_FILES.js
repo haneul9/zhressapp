@@ -264,6 +264,7 @@ fragment.COMMON_ATTACH_FILES = {
 					HelpTextList: [],
 					UseMultiCategories: false,
 					CntnmDifferent: false,
+					ReadAsync: false,
 					CntnmDifferentData: []
 				},
 				opt
@@ -337,13 +338,17 @@ fragment.COMMON_ATTACH_FILES = {
 			vAttachFileDatas = JSonModel.getProperty("/Data"),
 			vAppnm = JSonModel.getProperty("/Settings/Appnm"),
 			vUse = JSonModel.getProperty("/Settings/UseMultiCategories"),
+			vAsync = JSonModel.getProperty("/Settings/ReadAsync"),
 			vDif = JSonModel.getProperty("/Settings/CntnmDifferent"),
 			vDifData = JSonModel.getProperty("/Settings/CntnmDifferentData"),
 			Datas = { Data: [] };
 
+		oAttachbox.setBusyIndicatorDelay(0).setBusy(true);
+		JSonModel.setProperty("/Settings/Length", 0);
+		JSonModel.setProperty("/Data", []);
+
 		if(!vAppnm) {
-			JSonModel.setProperty("/Settings/Length", 0);
-			JSonModel.setProperty("/Data", []);
+			oAttachbox.setBusy(false);
 			return;
 		}
 
@@ -359,9 +364,11 @@ fragment.COMMON_ATTACH_FILES = {
 				vDifData.Type = vDifData.Fname.substring(vDifData.Fname.lastIndexOf(".") + 1);
 				Datas.Data.push(vDifData);
 			}
+
+			oAttachbox.setBusy(false);
 		} else{
 			oModel.read("/FileListSet", {
-				async: false,
+				async: vAsync || false,
 				filters: [
 					new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
 				],
@@ -405,23 +412,28 @@ fragment.COMMON_ATTACH_FILES = {
 							
 						});
 					}
+
+					// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
+					if (vExistDataFlag == "X" && vAttachFileDatas) {
+						vAttachFileDatas.forEach(function (elem) {
+							if(elem.New === true) Datas.Data.push(elem);
+						});
+					}
+
+					JSonModel.setProperty("/Settings/Length", Datas.Data.length);
+					JSonModel.setProperty("/Data", Datas.Data);
+					JSonModel.refresh();
+
+					oAttachbox.setBusy(false);
 				},
 				error: function (res) {
 					common.Common.log(res);
+					oAttachbox.setBusy(false);
 				}
 			});
 		}
 
-		// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
-		if (vExistDataFlag == "X" && vAttachFileDatas) {
-			vAttachFileDatas.forEach(function (elem) {
-				if(elem.New === true) Datas.Data.push(elem);
-			});
-		}
-
-		JSonModel.setProperty("/Settings/Length", Datas.Data.length);
-		JSonModel.setProperty("/Data", Datas.Data);
-		JSonModel.refresh();
+		
 	},
 
 	/*

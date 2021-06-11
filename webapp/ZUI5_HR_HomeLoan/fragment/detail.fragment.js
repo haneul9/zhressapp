@@ -241,7 +241,7 @@ sap.ui.define(
                                                         width: "250px",
                                                         editable: "{/Detail/Header/Edtfg}",
                                                         value: "{/Detail/Header/Zhlrat}",
-                                                        liveChange: Common.onChangeMoneyInput
+                                                        liveChange: ApprovalHandler.onChangeZhlrat.bind(ApprovalHandler)
                                                     })
                                                 ]
                                             }).addStyleClass("search-field-group"),

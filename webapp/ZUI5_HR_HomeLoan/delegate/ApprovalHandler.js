@@ -95,7 +95,7 @@ sap.ui.define(
                 );
 
                 this.oModel.setProperty("/IsSearch", true);
-                this.oModel.setProperty("/isVisibleApprovalBtn", results.Export[0].BtnActive === "X" ? true : false);
+                this.oModel.setProperty("/isVisibleApprovalBtn", (results.Export[0] || {}).BtnActive === "X" ? true : false);
                 this.oModel.setProperty("/List", results.TableIn1.map(function(elem) {
                     return $.extend(true, elem, {
                         Zhlrat: elem.Zhlrat ? elem.Zhlrat : "0",
@@ -179,7 +179,7 @@ sap.ui.define(
             },
 			
 			onAfterDetailDialog: function() {
-				$.app.byViewId("FilePanel").setBusy(true);
+				$.app.byViewId("FilePanel").setBusyIndicatorDelay(0).setBusy(true);
 
                 var vAppnm = this.oModel.getProperty("/Detail/Header/Appnm"),
                 vStatus = this.oModel.getProperty("/Detail/Header/Status"),
@@ -190,6 +190,7 @@ sap.ui.define(
                             Required : elem.Code === "6" ? false : true,
                             Appnm: vAppnm,
                             Mode: "S",
+                            ReadAsync: true,
                             UseMultiCategories: true,
                             Editable: (!vStatus || vStatus === "AA") ? true : false
                         }, Common.lpad(elem.Code, 3));
@@ -216,7 +217,18 @@ sap.ui.define(
 		
 					DialogHandler.open(BankDialogHandler.get(this.oController, initData, callback));
 				}.bind(this), 0);
-			},
+            },
+            
+            onChangeZhlrat: function(oEvent) {
+                Common.onChangeMoneyInput(oEvent);
+
+                var vInputData = this.oModel.getProperty("/Detail/Header"),
+                vZhlrat = vInputData.Zhlrat,    // 대출신청금액
+                vZhlpat = vInputData.Zhlpat,    // 기 대출금액
+                vZhltat = Number(vZhlrat.replace(/[^\d]/g, "")) + Number(vZhlpat.replace(/[^\d]/g, ""));
+
+                this.oModel.setProperty("/Detail/Header/Zhltat", Common.numberWithCommas(vZhltat));
+            },
 
             /**
              * 신청 Dialog 호출 버튼 event
@@ -370,19 +382,19 @@ sap.ui.define(
                         this.oController, 
                         processType,
                         payload, 
-                        function(data) {
+                        function() {
                             var successMessage;
 
                             switch(processType) {
                                 case HomeLoan.ProcessType.APPROVAL:
                                     successMessage = "신청되었습니다.";
 
-                                    if(!Common.isExternalIP()) {
-                                        if(!Common.openPopup.call(this.oController, data.Export.results[0].Url)) {
-                                            BusyIndicator.hide();
-                                            return;
-                                        }
-                                    }
+                                    // if(!Common.isExternalIP()) {
+                                    //     if(!Common.openPopup.call(this.oController, data.Export.results[0].Url)) {
+                                    //         BusyIndicator.hide();
+                                    //         return;
+                                    //     }
+                                    // }
 
                                     break;
                                 case HomeLoan.ProcessType.SAVE:
