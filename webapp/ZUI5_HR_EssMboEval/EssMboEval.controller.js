@@ -291,21 +291,21 @@ sap.ui.define([
 						ApoptT: "",
 						Apopt: "28",
 						Apop: oTa1.getValue(),
-						Docid: oController._Docid,
+						Docid: oController._Docid ? oController._Docid : null,
 						IOdkey: ""
 					});
 					oTableIn2.push({
 						ApoptT: "",
 						Apopt: "29",
 						Apop: oTa2.getValue(),
-						Docid: oController._Docid,
+						Docid: oController._Docid ? oController._Docid : null,
 						IOdkey: ""
 					});
 				}
 
 				if(oController._SheetData.TableIn4.results.length==0){
 					oTableIn4.push({
-						Docid:oController._Docid,
+						Docid:oController._Docid ? oController._Docid : null,
 						Apgrd0:oSel1.getSelectedKey(),
 						Apgrd0T:oSel1.getSelectedItem().getText(),
 					});
