@@ -5,11 +5,9 @@ sap.ui.define([
 	"../common/JSONModelHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"../common/OrgOfIndividualHandler",
-	"../common/SearchUser1",
 	"./delegate/ViewTemplates"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, OrgOfIndividualHandler, SearchUser1, ViewTemplates) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, ViewTemplates) {
 	"use strict";
 
 	
@@ -1041,7 +1039,7 @@ sap.ui.define([
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									}
 								}),
@@ -1058,7 +1056,7 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									textAlign: "End",
@@ -1071,7 +1069,7 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									textAlign: "End",
@@ -1108,7 +1106,7 @@ sap.ui.define([
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									}
 								}),
@@ -1126,7 +1124,7 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									textAlign: "End",
@@ -1139,7 +1137,7 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									textAlign: "End",
@@ -1715,7 +1713,7 @@ sap.ui.define([
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									}
 								}),
@@ -1732,7 +1730,7 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									liveChange: oController.getTimeComma.bind(oController),
@@ -1745,13 +1743,18 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									textAlign: "End",
 									width: "132px",
 									liveChange: oController.getMoneyComma.bind(oController),
-									value: e.Tepay
+									value: {
+										path: e.Tepay,
+										formatter: function() {
+											return Common.checkNull(e.Tepay) ? e.Tepay : Common.numberWithCommas(e.Tepay);
+										}
+									}
 								})
 							]
 						}).addStyleClass("search-field-group")
@@ -1771,7 +1774,7 @@ sap.ui.define([
 									visible: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									}
 								}),
@@ -1794,7 +1797,7 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									liveChange: oController.getDyTimeComma.bind(oController),
@@ -1807,13 +1810,18 @@ sap.ui.define([
 									editable: {
 										parts: [{path: "/Status1"}, {path: "/Edoty"}, {path: "/OJTResult"}],
 										formatter: function(v1, v2, v3) {
-											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || (v1 === "AA" && v2 === "2");
+											return !v1 || (v1 === "AA" && v2 === "1") || (v1 === "99" && v2 === "1" && v3 === "X") || ((v1 === "AA" || v1 === "88") && v2 === "2");
 										}
 									},
 									textAlign: "End",
 									width: "132px",
 									liveChange: oController.getDyMoneyComma.bind(oController),
-									value: e.Tepay
+									value: {
+										path: e.Tepay,
+										formatter: function() {
+											return Common.checkNull(e.Tepay) ? e.Tepay : Common.numberWithCommas(e.Tepay);
+										}
+									}
 								})
 							]
 						}).addStyleClass("search-field-group")
@@ -1982,6 +1990,7 @@ sap.ui.define([
 			
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
@@ -1991,6 +2000,7 @@ sap.ui.define([
 
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
@@ -2063,6 +2073,7 @@ sap.ui.define([
 			
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
@@ -2072,6 +2083,7 @@ sap.ui.define([
 
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
@@ -2239,6 +2251,7 @@ sap.ui.define([
 
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
@@ -2248,6 +2261,7 @@ sap.ui.define([
 
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
 				oTeaList1.Ename = e.getItems()[3].getValue();
 				oTeaList1.Times = e.getItems()[5].getValue();
 				oTeaList1.Tepay = e.getItems()[7].getValue().replace(/\,/gi, "");
