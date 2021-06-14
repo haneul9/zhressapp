@@ -104,6 +104,7 @@
                                         justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
                                         items: [
                                             new sap.ui.commons.TextView({
+                                                width: "auto",
                                                 text : {
                                                     parts: [{path: "Aedtm"}, {path: "Aetim"}],
                                                     formatter: function(v1, v2) {
