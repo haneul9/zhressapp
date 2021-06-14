@@ -85,7 +85,7 @@ fill: function() {
 								'<div class="portlet-bbs-title">',
 									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), o.Stitle),
 								'</div>',
-								'<small class="portlet-bbs-date" style="width:auto;">${date}</small>'.interpolate(date),
+								'<small class="portlet-bbs-date" style="width:100%;">${date}</small>'.interpolate(date),
 							'</div>',
 						'</a>'
 					].join('');

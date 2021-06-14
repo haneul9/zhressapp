@@ -87,7 +87,7 @@ fill: function() {
 									o.Newitem === 'X' ? '<span class="badge badge-primary badge-pill">N</span>' : '',
 									o.Impor === 'X' ? '<i class="fas fa-exclamation-circle"></i>' : '',
 								'</div>',
-								'<small class="portlet-bbs-date" style="width:auto;">${date}</small>'.interpolate(date),
+								'<small class="portlet-bbs-date" style="width:100%;">${date}</small>'.interpolate(date),
 							'</div>',
 						'</a>'
 					].join('');
