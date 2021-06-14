@@ -151,19 +151,20 @@
 						]
 					})
 					.addStyleClass("search-field-group"),
-                    new sap.m.HBox({
+                    new sap.m.HBox("contentArea", {
 						width: "100%",
 						fitContainer: true,
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true), // 내용
-                            new sap.m.TextArea({
-                                rows: 10,
-								width: "100%",
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),	
-								value:"{Detail}",
-								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
-								editable: false
-							}).addStyleClass("mt-8px mb-8px")
+							new sap.ui.core.HTML({ content: "{Detail}" })
+                            // new sap.m.TextArea({
+                            //     rows: 10,
+							// 	width: "100%",
+							// 	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),	
+							// 	value:"{Detail}",
+							// 	maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
+							// 	editable: false
+							// }).addStyleClass("mt-8px mb-8px")
 						]
 					})
 					.addStyleClass("search-field-group h-auto"),

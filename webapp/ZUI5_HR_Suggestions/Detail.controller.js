@@ -5,9 +5,11 @@
     "../common/AttachFileAction",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"./delegate/ViewTemplates"
+	"./delegate/ViewTemplates",
+	"sap/ui/richtexteditor/RichTextEditor",
+	"sap/ui/richtexteditor/EditorType"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ViewTemplates) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ViewTemplates, RTE, EditorType) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -143,15 +145,21 @@
 			sendObject.TableIn2 = [];
 			sendObject.TableIn3 = [];
 			sendObject.TableIn4 = [];
+			sendObject.TableIn6 = [];
 			
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 					if (oData && oData.TableIn2) {
 						Common.log(oData);
 						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
+						oCopiedRow.Detail = oData.TableIn6.results[0].Detail;
 						var oCommentData = oData.TableIn3.results;
 						var oSubCommentData = oData.TableIn4.results;
-						oController.RegistModel.setData({FormData: oCopiedRow});
+						// oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
+						// 	Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
+						// })});
+						oController.RegistModel.setData({FormData: oCopiedRow });
+
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
 
@@ -1460,6 +1468,7 @@
 					sendObject.IBukrs = vBukrs;
 					// Navigation property
 					sendObject.TableIn2 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn2", oRowData)];
+					sendObject.TableIn6 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn6", oRowData)];
 					
 					oModel.create("/SuggestionBoxSet", sendObject, {
 						success: function(oData, oResponse) {
@@ -1560,6 +1569,37 @@
 			var oController = this.getView().getController();
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
+				
+			// if(!$.app.byId("myRTE")) {
+			if($.app.byId("myRTE"))
+				$.app.byId("myRTE").destroy();
+
+			var that = this;
+				that.oRichTextEditor = new RTE("myRTE", {
+					editorType: EditorType.TinyMCE4,
+					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					width: "100%",
+					height: "500px",
+					customToolbar: true,
+					showGroupFont: true,
+					showGroupLink: true,
+					showGroupInsert: true,
+					value: "{Detail}",
+					editable: {
+						parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						formatter: function(v1, v2) {
+							return !v1 || v2 === "X";
+						}
+					},
+					ready: function () {
+						this.addButtonGroup("styleselect").addButtonGroup("table");
+					}
+				});
+
+			$.app.byId("contentArea").addItem(that.oRichTextEditor);
+			// }
+
+			$.app.byId("myRTE").addStyleClass("mxw-100");
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,

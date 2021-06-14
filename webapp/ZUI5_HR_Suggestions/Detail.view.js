@@ -92,7 +92,7 @@
 
 			return new sap.m.VBox({
                 width: "100%",
-				fitContainer: true,
+				// fitContainer: true,
 				items: [
 					// new sap.m.HBox({
 					// 	width: "100%",
@@ -186,12 +186,12 @@
 						]
 					})
 					.addStyleClass("search-field-group"),
-                    new sap.m.HBox({
+                    new sap.m.HBox("contentArea", {
 						width: "100%",
 						fitContainer: true,
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true), // 내용
-                            new sap.m.TextArea({
+                            /*new sap.m.TextArea({
                                 rows: 10,
 								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),	
@@ -203,7 +203,7 @@
 										return !v1 || v2 === "X";
 									}
 								}
-							}).addStyleClass("mt-8px mb-8px")
+							}).addStyleClass("mt-8px mb-8px")*/
 						]
 					})
 					.addStyleClass("search-field-group h-auto"),
