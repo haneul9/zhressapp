@@ -1,3 +1,5 @@
+/* eslint-disable no-eval */
+/* eslint-disable no-undef */
 jQuery.sap.require("sap.m.MessageBox");
 $.sap.require("common.Check_Regno");
 sap.ui.define([
@@ -110,7 +112,7 @@ sap.ui.define([
 				Regno:"",
 				Zzclass:"1",
 				Appnm:"",
-				Opener:"X"}	
+				Opener:"X"};	
 		},
 
 		onClose:function(){
@@ -507,10 +509,10 @@ sap.ui.define([
 		rrn : function(str){ 
 			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet");
 			var oController = oView.getController();
-			let originStr = str; 
-			let rrnStr; 
-			let maskingStr; 
-			let strLength; 
+			var originStr = str; 
+			var rrnStr; 
+			var maskingStr; 
+			var strLength; 
 			if(oController.checkNull(originStr) == true){ return originStr; } 
 			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-4]{1}[0-9]{6}\b/gi); 
 			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
@@ -585,10 +587,13 @@ sap.ui.define([
 				return false;
 			}
 
-			var vRegChk=common.Check_Regno.isValidJuminNo(oPro.Regno.split("-")[0]+oPro.Regno.split("-")[1]);
-			if((parseInt(oPro.Regno.split("-")[0])>=201001)&&(oPro.Regno.split("-")[1].substring(0,1)=="3"||oPro.Regno.split("-")[1].substring(0,1)=="4"
-				||oPro.Regno.split("-")[1].substring(0,1)=="7"||oPro.Regno.split("-")[1].substring(0,1)=="8")){
-			}else{
+			var vRegChk=common.Check_Regno.isValidJuminNo(oPro.Regno.split("-")[0]+oPro.Regno.split("-")[1]),
+				vBirth = parseInt(oPro.Regno.split("-")[0]),
+				vGender = oPro.Regno.split("-")[1].substring(0,1);
+
+			if(vBirth >= 201001 && (vGender === "3" || vGender === "4" || vGender === "7" || vGender === "8")) {
+				Common.log(oPro.Regno);
+			} else {
 				if(!/\*/.test(oPro.Regnot) && !vRegChk){
 					sap.m.MessageBox.show(
 						oBundleText.getText("MSG_44013"), {				
