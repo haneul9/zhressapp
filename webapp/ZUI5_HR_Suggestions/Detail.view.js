@@ -92,7 +92,7 @@
 
 			return new sap.m.VBox({
                 width: "100%",
-				fitContainer: true,
+				// fitContainer: true,
 				items: [
 					// new sap.m.HBox({
 					// 	width: "100%",
