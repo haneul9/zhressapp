@@ -34,6 +34,7 @@ common.AttachFileAction = {
 					Max: 2,
 					Required: false,
 					HelpButton: false,
+					ReadAsync: false,
 					HelpTextList: [],
 					fnChange: null
 				},
@@ -87,13 +88,18 @@ common.AttachFileAction = {
 			JSonModel = oAttachbox.getModel(),
 			vAttachFileDatas = JSonModel.getProperty("/Data"),
 			vAppnm = JSonModel.getProperty("/Settings/Appnm"),
+			vAsync = JSonModel.getProperty("/Settings/ReadAsync"),
 			Datas = { Data: [] };
+
+		JSonModel.setProperty("/Settings/Length", 0);
+		JSonModel.setProperty("/Data", []);
 
 		if(!vAppnm) {
 			JSonModel.setProperty("/Settings/Length", 0);
-			JSonModel.setProperty("/Data", []);
 			return;
 		}
+
+		oAttachbox.setBusyIndicatorDelay(0).setBusy(true);
 
 		if (f1) f1.setAttribute("value", "");
 
@@ -102,7 +108,7 @@ common.AttachFileAction = {
 		oAttachFileList.removeSelections(true);
 
 		oModel.read("/FileListSet", {
-			async: false,
+			async: vAsync || false,
 			filters: [
 				new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
 			],
@@ -117,21 +123,24 @@ common.AttachFileAction = {
 						Datas.Data.push(elem);
 					});
 				}
+
+				// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
+				if (vExistDataFlag == "X" && vAttachFileDatas) {
+					vAttachFileDatas.forEach(function (elem) {
+						if(elem.New === true) Datas.Data.push(elem);
+					});
+				}
+
+				JSonModel.setProperty("/Settings/Length", Datas.Data.length);
+				JSonModel.setProperty("/Data", Datas.Data);
+
+				oAttachbox.setBusy(false);
 			},
 			error: function (res) {
 				common.Common.log(res);
+				oAttachbox.setBusy(false);
 			}
 		});
-
-		// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
-		if (vExistDataFlag == "X" && vAttachFileDatas) {
-			vAttachFileDatas.forEach(function (elem) {
-				if(elem.New === true) Datas.Data.push(elem);
-			});
-		}
-
-		JSonModel.setProperty("/Settings/Length", Datas.Data.length);
-		JSonModel.setProperty("/Data", Datas.Data);
 	},
 
 	/*
