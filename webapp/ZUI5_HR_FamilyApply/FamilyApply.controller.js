@@ -729,6 +729,8 @@ sap.ui.define([
 			var oPro=$.app.byId(oController.PAGEID+"_Dialog").getModel().getProperty("/oData")[0];
 			var s = oEvent.getParameter("value");
 			var oId=oEvent.getSource().getId();
+			var vGender = "";
+
 			if(s.length>0&&s.length<7&&isNaN(s)){
 				$.app.byId(oId).setValue();
 			}
@@ -744,7 +746,10 @@ sap.ui.define([
 				if($.app.byId(oId).getValue().search("-")==-1){
 					$.app.byId(oId).setValue($.app.byId(oId).getValue().substring(0,6)+"-"+$.app.byId(oId).getValue().substring(6));
 				}
-				if($.app.byId(oId).getValue().substring(7,8)=="3"||$.app.byId(oId).getValue().substring(7,8)=="4"){
+
+				vGender = $.app.byId(oId).getValue().substring(7,8);
+
+				if(vGender=="3" || vGender=="4" || vGender=="7" || vGender=="8"){
 					oPro.Fgbdt=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 					oPro.Zzbdate=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}else{
@@ -752,7 +757,9 @@ sap.ui.define([
 					oPro.Zzbdate=new Date("19"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}
 			}else if(s.length==14){
-				if($.app.byId(oId).getValue().substring(7,8)=="3"||$.app.byId(oId).getValue().substring(7,8)=="4"){
+				vGender = $.app.byId(oId).getValue().substring(7,8);
+
+				if(vGender=="3" || vGender=="4" || vGender=="7" || vGender=="8"){
 					oPro.Fgbdt=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 					oPro.Zzbdate=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}else{
@@ -760,7 +767,9 @@ sap.ui.define([
 					oPro.Zzbdate=new Date("19"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}
 			}
+
 			var oRrn=oController.rrn($.app.byId(oId).getValue());
+			
 			$.app.byId(oId).setValue(oRrn);
 		},
 
@@ -770,9 +779,10 @@ sap.ui.define([
 			var oController=$.app.getController();
 			var originStr = str; 
 			var rrnStr; 
-			var maskingStr; 
+			var maskingStr;
+
 			if(oController.checkNull(originStr) == true){ return originStr; } 
-			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-4]{1}[0-9]{6}\b/gi); 
+			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8]{1}[0-9]{6}\b/gi); 
 			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
 			maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/(-?)([1-4]{1})([0-9]{6})\b/gi,"$1$2******")); }
 			else { rrnStr = originStr.match(/\d{13}/gi); 

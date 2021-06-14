@@ -672,17 +672,19 @@ sap.ui.define(["../../common/Common", "../../common/CommonController", "../../co
         onAutoInputReg: function (oEvent) {
             var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.FamilyApply");
             var oController = $.app.getController();
-            var oPro = $.app
-                .byId(oController.PAGEID + "_Dialog")
-                .getModel()
-                .getProperty("/oData")[0];
+            var oPro = $.app.byId(oController.PAGEID + "_Dialog").getModel().getProperty("/oData")[0];
             var s = oEvent.getParameter("value");
             var oId = oEvent.getSource().getId();
+            var vGender = "";
+
             if (s.length == 13) {
                 if ($.app.byId(oId).getValue().search("-") == -1) {
                     $.app.byId(oId).setValue($.app.byId(oId).getValue().substring(0, 6) + "-" + $.app.byId(oId).getValue().substring(6));
                 }
-                if ($.app.byId(oId).getValue().substring(7, 8) == "3" || $.app.byId(oId).getValue().substring(7, 8) == "4") {
+
+                vGender = $.app.byId(oId).getValue().substring(7, 8);
+
+                if (vGender == "3" || vGender == "4" || vGender == "7" || vGender == "8") {
                     oPro.Fgbdt = new Date("20" + $.app.byId(oId).getValue().substring(0, 2) + "-" + $.app.byId(oId).getValue().substring(2, 4) + "-" + $.app.byId(oId).getValue().substring(4, 6));
                     oPro.Zzbdate = new Date("20" + $.app.byId(oId).getValue().substring(0, 2) + "-" + $.app.byId(oId).getValue().substring(2, 4) + "-" + $.app.byId(oId).getValue().substring(4, 6));
                 } else {

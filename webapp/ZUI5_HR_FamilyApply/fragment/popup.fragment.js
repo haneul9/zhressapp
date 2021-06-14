@@ -1,3 +1,5 @@
+/* eslint-disable no-eval */
+/* eslint-disable no-undef */
 sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
     createContent: function (oController) {
         var oRow,
