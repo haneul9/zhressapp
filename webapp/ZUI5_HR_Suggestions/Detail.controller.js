@@ -1577,7 +1577,7 @@
 				that.oRichTextEditor = new RTE("myRTE", {
 					editorType: EditorType.TinyMCE4,
 					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-					width: "99.9%",
+					width: "99%",
 					height: "500px",
 					customToolbar: true,
 					showGroupFont: true,
