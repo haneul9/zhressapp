@@ -328,40 +328,48 @@ sap.ui.define(
             },
 
             onAfterOpen: function () {
-				var oController = $.app.getController();
-								
-                oController.getSelector("A");
-                oController.getSelData();
-				
-				oController._tData.Chk1 = (oController._tData.Zfvcgb == "X") ? true : false;
-				oController._tData.Chk2 = (oController._tData.Ziftgb == "X") ? true : false;
-				
-                oController._vArr1.forEach(function (fieldTxt) {
-					var oPro = $.app.getController()._DataModel.getProperty("/Pop1/0");
-					
-					oPro[fieldTxt] = parseInt(oPro[fieldTxt]);
-					
-					if (fieldTxt === "Zmedrl" && oPro[fieldTxt] > 90000000) {
-						oController._vC = oPro[fieldTxt];
-						oPro[fieldTxt] = oController.getBundleText("MSG_47044");	// 한도 없음
-						oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, oPro[fieldTxt]);
-                    } else {
-						oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
-                    }
-                });
-				
-				$.app.byId(oController.PAGEID + "_Dialog").bindElement("/Pop1/0");
+                var oController = $.app.getController();
+                
+                oController.oDialog.setBusyIndicatorDelay(0).setBusy(true);
 
-				if(oController._Hass === "X") {
-					EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
-					$.app.byId(oController.PAGEID + "_PerInfo").setVisible(true);
-				} else {
-					$.app.byId(oController.PAGEID + "_PerInfo").setVisible(false);
-				}
-				
-				if (oController._NewGubun !== "O") {
-					oController.changeSel2();
-                }
+                Common.getPromise(
+                    function () {
+                        oController.getSelector("A");
+                        oController.getSelData();
+                        
+                        oController._tData.Chk1 = (oController._tData.Zfvcgb == "X") ? true : false;
+                        oController._tData.Chk2 = (oController._tData.Ziftgb == "X") ? true : false;
+                        
+                        oController._vArr1.forEach(function (fieldTxt) {
+                            var oPro = $.app.getController()._DataModel.getProperty("/Pop1/0");
+                            
+                            oPro[fieldTxt] = parseInt(oPro[fieldTxt]);
+                            
+                            if (fieldTxt === "Zmedrl" && oPro[fieldTxt] > 90000000) {
+                                oController._vC = oPro[fieldTxt];
+                                oPro[fieldTxt] = oController.getBundleText("MSG_47044");	// 한도 없음
+                                oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, oPro[fieldTxt]);
+                            } else {
+                                oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
+                            }
+                        });
+                        
+                        $.app.byId(oController.PAGEID + "_Dialog").bindElement("/Pop1/0");
+
+                        if(oController._Hass === "X") {
+                            EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
+                            $.app.byId(oController.PAGEID + "_PerInfo").setVisible(true);
+                        } else {
+                            $.app.byId(oController.PAGEID + "_PerInfo").setVisible(false);
+                        }
+                        
+                        if (oController._NewGubun !== "O") {
+                            oController.changeSel2();
+                        }
+                    }
+                ).then(function() {
+                    oController.oDialog.setBusy(false);
+                });
             },
 
             onAfterLoad: function () {
@@ -386,36 +394,45 @@ sap.ui.define(
                 }
 
                 setTimeout(function () {
-					COMMON_ATTACH_FILES.setAttachFile(oController, {
-						Appnm: vAppnm,
-                        Mode: "S",
-                        Cntnm: "001",
-                        Max: "1",
-                        Label: "",
-                        Editable: oChk1.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
-                        UseMultiCategories: true
-					}, "001");
-
-                    COMMON_ATTACH_FILES.setAttachFile(oController, {
-						Appnm: vAppnm,
-                        Mode: "S",
-                        Cntnm: "002",
-                        Max: "1",
-                        Label: "",
-                        Editable: oChk2.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
-                        UseMultiCategories: true
-					}, "002");
-					
-					COMMON_ATTACH_FILES.setAttachFile(oController, {
-						Appnm: vAppnm,
-						Required: false,
-						Mode: "M",
-						Max: "7",
-						Cntnm: "009",
-						Editable: vEdit2,
-						UseMultiCategories: true
-					}, "009");
-                }, 10);
+                    Promise.all([
+                        Common.getPromise(function() {
+                            COMMON_ATTACH_FILES.setAttachFile(oController, {
+                                Appnm: vAppnm,
+                                Mode: "S",
+                                Cntnm: "001",
+                                Max: "1",
+                                Label: "",
+                                ReadAsync: true,
+                                Editable: oChk1.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
+                                UseMultiCategories: true
+                            }, "001");
+                        }),
+                        Common.getPromise(function() {
+                            COMMON_ATTACH_FILES.setAttachFile(oController, {
+                                Appnm: vAppnm,
+                                Mode: "S",
+                                Cntnm: "002",
+                                Max: "1",
+                                Label: "",
+                                ReadAsync: true,
+                                Editable: oChk2.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
+                                UseMultiCategories: true
+                            }, "002");
+                        }),
+                        Common.getPromise(function() {
+                            COMMON_ATTACH_FILES.setAttachFile(oController, {
+                                Appnm: vAppnm,
+                                Required: false,
+                                Mode: "M",
+                                Max: "7",
+                                Cntnm: "009",
+                                ReadAsync: true,
+                                Editable: vEdit2,
+                                UseMultiCategories: true
+                            }, "009");
+                        })
+                    ]);
+                }, 100);
             },
 
             onAfterLoad2: function () {
@@ -436,6 +453,7 @@ sap.ui.define(
 						Required: true,
 						Mode: "M",
 						Max: "15",
+                        ReadAsync: true,
 						Editable: vEdit
 					}, "008");	
                 }, 100);
@@ -443,35 +461,41 @@ sap.ui.define(
 
             onAfterOpen2: function () {
 				var oController = $.app.getController();
-				var oPro;
-				
-				oController.getSelector("A");
-				
-				oPro = oController._DataModel.getProperty("/Pop2/0");
-				oController._vArr2.forEach(function (fieldTxt) {
-					oController._DataModel.setProperty("/Pop2/0" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
-                });
-				
-				if (oController._onDialog === "M") {
-                    oController.getSelData2("B");
-					$.app.byId(oController.PAGEID + "_dSel5").setSelectedKey(oPro.Relation);
-					
-					oController.onChange5("B");
-					$.app.byId(oController.PAGEID + "_dSel6").setSelectedKey(oPro.PatiName);
-                    $.app.byId(oController.PAGEID + "_dSel3").setSelectedKey(oPro.Gtz51);
-                    $.app.byId(oController.PAGEID + "_dSel4").setSelectedKey(oPro.Gtz51s);
-                } else {
-                    oController.getSelData2();
-				}
-				
-                $.app.byId(oController.PAGEID + "_Dialog2").bindElement("/Pop2/0");
+                var oPro;
+                
+                oController.oDialog2.setBusyIndicatorDelay(0).setBusy(true);
 
-				if(oController._Hass === "X") {
-					$.app.byId(oController.PAGEID + "_PerInfo2").setVisible(true);
-					EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
-				} else {
-					$.app.byId(oController.PAGEID + "_PerInfo2").setVisible(false);
-				}
+                Common.getPromise(function() {
+                    oController.getSelector("A");
+				
+                    oPro = oController._DataModel.getProperty("/Pop2/0");
+                    oController._vArr2.forEach(function (fieldTxt) {
+                        oController._DataModel.setProperty("/Pop2/0" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
+                    });
+                    
+                    if (oController._onDialog === "M") {
+                        oController.getSelData2("B");
+                        $.app.byId(oController.PAGEID + "_dSel5").setSelectedKey(oPro.Relation);
+                        
+                        oController.onChange5("B");
+                        $.app.byId(oController.PAGEID + "_dSel6").setSelectedKey(oPro.PatiName);
+                        $.app.byId(oController.PAGEID + "_dSel3").setSelectedKey(oPro.Gtz51);
+                        $.app.byId(oController.PAGEID + "_dSel4").setSelectedKey(oPro.Gtz51s);
+                    } else {
+                        oController.getSelData2();
+                    }
+                    
+                    $.app.byId(oController.PAGEID + "_Dialog2").bindElement("/Pop2/0");
+
+                    if(oController._Hass === "X") {
+                        $.app.byId(oController.PAGEID + "_PerInfo2").setVisible(true);
+                        EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
+                    } else {
+                        $.app.byId(oController.PAGEID + "_PerInfo2").setVisible(false);
+                    }
+                }).then(function() {
+                    oController.oDialog2.setBusy(false);
+                });
             },
 
             onAfterOpen3: function (vDatum) {
