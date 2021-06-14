@@ -1570,7 +1570,6 @@
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
 				
-			// if(!$.app.byId("myRTE")) {
 			if($.app.byId("myRTE"))
 				$.app.byId("myRTE").destroy();
 
@@ -1578,7 +1577,7 @@
 				that.oRichTextEditor = new RTE("myRTE", {
 					editorType: EditorType.TinyMCE4,
 					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-					width: "100%",
+					width: "99.9%",
 					height: "500px",
 					customToolbar: true,
 					showGroupFont: true,
@@ -1597,7 +1596,6 @@
 				});
 
 			$.app.byId("contentArea").addItem(that.oRichTextEditor);
-			// }
 
 			$.app.byId("myRTE").addStyleClass("mxw-100");
 
