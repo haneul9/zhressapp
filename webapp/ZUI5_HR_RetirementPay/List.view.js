@@ -85,7 +85,7 @@ sap.ui.define(
 
                 // 급여연월, 금액
                 var col_info = [{id: "Yyyymm", label: "{i18n>LABEL_73014}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-                                {id: "BetrgT", label: "{i18n>LABEL_73015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"}];
+                                {id: "BetrgT", label: "{i18n>LABEL_73015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 
                 MakeTable.makeColumn(oController, oTable2, col_info);
 
@@ -111,7 +111,7 @@ sap.ui.define(
                 // 상여연월, 상여구분, 금액
                 var col_info = [{id: "Yyyymm", label: "{i18n>LABEL_73016}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
                                 {id: "Ocrtx", label: "{i18n>LABEL_73017}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-                                {id: "BetrgT", label: "{i18n>LABEL_73015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"}];
+                                {id: "BetrgT", label: "{i18n>LABEL_73015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 
                 MakeTable.makeColumn(oController, oTable3, col_info);
 

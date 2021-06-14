@@ -56,21 +56,21 @@ sap.ui.define([
 									{id: "Dat02", label: "{i18n>LABEL_73006}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Dat03", label: "{i18n>LABEL_73007}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Workym", label: "{i18n>LABEL_73008}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-									{id: "Bet02T", label: "{i18n>LABEL_73009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
-									{id: "Bet03T", label: "{i18n>LABEL_73010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
-									{id: "Bet01T", label: "{i18n>LABEL_73011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
+									{id: "Bet02T", label: "{i18n>LABEL_73009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+									{id: "Bet03T", label: "{i18n>LABEL_73010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+									{id: "Bet01T", label: "{i18n>LABEL_73011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
 									{id: "Anzhl", label: "{i18n>LABEL_73012}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-									{id: "Bet04T", label: "{i18n>LABEL_73013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"}];
+									{id: "Bet04T", label: "{i18n>LABEL_73013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 				} else {
 									// 당사입사일, 퇴직금기산일, 예상퇴직일, 근속기간, 평균급여, 평균상여, 평균임금, 예상퇴직금
 					var col_info = [{id: "Dat01", label: "{i18n>LABEL_73005}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Dat02", label: "{i18n>LABEL_73006}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Dat03", label: "{i18n>LABEL_73007}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Workym", label: "{i18n>LABEL_73008}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-									{id: "Bet02T", label: "{i18n>LABEL_73009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
-									{id: "Bet03T", label: "{i18n>LABEL_73010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
-									{id: "Bet01T", label: "{i18n>LABEL_73011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
-									{id: "Bet04T", label: "{i18n>LABEL_73013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"}];
+									{id: "Bet02T", label: "{i18n>LABEL_73009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+									{id: "Bet03T", label: "{i18n>LABEL_73010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+									{id: "Bet01T", label: "{i18n>LABEL_73011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+									{id: "Bet04T", label: "{i18n>LABEL_73013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true}];
 				}
 				
 				MakeTable.makeColumn(oController, sap.ui.getCore().byId(oController.PAGEID + "_Table1"), col_info);
@@ -81,12 +81,6 @@ sap.ui.define([
 			var oController = this;
 			
 			oController.onPressSearch(oEvent);
-		},
-		
-		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_RetirementPay.List");
-			var oController = oView.getController();
-		
 		},
 		
 		onChangeDate : function(oEvent){
@@ -112,6 +106,14 @@ sap.ui.define([
 
 			var oJSONModel = oTable1.getModel();
 			var vData = {Data1 : [], Data2 : [], Data3 : []};
+
+			for(var i=1; i<=3; i++){
+				var oColumn = eval("oTable" + i + ".getColumns();");
+				for(var j=0; j<oColumn.length; j++){
+					oColumn[j].setFiltered(false);
+					oColumn[j].setSorted(false);
+				}
+			}
 			
 			var search = function(){
 				var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
