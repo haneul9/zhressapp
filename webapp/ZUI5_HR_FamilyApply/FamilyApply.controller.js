@@ -781,15 +781,26 @@ sap.ui.define([
 			var rrnStr; 
 			var maskingStr;
 
-			if(oController.checkNull(originStr) == true){ return originStr; } 
-			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8]{1}[0-9]{6}\b/gi); 
-			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
-			maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/(-?)([1-8]{1})([0-9]{6})\b/gi,"$1$2******")); }
-			else { rrnStr = originStr.match(/\d{13}/gi); 
-			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
-			maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/([0-9]{6})$/gi,"******")); }
-			else{ return originStr; } } 
+			if(oController.checkNull(originStr)) {
+				return originStr;
+			} 
+
+			rrnStr = originStr.match(/\d{2}([0]\d|[1][0-2])([0][1-9]|[1-2]\d|[3][0-1])[-]*[1-4]\d{6}/);
+
+			if(!oController.checkNull(rrnStr)){
+				maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/(-?)([1-8]{1})([0-9]{6})\b/gi,"$1$2******"));
+			} else { 
+				rrnStr = originStr.match(/\d{13}/gi);
+
+				if(oController.checkNull(rrnStr) == false) {
+					maskingStr = originStr.toString().replace(rrnStr, rrnStr.toString().replace(/([0-9]{6})$/gi,"******"));
+				} else { 
+					return originStr;
+				}
+			} 
+
 			$.app.byId(oController.PAGEID+"_Dialog").getModel().setProperty("/oData/0/Regno",originStr);
+			
 			return maskingStr;
 		},
 
