@@ -67,9 +67,9 @@ sap.ui.define([
 									{id: "Dat02", label: "{i18n>LABEL_73006}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Dat03", label: "{i18n>LABEL_73007}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true},
 									{id: "Workym", label: "{i18n>LABEL_73008}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-									{id: "Bet02T", label: "{i18n>LABEL_73009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-									{id: "Bet03T", label: "{i18n>LABEL_73010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-									{id: "Bet01T", label: "{i18n>LABEL_73011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
+									{id: "Bet02T", label: "{i18n>LABEL_73009}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
+									{id: "Bet03T", label: "{i18n>LABEL_73010}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
+									{id: "Bet01T", label: "{i18n>LABEL_73011}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"},
 									{id: "Bet04T", label: "{i18n>LABEL_73013}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "End"}];
 				}
 				
