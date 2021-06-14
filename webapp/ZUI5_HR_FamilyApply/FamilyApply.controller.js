@@ -785,7 +785,7 @@ sap.ui.define([
 				return originStr;
 			} 
 
-			rrnStr = originStr.match(/\d{2}([0]\d|[1][0-2])([0][1-9]|[1-2]\d|[3][0-1])[-]*[1-8]\d{6}/);
+			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8]{1}[0-9]{6}\b/gi);
 
 			if(!oController.checkNull(rrnStr)){
 				maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/(-?)([1-8]{1})([0-9]{6})\b/gi,"$1$2******"));
