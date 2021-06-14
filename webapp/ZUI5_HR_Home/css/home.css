@@ -151,7 +151,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-bbs-item .portlet-bbs-date {font-size:100%; color:#888; padding-right:.5rem}
 .portlet-bbs-title {display:flex; align-items:center; width:239px}
 [device="mobile"] .portlet-bbs-title {width:221px}
-.portlet-bbs-title .portlet-bbs-title-text {display:inline-block; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.portlet-bbs-title .portlet-bbs-title-text {display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .portlet-bbs-title span + span, .portlet-bbs-title span + i {margin-left:3px}
 .portlet-bbs-title i {vertical-align:middle; font-size:1.1rem}
 .portlet-bbs .badge {font-weight:500}
