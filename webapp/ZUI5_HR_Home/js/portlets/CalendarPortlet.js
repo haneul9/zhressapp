@@ -397,10 +397,10 @@ initPopover: function() {
 				'<div class="portlet-calendar-tooltip">',
 					'<table>',
 						'<colgroup>',
-							'<col style="width:100px" /><col style="width:100px" /><col style="width:100px" />',
+							'<col style="width:80px" /><col style="width:80px" /><col style="width:80px" /><col style="width:80px" />',
 						'</colgroup>',
 						'<thead>',
-							'<tr><th>이름</th><th>직위</th><th>양음</th></tr>',
+							'<tr><th>일자</th><th>이름</th><th>직위</th><th>양음</th></tr>',
 						'</thead>',
 						'<tbody>',
 							tooltipBody,
@@ -471,12 +471,13 @@ tooltipBody: function(dateText, type) {
 		return $.map(list, function(o) { // 생일
 			return [
 				'<tr>',
+					'<td>', moment(o.Datum).format(this.pattern.birthday), '</td>',
 					'<td>', o.Ename || '', '</td>',
 					'<td>', o.ZtitleTxt || '', '</td>',
 					'<td>', o.Zzclass === '2' ? '음력' : '양력', '</td>',
 				'</tr>'
 			].join('');
-		}).join('');
+		}.bind(this)).join('');
 	}
 	return '';
 },
@@ -517,7 +518,8 @@ initI18n: function() {
 		datepicker: 'yymmdd',
 		moment: 'YYYYMMDD',
 		report: ko ? 'YYYY년 MM월 DD일' : 'MM/DD/YYYY',
-		period: 'M/D'
+		period: 'M/D',
+		birthday: 'M/D'
 	};
 
 	$.datepicker.regional.ko_KR = {
