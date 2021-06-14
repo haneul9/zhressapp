@@ -58,6 +58,7 @@ sap.ui.define(
                 sendObject.IGubun = "T";
                 sendObject.ISelf = "E";
                 sendObject.IBukrs = vBukrs2;
+                sendObject.ILangu =  oController.getView().getModel("session").getData().Langu;
                 // Navigation property
                 sendObject.OpenhelpExport = [];
                 sendObject.OpenhelpTableIn1 = [];
