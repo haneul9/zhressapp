@@ -159,6 +159,7 @@ sap.ui.define(
                             Required: true,
                             Mode: "M",
                             Max: "15",
+                            ReadAsync: true,
                             Editable: vEdit
                         },
                         "008"

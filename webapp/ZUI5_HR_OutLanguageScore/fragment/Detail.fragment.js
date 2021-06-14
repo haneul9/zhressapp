@@ -16,7 +16,7 @@ sap.ui.define(
 
                 var oDialog = new sap.m.Dialog({
                     contentWidth: "1000px",
-                    contentHeight: "60vh",
+                    // contentHeight: "60vh",
                     title: "{= ${/IsViewMode} ? ${i18n>LABEL_51016} : ${i18n>LABEL_51002} }",    // 외부 어학 성적 등록, 조회
                     content: [
                         this.buildInfoMessage(),    //

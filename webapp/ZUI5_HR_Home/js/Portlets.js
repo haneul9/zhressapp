@@ -45,19 +45,24 @@ init: function() {
 		.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
 			var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
 			if (popupMenuUrl) {
-				var paramMap = this._gateway.menuParam(popupMenuUrl, {
-					popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
-					mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
-				});
-				if (!this._gateway.isPRD()) {
-					paramMap.pernr = this._gateway.parameter('pernr');
+				if (/^http/.test(popupMenuUrl)) {
+					this._gateway.openWindow({
+						url: popupMenuUrl,
+						name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, '')
+					});
+				} else {
+					var params = this._gateway.menuParam(popupMenuUrl, {
+						popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
+						mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
+					});
+					if (!this._gateway.isPRD()) {
+						params.pernr = this._gateway.parameter('pernr');
+					}
+					this._gateway.openWindow({ // openPopup openWindow
+						url: ('/index${}.html?'.interpolate(this._gateway.isMobile() ? 'Mobile' : '')) + $.param(params),
+						name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, '')
+					});
 				}
-				this._gateway.openWindow({ // openPopup openWindow
-					url: 'index.html?' + $.param(paramMap),
-					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
-					width: 1280,
-					height: 800
-				});
 			} else {
 				this._gateway.alert({
 					title: '오류', html: ['<p>', '</p>'].join('이동할 URL 정보가 없습니다.')

@@ -1,6 +1,6 @@
 sap.ui.define(
     [
-        "common/PageHelper",  //
+        "common/PageHelper", //
         "./delegate/HomeLoan"
     ],
     function (PageHelper, HomeLoan) {
@@ -12,7 +12,6 @@ sap.ui.define(
             },
 
             createContent: function (oController) {
-
                 var tabBox = new sap.m.IconTabBar($.app.createId("TabContainer"), {
                     select: oController.selectIconTabBar.bind(oController),
                     selectedKey: HomeLoan.Tab.APPROVAL,
@@ -29,9 +28,8 @@ sap.ui.define(
                             content: [sap.ui.jsfragment([$.app.CONTEXT_PATH, HomeLoan.Tab.HISTORY].join(".fragment."), oController)]
                         })
                     ]
-                })
-                .addStyleClass("tab-group mt-26px");
-        
+                }).addStyleClass("tab-group mt-26px");
+
                 return new PageHelper({
                     contentItems: [tabBox]
                 });

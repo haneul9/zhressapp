@@ -1,6 +1,6 @@
 sap.ui.define(
     [
-        "common/ZHR_TABLES",	//
+        "common/ZHR_TABLES", //
         "../delegate/HomeLoan"
     ],
     function (ZHR_TABLES, HomeLoan) {
@@ -14,12 +14,12 @@ sap.ui.define(
 
                 return new sap.m.VBox({
                     items: [
-                        this.buildTable(oController, HistoryHandler)	//
+                        this.buildTable(oController, HistoryHandler) //
                     ]
                 }).setModel(HistoryHandler.Model());
             },
 
-            buildTable: function(oController, HistoryHandler) {
+            buildTable: function (oController, HistoryHandler) {
                 var oTable = new sap.ui.table.Table($.app.createId("HistoryTable"), {
                     selectionMode: sap.ui.table.SelectionMode.None,
                     enableColumnReordering: false,
@@ -33,15 +33,15 @@ sap.ui.define(
                     columnHeaderHeight: 38,
                     noData: "{i18n>LABEL_00901}"
                 })
-                .addStyleClass("mt-8px")
-                .bindRows("/List");
+                    .addStyleClass("mt-8px")
+                    .bindRows("/List");
 
                 ZHR_TABLES.makeColumn(oController, oTable, this.getColumnModel.call(HistoryHandler));
 
                 return oTable;
             },
 
-            getColumnModel: function() {
+            getColumnModel: function () {
                 return [
                     { id: "ZhltypTxt", label: "대출유형", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "10%" },
                     { id: "ZhldivTxt", label: "대출구분", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "10%" },

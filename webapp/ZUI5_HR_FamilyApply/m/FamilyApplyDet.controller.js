@@ -1,3 +1,5 @@
+/* eslint-disable no-eval */
+/* eslint-disable no-undef */
 jQuery.sap.require("sap.m.MessageBox");
 $.sap.require("common.Check_Regno");
 sap.ui.define([
@@ -110,7 +112,7 @@ sap.ui.define([
 				Regno:"",
 				Zzclass:"1",
 				Appnm:"",
-				Opener:"X"}	
+				Opener:"X"};	
 		},
 
 		onClose:function(){
@@ -469,6 +471,8 @@ sap.ui.define([
 			var oPro=$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().getProperty("/oData")[0];
 			var s = oEvent.getParameter("value");
 			var oId=oEvent.getSource().getId();
+			var vGender = "";
+
 			if(s.length>0&&s.length<7&&isNaN(s)){
 				$.app.byId(oId).setValue();
 			}
@@ -482,7 +486,10 @@ sap.ui.define([
 				if($.app.byId(oId).getValue().search("-")==-1){
 					$.app.byId(oId).setValue($.app.byId(oId).getValue().substring(0,6)+"-"+$.app.byId(oId).getValue().substring(6));
 				}
-				if($.app.byId(oId).getValue().substring(7,8)=="3"||$.app.byId(oId).getValue().substring(7,8)=="4"){
+
+				vGender = $.app.byId(oId).getValue().substring(7,8);
+
+				if(vGender=="3" || vGender=="4" || vGender=="7" || vGender=="8"){
 					oPro.Fgbdt=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 					oPro.Zzbdate=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}else{
@@ -490,7 +497,9 @@ sap.ui.define([
 					oPro.Zzbdate=new Date("19"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}
 			}else if(s.length==14){
-				if($.app.byId(oId).getValue().substring(7,8)=="3"||$.app.byId(oId).getValue().substring(7,8)=="4"){
+				vGender = $.app.byId(oId).getValue().substring(7,8);
+
+				if(vGender=="3" || vGender=="4" || vGender=="7" || vGender=="8"){
 					oPro.Fgbdt=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 					oPro.Zzbdate=new Date("20"+$.app.byId(oId).getValue().substring(0,2)+"-"+$.app.byId(oId).getValue().substring(2,4)+"-"+$.app.byId(oId).getValue().substring(4,6));
 				}else{
@@ -505,21 +514,31 @@ sap.ui.define([
 		checkNull : function (str){ if(typeof str == "undefined" || str == null || str == ""){ return true; } else{ return false; } },
 
 		rrn : function(str){ 
-			var oView = sap.ui.getCore().byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet");
-			var oController = oView.getController();
-			let originStr = str; 
-			let rrnStr; 
-			let maskingStr; 
-			let strLength; 
-			if(oController.checkNull(originStr) == true){ return originStr; } 
-			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-4]{1}[0-9]{6}\b/gi); 
-			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
-			maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/(-?)([1-4]{1})([0-9]{6})\b/gi,"$1$2******")); }
-			else { rrnStr = originStr.match(/\d{13}/gi); 
-			if(oController.checkNull(rrnStr) == false){ strLength = rrnStr.toString().split('-').length; 
-			maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/([0-9]{6})$/gi,"******")); }
-			else{ return originStr; } } 
+			var oController=$.app.getController();
+			var originStr = str; 
+			var rrnStr; 
+			var maskingStr;
+
+			if(oController.checkNull(originStr)) {
+				return originStr;
+			} 
+
+			rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-8]{1}[0-9]{6}\b/gi);
+
+			if(!oController.checkNull(rrnStr)){
+				maskingStr = originStr.toString().replace(rrnStr,rrnStr.toString().replace(/(-?)([1-8]{1})([0-9]{6})\b/gi,"$1$2******"));
+			} else { 
+				rrnStr = originStr.match(/\d{13}/gi);
+
+				if(oController.checkNull(rrnStr) == false) {
+					maskingStr = originStr.toString().replace(rrnStr, rrnStr.toString().replace(/([0-9]{6})$/gi,"******"));
+				} else { 
+					return originStr;
+				}
+			} 
+
 			$.app.byId("ZUI5_HR_FamilyApply.m.FamilyApplyDet").getModel().setProperty("/oData/0/Regno",originStr);
+			
 			return maskingStr;
 		},
 
@@ -585,10 +604,13 @@ sap.ui.define([
 				return false;
 			}
 
-			var vRegChk=common.Check_Regno.isValidJuminNo(oPro.Regno.split("-")[0]+oPro.Regno.split("-")[1]);
-			if((parseInt(oPro.Regno.split("-")[0])>=201001)&&(oPro.Regno.split("-")[1].substring(0,1)=="3"||oPro.Regno.split("-")[1].substring(0,1)=="4"
-				||oPro.Regno.split("-")[1].substring(0,1)=="7"||oPro.Regno.split("-")[1].substring(0,1)=="8")){
-			}else{
+			var vRegChk=common.Check_Regno.isValidJuminNo(oPro.Regno.split("-")[0]+oPro.Regno.split("-")[1]),
+				vBirth = parseInt(oPro.Regno.split("-")[0]),
+				vGender = oPro.Regno.split("-")[1].substring(0,1);
+
+			if(vBirth >= 201001 && (vGender === "3" || vGender === "4" || vGender === "7" || vGender === "8")) {
+				Common.log(oPro.Regno);
+			} else {
 				if(!/\*/.test(oPro.Regnot) && !vRegChk){
 					sap.m.MessageBox.show(
 						oBundleText.getText("MSG_44013"), {				

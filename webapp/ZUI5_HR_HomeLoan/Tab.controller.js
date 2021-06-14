@@ -32,7 +32,7 @@ sap.ui.define(
 
                 return this.ApprovalHandler;
             },
-            
+
             getHistoryHandler: function () {
                 if (!this.HistoryHandler) {
                     this.HistoryHandler = HistoryHandler.initialize(this);
@@ -40,7 +40,7 @@ sap.ui.define(
 
                 return this.HistoryHandler;
             },
-            
+
             onBeforeShow: function () {
                 this.ApprovalHandler.load();
             },
@@ -49,25 +49,25 @@ sap.ui.define(
                 this.ApprovalHandler.search();
             },
 
-            selectIconTabBar: function(oEvent) {
+            selectIconTabBar: function (oEvent) {
                 var sKey = oEvent.getParameter("selectedKey");
 
-                switch(sKey) {
+                switch (sKey) {
                     case HomeLoan.Tab.APPROVAL:
-                        if(!this.ApprovalHandler.Model().getProperty("/IsSearch")) {
+                        if (!this.ApprovalHandler.Model().getProperty("/IsSearch")) {
                             this.ApprovalHandler.load().search();
                         }
                         break;
                     case HomeLoan.Tab.HISTORY:
-                        if(!this.HistoryHandler.Model().getProperty("/IsSearch")) {
+                        if (!this.HistoryHandler.Model().getProperty("/IsSearch")) {
                             this.HistoryHandler.load().search();
                         }
                         break;
                 }
             },
 
-            changeTab: function(tabkey) {
-                switch(tabkey) {
+            changeTab: function (tabkey) {
+                switch (tabkey) {
                     case HomeLoan.Tab.APPROVAL:
                         $.app.byViewId("TabContainer").setSelectedKey(HomeLoan.Tab.APPROVAL);
                         this.ApprovalHandler.search();
@@ -79,9 +79,11 @@ sap.ui.define(
                 }
             },
 
-            getLocalSessionModel: Common.isLOCAL() ? function () {
-                return new JSONModelHelper({ name: "35110041" });
-            } : null
+            getLocalSessionModel: Common.isLOCAL()
+                ? function () {
+                      return new JSONModelHelper({ name: "35110041" });
+                  }
+                : null
         });
     }
 );

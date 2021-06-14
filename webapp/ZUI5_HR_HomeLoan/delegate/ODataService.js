@@ -2,13 +2,12 @@ sap.ui.define(
     [
         "common/Common", //
         "./HomeLoan",
-		"sap/m/MessageBox"
+        "sap/m/MessageBox"
     ],
     function (Common, HomeLoan, MessageBox) {
         "use strict";
 
         var ODataService = {
-
             HouseLoanRequestSet: function (processType, arg) {
                 var results = {
                     Export: [],
@@ -20,7 +19,8 @@ sap.ui.define(
                 };
 
                 $.app.getModel("ZHR_BENEFIT_SRV").create(
-                    "/HouseLoanRequestSet", {
+                    "/HouseLoanRequestSet",
+                    {
                         IConType: processType,
                         IPernr: arg.Pernr ? arg.Pernr : undefined,
                         IBegda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
@@ -36,24 +36,19 @@ sap.ui.define(
                         TableIn3: arg.TableIn3 ? arg.TableIn3 : [],
                         TableIn4: arg.TableIn4 ? arg.TableIn4 : [],
                         TableIn5: arg.TableIn5 ? arg.TableIn5 : []
-                    }, {
+                    },
+                    {
                         success: function (data) {
-                            if (data.Export)
-                                results.Export = data.Export.results;
-                            if (data.TableIn1)
-                                results.TableIn1 = data.TableIn1.results;
-                            if (data.TableIn2)
-                                results.TableIn2 = data.TableIn2.results;
-                            if (data.TableIn3)
-                                results.TableIn3 = data.TableIn3.results;
-                            if (data.TableIn4)
-                                results.TableIn4 = data.TableIn4.results;
-                            if (data.TableIn5)
-                                results.TableIn5 = data.TableIn5.results;
+                            if (data.Export) results.Export = data.Export.results;
+                            if (data.TableIn1) results.TableIn1 = data.TableIn1.results;
+                            if (data.TableIn2) results.TableIn2 = data.TableIn2.results;
+                            if (data.TableIn3) results.TableIn3 = data.TableIn3.results;
+                            if (data.TableIn4) results.TableIn4 = data.TableIn4.results;
+                            if (data.TableIn5) results.TableIn5 = data.TableIn5.results;
                         },
                         error: function (res) {
                             Common.log(res);
-                            if(arg.isErrorShow) {
+                            if (arg.isErrorShow) {
                                 var errData = Common.parseError(res);
                                 if (errData.Error && errData.Error === "E") {
                                     MessageBox.error(errData.ErrorMessage, {
@@ -72,7 +67,8 @@ sap.ui.define(
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 
                 oModel.create(
-                    "/HouseLoanRequestSet", {
+                    "/HouseLoanRequestSet",
+                    {
                         IConType: processType,
                         IPernr: payload.Pernr ? payload.Pernr : undefined,
                         ILangu: this.getSessionInfoByKey("Langu"),
@@ -84,7 +80,8 @@ sap.ui.define(
                         TableIn3: payload.TableIn3 ? payload.TableIn3 : [],
                         TableIn4: payload.TableIn4 ? payload.TableIn4 : [],
                         TableIn5: payload.TableIn5 ? payload.TableIn5 : []
-                    }, {
+                    },
+                    {
                         success: function (data) {
                             if (typeof success === "function") success.call(null, data);
                         },
