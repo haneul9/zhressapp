@@ -141,8 +141,8 @@ sap.ui.define([
 
 
 			return new sap.m.VBox({
-				// fitContainer: true,
-                width: "100%",
+				fitContainer: true,
+                // width: "100%",
 				items: [
 					new sap.m.HBox({
 						height: "40px",
