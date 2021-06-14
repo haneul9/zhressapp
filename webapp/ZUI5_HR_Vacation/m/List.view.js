@@ -52,11 +52,11 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.List", {
 			mode: "MultiSelect",
             columns: [
                 new sap.m.Column ({
-                    width: "45%",
+                    width: "40%",
                     hAlign: "Begin"
                 }),
                 new sap.m.Column ({
-                    width: "55%",
+                    width: "60%",
                     hAlign: "End"
                 })
             ],
