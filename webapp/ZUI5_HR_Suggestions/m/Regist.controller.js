@@ -5,9 +5,11 @@
     "../../common/AttachFileAction",
     "sap/m/MessageBox",
     "sap/ui/core/BusyIndicator",
-    "../delegate/ViewTemplates"
+    "../delegate/ViewTemplates",
+	"sap/ui/richtexteditor/RichTextEditor",
+	"sap/ui/richtexteditor/EditorType"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ViewTemplates) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ViewTemplates, RTE, EditorType) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Regist"].join($.app.getDeviceSuffix());
@@ -1553,6 +1555,37 @@
 			var oController = this.getView().getController();
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
+
+			// if(!$.app.byId("myRTE")) {
+			if($.app.byId("myRTE"))
+				$.app.byId("myRTE").destroy();
+
+			var that = this;
+				that.oRichTextEditor = new RTE("myRTE", {
+					editorType: EditorType.TinyMCE4,
+					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					width: "100%",
+					height: "350px",
+					customToolbar: true,
+					showGroupFont: true,
+					showGroupLink: true,
+					showGroupInsert: true,
+					value: "{Detail}",
+					editable: {
+						parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						formatter: function(v1, v2) {
+							return !v1 || v2 === "X";
+						}
+					},
+					ready: function () {
+						this.addButtonGroup("styleselect").addButtonGroup("table");
+					}
+				});
+
+			$.app.byId("contentArea").addItem(that.oRichTextEditor);
+			// }
+
+			$.app.byId("myRTE").addStyleClass("mxw-100");
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
