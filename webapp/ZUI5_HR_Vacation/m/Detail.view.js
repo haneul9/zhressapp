@@ -10,357 +10,678 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 	},
 
 	createContent: function(oController) {
-		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-			columns : 2,
-			width : "100%",
-			widths : ["105px", "100%"],
-			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48014")})], // 근태코드
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Awart", {
-											 	 	selectedKey : "{Awart}",
-											 	 	value : "{Atext}",
-											 	 	width : "65%",
-											 	 	change : oController.onChangeAwart,
-											 	 	editable : {
-											 	 		path : "Status1",
-				                               	   		formatter : function(fVal){
-				                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-				                               	   		}
-											 	 	}
-											 	}),
-											 	new sap.m.ComboBox({
-											 	 	selectedKey : "{Half}",
-											 	 	width : "35%",
-											 	 	items : [new sap.ui.core.Item({key : "1", text : oBundleText.getText("LABEL_48048")}),  // 오전
-											 	 			 new sap.ui.core.Item({key : "2", text : oBundleText.getText("LABEL_48049")})], // 오후
-											 	 	editable : {
-											 	 		parts : [{path : "Status1"}, {path : "Halfc"}],
-				                               	   		formatter : function(fVal1, fVal2){
-				                               	   			if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
-				                               	   				if(fVal2 && fVal2 == "H"){
-				                               	   					return true;
-				                               	   				} else {
-				                               	   					return false;
-				                               	   				}
-				                               	   			} else {
-				                               	   				return false;
-				                               	   			}
-				                               	   		}
-											 	 	},
-											 	 	// change : oController.onChangeHalf
-											 	}).addStyleClass("pl-3px")],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48021")})], // 근태기간
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.HBox({
-											 	 	items : [new sap.m.DatePicker({
-															     valueFormat : "yyyy-MM-dd",
-													             displayFormat : gDtfmt,
-													             value : "{Begda}",
-															     width : "100%",
-															     textAlign : "Begin",
-															     change : oController.onChangeDate,
-														 	     editable : {
-														 	 		path : "Status1",
-							                               	   		formatter : function(fVal){
-							                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-							                               	   		}
-														 	     }
-														     }),
-														     new sap.ui.core.HTML({content : "<div style='width:3px'/>"}),
-														     new sap.m.DatePicker({
-															     valueFormat : "yyyy-MM-dd",
-													             displayFormat : gDtfmt,
-													             value : "{Endda}",
-															     width : "100%",
-															     textAlign : "Begin",
-															     change : oController.onChangeDate,
-														 	     editable : {
-														 	 		path : "Status1",
-							                               	   		formatter : function(fVal){
-							                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-							                               	   		}
-														 	    }
-														     })]
-											 	})],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48050")})], // 근태시간
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.HBox({
-											 	 	items : [new sap.m.TimePicker({
-																 valueFormat : "HHmm",
-																 displayFormat : "HH:mm",
-													             value : "{Beguz}",
-													             minutesStep : 5,
-													             //width : "95px",
-													             textAlign : "Begin",
-													             change : oController.onChangeTime2,
-													             editable : {
-													             	parts : [{path : "Status1"}, {path : "Halfc"}],
-													             	formatter : function(fVal1, fVal2){
-													             		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
-													             			return (fVal2 && fVal2 == "X") ? true : false;
-													             		} else {
-													             			return false;
-													             		}
-													             	}
-													             }
-														     }),
-														     new sap.ui.core.HTML({content : "<div style='width:3px' />"}),
-														     new sap.m.TimePicker({
-																 valueFormat : "HHmm",
-																 displayFormat : "HH:mm",
-													             value : "{Enduz}",
-													             minutesStep : 5,
-													             //width : "95px",
-													             textAlign : "Begin",
-													             change : oController.onChangeTime2,
-													             editable : {
-													             	parts : [{path : "Status1"}, {path : "Halfc"}],
-													             	formatter : function(fVal1, fVal2){
-													             		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
-													             			return (fVal2 && fVal2 == "X") ? true : false;
-													             		} else {
-													             			return false;
-													             		}
-													             	}
-													             }
-														     }),
-														     new sap.m.Text({
-														    	 text : "({EAbshr}:{EAbsmm})",
-														    	 visible : {
-														    	 	parts : [{path : "EAbshr"}, {path : "EAbsmm"}],
-														    	 	formatter : function(fVal1, fVal2){
-														    	 		return (fVal1 && fVal2 && fVal1 != "" && fVal2 != "") ? true : false;
-														    	 	}
-														    	 }
-														     }).addStyleClass("pl-2px pt-3px")]
-											 	})],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48017")})], // 휴가일수
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({   // X일
-											 	 	text : "{Kaltg} " + oBundleText.getText("LABEL_48035"),
-											 	 	visible : {
-											 	 		path : "Kaltg",
-											 	 		formatter : function(fVal){
-											 	 			return fVal && fVal != "" ? true : false;
-											 	 		}
-											 	 	}
-											 	})],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48018")})], // 휴일일수
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({
-											 	 	text : "{Hldtg} " + oBundleText.getText("LABEL_48035") + " " + "{Holyt}", // X일
-											 	 	visible : {
-											 	 		path : "Hldtg",
-											 	 		formatter : function(fVal){
-											 	 			return fVal && fVal != "" ? true : false;
-											 	 		}
-											 	 	}
-											 	})],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48051")})], // 경조일수
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({
-											 	 	text :"{Kjdate}" + oBundleText.getText("LABEL_48035"), // 일
-											 	 	visible : {
-											 	 		path : "Kjdate",
-											 	 		formatter : function(fVal){
-											 	 			return fVal && fVal != "" ? true : false;
-											 	 		}
-											 	 	}
-											 	})],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48019"), required : true})], // 연락처
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Input({
-											 	 	value : "{Telnum}",
-											 	 	width : "100%",
-											 	 	maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Telnum"),
-											 	 	editable : {
-											 	 		path : "Status1",
-											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-											 	 		}
-											 	 	}
-											 	})],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({
-												 	text : {
-												 		path : "Awart",
-												 		formatter : function(fVal){
-												 			if(fVal == "1424"){ // 출장
-												 				return oBundleText.getText("LABEL_48020"); // 행선지/출입카드신청
-												 			} else {
-												 				return oBundleText.getText("LABEL_48052"); // 행선지
-												 			}
-												 		}
-												 	},
-												 	required : true
-												})],
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Input({
-											 	 	value : "{Desti}",
-											 	 	width : {
-											 	 		path : "Awart",
-											 	 		formatter : function(fVal){
-											 	 			return fVal == "1424" ? "70%" : "100%";
-											 	 		}
-											 	 	},
-												    maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Desti"),
-											 	 	editable : {
-											 	 		path : "Status1",
-											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-											 	 		}
-											 	 	}
-											 	}),
-											 	new sap.m.ComboBox(oController.PAGEID + "_Encard", {
-											 		selectedKey : "{Encard}",
-											 		width : "30%",
-											 	 	editable : {
-											 	 		path : "Status1",
-											 	 		formatter : function(fVal){
-											 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-											 	 		}
-											 	 	},
-											 	 	visible : {
-											 	 		path : "Awart",
-											 	 		formatter : function(fVal){
-											 	 			return fVal == "1424" ? true : false;
-											 	 		}
-											 	 	},
-											 	}).addStyleClass("pl-5px")],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48022")})], // 근태사유
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Input({
-												    value : "{Bigo}",
-												    width : "100%",
-												    maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Bigo"),
-												    editable : {
-												   		path : "Status1",
-												   		formatter : function(fVal){
-												   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-												   		}
-												    }
-											    })],
-								 	 hAlign : "Begin",
-								 	 vAlign : "Middle"
-								 })]
-					}),
-					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
-									 hAlign : "Begin",
-									 vAlign : "Middle"
+		// var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+		// 	columns : 2,
+		// 	width : "100%",
+		// 	widths : ["105px", "100%"],
+		// 	rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48014")})], // 근태코드
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Awart", {
+		// 									 	 	selectedKey : "{Awart}",
+		// 									 	 	value : "{Atext}",
+		// 									 	 	width : "65%",
+		// 									 	 	change : oController.onChangeAwart,
+		// 									 	 	editable : {
+		// 									 	 		path : "Status1",
+		// 		                               	   		formatter : function(fVal){
+		// 		                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 		                               	   		}
+		// 									 	 	}
+		// 									 	}),
+		// 									 	new sap.m.ComboBox({
+		// 									 	 	selectedKey : "{Half}",
+		// 									 	 	width : "35%",
+		// 									 	 	items : [new sap.ui.core.Item({key : "1", text : oBundleText.getText("LABEL_48048")}),  // 오전
+		// 									 	 			 new sap.ui.core.Item({key : "2", text : oBundleText.getText("LABEL_48049")})], // 오후
+		// 									 	 	editable : {
+		// 									 	 		parts : [{path : "Status1"}, {path : "Halfc"}],
+		// 		                               	   		formatter : function(fVal1, fVal2){
+		// 		                               	   			if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+		// 		                               	   				if(fVal2 && fVal2 == "H"){
+		// 		                               	   					return true;
+		// 		                               	   				} else {
+		// 		                               	   					return false;
+		// 		                               	   				}
+		// 		                               	   			} else {
+		// 		                               	   				return false;
+		// 		                               	   			}
+		// 		                               	   		}
+		// 									 	 	},
+		// 									 	 	// change : oController.onChangeHalf
+		// 									 	}).addStyleClass("pl-3px")],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48021")})], // 근태기간
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.VBox({
+		// 									 	 	items : [new sap.m.DatePicker({
+		// 													     valueFormat : "yyyy-MM-dd",
+		// 											             displayFormat : gDtfmt,
+		// 											             value : "{Begda}",
+		// 													     width : "100%",
+		// 													     textAlign : "Begin",
+		// 													     change : oController.onChangeDate,
+		// 												 	     editable : {
+		// 												 	 		path : "Status1",
+		// 					                               	   		formatter : function(fVal){
+		// 					                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 					                               	   		}
+		// 												 	     }
+		// 												     }),
+		// 												     new sap.ui.core.HTML({content : "<div style='width:3px'/>"}),
+		// 												     new sap.m.DatePicker({
+		// 													     valueFormat : "yyyy-MM-dd",
+		// 											             displayFormat : gDtfmt,
+		// 											             value : "{Endda}",
+		// 													     width : "100%",
+		// 													     textAlign : "Begin",
+		// 													     change : oController.onChangeDate,
+		// 												 	     editable : {
+		// 												 	 		path : "Status1",
+		// 					                               	   		formatter : function(fVal){
+		// 					                               	   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 					                               	   		}
+		// 												 	    }
+		// 												     })]
+		// 									 	})],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48050")})], // 근태시간
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.HBox({
+		// 									 	 	items : [new sap.m.TimePicker({
+		// 														 valueFormat : "HHmm",
+		// 														 displayFormat : "HH:mm",
+		// 											             value : "{Beguz}",
+		// 											             minutesStep : 5,
+		// 											             //width : "95px",
+		// 											             textAlign : "Begin",
+		// 											             change : oController.onChangeTime2,
+		// 											             editable : {
+		// 											             	parts : [{path : "Status1"}, {path : "Halfc"}],
+		// 											             	formatter : function(fVal1, fVal2){
+		// 											             		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+		// 											             			return (fVal2 && fVal2 == "X") ? true : false;
+		// 											             		} else {
+		// 											             			return false;
+		// 											             		}
+		// 											             	}
+		// 											             }
+		// 												     }),
+		// 												     new sap.ui.core.HTML({content : "<div style='width:3px' />"}),
+		// 												     new sap.m.TimePicker({
+		// 														 valueFormat : "HHmm",
+		// 														 displayFormat : "HH:mm",
+		// 											             value : "{Enduz}",
+		// 											             minutesStep : 5,
+		// 											             //width : "95px",
+		// 											             textAlign : "Begin",
+		// 											             change : oController.onChangeTime2,
+		// 											             editable : {
+		// 											             	parts : [{path : "Status1"}, {path : "Halfc"}],
+		// 											             	formatter : function(fVal1, fVal2){
+		// 											             		if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+		// 											             			return (fVal2 && fVal2 == "X") ? true : false;
+		// 											             		} else {
+		// 											             			return false;
+		// 											             		}
+		// 											             	}
+		// 											             }
+		// 												     }),
+		// 												     new sap.m.Text({
+		// 												    	 text : "({EAbshr}:{EAbsmm})",
+		// 												    	 visible : {
+		// 												    	 	parts : [{path : "EAbshr"}, {path : "EAbsmm"}],
+		// 												    	 	formatter : function(fVal1, fVal2){
+		// 												    	 		return (fVal1 && fVal2 && fVal1 != "" && fVal2 != "") ? true : false;
+		// 												    	 	}
+		// 												    	 }
+		// 												     }).addStyleClass("pl-2px pt-3px")]
+		// 									 	})],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48017")})], // 휴가일수
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.Text({   // X일
+		// 									 	 	text : "{Kaltg} " + oBundleText.getText("LABEL_48035"),
+		// 									 	 	visible : {
+		// 									 	 		path : "Kaltg",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return fVal && fVal != "" ? true : false;
+		// 									 	 		}
+		// 									 	 	}
+		// 									 	})],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48018")})], // 휴일일수
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.Text({
+		// 									 	 	text : "{Hldtg} " + oBundleText.getText("LABEL_48035") + " " + "{Holyt}", // X일
+		// 									 	 	visible : {
+		// 									 	 		path : "Hldtg",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return fVal && fVal != "" ? true : false;
+		// 									 	 		}
+		// 									 	 	}
+		// 									 	})],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48051")})], // 경조일수
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.Text({
+		// 									 	 	text :"{Kjdate}" + oBundleText.getText("LABEL_48035"), // 일
+		// 									 	 	visible : {
+		// 									 	 		path : "Kjdate",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return fVal && fVal != "" ? true : false;
+		// 									 	 		}
+		// 									 	 	}
+		// 									 	})],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48019"), required : true})], // 연락처
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.Input({
+		// 									 	 	value : "{Telnum}",
+		// 									 	 	width : "100%",
+		// 									 	 	maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Telnum"),
+		// 									 	 	editable : {
+		// 									 	 		path : "Status1",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 									 	 		}
+		// 									 	 	}
+		// 									 	})],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({
+		// 										 	text : {
+		// 										 		path : "Awart",
+		// 										 		formatter : function(fVal){
+		// 										 			if(fVal == "1424"){ // 출장
+		// 										 				return oBundleText.getText("LABEL_48020"); // 행선지/출입카드신청
+		// 										 			} else {
+		// 										 				return oBundleText.getText("LABEL_48052"); // 행선지
+		// 										 			}
+		// 										 		}
+		// 										 	},
+		// 										 	required : true
+		// 										})],
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.Input({
+		// 									 	 	value : "{Desti}",
+		// 									 	 	width : {
+		// 									 	 		path : "Awart",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return fVal == "1424" ? "70%" : "100%";
+		// 									 	 		}
+		// 									 	 	},
+		// 										    maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Desti"),
+		// 									 	 	editable : {
+		// 									 	 		path : "Status1",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 									 	 		}
+		// 									 	 	}
+		// 									 	}),
+		// 									 	new sap.m.ComboBox(oController.PAGEID + "_Encard", {
+		// 									 		selectedKey : "{Encard}",
+		// 									 		width : "30%",
+		// 									 	 	editable : {
+		// 									 	 		path : "Status1",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 									 	 		}
+		// 									 	 	},
+		// 									 	 	visible : {
+		// 									 	 		path : "Awart",
+		// 									 	 		formatter : function(fVal){
+		// 									 	 			return fVal == "1424" ? true : false;
+		// 									 	 		}
+		// 									 	 	},
+		// 									 	}).addStyleClass("pl-5px")],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : oBundleText.getText("LABEL_48022")})], // 근태사유
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 						 	 content : [new sap.m.Input({
+		// 										    value : "{Bigo}",
+		// 										    width : "100%",
+		// 										    maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Bigo"),
+		// 										    editable : {
+		// 										   		path : "Status1",
+		// 										   		formatter : function(fVal){
+		// 										   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 										   		}
+		// 										    }
+		// 									    })],
+		// 						 	 hAlign : "Begin",
+		// 						 	 vAlign : "Middle"
+		// 						 })]
+		// 			}),
+		// 			new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						}),
+		// 						new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+		// 										   selectedKey : "{AppName}",
+		// 										   width : "100%",
+		// 										   editable : {
+		// 										   		path : "Status1",
+		// 										   		formatter : function(fVal){
+		// 										   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+		// 										   		}
+		// 										   }
+		// 									   })],
+		// 							hAlign : "Begin",
+		// 							vAlign : "Middle"
+		// 						})]
+		// 			}).addStyleClass("displayNone"),					
+		// 			new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_MessageRow", {
+		// 				// height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 // ※ 자녀출생의 경우 출산일을 반드시 기입하여 주시기 바랍니다.
+		// 							 content : [new sap.m.Text({text : oBundleText.getText("MSG_48003")}).addStyleClass("font-bold font-13px color-red")], 
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle",
+		// 							 colSpan : 4
+		// 						 }).addStyleClass("pl-10px pr-10px")]
+		// 			}).addStyleClass("displayNone")]
+		// });
+
+		var oMatrix = new sap.m.VBox({
+			items : [
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48014")}).addStyleClass("sub-con-title"), // 근태코드
+						new sap.m.HBox({
+							items : [
+								new sap.m.ComboBox(oController.PAGEID + "_Awart", {
+									selectedKey : "{Awart}",
+									value : "{Atext}",
+									// width : "65%",
+									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+									change : oController.onChangeAwart,
+									editable : {
+										path : "Status1",
+											formatter : function(fVal){
+												return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+											}
+									}
+							   }),
+							   new sap.m.ComboBox({
+									selectedKey : "{Half}",
+									width : "80px",
+									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+									items : [new sap.ui.core.Item({key : "1", text : oBundleText.getText("LABEL_48048")}),  // 오전
+											 new sap.ui.core.Item({key : "2", text : oBundleText.getText("LABEL_48049")})], // 오후
+									editable : {
+										parts : [{path : "Status1"}, {path : "Halfc"}],
+											formatter : function(fVal1, fVal2){
+												if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+													if(fVal2 && fVal2 == "H"){
+														return true;
+													} else {
+														return false;
+													}
+												} else {
+													return false;
+												}
+											}
+									},
+									// change : oController.onChangeHalf
+							   }).addStyleClass("pl-3px")
+							]
+						})
+					]
+				}),
+				new sap.m.HBox({
+					height: "84px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48021")}).addStyleClass("sub-con-title"), // 근태기간
+						new sap.m.VBox({
+							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+							items : [
+								new sap.m.DatePicker({
+									valueFormat : "yyyy-MM-dd",
+									displayFormat : gDtfmt,
+									value : "{Begda}",
+									width : "100%",
+									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+									textAlign : "Begin",
+									change : oController.onChangeDate,
+									editable : {
+										path : "Status1",
+										 formatter : function(fVal){
+											return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+										}
+									}
 								}),
-								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
-												   selectedKey : "{AppName}",
-												   width : "100%",
-												   editable : {
-												   		path : "Status1",
-												   		formatter : function(fVal){
-												   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-												   		}
-												   }
-											   })],
-									hAlign : "Begin",
-									vAlign : "Middle"
-								})]
-					}).addStyleClass("displayNone"),					
-					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_MessageRow", {
-						// height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 // ※ 자녀출생의 경우 출산일을 반드시 기입하여 주시기 바랍니다.
-									 content : [new sap.m.Text({text : oBundleText.getText("MSG_48003")}).addStyleClass("font-bold font-13px color-red")], 
-									 hAlign : "Begin",
-									 vAlign : "Middle",
-									 colSpan : 4
-								 }).addStyleClass("pl-10px pr-10px")]
-					}).addStyleClass("displayNone")]
+								new sap.m.DatePicker({
+									valueFormat : "yyyy-MM-dd",
+									displayFormat : gDtfmt,
+									value : "{Endda}",
+									width : "100%",
+									layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+									textAlign : "Begin",
+									change : oController.onChangeDate,
+									editable : {
+										path : "Status1",
+											formatter : function(fVal){
+												return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+										}
+									}
+								})
+							]
+						})
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48050")}).addStyleClass("sub-con-title"), // 근태시간
+						new sap.m.TimePicker({
+							valueFormat : "HHmm",
+							displayFormat : "HH:mm",
+							value : "{Beguz}",
+							minutesStep : 5,
+							//width : "95px",
+							textAlign : "Begin",
+							change : oController.onChangeTime2,
+							editable : {
+								parts : [{path : "Status1"}, {path : "Halfc"}],
+								formatter : function(fVal1, fVal2){
+									if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+										return (fVal2 && fVal2 == "X") ? true : false;
+									} else {
+										return false;
+									}
+								}
+							}
+						}),
+						new sap.ui.core.HTML({content : "<div style='width:3px' />"}),
+						new sap.m.TimePicker({
+							valueFormat : "HHmm",
+							displayFormat : "HH:mm",
+							value : "{Enduz}",
+							minutesStep : 5,
+							//width : "95px",
+							textAlign : "Begin",
+							change : oController.onChangeTime2,
+							editable : {
+								parts : [{path : "Status1"}, {path : "Halfc"}],
+								formatter : function(fVal1, fVal2){
+									if(fVal1 == "" || fVal1 == "AA" || fVal1 == "JJ"){
+										return (fVal2 && fVal2 == "X") ? true : false;
+									} else {
+										return false;
+									}
+								}
+							}
+						}),
+						new sap.m.Text({
+							text : "({EAbshr}:{EAbsmm})",
+							visible : {
+								parts : [{path : "EAbshr"}, {path : "EAbsmm"}],
+								formatter : function(fVal1, fVal2){
+									return (fVal1 && fVal2 && fVal1 != "" && fVal2 != "") ? true : false;
+								}
+							}
+						}).addStyleClass("pl-2px pt-3px")
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48017")}).addStyleClass("sub-con-title"), // 휴가일수
+						new sap.m.Text({   // X일
+							text : "{Kaltg} " + oBundleText.getText("LABEL_48035"),
+							visible : {
+								path : "Kaltg",
+								formatter : function(fVal){
+									return fVal && fVal != "" ? true : false;
+								}
+							}
+					   })
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48018")}).addStyleClass("sub-con-title"), // 휴일일수
+						new sap.m.Text({
+							text : "{Hldtg} " + oBundleText.getText("LABEL_48035") + " " + "{Holyt}", // X일
+							visible : {
+								path : "Hldtg",
+								formatter : function(fVal){
+									return fVal && fVal != "" ? true : false;
+								}
+							}
+					   })
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48051")}).addStyleClass("sub-con-title"), // 경조일수
+						new sap.m.Text({
+							text :"{Kjdate}" + oBundleText.getText("LABEL_48035"), // 일
+							visible : {
+								path : "Kjdate",
+								formatter : function(fVal){
+									return fVal && fVal != "" ? true : false;
+								}
+							}
+					   })
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48019"), required : true}).addStyleClass("sub-con-title"), // 연락처
+						new sap.m.Input({
+							value : "{Telnum}",
+							width : "100%",
+							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+							maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Telnum"),
+							editable : {
+								path : "Status1",
+								formatter : function(fVal){
+									return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+								}
+							}
+					   })
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({
+							width : "105px",
+							// text : {
+							// 	path : "Awart",
+							// 	formatter : function(fVal){
+							// 		if(fVal == "1424"){ // 출장
+							// 			return oBundleText.getText("LABEL_48020"); // 행선지/출입카드신청
+							// 		} else {
+							// 			return oBundleText.getText("LABEL_48052"); // 행선지
+							// 		}
+							// 	}
+							// },
+							text : oBundleText.getText("LABEL_48052"), // 행선지
+							required : true
+					   }).addStyleClass("sub-con-title"),
+					   new sap.m.Input({
+						   value : "{Desti}",
+						   width : "100%",
+						   layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+						   maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Desti"),
+						   editable : {
+								path : "Status1",
+								formatter : function(fVal){
+									return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+								}
+						   }
+						})
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					visible : {
+						path : "Awart",
+						formatter : function(fVal){
+							return fVal == "1424" ? true : false;
+						}
+					},
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48020").split("/")[1]}).addStyleClass("sub-con-title"), // 출입카드신청
+						new sap.m.ComboBox(oController.PAGEID + "_Encard", {
+							selectedKey : "{Encard}",
+							width : "100%",
+							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+							editable : {
+								path : "Status1",
+								formatter : function(fVal){
+									return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+								}
+							},
+							visible : {
+								path : "Awart",
+								formatter : function(fVal){
+									return fVal == "1424" ? true : false;
+								}
+							},
+						})
+					]
+				}),
+				new sap.m.HBox({
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : oBundleText.getText("LABEL_48022")}).addStyleClass("sub-con-title"), // 근태사유
+						new sap.m.Input({
+							value : "{Bigo}",
+							width : "100%",
+							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+							maxLength : common.Common.getODataPropertyLength("ZHR_LEAVE_APPL_SRV", "VacationApplyTab1", "Bigo"),
+							editable : {
+								   path : "Status1",
+								   formatter : function(fVal){
+									   return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+								   }
+							}
+						})
+					]
+				}),
+				new sap.m.HBox(oController.PAGEID + "_AppNameRow", {
+					height: "42px",
+					alignItems: sap.m.FlexAlignItems.Center,
+					items : [
+						new sap.m.Label({width : "105px", text : "{i18n>LABEL_48066}", required : true}).addStyleClass("sub-con-title"), // 결재자
+						new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+							selectedKey : "{AppName}",
+							width : "100%",
+							layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+							editable : {
+									path : "Status1",
+									formatter : function(fVal){
+										return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+									}
+							}
+						})
+					]
+				}).addStyleClass("displayNone"),
+				new sap.m.HBox(oController.PAGEID + "_MessageRow", {
+					items : [
+						// ※ 자녀출생의 경우 출산일을 반드시 기입하여 주시기 바랍니다.
+						new sap.m.Text({text : oBundleText.getText("MSG_48003")}).addStyleClass("font-bold font-13px color-red")
+					]
+				}).addStyleClass("displayNone pl-10px pr-10px")
+			]
 		});
 		
         var oLayout1 = new sap.m.VBox({
@@ -604,11 +925,11 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 			mode: "None",
             columns: [
                 new sap.m.Column ({
-                    width: "50%",
+                    width: "105px",
                     hAlign: "Begin"
                 }),
                 new sap.m.Column ({
-                    width: "50%",
+                    width: "100%",
                     hAlign: "End"
                 })
             ],
