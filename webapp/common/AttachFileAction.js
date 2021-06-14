@@ -95,7 +95,6 @@ common.AttachFileAction = {
 		JSonModel.setProperty("/Data", []);
 
 		if(!vAppnm) {
-			JSonModel.setProperty("/Settings/Length", 0);
 			return;
 		}
 
