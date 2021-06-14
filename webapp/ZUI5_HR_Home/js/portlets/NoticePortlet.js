@@ -82,7 +82,7 @@ fill: function() {
 					return [
 						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
-								'<div class="portlet-bbs-title">',
+								'<div class="portlet-bbs-title" style="width:100%;">',
 									'<span class="portlet-bbs-title-text" title="${title}">${title}</span>'.interpolate(o.Title, o.Title),
 									o.Newitem === 'X' ? '<span class="badge badge-primary badge-pill">N</span>' : '',
 									o.Impor === 'X' ? '<i class="fas fa-exclamation-circle"></i>' : '',
