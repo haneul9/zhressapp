@@ -91,8 +91,8 @@
 			}, oGubunCombo);
 
 			return new sap.m.VBox({
-                width: "100%",
-				// fitContainer: true,
+                // width: "100%",
+				fitContainer: true,
 				items: [
 					// new sap.m.HBox({
 					// 	width: "100%",
