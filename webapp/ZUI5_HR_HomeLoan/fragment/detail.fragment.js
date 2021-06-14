@@ -312,7 +312,7 @@ sap.ui.define(
                                 src: "sap-icon://information",
                                 hover: function (oEvent) {
                                     Common.onPressTableHeaderInformation.call(oController, oEvent, [
-                                        "• 지방세(재산세부문) 세목별과세(납세)증명서 1부",  //
+                                        "• 지방세(재산세부문) 세목별과세(납세)증명서 1부", //
                                         "• 계약서 사본 1부(주택임대차, 구입)",
                                         "• 주민등록 등본 1부",
                                         "• 통장사본 및 신분증(주민등록증 또는 운전면허증) 각 1부"
@@ -325,14 +325,7 @@ sap.ui.define(
                         ]
                     }).addStyleClass("pl-0"),
                     content: new sap.m.VBox({
-                        items: [
-                            fragment.COMMON_ATTACH_FILES.renderer(oController,"001"),
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"002"),
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"003"),
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"004"),
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"005"),
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"006")
-                        ]
+                        items: [fragment.COMMON_ATTACH_FILES.renderer(oController, "001"), fragment.COMMON_ATTACH_FILES.renderer(oController, "002"), fragment.COMMON_ATTACH_FILES.renderer(oController, "003"), fragment.COMMON_ATTACH_FILES.renderer(oController, "004"), fragment.COMMON_ATTACH_FILES.renderer(oController, "005"), fragment.COMMON_ATTACH_FILES.renderer(oController, "006")]
                     }).addStyleClass("custom-multiAttach-file h-auto p-30px")
                 }).addStyleClass("custom-panel");
             },

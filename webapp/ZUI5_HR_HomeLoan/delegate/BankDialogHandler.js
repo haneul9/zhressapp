@@ -65,13 +65,17 @@ sap.ui.define(
 
                         oModel.setProperty("/Bank/List", BankList);
 
-                        if(this.oController._BankItemsBinding) {
+                        if (this.oController._BankItemsBinding) {
                             this.oController._BankItemsBinding.filter([new sap.ui.model.Filter("Text", sap.ui.model.FilterOperator.Contains, "")]);
                         }
 
-                        jQuery.sap.delayedCall(1000, null, function() {
-                            sap.ui.getCore().byId(this.getDialog().$().find(".sapMSF")[0].id).focus();
-                        }.bind(this));
+                        jQuery.sap.delayedCall(
+                            1000,
+                            null,
+                            function () {
+                                sap.ui.getCore().byId(this.getDialog().$().find(".sapMSF")[0].id).focus();
+                            }.bind(this)
+                        );
                     }.bind(this)
                 );
             },
