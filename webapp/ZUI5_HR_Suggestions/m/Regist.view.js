@@ -307,6 +307,12 @@ sap.ui.define([
 					})
 					.addStyleClass("custom-HiTokTok-group border-bottom-no"),
 					new sap.m.HBox({
+                        visible: {
+                            parts: [{path: "Appnm"}, {path: "/Gubun"}],
+                            formatter: function(v1, v2) {
+                                return Common.checkNull(!v1) || (Common.checkNull(v1) && v2 === "X");
+                            }	
+                        },
 						items: [
                             sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 						]

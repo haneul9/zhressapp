@@ -1440,8 +1440,7 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: false,
-				Visible: !vAppnm ? false : true
+				Editable: false
 			});
 		},
 		

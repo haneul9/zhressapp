@@ -1603,8 +1603,7 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: !vSdate ? true : false,
-				Visible: !vAppnm ? false : true
+				Editable: !vSdate ? true : false
 			});
 		},
 		

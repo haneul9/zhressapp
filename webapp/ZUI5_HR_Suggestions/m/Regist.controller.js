@@ -977,7 +977,6 @@
 				this.g_RePwordBox.setVisible(true);
 				this.g_ReDetail.setEditable(true);
 				this.g_ReDate.setVisible(false);
-				this.onBeforeOpenDetailDialog();
 			}else {
 				oController.onSubCommentDelete();
 			}
@@ -1000,7 +999,6 @@
 				this.g_CanBtn.setVisible(true);
 				this.g_HiBox.setVisible(true);
                 this.g_CoDate.setVisible(false);
-				this.onBeforeOpenDetailDialog();
 			}else {
 				this.onCommentDelete();
 			}
