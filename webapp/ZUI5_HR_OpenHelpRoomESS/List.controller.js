@@ -249,13 +249,13 @@ sap.ui.define([
 		},
 
 		displayBinaryPDF: function(vPdfInfo) {
-			if(!vPdfInfo.Appnm || !vPdfInfo.Url) {
+			if(!(vPdfInfo || {}).Appnm || !(vPdfInfo || {}).Url) {
 				return;
 			}
 
 			var oPdfViewer = $.app.byId(this.PAGEID + "_PDFBox");
 
-			this.OpenHelpModel.setProperty("/PDFData/Url", "https://clri-ltc.ca/files/2018/09/TEMP-PDF-Document.pdf");
+			this.OpenHelpModel.setProperty("/PDFData/Url", "/ZUI5_HR_OpenHelpRoomESS/temp/sample.pdf");
 			oPdfViewer.setBusyIndicatorDelay(0).setBusy(true);
 
 			Common.getPromise(true, function(resolve, reject) {
