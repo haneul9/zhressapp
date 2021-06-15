@@ -141,8 +141,8 @@ sap.ui.define([
 
 
 			return new sap.m.VBox({
-				fitContainer: true,
-                // width: "100%",
+				// fitContainer: true,
+                width: "100%",
 				items: [
 					new sap.m.HBox({
 						height: "40px",
@@ -251,23 +251,23 @@ sap.ui.define([
                     }),
                     new sap.m.VBox("contentArea", {
                         width: "100%",
-                        fitContainer: true,
+                        // fitContainer: true,
 					//	alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title"), // 내용
-                            new sap.m.TextArea({
-                                rows: 10,
-								width: "100%",
-								value:"{Detail}",
-                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
-								editable: {
-									parts: [{path: "Sdate"}, {path: "/Gubun"}],
-									formatter: function(v1, v2) {
-										return !v1 || v2 === "X";
-									}
-								}
-							})
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title") // 내용
+                            // new sap.m.TextArea({
+                            //     rows: 10,
+							// 	width: "100%",
+							// 	value:"{Detail}",
+                            //     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                            //     maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
+							// 	editable: {
+							// 		parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							// 		formatter: function(v1, v2) {
+							// 			return !v1 || v2 === "X";
+							// 		}
+							// 	}
+							// })
 						]
 					}).addStyleClass("w-100"),
                     new sap.m.HBox(oController.PAGEID + "_ThumsBox", {
@@ -314,7 +314,7 @@ sap.ui.define([
                     oCommentBox
 				]
 			})
-			.addStyleClass("vbox-form-mobile mnw-100")
+			.addStyleClass("vbox-form-mobile ml-0 p-5px")
 			.setModel(oController.RegistModel)
 			.bindElement("/FormData");
 		}

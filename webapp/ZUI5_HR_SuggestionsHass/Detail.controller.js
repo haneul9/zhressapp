@@ -168,10 +168,10 @@
 						oCopiedRow.Detail = oData.TableIn6.results[0].Detail;
 						var oCommentData = oData.TableIn3.results;
 						var oSubCommentData = oData.TableIn4.results;
-						oController.RegistModel.setData({FormData: oCopiedRow});
-						// oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
-						// 	Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
-						// })});
+						// oController.RegistModel.setData({FormData: oCopiedRow});
+						oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
+							Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
+						})});
 
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);
@@ -1440,7 +1440,8 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: false
+				Editable: false,
+				Visible: !vAppnm ? false : true
 			});
 		},
 		

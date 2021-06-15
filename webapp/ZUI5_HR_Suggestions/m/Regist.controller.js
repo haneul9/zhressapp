@@ -1556,40 +1556,41 @@
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
 
-			// if($.app.byId("myRTE"))
-			// 	$.app.byId("myRTE").destroy();
+			if($.app.byId("myRTE"))
+				$.app.byId("myRTE").destroy();
 
-			// var that = this;
-			// 	that.oRichTextEditor = new RTE("myRTE", {
-			// 		editorType: EditorType.TinyMCE4,
-			// 		layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-			// 		width: "100%",
-			// 		height: "350px",
-			// 		customToolbar: true,
-			// 		showGroupFont: true,
-			// 		showGroupLink: true,
-			// 		showGroupInsert: true,
-			// 		value: "{Detail}",
-			// 		editable: {
-			// 			parts: [{path: "Sdate"}, {path: "/Gubun"}],
-			// 			formatter: function(v1, v2) {
-			// 				return !v1 || v2 === "X";
-			// 			}
-			// 		},
-			// 		ready: function () {
-			// 			this.addButtonGroup("styleselect").addButtonGroup("table");
-			// 		}
-			// 	});
+			var that = this;
+				that.oRichTextEditor = new RTE("myRTE", {
+					editorType: EditorType.TinyMCE4,
+					// layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					width: "100%",
+					height: "350px",
+					customToolbar: true,
+					showGroupFont: true,
+					showGroupLink: true,
+					showGroupInsert: true,
+					value: "{Detail}",
+					editable: {
+						parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						formatter: function(v1, v2) {
+							return !v1 || v2 === "X";
+						}
+					},
+					ready: function () {
+						this.addButtonGroup("styleselect").addButtonGroup("table");
+					}
+				});
 
-			// $.app.byId("contentArea").addItem(that.oRichTextEditor);
+			$.app.byId("contentArea").addItem(that.oRichTextEditor);
 
-			// $.app.byId("myRTE").addStyleClass("mxw-100");
+			$.app.byId("myRTE").addStyleClass("mxw-100");
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: !vSdate ? true : false
+				Editable: !vSdate ? true : false,
+				Visible: !vAppnm ? false : true
 			});
 		},
 
