@@ -93,9 +93,6 @@ sap.ui.define(
 					vConvertYear = "",
 					aYears = [];
 	
-				vConvertYear = String(vZyear + 1);
-				aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
-	
 				Common.makeNumbersArray({length: 11}).forEach(function(idx) {
 					vConvertYear = String(vZyear - idx);
 					aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });

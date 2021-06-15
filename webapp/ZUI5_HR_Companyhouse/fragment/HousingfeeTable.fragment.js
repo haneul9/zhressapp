@@ -8,7 +8,7 @@ sap.ui.define([
 
 	sap.ui.jsfragment("ZUI5_HR_Companyhouse.fragment.HousingfeeTable", {
 		_FeeModel: [
-			{id: "Zyymm",	label: "{i18n>LABEL_14005}"/* 월 */,	 	  plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "auto", templateGetter: "getMonthFormatter"},
+			{id: "Zyymm",	label: "{i18n>LABEL_14021}"/* 대상기간 */,	  plabel: "", resize: true, span: 0, type: "template", sort: true,  filter: true,  width: "auto", templateGetter: "getMonthFormatter"},
 			{id: "Bet01", 	label: "{i18n>LABEL_14011}"/* 사택료 */,	  plabel: "", resize: true, span: 0, type: "money",  sort: true,  filter: true,  width: "9%", align: sap.ui.core.HorizontalAlign.Right},
 			{id: "Bet02", 	label: "{i18n>LABEL_14012}"/* 전기료 */,	  plabel: "", resize: true, span: 0, type: "money",  sort: true,  filter: true,  width: "8%", align: sap.ui.core.HorizontalAlign.Right},
 			{id: "Bet03",	label: "{i18n>LABEL_14013}"/* 가스료 */,	  plabel: "", resize: true, span: 0, type: "money", sort: true,  filter: true,  width: "8%", align: sap.ui.core.HorizontalAlign.Right},
@@ -31,6 +31,8 @@ sap.ui.define([
 				showOverlay: false,
 				showNoData: true,
 				width: "100%",
+				rowHeight: 37,
+				columnHeaderHeight: 38,
 				noData: "{i18n>LABEL_00901}"
 			})
 				.addStyleClass("mt-18px")
