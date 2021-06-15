@@ -962,7 +962,6 @@
 				this.g_RePwordBox.setVisible(true);
 				this.g_ReDetail.setEditable(true);
 				this.g_ReCommDateText.setVisible(false);
-				this.onBeforeOpenDetailDialog();
 			}else {
 				oController.onSubCommentDelete();
 			}
@@ -985,7 +984,6 @@
 				this.g_CanBtn.setVisible(true);
 				this.g_HiBox.setVisible(true);
 				this.g_CommDateText.setVisible(false);
-				this.onBeforeOpenDetailDialog();
 			}else {
 				this.onCommentDelete();
 			}
@@ -1022,9 +1020,10 @@
 							return oController.CommentUserCheck();
 						}
 			
-						if(oController.g_Pword === "R")
+						if(oController.g_Pword === "R"){
 							oController.RegistModel.setProperty("/Gubun", "X");
-						else if(oController.g_Pword === "D")
+							oController.onBeforeOpenDetailDialog();
+						}else if(oController.g_Pword === "D")
 							oController.onDeleteData();
 						
 						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
