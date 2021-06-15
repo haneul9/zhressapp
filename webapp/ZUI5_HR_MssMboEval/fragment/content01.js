@@ -373,7 +373,7 @@ ZUI5_HR_MssMboEval.fragment.content01={
 		oHeader.addRow(oRow);
 		var oContents2=[oHeader,new sap.ui.core.HTML({
 			content:"<div style='height:10px;' />"
-		}),oBtnMat,oPagePanel2,oPagePanel3];	
+		}),oPagePanel2,oPagePanel3];	
 
 		var oPagePanel4;
 		if(vPage=="2"||vPage=="3"){
