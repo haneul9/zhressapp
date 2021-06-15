@@ -1568,7 +1568,8 @@
         onBeforeOpenDetailDialog: function() {
 			var oController = this.getView().getController();
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
-				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
+				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "",
+				vGubun = oController.RegistModel.getProperty("/Gubun") || "";
 				
 			if($.app.byId("myRTE"))
 				$.app.byId("myRTE").destroy();
@@ -1603,7 +1604,7 @@
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: !vSdate ? true : false
+				Editable: Common.checkNull(vSdate) || (Common.checkNull(!vSdate) && vGubun === "X") ? true : false
 			});
 		},
 		
