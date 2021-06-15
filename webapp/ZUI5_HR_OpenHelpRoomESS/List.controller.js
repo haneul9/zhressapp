@@ -255,7 +255,7 @@ sap.ui.define([
 
 			var oPdfViewer = $.app.byId(this.PAGEID + "_PDFBox");
 
-			this.OpenHelpModel.setProperty("/PDFData/Url", "/ZUI5_HR_OpenHelpRoomESS/manual/sample.pdf");
+			this.OpenHelpModel.setProperty("/PDFData/Url", "/ZUI5_HR_OpenHelpRoomESS/manual/notLoaded.pdf");
 			oPdfViewer.setBusyIndicatorDelay(0).setBusy(true);
 
 			Common.getPromise(true, function(resolve, reject) {
@@ -276,8 +276,6 @@ sap.ui.define([
 					sampleArr = Common.base64ToArrayBuffer(vFiledata.Mresource);
 
 					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, sampleArr));
-				} else {
-					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, "/ZUI5_HR_OpenHelpRoomESS/manual/notLoaded.pdf"));
 				}
 
 				oPdfViewer.setBusy(false);
