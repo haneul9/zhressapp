@@ -468,8 +468,9 @@ sap.ui.define([
 		ErrorCheck: function() {
 			var oController = $.app.getController();
 			var oCostCombo = $.app.byId(oController.PAGEID + "_CostCombo");
+			var oWBSCombo = $.app.byId(oController.PAGEID + "_WBSCombo");
 
-			if(Common.checkNull(oCostCombo.getSelectedKey())){
+			if(Common.checkNull(oCostCombo.getSelectedKey()) && Common.checkNull(oWBSCombo.getSelectedKey())){
 				MessageBox.error(oController.getBundleText("MSG_29007"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}

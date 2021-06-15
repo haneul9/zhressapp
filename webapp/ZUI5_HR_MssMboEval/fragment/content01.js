@@ -329,26 +329,26 @@ ZUI5_HR_MssMboEval.fragment.content01={
 			oRow.addCell(oCell);
 			oMat3.addRow(oRow);
 		}
-		var oBtnMat=new c.layout.MatrixLayout();
-		oRow=new c.layout.MatrixLayoutRow();
-		oCell=new c.layout.MatrixLayoutCell({
-			hAlign:"Right",
-			content:[new sap.m.Button({
-				icon : "sap-icon://message-information",
-				text : oBundleText.getText("LABEL_36037"),
-				press : function(){oController.onOpenImg("1");}
-			}).addStyleClass("button-light"),new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),new sap.m.Button({
-				icon : "sap-icon://message-information",
-				text : oBundleText.getText("LABEL_36038"),
-				press : function(){oController.onOpenImg("2");}
-			}).addStyleClass("button-light"),new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),new sap.m.Button({
-				icon : "sap-icon://message-information",
-				text : oBundleText.getText("LABEL_36039"),
-				press : function(){oController.onOpenImg("3");}
-			}).addStyleClass("button-light")]
-		});
-		oRow.addCell(oCell);
-		oBtnMat.addRow(oRow);
+		// var oBtnMat=new c.layout.MatrixLayout();
+		// oRow=new c.layout.MatrixLayoutRow();
+		// oCell=new c.layout.MatrixLayoutCell({
+		// 	hAlign:"Right",
+		// 	content:[new sap.m.Button({
+		// 		icon : "sap-icon://message-information",
+		// 		text : oBundleText.getText("LABEL_36037"),
+		// 		press : function(){oController.onOpenImg("1");}
+		// 	}).addStyleClass("button-light"),new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),new sap.m.Button({
+		// 		icon : "sap-icon://message-information",
+		// 		text : oBundleText.getText("LABEL_36038"),
+		// 		press : function(){oController.onOpenImg("2");}
+		// 	}).addStyleClass("button-light"),new sap.ui.core.HTML({content:"<span>&nbsp;&nbsp;</span>"}),new sap.m.Button({
+		// 		icon : "sap-icon://message-information",
+		// 		text : oBundleText.getText("LABEL_36039"),
+		// 		press : function(){oController.onOpenImg("3");}
+		// 	}).addStyleClass("button-light")]
+		// });
+		// oRow.addCell(oCell);
+		// oBtnMat.addRow(oRow);
 
         var oPagePanel2 = new m.Panel({
 			expanded:true,
@@ -373,7 +373,7 @@ ZUI5_HR_MssMboEval.fragment.content01={
 		oHeader.addRow(oRow);
 		var oContents2=[oHeader,new sap.ui.core.HTML({
 			content:"<div style='height:10px;' />"
-		}),oBtnMat,oPagePanel2,oPagePanel3];	
+		}),oPagePanel2,oPagePanel3];	
 
 		var oPagePanel4;
 		if(vPage=="2"||vPage=="3"){

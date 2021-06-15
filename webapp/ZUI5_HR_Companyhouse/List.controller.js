@@ -93,9 +93,6 @@ sap.ui.define(
 					vConvertYear = "",
 					aYears = [];
 	
-				vConvertYear = String(vZyear + 1);
-				aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
-	
 				Common.makeNumbersArray({length: 11}).forEach(function(idx) {
 					vConvertYear = String(vZyear - idx);
 					aYears.push({ Code: vConvertYear, Text: vConvertYear + "년" });
@@ -146,7 +143,7 @@ sap.ui.define(
 					oController.FeeModelTable.setData({Data: {}});
 					
 					oModel.create("/AptSet", oSearchData, {
-						async: true,
+						async: false,
 						success: function (data, res) {
 							if (data.AptPayTabNav) {
 								var rDatas = data.AptPayTabNav.results;
@@ -159,14 +156,14 @@ sap.ui.define(
 							Common.log(res);
 						}
 					});
-
 					Common.adjustAutoVisibleRowCount.call(oTable);
+
 				}else{
 					oSearchData.AptPayNav = [];
 					oController.PDFViewModel.setData({Data: {}});
 					
 					oModel.create("/AptSet", oSearchData, {
-						async: true,
+						async: false,
 						success: function (data, res) {
 							if (data.AptPayNav) {
 								var oResult = data.AptPayNav.results[0].Url
