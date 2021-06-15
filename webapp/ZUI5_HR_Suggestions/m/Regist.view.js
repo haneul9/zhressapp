@@ -308,9 +308,9 @@ sap.ui.define([
 					.addStyleClass("custom-HiTokTok-group border-bottom-no"),
 					new sap.m.HBox({
                         visible: {
-                            parts: [{path: "Appnm"}, {path: "/Gubun"}],
-                            formatter: function(v1, v2) {
-                                return Common.checkNull(!v1) || (Common.checkNull(v1) && v2 === "X");
+                            parts: [{path: "Appnm"}, {path: "/Gubun"}, {path: "Sdate"}],
+                            formatter: function(v1, v2, v3) {
+                                return Common.checkNull(!v1) || (Common.checkNull(v1) && v2 === "X") || Common.checkNull(v3);
                             }	
                         },
 						items: [
