@@ -93,12 +93,12 @@
                     oCommentBox.destroyItems();
                     oDateBox.setVisible(false);
                     oIsHideBox.setVisible(true);
-					oThumsBox.setVisible(true);
+					oThumsBox.setVisible(false);
 					this.CommentModel.setProperty("/HideComment", "X");
                 }else{
                     oDateBox.setVisible(true);
                     oIsHideBox.setVisible(false);
-					oThumsBox.setVisible(false);
+					oThumsBox.setVisible(true);
                     this.getDetailData(this, "O");
                 }
             }
