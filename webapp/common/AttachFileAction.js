@@ -27,6 +27,7 @@ common.AttachFileAction = {
 				true,
 				{ 
 					Editable: false, 
+					Visible: true,
 					FileTypes: [], 
 					InfoMessage: "", 
 					Appnm: "",
