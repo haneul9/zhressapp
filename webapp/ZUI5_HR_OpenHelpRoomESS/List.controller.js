@@ -188,8 +188,10 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/PDFData", []);
 
 						}else{
+							jQuery.sap.addUrlWhitelist("https", "clri-ltc.ca");
 							jQuery.sap.addUrlWhitelist("https", "esslddev.lottechem.com");
 							jQuery.sap.addUrlWhitelist("https", "essprd.lottechem.com");
+							jQuery.sap.addUrlWhitelist("blob");
 							// jQuery.sap.addUrlWhitelist("http", "ssvess1d", "7097");
 
 							// oNoDataBox.setVisible(false);
@@ -198,10 +200,14 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
 							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
-							oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
+							oController.OpenHelpModel.setProperty("/PDFData", []);
 							
-							// oController.getPDFView();
-							// oController.openPDF(oController);
+							// 외부망 - binary파일로 대체
+							if(Common.isExternalIP()) {
+								oController.displayBinaryPDF(oData.OpenhelpTableIn5.results[0]);
+							} else {
+								oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
+							}
 						}
 						oController.onBeforeOpenDetailDialog();
 						
@@ -240,6 +246,40 @@ sap.ui.define([
 					popup.focus();
 				}, 500);
 			}, 0);
+		},
+
+		displayBinaryPDF: function(vPdfInfo) {
+			if(!vPdfInfo.Appnm || !vPdfInfo.Url) {
+				return;
+			}
+
+			var oPdfViewer = $.app.byId(this.PAGEID + "_PDFBox");
+
+			this.OpenHelpModel.setProperty("/PDFData/Url", "https://clri-ltc.ca/files/2018/09/TEMP-PDF-Document.pdf");
+			oPdfViewer.setBusyIndicatorDelay(0).setBusy(true);
+
+			Common.getPromise(true, function(resolve, reject) {
+				$.app.getModel("ZHR_COMMON_SRV").read("/FileListSet", {
+					async: true,
+					filters: [ new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vPdfInfo.Appnm) ],
+					success: function (data) {
+						resolve(data);
+					},
+					error: function (res) {
+						Common.log(res);
+						reject(res);
+					}
+				});
+			}).then(function(data) {
+				if(data.results.length) {
+					var vFiledata = data.results[0],
+					sampleArr = Common.base64ToArrayBuffer(vFiledata.Mresource);
+
+					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, sampleArr));
+				}
+
+				oPdfViewer.setBusy(false);
+			}.bind(this));
 		},
 
 		getPDFView: function() {

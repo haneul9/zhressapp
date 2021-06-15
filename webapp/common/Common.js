@@ -1098,13 +1098,18 @@ common.Common = {
 		   bytes[i] = ascii;
 		}
 		return bytes;
-	},
+    },
+    
+    getBlobURL: function(mimeType, byte) {
+        var blob = new Blob([byte], {type: mimeType});
+        return window.URL.createObjectURL(blob);
+    },
 
 	saveByteArray: function(reportName, mimeType, byte) {
-		var blob = new Blob([byte], {type: mimeType});
 		var link = document.createElement('a');
-		link.href = window.URL.createObjectURL(blob);
 		var fileName = reportName;
+        
+        link.href = common.Common.getBlobURL(mimeType, byte);
 		link.download = fileName;
 		link.click();
 	}
