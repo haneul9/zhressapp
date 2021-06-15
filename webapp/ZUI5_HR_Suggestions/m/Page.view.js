@@ -24,12 +24,12 @@
                     new sap.m.VBox({
 						items: [
 							new sap.m.Input(oController.PAGEID + "_SearchInput", {
-                                width: "113%",
+                                width: "230px",
                                 value: "{ITitle}",
                                 placeholder: "{i18n>LABEL_56002}" // 검색어(제목)
                             }),
                             new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
-								width: "100%",
+								width: "230px",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
 								dateValue: new Date(vYear, vMonth-2, 1),
