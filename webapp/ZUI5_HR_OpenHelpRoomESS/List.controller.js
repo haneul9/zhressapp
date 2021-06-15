@@ -276,6 +276,8 @@ sap.ui.define([
 					sampleArr = Common.base64ToArrayBuffer(vFiledata.Mresource);
 
 					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, sampleArr));
+				} else {
+					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, "/ZUI5_HR_OpenHelpRoomESS/temp/notLoaded.pdf"));
 				}
 
 				oPdfViewer.setBusy(false);
