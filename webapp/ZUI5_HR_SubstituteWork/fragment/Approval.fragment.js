@@ -53,7 +53,7 @@ sap.ui.define(
                                             dateValue: "{Begda}",
                                             secondDateValue: "{Endda}",
                                             delimiter: "~",
-                                            width: "210px"
+                                            width: "250px"
                                         }),
                                         new sap.m.Label({text: "{i18n>LABEL_31013}"}), // 결재상태
                                         new sap.m.ComboBox({

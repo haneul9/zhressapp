@@ -45,7 +45,7 @@ sap.ui.define(
                                             dateValue: "{Begda}",
                                             secondDateValue: "{Endda}",
                                             delimiter: "~",
-                                            width: "210px"
+                                            width: "250px"
                                         }),
                                         new sap.m.Label({ text: "{i18n>LABEL_31005}" }), // 근무일정
                                         new sap.m.ComboBox({
