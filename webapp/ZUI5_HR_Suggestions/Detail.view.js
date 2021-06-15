@@ -190,20 +190,20 @@
 						width: "100%",
 						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
-                            // new sap.m.TextArea({
-                            //     rows: 10,
-							// 	width: "100%",
-							// 	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),	
-							// 	value:"{Detail}",
-							// 	maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
-							// 	editable: {
-							// 		parts: [{path: "Sdate"}, {path: "/Gubun"}],
-							// 		formatter: function(v1, v2) {
-							// 			return !v1 || v2 === "X";
-							// 		}
-							// 	}
-							// }).addStyleClass("mt-8px mb-8px")
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true), // 내용
+                            new sap.m.TextArea({
+                                rows: 10,
+								width: "100%",
+								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),	
+								value:"{Detail}",
+								maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
+								editable: {
+									parts: [{path: "Sdate"}, {path: "/Gubun"}],
+									formatter: function(v1, v2) {
+										return !v1 || v2 === "X";
+									}
+								}
+							}).addStyleClass("mt-8px mb-8px")
 						]
 					})
 					.addStyleClass("search-field-group h-auto"),
