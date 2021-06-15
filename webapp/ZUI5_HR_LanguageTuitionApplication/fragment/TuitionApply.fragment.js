@@ -99,7 +99,7 @@ sap.ui.define([
 								new sap.m.HBox({
 									items: [
 										// 원가코드
-										new sap.m.Label({ text: "{i18n>LABEL_29016}", required: true, width: "130px", layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }) }),
+										new sap.m.Label({ text: "{i18n>LABEL_29016}", width: "130px", layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }) }),
 										oCostCombo
 									]
 								}).addStyleClass("search-field-group"),
