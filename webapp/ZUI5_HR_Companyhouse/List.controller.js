@@ -143,7 +143,7 @@ sap.ui.define(
 					oController.FeeModelTable.setData({Data: {}});
 					
 					oModel.create("/AptSet", oSearchData, {
-						async: true,
+						async: false,
 						success: function (data, res) {
 							if (data.AptPayTabNav) {
 								var rDatas = data.AptPayTabNav.results;
@@ -163,7 +163,7 @@ sap.ui.define(
 					oController.PDFViewModel.setData({Data: {}});
 					
 					oModel.create("/AptSet", oSearchData, {
-						async: true,
+						async: false,
 						success: function (data, res) {
 							if (data.AptPayNav) {
 								var oResult = data.AptPayNav.results[0].Url
