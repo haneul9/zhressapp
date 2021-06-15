@@ -1020,9 +1020,10 @@
 							return oController.CommentUserCheck();
 						}
 			
-						if(oController.g_Pword === "R")
+						if(oController.g_Pword === "R"){
 							oController.RegistModel.setProperty("/Gubun", "X");
-						else if(oController.g_Pword === "D")
+							oController.onBeforeOpenDetailDialog();
+						}else if(oController.g_Pword === "D")
 							oController.onDeleteData();
 						
 						if(Common.checkNull(!oController.g_HiSeqnr2)) oController.g_HiSeqnr2 = "";
@@ -1568,42 +1569,43 @@
         onBeforeOpenDetailDialog: function() {
 			var oController = this.getView().getController();
 			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
-				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "";
+				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "",
+				vGubun = oController.RegistModel.getProperty("/Gubun") || "";
 				
-			// if($.app.byId("myRTE"))
-			// 	$.app.byId("myRTE").destroy();
+			if($.app.byId("myRTE"))
+				$.app.byId("myRTE").destroy();
 
-			// var that = this;
-			// 	that.oRichTextEditor = new RTE("myRTE", {
-			// 		editorType: EditorType.TinyMCE4,
-			// 		layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-			// 		width: "99%",
-			// 		height: "500px",
-			// 		customToolbar: true,
-			// 		showGroupFont: true,
-			// 		showGroupLink: true,
-			// 		showGroupInsert: true,
-			// 		value: "{Detail}",
-			// 		editable: {
-			// 			parts: [{path: "Sdate"}, {path: "/Gubun"}],
-			// 			formatter: function(v1, v2) {
-			// 				return !v1 || v2 === "X";
-			// 			}
-			// 		},
-			// 		ready: function () {
-			// 			this.addButtonGroup("styleselect").addButtonGroup("table");
-			// 		}
-			// 	});
+			var that = this;
+				that.oRichTextEditor = new RTE("myRTE", {
+					editorType: EditorType.TinyMCE4,
+					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					width: "99.8%",
+					height: "500px",
+					customToolbar: true,
+					showGroupFont: true,
+					showGroupLink: true,
+					showGroupInsert: true,
+					value: "{Detail}",
+					editable: {
+						parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						formatter: function(v1, v2) {
+							return !v1 || v2 === "X";
+						}
+					},
+					ready: function () {
+						this.addButtonGroup("styleselect").addButtonGroup("table");
+					}
+				});
 
-			// $.app.byId("contentArea").addItem(that.oRichTextEditor);
+			$.app.byId("contentArea").addItem(that.oRichTextEditor);
 
-			// $.app.byId("myRTE").addStyleClass("mxw-100");
+			$.app.byId("myRTE").addStyleClass("mxw-100");
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "5",
-				Editable: !vSdate ? true : false
+				Editable: Common.checkNull(vSdate) || (Common.checkNull(!vSdate) && vGubun === "X") ? true : false
 			});
 		},
 		

@@ -19,50 +19,40 @@
 			var vMonth = new Date().getMonth()+1;	
 
             var oInfoBox = new sap.m.HBox({
-                justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
                 fitContainer: true,
                 items: [
-                    new sap.m.HBox({
+                    new sap.m.VBox({
 						items: [
 							new sap.m.Input(oController.PAGEID + "_SearchInput", {
-                                width: "110px",
+                                width: "113%",
                                 value: "{ITitle}",
                                 placeholder: "{i18n>LABEL_56002}" // 검색어(제목)
-                            })
-                            .addStyleClass("mr-5px"),
+                            }),
                             new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
-							//	width: "220px",
+								width: "100%",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
 								dateValue: new Date(vYear, vMonth-2, 1),
 								secondDateValue: new Date(vYear, vMonth, 0)
-							})
+							}).addStyleClass("mt-10px mb-7px")
 						]
-                    }).addStyleClass("search-field-group pr-0"),
+                    }).addStyleClass("search-field-group"),
 					new sap.m.HBox({
+                        alignItems: sap.m.FlexAlignItems.Center,
 						items: [
                             new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
 								icon: "sap-icon://search"
 							}).addStyleClass("button-search")
-                        //    new sap.m.Button({
-						//		press: oController.onPressSer.bind(oController),
-						//		icon : "sap-icon://bell" // 알림
-						//	}).addStyleClass("button-light h-42px ml-8px")
 						]
 					})
-                    .addStyleClass("button-group pl-0")
                 ]
             })
             .addStyleClass("search-box-mobile h-auto")
             .setModel(oController.LogModel)
 			.bindElement("/Data");
 
-            var infoBox = new sap.m.FlexBox({
-				justifyContent: sap.m.FlexJustifyContent.End,
-				alignContent: sap.m.FlexAlignContent.End,
-				alignItems: sap.m.FlexAlignItems.End,
-				fitContainer: true,
+            var infoBox = new sap.m.HBox({
 				items: [
 					new sap.m.Button({
 						press: oController.onPressRegi.bind(oController),
@@ -70,7 +60,7 @@
 					}).addStyleClass("button-light")
 				]
             })
-            .addStyleClass("button-group mt-5px mb-5px");
+            .addStyleClass("app-nav-button-right");
 
             var oTable = new sap.m.Table({
                 inset: false,
@@ -154,8 +144,8 @@
             return new PageHelper({
                 contentContainerStyleClass: "app-content-container-mobile",
                 contentItems: [
-                    oInfoBox,
                     infoBox,
+                    oInfoBox,
                     oTable
                 ]
             });
