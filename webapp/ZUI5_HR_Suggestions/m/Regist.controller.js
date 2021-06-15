@@ -83,6 +83,7 @@
             var oDateBox = $.app.byId(this.PAGEID + "_RegistDateBox");
             var oIsHideBox = $.app.byId(this.PAGEID + "_IsHideBox");
             var oCommentBox = $.app.byId(this.PAGEID + "_CommentBox");
+			var oThumsBox = $.app.byId(this.PAGEID + "_ThumsBox");
 
             if(oEvent.data){
                 this.RegistModel.setData({ FormData: oEvent.data.RowData ? oEvent.data.RowData : [] });
@@ -92,10 +93,12 @@
                     oCommentBox.destroyItems();
                     oDateBox.setVisible(false);
                     oIsHideBox.setVisible(true);
+					oThumsBox.setVisible(true);
 					this.CommentModel.setProperty("/HideComment", "X");
                 }else{
                     oDateBox.setVisible(true);
                     oIsHideBox.setVisible(false);
+					oThumsBox.setVisible(false);
                     this.getDetailData(this, "O");
                 }
             }
