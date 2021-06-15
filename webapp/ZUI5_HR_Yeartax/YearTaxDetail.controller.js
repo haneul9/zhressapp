@@ -3494,9 +3494,9 @@ sap.ui.define([
     //2015 변경		
             if(sResponse == "Error: null"){
                 sResponse = "파일 업로드가 완료되었습니다.";
-                MessageBox.success(sResponse);
+                MessageBox.alert(sResponse, {title : "안내"});
             } else {
-                MessageBox.error(sResponse);
+                MessageBox.alert(sResponse, {title : "안내"});
             }
             
             var oFileUploader = sap.ui.getCore().byId("yeaUploader");
