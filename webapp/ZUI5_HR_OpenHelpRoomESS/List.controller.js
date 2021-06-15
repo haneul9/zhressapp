@@ -200,7 +200,7 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
 							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
-							oController.OpenHelpModel.setProperty("/PDFData", []);
+							oController.OpenHelpModel.setProperty("/PDFData", {});
 							
 							// 외부망 - binary파일로 대체
 							if(Common.isExternalIP()) {
