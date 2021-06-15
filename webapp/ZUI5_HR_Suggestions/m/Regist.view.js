@@ -162,7 +162,7 @@ sap.ui.define([
 								}
                             })
 						]
-					}),
+					}).addStyleClass("mt-5px"),
 					new sap.m.VBox(oController.PAGEID + "_RegistDateBox", {
                         fitContainer: true,
 						items: [
