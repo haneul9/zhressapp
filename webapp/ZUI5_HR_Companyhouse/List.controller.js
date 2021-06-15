@@ -156,8 +156,8 @@ sap.ui.define(
 							Common.log(res);
 						}
 					});
-
 					Common.adjustAutoVisibleRowCount.call(oTable);
+
 				}else{
 					oSearchData.AptPayNav = [];
 					oController.PDFViewModel.setData({Data: {}});
