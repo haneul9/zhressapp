@@ -41,7 +41,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03", {
 																}
 															},
 															customData : [new sap.ui.core.CustomData({key : "", value : "{}"})],
-															press : oController.onDownloadAttachFile,
+															press : oController.onDownloadPDFFile,
 														}).addStyleClass("Font14 helpText PaddingRight10 PaddingTop6"),
 														new sap.m.Button("yeaUploader_AttachFileDelete", {
 															text : "파일삭제",

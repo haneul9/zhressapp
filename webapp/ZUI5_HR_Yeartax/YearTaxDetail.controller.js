@@ -1069,7 +1069,7 @@ sap.ui.define([
         },
         
         // 첨부파일 다운로드
-        onDownloadAttachFile : function(oEvent) {
+        onDownloadPDFFile : function(oEvent) {
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
             var oController = oView.getController();
             

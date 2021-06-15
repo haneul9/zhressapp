@@ -54,8 +54,8 @@
 							// oGubunCombo.addStyleClass("mr-10px"),
 							new sap.m.Label({text: "{i18n>LABEL_56002}"}), // 검색어(제목)
 							new sap.m.Input(oController.PAGEID + "_SearchInput",{
-								width: "200px",
-								value: "{ITitle}"
+								width: "200px"
+								// value: "{ITitle}"
 							}),
 							new sap.m.Label({text: "{i18n>LABEL_56003}"}), // 등록일
 							new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {

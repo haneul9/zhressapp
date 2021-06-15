@@ -179,7 +179,7 @@ sap.ui.define(
                                                 dateValue: "{/TemplateData/Begda}",
                                                 secondDateValue: "{/TemplateData/Endda}",
                                                 delimiter: "~",
-                                                width: "210px",
+                                                width: "250px",
                                                 change: DetailHandler.checkDateRange.bind(DetailHandler)
                                             }),
                                             new sap.m.Label({text: "{i18n>LABEL_31019}"}), // 신청사유

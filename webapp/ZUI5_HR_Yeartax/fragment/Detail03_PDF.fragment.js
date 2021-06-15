@@ -12,12 +12,11 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03_PDF", {
 			contentWidth : "1200px",
 			title : "",
 			content : [oPanel],
-			endButton : [new sap.m.Button({text : "닫기", type : "Emphasized", press : function(){oDialog.close();}})]	
+			endButton : [new sap.m.Button({text : "닫기", press : function(oEvent){oDialog.close();}}).addStyleClass("button-default")]	
 		});
 		
-		oDialog.addStyleClass("sapUiSizeCompact");
+		oDialog.addStyleClass("custom-dialog-popup");
 		
 		return oDialog;
 	}
-
 });
