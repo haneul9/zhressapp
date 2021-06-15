@@ -200,7 +200,7 @@ sap.ui.define([
 							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
 							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
 							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
-							oController.OpenHelpModel.setProperty("/PDFData", []);
+							oController.OpenHelpModel.setProperty("/PDFData", {});
 							
 							// 외부망 - binary파일로 대체
 							if(Common.isExternalIP()) {
@@ -249,13 +249,13 @@ sap.ui.define([
 		},
 
 		displayBinaryPDF: function(vPdfInfo) {
-			if(!vPdfInfo.Appnm || !vPdfInfo.Url) {
+			if(!(vPdfInfo || {}).Appnm || !(vPdfInfo || {}).Url) {
 				return;
 			}
 
 			var oPdfViewer = $.app.byId(this.PAGEID + "_PDFBox");
 
-			this.OpenHelpModel.setProperty("/PDFData/Url", "https://clri-ltc.ca/files/2018/09/TEMP-PDF-Document.pdf");
+			this.OpenHelpModel.setProperty("/PDFData/Url", "/ZUI5_HR_OpenHelpRoomESS/manual/sample.pdf");
 			oPdfViewer.setBusyIndicatorDelay(0).setBusy(true);
 
 			Common.getPromise(true, function(resolve, reject) {
@@ -276,6 +276,8 @@ sap.ui.define([
 					sampleArr = Common.base64ToArrayBuffer(vFiledata.Mresource);
 
 					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, sampleArr));
+				} else {
+					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, "/ZUI5_HR_OpenHelpRoomESS/manual/notLoaded.pdf"));
 				}
 
 				oPdfViewer.setBusy(false);

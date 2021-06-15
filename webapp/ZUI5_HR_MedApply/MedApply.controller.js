@@ -394,44 +394,54 @@ sap.ui.define(
                 }
 
                 setTimeout(function () {
-                    Promise.all([
-                        Common.getPromise(function() {
-                            COMMON_ATTACH_FILES.setAttachFile(oController, {
-                                Appnm: vAppnm,
-                                Mode: "S",
-                                Cntnm: "001",
-                                Max: "1",
-                                Label: "",
-                                ReadAsync: true,
-                                Editable: oChk1.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
-                                UseMultiCategories: true
-                            }, "001");
-                        }),
-                        Common.getPromise(function() {
-                            COMMON_ATTACH_FILES.setAttachFile(oController, {
-                                Appnm: vAppnm,
-                                Mode: "S",
-                                Cntnm: "002",
-                                Max: "1",
-                                Label: "",
-                                ReadAsync: true,
-                                Editable: oChk2.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
-                                UseMultiCategories: true
-                            }, "002");
-                        }),
-                        Common.getPromise(function() {
-                            COMMON_ATTACH_FILES.setAttachFile(oController, {
-                                Appnm: vAppnm,
-                                Required: false,
-                                Mode: "M",
-                                Max: "7",
-                                Cntnm: "009",
-                                ReadAsync: true,
-                                Editable: vEdit2,
-                                UseMultiCategories: true
-                            }, "009");
-                        })
-                    ]);
+                    $.app.byId("MedApply_ATTACHBOX001").setBusyIndicatorDelay(0).setBusy(true);
+                    $.app.byId("MedApply_ATTACHBOX002").setBusyIndicatorDelay(0).setBusy(true);
+                    $.app.byId("MedApply_ATTACHBOX009").setBusyIndicatorDelay(0).setBusy(true);
+
+                    COMMON_ATTACH_FILES.once.call(oController, vAppnm).then(function() {
+                        Promise.all([
+                            Common.getPromise(function() {
+                                COMMON_ATTACH_FILES.setAttachFile(oController, {
+                                    Appnm: vAppnm,
+                                    Mode: "S",
+                                    Cntnm: "001",
+                                    Max: "1",
+                                    Label: "",
+                                    ReadAsync: true,
+                                    Editable: oChk1.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
+                                    UseMultiCategories: true
+                                }, "001");
+                            }),
+                            Common.getPromise(function() {
+                                COMMON_ATTACH_FILES.setAttachFile(oController, {
+                                    Appnm: vAppnm,
+                                    Mode: "S",
+                                    Cntnm: "002",
+                                    Max: "1",
+                                    Label: "",
+                                    ReadAsync: true,
+                                    Editable: oChk2.getSelected() && (vStatus === "AA" || vStatus === "88") && oController._onClose !== "X",
+                                    UseMultiCategories: true
+                                }, "002");
+                            }),
+                            Common.getPromise(function() {
+                                COMMON_ATTACH_FILES.setAttachFile(oController, {
+                                    Appnm: vAppnm,
+                                    Required: false,
+                                    Mode: "M",
+                                    Max: "7",
+                                    Cntnm: "009",
+                                    ReadAsync: true,
+                                    Editable: vEdit2,
+                                    UseMultiCategories: true
+                                }, "009");
+                            })
+                        ]).then(function() {
+                            $.app.byId("MedApply_ATTACHBOX001").setBusy(false);
+                            $.app.byId("MedApply_ATTACHBOX002").setBusy(false);
+                            $.app.byId("MedApply_ATTACHBOX009").setBusy(false);
+                        });
+                    });
                 }, 100);
             },
 
