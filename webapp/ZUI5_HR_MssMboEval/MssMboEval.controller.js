@@ -520,17 +520,17 @@ sap.ui.define([
 		},
 
 		oTableMapping : function(oController,xData){
-			var c=sap.ui.commons;
 			var oTable=$.app.byId(oController.PAGEID+"_"+oController.vPage+"_Table1");
 			var oJSON=new sap.ui.model.json.JSONModel();
 			var aData={tData:[]};
-			xData.forEach(function(e){
-				aData.tData.push(e);
+
+			aData.tData = xData.map(function(elem, idx) {
+				return $.extend(true, elem, {
+					Seqno: String(++idx)
+				});
 			});
-			aData.tData.forEach(function(e,i){
-				aData.tData[i].Seqno=i+1;
-			});
-			aData.tData.length>=10?oTable.setVisibleRowCount(10):oTable.setVisibleRowCount(0);
+
+			common.Common.adjustVisibleRowCount(oTable, 10, aData.tData.length);
 			oJSON.setData(aData);
 			oTable.setModel(oJSON);
 			oTable.bindRows("/tData");

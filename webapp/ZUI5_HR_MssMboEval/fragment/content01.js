@@ -78,6 +78,7 @@ ZUI5_HR_MssMboEval.fragment.content01={
 			showOverlay: false,
 			showNoData: true,
 			width: "auto",
+			rowHeight: 38,
 			selectionBehavior:sap.ui.table.SelectionBehavior.RowOnly,
 			noData: "{i18n>LABEL_00901}"
 		}).addStyleClass("mt-10px row-link").attachCellClick(function(oEvent){oController.onSelectedRow(oEvent,vPage)});
