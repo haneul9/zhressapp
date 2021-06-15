@@ -54,7 +54,13 @@ sap.ui.define([
 				alignContent: sap.m.FlexAlignContent.Center,
 				alignItems: sap.m.FlexAlignItems.Center,
 				fitContainer: true,
-				visible: "/Settings/Visible",
+				visible: {
+					path: "/Settings/Visible",
+					formatter: function(v) {
+						if(v) return true;
+						else return false;
+					}
+				},
 				items: [
 					new sap.m.FlexBox({
 						alignContent: sap.m.FlexAlignContent.Center,
