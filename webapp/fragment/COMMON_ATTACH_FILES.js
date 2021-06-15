@@ -325,6 +325,46 @@ fragment.COMMON_ATTACH_FILES = {
 		return vAttachDatas ? vAttachDatas.length : 0;
 	},
 
+	once: function(vAppnm) {
+		return common.Common.getPromise(true,
+			function(resolve, reject) {
+				if(!vAppnm) {
+					resolve();
+					return;
+				}
+
+				if (!sap.ui.getCore().getModel("_TempFiledatas_")) {
+					sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "_TempFiledatas_");
+				} else {
+					sap.ui.getCore().getModel("_TempFiledatas_").setProperty("/Data", []);
+				}
+
+				$.app.getModel("ZHR_COMMON_SRV").read("/FileListSet", {
+					async: true,
+					filters: [ new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm) ],
+					success: function (data) {
+						if (data && data.results.length) {
+							sap.ui.getCore().getModel("_TempFiledatas_").setProperty("/Data", data.results);
+						}
+						resolve();
+					},
+					error: function (res) {
+						common.Common.log(res);
+						reject();
+					}
+				});
+			}
+		);
+	},
+
+	getTempData: function() {
+		if (!sap.ui.getCore().getModel("_TempFiledatas_")) {
+            sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "_TempFiledatas_");
+        }
+
+		return sap.ui.getCore().getModel("_TempFiledatas_").getProperty("/Data") || [];
+	},
+
 	/*
 	 * 첨부파일 리스트를 Binding한다.
 	 */
@@ -341,7 +381,8 @@ fragment.COMMON_ATTACH_FILES = {
 			vAsync = JSonModel.getProperty("/Settings/ReadAsync"),
 			vDif = JSonModel.getProperty("/Settings/CntnmDifferent"),
 			vDifData = JSonModel.getProperty("/Settings/CntnmDifferentData"),
-			Datas = { Data: [] };
+			Datas = { Data: [] },
+			aTempDatas = this.getTempData();
 
 		oAttachbox.setBusyIndicatorDelay(0).setBusy(true);
 		JSonModel.setProperty("/Settings/Length", 0);
@@ -366,71 +407,123 @@ fragment.COMMON_ATTACH_FILES = {
 			}
 
 			oAttachbox.setBusy(false);
-		} else{
-			oModel.read("/FileListSet", {
-				async: vAsync || false,
-				filters: [
-					new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
-				],
-				success: function (data) {
-					if (data && data.results.length) {
-						data.results.forEach(function (elem) {
-							elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
-							elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
+		} else {
+			if(aTempDatas.length) {
+				aTempDatas.forEach(function(elem) {
+					elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
+					elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
 
-							if(vUse){
-								if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
-									if(vPage==elem.Cntnm){
-										elem.New = false;
-										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-										Datas.Data.push(elem);
-									}
-								}else if(vPage=="009"){
-									if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
-										if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
-											elem.New = false;
-											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-											Datas.Data.push(elem);
-										}
-									}else{
-										elem.New = false;
-										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-										Datas.Data.push(elem);
-									}									
-								}else{
-									if(elem.Cntnm =="009"){
-										elem.New = false;
-										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-										Datas.Data.push(elem);
-									}
+					if(vUse){
+						if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
+							if(vPage==elem.Cntnm){
+								elem.New = false;
+								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+								Datas.Data.push(elem);
+							}
+						}else if(vPage=="009"){
+							if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
+								if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
 								}
 							}else{
 								elem.New = false;
 								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 								Datas.Data.push(elem);
+							}									
+						}else{
+							if(elem.Cntnm =="009"){
+								elem.New = false;
+								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+								Datas.Data.push(elem);
 							}
-							
-						});
+						}
+					}else{
+						elem.New = false;
+						elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+						Datas.Data.push(elem);
 					}
+				});
 
-					// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
-					if (vExistDataFlag == "X" && vAttachFileDatas) {
-						vAttachFileDatas.forEach(function (elem) {
-							if(elem.New === true) Datas.Data.push(elem);
-						});
-					}
-
-					JSonModel.setProperty("/Settings/Length", Datas.Data.length);
-					JSonModel.setProperty("/Data", Datas.Data);
-					JSonModel.refresh();
-
-					oAttachbox.setBusy(false);
-				},
-				error: function (res) {
-					common.Common.log(res);
-					oAttachbox.setBusy(false);
+				// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
+				if (vExistDataFlag == "X" && vAttachFileDatas) {
+					vAttachFileDatas.forEach(function (elem) {
+						if(elem.New === true) Datas.Data.push(elem);
+					});
 				}
-			});
+
+				JSonModel.setProperty("/Settings/Length", Datas.Data.length);
+				JSonModel.setProperty("/Data", Datas.Data);
+				JSonModel.refresh();
+
+				oAttachbox.setBusy(false);
+			} else {
+				oModel.read("/FileListSet", {
+					async: vAsync || false,
+					filters: [
+						new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
+					],
+					success: function (data) {
+						if (data && data.results.length) {
+							data.results.forEach(function (elem) {
+								elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
+								elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
+	
+								if(vUse){
+									if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
+										if(vPage==elem.Cntnm){
+											elem.New = false;
+											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+											Datas.Data.push(elem);
+										}
+									}else if(vPage=="009"){
+										if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
+											if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+												elem.New = false;
+												elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+												Datas.Data.push(elem);
+											}
+										}else{
+											elem.New = false;
+											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+											Datas.Data.push(elem);
+										}									
+									}else{
+										if(elem.Cntnm =="009"){
+											elem.New = false;
+											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+											Datas.Data.push(elem);
+										}
+									}
+								}else{
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}
+								
+							});
+						}
+	
+						// DB저장 전 올린 File List 를 배열에 담는다. ( 이후에 DB에 저장 된 File List 와 결합하여 보여줌 )
+						if (vExistDataFlag == "X" && vAttachFileDatas) {
+							vAttachFileDatas.forEach(function (elem) {
+								if(elem.New === true) Datas.Data.push(elem);
+							});
+						}
+	
+						JSonModel.setProperty("/Settings/Length", Datas.Data.length);
+						JSonModel.setProperty("/Data", Datas.Data);
+						JSonModel.refresh();
+	
+						oAttachbox.setBusy(false);
+					},
+					error: function (res) {
+						common.Common.log(res);
+						oAttachbox.setBusy(false);
+					}
+				});
+			}
 		}
 
 		

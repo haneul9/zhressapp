@@ -202,34 +202,35 @@ sap.ui.define(
                 $.app.byViewId("FilePanel").setBusyIndicatorDelay(0).setBusy(true);
 
                 var vAppnm = this.oModel.getProperty("/Detail/Header/Appnm"),
-                    vStatus = this.oModel.getProperty("/Detail/Header/Status"),
-                    promises = this.oModel.getProperty("/Detail/AttachDomains").map(
-                        function (elem) {
-                            return Common.getPromise(
-                                function () {
-                                    FileHandler.setAttachFile(
-                                        this.oController,
-                                        {
-                                            Label: elem.Text,
-                                            Required: elem.Code === "6" ? false : true,
-                                            Appnm: vAppnm,
-                                            Mode: "S",
-                                            ReadAsync: true,
-                                            UseMultiCategories: true,
-                                            Editable: !vStatus || vStatus === "AA" ? true : false
-                                        },
-                                        Common.lpad(elem.Code, 3)
-                                    );
-                                }.bind(this)
-                            );
-                        }.bind(this)
-                    );
+                    vStatus = this.oModel.getProperty("/Detail/Header/Status");
 
                 setTimeout(function () {
-                    Promise.all(promises).then(function () {
-                        $.app.byViewId("FilePanel").setBusy(false);
-                    });
-                }, 100);
+                    FileHandler.once.call(this.oController, vAppnm).then(function() {
+                        Promise.all(this.oModel.getProperty("/Detail/AttachDomains").map(
+                            function (elem) {
+                                return Common.getPromise(
+                                    function () {
+                                        FileHandler.setAttachFile(
+                                            this.oController,
+                                            {
+                                                Label: elem.Text,
+                                                Required: elem.Code === "6" ? false : true,
+                                                Appnm: vAppnm,
+                                                Mode: "S",
+                                                ReadAsync: true,
+                                                UseMultiCategories: true,
+                                                Editable: !vStatus || vStatus === "AA" ? true : false
+                                            },
+                                            Common.lpad(elem.Code, 3)
+                                        );
+                                    }.bind(this)
+                                );
+                            }.bind(this)
+                        )).then(function () {
+                            $.app.byViewId("FilePanel").setBusy(false);
+                        });
+                    }.bind(this));
+                }.bind(this), 100);
             },
 
             searchBank: function () {
