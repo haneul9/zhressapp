@@ -60,7 +60,7 @@
 					}).addStyleClass("button-light")
 				]
             })
-            .addStyleClass("app-nav-button-right");
+            .addStyleClass("app-nav-button-right mt-3px");
 
             var oTable = new sap.m.Table({
                 inset: false,
