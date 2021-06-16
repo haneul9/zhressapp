@@ -7,9 +7,10 @@ sap.ui.define(
         "common/DialogHandler",
         "common/OrgOfIndividualHandler",
 		"sap/ui/export/Spreadsheet",
-        "sap/ui/model/json/JSONModel"
+        "sap/ui/model/json/JSONModel",
+        "sap/m/MessageBox"
     ],
-    function (Common, CommonController, DialogHandler, OrgOfIndividualHandler, Spreadsheet, JSONModel) {
+    function (Common, CommonController, DialogHandler, OrgOfIndividualHandler, Spreadsheet, JSONModel, MessageBox) {
         "use strict";
 
         return CommonController.extend($.app.APP_ID, {
@@ -180,7 +181,7 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
@@ -239,11 +240,11 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
-                    sap.m.MessageBox.alert(oController.getBundleText("MSG_45002"), {
+                    MessageBox.alert(oController.getBundleText("MSG_45002"), {
                         title: oController.getBundleText("LABEL_00149"),
                         onClose: function () {
                             oController._RequestDialog.close();
@@ -254,16 +255,16 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
                 };
 
-                sap.m.MessageBox.confirm(oController.getBundleText("MSG_17003"), {
+                MessageBox.confirm(oController.getBundleText("MSG_17003"), {
                     // 신청하시겠습니까?
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -275,18 +276,18 @@ sap.ui.define(
                     createData = { TempPayDeductionTableIn1: [] },
                     vIdx = oTable.getSelectedIndices();
                 if (vIdx.length < 1) {
-                    sap.m.MessageBox.error(oController.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
+                    MessageBox.error(oController.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
                     return;
                 }
                 for (var i = 0; i < vIdx.length; i++) {
                     var detailData = {};
                     Object.assign(detailData, oController._ListJSonModel.getProperty(oTable.getContextByIndex(vIdx[i]).sPath));
                     if (detailData.Status == "ZZ") {
-                        sap.m.MessageBox.error(oController.getBundleText("MSG_50004")); // 진행상태가 중복인 것은 저장된 데이터가 아니라 삭제가 불가능합니다.
+                        MessageBox.error(oController.getBundleText("MSG_50004")); // 진행상태가 중복인 것은 저장된 데이터가 아니라 삭제가 불가능합니다.
                         return;
                     }
                     if (detailData.Apernr != oController.getView().getModel("session").getData().Pernr) {
-                        sap.m.MessageBox.error(oController.getBundleText("MSG_50005")); // 타인이 신청한 건은 삭제가 불가능합니다.
+                        MessageBox.error(oController.getBundleText("MSG_50005")); // 타인이 신청한 건은 삭제가 불가능합니다.
                         return;
                     }
 
@@ -321,11 +322,11 @@ sap.ui.define(
 
                     if (oController.Error == "E") {
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
-                    sap.m.MessageBox.alert(oController.getBundleText("MSG_00021"), {
+                    MessageBox.alert(oController.getBundleText("MSG_00021"), {
                         // 삭제되었습니다.
                         title: oController.getBundleText("LABEL_02053"),
                         onClose: function () {
@@ -336,16 +337,16 @@ sap.ui.define(
                 };
 
                 var CreateProcess = function (fVal) {
-                    if (fVal && fVal == sap.m.MessageBox.Action.YES) {
+                    if (fVal && fVal == MessageBox.Action.YES) {
                         oController._BusyDialog.open();
                         setTimeout(create, 100);
                     }
                 };
 
-                sap.m.MessageBox.confirm(oController.getBundleText("MSG_00051"), {
+                MessageBox.confirm(oController.getBundleText("MSG_00051"), {
                     // 선택된 행을 삭제하시겠습니까?
                     title: oController.getBundleText("LABEL_02053"), // 확인
-                    actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                     onClose: CreateProcess
                 });
             },
@@ -420,7 +421,7 @@ sap.ui.define(
                             cRowData.Lgart = rowElem.Coulmn_1; //  임금유형
                             cRowData.Betrg = "" + common.Common.toNumber(rowElem.Coulmn_2); //  금액
                             if (!rowElem.Coulmn_3 || rowElem.Coulmn_3 == "") {
-                                sap.m.MessageBox.alert(oController.getBundleText("MSG_50006"), { title: oController.getBundleText("LABEL_50011") }); // =통화키는 필수입력항목입니다.
+                                MessageBox.alert(oController.getBundleText("MSG_50006"), { title: oController.getBundleText("LABEL_50011") }); // =통화키는 필수입력항목입니다.
                                 return;
                             }
                             cRowData.Waers = rowElem.Coulmn_3; // 통화키
@@ -490,13 +491,13 @@ sap.ui.define(
                         oFileUploader.setVisible(false);
                         oFileUploader.setVisible(true);
                         oController.Error = "";
-                        sap.m.MessageBox.error(oController.ErrorMessage);
+                        MessageBox.error(oController.ErrorMessage);
                         return;
                     }
 
                     $.app.byId(oController.PAGEID + "_Table").clearSelection();
 
-                    sap.m.MessageBox.alert(vMessage, {
+                    MessageBox.alert(vMessage, {
                         // 업로드 완료하였습니다.
                         title: oController.getBundleText("LABEL_00150"), // 확인.
                         onClose: function () {}
@@ -570,7 +571,7 @@ sap.ui.define(
                                     oModel.setProperty("/Data/Ename", o.Otype === "P" ? o.Stext : "");
                                     oModel.setProperty("/Data/Bukrs", o.Otype === "P" ? o.Bukrs3 : "");
                                 } else {
-                                    sap.m.MessageBox.error(oController.getBundleText("MSG_50003"));
+                                    MessageBox.error(oController.getBundleText("MSG_50003"));
                                 }
                             };
 
@@ -603,7 +604,7 @@ sap.ui.define(
 				var aTableDatas = this._ListJSonModel.getProperty("/Data") || [];
 
 				if (!aTableDatas.length) {
-					MessageBox.warning(this.oController.getBundleText("MSG_00023")); // 다운로드할 데이터가 없습니다.
+					MessageBox.warning(this.getBundleText("MSG_00023")); // 다운로드할 데이터가 없습니다.
 					return;
 				}
 				
@@ -611,7 +612,7 @@ sap.ui.define(
 					worker: false,
 					dataSource: Common.convertListTimeToString(aTableDatas, "Begda", "ApplyDt"),
 					workbook: {columns: this.aColumnModel},
-					fileName: "${fileName}-${datetime}.xlsx".interpolate(this.oController.getBundleText("LABEL_50001"), moment().format("YYYY.MMDD"))
+					fileName: "${fileName}-${datetime}.xlsx".interpolate(this.getBundleText("LABEL_50001"), moment().format("YYYY.MMDD"))
 				}).build();
             },
 
