@@ -277,7 +277,7 @@ sap.ui.define(["../../common/Common", "../../common/CommonController", "../../co
             oFileUploader.setValue("");
 
             options.ListMode = options.Editable ? sap.m.ListMode.MultiSelect : sap.m.ListMode.None;
-            options.FileTypes = ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "zip", "jpeg"];
+            options.FileTypes = ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "jpeg"];
             if (!common.Common.isEmptyArray(opt.FileTypes)) options.FileTypes = opt.FileTypes;
 
             oAttachbox.getModel().setProperty("/Settings", options);
