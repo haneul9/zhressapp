@@ -26,10 +26,9 @@ common.AttachFileAction = {
 		var options = $.extend(
 				true,
 				{ 
-					Editable: false, 
-					Visible: true,
-					FileTypes: [], 
-					InfoMessage: "", 
+					Editable: false,
+					FileTypes: [],
+					InfoMessage: "",
 					Appnm: "",
 					Mode: "S",	// S: single file, M: multi file
 					Max: 2,
