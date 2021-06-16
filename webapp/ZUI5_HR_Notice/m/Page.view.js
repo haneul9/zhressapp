@@ -19,27 +19,26 @@
 			var vMonth = new Date().getMonth()+1;	
 
             var oInfoBox = new sap.m.HBox({
-                justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
                 fitContainer: true,
                 items: [
-                    new sap.m.HBox({
+                    new sap.m.VBox({
 						items: [
 							new sap.m.Input(oController.PAGEID + "_SearchInput",{
-                                width: "110px",
+                                width: "230px",
                                 value: "{ITitle}",
                                 placeholder: "{i18n>LABEL_57003}" // 검색어(제목)
-                            })
-                            .addStyleClass("mr-5px"),
+                            }),
                             new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
-							//	width: "220px",
+								width: "230px",
 								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
 								delimiter: "~",
 								dateValue: new Date(vYear, vMonth-2, 1),
 								secondDateValue: new Date(vYear, vMonth, 0)
-							})
+							}).addStyleClass("mt-10px mb-7px")
 						]
-                    }).addStyleClass("search-field-group pr-0"),
+                    }).addStyleClass("search-field-group"),
 					new sap.m.HBox({
+                        alignItems: sap.m.FlexAlignItems.Center,
 						items: [
 							new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
@@ -47,7 +46,6 @@
 							}).addStyleClass("button-search")
 						]
 					})
-					.addStyleClass("button-group pl-0")
                 ]
             })
             .addStyleClass("search-box-mobile h-auto")
@@ -64,11 +62,7 @@
 				itemPress: oController.onSelectedRow.bind(oController),
                 columns: [
                     new sap.m.Column ({
-                        width: "55%",
-                        hAlign: "Begin"
-                    }),
-                    new sap.m.Column ({
-                        width: "auto",
+                        width: "100%",
                         hAlign: "Begin"
                     })
                 ],
@@ -79,62 +73,46 @@
                         counter: 5,
                         cells: [
                             new sap.m.VBox({
+                                fitContainer: true,
+                                width: "100%",
                                 items: [
-                                    new sap.m.HBox({
-                                        fitContainer: true,
-                                        items: [
-                                            new sap.ui.core.HTML({
-                                                content: {
-                                                    parts: [{path : "Title"}, {path: "Newitem"}, {path: "Impor"}],
-                                                    formatter: function(v1, v2, v3) {
-                                                        if(Common.checkNull(v1)){
-                                                            return "";
-                                                        }else{
-                                                            var oList = [
-                                                                '<span class="font14px font-bold">' + v1 + '</span>',
-                                                                v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
-                                                                v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
-                                                            ].join("");
-                                                            return oList;
-                                                        }
-                                                    }
+                                    new sap.ui.core.HTML({
+                                        content: {
+                                            parts: [{path : "Title"}, {path: "Newitem"}, {path: "Impor"}],
+                                            formatter: function(v1, v2, v3) {
+                                                if(Common.checkNull(v1)){
+                                                    return "";
+                                                }else{
+                                                    var oList = [
+                                                        '<span class="font14px font-bold">' + v1 + '</span>',
+                                                        v2 === 'X' ? '<span class="IconNPosition">N</span>' : '',
+                                                        v3 === 'X' ? '<i class="FontRed-Ml3px fas fa-exclamation-circle"></i>' : ''
+                                                    ].join("");
+                                                    return oList;
                                                 }
-                                            })
-                                        ]
+                                            }
+                                        }
                                     }),
-                                    new sap.m.Text({ // 등록자
-                                        text: "{ApernTxt}",
-                                        textAlign: "Begin"
+                                    new sap.m.HBox({
+                                        justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
+                                        items: [
+                                            new sap.m.Text({ // 등록자
+                                                text: "{ApernTxt}",
+                                                textAlign: "Begin"
+                                            })
+                                            .addStyleClass("L2P13Font font-14px"),
+                                            new sap.m.Text({ // 등록일
+                                                text : {
+                                                    path : "Sdate",
+                                                    formatter : function(v){
+                                                        return v ? Common.DateFormatter(v) : "";
+                                                    }
+                                                },
+                                                textAlign: "Begin"
+                                            })
+                                            .addStyleClass("L2P13Font font-14px")
+                                        ]
                                     })
-                                    .addStyleClass("L2P13Font font-14px")
-                                ]
-                            }),
-                            new sap.m.VBox({
-                                items: [
-                                    new sap.m.Text({ // 등록일
-                                        text : {
-                                            path : "Sdate",
-                                            formatter : function(v){
-                                                return v ? Common.DateFormatter(v) : "";
-                                            }
-                                        },
-                                        textAlign: "Begin"
-                                    })
-                                    .addStyleClass("L2P13Font font-14px"),
-                                    new sap.ui.commons.TextView({
-                                        text : {
-                                            parts: [{path: "Aedtm"}, {path: "Aetim"}],
-                                            formatter: function(v1, v2) {
-                                                if(v1 && v2){
-                                                    v1 = Common.DateFormatter(v1);
-                                                    v2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm:ss" }).format(new Date(v2.ms), true);
-                                                }
-                                                return v1 + " " + v2; 
-                                            }
-                                        }, 
-                                        textAlign : "Center"
-                                    })
-                                    .addStyleClass("L2P13Font font-14px")
                                 ]
                             })
                         ]
