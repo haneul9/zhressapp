@@ -1,25 +1,21 @@
 /* eslint-disable no-undef */
 sap.ui.define(
     [
-        "../../common/Common", //
-        "sap/m/InputBase",
+        "common/Common", //
         "../delegate/ViewTemplates"
     ],
-    function (Common, InputBase, ViewTemplates) {
+    function (Common, ViewTemplates) {
         "use strict";
 
         var DIALOG_DETAIL_ID = [$.app.CONTEXT_PATH, "RequestDialog"].join(".fragment.");
 
         sap.ui.jsfragment(DIALOG_DETAIL_ID, {
             createContent: function (oController) {
-             
                 var oDialog = new sap.m.Dialog({
                     contentWidth: "1400px",
                     contentHeight: "225px",
-                    title: "{i18n>LABEL_50001}",    // 일회성 지급/공제 신청
-                    content: [
-                        this.buildInfoBox(oController)
-                    ],
+                    title: "{i18n>LABEL_50001}", // 일회성 지급/공제 신청
+                    content: [this.buildInfoBox(oController)],
                     buttons: [
                         new sap.m.Button({
                             text: "{i18n>LABEL_00152}", // 신청
@@ -33,15 +29,14 @@ sap.ui.define(
                         }).addStyleClass("button-default custom-button-divide")
                     ]
                 })
-                .addStyleClass("custom-dialog-popup")
-                .setModel(oController._ApplyJSonModel)
-                .bindElement("/Data");
+                    .addStyleClass("custom-dialog-popup")
+                    .setModel(oController._ApplyJSonModel)
+                    .bindElement("/Data");
 
                 return oDialog;
             },
 
             buildInfoBox: function (oController) {
-
                 return new sap.m.Panel({
                     layoutData: new sap.m.FlexItemData({ minWidth: "1000px" }),
                     expanded: true,
@@ -56,34 +51,35 @@ sap.ui.define(
                                             new sap.m.HBox({
                                                 items: [
                                                     this.getLabel("{i18n>LABEL_32025}", true), // 대상자
-                                                    ViewTemplates.getCustomInput(oController.PAGEID +"_DetailEname", {
-                                                        layoutData: new sap.m.FlexItemData({ growFactor: 0, minWidth: "170px" }),
-                                                        customData: [
-                                                            
-                                                        ],
-                                                        width : "170px",
-                                                        fieldWidth: "170px",
-                                                        value: "{Pernr}",
-                                                        showValueHelp: true,
-                                                        valueHelpOnly: true,
-                                                        valueHelpRequest: oController.searchOrgehPernrByDetail.bind(oController)
-                                                    }, oController.clearDetailEname.bind(oController))
-                                                    .addStyleClass("field-min-width-50"),
+                                                    ViewTemplates.getCustomInput(
+                                                        oController.PAGEID + "_DetailEname",
+                                                        {
+                                                            layoutData: new sap.m.FlexItemData({ growFactor: 0, minWidth: "170px" }),
+                                                            customData: [],
+                                                            width: "170px",
+                                                            fieldWidth: "170px",
+                                                            value: "{Pernr}",
+                                                            showValueHelp: true,
+                                                            valueHelpOnly: true,
+                                                            valueHelpRequest: oController.searchOrgehPernrByDetail.bind(oController)
+                                                        },
+                                                        oController.clearDetailEname.bind(oController)
+                                                    ).addStyleClass("field-min-width-50")
                                                 ]
                                             }).addStyleClass("search-field-group"),
                                             new sap.m.HBox({
                                                 items: [
-                                                    this.getLabel("{i18n>LABEL_50003}",true), // 임금유형
+                                                    this.getLabel("{i18n>LABEL_50003}", true), // 임금유형
                                                     new sap.m.ComboBox({
-                                                	    required: true,
-														width: "100%",
-														selectedKey: "{Lgart}",
-														items: {
-															path: "/Lgart",
-															templateShareable: false,
-															template: new sap.ui.core.ListItem({key: "{Lgart}", text: "{Lgtxt2}"})
-														}
-													}).addStyleClass("custom-select-time"),
+                                                        required: true,
+                                                        width: "100%",
+                                                        selectedKey: "{Lgart}",
+                                                        items: {
+                                                            path: "/Lgart",
+                                                            templateShareable: false,
+                                                            template: new sap.ui.core.ListItem({ key: "{Lgart}", text: "{Lgtxt2}" })
+                                                        }
+                                                    }).addStyleClass("custom-select-time")
                                                 ]
                                             }).addStyleClass("search-field-group"),
                                             new sap.m.HBox({
@@ -93,10 +89,10 @@ sap.ui.define(
                                                         required: true,
                                                         width: "100%",
                                                         value: "{Betrg}",
-                                                        change : common.Common.onChangeMoneyInput
+                                                        change: Common.onChangeMoneyInput
                                                     })
                                                 ]
-                                            }).addStyleClass("search-field-group"),
+                                            }).addStyleClass("search-field-group")
                                         ]
                                     }).addStyleClass("search-inner-vbox"),
                                     new sap.m.VBox({
@@ -114,7 +110,7 @@ sap.ui.define(
                                                 items: [
                                                     this.getLabel("{i18n>LABEL_50004}", false), // 지급/공제일
                                                     new sap.m.Text({
-                                                        text : "{Begda}"
+                                                        text: "{Begda}"
                                                     }).addStyleClass("mx-10px")
                                                 ]
                                             }).addStyleClass("search-field-group"),
@@ -128,10 +124,10 @@ sap.ui.define(
                                                             path: "/Waers",
                                                             template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" }),
                                                             templateShareable: true
-                                                        },
-                                                    }).addStyleClass("custom-select-time"),
+                                                        }
+                                                    }).addStyleClass("custom-select-time")
                                                 ]
-                                            }).addStyleClass("search-field-group"),
+                                            }).addStyleClass("search-field-group")
                                         ]
                                     }).addStyleClass("search-inner-vbox")
                                 ]
@@ -140,9 +136,9 @@ sap.ui.define(
                                 items: [
                                     this.getLabel("{i18n>LABEL_34021}", false), // 비고
                                     new sap.m.Input({
-                                    	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                        layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                         width: "100%",
-                                        value: "{Notes}",
+                                        value: "{Notes}"
                                     })
                                 ]
                             }).addStyleClass("search-field-group")
@@ -151,8 +147,7 @@ sap.ui.define(
                 }).addStyleClass("custom-panel");
             },
 
-            getLabel: function(text, required, width) {
-
+            getLabel: function (text, required, width) {
                 return new sap.m.Label({
                     text: text,
                     width: width ? width : "120px",
