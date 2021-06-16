@@ -1661,7 +1661,7 @@ sap.ui.define([
 			// 	}
 			// });
 			oInData.forEach(function(e) {
-				if(oController.g_IDelTeacherList.getItems()[1].getText() === e.Pernr)
+				if(oController.g_IDelTeacherList.some(function(ele) {return ele.getItems()[1].getText() === e.Pernr;}))
 					oList.push(e);
 			});
 			this.TeacherInfoModel.setProperty("/InData", oList);
