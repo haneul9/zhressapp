@@ -1157,7 +1157,7 @@ sap.ui.define([
 			var oController = this;
 			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
 			oController.g_IDelTeacherList = [];
-			
+
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
 
@@ -1175,32 +1175,20 @@ sap.ui.define([
 		onOutCheck: function(oEvent) {
 			var oController = this;
 			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
-			var oList = [];
+			oController.g_ODelTeacherList = [];
 
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
-				oTeaList1.Pernr = e.getItems()[1].getText();
-				oTeaList1.Ename = e.getItems()[3].getValue();
-				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
-				oTeaList1.Sclas = "H";
-				oList.push(oTeaList1);
+
+				if(!e.getItems()[0].getSelected()){
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "H";
+					oController.g_ODelTeacherList.push(oTeaList1);
+				}
 			});
-			oController.TeacherInfoModel.setProperty("/OutData", oList);
-			
-			if(!oEvent.getSource().getSelected()){
-				var vIndex = this.g_ODelTeacherList.indexOf(oEvent.getSource().getParent());
-				
-				if(vIndex > -1) this.g_ODelTeacherList.splice(vIndex, 1);
-			}else {
-				oController.g_ODelTeacherList = [];
-				
-				oOutTeacherBox.getItems().forEach(function(e) {
-					if(e.getItems()[0].getSelected()) {
-						oController.g_ODelTeacherList.push(e);
-					}
-				});
-			}
 		},
 
 		onPressAddRow: function() { // 참석자 추가
@@ -1672,22 +1660,13 @@ sap.ui.define([
 
 		onOutPressDelRow: function(oEvent) { // 강사(외부)
 			var oController = this;
-			var oOutData = this.TeacherInfoModel.getProperty("/OutData");
 
 			if(Common.checkNull(this.g_ODelTeacherList)){
 				MessageBox.error(oController.getBundleText("MSG_70004"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
-			
-			this.g_ODelTeacherList.forEach(function(ele) {
-				var vItemIndex = oOutData.find(function(item) {return item.Ename === ele.getItems()[3].getValue();});
-				var Index = oOutData.indexOf(vItemIndex);
-				
-				if(oOutData.some(function(e) {return e.Ename === ele.getItems()[3].getValue();})){
-					oOutData.splice(Index, 1);
-				}
-			});
-			this.TeacherInfoModel.setProperty("/OutData", oOutData);
+
+			this.TeacherInfoModel.setProperty("/OutData", this.g_ODelTeacherList);
 			this.setTeacherBox("O");
 			this.g_ODelTeacherList = [];
 		},
