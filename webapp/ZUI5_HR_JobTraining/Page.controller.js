@@ -1156,7 +1156,8 @@ sap.ui.define([
 		onInCheck: function(oEvent) {
 			var oController = this;
 			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
-
+			oController.g_IDelTeacherList = [];
+			
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
 
