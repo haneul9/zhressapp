@@ -600,7 +600,7 @@ sap.ui.define(
             },
 
             pressExcelDownloadBtn: function() {
-				var aTableDatas = this._ListJSonModel.getProperty("/Data");
+				var aTableDatas = this._ListJSonModel.getProperty("/Data") || [];
 
 				if (!aTableDatas.length) {
 					MessageBox.warning(this.oController.getBundleText("MSG_00023")); // 다운로드할 데이터가 없습니다.
