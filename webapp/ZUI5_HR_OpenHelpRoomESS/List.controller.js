@@ -255,7 +255,7 @@ sap.ui.define([
 
 			var oPdfViewer = $.app.byId(this.PAGEID + "_PDFBox");
 
-			this.OpenHelpModel.setProperty("/PDFData/Url", "/ZUI5_HR_OpenHelpRoomESS/manual/notLoaded.pdf");
+			this.OpenHelpModel.setProperty("/PDFData/Url", "/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/hipdf/sample.pdf");
 			oPdfViewer.setBusyIndicatorDelay(0).setBusy(true);
 
 			Common.getPromise(true, function(resolve, reject) {
@@ -276,6 +276,8 @@ sap.ui.define([
 					sampleArr = Common.base64ToArrayBuffer(vFiledata.Mresource);
 
 					this.OpenHelpModel.setProperty("/PDFData/Url", Common.getBlobURL(vFiledata.Mimetype, sampleArr));
+				} else {
+					this.OpenHelpModel.setProperty("/PDFData/Url", "/notloaded.pdf");
 				}
 
 				oPdfViewer.setBusy(false);
