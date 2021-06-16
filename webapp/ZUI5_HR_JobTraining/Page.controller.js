@@ -1154,6 +1154,20 @@ sap.ui.define([
 		},
 
 		onInCheck: function(oEvent) {
+			var oController = this;
+			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
+			var oList = [];
+
+			oTeacherBox.getItems().forEach(function(e) {
+				var oTeaList1 = {};
+				oTeaList1.Pernr = e.getItems()[1].getText();
+				oTeaList1.Ename = e.getItems()[3].getValue();
+				oTeaList1.Times = e.getItems()[5].getValue();
+				oTeaList1.Tepay = e.getItems()[7].getValue();
+				oTeaList1.Sclas = "P";
+				oList.push(oTeaList1);
+			});
+			oController.TeacherInfoModel.setProperty("/InData", oList);
 
 			if(!oEvent.getSource().getSelected()){
 				var vIndex = this.g_IDelTeacherList.indexOf(oEvent.getSource().getParent());
