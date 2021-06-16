@@ -1158,8 +1158,16 @@ sap.ui.define([
 			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
 
 			oTeacherBox.getItems().forEach(function(e) {
-				if(!e.getItems()[0].getSelected())
-					oController.g_IDelTeacherList.push(e); 
+				var oTeaList1 = {};
+
+				if(!e.getItems()[0].getSelected()){
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "P";
+					oController.g_IDelTeacherList.push(oTeaList1);
+				}
 			});
 		},
 
@@ -1640,6 +1648,7 @@ sap.ui.define([
 				return ;
 			}
 
+			this.TeacherInfoModel.setProperty("/InData", this.g_IDelTeacherList);
 			this.setTeacherBox("I");
 			this.g_IDelTeacherList = [];
 		},
