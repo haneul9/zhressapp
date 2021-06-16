@@ -1166,16 +1166,11 @@ sap.ui.define([
 				oTeaList1.Tepay = e.getItems()[7].getValue();
 				oTeaList1.Sclas = "P";
 				oList.push(oTeaList1);
+
+				if(!e.getItems()[0].getSelected())
+					oController.g_IDelTeacherList.push(e); 
 			});
 			oController.TeacherInfoModel.setProperty("/InData", oList);
-
-			if(!oEvent.getSource().getSelected()){
-				var vIndex = this.g_IDelTeacherList.indexOf(oEvent.getSource().getParent());
-
-				if(vIndex > -1) this.g_IDelTeacherList.splice(vIndex, 1);
-			}else {
-				this.g_IDelTeacherList.push(oEvent.getSource().getParent());
-			}
 		},
 
 		onOutCheck: function(oEvent) {
@@ -1650,21 +1645,26 @@ sap.ui.define([
 		onInPressDelRow: function(oEvent) { // 강사(내부)
 			var oController = this;
 			var oInData = this.TeacherInfoModel.getProperty("/InData");
+			var oList = [];
 
 			if(Common.checkNull(this.g_IDelTeacherList)){
 				MessageBox.error(oController.getBundleText("MSG_70004"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
 			
-			this.g_IDelTeacherList.forEach(function(ele) {
-				var vItemIndex = oInData.find(function(item) {return item.Ename === ele.getItems()[3].getValue();});
-				var Index = oInData.indexOf(vItemIndex);
+			// this.g_IDelTeacherList.forEach(function(ele) {
+			// 	var vItemIndex = oInData.find(function(item) {return item.Ename === ele.getItems()[3].getValue();});
+			// 	var Index = oInData.indexOf(vItemIndex);
 				
-				if(oInData.some(function(e) {return e.Ename === ele.getItems()[3].getValue();})){
-					oInData.splice(Index, 1);
-				}
+			// 	if(oInData.some(function(e) {return e.Ename === ele.getItems()[3].getValue();})){
+			// 		oInData.splice(Index, 1);
+			// 	}
+			// });
+			oInData.forEach(function(e) {
+				if(this.g_IDelTeacherList.getItems()[1].getText() === e.Pernr)
+					oList.push(e);
 			});
-			this.TeacherInfoModel.setProperty("/InData", oInData);
+			this.TeacherInfoModel.setProperty("/InData", oList);
 			this.setTeacherBox("I");
 			this.g_IDelTeacherList = [];
 		},
