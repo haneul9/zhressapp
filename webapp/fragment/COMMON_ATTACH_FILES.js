@@ -406,6 +406,10 @@ fragment.COMMON_ATTACH_FILES = {
 				Datas.Data.push(vDifData);
 			}
 
+			JSonModel.setProperty("/Settings/Length", Datas.Data.length);
+			JSonModel.setProperty("/Data", Datas.Data);
+			JSonModel.refresh();
+
 			oAttachbox.setBusy(false);
 		} else {
 			if(aTempDatas.length) {
