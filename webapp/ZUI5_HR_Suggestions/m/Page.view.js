@@ -36,7 +36,7 @@
 								secondDateValue: new Date(vYear, vMonth, 0)
 							}).addStyleClass("mt-10px mb-7px")
 						]
-                    }).addStyleClass("search-field-group"),
+                    }).addStyleClass("search-field-group pr-0"),
 					new sap.m.HBox({
                         alignItems: sap.m.FlexAlignItems.Center,
 						items: [
