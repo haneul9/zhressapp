@@ -11,7 +11,7 @@ sap.ui.define([
 ) {
 "use strict";
 
-sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), { // 출장 사전 신청
+sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestList", { // 출장 사전 신청
 
 	createContent: function(oController) {
 
@@ -32,6 +32,20 @@ sap.ui.jsfragment([$.app.CONTEXT_PATH, "fragment", "RequestList"].join("."), { /
 			items: [
 				new sap.m.HBox({
 					items: [
+						new sap.m.Label({
+							visible: "{= ${HassMode} === true }",
+							text: "{i18n>LABEL_08007}" // 대상자
+						}),
+						new sap.m.Input({
+							visible: "{= ${HassMode} === true }",
+							width: "140px",
+							value: "{Ename}",
+							showValueHelp: true,
+							valueHelpOnly: true,
+							valueHelpRequest: function(oEvent) {
+								oController.searchProxyTarget.call(oController, oEvent);
+							}
+						}),
 						new sap.m.Label({text: "{i18n>LABEL_19101}"}), // 신청일
 						new PickOnlyDateRangeSelection({
 							displayFormat: "{Dtfmt}",

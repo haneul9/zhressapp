@@ -1,23 +1,17 @@
-/* global moment naver */
+/* global moment */
 sap.ui.define([
 	"common/Common",
-	"common/DialogHandler",
 	"common/map/AddressOverlay",
-	"common/map/CustomLayer",
 	"common/map/SouthKoreaBounds",
 	"common/map/LotteChemMap",
-	"./PlaceSearchDialogHandler",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"sap/ui/model/json/JSONModel"
 ], function(
 	Common,
-	DialogHandler,
 	AddressOverlay,
-	CustomLayer,
 	SouthKoreaBounds,
 	LotteChemMap,
-	PlaceSearchDialogHandler,
 	MessageBox,
 	BusyIndicator,
 	JSONModel
@@ -124,12 +118,6 @@ return {
 
 		return this;
 	},
-
-	// onBeforeOpen: function() {
-
-	// 	return Common.getPromise(function() {
-	// 	}.bind(this));
-	// },
 
 	onAfterOpen: function() {
 
@@ -357,15 +345,21 @@ return {
 		distance = this.oModel.getProperty("/LccMap/Results/distance");
 
 		if (!departure) {
-			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19633"))); // 출발지를 검색하세요.
+			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19633")), { // 출발지를 검색하세요.
+				title: this.oController.getBundleText("LABEL_00149") // 안내
+			});
 			return;
 		}
 		if (!destination) {
-			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19634"))); // 도착지를 검색하세요.
+			MessageBox.alert(this.oController.getBundleText("MSG_19036", this.oController.getBundleText("LABEL_19634")), { // 도착지를 검색하세요.
+				title: this.oController.getBundleText("LABEL_00149") // 안내
+			});
 			return;
 		}
 		if (!distance) {
-			MessageBox.alert(this.oController.getBundleText("MSG_19037")); // 이동거리 정보가 입력되지 않았습니다.\n출발지와 도착지를 다시 한 번 확인해주세요.
+			MessageBox.alert(this.oController.getBundleText("MSG_19037"), { // 이동거리 정보가 입력되지 않았습니다.\n출발지와 도착지를 다시 한 번 확인해주세요.
+				title: this.oController.getBundleText("LABEL_00149") // 안내
+			});
 			return;
 		}
 
@@ -390,7 +384,7 @@ return {
 
 		MessageBox.confirm(this.oController.getBundleText("MSG_00069"), { // Popup을 닫으시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					this.oDialog.setBusy(false);
 					this.oDialog.close();
 

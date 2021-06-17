@@ -6,7 +6,6 @@ sap.ui.define([
 	"common/PickOnlyDatePicker",
 	"common/PickOnlyDateRangeSelection",
 	"common/ZHR_TABLES",
-	"../delegate/TripPlaceDialogHandler",
 	"../delegate/ViewTemplates"
 ], function(
 	CommaInteger,
@@ -15,7 +14,6 @@ sap.ui.define([
 	PickOnlyDatePicker,
 	PickOnlyDateRangeSelection,
 	ZHR_TABLES,
-	TripPlaceDialogHandler,
 	ViewTemplates
 ) {
 "use strict";
@@ -547,7 +545,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			showOverlay: false,
 			showNoData: true,
 			width: "100%",
-			rowHeight: 37,
+			rowHeight: 44,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}"
 		})
@@ -580,7 +578,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.ExpenseDetailDialog", {
 			showOverlay: false,
 			showNoData: true,
 			width: "100%",
-			rowHeight: 37,
+			rowHeight: 44,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}"
 		})

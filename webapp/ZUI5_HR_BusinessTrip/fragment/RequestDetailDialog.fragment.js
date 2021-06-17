@@ -11,13 +11,10 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetailDialog", {
 
 		var oDialog = new sap.m.Dialog({
 			title: oController.getBundleText("LABEL_19002"), // 출장 신청
+			draggable: true,
 			contentWidth: "1600px",
 			contentHeight: "96%",
-			/*대근자
-			afterOpen : function(){oController.RequestDetailDialogHandler.bindAdded.call(oController,oController.RequestDetailDialogHandler.oDatas);},
-			*/
 			content: sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", oController),
-			draggable: true,
 			buttons: [ 
 				new sap.m.Button({
 					text: "{i18n>LABEL_00154}", // 재작성

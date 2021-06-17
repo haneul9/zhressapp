@@ -77,7 +77,7 @@ isTargetPernr: function() {
 		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
 		
 		oModel.read("/TwoFactorAuthCheckSet", {
-			asyn: true,
+			async: true,
 			filters: [
 				new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
 				new sap.ui.model.Filter("Device", sap.ui.model.FilterOperator.EQ, this._gateway.isMobile() ? 'M' : '')
@@ -211,6 +211,7 @@ requestCode: function(type) {
 			Cernm: code,
 			Percod: sessionStorage.getItem('ehr.odata.user.percod')
 		}, {
+			async: true,
 			success: function(data) {
 				this._gateway.prepareLog('HomeMFA.requestCode success', arguments).log();
 

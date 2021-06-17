@@ -440,9 +440,9 @@ retrieveLoginInfo: function() {
 		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
 		Percod = sessionStorage.getItem('ehr.odata.user.percod'),
 		Langu = sessionStorage.getItem('ehr.sf-user.language');
-		
+
 		oModel.read("/EmpLoginInfoSet", {
-			asyn: true,
+			async: true,
 			filters: [
 				new sap.ui.model.Filter("Lpmid", sap.ui.model.FilterOperator.EQ, "HACTA"),
 				new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, Percod),
@@ -471,7 +471,7 @@ retrieveLoginInfo: function() {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.retrieveLoginInfo');
 
 				sessionStorage.removeItem('ehr.odata.user');
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});

@@ -1,4 +1,4 @@
-/* global moment:true Promise:true */
+/* global moment Promise */
 sap.ui.define([
 	"common/Common",
 	"sap/m/MessageBox",
@@ -14,29 +14,23 @@ sap.ui.define([
 ) {
 "use strict";
 
-var Handler = {
+return {
 
 	oController: null,
 	oRowData: null,
 	oDialog: null,
-	//대근자
-	flag : "",
-	_dArr: new Array(),
-	_AddPersonDialog:null,
-	_addDatas:{id:""},
-	oDatas: null,
-	_Peridx:0,
-	_Daegun:"",
-	_Hando:"",
-	//
+	oSubstituteDialog: null,
+	aTripperList: null,
+	isSubstituteAdding: false,
+	isCheckedSubstituteAvailability: false,
 	oModel: new JSONModel({
 		Header: null,
-		BtPurpose1SelectList: null, // 출장구분 코드 목록
-		SubtySelectList: null,      // 근태유형 코드 목록
-		EncardSelectList: null,     // 출입카드 신청 코드 목록
-		EnameList: null,             // 출장자 popup 목록 : 대리인 자격으로 신청시
-		addData: new Array()		// 대근자 목록
+		BtPurpose1SelectList: null,	// 출장구분 코드 목록
+		SubtySelectList: null,		// 근태유형 코드 목록
+		EncardSelectList: null,		// 출입카드 신청 코드 목록
+		EnameList: null				// 출장자 popup 목록 : 대리인 자격으로 신청시
 	}),
+
 	// DialogHandler 호출 function
 	get: function(oController, oRowData) {
 
@@ -63,9 +57,22 @@ var Handler = {
 	// DialogHandler 호출 function
 	once: function() {
 
+		var minuteStep = 5,
+		HourSelectList = [{ value: "", text: "HH" }], MinuteSelectList = [{ value: "", text: "mm" }]; // 이동시간 Select
+		$.each(new Array(24), function(hour) {
+			hour = Common.lpad(hour, 2);
+			HourSelectList.push({ value: hour, text: hour });
+		});
+		$.each(new Array(60 / minuteStep), function(minute) {
+			minute = Common.lpad(minute * minuteStep, 2);
+			MinuteSelectList.push({ value: minute, text: minute });
+		});
+		this.oModel.setProperty("/HourSelectList", HourSelectList);
+		this.oModel.setProperty("/MinuteSelectList", MinuteSelectList);
+
 		var Pernr = this.oController.getSessionInfoByKey("name"),
 			Bukrs = this.oController.getSessionInfoByKey("Bukrs"),
-		    Langu = this.oController.getSessionInfoByKey("Langu");
+			Langu = this.oController.getSessionInfoByKey("Langu");
 
 		return Promise.all([
 			Common.getPromise(function() {
@@ -192,7 +199,6 @@ var Handler = {
 				{
 					IConType: $.app.ConType.CHECK,
 					IPernr: IPernr,
-					// IPernr: typeof this.oRowData.Btbpn === "undefined" ? this.oController.getSessionInfoByKey("name") : "",
 					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
 					ILangu: this.oController.getSessionInfoByKey("Langu"),
 					TableIn01: [Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn01", this.oRowData)],
@@ -200,10 +206,8 @@ var Handler = {
 					TableIn03: [], // 출장 일정 목록
 					TableIn04: [], // 동반출장자 목록
 					TableIn05: [], // 코스트센터 소속부서
-					TableIn06: [],  // 근태유형 코드 목록
-					/*대근자
-					TableIn07: []
-					*/
+					TableIn06: [], // 근태유형 코드 목록
+					TableIn07: []  // 대근자 목록
 				},
 				{
 					success: function(oData) {
@@ -228,7 +232,7 @@ var Handler = {
 								Header.BtPurpose1 = BtPurpose1SelectList.length === 1 ? this.oModel.getProperty("/BtPurpose1SelectList/0/Code") : this.oModel.getProperty("/BtPurpose1SelectList/1/Code");
 							}
 							if (!Header.Subty) {
-								Header.Subty = SubtySelectList.length === 1 ? this.oModel.getProperty("/SubtySelectList/0/Subty") : this.oModel.getProperty("/SubtySelectList/1/Subty");
+								Header.Subty = this.oModel.getProperty("/SubtySelectList/0/Subty");
 							}
 							if (this.oRowData.isReportPopup) {
 								Header.Edtfg = false;
@@ -277,10 +281,8 @@ var Handler = {
 								o.ExptTotAmt = Common.toNumber(o.ExptTotAmt);
 							});
 							this.oModel.setProperty("/TableIn03", TableIn03);
-	//						this.onShow.call(this);
 						} else {
 							this.oModel.setProperty("/TableIn03", [{}]);
-	//						this.initAdded.call(this.oController);
 						}
 						Common.adjustVisibleRowCount($.app.byId("TableIn03"), 5, TableIn03.length);
 
@@ -300,26 +302,22 @@ var Handler = {
 						this.oModel.setProperty("/MainCostCenterList", Common.getTableInResults(oData, "TableIn05")); // 코스트센터 소속부서
 
 						this.toggleAdvanceAmtState(); // 가지급금 입력 활성화 여부 결정
-						/* 대근자
-						var TableIn07 = Common.getTableInResults(oData, "TableIn07");
-						this.oModel.getProperty("/Header").Status1=="AA"?TableIn07=new Array():null;
-						this._dArr=TableIn07;					
-						this.renderAdded.call(this,$.app.getController(),TableIn07);
-						this.onShow.call(this,TableIn07,"V");
-						this.oModel.getProperty("/Header").Status1!="AA"?this.afterTable(TableIn07):null;
-						$.app.byId($.app.getController().PAGEID+"_aTable").getModel().setProperty("/addData", TableIn07);
-						*/
+
+						var TableIn07 = Common.getTableInResults(oData, "TableIn07"); // 대근자 목록
+						if (TableIn07.length) {
+							this.setSubstituteSchedule(TableIn07);
+						} else {
+							this.changeSubstituteData("onBeforeOpen");
+						}
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.onBeforeOpen error", oResponse);
 
 						var errData = Common.parseError(oResponse);
 						if (errData.Error && errData.Error === "E") {
-							MessageBox.error(errData.ErrorMessage, {
-								title: this.oController.getBundleText("LABEL_09029") // 확인
-							});
+							MessageBox.error(errData.ErrorMessage);
 						}
-					}.bind(this)
+					}
 				}
 			);
 		}.bind(this));
@@ -426,18 +424,16 @@ var Handler = {
 
 						BusyIndicator.hide();
 					}.bind(this),
-					error: function (oResponse) {
+					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.retrieveHeader error", oResponse);
 
 						var errData = Common.parseError(oResponse);
 						if (errData.Error && errData.Error === "E") {
-							MessageBox.error(errData.ErrorMessage, {
-								title: this.oController.getBundleText("LABEL_09029") // 확인
-							});
+							MessageBox.error(errData.ErrorMessage);
 						}
 
 						BusyIndicator.hide();
-					}.bind(this)
+					}
 				}
 			);
 		}.bind(this));
@@ -450,7 +446,7 @@ var Handler = {
 		Header = Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn02", data.Header || {});
 
 		if (!Header.BtPurpose1) {
-			return;
+			return new Promise(function(resolve, reject) { reject(); });
 		}
 
 		var TableIn03 = $.map(data.TableIn03, function(o, i) {
@@ -462,7 +458,7 @@ var Handler = {
 		}.bind(this));
 
 		if (!TableIn03.length) {
-			return;
+			return new Promise(function(resolve, reject) { reject(); });
 		}
 
 		var TableIn04 = $.map(data.TableIn04, function(o, i) {
@@ -475,7 +471,7 @@ var Handler = {
 
 		Header.Accfg = TableIn04.length > 0;
 
-		return Common.getPromise(function () {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtRequestSet",
 				{
@@ -484,11 +480,11 @@ var Handler = {
 					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
 					ILangu: this.oController.getSessionInfoByKey("Langu"),
 					TableIn01: [],
-					TableIn02: [Header],  // 출장 Header 정보
-					TableIn03: TableIn03, // 출장 일정 목록
-					TableIn04: TableIn04, // 동반출장자 목록
-					TableIn05: [], // 코스트센터 소속부서
-					TableIn06: []  // 근태유형 코드 목록
+					TableIn02: [Header],	// 출장 Header 정보
+					TableIn03: TableIn03,	// 출장 일정 목록
+					TableIn04: TableIn04,	// 동반출장자 목록
+					TableIn05: [],			// 코스트센터 소속부서
+					TableIn06: []			// 근태유형 코드 목록
 				},
 				{
 					success: function(oData) {
@@ -513,7 +509,8 @@ var Handler = {
 							this.oModel.setProperty("/TableIn02", TableIn02);
 
 							if (Header.IfAdv && Header.EventFiredOnAdvtot) {
-								MessageBox.warning(this.oController.getBundleText("MSG_19017"), { // 가지급금이 한도액(일비)를 초과했습니다.
+								MessageBox.alert(this.oController.getBundleText("MSG_19017"), { // 가지급금이 한도액(일비)를 초과했습니다.
+									title: this.oController.getBundleText("LABEL_00149"), // 안내
 									onClose: function() {
 										this.getModel().setProperty("/Header/EventFiredOnAdvtot", false);
 									}.bind(this)
@@ -564,6 +561,8 @@ var Handler = {
 						}
 
 						this.toggleAdvanceAmtState(); // 가지급금 입력 필드 활성화 여부 결정
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.calculateAmount error", oResponse);
@@ -571,27 +570,29 @@ var Handler = {
 						var errData = Common.parseError(oResponse);
 						if (errData.Error && errData.Error === "E") {
 							MessageBox.error(errData.ErrorMessage, {
-								title: this.oController.getBundleText("LABEL_09029") // 확인
+								onClose: function() {
+									reject();
+								}
 							});
 						}
-					}.bind(this)
+					}
 				}
 			);
 		}.bind(this));
 	},
 
-	openPersonDial: function(oEvent) {
-		var oEventSource = oEvent.getSource();
-		var target = oEventSource.data("target");
-		this.RequestDetailDialogHandler.flag="5";
-		var rowIndex = oEventSource.getParent().getParent().getIndex();
+	searchSubstitute: function(oEvent) {
+
+		var oEventSource = oEvent.getSource(),
+		targetPath = oEventSource.data("targetPath"),
+		rowIndex = oEventSource.getParent().getIndex();
+
 		SearchUser1.oController = this;
 		SearchUser1.searchAuth = "A";
 		SearchUser1.dialogContentHeight = 480;
-		SearchUser1.oTargetPaths = {
-			pernr: target.pernr.interpolate(rowIndex),
-			ename: target.ename.interpolate(rowIndex)
-		};
+		SearchUser1.targetPath = targetPath + rowIndex;
+
+		this.RequestDetailDialogHandler.isSubstituteAdding = true;
 
 		if (!this._AddPersonDialog) {
 			this._AddPersonDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this);
@@ -600,611 +601,505 @@ var Handler = {
 		this._AddPersonDialog.open();
 	},
 
-	changeSel : function(oEvent){
-		var oController=$.app.getController();
+	changeSubstitueCount: function(oEvent) {
+
 		var oEventSource = oEvent.getSource();
-		var oId=oEventSource.getId();
-		var s=oEventSource.getSelectedKey();
-		var idx=oEventSource.getCustomData()[0].getValue("Seqno");
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		var oModel=this.RequestDetailDialogHandler.oModel;
-		var aData=oModel.getProperty("/addData");
-		var selData={
-			Awper: "",
-			Awtxt: "",
-			Beguz: null,
-			Beguzenduz: "",
-			Cntgb: "",
-			Datum: null,
-			Ename: "",
-			Enduz: null,
-			Flag: "X",
-			IOdkey: "",
-			Ligbn: "",
-			LigbnTx: "",
-			Lttim: "",
-			Offck: "",
-			Ovtim: "",
-			Pernr: "",
-			Seqnr: "",
-			Tprog: "",
-			Wt12: "",
-			Wt40: "",
-			Wtsum: ""
-		}
-		var sData=null;
+		setTimeout(function() {
+			var TableIn07 = this.oModel.getProperty("/TableIn07"),
+			iCurrRowIndex = parseInt(oEventSource.data("RowIndex")),
+			iNextRowIndex = iCurrRowIndex + 1,
+			oCurrRowData = this.oModel.getProperty("/TableIn07/" + iCurrRowIndex),
+			oNextRowData = this.oModel.getProperty("/TableIn07/" + iNextRowIndex) || {},
+			oDefaultData = {
+				Awper: "",
+				Awtxt: "",
+				Beguz: null,
+				BeguzHour: null,
+				BeguzMinute: null,
+				Cntgb: "",
+				Datum: null,
+				Ename: "",
+				Enduz: null,
+				EnduzHour: null,
+				EnduzMinute: null,
+				Flag: "X",
+				Ligbn: "",
+				LigbnTx: "",
+				Lttim: "",
+				Offck: "",
+				Ovtim: "",
+				Pernr: "",
+				Seqnr: "",
+				Sobeg: null,
+				Soend: null,
+				Tprog: "",
+				Wt12: "",
+				Wt40: "",
+				Wtsum: ""
+			};
 
-		switch (s) {
-			case "0":
-				if(aData[idx+1].Flag=="X"){
-					aData.splice(parseInt(idx)+1,1);
-				}
-				aData[parseInt(idx)].Awper="";
-				aData[parseInt(idx)].Awtxt="";
-				aData[parseInt(idx)].Beguz=null;
-				aData[parseInt(idx)].Enduz=null;
-				aData[parseInt(idx)].Flag="A";
-				aData[parseInt(idx)].IOdkey="";
-				aData[parseInt(idx)].Ligbn="";
-				aData[parseInt(idx)].LigbnTx="";
-				aData[parseInt(idx)].Lttim="";
-				aData[parseInt(idx)].Offck="";
-				aData[parseInt(idx)].Ovtim="";
-				aData[parseInt(idx)].Tprog="";
-				aData[parseInt(idx)].Wt12="";
-				aData[parseInt(idx)].Wt40="";
-				aData[parseInt(idx)].Wtsum="";
-				break;
-			case "1":
-				if(aData[idx+1].Flag=="X"){
-					aData.splice(parseInt(idx)+1,1);
-				}
-				break;
-			case "2":
-				selData.Pernr=aData[parseInt(idx)].Pernr;
-				selData.Ename=aData[parseInt(idx)].Ename;
-				selData.Datum=aData[parseInt(idx)].Datum;
-				aData.splice(parseInt(idx)+1,0,selData);
-			break;
-			default:
-				break;
-		}
-		var oPro=oModel.getProperty("/addData");
-		this.RequestDetailDialogHandler.afterTable(oPro);
-		this.oDatas=oPro;
-		oModel.refresh();
-		var oFficialLength=10;
-		oPro.length>oFficialLength?oTable.setVisibleRowCount(oFficialLength):oTable.setVisibleRowCount(oPro.length);
-	},
+			switch (oEventSource.getSelectedKey()) {
+				case "0":
+					if (oNextRowData.Flag === "X") {
+						TableIn07.splice(iNextRowIndex, 1);
+					}
 
-	renderAdded : function(oController,pData){
-		var	oController = $.app.getController();
-		var c=sap.ui.commons;
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		oTable.destroyColumns();
-		var oFields=["Ename","Datum","Ename","Beguzenduz","Ovtim","Wt40","Wt12","Wtsum","LigbnTx","Cntgb"];
-		var oWidths=['','','','240px','','','','','',''];			
-		var oLabels=new Array();
-		var oFficialLength=10;
-		pData.length>oFficialLength?oTable.setVisibleRowCount(oFficialLength):oTable.setVisibleRowCount(pData.length);
-		for(var i=3;i<13;i++){
-			i<10?i="0"+i:null;
-			oLabels.push({Label:"LABEL_198"+i,Width:oWidths[i-3],Align:"Center"});
-		}
-		oLabels.forEach(function(e,i){
-			var oCol=new sap.ui.table.Column({
-				flexible : false,
-				autoResizable : true,
-				resizable : true,
-				showFilterMenuEntry : true,
-				filtered : false,
-				sorted : false
-			});
-			oCol.setWidth(e.Width);
-			oCol.setHAlign(e.Align);
-			oCol.setLabel(new sap.m.Text({text:oController.getBundleText(e.Label),textAlign:e.Align}));
-			
-			switch (i) {
-				case 0:
-					var oText=new sap.m.Text({
-						text:"{"+oFields[i]+"}",
-						textAlign : "Center"
-					}).addStyleClass("FontFamily")
-					oCol.setTemplate(oText);
-					break;
-				case 1:
-					var oText1=new sap.m.Text({
-						text : {
-							path : oFields[i], 
-							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
-						},
-						visible:{path:"Offck",formatter:function(fVal){
-							return fVal=="X"?false:true;
-						}},
-						textAlign : "Center"
-					}).addStyleClass("FontFamily");
-					var oText2=new sap.m.Text({
-						text : {
-							path : oFields[i], 
-							type : new sap.ui.model.type.Date({pattern: "yyyy-MM-dd"})
-						},
-						visible:{path:"Offck",formatter:function(fVal){
-							return fVal=="X"?true:false;
-						}},
-						textAlign : "Center"
-					}).addStyleClass("Red Bold");		
-					var oHori=new sap.ui.commons.layout.HorizontalLayout({
-						content:[oText1,oText2]
-					});
-					oCol.setTemplate(oHori);
-					break;
-				case 2:
-					var oText=new sap.m.Text({
-						text:"{Awtxt}",
-						visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
-							if(fVal=="X"){
-								return true;									
-							}else{
-								return false;
-							}
-						}}
-					}).addStyleClass("Red Bold");
-					var oInput = new sap.m.Input({
-						valueHelpRequest: function(oEvent){oController.RequestDetailDialogHandler.openPersonDial.call(oController,oEvent);},
-						editable: "{/Header/Edtfg}",
-						customData: new sap.ui.core.CustomData({
-							key: "target",
-							value: {
-								pernr: "/addData/${rowIndex}/Awper",
-								ename: "/addData/${rowIndex}/Awtxt"
-							}
-						}),
-						value: "{Awtxt}",
-						valueHelpOnly: true,
-						visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
-							if(fVal!="X"){
-								return fVal2=="0"?false:true;
-							}else{
-								return false;
-							}
-						}},
-						showValueHelp: true,
-						width: "100%"
-					});			
-					var oHori=new sap.ui.commons.layout.HorizontalLayout({
-						content:[oText,oInput]
-					});
-					oCol.setTemplate(oHori);
-					break;
+					oDefaultData.Pernr = oCurrRowData.Pernr;
+					oDefaultData.Ename = oCurrRowData.Ename;
+					oDefaultData.Cntgb = oCurrRowData.Cntgb;
+					oDefaultData.Datum = oCurrRowData.Datum;
+					oDefaultData.Offck = oCurrRowData.Offck;
+					oDefaultData.Flag = oCurrRowData.Flag;
 
-				case 3:
-				var oBeguz=new sap.m.TimePicker({
-					valueFormat : "HHmm",
-					displayFormat : "HH:mm",
-					value : "{Beguz}",
-					minutesStep : 10,
-					editable: "{/Header/Edtfg}",
-					width : "100px", 
-					textAlign : "Begin",
-					visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
-						if(fVal!="X"){
-							return fVal2=="0"?false:true;
-						}else{
-							return false;
-						}
-					}}
-				}).addStyleClass("pl-5px");
-				var oEnduz = new sap.m.TimePicker({
-					valueFormat : "HHmm",
-					displayFormat : "HH:mm",
-					value : "{Enduz}",
-					editable: "{/Header/Edtfg}",
-					minutesStep : 10,
-					width : "100px", 
-					textAlign : "Begin",
-					visible:{parts:[{path:"Offck"},{path:"Cntgb"}],formatter:function(fVal,fVal2){
-						if(fVal!="X"){
-							return fVal2=="0"?false:true;
-						}else{
-							return false;
-						}
-					}}
-				}).addStyleClass("pl-5px");			
-				var oHori=new sap.ui.commons.layout.HorizontalLayout({
-					content:[oBeguz,oEnduz]
-				});
-				oCol.setTemplate(oHori);
-				break;
-
-				case oFields.length-1:
-					var oSel=new sap.m.Select({change: function(oEvent){oController.RequestDetailDialogHandler.changeSel.call(oController,oEvent);},
-					visible:{parts:[{path:"Offck"},{path:"Flag"}],
-					formatter:function(fVal,fVal2){
-						if(fVal2=="A"){
-							return fVal=="X"?false:true;
-						}else{
-							return false;
-						}
-					}},selectedKey:"{"+oFields[i]+"}",customData : new sap.ui.core.CustomData({value:"{Seqno}",key:"Seqno"}),
-					editable: "{/Header/Edtfg}"});
-					oSel.addItem(new sap.ui.core.Item({
-						text:'',
-						key:''
-					}));
-					oSel.addItem(new sap.ui.core.Item({
-						text:oController.getBundleText('LABEL_19814'),
-						key:'0'
-					}));
-					oSel.addItem(new sap.ui.core.Item({
-						text:oController.getBundleText('LABEL_19815'),
-						key:'1'
-					}));
-					oSel.addItem(new sap.ui.core.Item({
-						text:oController.getBundleText('LABEL_19816'),
-						key:'2'
-					}));
-					oCol.setTemplate(oSel);
+					this.oModel.setProperty("/TableIn07/" + iCurrRowIndex, oDefaultData);
 					break;
-			
+				case "1":
+					if (oNextRowData.Flag === "X") {
+						TableIn07.splice(iNextRowIndex, 1);
+					}
+					break;
+				case "2":
+					oDefaultData.Pernr = oCurrRowData.Pernr;
+					oDefaultData.Ename = oCurrRowData.Ename;
+					oDefaultData.Datum = oCurrRowData.Datum;
+					oDefaultData.Offck = oCurrRowData.Offck;
+					oDefaultData.Sobeg = oCurrRowData.Sobeg;
+					oDefaultData.Soend = oCurrRowData.Soend;
+
+					TableIn07.splice(iNextRowIndex, 0, oDefaultData);
+					break;
 				default:
-					oCol.setTemplate(new sap.ui.commons.TextView({text:"{"+oFields[i]+"}",textAlign:"Center",visible:{path:"Offck",formatter:function(fVal){
-						return fVal=="X"?false:true;
-					}}}).addStyleClass("FontFamily"));
 					break;
-			}			
-			
-			oTable.addColumn(oCol);
-		});
-		this.bindAdded.call(oController,pData);
-	}, 
+			}
 
-	bindAdded : function(pData){
-		function timeForm(time){
-			time="PT"+time.substring(0,2)+"H"+time.substring(2,4)+"M00S";
-			return time;
-		}
-		var	oController = $.app.getController();
-		var c=sap.ui.commons;
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		var oJSON=this.RequestDetailDialogHandler.oModel;
-		var aData=oJSON.getData().addData=new Array();
-		pData.forEach(function(e){
-			aData.push(e);
-		});
-		oJSON.refresh();
-		oTable.setModel(null);
-		oTable.setModel(oJSON);
-		oTable.bindRows("/addData");
+			this.setSubstituteSchedule(TableIn07);
+		}.bind(this), 0);
 	},
 
-	onShow : function(oPro,vSig){
-		this._Hando="";
-		var jModel=this.oModel;
-		var oController=$.app.getController();
-		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
-		var oData3=this.oModel.getProperty("/TableIn03");
-		var oData4=this.oModel.getProperty("/TableIn04");
-		var tArr=new Array();
-		var dArr=new Array();
-		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
-		var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern: "KK:mm"});
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		var oPro=this.oModel.getProperty("/addData");
-		function timeForm(time){
-			time="PT"+time.substring(0,2)+"H"+time.substring(2,4)+"M00S";
-			return time;
-		}
-		//대근자 체크
-		function chkCover(vStrs){
-			for(var i=0;i<vStrs.length;i++){
-				var _Awchk="";
-				var vData={
-					IBegda: new Date(dateFormat.format(vStrs[i].IBegda)+"T09:00:00"),
-					IEndda: new Date(dateFormat.format(vStrs[i].IEndda)+"T09:00:00"),
-					IPernr: vStrs[i].IPernr,
-					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
-					Export: []
-				};
-				oModel.create("/VacationCoverTargetSet", vData, null,
-					function(data,res){
-						if(data&&data.Export.results.length){
-							_Awchk=data.Export.results[0].Awchk;
-						}				
-						if(_Awchk!=""){
-							dArr.push(vStrs[i]);
-						}
-					},
-					function (oError) {
-						var Err = {};						
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-							else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						} else {
-							sap.m.MessageBox.alert(oError.toString());
-						}
-					}
-				);
-			}
-		}		
-		if(oData3&&oData3.length){
-			if(oData3.length>0){
-				for(var i=0;i<oData3.length;i++){
-					if(oData3[i].BtStartdat!=undefined){
-						tArr.push({IPernr:this.oController.getSessionInfoByKey("Pernr"),IBegda:oData3[i].BtStartdat,IEndda:oData3[i].BtEnddat});
-						if(oData4&&oData4.length){
-							for(var j=0;j<oData4.length;j++){
-								if(oData4[j].Pernr!=undefined){
-									tArr.push({IPernr:oData4[j].Pernr,IBegda:oData3[i].BtStartdat,IEndda: oData3[i].BtEnddat});
-								}
-							}
-						}
-					}
-				}				
-			}
-		}
-		var oArray=new Array();
-		if(tArr&&tArr.length){
-			for(var i=0;i<tArr.length;i++){
-				oArray.push(tArr[i].IPernr);
-			}
-		}
-		var fArray=new Array();
-		oArray=Array.from(new Set(oArray));
-		for(var i=0;i<oArray.length;i++){
-			for(var j=0;j<tArr.length;j++){
-				if(oArray[i]==tArr[j].IPernr){
-					fArray.push(tArr[j]);
+	// 대근자 OT 시간 변경 event handler
+	changeSubstitueOT: function(oEvent) {
+
+		var oEventSource = oEvent.getSource(),
+		oEventSourceColumnId = oEventSource.getBindingInfo("selectedKey").binding.sPath, // BeguzHour, BeguzMinute, EnduzHour, EnduzMinute
+		iCurrRowIndex = parseInt(oEventSource.data("RowIndex"));
+
+		setTimeout(function() {
+			var oCurrRowData = this.oModel.getProperty("/TableIn07/" + iCurrRowIndex),
+				oCurrRowSobeg = moment(oCurrRowData.Datum).subtract(9, "hours").millisecond(oCurrRowData.Sobeg.ms),
+				oCurrRowBeguz,
+				oCurrRowEnduz;
+
+			if (oCurrRowData.BeguzHour && oCurrRowData.BeguzMinute) {
+				oCurrRowBeguz = moment(oCurrRowData.Datum).set({ hour: parseInt(oCurrRowData.BeguzHour), minute: parseInt(oCurrRowData.BeguzMinute) });
+				if (oCurrRowSobeg.isAfter(oCurrRowBeguz)) {
+					oCurrRowBeguz.add(1, "days");
 				}
+				setTimeout(function() {
+					this.oModel.setProperty("/TableIn07/${}/Beguz".interpolate(iCurrRowIndex), oCurrRowBeguz.toDate());
+				}.bind(this), 0);
 			}
-		}
-		chkCover.call(this,fArray);	
-		var vArr=new Array();
-		var vArr2=new Array();
-		var vTmps=new Array();
-		var vSame="";
-		if(this._dArr.length!=0){
-			if(dArr.length<this._dArr.length){
-				vSame="D";
-				for(var i=0;i<this._dArr.length;i++){
-					var vTmp=false;
-					for(var j=0;j<dArr.length;j++){
-						if((this._dArr[i].IBegda==dArr[j].IBegda)&&(this._dArr[i].IEndda==dArr[j].IEndda)&&(this._dArr[i].IPernr==dArr[j].IPernr)){
-							vTmp=true;
-							break;
-						}
-					}
-					if(!vTmp){
-						vArr.push(this._dArr[i]);
-					}
+			if (oCurrRowData.EnduzHour && oCurrRowData.EnduzMinute) {
+				oCurrRowEnduz = moment(oCurrRowData.Datum).set({ hour: parseInt(oCurrRowData.EnduzHour), minute: parseInt(oCurrRowData.EnduzMinute) });
+				if (oCurrRowSobeg.isAfter(oCurrRowEnduz)) {
+					oCurrRowEnduz.add(1, "days");
 				}
-			}else if(dArr.length>this._dArr.length){
-				vSame="A";
-				for(var i=0;i<dArr.length;i++){
-					var vTmp=false;
-					for(var j=0;j<this._dArr.length;j++){
-						if((dArr[i].IBegda==this._dArr[j].IBegda)&&(dArr[i].IEndda==this._dArr[j].IEndda)&&(dArr[i].IPernr==this._dArr[j].IPernr)){
-							vTmp=true;
-							break;
-						}
-					}
-					if(!vTmp){
-						vArr.push(dArr[i]);
-					}
+				if (oCurrRowBeguz && oCurrRowBeguz.isSameOrAfter(oCurrRowEnduz)) {
+					oCurrRowEnduz.add(1, "days");
 				}
-			}else if(dArr.length==this._dArr.length){
-				vSame="M";
-				for(var i=0;i<dArr.length;i++){
-					var vTmp=false;
-					for(var j=0;j<this._dArr.length;j++){
-						if((dArr[i].IBegda==this._dArr[j].IBegda)&&(dArr[i].IEndda==this._dArr[j].IEndda)&&(dArr[i].IPernr==this._dArr[j].IPernr)){
-							vTmp=true;
-							break;
-						}
-					}
-					if(!vTmp){
-						vArr.push(dArr[i]);
-					}
-				}
-				for(var i=0;i<this._dArr.length;i++){
-					var vTmp=false;
-					for(var j=0;j<dArr.length;j++){
-						if((dArr[j].IBegda==this._dArr[i].IBegda)&&(dArr[j].IEndda==this._dArr[i].IEndda)&&(dArr[j].IPernr==this._dArr[i].IPernr)){
-							vTmp=true;
-							break;
-						}
-					}
-					if(!vTmp){
-						vArr2.push(this._dArr[i]);
-					}
-				}
+				setTimeout(function() {
+					this.oModel.setProperty("/TableIn07/${}/Enduz".interpolate(iCurrRowIndex), oCurrRowEnduz.toDate());
+				}.bind(this), 0);
 			}
-			if(vArr.length!=0){
-				if(vSame=="A"){
-					var vStructure=this.onSearchDG.call(this,vArr,vSame);
-					vStructure.forEach(function(e){
-						oPro.push(e);
-					});				
-					this.afterTable(oPro);
-				}else if(vSame=="M"){
-					if(vSig=="S"){
-						vTmps=new Array();
-						for(var i=0;i<oPro.length;i++){
-							var vSignal=false;
-							for(var j=0;j<vArr2.length;j++){
-								if(new Date(oPro[i].Datum).getTime()>=new Date(vArr2[j].IBegda).getTime()&&new Date(oPro[i].Datum).getTime()<=new Date(vArr2[j].IEndda).getTime()){
-									vSignal=true;
-									break;
-								}
-							}
-							if(!vSignal){
-								vTmps.push(oPro[i]);
-							}
-						}
-					}else if(vSig=="X"){
-						vTmps=new Array();
-						for(var i=0;i<oPro.length;i++){
-							var vSignal=false;
-							for(var j=0;j<vArr2.length;j++){
-								if(oPro[i].Pernr==vArr2[j].IPernr){
-									vSignal=true;
-									break;
-								}
-							}
-							if(!vSignal){
-								vTmps.push(oPro[i]);
-							}
-						}
-					}
-					var vStructure=this.onSearchDG.call(this,vArr,vSame);
-					vStructure.forEach(function(e){
-						vTmps.push(e);
-					});				
-					this.afterTable(vTmps);
-				}else if(vSame=="D"){
-					if(vSig=="D1"){
-						vTmps=new Array();
-						for(var i=0;i<oPro.length;i++){
-							var vSignal=false;
-							for(var j=0;j<vArr.length;j++){
-								if(new Date(oPro[i].Datum).getTime()>=new Date(vArr[j].IBegda).getTime()&&new Date(oPro[i].Datum).getTime()<=new Date(vArr[j].IEndda).getTime()){
-									vSignal=true;
-									break;
-								}
-							}
-							if(!vSignal){
-								vTmps.push(oPro[i]);
-							}
-						}
-					}else if(vSig=="D2"){
-						vTmps=new Array();
-						for(var i=0;i<oPro.length;i++){
-							var vSignal=false;
-							for(var j=0;j<vArr.length;j++){
-								if(oPro[i].Pernr==vArr[j].IPernr){
-									vSignal=true;
-									break;
-								}
-							}
-							if(!vSignal){
-								vTmps.push(oPro[i]);
-							}
-						}
-					}
-					this.afterTable(vTmps);
+			this.oModel.setProperty("/TableIn07/${}/Ligbn".interpolate(iCurrRowIndex), "");
+			this.oModel.setProperty("/TableIn07/${}/LigbnTx".interpolate(iCurrRowIndex), this.oController.getBundleText("LABEL_19819")); // 한도체크 필요
+
+			if (!oCurrRowBeguz || !oCurrRowEnduz) {
+				return;
+			}
+
+			// 동일 일자 대근자가 2명인 경우 OT 시간이 겹치는지 확인
+			var existOT, inputOT = { Beguz: oCurrRowBeguz, Enduz: oCurrRowEnduz };
+
+			// 동일 일자 두번째 대근자의 OT 입력인 경우
+			if (oCurrRowData.Flag === "X") {
+				var oPrevRowData = this.oModel.getProperty("/TableIn07/" + (iCurrRowIndex - 1)) || {}; // 동일 일자 첫번째 대근자의 OT 정보
+				if (!oPrevRowData.BeguzHour || !oPrevRowData.BeguzMinute || !oPrevRowData.EnduzHour || !oPrevRowData.EnduzMinute) {
+					return;
 				}
+
+				existOT = this.getOtMoments(oPrevRowData);
 			}
-		}else{
-			this.onSearchDG.call(this,dArr,vSig);
-		}
-		this._dArr=dArr;
-		if(dArr.length!=0){
-			if(vSig!="V"){
-				sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19042"));
+			// 동일 일자 첫번째 대근자의 OT 입력인 경우
+			else {
+				var oNextRowData = this.oModel.getProperty("/TableIn07/" + (iCurrRowIndex + 1)) || {}; // 동일 일자 두번째 대근자의 OT 정보
+				if (oNextRowData.Flag !== "X" || !oNextRowData.BeguzHour || !oNextRowData.BeguzMinute || !oNextRowData.EnduzHour || !oNextRowData.EnduzMinute) {
+					return;
+				}
+
+				existOT = this.getOtMoments(oNextRowData);
 			}
-		}
+
+			if (   (existOT.Beguz.isSameOrBefore(inputOT.Beguz) && inputOT.Beguz.isBefore(existOT.Enduz)      )	// OT 시작 시각이 기입력된 OT 시간대 중간에 있는 경우
+				|| (      existOT.Beguz.isBefore(inputOT.Enduz) && inputOT.Enduz.isSameOrBefore(existOT.Enduz))	// OT 종료 시각이 기입력된 OT 시간대 중간에 있는 경우
+				|| (inputOT.Beguz.isSameOrBefore(existOT.Beguz) && existOT.Enduz.isSameOrBefore(inputOT.Enduz))	// 입력 OT 시간대가 기입력된 OT 시간대를 포함하는 경우
+			) {
+				var Dtfmt = this.oController.getSessionInfoByKey("Dtfmt").toUpperCase(),
+				Datum = moment(oCurrRowData.Datum).format(Dtfmt);
+
+				MessageBox.alert(this.oController.getBundleText("MSG_19050", Datum), { // {0} 일자 대근자들의 OT 시간이 겹칩니다. 다시 입력해주세요.
+					title: this.oController.getBundleText("LABEL_00149"), // 안내
+					onClose: function() {
+						this.oModel.setProperty("/TableIn07/${}/${}".interpolate(iCurrRowIndex, oEventSourceColumnId), null);
+						this.oModel.setProperty("/TableIn07/${}/${}".interpolate(iCurrRowIndex, oEventSourceColumnId.replace(/^(.{5}).+/, "$1")), null);
+					}.bind(this)
+				});
+			}
+		}.bind(this), 0);
 	},
 
-	afterTable : function(oDatas){
-		function timeDec(fValue) {
-			if(typeof(fValue)!="string"){
-				if (fValue) {			
-					var date = new Date(fValue.ms);			
-					var timeinmiliseconds = date.getTime();			
-					var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({			
-					pattern: "kk:mm"});			
-					var TZOffsetMs = new Date(0).getTimezoneOffset() * 60 * 1000;			
-					var timeStr = timeFormat.format(new Date(timeinmiliseconds + TZOffsetMs));			
-					return timeStr;			
-				}else{			
-					return fValue;		
-				}
-			}else{
-				return fValue;
-			}
-		};
-		var oController=$.app.getController();
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		if(oDatas.length>0){
-			oDatas.sort(function(a,b){
-				return a.Datum < b.Datum ? -1 : a.Datum > b.Datum ? 1 : 0;
+	getOtMoments: function(rowData) {
+
+		if (!rowData.BeguzHour || !rowData.BeguzMinute || !rowData.EnduzHour || !rowData.EnduzMinute) {
+			return null;
+		}
+
+		var Sobeg = moment(rowData.Datum).subtract(9, "hours").millisecond(rowData.Sobeg.ms),
+			Beguz = moment(rowData.Datum).set({ hour: parseInt(rowData.BeguzHour), minute: parseInt(rowData.BeguzMinute) }),
+			Enduz = moment(rowData.Datum).set({ hour: parseInt(rowData.EnduzHour), minute: parseInt(rowData.EnduzMinute) });
+
+		if (Sobeg.isAfter(Beguz)) { // 출장 일자 대근자의 기본 근무시작 시각보다 입력된 OT시작 시각이 이전이면 하루를 더함
+			Beguz.add(1, "days");
+		}
+		if (Sobeg.isSameOrAfter(Enduz)) { // 출장 일자 대근자의 기본 근무시작 시각보다 입력된 OT종료 시각이 같거나 이전이면 하루를 더함
+			Enduz.add(1, "days");
+		}
+		if (Beguz.isSameOrAfter(Enduz)) {
+			Enduz.add(1, "days");
+		}
+
+		return { Beguz: Beguz, Enduz: Enduz };
+	},
+
+	changeSubstituteData: function(trigger, contextDataList) {
+
+		BusyIndicator.show(0);
+
+		if (trigger === "pressRemoveSchedule") { // 출장 일정 삭제시 - 해당 대근자 목록 삭제
+			var removedScheduleMap = {};
+			$.map(contextDataList, function(o) {
+				var BtStartdat = moment(o.BtStartdat).startOf("date"),
+				BtEnddat = moment(o.BtEnddat).startOf("date");
+
+				removedScheduleMap[BtStartdat.format("YYYYMMDD")] = true;
+
+				$.map(BtEnddat.diff(BtStartdat, "days"), function() {
+					removedScheduleMap[BtStartdat.add(1, "days").format("YYYYMMDD")] = true;
+				});
 			});
+
+			var currentSubstituteList = this.oModel.getProperty("/TableIn07"),
+			list = $.map(currentSubstituteList, function(o) {
+				if (!removedScheduleMap[moment(o.Datum).format("YYYYMMDD")]) {
+					return o;
+				}
+			});
+
+			if (list.length) {
+				this.setSubstituteSchedule(list);
+			}
+
+			if (currentSubstituteList.length !== list.length) {
+				MessageBox.alert(this.oController.getBundleText("MSG_19042"), { // 출장 일정 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
+					title: this.oController.getBundleText("LABEL_00149"), // 안내
+					onClose: function() {
+						BusyIndicator.hide();
+					}
+				});
+			} else {
+				BusyIndicator.hide();
+			}
+
+		} else if (trigger === "pressRemoveAccompanier") { // 동반출장자 삭제시 - 해당 대근자 목록 삭제
+			var removedAccompanierMap = {};
+			$.map(contextDataList, function(o) {
+				removedAccompanierMap[o.Pernr] = true;
+			});
+
+			var currentSubstituteList = this.oModel.getProperty("/TableIn07"),
+			list = $.map(currentSubstituteList, function(o) {
+				if (!removedAccompanierMap[o.Pernr]) {
+					return o;
+				}
+			});
+
+			if (list.length) {
+				this.setSubstituteSchedule(list);
+			}
+
+			if (currentSubstituteList.length !== list.length) {
+				MessageBox.alert(this.oController.getBundleText("MSG_19043"), { // 동반출장자 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
+					title: this.oController.getBundleText("LABEL_00149"), // 안내
+					onClose: function() {
+						BusyIndicator.hide();
+					}
+				});
+			} else {
+				BusyIndicator.hide();
+			}
+
+		} else {
+			var tripperScheduleList = this.getTripperScheduleList(), // 화면 상의 출장자, 동반출장자 목록 취합
+			substituteNeedTripperList = [];
+
+			Promise.all(
+				$.map(tripperScheduleList, function(o) {
+					return this.checkSubstituteNeed(o, substituteNeedTripperList); // 대근자 필요여부 확인
+				}.bind(this))
+			)
+			.then(function() {
+				Common.log("substituteNeedTripperList", substituteNeedTripperList);
+				if (!substituteNeedTripperList.length) {
+					return;
+				}
+
+				return this.retrieveSubstituteSchedule(substituteNeedTripperList);
+			}.bind(this))
+			.then(function(substituteScheduleList) {
+				Common.log("substituteScheduleList", substituteScheduleList);
+
+				var currentSubstituteList = this.oModel.getProperty("/TableIn07") || [],
+				currentSubstituteDataMap = {}, // 기존 대근자 전체 정보
+				secondSubstituteDataMap = {}, // 기존 대근자 정보중 동일 일자 2번째 대근자 정보
+				newTableIn07 = [],
+				isChanged = false;
+
+				$.map(currentSubstituteList, function(o) {
+					var key = [o.Pernr, moment(o.Datum).format("YYYYMMDD"), o.Flag].join(",");
+					currentSubstituteDataMap[key] = o;
+
+					if (o.Flag === "X") {
+						secondSubstituteDataMap[key] = o; // 2번째 대근자 정보는 나중에 따로 끼워넣기 위해 저장해둠
+					}
+				});
+
+				Common.log("currentSubstituteDataMap", currentSubstituteDataMap);
+				Common.log("secondSubstituteDataMap", secondSubstituteDataMap);
+
+				// 새로 조회된 대근자 목록은 기본값으로 세팅된 정보만 조회되므로 기존에 입력된 대근자 정보로 덮어씀
+				$.map(substituteScheduleList, function(o) {
+					var sDatum = moment(o.Datum).format("YYYYMMDD"),
+					currentSubstituteData = currentSubstituteDataMap[[o.Pernr, sDatum, "A"].join(",")];
+
+					Common.log("currentSubstituteData", currentSubstituteData);
+
+					if (currentSubstituteData) { // 기존 입력된 대근자 정보가 존재하는 경우
+						$.extend(o, currentSubstituteData);
+					} else {
+						isChanged = true; // 기존 입력된 대근자 정보가 존재하지 않으면 대근자 목록이 변경된 것이므로 메세지를 보여줌
+					}
+
+					newTableIn07.push(o);
+
+					var secondSubstituteData = secondSubstituteDataMap[[o.Pernr, sDatum, "X"].join(",")];
+					if (secondSubstituteData) { // 동일 일자 두번째 대근자 끼워넣기
+						newTableIn07.push(secondSubstituteData);
+					}
+				});
+
+				if (newTableIn07.length !== currentSubstituteList.length) {
+					isChanged = true; // 기존 입력된 일부 대근자 정보만 삭제되는 경우에는 substituteScheduleList에 해당 정보가 없어 위 로직에서 isChanged flag를 true로 만들어 주지못함
+				}
+
+				Common.log("newTableIn07", newTableIn07);
+				Common.log("isChanged", isChanged);
+
+				if (isChanged) {
+					this.isCheckedSubstituteAvailability = false;
+
+					this.setSubstituteSchedule(newTableIn07);
+
+					if (trigger === "changeScheduleDate") {
+						MessageBox.alert(this.oController.getBundleText("MSG_19042"), { // 출장 일정 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
+							title: this.oController.getBundleText("LABEL_00149"), // 안내
+							onClose: function() {
+								BusyIndicator.hide();
+							}
+						});
+
+					} else if (trigger === "setAccompanier") {
+						MessageBox.alert(this.oController.getBundleText("MSG_19043"), { // 동반출장자 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
+							title: this.oController.getBundleText("LABEL_00149"), // 안내
+							onClose: function() {
+								BusyIndicator.hide();
+							}
+						});
+
+					} else if (trigger === "changeBtPurpose") {
+						MessageBox.alert(this.oController.getBundleText("MSG_19044"), { // 출장구분 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
+							title: this.oController.getBundleText("LABEL_00149"), // 안내
+							onClose: function() {
+								BusyIndicator.hide();
+							}
+						});
+
+					} else { // onBeforeOpen
+						BusyIndicator.hide();
+					}
+				} else {
+					BusyIndicator.hide();
+				}
+			}.bind(this));
+
 		}
-		oDatas.forEach(function(e,i){
-			e.Beguz=timeDec(e.Beguz);
-			e.Enduz=timeDec(e.Enduz);
-			e.Seqno=i;
-		});
-		this.oDatas=oDatas;
-		var oFficialLength=10;
-		oDatas.length>oFficialLength?oTable.setVisibleRowCount(oFficialLength):oTable.setVisibleRowCount(oDatas.length);
-		this.bindAdded.call(oController,oDatas);
-		this.oModel.refresh();
 	},
 
-	onSearchDG : function(dArr,vSig){
-		var jModel=this.oModel;
-		var oController=$.app.getController();
-		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
-		var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-dd" });
-		function timeForm(time){
-			time="PT"+time.substring(0,2)+"H"+time.substring(2,4)+"M00S";
-			return time;
-		}
-		var oModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
-		var oDatas=new Array();
-		var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern: "KK:mm"});
-		for(var i=0;i<dArr.length;i++){
-			var vData={IConType: "1",
-					IAwart: this.oModel.getProperty("/Header").BtPurpose1,
-					IProType : "1",
-					IBegda: new Date(dateFormat.format(dArr[i].IBegda)+"T09:00:00"),
-					IEndda: new Date(dateFormat.format(dArr[i].IEndda)+"T09:00:00"),
-					IPernr: dArr[i].IPernr,
-					IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
-					ILangu: this.oController.getSessionInfoByKey("Langu"),
-					TableIn: []};
-		
-			oModel.create("/VacationCoverSet", vData, null,
-				function(data,res){
-					if(data&&data.TableIn.results.length){
-						for(var j=0;j<data.TableIn.results.length;j++){
-							data.TableIn.results[j].Flag="A";
-							oDatas.push(data.TableIn.results[j]); 
-						}					
-					}				
+	// 대근자 필요여부 확인용 출장자 목록 및 출장자별 출장 일정 목록 취합
+	getTripperScheduleList: function() {
+
+		var IPernr = this.oModel.getProperty("/Header/Pernr"), // 출장자
+		IBukrs = this.oController.getSessionInfoByKey("Bukrs"),
+		tripperList = [];
+
+		$.map(this.oModel.getProperty("/TableIn03") || [], function(o) {
+			if (o.BtCity && o.BtStartdat && o.BtEnddat) {
+				tripperList.push({ IPernr: IPernr, IBukrs: IBukrs, IBegda: o.BtStartdat, IEndda: o.BtEnddat }); // 출장자 및 출장자의 출장일정
+
+				$.map(this.oModel.getProperty("/TableIn04") || [], function(p) { // 동반출장자 및 동반출장자의 출장일정
+					if (p.Pernr) {
+						tripperList.push({ IPernr: p.Pernr, IBukrs: IBukrs, IBegda: o.BtStartdat, IEndda: o.BtEnddat });
+					}
+				});
+			}
+		}.bind(this));
+
+		return tripperList;
+	},
+
+	// 대근자 필요여부 확인
+	checkSubstituteNeed: function(o, substituteNeedTripperList) {
+
+		var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
+
+		return Common.getPromise(true, function(resolve, reject) {
+			oModel.create(
+				"/VacationCoverTargetSet",
+				{
+					IPernr: o.IPernr,
+					IBukrs: o.IBukrs,
+					IBegda: moment(o.IBegda).startOf("date").add(9, "hours").toDate(),
+					IEndda: moment(o.IEndda).startOf("date").add(9, "hours").toDate(),
+					Export: []
 				},
-				function (oError) {
-					var Err = {};						
-					if (oError.response) {
-						Err = window.JSON.parse(oError.response.body);
-						var msg1 = Err.error.innererror.errordetails;
-						if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-						else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-					} else {
-						sap.m.MessageBox.alert(oError.toString());
+				{
+					success: function(oData) {
+						if (((((oData || {}).Export || {}).results || [{}])[0] || {}).Awchk) {
+							substituteNeedTripperList.push(o);
+						}
+						resolve();
+					},
+					error: function(oResponse) {
+						Common.log("RequestDetailDialogHandler.checkSubstituteNeed error", oResponse);
+
+						var errData = Common.parseError(oResponse);
+						if (errData.Error && errData.Error === "E") {
+							MessageBox.error(errData.ErrorMessage, {
+								onClose: function() {
+									reject();
+								}
+							});
+						}
 					}
 				}
 			);
-		}
-		
-		if(vSig=="A"||vSig=="M"){
-			return oDatas;
-		}else{
-			oDatas.sort(function(a,b){
-				return a.Datum < b.Datum ? -1 : a.Datum > b.Datum ? 1 : 0;
-			});
-			oDatas.forEach(function(e,i){
-				e.Seqno=i;
-			});
-			this.oDatas=oDatas;
-			this.bindAdded.call(this.oController,oDatas);
-			this.afterTable(oDatas);
-		}
-	}
-};
+		});
+	},
 
-return Handler;
+	// 대근자 목록 정보 model binding
+	setSubstituteSchedule: function(TableIn07) {
+
+		// 실제 response로 받는 시간 형식은 PT##H##M##S 형식이지만 ODataModel class에서 ms가 들어있는 JSON object로 변환해줌
+		var sPrevRowCntgb;
+		TableIn07.forEach(function(o, i) {
+			if ($.isPlainObject(o.Beguz) && typeof o.Beguz.ms === "number") {
+				var mBeguz = moment(o.Beguz.ms).subtract(9, "hours");
+				o.BeguzHour = mBeguz.format("HH");
+				o.BeguzMinute = mBeguz.format("mm");
+			}
+
+			if ($.isPlainObject(o.Enduz) && typeof o.Enduz.ms === "number") {
+				var mEnduz = moment(o.Enduz.ms).subtract(9, "hours");
+				o.EnduzHour = mEnduz.format("HH");
+				o.EnduzMinute = mEnduz.format("mm");
+			}
+
+			if (sPrevRowCntgb === "2") {
+				o.Flag = "X";
+			}
+			sPrevRowCntgb = o.Cntgb;
+
+			o.RowIndex = i;
+		});
+
+		this.oModel.setProperty("/TableIn07", TableIn07);
+		Common.adjustVisibleRowCount($.app.byId("TableIn07"), 10, TableIn07.length);
+	},
+
+	retrieveSubstituteSchedule: function(substituteNeedTripperList) {
+
+		var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV"),
+		BtPurpose1 = this.oModel.getProperty("/Header/BtPurpose1"),
+		Bukrs = this.oController.getSessionInfoByKey("Bukrs"),
+		Langu = this.oController.getSessionInfoByKey("Langu"),
+		substituteScheduleList = [];
+
+		return Promise.all(
+			$.map(substituteNeedTripperList, function(p) {
+				return Common.getPromise(true, function(resolve, reject) {
+					oModel.create(
+						"/VacationCoverSet",
+						{
+							IConType: "1",
+							IProType: "1",
+							IAwart: BtPurpose1,
+							IBegda: moment(p.IBegda).startOf("date").add(9, "hours").toDate(),
+							IEndda: moment(p.IEndda).startOf("date").add(9, "hours").toDate(),
+							IPernr: p.IPernr,
+							IBukrs: Bukrs,
+							ILangu: Langu,
+							TableIn: []
+						},
+						{
+							success: function(oData) {
+								$.map(Common.getTableInResults(oData, "TableIn"), function(o, i) {
+									o.Flag = "A";
+									o.RowIndex = i;
+
+									substituteScheduleList.push(o);
+								});
+
+								resolve();
+							},
+							error: function(oResponse) {
+								Common.log("RequestDetailDialogHandler.retrieveSubstituteSchedule error", oResponse);
+
+								var errData = Common.parseError(oResponse);
+								if (errData.Error && errData.Error === "E") {
+									MessageBox.error(errData.ErrorMessage, {
+										onClose: function() {
+											reject();
+										}
+									});
+								}
+							}
+						}
+					);
+				});
+			})
+		).then(function() {
+			return substituteScheduleList;
+		});
+	}
+
+};
 
 });

@@ -174,7 +174,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.CardExpenseDialog", {
 			showOverlay: false,
 			showNoData: true,
 			width: "100%",
-			rowHeight: 37,
+			rowHeight: 44,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}",
 			cellClick: CardExpenseDialogHandler.clickTableCell.bind(CardExpenseDialogHandler)

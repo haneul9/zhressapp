@@ -1,5 +1,6 @@
-/* global moment:true */
+/* global moment */
 sap.ui.define([
+	// "common/ApprovalLinesHandler",
 	"common/Common",
 	"common/DialogHandler",
 	"common/SearchOrg",
@@ -13,6 +14,7 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 ], function(
+	// ApprovalLinesHandler,
 	Common,
 	DialogHandler,
 	SearchOrg,
@@ -30,7 +32,6 @@ sap.ui.define([
 
 var OnRequest = { // 출장 event handler
 
-	_addRequiredData:null,
 	// 출장 신청 목록 조회
 	pressSearch: function(oEvent) {
 		Common.log("OnRequest.pressSearch", oEvent);
@@ -59,7 +60,6 @@ var OnRequest = { // 출장 event handler
 					success: function(oData) {
 						this.RequestListModel.setProperty("/", Common.getTableInResults(oData, "TableIn01"));
 						Common.adjustAutoVisibleRowCount.call($.app.byId("RequestListTable"));
-						this._addRequiredData=oData;
 						BusyIndicator.hide();
 					}.bind(this),
 					error: function(oResponse) {
@@ -147,10 +147,9 @@ var OnRequest = { // 출장 event handler
 
 	changeBtPurpose: function() {
 
-		this.RequestDetailDialogHandler.calculateAmount();
-		/*대근자
-		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"I");
-		*/
+		this.RequestDetailDialogHandler.calculateAmount().then(function() {
+			this.RequestDetailDialogHandler.changeSubstituteData("changeBtPurpose"); // 대근자
+		}.bind(this));
 	},
 
 	searchAccompanier: function(oEvent) {
@@ -158,25 +157,25 @@ var OnRequest = { // 출장 event handler
 		var oEventSource = oEvent.getSource(),
 		target = oEventSource.data("target"),
 		rowIndex = oEventSource.getParent().getIndex();
-		this.RequestDetailDialogHandler.flag="";
+
 		SearchUser1.oController = this;
 		SearchUser1.searchAuth = "A";
 		SearchUser1.dialogContentHeight = 480;
 		SearchUser1.oTargetPaths = {
-			// kostl: target.kostl.interpolate(rowIndex),
-			// kostx: target.kostx.interpolate(rowIndex),
 			pernr: target.pernr.interpolate(rowIndex),
 			ename: target.ename.interpolate(rowIndex)
 		};
+
+		this.RequestDetailDialogHandler.isSubstituteAdding = false;
 
 		if (!this._AddPersonDialog) {
 			this._AddPersonDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this);
 			this.getView().addDependent(this._AddPersonDialog);
 		}
-
 		this._AddPersonDialog.open();
 	},
 
+	// 사원 검색 공통 팝업에서 사용하는 조직 검색
 	searchOrg: function(oEvent) {
 
 		var oEventSourceId = oEvent.getSource().getId();
@@ -193,140 +192,196 @@ var OnRequest = { // 출장 event handler
 			}
 
 			this.oOrgSearchDialog.open();
-		}.bind($.app.getController()), 0);
+		}.bind(this), 0);
 	},
 
-	onValid : function(){
+	// 대근자 한도체크
+	checkSubstituteAvailability: function() {
 
-	},
+		setTimeout(function() {
+			var oModel = this.RequestDetailDialogHandler.getModel(),
+			TableIn07 = oModel.getProperty("/TableIn07");
 
-	checkDK : function(){
-		var oController=$.app.getController();
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		$.app.getController().RequestDetailDialogHandler.onShow.call($.app.getController().RequestDetailDialogHandler,
-		this.RequestDetailDialogHandler.oModel.getProperty("/addData"));
-	},
+			if (!TableIn07 || !TableIn07.length) {
+				MessageBox.alert(this.getBundleText("MSG_19041"), { // 대근자가 없습니다.
+					title: this.getBundleText("LABEL_00149") // 안내
+				});
+				return;
+			}
 
-	checkHD : function(){
-		var oController=$.app.getController();
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		var oModel = this.RequestDetailDialogHandler.oModel;
-		var oPro=oModel.getProperty("/addData");
-		var timeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern: "KK:mm"});
-		var vTmp=false,vTmp2=false;
-		if(oPro.length==0){
-			sap.m.MessageBox.alert(oController.getBundleText("MSG_19041"));
-			return;
-		}
-		if(oPro&&oPro.length){
-			oPro.forEach(function(e){
-				if(e.Cntgb!="0"){
-					e.Awtxt==""?vTmp=true:null;
-					if(e.Offck!="X"){
-						e.Beguz==null||e.Beguz==""?vTmp2=true:null;
-						e.Enduz==null||e.Enduz==""?vTmp2=true:null;
+			var isError = false,
+			TableIn = [];
+			$.each(TableIn07, function(i, o) {
+				if (o.Cntgb !== "0") {
+					if (!o.Awtxt) {
+						MessageBox.alert(this.getBundleText("MSG_19045"), { // 대근자를 모두 입력해주세요.
+							title: this.getBundleText("LABEL_00149") // 안내
+						});
+						isError = true;
+						return false;
+					}
+					if (o.Offck != "X" && (!o.Beguz || !o.Enduz)) {
+						MessageBox.alert(this.getBundleText("MSG_19046"), { // 대근자 OT시간을 모두 입력해주세요.
+							title: this.getBundleText("LABEL_00149") // 안내
+						});
+						isError = true;
+						return false;
 					}
 				}
-			});
-		}
-		if(vTmp){
-			sap.m.MessageBox.alert(oController.getBundleText("MSG_19043"));
-			return;
-		}
-		if(vTmp2){
-			sap.m.MessageBox.alert(oController.getBundleText("MSG_19044"));
-			return;
-		}
-		function timeForm(time){
-			time="PT"+time.split(":")[0]+"H"+time.split(":")[1]+"M00S";
-			return time;
-		}
-		oPro.forEach(function(e,i){
-			e.Beguz=timeForm(e.Beguz);
-			e.Enduz=timeForm(e.Enduz);
-			e.Ovtim==""?e.Ovtim="0.00":null;
-			e.Wt40==""?e.Wt40="0.00":null;
-			e.Wt12==""?e.Wt12="0.00":null;
-			e.Wtsum==""?e.Wtsum="0.00":null;
-			e.Lttim==""?e.Lttim="0.00":null;
-			delete e.Seqno;
-		});
-		var oProduct=new Array();
-		if(oPro&&oPro.length){
-			oPro.forEach(function(e){
-				oProduct.push(Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "VacationCoverTableIn", e));
-			});
-		}
 
-		var vData={ IConType: "1",
-					IProType: "2",
-					IPernr: oController.getSessionInfoByKey("Pernr"),
-					IBukrs: oController.getSessionInfoByKey("Bukrs"),
-					ILangu: oController.getSessionInfoByKey("Langu"),
-					TableIn: oProduct};
-					
-		var hModel=$.app.getModel("ZHR_WORKTIME_APPL_SRV");
-		hModel.create("/VacationCoverSet", vData, null,
-		function(data,res){
-			if(data&&data.TableIn.results.length){
-				oPro=data.TableIn.results;
-			}		
-			$.app.getController().RequestDetailDialogHandler._Hando="X";		
-			$.app.getController().RequestDetailDialogHandler.afterTable(oPro);
-			oModel.refresh();
-		}, 
-		function (oError) {
-			var Err = {};						
-			if (oError.response) {
-				Err = window.JSON.parse(oError.response.body);
-				var msg1 = Err.error.innererror.errordetails;
-				if(msg1 && msg1.length) sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-				else sap.m.MessageBox.alert(Err.error.innererror.errordetails[0].message);
-			} else {
-				sap.m.MessageBox.alert(oError.toString());
+				o.Beguz = "PT${}H${}M00S".interpolate(o.BeguzHour, o.BeguzMinute);
+				o.Enduz = "PT${}H${}M00S".interpolate(o.EnduzHour, o.EnduzMinute);
+				o.Ovtim = o.Ovtim || "0.00";
+				o.Wt40 = o.Wt40 || "0.00";
+				o.Wt12 = o.Wt12 || "0.00";
+				o.Wtsum = o.Wtsum || "0.00";
+				o.Lttim = o.Lttim || "0.00";
+
+				TableIn.push(Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "VacationCoverTableIn", o));
+			}.bind(this));
+
+			if (isError) {
+				return;
 			}
-		});
+
+			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
+				"/VacationCoverSet",
+				{
+					IConType: "1",
+					IProType: "2",
+					IBt: "X",
+					IPernr: this.getSessionInfoByKey("Pernr"),
+					IBukrs: this.getSessionInfoByKey("Bukrs"),
+					ILangu: this.getSessionInfoByKey("Langu"),
+					TableIn: TableIn
+				},
+				{
+					success: function(oData) {
+						var ResultTableIn = Common.getTableInResults(oData, "TableIn");
+						if (ResultTableIn.length) {
+							this.RequestDetailDialogHandler.isCheckedSubstituteAvailability = true;
+							this.RequestDetailDialogHandler.setSubstituteSchedule(ResultTableIn);
+						}
+						MessageBox.alert(this.getBundleText("MSG_19047"), { // 한도체크가 완료되었습니다. 신청 가능합니다.
+							title: this.getBundleText("LABEL_00149") // 안내
+						});
+					}.bind(this),
+					error: function(oResponse) {
+						Common.log("OnRequest.checkSubstituteAvailability error", oResponse);
+
+						var errData = Common.parseError(oResponse);
+						if (errData.Error && errData.Error === "E") {
+							var matcher = errData.ErrorMessage.match(/\d{8}\s[^\]\s]+/);
+							if (matcher && matcher.length >= 1) {
+								var rowSelector = matcher[0].split(" ");
+								$.each(TableIn07, function(i, o) {
+									if (moment(o.Datum).format("YYYYMMDD") === rowSelector[0] && o.Awtxt === rowSelector[1]) {
+										oModel.setProperty("/TableIn07/${}/Ligbn".interpolate(o.RowIndex), "2"); // 오류 발생 대근자 한도체크 아이콘 변경
+										oModel.setProperty("/TableIn07/${}/LigbnTx".interpolate(o.RowIndex), this.getBundleText("LABEL_19818")); // 불가능
+										return false;
+									}
+								}.bind(this));
+							}
+
+							MessageBox.error(errData.ErrorMessage); // [ 일자 성명 ] 대근자의 근로시간에 해당되는 OT시간을 입력하세요.
+						}
+					}.bind(this)
+				}
+			);
+		}.bind(this), 0);
 	},
 
-	setAdded : function(o){
+	setSubstitute: function(o) {
 
 		if (!o.Pernr) {
-			MessageBox.alert(this.getBundleText("MSG_02050")); // 대상자를 선택해 주시기 바랍니다.
+			MessageBox.alert(this.getBundleText("MSG_00076"), { // 대상자를 선택하세요.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
 			return;
 		}
-		var oController=$.app.getController();
-		var oTable=$.app.byId(oController.PAGEID+"_aTable");
-		this.RequestDetailDialogHandler.flag="";
-		var oModel = this.RequestDetailDialogHandler.oModel;
-		var oTargetPaths = SearchUser1.oTargetPaths;
-		oModel.setProperty(oTargetPaths.pernr, o.Pernr);
-		oModel.setProperty(oTargetPaths.ename, o.Ename || "");
-		oModel.refresh();
-		oTable.setModel(oModel);
-		oTable.bindRows("/addData");
-		this._AddPersonDialog.close();
+
+		var oModel = this.RequestDetailDialogHandler.getModel(),
+		tripperMap = {};
+
+		if (o.Pernr === oModel.getProperty("/Header/Pernr")) {
+			MessageBox.alert(this.getBundleText("MSG_19048"), { // 출장자를 대근자로 지정할 수 없습니다.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
+			return;
+		}
+
+		$.map(oModel.getProperty("/TableIn04") || [], function(p) { // 동반출장자
+			if (p.Pernr) {
+				tripperMap[p.Pernr] = true;
+			}
+		});
+
+		if (tripperMap[o.Pernr]) {
+			MessageBox.alert(this.getBundleText("MSG_19049"), { // 동반출장자를 대근자로 지정할 수 없습니다.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
+			return;
+		}
+
+		var targetRowData = oModel.getProperty(SearchUser1.targetPath),
+		Datum = moment(targetRowData.Datum).format("YYYYMMDD"),
+		substituteMap = {};
+
+		$.map(oModel.getProperty("/TableIn07") || [], function(p) { // 대근자
+			if ((p.Awper || "").replace(/^0+/, "")) {
+				var keys = [moment(p.Datum).format("YYYYMMDD"), p.Awper, p.Flag];
+				substituteMap[keys.join()] = keys;
+				keys.push(p.Pernr); // keys = [출장 일자, 대근자 사번, 첫번째 or 두번째 대근자 플래그, 출장자 사번]
+			}
+		});
+
+		var substitute1 = substituteMap[[Datum, o.Pernr, "A"].join()], // 같은 출장 일자에 첫번째 대근자로 이미 지정된 경우
+			substitute2 = substituteMap[[Datum, o.Pernr, "X"].join()]; // 같은 출장 일자에 두번째 대근자로 이미 지정된 경우
+		if ((substitute1 && substitute1.pop() !== targetRowData.Pernr)
+		 || (substitute2 && substitute2.pop() !== targetRowData.Pernr)) {
+			MessageBox.alert(this.getBundleText("MSG_19051"), { // 이미 지정된 대근자입니다.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
+			return;
+		}
+
+		oModel.setProperty(SearchUser1.targetPath, $.extend(targetRowData, {
+			Awper: o.Pernr,
+			Awtxt: o.Ename || "",
+			Ligbn: "",
+			LigbnTx: "",
+			Lttim: "",
+			Ovtim: "",
+			Wt12: "",
+			Wt40: "",
+			Wtsum: ""
+		}));
+
+		this.RequestDetailDialogHandler.isSubstituteAdding = false;
+		this.RequestDetailDialogHandler.isCheckedSubstituteAvailability = false;
+
+		SearchUser1.onClose();
 	},
 
 	setAccompanier: function(o) {
 
 		if (!o.Pernr) {
-			MessageBox.alert(this.getBundleText("MSG_02050")); // 대상자를 선택해 주시기 바랍니다.
+			MessageBox.alert(this.getBundleText("MSG_00076"), { // 대상자를 선택하세요.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
 			return;
 		}
 
 		var oModel = this.RequestDetailDialogHandler.getModel(),
 		oTargetPaths = SearchUser1.oTargetPaths;
 
-		// oModel.setProperty(oTargetPaths.kostl, o.Kostl || "");
-		// oModel.setProperty(oTargetPaths.kostx, o.Kostx || "");
 		oModel.setProperty(oTargetPaths.pernr, o.Pernr);
 		oModel.setProperty(oTargetPaths.ename, o.Ename || "");
 
-		this.RequestDetailDialogHandler.calculateAmount();
-		/*대근자
-		this.RequestDetailDialogHandler.oDatas!=null?
-		this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"X"):null;
-		*/
+		this.RequestDetailDialogHandler.calculateAmount().then(function() {
+			this.RequestDetailDialogHandler.changeSubstituteData("setAccompanier"); // 대근자
+		}.bind(this));
+
 		SearchUser1.onClose();
 	},
 
@@ -495,7 +550,9 @@ var OnRequest = { // 출장 event handler
 			var oTable = $.app.byId("TableIn03"),
 			aIndices = oTable.getSelectedIndices();
 			if (aIndices.length < 1) {
-				MessageBox.warning(this.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
+				MessageBox.alert(this.getBundleText("MSG_00050"), { // 삭제할 행을 선택하세요.
+					title: this.getBundleText("LABEL_00149") // 안내
+				});
 				return;
 			}
 
@@ -518,17 +575,16 @@ var OnRequest = { // 출장 event handler
 
 			MessageBox.confirm(this.getBundleText("MSG_00051"), { // 선택된 행을 삭제하시겠습니까?
 				onClose: function(oAction) {
-					if (sap.m.MessageBox.Action.OK === oAction) {
-						var TableIn03 = Common.getUnselectedRowsModelProperties(oTable),
+					if (MessageBox.Action.OK === oAction) {
+						var TableIn03Rows = Common.getRowsBySelectionState(oTable),
 						oModel = this.RequestDetailDialogHandler.getModel();
-						oModel.setProperty("/TableIn03", TableIn03);
+						oModel.setProperty("/TableIn03", TableIn03Rows.unselectedRows);
 						oModel.refresh();
-						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn03.length);
+						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn03Rows.unselectedRows.length);
 
-						this.RequestDetailDialogHandler.calculateAmount();
-						/*대근자
-						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"D1");
-						*/
+						this.RequestDetailDialogHandler.calculateAmount().then(function() {
+							this.RequestDetailDialogHandler.changeSubstituteData("pressRemoveSchedule", TableIn03Rows.selectedRows); // 대근자
+						}.bind(this));
 					}
 				}.bind(this)
 			});
@@ -554,7 +610,9 @@ var OnRequest = { // 출장 event handler
 			var oTable = $.app.byId("TableIn04"),
 			aIndices = oTable.getSelectedIndices();
 			if (aIndices.length < 1) {
-				MessageBox.warning(this.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
+				MessageBox.alert(this.getBundleText("MSG_00050"), { // 삭제할 행을 선택하세요.
+					title: this.getBundleText("LABEL_00149") // 안내
+				});
 				return;
 			}
 
@@ -577,17 +635,16 @@ var OnRequest = { // 출장 event handler
 
 			MessageBox.confirm(this.getBundleText("MSG_00051"), { // 선택된 행을 삭제하시겠습니까?
 				onClose: function(oAction) {
-					if (sap.m.MessageBox.Action.OK === oAction) {
-						var TableIn04 = Common.getUnselectedRowsModelProperties(oTable),
+					if (MessageBox.Action.OK === oAction) {
+						var TableIn04Rows = Common.getRowsBySelectionState(oTable),
 						oModel = this.RequestDetailDialogHandler.getModel();
-						oModel.setProperty("/TableIn04", TableIn04);
+						oModel.setProperty("/TableIn04", TableIn04Rows.unselectedRows);
 						oModel.refresh();
-						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn04.length);
+						Common.adjustVisibleRowCount(oTable.clearSelection(), 5, TableIn04Rows.unselectedRows.length);
 
-						this.RequestDetailDialogHandler.calculateAmount();
-						/*대근자
-						this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"D2");
-						*/
+						this.RequestDetailDialogHandler.calculateAmount().then(function() {
+							this.RequestDetailDialogHandler.changeSubstituteData("pressRemoveAccompanier", TableIn04Rows.selectedRows); // 대근자
+						}.bind(this));
 					}
 				}.bind(this)
 			});
@@ -632,23 +689,19 @@ var OnRequest = { // 출장 event handler
 					return i;
 				}
 			});
-			var RequestHandler=this.RequestDetailDialogHandler;
+
 			if (rowIndices.length) {
 				MessageBox.error(this.getBundleText("MSG_19015"), { // 기 신청한 출장 내역과 중복이 됩니다.\n확인하세요.
 					onClose: function() {
 						props.BtStartdat = null;
 						props.BtEnddat = null;
 						oModel.refresh();
-						/*대근자
-						this.RequestDetailDialogHandler.onShow.call(RequestHandler,null,"S");
-						*/
-					}.bind(this)
+					}
 				});
 			} else {
-				this.RequestDetailDialogHandler.calculateAmount();
-				/*대근자
-				this.RequestDetailDialogHandler.onShow.call(this.RequestDetailDialogHandler,null,"S");
-				*/
+				this.RequestDetailDialogHandler.calculateAmount().then(function() {
+					this.RequestDetailDialogHandler.changeSubstituteData("changeScheduleDate"); // 대근자
+				}.bind(this));
 			}
 		}.bind(this), 0);
 	},
@@ -689,14 +742,14 @@ var OnRequest = { // 출장 event handler
 
 		MessageBox.confirm(this.getBundleText("MSG_00059"), { // 삭제하시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					BusyIndicator.show(0);
 					setTimeout(OnRequest.remove.bind(this), 0);
 				}
 			}.bind(this)
 		});
 	},
-	
+
 	// 삭제
 	remove: function() {
 		Common.log("OnRequest.remove");
@@ -733,9 +786,7 @@ var OnRequest = { // 출장 event handler
 
 					var errData = Common.parseError(oResponse);
 					if (errData.Error && errData.Error === "E") {
-						MessageBox.error(errData.ErrorMessage, {
-							title: this.getBundleText("LABEL_09029") // 확인
-						});
+						MessageBox.error(errData.ErrorMessage);
 					}
 
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
@@ -751,7 +802,7 @@ var OnRequest = { // 출장 event handler
 
 		MessageBox.confirm(this.getBundleText("MSG_00058"), { // 저장하시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					BusyIndicator.show(0);
 					setTimeout(OnRequest.save.bind(this), 0);
 				}
@@ -774,30 +825,24 @@ var OnRequest = { // 출장 event handler
 			return;
 		}
 
-		var oTableIn03Rows = oModel.getProperty("/TableIn03"),
-		TableIn03 = $.map(oTableIn03Rows, function(p, i) {
+		var TableIn03 = $.map(oModel.getProperty("/TableIn03"), function(p, i) {
 			if (p.BtCity || p.BtStartdat || p.BtEnddat) {
 				p.Btseq = Common.lpad(i, 2);
 				return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn03", p);
 			}
 		});
 
-		var oTableIn04Rows = oModel.getProperty("/TableIn04"),
-		TableIn04 = $.map(oTableIn04Rows, function(p, i) {
+		var TableIn04 = $.map(oModel.getProperty("/TableIn04"), function(p, i) {
 			if (p.Pernr || p.Kostl) {
 				p.Btseq = Common.lpad(i, 2);
 				return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn04", p);
 			}
 		});
-		/*대근자
-		var TableIn07 = [];
-		var oPro=$.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData");
-		if(oPro&&oPro.length){
-			oPro.forEach(function(e){
-				TableIn07.push(Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", e));
-			});
-		}
-		*/
+
+		var TableIn07 = $.map(oModel.getProperty("/TableIn07"), function(p) {
+			return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", p);
+		});
+
 		oModel.setProperty("/Header/Accfg", TableIn04.length > 0);
 
 		if (oModel.getProperty("/Header/Status1") === "JJ") { // 상신취소 상태에서 저장시 키값 초기화
@@ -814,13 +859,11 @@ var OnRequest = { // 출장 event handler
 				ILangu: this.getSessionInfoByKey("Langu"),
 				TableIn01: [],
 				TableIn02: [Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn02", oModel.getProperty("/Header"))], // 출장 Header 정보
-				TableIn03: TableIn03, // 출장 일정 목록
-				TableIn04: TableIn04, // 동반출장자 목록
-				TableIn05: [], // 코스트센터 소속부서
-				TableIn06: [],  // 근태유형 코드 목록
-				/*대근자
-				TableIn07: [] 
-				*/
+				TableIn03: TableIn03,	// 출장 일정 목록
+				TableIn04: TableIn04,	// 동반출장자 목록
+				TableIn05: [],			// 코스트센터 소속부서
+				TableIn06: [],			// 근태유형 코드 목록
+				TableIn07: TableIn07	// 대근자
 			},
 			{
 				success: function(oData) {
@@ -846,9 +889,7 @@ var OnRequest = { // 출장 event handler
 
 					var errData = Common.parseError(oResponse);
 					if (errData.Error && errData.Error === "E") {
-						MessageBox.error(errData.ErrorMessage, {
-							title: this.getBundleText("LABEL_09029") // 확인
-						});
+						MessageBox.error(errData.ErrorMessage);
 					}
 
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
@@ -857,24 +898,23 @@ var OnRequest = { // 출장 event handler
 			}
 		);
 	},
-	
+
 	// 신청 확인
 	pressRequest: function() {
-		/*대근자
-		if($.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData").length!=0){
-			if(this.RequestDetailDialogHandler._Hando==""){
-				sap.m.MessageBox.alert($.app.getController().getBundleText("MSG_19039"));
-				return;
-			}
-		}
-		*/
 		Common.log("OnRequest.pressRequest");
+
+		if (this.RequestDetailDialogHandler.getModel().getProperty("/TableIn07").length && !this.RequestDetailDialogHandler.isCheckedSubstituteAvailability) {
+			MessageBox.alert(this.getBundleText("MSG_19039"), { // 한도체크를 진행 하세요.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
+			return;
+		}
 
 		this.RequestDetailDialogHandler.toggleButtonsState(false);
 
 		MessageBox.confirm(this.getBundleText("MSG_00060"), { // 신청하시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					BusyIndicator.show(0);
 					setTimeout(OnRequest.checkDuplication.bind(this), 0);
 				} else {
@@ -913,9 +953,7 @@ var OnRequest = { // 출장 event handler
 
 					var errData = Common.parseError(oResponse);
 					if (errData.Error && errData.Error === "E") {
-						MessageBox.error(errData.ErrorMessage, { // 결재 신청한 내역이 있습니다.
-							title: this.getBundleText("LABEL_09029") // 확인
-						});
+						MessageBox.error(errData.ErrorMessage);
 					}
 
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
@@ -925,15 +963,6 @@ var OnRequest = { // 출장 event handler
 		);
 	},
 
-	initTable : function(vSig){
-		this.RequestDetailDialogHandler.bindAdded([]);
-		this.RequestDetailDialogHandler._Daegun="";
-		this.RequestDetailDialogHandler._Hando="";
-		this.RequestDetailDialogHandler._dArr=new Array();
-		$.app.byId($.app.getController().PAGEID+"_aTable").setVisibleRowCount(0);
-	},
-
-
 	// 신청
 	request: function() {
 		Common.log("OnRequest.request");
@@ -941,7 +970,8 @@ var OnRequest = { // 출장 event handler
 		var oModel = this.RequestDetailDialogHandler.getModel(),
 		value = oModel.getProperty("/Header/CdIndpt");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19305")), { // {소속부서}을 선택하세요.
+			MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19305")), { // {소속부서}을 선택하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -952,7 +982,8 @@ var OnRequest = { // 출장 event handler
 		}
 		value = oModel.getProperty("/Header/Ename");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00054", this.getBundleText("LABEL_19306")), { // {출장자}를 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00054", this.getBundleText("LABEL_19306")), { // {출장자}를 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -963,7 +994,8 @@ var OnRequest = { // 출장 event handler
 		}
 		value = oModel.getProperty("/Header/ZsendKostl");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19307")), { // {비용귀속부서}를 선택하세요.
+			MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19307")), { // {비용귀속부서}를 선택하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -974,7 +1006,8 @@ var OnRequest = { // 출장 event handler
 		}
 		value = oModel.getProperty("/Header/BtPurpose1");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19308")), { // {출장구분}을 선택하세요.
+			MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19308")), { // {출장구분}을 선택하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -986,7 +1019,8 @@ var OnRequest = { // 출장 event handler
 		if (this.getSessionInfoByKey("Bukrs") === "1000") {
 			value = oModel.getProperty("/Header/Subty");
 			if (!$.trim(value)) {
-				MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19310")), { // {근태유형}을 선택하세요.
+				MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19310")), { // {근태유형}을 선택하세요.
+					title: this.getBundleText("LABEL_00149"), // 안내
 					onClose: function() {
 						this.RequestDetailDialogHandler.toggleButtonsState(true);
 						BusyIndicator.hide();
@@ -998,7 +1032,8 @@ var OnRequest = { // 출장 event handler
 		}
 		value = oModel.getProperty("/Header/Title");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19312")), { // {출장명}을 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19312")), { // {출장명}을 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -1009,7 +1044,8 @@ var OnRequest = { // 출장 event handler
 		}
 		value = oModel.getProperty("/Header/BtPurpose2");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19314")), { // {출장목적}을 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19314")), { // {출장목적}을 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -1024,7 +1060,8 @@ var OnRequest = { // 출장 event handler
 			$.each($.app.byId("TableIn03").getRows(), function(i, o) { // 행이 생성되었더라도 두 필수 항목이 모두 입력된 행만 신청데이터로 취합함.
 				var p = o.getRowBindingContext().getProperty();
 				if (!p.BtCity) {
-					MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19335")), { // {도시}를 선택하세요.
+					MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19335")), { // {도시}를 선택하세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.RequestDetailDialogHandler.toggleButtonsState(true);
 							BusyIndicator.hide();
@@ -1034,7 +1071,8 @@ var OnRequest = { // 출장 event handler
 					isInvalid = true;
 					return false;
 				} else if (!p.BtStartdat || !p.BtEnddat) {
-					MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19336")), { // {출장 기간}을 선택하세요.
+					MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19336")), { // {출장 기간}을 선택하세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.RequestDetailDialogHandler.toggleButtonsState(true);
 							BusyIndicator.hide();
@@ -1054,7 +1092,8 @@ var OnRequest = { // 출장 event handler
 		}
 
 		if (!TableIn03.length) {
-			MessageBox.error(this.getBundleText("MSG_19016"), { // 출장 일정 정보를 입력해주세요.
+			MessageBox.alert(this.getBundleText("MSG_19016"), { // 출장 일정 정보를 입력해주세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -1068,7 +1107,8 @@ var OnRequest = { // 출장 event handler
 			$.each($.app.byId("TableIn04").getRows(), function(i, o) { // 행이 생성되었더라도 두 필수 항목이 모두 입력된 행만 신청데이터로 취합함.
 				var p = o.getRowBindingContext().getProperty();
 				if (!p.Pernr && p.Kostl) {
-					MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19381")), { // {동반출장자}를 선택하세요.
+					MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19381")), { // {동반출장자}를 선택하세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.RequestDetailDialogHandler.toggleButtonsState(true);
 							BusyIndicator.hide();
@@ -1079,7 +1119,8 @@ var OnRequest = { // 출장 event handler
 					return false;
 				}
 				if (p.Pernr && !p.Kostl) {
-					MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19383")), { // {비용항목}을 선택하세요.
+					MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19383")), { // {비용항목}을 선택하세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.RequestDetailDialogHandler.toggleButtonsState(true);
 							BusyIndicator.hide();
@@ -1098,37 +1139,47 @@ var OnRequest = { // 출장 event handler
 				return;
 			}
 		}
-		/*대근자
-		var TableIn07 = [];
-		var oPro=$.app.byId($.app.getController().PAGEID+"_aTable").getModel().getProperty("/addData");
-		if(oPro&&oPro.length){
-			oPro.forEach(function(e){
-				TableIn07.push(Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", e));
-			});
-		}
-		*/
+
+		var TableIn07 = $.map(oModel.getProperty("/TableIn07"), function(o) {
+			return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", o);
+		});
+
 		oModel.setProperty("/Header/Accfg", TableIn04.length > 0);
 		oModel.setProperty("/Header/Status1", "");
 		oModel.setProperty("/Header/Appkey1", ""); // 신청시 결재상신없이 SMOIN 결재창을 닫아버리는 경우 Appkey1은 이미 생성되어 SAP에 저장되므로 신청시 무조건 Appkey1을 초기화함
 
 		if (oModel.getProperty("/Header/IfAdv")) {
-			MessageBox.warning(this.getBundleText("MSG_19017")); // 가지급금이 한도액(일비)를 초과했습니다.
+			MessageBox.alert(this.getBundleText("MSG_19017"), { // 가지급금이 한도액(일비)를 초과했습니다.
+				title: this.getBundleText("LABEL_00149") // 안내
+			});
 			this.RequestDetailDialogHandler.toggleButtonsState(true);
 			BusyIndicator.hide();
 		} else {
-			OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04);
-			/*대근자
-			OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07);
-			*/
+			// if (Common.isExternalIP()) {
+			// 	setTimeout(function() {
+			// 		var initData = {
+			// 			Mode: "P",																	// PC – P, Mobile - M
+			// 			Pernr: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+			// 			Empid: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+			// 			Bukrs: this.getSessionInfoByKey("Bukrs"),									// 각 업무에 맞게 작성
+			// 			ZappSeq: oModel.getProperty("/TableIn03/0/ClDmtr") === "1" ? "22" : "23"	// 신청서 번호 (국내출장: 22, 해외출장: 23)
+			// 		},
+			// 		callback = function(TableIn08) {
+			// 			OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07, TableIn08);	// 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+			// 		}.bind(this);
+
+			// 		this.ApprovalLinesHandler = ApprovalLinesHandler.get(this, initData, callback);
+			// 		DialogHandler.open(this.ApprovalLinesHandler);
+			// 	}.bind(this), 0);
+			// } else {
+				OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07);
+			// }
 		}
 	},
 
-	/*대근자
-	callRequestOData: function(Header, TableIn03, TableIn04, TableIn07) {
-	*/
 	// 신청 OData 호출
-	callRequestOData: function(Header, TableIn03, TableIn04) {
-		var vExtryn = Common.isExternalIP() === true ? "X" : "";
+	callRequestOData: function(Header, TableIn03, TableIn04, TableIn07, TableIn08) {
+		var vExtryn = Common.isExternalIP() ? "X" : "";
 
 		$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 			"/BtRequestSet",
@@ -1142,13 +1193,12 @@ var OnRequest = { // 출장 event handler
 				Export: [],
 				TableIn01: [],
 				TableIn02: [Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn02", Header)], // 출장 Header 정보
-				TableIn03: TableIn03, // 출장 일정 목록
-				TableIn04: TableIn04, // 동반출장자 목록
-				TableIn05: [], // 코스트센터 소속부서
-				TableIn06: [],  // 근태유형 코드 목록
-				/*대근자
-				TableIn07: TableIn07
-				*/
+				TableIn03: TableIn03,		// 출장 일정 목록
+				TableIn04: TableIn04,		// 동반출장자 목록
+				TableIn05: [],				// 코스트센터 소속부서
+				TableIn06: [],				// 근태유형 코드 목록
+				TableIn07: TableIn07		// 대근자 목록
+				// TableIn08: TableIn08 || []	// 결재자 목록
 			},
 			{
 				success: function(oData) {
@@ -1163,16 +1213,17 @@ var OnRequest = { // 출장 event handler
 
 					if (smoinUrl) {
 						if (this.getSessionInfoByKey("Bukrs") === "A100" && TableIn03[0].ClDmtr === "2") { // 해외 출장인 경우에만 안내 메세지 popup
-							MessageBox.information(this.getBundleText("MSG_19020"), { // ※ 출장 사전 품의시 "모인 메모품의(항공권 예약/발권 신청서)" 첨부하시기 바랍니다.
+							MessageBox.alert(this.getBundleText("MSG_19020"), { // ※ 출장 사전 품의시 "모인 메모품의(항공권 예약/발권 신청서)" 첨부하시기 바랍니다.
+								title: this.getBundleText("LABEL_00149"), // 안내
 								onClose: function() {
-									this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-									// if(vExtryn !== "X") {
+									// if (!Common.isExternalIP()) {
+										this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 									// }
 								}.bind(this)
 							});
 						} else {
-							this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-							// if(vExtryn !== "X") {
+							// if (!Common.isExternalIP()) {
+								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 							// }
 						}
 					}
@@ -1190,9 +1241,7 @@ var OnRequest = { // 출장 event handler
 
 					var errData = Common.parseError(oResponse);
 					if (errData.Error && errData.Error === "E") {
-						MessageBox.error(errData.ErrorMessage, {
-							title: this.getBundleText("LABEL_09029") // 확인
-						});
+						MessageBox.error(errData.ErrorMessage);
 					}
 
 					this.RequestDetailDialogHandler.toggleButtonsState(true);
@@ -1201,7 +1250,7 @@ var OnRequest = { // 출장 event handler
 			}
 		);
 	}
-	
+
 };
 
 return OnRequest;

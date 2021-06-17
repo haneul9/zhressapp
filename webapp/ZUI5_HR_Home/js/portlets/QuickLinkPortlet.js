@@ -241,6 +241,7 @@ save: function() {
 			TableIn3: this.urlList
 		}, 
 		{
+			async: true,
 			success: function() {
 				this._gateway.prepareLog('QuickLinkPortlet.save ${url} success'.interpolate(url), arguments).log();
 				this.render(this.urlList);
