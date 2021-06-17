@@ -1072,6 +1072,7 @@ sap.ui.define(
 
                 vData.MedicalApplyTableIn[0].Waers = "KRW";
                 vData.MedicalApplyTableIn[0].Bukrs = vSig;
+                vData.MedicalApplyTableIn[0].Pernr = oSessionData.Pernr;
 				
 				if(vSig == "1000") {
 					vData.IMedDate = oController._DataModel.getProperty("/Pop1/0/MedDate");
