@@ -839,7 +839,7 @@ var OnRequest = { // 출장 event handler
 			}
 		});
 
-		var TableIn07 = $.map(oModel.getProperty("/TableIn07"), function(p) {
+		var TableIn07 = $.map(oModel.getProperty("/TableIn07") || [], function(p) {
 			return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", p);
 		});
 
@@ -903,7 +903,8 @@ var OnRequest = { // 출장 event handler
 	pressRequest: function() {
 		Common.log("OnRequest.pressRequest");
 
-		if (this.RequestDetailDialogHandler.getModel().getProperty("/TableIn07").length && !this.RequestDetailDialogHandler.isCheckedSubstituteAvailability) {
+		var TanleInt07 = this.RequestDetailDialogHandler.getModel().getProperty("/TableIn07") || [];
+		if (TanleInt07.length && !this.RequestDetailDialogHandler.isCheckedSubstituteAvailability) {
 			MessageBox.alert(this.getBundleText("MSG_19039"), { // 한도체크를 진행 하세요.
 				title: this.getBundleText("LABEL_00149") // 안내
 			});
@@ -1140,7 +1141,7 @@ var OnRequest = { // 출장 event handler
 			}
 		}
 
-		var TableIn07 = $.map(oModel.getProperty("/TableIn07"), function(o) {
+		var TableIn07 = $.map(oModel.getProperty("/TableIn07") || [], function(o) {
 			return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtRequestTableIn07", o);
 		});
 
