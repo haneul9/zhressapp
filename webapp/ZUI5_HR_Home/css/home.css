@@ -214,11 +214,10 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-calendar-daily-report .list-group-item span.unit {font-weight:400; font-size:14px; display:inline-block; padding-left:4px}
 .portlet-calendar .tooltip.show {opacity:1}
 .portlet-calendar .tooltip .arrow:before {border-bottom-color:#b8cddb; border-top-color:#b8cddb}
-.portlet-calendar .tooltip .tooltip-inner {max-width:none; padding:7px; background-color:#ebf5fe; color:#002D51; font-size:.75rem; border:1px solid #b8cddb}
+.portlet-calendar .tooltip .tooltip-inner {max-width:none; padding:7px; background-color:#ebf5fe; /*box-shadow:rgba(23,25,29,0.3) 0 2px 10px;*/ color:#002D51; font-size:.75rem; border:1px solid #b8cddb}
 .portlet-calendar .tooltip .tooltip-inner .portlet-calendar-tooltip {max-height:300px; overflow:hidden}
-.portlet-calendar .tooltip .tooltip-inner th {font-weight:600; padding:.2rem .8rem}
-.portlet-calendar .tooltip .tooltip-inner td {font-weight:400; padding:.2rem .8rem}
-.portlet-calendar .tooltip .tooltip-inner .portlet-calendar-tooltip .jspPane tr td:last-child {padding-right:1.8rem}
+.portlet-calendar .tooltip .tooltip-inner th {font-weight:400; color:#002D51}
+.portlet-calendar .tooltip .tooltip-inner td {font-weight:400; padding:.125rem .375rem}
 
 .portlet-switch {margin-top:.75rem; cursor:pointer}
 .portlet-switch.active {border-color:rgba(0,112,189,.7); background-color:#ebf5fe}
