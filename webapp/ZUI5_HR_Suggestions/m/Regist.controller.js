@@ -1596,7 +1596,7 @@
 					customToolbar: true,
 					showGroupFont: true,
 					// showGroupLink: true,
-					showGroupInsert: true,
+					// showGroupInsert: true,
 					value: "{Detail}",
 					editable: {
 						parts: [{path: "Sdate"}, {path: "/Gubun"}],
