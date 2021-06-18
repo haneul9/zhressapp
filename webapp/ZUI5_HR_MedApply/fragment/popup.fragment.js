@@ -436,7 +436,7 @@ sap.ui.define(
                             new MatrixLayoutCell({
                                 hAlign: "Center",
                                 content: new sap.m.Label({text: "{i18n>LABEL_47032}", textAlign: "Center", required: false}),
-                                colSpan: 7
+                                colSpan: 6
                             }).addStyleClass("LabelCell")
                         ]
                     }),
@@ -458,7 +458,7 @@ sap.ui.define(
                             new MatrixLayoutCell({
                                 hAlign: "Center",
                                 content: new sap.m.Label({text: "{i18n>LABEL_47035}", textAlign: "Center", required: false}),
-                                colSpan: 3
+                                colSpan: 2
                             }).addStyleClass("LabelCell")
                         ]
                     }),
@@ -500,10 +500,10 @@ sap.ui.define(
                                 content: new sap.m.Label({text: "{i18n>LABEL_47041}", textAlign: "Center", required: false})
                             }).addStyleClass("LabelCell"),
                             // 선택진료료
-                            new MatrixLayoutCell({
-                                hAlign: "Center",
-                                content: new sap.m.Label({text: "{i18n>LABEL_47042}", textAlign: "Center", required: false})
-                            }).addStyleClass("LabelCell"),
+                            // new MatrixLayoutCell({
+                            //     hAlign: "Center",
+                            //     content: new sap.m.Label({text: "{i18n>LABEL_47042}", textAlign: "Center", required: false})
+                            // }).addStyleClass("LabelCell"),
                             // CT/MRI/초음파
                             new MatrixLayoutCell({
                                 hAlign: "Center",
@@ -529,7 +529,7 @@ sap.ui.define(
                             this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp4", Path: "Zniiwm"}),
                             this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp5", Path: "Znisdm"}),
                             this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp6", Path: "Znoctm"}),
-                            this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp7", Path: "Znomrm"}),
+                            // this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp7", Path: "Znomrm"}),
                             this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp8", Path: "Znocum"}),
                             this.getExpensesInput(oController, {Id: oController.PAGEID + "_Inp9", Path: "Znobcm"})
                         ]
@@ -547,7 +547,7 @@ sap.ui.define(
                             this.getSupportAmountInput("Zniiwd"),
                             this.getSupportAmountInput("Znisdd"),
                             this.getSupportAmountInput("Znoctd"),
-                            this.getSupportAmountInput("Znomrd"),
+                            // this.getSupportAmountInput("Znomrd"),
                             this.getSupportAmountInput("Znocud"),
                             this.getSupportAmountInput("Znobcd")
                         ]

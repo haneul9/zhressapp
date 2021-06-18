@@ -459,19 +459,19 @@ sap.ui.define(
                             })
                         ]
                     }),
-                    new MatrixLayoutRow({
-                        cells: [
-                            // (외래)선택진료료
-                            this.getLabel({ Text: "{i18n>LABEL_47123}", Required: false }),
-                            new MatrixLayoutCell({
-                                hAlign: "Begin",
-                                content: [
-                                    this.getOnlyMoneyInput1(oController, { Id: "_Inp7", Path: "{Znomrm}", Close: "{Close}", Status: "{Status}"}),
-                                    this.getOnlyMoneyInput2(oController, { Path: "{Znomrd}", Editable: false })
-                                ]
-                            })
-                        ]
-                    }),
+                    // new MatrixLayoutRow({
+                    //     cells: [
+                    //         // (외래)선택진료료
+                    //         this.getLabel({ Text: "{i18n>LABEL_47123}", Required: false }),
+                    //         new MatrixLayoutCell({
+                    //             hAlign: "Begin",
+                    //             content: [
+                    //                 this.getOnlyMoneyInput1(oController, { Id: "_Inp7", Path: "{Znomrm}", Close: "{Close}", Status: "{Status}"}),
+                    //                 this.getOnlyMoneyInput2(oController, { Path: "{Znomrd}", Editable: false })
+                    //             ]
+                    //         })
+                    //     ]
+                    // }),
                     new MatrixLayoutRow({
                         cells: [
                             // (외래)CT/MRI/초음파
