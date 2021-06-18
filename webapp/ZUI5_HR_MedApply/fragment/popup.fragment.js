@@ -661,7 +661,7 @@ sap.ui.define(
                                     }
                                 })
                             }).addStyleClass("DataCell totalLine"),
-                            new MatrixLayoutCell({ colSpan: 2 }).addStyleClass("DataCell totalLine")
+                            new MatrixLayoutCell().addStyleClass("DataCell totalLine")
                         ]
                     })
                 ];
