@@ -453,15 +453,14 @@ sap.ui.define([
 		onChangeAwart : function(oEvent){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Vacation.m.Detail");
 			var oController = oView.getController();
-			
-			oController._DetailJSonModel.setProperty("/Data/Half", "");
-			
+						
 			var oMessage = sap.ui.getCore().byId(oController.PAGEID + "_MessageRow");
 				oMessage.addStyleClass("displayNone");
 				
 			var oAwart = sap.ui.getCore().byId(oController.PAGEID + "_Awart");
 			
 			if(oEvent){
+				oController._DetailJSonModel.setProperty("/Data/Half", "");
 				// 근태일수, 휴일일수 초기화
 				oController._DetailJSonModel.setProperty("/Data/Kaltg", "");
 				oController._DetailJSonModel.setProperty("/Data/Hldtg", "");
