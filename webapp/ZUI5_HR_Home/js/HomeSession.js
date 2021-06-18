@@ -174,7 +174,11 @@ _retrieveSFUserName: function(resolve) {
 		success: function(data) {
 			this._gateway.prepareLog('HomeSession.retrieveSFUserName success', arguments).log();
 
-			if ((this._gateway.isPRD() && /hpjt0832/i.test(data.name)) || (this._gateway.isQAS() && /hpjt0857/i.test(data.name))) {
+			if ((this._gateway.isPRD() && /hpjt0832/i.test(data.name)) || 
+				(this._gateway.isPRD() && /95020128/i.test(data.name)) ||
+				(this._gateway.isPRD() && /95022154/i.test(data.name)) ||
+				(this._gateway.isPRD() && /95023137/i.test(data.name)) || 
+				(this._gateway.isQAS() && /hpjt0857/i.test(data.name))) {
 				this.dkdlTlqpfmffls(resolve);
 			} else {
 				sessionStorage.setItem('ehr.sf-user.name', data.name);
