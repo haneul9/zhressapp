@@ -792,21 +792,19 @@ return {
 
 				removedScheduleMap[BtStartdat.format("YYYYMMDD")] = true;
 
-				$.map(BtEnddat.diff(BtStartdat, "days"), function() {
+				$.map(new Array(BtEnddat.diff(BtStartdat, "days")), function() {
 					removedScheduleMap[BtStartdat.add(1, "days").format("YYYYMMDD")] = true;
 				});
 			});
 
-			var currentSubstituteList = this.oModel.getProperty("/TableIn07"),
+			var currentSubstituteList = this.oModel.getProperty("/TableIn07") || [],
 			list = $.map(currentSubstituteList, function(o) {
 				if (!removedScheduleMap[moment(o.Datum).format("YYYYMMDD")]) {
 					return o;
 				}
 			});
 
-			if (list.length) {
-				this.setSubstituteSchedule(list);
-			}
+			this.setSubstituteSchedule(list);
 
 			if (currentSubstituteList.length !== list.length) {
 				MessageBox.alert(this.oController.getBundleText("MSG_19042"), { // 출장 일정 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
@@ -825,16 +823,14 @@ return {
 				removedAccompanierMap[o.Pernr] = true;
 			});
 
-			var currentSubstituteList = this.oModel.getProperty("/TableIn07"),
+			var currentSubstituteList = this.oModel.getProperty("/TableIn07") || [],
 			list = $.map(currentSubstituteList, function(o) {
 				if (!removedAccompanierMap[o.Pernr]) {
 					return o;
 				}
 			});
 
-			if (list.length) {
-				this.setSubstituteSchedule(list);
-			}
+			this.setSubstituteSchedule(list);
 
 			if (currentSubstituteList.length !== list.length) {
 				MessageBox.alert(this.oController.getBundleText("MSG_19043"), { // 동반출장자 변경에 따라 대근자 목록이 변경되었습니다. 확인하시기 바랍니다.
