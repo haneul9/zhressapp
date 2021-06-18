@@ -808,8 +808,8 @@ sap.ui.define(
                     ],
                     content: [
                         new MatrixLayout({
-                            columns: 10,
-                            widths: ["140px", "", "", "", "", "", "", "", "", ""],
+                            columns: 9,
+                            widths: ["140px", "", "", "", "", "", "", "", ""],
                             rows: aFirstRows
                         }),
                         new sap.ui.core.HTML({ content: "<div style='height:20px;'/>" }),
