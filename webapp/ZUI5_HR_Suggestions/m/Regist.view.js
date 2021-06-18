@@ -211,9 +211,9 @@ sap.ui.define([
                     new sap.m.VBox(oController.PAGEID + "_IsHideBox", {
                         fitContainer: true,
                         visible: {
-							path: "/Gubun",
-							formatter: function(v) {
-								return v === "X";
+							parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return !v1 || (Common.checkNull(!v1) && v2 === "X");
 							}
 						},
 						items: [

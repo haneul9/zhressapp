@@ -159,9 +159,9 @@
 						width: "100%",
 						fitContainer: true,
 						visible: {
-							path: "/Gubun",
-							formatter: function(v) {
-								return v === "X";
+							parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return !v1 || (Common.checkNull(!v1) && v2 === "X");
 							}
 						},
 						items: [
