@@ -8,6 +8,7 @@ sap.ui.define([
 		constructor: function() {
 			JSONModelHelper.apply(this, arguments);
 
+			this.backupProxyData = null;
 			this.reset();
 		}
 	});
@@ -18,7 +19,7 @@ sap.ui.define([
 			this.setData({
 				User: {
 					Pernr: "사번",
-					nickname: "성명",
+					Ename: "성명",
 					Btrtx: "인사영역",
 					Stext: "부서",
 					PGradeTxt: "직급",
@@ -26,6 +27,18 @@ sap.ui.define([
 					photo: "images/photoNotAvailable.gif"
 				}
 			});
+			return this;
+		},
+		backup: function() {
+
+			this.backupProxyData = $.extend(true, {}, this.getData());
+
+			return this;
+		},
+		restore: function() {
+
+			this.setData(this.backupProxyData);
+
 			return this;
 		},
 		/*
@@ -42,8 +55,8 @@ sap.ui.define([
 			if (!result.Pernr) {
 				result.Pernr = "사번";
 			}
-			if (!result.nickname) {
-				result.nickname = "성명";
+			if (!result.Ename) {
+				result.Ename = "성명";
 			}
 			if (!result.Btrtx) {
 				result.Btrtx = "인사영역";
@@ -59,7 +72,7 @@ sap.ui.define([
 			}
 			result.photo = sessionStorage.getItem("ehr.sf-user.photo");
 
-			model.setData({User: result}, true);
+			model.setData({ User: result }, true);
 
 			// return Promise.all([
 			// 	new JSONModelHelper()
@@ -74,8 +87,8 @@ sap.ui.define([
 			// 			if (!result.Pernr) {
 			// 				result.Pernr = "사번";
 			// 			}
-			// 			if (!result.nickname) {
-			// 				result.nickname = "성명";
+			// 			if (!result.Ename) {
+			// 				result.Ename = "성명";
 			// 			}
 			// 			if (!result.Btrtx) {
 			// 				result.Btrtx = "인사영역";

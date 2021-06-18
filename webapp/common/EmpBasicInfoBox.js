@@ -30,16 +30,11 @@ sap.ui.define([
 							new sap.m.HBox({
 								alignItems: sap.m.FlexAlignItems.End,
 								items: [
-									new sap.m.Text({text: "{nickname}"}).addStyleClass("employee-basic-info-nickname"),
+									new sap.m.Text({text: "{Ename}"}).addStyleClass("employee-basic-info-ename"),
 									new sap.m.Text({text: "({Pernr})"}).addStyleClass("employee-basic-info-title ml-5px"),
 									new sap.m.Text({text: "{Pbtxt} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
 								]
 							})
-							// new sap.m.HBox({
-							// 	items: [
-							// 		new sap.m.Text({text: "{Pbtxt} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
-							// 	]
-							// })
 						]
 					})
 					.addStyleClass("ml-10px")

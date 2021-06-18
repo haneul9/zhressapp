@@ -7,8 +7,7 @@ sap.ui.define([
 	"common/PickOnlyDatePicker",
 	"common/ZHR_TABLES",
 	"../delegate/OnRequest",
-	"../delegate/ViewTemplates",
-	"sap/m/InputBase"
+	"../delegate/ViewTemplates"
 ], function(
 	CommaInteger,
 	Common,
@@ -17,8 +16,7 @@ sap.ui.define([
 	PickOnlyDatePicker,
 	ZHR_TABLES,
 	OnRequest,
-	ViewTemplates,
-	InputBase
+	ViewTemplates
 ) {
 "use strict";
 
@@ -30,54 +28,8 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		return [
 			this.getHeaderPanel(oController).setModel(oModel),
 			this.getSchedulePanel(oController).setModel(oModel),
-			/*대근자
-			this.getAddedPanel(oController).setModel(oModel)
-			*/
+			this.getSubstitutePanel(oController).setModel(oModel)
 		];
-	},
-
-	getAddedPanel : function(oController) {
-
-		var oTable = new sap.ui.table.Table(oController.PAGEID + "_aTable", {
-			selectionMode: "None",
-			enableColumnReordering: false,
-			enableColumnFreeze: false,
-			enableBusyIndicator: true,
-			visibleRowCount: 15,
-			showOverlay: false,
-			showNoData: true,
-			width: "auto",
-			noData: "{i18n>MSG_05001}"
-		});
-
-		return new sap.m.Panel({
-			expanded: true,
-			expandable: true,
-			headerText: "{i18n>LABEL_19801}", // 대근자
-			content: new sap.m.VBox({
-				width: "100%",
-				items: [
-					new sap.m.VBox({
-						items:[new sap.m.HBox({
-							justifyContent: sap.m.FlexJustifyContent.End,
-							visible: "{/Header/Edtfg}",
-							items: [
-								new sap.m.HBox({
-									items: [
-										new sap.m.Button({
-											press: OnRequest.checkHD.bind(oController),
-											enabled: "{/Header/Edtfg}",
-											text: "{i18n>LABEL_19811}" // 한도체크
-										})
-										.addStyleClass("button-light-sm")
-									]
-								}).addStyleClass("button-group")
-							]
-						}),new sap.ui.core.HTML({content:"<div style='height:3px;'></>"}),oTable]
-					})					
-				]
-			}).addStyleClass("panel-inner-box")
-		}).addStyleClass("custom-panel mt-15px mnw-1188px");
 	},
 
 	getHeaderPanel: function(oController) {
@@ -142,7 +94,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 											Common.onPressTableHeaderInformation.call(oController, oEvent);
 										}
 									})
-									.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue")
+									.addStyleClass(sap.m.InputBase.ICON_CSS_CLASS + " color-icon-blue")
 								]
 							})
 							.addStyleClass("search-field-group"),
@@ -174,7 +126,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 											Common.onPressTableHeaderInformation.call(oController, oEvent);
 										}
 									})
-									.addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue")
+									.addStyleClass(sap.m.InputBase.ICON_CSS_CLASS + " color-icon-blue")
 								]
 							})
 							.addStyleClass("search-field-group"),
@@ -460,7 +412,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 			showOverlay: false,
 			showNoData: true,
 			width: "100%",
-			rowHeight: 37,
+			rowHeight: 44,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}"
 		})
@@ -488,7 +440,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 			ZHR_TABLES.makeColumn(oController, oTable, [
 				{ id: "ClDmtrT",     label: "{i18n>LABEL_19332}"/* 출장지        */, plabel: "{i18n>LABEL_19333}"/* 국내외 구분     */, resize: true, span: 3, type: "string",   sort: true,  filter: true, width: "105px" },
 				{ id: "BtCrtT",      label: "{i18n>LABEL_19332}"/* 출장지        */, plabel: "{i18n>LABEL_19334}"/* 국가            */, resize: true, span: 0, type: "string",   sort: true,  filter: true, width: "135px" },
-				{ id: "BtCityT",     label: "{i18n>LABEL_19332}"/* 출장지        */, plabel: "{i18n>LABEL_19335}"/* 도시            */, resize: true, span: 0, type: "template", sort: true,  filter: true, width: "195px", templateGetter: "getCityInputTemplate",          templateGetterOwner: this, required: true },
+				{ id: "BtCityT",     label: "{i18n>LABEL_19332}"/* 출장지        */, plabel: "{i18n>LABEL_19335}"/* 도시            */, resize: true, span: 0, type: "template", sort: true,  filter: true, width: "195px", align: sap.ui.core.HorizontalAlign.Left, templateGetter: "getCityInputTemplate", templateGetterOwner: this, required: true },
 				{ id: "BtPeriod",    label: "{i18n>LABEL_19336}"/* 출장 기간     */, plabel: "{i18n>LABEL_19337}"/* 시작일 ~ 종료일 */, resize: true, span: 2, type: "template", sort: true,  filter: true, width: "285px", templateGetter: "getDateRangeSelectionTemplate", templateGetterOwner: this, required: true },
 				{ id: "Prestart",    label: "{i18n>LABEL_19336}"/* 출장 기간     */, plabel: "{i18n>LABEL_19338}"/* 전일 출발       */, resize: true, span: 0, type: "template", sort: false, filter: true, width:  "90px", templateGetter: "getCheckboxTemplate",           templateGetterOwner: this, ptooltip: PrestartPTooltip },
 				{ id: "ReLodging",   label: "{i18n>LABEL_19339}"/* 제공받는 일수 */, plabel: "{i18n>LABEL_19340}"/* 숙박            */, resize: true, span: 2, type: "template", sort: true,  filter: true, width: "105px", templateGetter: "getDescriptionInputTemplate",   templateGetterOwner: this, tooltip: ReLodgingTooltip },
@@ -628,7 +580,7 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 			showOverlay: false,
 			showNoData: true,
 			width: "100%",
-			rowHeight: 37,
+			rowHeight: 44,
 			columnHeaderHeight: 38,
 			noData: "{i18n>LABEL_00901}"
 		})
@@ -892,6 +844,216 @@ sap.ui.jsfragment("ZUI5_HR_BusinessTrip.fragment.RequestDetail", {
 		}, oInput);
 
 		return oInput;
+	},
+
+	getSubstitutePanel: function(oController) {
+
+		var oTable = new sap.ui.table.Table("TableIn07", {
+			selectionMode: sap.ui.table.SelectionMode.None,
+			enableColumnReordering: false,
+			enableColumnFreeze: false,
+			enableBusyIndicator: true,
+			busyIndicatorDelay: 0,
+			visibleRowCount: 1,
+			showOverlay: false,
+			showNoData: true,
+			width: "100%",
+			rowHeight: 44,
+			columnHeaderHeight: 38,
+			noData: "{i18n>LABEL_00901}"
+		})
+		.addStyleClass("thead-cell-border tbody-cell-border mt-8px")
+		.bindRows("/TableIn07");
+
+		ZHR_TABLES.makeColumn(oController, oTable, [
+			{ id: "Ename", label: "{i18n>LABEL_19803}"/* 출장자   */, plabel: "", resize: true, span: 0, type: "string",   sort: false, filter: true, width: "auto",  align: sap.ui.core.HorizontalAlign.Center },
+			{ id: "Datum", label: "{i18n>LABEL_19804}"/* 일자     */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteDatumTemplate",        templateGetterOwner: this },
+			{ id: "Awtxt", label: "{i18n>LABEL_19805}"/* 대근자   */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteAwtxtTemplate",        templateGetterOwner: this },
+			{ id: "Beguz", label: "{i18n>LABEL_19806}"/* OT 시작  */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "160px", templateGetter: "getSubstituteTimeTemplate",         templateGetterOwner: this },
+			{ id: "Enduz", label: "{i18n>LABEL_19807}"/* OT 종료  */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "160px", templateGetter: "getSubstituteTimeTemplate",         templateGetterOwner: this },
+			{ id: "Ovtim", label: "{i18n>LABEL_19808}"/* 연장근로 */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteFieldTemplate",        templateGetterOwner: this },
+			{ id: "Wt40",  label: "{i18n>LABEL_19809}"/* 소정근로 */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteFieldTemplate",        templateGetterOwner: this },
+			{ id: "Wt12",  label: "{i18n>LABEL_19810}"/* 연장체크 */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteFieldTemplate",        templateGetterOwner: this },
+			{ id: "Wtsum", label: "{i18n>LABEL_19811}"/* 계       */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteFieldTemplate",        templateGetterOwner: this },
+			{ id: "Ligbn", label: "{i18n>LABEL_19812}"/* 한도체크 */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteAvailabilityTemplate", templateGetterOwner: this },
+			{ id: "Cntgb", label: "{i18n>LABEL_19813}"/* 인원     */, plabel: "", resize: true, span: 0, type: "template", sort: false, filter: true, width: "auto",  templateGetter: "getSubstituteCntgbTemplate",        templateGetterOwner: this }
+		]);
+
+		return new sap.m.Panel({
+			expanded: true,
+			expandable: false,
+			headerText: "{i18n>LABEL_19801}", // 대근자
+			content: new sap.m.VBox({
+				width: "100%",
+				items: [
+					new sap.m.HBox({
+						justifyContent: sap.m.FlexJustifyContent.End,
+						visible: "{/Header/Edtfg}",
+						items: [
+							new sap.m.HBox({
+								items: [
+									new sap.m.Button({
+										press: OnRequest.checkSubstituteAvailability.bind(oController),
+										icon: "sap-icon://task",
+										enabled: "{/Header/Edtfg}",
+										text: "{i18n>LABEL_19812}" // 한도체크
+									})
+									.addStyleClass("button-light-sm color-signature-orange")
+								]
+							}).addStyleClass("button-group")
+						]
+					}),
+					oTable
+				]
+			}).addStyleClass("panel-inner-box")
+		}).addStyleClass("custom-panel mt-15px mnw-1188px");
+	},
+
+	getSubstituteFieldTemplate: function(columnInfo) {
+
+		return new sap.m.Text({
+			textAlign: sap.ui.core.TextAlign.Center,
+			text: "{" + columnInfo.id + "}",
+			visible: "{= ${Offck} !== 'X' }"
+		});
+	},
+
+	getSubstituteDatumTemplate: function(columnInfo, oController) {
+
+		var oText = new sap.m.Text({
+			textAlign: sap.ui.core.TextAlign.Center,
+			text: {
+				path: columnInfo.id,
+				type: new sap.ui.model.type.Date({ pattern: oController.getSessionInfoByKey("Dtfmt") })
+			}
+		});
+
+		oText.addEventDelegate({
+			onAfterRendering: function () {
+				var bindingContext = this.getBindingContext();
+				this.$().find("input").toggleClass("color-red bold-700", bindingContext && bindingContext.getProperty("Offck") === "X");
+			}
+		}, oText);
+
+		return oText;
+	},
+
+	getSubstituteAwtxtTemplate: function(columnInfo, oController) {
+
+		var RequestDetailDialogHandler = oController.RequestDetailDialogHandler,
+		oInput = new sap.m.Input({
+			width: "100%",
+			value: "{" + columnInfo.id + "}",
+			editable: "{= ${/Header/Edtfg} && ${Offck} !== 'X' && ${Cntgb} !== '0' }",
+			showValueHelp: true,
+			valueHelpOnly: true,
+			valueHelpRequest: RequestDetailDialogHandler.searchSubstitute.bind(oController),
+			customData: new sap.ui.core.CustomData({
+				key: "targetPath",
+				value: "/TableIn07/"
+			})
+		});
+
+		oInput.addEventDelegate({
+			onAfterRendering: function() {
+				var editable = this.getEditable(), bindingContext = this.getBindingContext();
+				this.toggleStyleClass("plain-text-mimic", !editable)
+					.$().find("input")
+						.toggleClass("text-center", !editable)
+						.toggleClass("color-red bold-700", bindingContext && bindingContext.getProperty("Offck") === "X");
+			}
+		}, oInput);
+
+		return oInput;
+	},
+
+	getSubstituteTimeTemplate: function(columnInfo, oController) {
+
+		var RequestDetailDialogHandler = oController.RequestDetailDialogHandler;
+
+		return new sap.m.HBox({
+			justifyContent: sap.m.FlexJustifyContent.Center,
+			visible: "{= ${Offck} !== 'X' && ${Cntgb} !== '0' }",
+			width: "100%",
+			items: [
+				new sap.m.Select({
+					change: RequestDetailDialogHandler.changeSubstitueOT.bind(RequestDetailDialogHandler),
+					customData: new sap.ui.core.CustomData({ key: "RowIndex", value: "{RowIndex}" }),
+					selectedKey: "{" + columnInfo.id + "Hour}",
+					editable: "{/Header/Edtfg}",
+					items: {
+						path: "/HourSelectList",
+						templateShareable: true,
+						template: new sap.ui.core.ListItem({ key: "{value}", text: "{text}" })
+					},
+					width: "70px"
+				})
+				.addStyleClass("custom-select-time"),
+				new sap.m.Text({ text: ":" }).addStyleClass("mx-2px"),
+				new sap.m.Select({
+					change: RequestDetailDialogHandler.changeSubstitueOT.bind(RequestDetailDialogHandler),
+					customData: new sap.ui.core.CustomData({ key: "RowIndex", value: "{RowIndex}" }),
+					selectedKey: "{" + columnInfo.id + "Minute}",
+					editable: "{/Header/Edtfg}",
+					items: {
+						path: "/MinuteSelectList",
+						templateShareable: true,
+						template: new sap.ui.core.ListItem({ key: "{value}", text: "{text}" })
+					},
+					width: "70px"
+				})
+				.addStyleClass("custom-select-time")
+			]
+		});
+	},
+
+	getSubstituteAvailabilityTemplate: function(columnInfo, oController) {
+
+		return new HoverIcon({
+			src: "{= !${" + columnInfo.id + "} ? 'sap-icon://task' : (${" + columnInfo.id + "} === '1' ? 'sap-icon://employee-approvals' : 'sap-icon://employee-rejections') }",
+			color: "{= !${" + columnInfo.id + "} ? '#ffb400' : (${" + columnInfo.id + "} === '1' ? '#8dc63f' : '#da291c') }",
+			alt: "{LigbnTx}",
+			size: "1.4rem",
+			visible: "{= ${Offck} !== 'X' }",
+			customData: new sap.ui.core.CustomData({
+				key: "messages",
+				value: "{= !${" + columnInfo.id + "} ? ${i18n>LABEL_19819} : (${" + columnInfo.id + "} === '1' ? ${LigbnTx} : ${i18n>LABEL_19818}) }" // 한도체크 필요, 불가능
+			}),
+			hover: function(oEvent) {
+				common.Common.onPressTableHeaderInformation.call(oController, oEvent, oEvent.getSource().data("messages"));
+			},
+			leave: function(oEvent) {
+				common.Common.onPressTableHeaderInformation.call(oController, oEvent);
+			}
+		})
+		.addStyleClass(sap.m.InputBase.ICON_CSS_CLASS);
+	},
+
+	getSubstituteCntgbTemplate: function(columnInfo, oController) {
+
+		var RequestDetailDialogHandler = oController.RequestDetailDialogHandler;
+
+		return new sap.m.Select({
+			change: RequestDetailDialogHandler.changeSubstitueCount.bind(RequestDetailDialogHandler),
+			visible: {
+				parts: [
+					{ path: "Offck" },
+					{ path: "Flag" }
+				],
+				formatter: function(Offck, Flag) {
+					return Offck !== "X" && Flag === "A";
+				}
+			},
+			customData: new sap.ui.core.CustomData({ key: "RowIndex", value: "{RowIndex}" }),
+			selectedKey: "{" + columnInfo.id + "}",
+			editable: "{/Header/Edtfg}",
+			items: [
+				new sap.ui.core.Item({ text: "", key: "" }),
+				new sap.ui.core.Item({ text: "{i18n>LABEL_19814}", key: "0" }), // 없음
+				new sap.ui.core.Item({ text: "{i18n>LABEL_19815}", key: "1" }), // 1명
+				new sap.ui.core.Item({ text: "{i18n>LABEL_19816}", key: "2" })  // 2명
+			]
+		});
 	}
 
 });

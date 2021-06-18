@@ -1156,52 +1156,39 @@ sap.ui.define([
 		onInCheck: function(oEvent) {
 			var oController = this;
 			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
-			var oList = [];
+			oController.g_IDelTeacherList = [];
 
 			oTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
-				oTeaList1.Pernr = e.getItems()[1].getText();
-				oTeaList1.Ename = e.getItems()[3].getValue();
-				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
-				oTeaList1.Sclas = "P";
-				oList.push(oTeaList1);
 
-				if(!e.getItems()[0].getSelected())
-					oController.g_IDelTeacherList.push(e); 
+				if(!e.getItems()[0].getSelected()){
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "P";
+					oController.g_IDelTeacherList.push(oTeaList1);
+				}
 			});
-			oController.TeacherInfoModel.setProperty("/InData", oList);
 		},
 
 		onOutCheck: function(oEvent) {
 			var oController = this;
 			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
-			var oList = [];
+			oController.g_ODelTeacherList = [];
 
 			oOutTeacherBox.getItems().forEach(function(e) {
 				var oTeaList1 = {};
-				oTeaList1.Pernr = e.getItems()[1].getText();
-				oTeaList1.Ename = e.getItems()[3].getValue();
-				oTeaList1.Times = e.getItems()[5].getValue();
-				oTeaList1.Tepay = e.getItems()[7].getValue();
-				oTeaList1.Sclas = "H";
-				oList.push(oTeaList1);
+
+				if(!e.getItems()[0].getSelected()){
+					oTeaList1.Pernr = e.getItems()[1].getText();
+					oTeaList1.Ename = e.getItems()[3].getValue();
+					oTeaList1.Times = e.getItems()[5].getValue();
+					oTeaList1.Tepay = e.getItems()[7].getValue();
+					oTeaList1.Sclas = "H";
+					oController.g_ODelTeacherList.push(oTeaList1);
+				}
 			});
-			oController.TeacherInfoModel.setProperty("/OutData", oList);
-			
-			if(!oEvent.getSource().getSelected()){
-				var vIndex = this.g_ODelTeacherList.indexOf(oEvent.getSource().getParent());
-				
-				if(vIndex > -1) this.g_ODelTeacherList.splice(vIndex, 1);
-			}else {
-				oController.g_ODelTeacherList = [];
-				
-				oOutTeacherBox.getItems().forEach(function(e) {
-					if(e.getItems()[0].getSelected()) {
-						oController.g_ODelTeacherList.push(e);
-					}
-				});
-			}
 		},
 
 		onPressAddRow: function() { // 참석자 추가
@@ -1644,27 +1631,13 @@ sap.ui.define([
 
 		onInPressDelRow: function(oEvent) { // 강사(내부)
 			var oController = this;
-			var oInData = this.TeacherInfoModel.getProperty("/InData");
-			var oList = [];
 
 			if(Common.checkNull(this.g_IDelTeacherList)){
 				MessageBox.error(oController.getBundleText("MSG_70004"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
-			
-			// this.g_IDelTeacherList.forEach(function(ele) {
-			// 	var vItemIndex = oInData.find(function(item) {return item.Ename === ele.getItems()[3].getValue();});
-			// 	var Index = oInData.indexOf(vItemIndex);
-				
-			// 	if(oInData.some(function(e) {return e.Ename === ele.getItems()[3].getValue();})){
-			// 		oInData.splice(Index, 1);
-			// 	}
-			// });
-			oInData.forEach(function(e) {
-				if(oController.g_IDelTeacherList.some(function(ele) { ele.getItems()[1].getText() === e.Pernr;}))
-					oList.push(e);
-			});
-			this.TeacherInfoModel.setProperty("/InData", oList);
+
+			this.TeacherInfoModel.setProperty("/InData", this.g_IDelTeacherList);
 			this.setTeacherBox("I");
 			this.g_IDelTeacherList = [];
 		},
@@ -1687,22 +1660,13 @@ sap.ui.define([
 
 		onOutPressDelRow: function(oEvent) { // 강사(외부)
 			var oController = this;
-			var oOutData = this.TeacherInfoModel.getProperty("/OutData");
 
 			if(Common.checkNull(this.g_ODelTeacherList)){
 				MessageBox.error(oController.getBundleText("MSG_70004"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
-			
-			this.g_ODelTeacherList.forEach(function(ele) {
-				var vItemIndex = oOutData.find(function(item) {return item.Ename === ele.getItems()[3].getValue();});
-				var Index = oOutData.indexOf(vItemIndex);
-				
-				if(oOutData.some(function(e) {return e.Ename === ele.getItems()[3].getValue();})){
-					oOutData.splice(Index, 1);
-				}
-			});
-			this.TeacherInfoModel.setProperty("/OutData", oOutData);
+
+			this.TeacherInfoModel.setProperty("/OutData", this.g_ODelTeacherList);
 			this.setTeacherBox("O");
 			this.g_ODelTeacherList = [];
 		},

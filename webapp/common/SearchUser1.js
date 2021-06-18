@@ -39,10 +39,11 @@ common.SearchUser1 = {
         var oPersg = sap.ui.getCore().byId(oController.PAGEID + "_ES_Persg");
         var oZhgrade = sap.ui.getCore().byId(oController.PAGEID + "_ES_Zhgrade");
         var vActda = oController._vActda ? oController._vActda : new Date().setHours(9);
+        var oSessionModel = common.SearchUser1.sessionModel || oController.getSessionModel();
 
         var oFilters = [
-			new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
-			new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Bukrs2")),
+            new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oSessionModel.getProperty("/Percod")),
+            new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oSessionModel.getProperty("/Bukrs2")),
 			new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, $.app.APP_ID == "ZUI5_HR_HRDoc.Page" ? "A" : common.SearchUser1.searchAuth ? common.SearchUser1.searchAuth : $.app.getAuth()),
 			new sap.ui.model.Filter("Persa", sap.ui.model.FilterOperator.EQ, oPersa.getSelectedKey()),
 			new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, new Date(vActda))
@@ -121,10 +122,11 @@ common.SearchUser1 = {
 
     loadPersaControl: function () {
         var oController = common.SearchUser1.oController;
+        var oSessionModel = common.SearchUser1.sessionModel || oController.getSessionModel();
         var oPersa = sap.ui.getCore().byId(oController.PAGEID + "_ES_Persa");
         var aFilters = [
-			new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
-			new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Bukrs2"))
+            new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oSessionModel.getProperty("/Percod")),
+            new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oSessionModel.getProperty("/Bukrs2"))
 		];
 
         oPersa.setEnabled(common.SearchUser1.fPersaEnabled);

@@ -32,7 +32,7 @@ ui: function() {
 		'<div class="card portlet portlet-${size}h portlet-evalcollfin" data-key="${key}"${tooltip}>'.interpolate(this.size(), this.key(), this.tooltip()),
 			cardHeader,
 			'<div class="card-body">',
-				'<div style="position:relative; margin:30px auto; width:250px; height:100%">',
+				'<div style="position:relative; margin:30px auto; width:250px">',
 					'<canvas id="chart-evalcollfin" style="width:250px; height:250px"></canvas>',
 				'</div>',
 			'</div>',

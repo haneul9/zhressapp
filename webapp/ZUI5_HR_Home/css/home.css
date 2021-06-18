@@ -303,8 +303,14 @@ body.under-construction .ehr-logo {position:static; margin:0}
 
 .portlet-evalcollfin-popover.popover {max-width:none}
 .portlet-evalcollfin-popover {border:1px solid #b8cddb}
-.portlet-evalcollfin-popover .arrow::before {border-bottom-color:#b8cddb !important; border-top-color:#b8cddb}
-.portlet-evalcollfin-popover .arrow::after {border-bottom-color:#ebf5fe !important}
+.bs-popover-auto[x-placement^=top]>.arrow::before, .bs-popover-top>.arrow::before {border-top-color:#b8cddb}
+.bs-popover-auto[x-placement^=top]>.arrow::after, .bs-popover-top>.arrow::after {border-top-color:#ebf5fe}
+.bs-popover-auto[x-placement^=right]>.arrow::before, .bs-popover-right>.arrow::before {border-right-color:#b8cddb}
+.bs-popover-auto[x-placement^=right]>.arrow::after, .bs-popover-right>.arrow::after {border-right-color:#ebf5fe}
+.bs-popover-auto[x-placement^=bottom]>.arrow::before, .bs-popover-bottom>.arrow::before {border-bottom-color:#b8cddb}
+.bs-popover-auto[x-placement^=bottom]>.arrow::after, .bs-popover-bottom>.arrow::after {border-bottom-color:#ebf5fe}
+.bs-popover-auto[x-placement^=left]>.arrow::before, .bs-popover-left>.arrow::before {border-left-color:#b8cddb}
+.bs-popover-auto[x-placement^=left]>.arrow::after, .bs-popover-left>.arrow::after {border-left-color:#ebf5fe}
 .portlet-evalcollfin-popover .popover-body {width:300px; border-radius:.3rem; padding:7px; color:#002d51; font-size:.75rem; background-color:#ebf5fe}
 .portlet-evalcollfin-popover .popover-body .popover-scroll {max-height:300px; overflow:hidden}
 .portlet-evalcollfin-popover .popover-body th {font-weight:400; color:#002d51; text-align:center}

@@ -119,7 +119,7 @@ common.map.LotteChemMap.prototype.instantiate = function(options) {
 	},
 	oMap = new naver.maps.Map(options.id, oMapOptions);
 
-	naver.maps.Event.addListener(oMap, 'click', function(e) { // 지도 클릭시 마커 표시
+	naver.maps.Event.addListener(oMap, 'click', function(e) { // 지도 클릭시 해당 좌표에 마커 표시
 		this.setMarker({
 			target: this.PLACE_TARGET.CHOICE,
 			coord: e.coord
@@ -217,7 +217,7 @@ common.map.LotteChemMap.prototype.getMarker = function(o) {
 			oAddressOverlay.setMap();
 		}
 
-		this.initPath(); // 경로찾기를 했었다면 초기화
+		this.initPath(); // 경로찾기를 했었다면 해당 경로 초기화
 
 		if (target !== this.PLACE_TARGET.CHOICE && address) {
 			this.setAddressOverlay({ // 주소 오버레이 표시

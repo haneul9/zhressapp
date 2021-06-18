@@ -1,5 +1,6 @@
 /* global moment */
 sap.ui.define([
+	// "common/ApprovalLinesHandler",
 	"common/Common",
 	"common/DialogHandler",
 	"./SettlementTargetAbsenceListDialogHandler",
@@ -14,6 +15,7 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 ], function(
+	// ApprovalLinesHandler,
 	Common,
 	DialogHandler,
 	SettlementTargetAbsenceListDialogHandler,
@@ -259,7 +261,9 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				});
 
 				if (rowIndices.length) {
-					MessageBox.error(this.getBundleText("MSG_19014")); // 국내/해외 출장을 함께 신청 및 정산하실 수는 없습니다.
+					MessageBox.alert(this.getBundleText("MSG_19014"), { // 국내/해외 출장을 함께 신청 및 정산하실 수는 없습니다.
+						title: this.getBundleText("LABEL_00149") // 안내
+					});
 					throw new Error();
 				}
 
@@ -298,7 +302,9 @@ var OnSettlement = { // 출장 비용 정산 event handler
 			oTableIn05 = $.app.byId("SettlementTableIn05"),
 			aIndices = oTableIn04.getSelectedIndices();
 			if (aIndices.length < 1) {
-				MessageBox.warning(this.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
+				MessageBox.alert(this.getBundleText("MSG_00050"), { // 삭제할 행을 선택하세요.
+					title: this.getBundleText("LABEL_00149") // 안내
+				});
 				return;
 			}
 
@@ -329,8 +335,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 			MessageBox.confirm(this.getBundleText("MSG_00051"), { // 선택된 행을 삭제하시겠습니까?
 				onClose: function(oAction) {
-					if (sap.m.MessageBox.Action.OK === oAction) {
-						var TableIn04 = Common.getUnselectedRowsModelProperties(oTableIn04), // 선택되지 않은 행들의 데이터만 array로 받음
+					if (MessageBox.Action.OK === oAction) {
+						var TableIn04 = Common.getRowsBySelectionState(oTableIn04).unselectedRows, // 선택되지 않은 행들의 데이터만 array로 받음
 						TableIn05 = OnSettlement.getExpensesFor.call(this, TableIn04),
 						oModel = this.SettlementDetailDialogHandler.getModel();
 
@@ -373,7 +379,9 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 		setTimeout(function() {
 			if (!this.SettlementDetailDialogHandler.getModel().getProperty("/SettlementTableIn04").length) {
-				MessageBox.error(this.getBundleText("MSG_19024")); // 출장 일정 정보를 먼저 입력해주세요.
+				MessageBox.alert(this.getBundleText("MSG_19024"), { // 출장 일정 정보를 먼저 입력해주세요.
+					title: this.getBundleText("LABEL_00149") // 안내
+				});
 				BusyIndicator.hide();
 				return;
 			}
@@ -382,7 +390,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 			$.each($.app.byId("SettlementTableIn04").getRows(), function(i, o) {
 				var p = o.getRowBindingContext().getProperty();
 				if (!p.BtCity) {
-					MessageBox.error(this.getBundleText("MSG_19024"), { // 출장 일정 정보를 먼저 입력해주세요.
+					MessageBox.alert(this.getBundleText("MSG_19024"), { // 출장 일정 정보를 먼저 입력해주세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.SettlementDetailDialogHandler.toggleButtonsState(true);
 							$.app.byId(o.$().find("[data-sap-ui-colid=\"SettlementTableIn04BtCityT\"] .sapUiTableCellInner>[data-sap-ui]").attr("id")).focus();
@@ -391,7 +400,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 					isInvalid = true;
 					return false;
 				} else if (!p.BtStartdat || !p.BtEnddat) {
-					MessageBox.error(this.getBundleText("MSG_19024"), { // 출장 일정 정보를 먼저 입력해주세요.
+					MessageBox.alert(this.getBundleText("MSG_19024"), { // 출장 일정 정보를 먼저 입력해주세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.SettlementDetailDialogHandler.toggleButtonsState(true);
 							$.app.byId(o.$().find("[data-sap-ui-colid=\"SettlementTableIn04BtPeriod\"] .sapUiTableCellInner>[data-sap-ui]").attr("id")).focus();
@@ -446,14 +456,16 @@ var OnSettlement = { // 출장 비용 정산 event handler
 			var oTable = $.app.byId("SettlementTableIn05"),
 			aSelectedIndices = oTable.getSelectedIndices();
 			if (aSelectedIndices.length < 1) {
-				MessageBox.warning(this.getBundleText("MSG_00050")); // 삭제할 행을 선택하세요.
+				MessageBox.alert(this.getBundleText("MSG_00050"), { // 삭제할 행을 선택하세요.
+					title: this.getBundleText("LABEL_00149") // 안내
+				});
 				return;
 			}
 
 			MessageBox.confirm(this.getBundleText("MSG_00051"), { // 선택된 행을 삭제하시겠습니까?
 				onClose: function(oAction) {
-					if (sap.m.MessageBox.Action.OK === oAction) {
-						var TableIn05 = Common.getUnselectedRowsModelProperties(oTable),
+					if (MessageBox.Action.OK === oAction) {
+						var TableIn05 = Common.getRowsBySelectionState(oTable).unselectedRows,
 						oModel = this.SettlementDetailDialogHandler.getModel();
 						oModel.setProperty("/SettlementTableIn05", TableIn05);
 						oModel.refresh();
@@ -546,12 +558,13 @@ var OnSettlement = { // 출장 비용 정산 event handler
 			});
 
 			if (rowIndices.length) {
-				MessageBox.error(this.getBundleText("MSG_19015"), { // 기 신청한 출장 내역과 중복이 됩니다.\n확인하세요.
+				MessageBox.alert(this.getBundleText("MSG_19015"), { // 기 신청한 출장 내역과 중복이 됩니다.\n확인하세요.
+					title: this.getBundleText("LABEL_00149"), // 안내
 					onClose: function() {
 						props.BtStartdat = null;
 						props.BtEnddat = null;
 						oModel.refresh();
-					}.bind(this)
+					}
 				});
 			} else {
 				this.SettlementDetailDialogHandler.calculateAmount();
@@ -596,7 +609,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 		MessageBox.confirm(this.getBundleText("MSG_00059"), { // 삭제하시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					BusyIndicator.show(0);
 					setTimeout(OnSettlement.remove.bind(this), 0);
 				}
@@ -661,7 +674,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 		MessageBox.confirm(this.getBundleText("MSG_00058"), { // 저장하시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					BusyIndicator.show(0);
 					setTimeout(OnSettlement.save.bind(this), 0);
 				}
@@ -755,7 +768,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 		MessageBox.confirm(this.getBundleText("MSG_00060"), { // 신청하시겠습니까?
 			onClose: function(oAction) {
-				if (sap.m.MessageBox.Action.OK === oAction) {
+				if (MessageBox.Action.OK === oAction) {
 					BusyIndicator.show(0);
 					setTimeout(OnSettlement.checkDuplication.bind(this), 0);
 				} else {
@@ -814,7 +827,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		Olamt = Common.toNumber(oModel.getProperty("/Header/Olamt") || 0);
 
 		if (ZlodgeLimit && Olamt > 0) {
-			MessageBox.warning(this.getBundleText("MSG_19034"), { // 숙박비 한도초과는 사내규정에 어긋나며, 감사팀과 재무그룹에 통보됨을 유념하시기 바랍니다.
+			MessageBox.alert(this.getBundleText("MSG_19034"), { // 숙박비 한도초과는 사내규정에 어긋나며, 감사팀과 재무그룹에 통보됨을 유념하시기 바랍니다.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					BusyIndicator.hide();
 					setTimeout(OnSettlement.openLodgeCommentDialog.bind(this), 0);
@@ -881,7 +895,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		var oModel = this.SettlementDetailDialogHandler.getModel(),
 		value = oModel.getProperty("/Header/CdIndpt");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19305")), { // {소속부서}을 선택하세요.
+			MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19305")), { // {소속부서}을 선택하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -892,7 +907,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 		value = oModel.getProperty("/Header/Ename");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00054", this.getBundleText("LABEL_19306")), { // {출장자}를 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00054", this.getBundleText("LABEL_19306")), { // {출장자}를 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -903,7 +919,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 		value = oModel.getProperty("/Header/ZsendKostl");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19307")), { // {비용귀속부서}를 선택하세요.
+			MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19307")), { // {비용귀속부서}를 선택하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -914,7 +931,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 		value = oModel.getProperty("/Header/BtPurpose1");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19308")), { // {출장구분}을 선택하세요.
+			MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19308")), { // {출장구분}을 선택하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -925,7 +943,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 		value = oModel.getProperty("/Header/Title");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19312")), { // {출장명}을 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19312")), { // {출장명}을 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -936,7 +955,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 		value = oModel.getProperty("/Header/BtPurpose2");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19314")), { // {출장목적}을 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00053", this.getBundleText("LABEL_19314")), { // {출장목적}을 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -947,7 +967,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 		value = oModel.getProperty("/Header/BtResult");
 		if (!$.trim(value)) {
-			MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19319")), { // {출장결과}를 입력하세요.
+			MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19319")), { // {출장결과}를 입력하세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -962,7 +983,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 			$.each($.app.byId("SettlementTableIn04").getRows(), function(i, o) { // 행이 생성되었더라도 두 필수 항목이 모두 입력된 행만 신청데이터로 취합함.
 				var p = o.getRowBindingContext().getProperty();
 				if (!p.BtCity) {
-					MessageBox.error(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19335")), { // {도시}를 선택하세요.
+					MessageBox.alert(this.getBundleText("MSG_00056", this.getBundleText("LABEL_19335")), { // {도시}를 선택하세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.SettlementDetailDialogHandler.toggleButtonsState(true);
 							BusyIndicator.hide();
@@ -972,7 +994,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 					isInvalid = true;
 					return false;
 				} else if (!p.BtStartdat || !p.BtEnddat) {
-					MessageBox.error(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19336")), { // {출장 기간}을 선택하세요.
+					MessageBox.alert(this.getBundleText("MSG_00055", this.getBundleText("LABEL_19336")), { // {출장 기간}을 선택하세요.
+						title: this.getBundleText("LABEL_00149"), // 안내
 						onClose: function() {
 							this.SettlementDetailDialogHandler.toggleButtonsState(true);
 							BusyIndicator.hide();
@@ -992,7 +1015,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		}
 
 		if (!TableIn04.length) {
-			MessageBox.error(this.getBundleText("MSG_19016"), { // 출장 일정 정보를 입력해주세요.
+			MessageBox.alert(this.getBundleText("MSG_19016"), { // 출장 일정 정보를 입력해주세요.
+				title: this.getBundleText("LABEL_00149"), // 안내
 				onClose: function() {
 					this.SettlementDetailDialogHandler.toggleButtonsState(true);
 					BusyIndicator.hide();
@@ -1015,12 +1039,30 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		oModel.setProperty("/Header/AppTime1", null);
 		oModel.setProperty("/Header/AppName1", "");
 
-		OnSettlement.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn04, TableIn05);
+		// if (Common.isExternalIP()) {
+		// 	setTimeout(function() {
+		// 		var initData = {
+		// 			Mode: "P",																	// PC – P, Mobile - M
+		// 			Pernr: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+		// 			Empid: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+		// 			Bukrs: this.getSessionInfoByKey("Bukrs"),									// 각 업무에 맞게 작성
+		// 			ZappSeq: oModel.getProperty("/TableIn04/0/ClDmtr") === "1" ? "24" : "25"	// 신청서 번호 (국내출장: 24, 해외출장: 25)
+		// 		},
+		// 		callback = function(TableIn09) {
+		// 			OnSettlement.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn04, TableIn05, TableIn09);	// 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+		// 		}.bind(this);
+
+		// 		this.ApprovalLinesHandler = ApprovalLinesHandler.get(this, initData, callback);
+		// 		DialogHandler.open(this.ApprovalLinesHandler);
+		// 	}.bind(this), 0);
+		// } else {
+			OnSettlement.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn04, TableIn05);
+		// }
 	},
 
 	// 신청 OData 호출
-	callRequestOData: function(Header, TableIn04, TableIn05) {
-		var vExtryn = Common.isExternalIP() === true ? "X" : "";
+	callRequestOData: function(Header, TableIn04, TableIn05, TableIn09) {
+		var vExtryn = Common.isExternalIP() ? "X" : "";
 
 		$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 			"/BtSettlementSet",
@@ -1034,10 +1076,11 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				Export: [],
 				TableIn01: [],
 				TableIn02: [Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtSettlementTableIn02", Header)], // 출장 Header 정보
-				TableIn03: [],        // 경비현황 목록
-				TableIn04: TableIn04, // 출장일정 목록
-				TableIn05: TableIn05, // 비용정산항목 목록
-				TableIn06: []         // 코스트센터 코드 목록
+				TableIn03: [],				// 경비현황 목록
+				TableIn04: TableIn04,		// 출장일정 목록
+				TableIn05: TableIn05,		// 비용정산항목 목록
+				TableIn06: [],				// 코스트센터 코드 목록
+				TableIn09: TableIn09 || []	// 결재자 목록
 			},
 			{
 				success: function(oData) {
@@ -1048,8 +1091,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 						if (exports.length) {
 							smoinUrl = exports[0].Url;
 
-							// if (vExtryn !== "X" ) {
-							if (smoinUrl) {
+							if (smoinUrl && !Common.isExternalIP()) {
 								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 							}
 						}

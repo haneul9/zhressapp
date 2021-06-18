@@ -18,15 +18,12 @@ sap.ui.define([
 
 return CommonController.extend($.app.APP_ID, { // 출장
 
-	PAGEID: "",
 	RequestSearchModel: new JSONModel(),
 	RequestListModel: new JSONModel(),
 	RequestDetailModel: new JSONModel(),
 	SettlementSearchModel: new JSONModel(),
 	SettlementListModel: new JSONModel(),
 	SettlementDetailModel: new JSONModel(),
-	SetPerSon:"",
-	SetAddLine:"",
 
 	onInit: function() {
 		Common.log("onInit");
@@ -64,10 +61,10 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		this.SettlementListModel.setData([]);
 
 		setTimeout(function() {
-			this.retrieveApprovalStatusList.call(this, "ZHRD_OK_G", this.RequestSearchModel); // 출장 사전 신청 - 결재상태
+			this.retrieveApprovalStatusList("ZHRD_OK_G", this.RequestSearchModel); // 출장 사전 신청 - 결재상태
 		}.bind(this), 0);
 		setTimeout(function() {
-			this.retrieveApprovalStatusList.call(this, "ZHRD_BT_STAT", this.SettlementSearchModel); // 출장 비용 정산 - 결재상태
+			this.retrieveApprovalStatusList("ZHRD_BT_STAT", this.SettlementSearchModel); // 출장 비용 정산 - 결재상태
 		}.bind(this), 0);
 	},
 
@@ -75,7 +72,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		Common.log("onAfterShow");
 
 		var tab = (UriParameters.fromQuery(document.location.search).get("tab") || "").toLowerCase(),
-			html = (document.location.pathname || "").replace(/.*\/BusinessTrip(.+)\.html/, "$1").toLowerCase();
+		html = (document.location.pathname || "").replace(/.*\/BusinessTrip(.+)\.html/, "$1").toLowerCase();
 
 		if (tab === "settlement" || html === "settlement") {
 			$.app.byId("BusinessTripTabBar").setSelectedKey("SettlementList");
@@ -116,24 +113,11 @@ return CommonController.extend($.app.APP_ID, { // 출장
 
 	selectBusinessTripTabBar: function(oEvent) {
 
-		var selectedKey = oEvent.getParameter("key"),
-		IBegda = moment().startOf("date").subtract(1, "months").add(1, "days").toDate(),
-		IEndda = moment().startOf("date").toDate();
-
+		var selectedKey = oEvent.getParameter("key");
 		if (selectedKey === "RequestList") {
-			// this.RequestSearchModel.setProperty("/IBegda", IBegda);
-			// this.RequestSearchModel.setProperty("/IEndda", IEndda);
-			// this.RequestSearchModel.setProperty("/IZzok", "0");
-			// this.RequestListModel.setData([]);
-
 			setTimeout(OnRequest.pressSearch.bind(this), 0);
 
 		} else if (selectedKey === "SettlementList") {
-			// this.SettlementListModel.setProperty("/IBegda", IBegda);
-			// this.SettlementListModel.setProperty("/IEndda", IEndda);
-			// this.SettlementListModel.setProperty("/IBtStat", "0");
-			// this.SettlementListModel.setData([]);
-
 			setTimeout(OnSettlement.pressSearch.bind(this), 0);
 
 		}
@@ -144,28 +128,39 @@ return CommonController.extend($.app.APP_ID, { // 출장
 		Common.openPopup.call(this, p.url);
 	},
 
-	onESSelectPerson: function(oEvent) {
+	onESSelectPerson: function(o) {
 
-		this.RequestDetailDialogHandler.flag == "5"
-			? OnRequest.setAdded.call($.app.getController(), oEvent)
-			: OnRequest.setAccompanier.call($.app.getController(), oEvent);
+		// 외부망인 경우 결재자 지정
+		if (this.EmployeeSearchCallOwner) {
+			this.EmployeeSearchCallOwner.setSelectionTagets(o);
+		}
+		// 대근자 지정
+		else if (this.RequestDetailDialogHandler.isSubstituteAdding) {
+			OnRequest.setSubstitute.call(this, o);
+		}
+		// 동반출장자 지정
+		else {
+			OnRequest.setAccompanier.call(this, o);
+		}
 	},
 
-	displayMultiOrgSearchDialog: OnRequest.searchOrg,
+	displayMultiOrgSearchDialog: function(oEvent) {
 
-	getLocalSessionModel: Common.isLOCAL() ? function() {
-		return new JSONModel({name: "20001003"}); // 
-		// return new JSONModel({name: "35132258"}); // 첨단
-		// return new JSONModel({name: "35132259"}); // 첨단
-		// return new JSONModel({name: "35132260"}); // 첨단
-		// return new JSONModel({name: "35132261"}); // 첨단
-		// return new JSONModel({name: "981014"}); // 기초
-		// return new JSONModel({name: "991002"}); // 기초
-		// return new JSONModel({name: "991004"}); // 기초
-		// return new JSONModel({name: "8900366"}); // 기초
-		// return new JSONModel({name: "8903376"}); // 기초
-		// return new JSONModel({name: "9000290"}); // 기초
-	} : null
+		var oController = $.app.getController();
+		// 외부망인 경우 결재자 검색시
+		if (oController.EmployeeSearchCallOwner) {
+			oController.EmployeeSearchCallOwner.openOrgSearchDialog.call(oController, oEvent);
+		}
+		// 동반출장자/대근자 검색시
+		else {
+			OnRequest.searchOrg.call(oController, oEvent);
+		}
+	},
+
+	getApprovalLinesHandler: function() {
+
+		return this.ApprovalLinesHandler;
+	}
 
 });
 

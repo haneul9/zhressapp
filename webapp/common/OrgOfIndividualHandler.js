@@ -238,25 +238,27 @@ sap.ui.define(
 						sPath = selectContext.getPath(),
 						oSelectedItem = selectContext.getProperty(),
 						bChildIsDummyNode = oSelectedItem.nodes && oSelectedItem.nodes[0].dummy === true;
-					
-					if(bChildIsDummyNode) {
-						oTree.setBusyIndicatorDelay(0);
-						oTree.setBusy(true);
-					}
 
-					Common.getPromise(function() {
+					setTimeout(function() {
 						if(bChildIsDummyNode) {
-							// Tree 하위 아이템 조회
-							this.loadTreeData(sPath, oSelectedItem.Objid);
+							oTree.setBusyIndicatorDelay(0);
+							oTree.setBusy(true);
 						}
-					}.bind(this))
-					.then(function() {
-						this.callback(!oSelectedItem ? null : oSelectedItem);
-						oTree.removeSelections();
-						
-						if(bChildIsDummyNode) oTree.setBusy(false);
-						if(this.autoClose) this.oDialog.close();
-					}.bind(this));
+	
+						Common.getPromise(function() {
+							if(bChildIsDummyNode) {
+								// Tree 하위 아이템 조회
+								this.loadTreeData(sPath, oSelectedItem.Objid);
+							}
+						}.bind(this))
+						.then(function() {
+							this.callback(!oSelectedItem ? null : oSelectedItem);
+							oTree.removeSelections();
+							
+							if(bChildIsDummyNode) oTree.setBusy(false);
+							if(this.autoClose) this.oDialog.close();
+						}.bind(this));
+					}.bind(this), 0);
 				}
 			},
 

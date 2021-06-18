@@ -19,7 +19,7 @@ common.EmpBasicInfoBoxCustom={
 						new sap.m.HBox({
 							alignItems: sap.m.FlexAlignItems.End,
 							items: [
-								new sap.m.Text({text: "{Ename}"}).addStyleClass("employee-basic-info-nickname"),
+								new sap.m.Text({text: "{Ename}"}).addStyleClass("employee-basic-info-ename"),
 								new sap.m.Text({text: "({Pernr})"}).addStyleClass("employee-basic-info-title ml-5px"),
 								new sap.m.Text({text: "{Pbtxt} / {Stext} / {PGradeTxt} / {ZtitleT}"}).addStyleClass("employee-basic-info-department")
 							]

@@ -1420,13 +1420,6 @@ sap.ui.define([
                 oData = oController._DetailJSonModel.getProperty("/Data2");
             }
             
-            // 소득공제
-            var oData2 = oController._DetailJSonModel.getProperty("/Data4");
-            if(oData2.Pernr == undefined){
-                oController.onPressSearch4();
-                oData2 = oController._DetailJSonModel.getProperty("/Data4");
-            }
-            
             // 개인정보 validation check
             if(oData.Hndee == true && oData.Hndcd == "0"){
                 sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").setSelectedKey("2");
@@ -1435,28 +1428,44 @@ sap.ui.define([
                 return;
             }
             
+            // 소득공제
+            var oData2 = oController._DetailJSonModel.getProperty("/Data4");
+            if(oData2.Pernr == undefined){
+                oController.onPressSearch4();
+                oData2 = oController._DetailJSonModel.getProperty("/Data4");
+            }
+            
+            // 종(전)근무지
+            var oData3 = oController._DetailJSonModel.getProperty("/Data7");
+            if(oData3.length == 0){
+                oController.onPressSearch7();
+                oData3 = oController._DetailJSonModel.getProperty("/Data7");
+            }
+            
             var onProcess = function(){
                 var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
                 
-                // 1. 인적공제 저장
-                var createData = {};
-                    createData.IMode = "3";
-                    createData.Zyear = oData.Zyear;
-                    createData.Pernr = oData.Pernr;
-                    createData.Pdcid = oData.Pdcid;
-                    createData.Hshld = oData.Hshld;
-                    createData.Hndee = oData.Hndee == true ? "X" : "";
-                    createData.Hndcd = oData.Hndcd && oData.Hndcd != "0" ? oData.Hndcd : "";
-                    createData.Hndtx = oData.Hndtx ? oData.Hndtx : "";
-                    createData.Womee = oData.Womee == true ? "X" : "";
-                    createData.Sigpr = oData.Sigpr == true ? "X" : "";
-                    createData.Ageid = oData.Ageid == true ? "X" : "";
-                    createData.Zzinsyn = oData.Zzinsyn == true ? "X" : "";
-                    createData.Zzmedyn = oData.Zzmedyn == true ? "X" : "";
-                    createData.Zzeduyn = oData.Zzeduyn == true ? "X" : "";
-                    createData.Zzcrdyn = oData.Zzcrdyn == true ? "X" : "";
-                    createData.Zzdonyn = oData.Zzdonyn == true ? "X" : "";
-                    
+               // 1. 인적공제 저장
+               var createData = {};
+                   createData.IMode = "3";
+                   createData.IZyear = oData.Zyear;
+                   createData.Zyear = oData.Zyear;
+                   createData.IPernr = oData.Pernr;
+                   createData.Pernr = oData.Pernr;
+                   createData.Pdcid = oData.Pdcid;
+                   createData.Hshld = oData.Hshld;
+                   createData.Hndee = oData.Hndee == true ? "X" : "";
+                   createData.Hndcd = oData.Hndcd && oData.Hndcd != "0" ? oData.Hndcd : "";
+                   createData.Hndtx = oData.Hndtx ? oData.Hndtx : "";
+                   createData.Womee = oData.Womee == true ? "X" : "";
+                   createData.Sigpr = oData.Sigpr == true ? "X" : "";
+                   createData.Ageid = oData.Ageid == true ? "X" : "";
+                   createData.Zzinsyn = oData.Zzinsyn == true ? "X" : "";
+                   createData.Zzmedyn = oData.Zzmedyn == true ? "X" : "";
+                   createData.Zzeduyn = oData.Zzeduyn == true ? "X" : "";
+                   createData.Zzcrdyn = oData.Zzcrdyn == true ? "X" : "";
+                   createData.Zzdonyn = oData.Zzdonyn == true ? "X" : "";
+                        
                 oModel.create("/YeartaxSaveFamilyDataPinfoSet", createData,
                     {
                         success: function(data,res){
@@ -1533,23 +1542,45 @@ sap.ui.define([
                     MessageBox.error(oController.ErrorMessage);
                     return;
                 }
-                
-                // 3. 최종제출
-                var createData3 = {};
-                    createData3.Zyear = oData.Zyear;
-                    createData3.Pernr = oData.Pernr;
-                    createData3.Pystat = "";
-                    createData3.Pystatx = "";
-                
-                oModel.update("/DataProgress(Zyear='" + oData.Zyear + "',Pernr='" + oData.Pernr + "')", createData3, null,
-                        function(data,res){
-                            if(data) {
+
+                // 3. 종(전)근무지
+                var createData3 = {NavYeartaxPrevWorkN2 : []};
+                    createData3.IPernr = oData2.Pernr;
+                    createData3.IPyear = oData2.Zyear;
+                    createData3.IConType = "3";
+                    
+                for(var i=0; i<oData3.length; i++){
+                    var detail = {};
+                        detail.Pernr = oData2.Pernr;
+                        detail.Bizno = oData3[i].Bizno ? oData3[i].Bizno : "";
+                        detail.Comnm = oData3[i].Comnm ? oData3[i].Comnm : "";
+                        detail.Pabeg = oData3[i].Pabeg ? "\/Date(" + common.Common.getTime(new Date(oData3[i].Pabeg)) + ")\/" : null;
+                        detail.Paend = oData3[i].Paend ? "\/Date(" + common.Common.getTime(new Date(oData3[i].Paend)) + ")\/" : null;
+                        detail.Bet01 = oData3[i].Bet01 ? oData3[i].Bet01.replace(/[^0-9]/g, "") : "";
+                        detail.Bet02 = oData3[i].Bet02 ? oData3[i].Bet02.replace(/[^0-9]/g, "") : "";
+                        detail.Bet03 = oData3[i].Bet03 ? oData3[i].Bet03.replace(/[^0-9]/g, "") : "";
+                        detail.Bet04 = oData3[i].Bet04 ? oData3[i].Bet04.replace(/[^0-9]/g, "") : "";
+                        detail.Bet05 = oData3[i].Bet05 ? oData3[i].Bet05.replace(/[^0-9]/g, "") : "";
+                        detail.Bet06 = oData3[i].Bet06 ? oData3[i].Bet06.replace(/[^0-9]/g, "") : "";
+                        detail.Bet07 = oData3[i].Bet07 ? oData3[i].Bet07.replace(/[^0-9]/g, "") : "";
+                        detail.Bet08 = oData3[i].Bet08 ? oData3[i].Bet08.replace(/[^0-9]/g, "") : "";
+                        detail.Bet09 = oData3[i].Bet09 ? oData3[i].Bet09.replace(/[^0-9]/g, "") : "";
+                        detail.Bet10 = oData3[i].Bet10 ? oData3[i].Bet10.replace(/[^0-9]/g, "") : "";
+                        
+                    createData3.NavYeartaxPrevWorkN2.push(detail);
+                }
+
+                oModel.create("/YeartaxPrevWorkN2HeaderSet", createData3,
+                    {
+                        success: function(data,res){
+                            if(data){
                                 
-                            } 
+                            }
                         },
-                        function (oError) {
-                            oController.Error = "E";
+                        error: function (oError) {
                             var Err = {};
+                            oController.Error = "E";
+                            
                             if (oError.response) {
                                 Err = window.JSON.parse(oError.response.body);
                                 var msg1 = Err.error.innererror.errordetails;
@@ -1559,6 +1590,7 @@ sap.ui.define([
                                 oController.ErrorMessage = oError.toString();
                             }
                         }
+                    }
                 );
                 
                 oController._BusyDialog.close();
@@ -1568,6 +1600,46 @@ sap.ui.define([
                     MessageBox.error(oController.ErrorMessage);
                     return;
                 }
+                
+                // 4. 최종제출
+                var createData4 = {NavYeartaxDataOperTableIn2 : [], NavYeartaxDataOperTableIn3 : [], NavYeartaxDataOperTableInSet : []};
+                    createData4.IMode = "UPD";
+                    createData4.IFinish = "X";
+                    createData4.IPernr = oData.Pernr;
+                    createData4.IZyear = oData.Zyear;
+                
+                oModel.create("/YeartaxDataOperSet", createData4,
+                    {
+                        success: function(data,res){
+                            if(data){
+                                
+                            }
+                        },
+                        error: function (oError) {
+                            var Err = {};
+                            oController.Error = "E";
+                            
+                            if (oError.response) {
+                                Err = window.JSON.parse(oError.response.body);
+                                var msg1 = Err.error.innererror.errordetails;
+                                if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                                else oController.ErrorMessage = Err.error.message.value;
+                            } else {
+                                oController.ErrorMessage = oError.toString();
+                            }
+                        }
+                    }
+                );
+
+                oController._BusyDialog.close();
+                
+                if(oController.Error == "E"){
+                    oController.Error = "";
+                    MessageBox.error(oController.ErrorMessage);
+                    return;
+                }
+                
+                oController.onDataProgress();
                 
                 MessageBox.success("최종입력완료되었습니다. 조회모드로 변경됩니다.", {
                     onClose : function(){

@@ -465,6 +465,7 @@ save: function(o) {
 			TableIn2: saveItems
 		},
 		{
+			async: true,
 			success: function() {
 				this._gateway.prepareLog('Portlets.save ${url} success'.interpolate(url), arguments).log();
 
