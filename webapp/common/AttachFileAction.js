@@ -190,7 +190,7 @@ common.AttachFileAction = {
 			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
 				common.AttachFileAction.retrieveFile(vFileInfo);
 			} else {
-				if(parent._gateway.isMobile()) {
+				if(common.Common.isPRD() && parent._gateway.isMobile()) {
 					sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
 						title: this.getBundleText("LABEL_09029")
 					});
