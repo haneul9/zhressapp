@@ -809,6 +809,7 @@ sap.ui.define(
                     content: [
                         new MatrixLayout({
                             columns: 9,
+                            width : "100%",
                             widths: ["140px", "", "", "", "", "", "", "", ""],
                             rows: aFirstRows
                         }),
