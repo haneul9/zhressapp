@@ -59,57 +59,62 @@ return CommonController.extend($.app.APP_ID, { // 출장
 
 		this.RequestListModel.setData([]);
 		this.SettlementListModel.setData([]);
-
-		setTimeout(function() {
-			this.retrieveApprovalStatusList("ZHRD_OK_G", this.RequestSearchModel); // 출장 사전 신청 - 결재상태
-		}.bind(this), 0);
-		setTimeout(function() {
-			this.retrieveApprovalStatusList("ZHRD_BT_STAT", this.SettlementSearchModel); // 출장 비용 정산 - 결재상태
-		}.bind(this), 0);
 	},
 
 	onAfterShow: function() {
 		Common.log("onAfterShow");
 
-		var tab = (UriParameters.fromQuery(document.location.search).get("tab") || "").toLowerCase(),
-		html = (document.location.pathname || "").replace(/.*\/BusinessTrip(.+)\.html/, "$1").toLowerCase();
+		Promise.all([
+			this.retrieveApprovalStatusList("ZHRD_OK_G", this.RequestSearchModel),		// 출장 사전 신청 - 결재상태
+			this.retrieveApprovalStatusList("ZHRD_BT_STAT", this.SettlementSearchModel)	// 출장 비용 정산 - 결재상태
+		])
+		.then(function() {
+			var tab = (UriParameters.fromQuery(document.location.search).get("tab") || "").toLowerCase(),
+			html = (document.location.pathname || "").replace(/.*\/BusinessTrip(.+)\.html/, "$1").toLowerCase();
 
-		if (tab === "settlement" || html === "settlement") {
-			$.app.byId("BusinessTripTabBar").setSelectedKey("SettlementList");
-			setTimeout(OnSettlement.pressSearch.bind(this), 0);
-		} else {
-			$.app.byId("BusinessTripTabBar").setSelectedKey("RequestList");
-			setTimeout(OnRequest.pressSearch.bind(this), 0);
-		}
+			if (tab === "settlement" || html === "settlement") {
+				$.app.byId("BusinessTripTabBar").setSelectedKey("SettlementList");
+				setTimeout(OnSettlement.pressSearch.bind(this), 0);
+			} else {
+				$.app.byId("BusinessTripTabBar").setSelectedKey("RequestList");
+				setTimeout(OnRequest.pressSearch.bind(this), 0);
+			}
+		}.bind(this));
 	},
 
 	// 결재상태 ComboBox 공통코드 목록 조회
 	retrieveApprovalStatusList: function(ICodty, oModel) {
 
-		$.app.getModel("ZHR_COMMON_SRV").create(
-			"/CommonCodeListHeaderSet",
-			{
-				ICodeT: "004",
-				ICodty: ICodty,
-				ILangu: this.getSessionInfoByKey("Langu"),
-				NavCommonCodeList: []
-			},
-			{
-				async: true,
-				success: function(oData) {
-					if (oData && oData.NavCommonCodeList.results) {
-						oModel.setProperty("/ApprovalStatusList", oData.NavCommonCodeList.results);
-					} else {
-						oModel.setProperty("/ApprovalStatusList", []);
-					}
+		return Common.getPromise(true, function(resolve, reject) {
+			$.app.getModel("ZHR_COMMON_SRV").create(
+				"/CommonCodeListHeaderSet",
+				{
+					ICodeT: "004",
+					ICodty: ICodty,
+					ILangu: this.getSessionInfoByKey("Langu"),
+					NavCommonCodeList: []
 				},
-				error: function(oResponse) {
-					Common.log(oResponse);
+				{
+					async: true,
+					success: function(oData) {
+						if (oData && oData.NavCommonCodeList.results) {
+							oModel.setProperty("/ApprovalStatusList", oData.NavCommonCodeList.results);
+						} else {
+							oModel.setProperty("/ApprovalStatusList", []);
+						}
 
-					oModel.setProperty("/ApprovalStatusList", []);
+						resolve();
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+
+						oModel.setProperty("/ApprovalStatusList", []);
+
+						reject();
+					}
 				}
-			}
-		);
+			);
+		}.bind(this));
 	},
 
 	selectBusinessTripTabBar: function(oEvent) {
