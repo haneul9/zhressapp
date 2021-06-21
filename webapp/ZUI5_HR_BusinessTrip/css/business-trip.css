@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-.sapUiHiddenPlaceholder+.sapMFlexItem .sapMLabel {margin-left:0; margin-right:0} /* HASS search-field-group의 대상자 뒤에 나오는 신청일/출장기간에만 적용 */
+.search-field-group .sapUiHiddenPlaceholder+.sapMFlexItem .sapMLabel {margin-left:0; margin-right:0} /* HASS search-field-group의 대상자 뒤에 나오는 신청일/출장기간에만 적용 */
 .action-buttons {z-index:1; position:absolute; right:40px; top:20px}
 .field-min-width-50 .sapMInputBaseContentWrapper {min-width:250px !important; width:250px !important}
 .field-min-width-50 .sapMInputDescriptionWrapper {max-width:calc(100% - 250px) !important; width:calc(100% - 250px) !important}
