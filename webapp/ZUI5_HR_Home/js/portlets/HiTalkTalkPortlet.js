@@ -80,7 +80,7 @@ fill: function() {
 					o.Snotes = o.Snotes.replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/g, "");
 
 					return [
-						'<a href="#" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
+						'<a href="javascript:;" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
 								'<div class="portlet-bbs-title" style="width:100%;">',
 									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), o.Stitle),
