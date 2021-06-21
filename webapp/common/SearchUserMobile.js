@@ -230,7 +230,7 @@ common.SearchUserMobile = {
 		vData.forEach(function(o){
 			promises.push(
 				new Promise(function(){
-					 new common.JSONModelHelper()
+					 new JSONModelHelper()
                             .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(o.Pernr) + "' and photoType eq '1'")
                             .select("photo")
                             .setAsync(true)
