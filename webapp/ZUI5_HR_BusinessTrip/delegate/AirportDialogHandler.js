@@ -11,7 +11,7 @@ sap.ui.define([
 ) {
 "use strict";
 
-var Handler = {
+return {
 
 	oController: null,
 	oDialog: null,
@@ -45,7 +45,7 @@ var Handler = {
 	// DialogHandler 호출 function
 	once: function() {
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 국가 코드 목록 조회
 				"/BtCodeSet",
 				{
@@ -55,6 +55,7 @@ var Handler = {
 					TableIn: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var BtCrtList = Common.getTableInResults(oData, "TableIn");
 						if (BtCrtList.length) {
@@ -78,6 +79,8 @@ var Handler = {
 							this.oModel.setProperty("/Airport/BtCrt", "");
 							this.oModel.setProperty("/Airport/BtCrtTxt", "");
 						}
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
@@ -85,6 +88,8 @@ var Handler = {
 						this.oModel.setProperty("/Airport/BtCrtList", []);
 						this.oModel.setProperty("/Airport/BtCrt", "");
 						this.oModel.setProperty("/Airport/BtCrtTxt", "");
+
+						resolve();
 					}.bind(this)
 				}
 			);
@@ -119,7 +124,7 @@ var Handler = {
 
 	onBeforeOpen: function() {
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.byId("AirportTable").setBusy(true, 0);
 
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 공항 코드 목록 조회
@@ -143,11 +148,14 @@ var Handler = {
 					TableIn09: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var TableIn05 = Common.getTableInResults(oData, "TableIn05");
 						this.oModel.setProperty("/Airport/SearchList", TableIn05);
 
 						Common.adjustVisibleRowCount($.app.byId("AirportTable").setBusy(false), 5, TableIn05.length);
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
@@ -155,6 +163,8 @@ var Handler = {
 						this.oModel.setProperty("/Airport/SearchList", []);
 
 						Common.adjustVisibleRowCount($.app.byId("AirportTable").setBusy(false), 1, 1);
+
+						resolve();
 					}.bind(this)
 				}
 			);
@@ -191,7 +201,5 @@ var Handler = {
 	}
 
 };
-
-return Handler;
 
 });

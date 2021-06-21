@@ -42,7 +42,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 
 		var IZzdocno = this.SettlementSearchModel.getProperty("/IZzdocno") || ""; // ZUI5_HR_BusinessTripDetail 에서 사용
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtSettlementSet",
 				{
@@ -57,11 +57,13 @@ var OnSettlement = { // 출장 비용 정산 event handler
 					TableIn01: []
 				},
 				{
-					async: false,
+					async: true,
 					success: function(oData) {
 						this.SettlementListModel.setProperty("/", Common.getTableInResults(oData, "TableIn01"));
 						Common.adjustAutoVisibleRowCount.call($.app.byId("SettlementListTable"));
 						BusyIndicator.hide();
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("OnSettlement.pressSearch error", oResponse);
@@ -69,6 +71,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 						this.SettlementListModel.setProperty("/", []);
 						Common.adjustAutoVisibleRowCount.call($.app.byId("SettlementListTable"));
 						BusyIndicator.hide();
+
+						resolve();
 					}.bind(this)
 				}
 			);
@@ -640,6 +644,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				TableIn08: []  // 연료유형 코드 목록
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnSettlement.remove success", oData);
 
@@ -726,6 +731,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				TableIn06: []         // 코스트센터 코드 목록
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnSettlement.request success", oData);
 
@@ -797,6 +803,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				Export: []
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnSettlement.checkDuplication success", oData);
 
@@ -1083,6 +1090,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 				TableIn09: TableIn09 || []	// 결재자 목록
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnSettlement.request success", oData);
 					var smoinUrl;

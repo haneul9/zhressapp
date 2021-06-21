@@ -40,7 +40,7 @@ var OnRequest = { // 출장 event handler
 
 		var IZzdocno = this.RequestSearchModel.getProperty("/IZzdocno") || ""; // ZUI5_HR_BusinessTripDetail 에서 사용
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtRequestSet",
 				{
@@ -56,11 +56,13 @@ var OnRequest = { // 출장 event handler
 					TableIn03: []
 				},
 				{
-					async: false,
+					async: true,
 					success: function(oData) {
 						this.RequestListModel.setProperty("/", Common.getTableInResults(oData, "TableIn01"));
 						Common.adjustAutoVisibleRowCount.call($.app.byId("RequestListTable"));
 						BusyIndicator.hide();
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("OnRequest.pressSearch error", oResponse);
@@ -68,6 +70,8 @@ var OnRequest = { // 출장 event handler
 						this.RequestListModel.setProperty("/", []);
 						Common.adjustAutoVisibleRowCount.call($.app.byId("RequestListTable"));
 						BusyIndicator.hide();
+
+						resolve();
 					}.bind(this)
 				}
 			);
@@ -256,6 +260,7 @@ var OnRequest = { // 출장 event handler
 					TableIn: TableIn
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var ResultTableIn = Common.getTableInResults(oData, "TableIn");
 						if (ResultTableIn.length) {
@@ -771,6 +776,7 @@ var OnRequest = { // 출장 event handler
 				TableIn06: []  // 근태유형 코드 목록
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnRequest.remove success", oData);
 
@@ -866,6 +872,7 @@ var OnRequest = { // 출장 event handler
 				TableIn07: TableIn07	// 대근자
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnRequest.request success", oData);
 
@@ -944,6 +951,7 @@ var OnRequest = { // 출장 event handler
 				Export: []
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnRequest.checkDuplication success", oData);
 
@@ -1202,6 +1210,7 @@ var OnRequest = { // 출장 event handler
 				// TableIn08: TableIn08 || []	// 결재자 목록
 			},
 			{
+				async: true,
 				success: function(oData) {
 					Common.log("OnRequest.request success", oData);
 					var smoinUrl;

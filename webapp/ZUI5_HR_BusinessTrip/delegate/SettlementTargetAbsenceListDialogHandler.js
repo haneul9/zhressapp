@@ -75,7 +75,7 @@ var Handler = {
 
 		$.app.byId("SettlementTargetAbsenceListTable").setBusy(true, 0);
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtSettlementSet",
 				{
@@ -94,6 +94,8 @@ var Handler = {
 						this.oModel.setProperty("/Absence/List", TableIn07);
 
 						Common.adjustVisibleRowCount($.app.byId("SettlementTargetAbsenceListTable").setBusy(false), 5, TableIn07.length);
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("SettlementTargetAbsenceListDialogHandler.onBeforeOpen error", oResponse);
@@ -101,6 +103,8 @@ var Handler = {
 						this.oModel.setProperty("/Absence/List", []);
 
 						Common.adjustVisibleRowCount($.app.byId("SettlementTargetAbsenceListTable").setBusy(false), 1, 1);
+
+						resolve();
 					}.bind(this)
 				}
 			);

@@ -10,7 +10,7 @@ sap.ui.define([
 ) {
 "use strict";
 
-var Handler = {
+return {
 
 	oController: null,
 	oDialog: null,
@@ -79,7 +79,7 @@ var Handler = {
 
 		$.app.byId("CurrencyTable").setBusy(true, 0);
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 통화 코드 목록 조회
 				"/BtBaseSet",
 				{
@@ -98,18 +98,23 @@ var Handler = {
 					TableIn09: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var TableIn07 = Common.getTableInResults(oData, "TableIn07");
 						this.oModel.setProperty("/Currency/SearchList", TableIn07);
 
 						Common.adjustVisibleRowCount($.app.byId("CurrencyTable").setBusy(false), 5, TableIn07.length);
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
-
+						
 						this.oModel.setProperty("/Currency/SearchList", []);
-
+						
 						Common.adjustVisibleRowCount($.app.byId("CurrencyTable").setBusy(false), 1, 1);
+
+						resolve();
 					}
 				}
 			);
@@ -130,7 +135,5 @@ var Handler = {
 	}
 
 };
-
-return Handler;
 
 });

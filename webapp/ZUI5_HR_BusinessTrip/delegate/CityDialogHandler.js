@@ -11,7 +11,7 @@ sap.ui.define([
 ) {
 "use strict";
 
-var Handler = {
+return {
 
 	oController: null,
 	oDialog: null,
@@ -46,7 +46,7 @@ var Handler = {
 	once: function() {
 
 		return Promise.all([
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 국가 코드 목록 조회
 					"/BtCodeSet",
 					{
@@ -56,6 +56,7 @@ var Handler = {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var BtCrtList = Common.getTableInResults(oData, "TableIn");
 							if (BtCrtList.length) {
@@ -73,16 +74,20 @@ var Handler = {
 							}
 
 							this.oModel.setProperty("/City/BtCrtList", BtCrtList);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 
 							this.oModel.setProperty("/City/BtCrtList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // Favorite City 코드 목록 조회
 					"/BtBaseSet",
 					{
@@ -100,12 +105,18 @@ var Handler = {
 						TableIn09: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							this.arrangeFavoriteCityList(Common.getTableInResults(oData, "TableIn08"));
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
+
 							this.arrangeFavoriteCityList([]);
+
+							resolve();
 						}.bind(this)
 					}
 				);
@@ -206,6 +217,7 @@ var Handler = {
 					TableIn09: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var TableIn01 = Common.getTableInResults(oData, "TableIn01");
 						this.oModel.setProperty("/City/SearchList", TableIn01);
@@ -258,7 +270,5 @@ var Handler = {
 	}
 
 };
-
-return Handler;
 
 });

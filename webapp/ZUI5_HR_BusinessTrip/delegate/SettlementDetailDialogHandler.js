@@ -68,7 +68,7 @@ return {
 			Langu = this.oController.getSessionInfoByKey("Langu");
 
 		return Promise.all([
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 출장자 popup 목록 조회
 					"/DelegateCheckSet",
 					{
@@ -80,17 +80,22 @@ return {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							this.oModel.setProperty("/EnameList", Common.getTableInResults(oData, "TableIn"));
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 							this.oModel.setProperty("/EnameList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 출장구분 코드 목록 조회
 					"/BtCodeSet",
 					{
@@ -100,16 +105,21 @@ return {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var BtPurpose1SelectList = Common.getTableInResults(oData, "TableIn");
 							if (BtPurpose1SelectList.length > 1) {
 								BtPurpose1SelectList.unshift({ Text: this.oController.getBundleText("LABEL_00181") }); // - 선택 -
 							}
 							this.oModel.setProperty("/BtPurpose1SelectList", BtPurpose1SelectList);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 							this.oModel.setProperty("/BtPurpose1SelectList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
@@ -156,7 +166,7 @@ return {
 			IPernr = "";
 		}
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtSettlementSet",
 				{
@@ -172,6 +182,7 @@ return {
 					TableIn06: []  // 코스트센터 코드 목록
 				},
 				{
+					async: true,
 					success: function(oData) {
 						Common.log("SettlementDetailDialogHandler.onBeforeOpen success", oData);
 
@@ -277,6 +288,8 @@ return {
 						Common.adjustVisibleRowCount($.app.byId("SettlementTableIn05"), 5, TableIn05.length);
 
 						this.oModel.setProperty("/MainCostCenterList", Common.getTableInResults(oData, "TableIn06")); // 코스트센터 코드 목록
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("SettlementDetailDialogHandler.onBeforeOpen error", oResponse);
@@ -284,7 +297,10 @@ return {
 						var errData = Common.parseError(oResponse);
 						if (errData.Error && errData.Error === "E") {
 							MessageBox.error(errData.ErrorMessage, {
-								title: this.oController.getBundleText("LABEL_09029") // 확인
+								title: this.oController.getBundleText("LABEL_09029"), // 확인
+								onClose: function() {
+									reject();
+								}
 							});
 						}
 					}.bind(this)
@@ -302,7 +318,7 @@ return {
 
 		BusyIndicator.show(0);
 
-		return Common.getPromise(function () {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtSettlementSet",
 				{
@@ -314,6 +330,7 @@ return {
 					TableIn02: [] // 출장 Header 정보
 				},
 				{
+					async: true,
 					success: function (oData) {
 						Common.log("SettlementDetailDialogHandler.retrieveHeader success", oData);
 
@@ -362,6 +379,8 @@ return {
 						this.oModel.setProperty("/MainCostCenterList", Common.getTableInResults(oData, "TableIn06")); // 코스트센터 코드 목록
 
 						BusyIndicator.hide();
+
+						resolve();
 					}.bind(this),
 					error: function (oResponse) {
 						Common.log("SettlementDetailDialogHandler.retrieveHeader error", oResponse);
@@ -369,7 +388,10 @@ return {
 						var errData = Common.parseError(oResponse);
 						if (errData.Error && errData.Error === "E") {
 							MessageBox.error(errData.ErrorMessage, {
-								title: this.oController.getBundleText("LABEL_09029") // 확인
+								title: this.oController.getBundleText("LABEL_09029"), // 확인
+								onClose: function() {
+									reject();
+								}
 							});
 						}
 
@@ -408,7 +430,7 @@ return {
 			return Common.copyByMetadata("ZHR_WORKTIME_APPL_SRV", "entityType", "BtSettlementTableIn05", o);
 		}.bind(this));
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtSettlementSet",
 				{
@@ -424,6 +446,7 @@ return {
 					TableIn06: []         // 코스트센터 코드 목록
 				},
 				{
+					async: true,
 					success: function(oData) {
 						Common.log("SettlementDetailDialogHandler.calculateAmount success", oData);
 
@@ -504,6 +527,8 @@ return {
 							});
 							this.oModel.setProperty("/SettlementTableIn05", TableIn05);
 						}
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("SettlementDetailDialogHandler.calculateAmount error", oResponse);
@@ -511,7 +536,10 @@ return {
 						var errData = Common.parseError(oResponse);
 						if (errData.Error && errData.Error === "E") {
 							MessageBox.error(errData.ErrorMessage, {
-								title: this.oController.getBundleText("LABEL_09029") // 확인
+								title: this.oController.getBundleText("LABEL_09029"), // 확인
+								onClose: function() {
+									reject();
+								}
 							});
 						}
 					}.bind(this)

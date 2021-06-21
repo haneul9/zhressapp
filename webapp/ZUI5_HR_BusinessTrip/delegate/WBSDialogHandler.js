@@ -70,7 +70,7 @@ var Handler = {
 
 		$.app.byId("WBSTable").setBusy(true, 0);
 
-		return Common.getPromise(function () {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // WBS코드 목록 조회
 				"/BtBaseSet",
 				{
@@ -91,18 +91,23 @@ var Handler = {
 					TableIn09: []
 				},
 				{
-					success: function (oData) {
+					async: true,
+					success: function(oData) {
 						var TableIn03 = Common.getTableInResults(oData, "TableIn03");
 						this.oModel.setProperty("/WBS/List", TableIn03);
 
 						Common.adjustVisibleRowCount($.app.byId("WBSTable").setBusy(false), 5, TableIn03.length);
+
+						resolve();
 					}.bind(this),
-					error: function (oResponse) {
+					error: function(oResponse) {
 						Common.log(oResponse);
 
 						this.oModel.setProperty("/WBS/List", []);
 
 						Common.adjustVisibleRowCount($.app.byId("WBSTable").setBusy(false), 1, 1);
+
+						resolve();
 					}.bind(this)
 				}
 			);

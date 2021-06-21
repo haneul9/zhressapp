@@ -64,6 +64,7 @@ return {
 					TableIn: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var CorpCardSelectList = Common.getTableInResults(oData, "TableIn");
 						if (CorpCardSelectList.length > 1) {
@@ -132,7 +133,7 @@ return {
 		IBegda = CorpCardUsed.IBegda,
 		IEndda = CorpCardUsed.IEndda;
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 출장 비용 정산 - 카드사용내역 조회
 				"/BtCorpCardUseListSet",
 				{
@@ -147,6 +148,7 @@ return {
 					TableIn: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var CorpCardUsedList = $.map(Common.getTableInResults(oData, "TableIn"), function(p) {
 							if (!this.stagedCardApprNoMap[p.ApprNo]) {
@@ -158,6 +160,8 @@ return {
 						this.oModel.setProperty("/CorpCardUsedList", CorpCardUsedList);
 
 						Common.adjustVisibleRowCount($.app.byId("CorpCardUsedTable").setBusy(false), 5, CorpCardUsedList.length);
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
@@ -165,6 +169,8 @@ return {
 						this.oModel.setProperty("/CorpCardUsedList", []);
 
 						Common.adjustVisibleRowCount($.app.byId("CorpCardUsedTable").setBusy(false), 1, 1);
+
+						resolve();
 					}.bind(this)
 				}
 			);

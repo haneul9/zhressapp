@@ -130,7 +130,7 @@ return {
 		Langu = this.oController.getSessionInfoByKey("Langu");
 
 		return Promise.all([
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 비용구분 코드 목록 조회
 					"/BtCodeSet",
 					{
@@ -140,6 +140,7 @@ return {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var CategorySelectList = Common.getTableInResults(oData, "TableIn");
 							if (CategorySelectList.length) {
@@ -148,16 +149,20 @@ return {
 								});
 							}
 							this.oModel.setProperty("/CategorySelectList", CategorySelectList);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 
 							this.oModel.setProperty("/CategorySelectList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 국내현금 세금 코드 목록 조회
 					"/BtBaseSet",
 					{
@@ -177,6 +182,7 @@ return {
 						TableIn09: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var TaxSelectList11 = Common.getTableInResults(oData, "TableIn06"), TaxMap11 = {};
 							if (TaxSelectList11.length) {
@@ -189,17 +195,21 @@ return {
 
 							this.oModel.setProperty("/TaxSelectList11", TaxSelectList11);
 							this.oModel.setProperty("/TaxMap11", TaxMap11);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 
 							this.oModel.setProperty("/TaxSelectList11", []);
 							this.oModel.setProperty("/TaxMap11", {});
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 국내카드 세금 코드 목록 조회
 					"/BtBaseSet",
 					{
@@ -219,6 +229,7 @@ return {
 						TableIn09: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var TaxSelectList15 = Common.getTableInResults(oData, "TableIn06"), TaxMap15 = {};
 							if (TaxSelectList15.length) {
@@ -231,17 +242,21 @@ return {
 
 							this.oModel.setProperty("/TaxSelectList15", TaxSelectList15);
 							this.oModel.setProperty("/TaxMap15", TaxMap15);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 
 							this.oModel.setProperty("/TaxSelectList15", []);
 							this.oModel.setProperty("/TaxMap15", {});
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 해외현금 세금 코드 목록 조회
 					"/BtBaseSet",
 					{
@@ -261,6 +276,7 @@ return {
 						TableIn09: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var TaxSelectList21 = Common.getTableInResults(oData, "TableIn06"), TaxMap21 = {};
 							if (TaxSelectList21.length) {
@@ -273,17 +289,21 @@ return {
 
 							this.oModel.setProperty("/TaxSelectList21", TaxSelectList21);
 							this.oModel.setProperty("/TaxMap21", TaxMap21);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 
 							this.oModel.setProperty("/TaxSelectList21", []);
 							this.oModel.setProperty("/TaxMap21", {});
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 해외카드 세금 코드 목록 조회
 					"/BtBaseSet",
 					{
@@ -303,6 +323,7 @@ return {
 						TableIn09: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var TaxSelectList25 = Common.getTableInResults(oData, "TableIn06"), TaxMap25 = {};
 							if (TaxSelectList25.length) {
@@ -315,12 +336,16 @@ return {
 
 							this.oModel.setProperty("/TaxSelectList25", TaxSelectList25);
 							this.oModel.setProperty("/TaxMap25", TaxMap25);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 
 							this.oModel.setProperty("/TaxSelectList25", []);
 							this.oModel.setProperty("/TaxMap25", {});
+
+							resolve();
 						}.bind(this)
 					}
 				);
@@ -506,6 +531,7 @@ return {
 					TableIn: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var SubcategorySelectList = Common.getTableInResults(oData, "TableIn");
 						if (!SubcategorySelectList.length) {
@@ -953,6 +979,7 @@ return {
 						TableIn08: []  // 소유 차종의 연료종류 코드 목록
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var OwnCarGasTypeList = Common.getTableInResults(oData, "TableIn08");
 							if (OwnCarGasTypeList.length > 0) {
@@ -984,6 +1011,7 @@ return {
 						TableIn09: []  // 연료종류 코드 목록 조회
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var GasTypeMap = {},
 							GasTypeSelectList = $.map(Common.getTableInResults(oData, "TableIn09"), function(o) {

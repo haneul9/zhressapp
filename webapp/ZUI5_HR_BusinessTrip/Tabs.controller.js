@@ -95,6 +95,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				NavCommonCodeList: []
 			},
 			{
+				async: true,
 				success: function(oData) {
 					if (oData && oData.NavCommonCodeList.results) {
 						oModel.setProperty("/ApprovalStatusList", oData.NavCommonCodeList.results);

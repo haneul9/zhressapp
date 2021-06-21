@@ -75,7 +75,7 @@ return {
 			Langu = this.oController.getSessionInfoByKey("Langu");
 
 		return Promise.all([
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 출장자 popup 목록 조회
 					"/DelegateCheckSet",
 					{
@@ -87,17 +87,22 @@ return {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							this.oModel.setProperty("/EnameList", Common.getTableInResults(oData, "TableIn"));
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 							this.oModel.setProperty("/EnameList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 출장구분 코드 목록 조회
 					"/BtCodeSet",
 					{
@@ -107,21 +112,26 @@ return {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var BtPurpose1SelectList = Common.getTableInResults(oData, "TableIn");
 							if (BtPurpose1SelectList.length > 1) {
 								BtPurpose1SelectList.unshift({ Text: this.oController.getBundleText("LABEL_00181") }); // - 선택 -
 							}
 							this.oModel.setProperty("/BtPurpose1SelectList", BtPurpose1SelectList);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 							this.oModel.setProperty("/BtPurpose1SelectList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
 			}.bind(this)),
-			Common.getPromise(function() {
+			Common.getPromise(true, function(resolve) {
 				$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 출입카드 신청지역 코드 목록 조회
 					"/BtCodeSet",
 					{
@@ -131,16 +141,21 @@ return {
 						TableIn: []
 					},
 					{
+						async: true,
 						success: function(oData) {
 							var EncardSelectList = Common.getTableInResults(oData, "TableIn");
 							if (EncardSelectList.length) {
 								EncardSelectList.unshift({ Text: this.oController.getBundleText("LABEL_00181") }); // - 선택 -
 							}
 							this.oModel.setProperty("/EncardSelectList", EncardSelectList);
+
+							resolve();
 						}.bind(this),
 						error: function(oResponse) {
 							Common.log(oResponse);
 							this.oModel.setProperty("/EncardSelectList", []);
+
+							resolve();
 						}.bind(this)
 					}
 				);
@@ -193,7 +208,7 @@ return {
 			IPernr = this.oRowData.Btbpn;
 		}
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtRequestSet",
 				{
@@ -210,6 +225,7 @@ return {
 					TableIn07: []  // 대근자 목록
 				},
 				{
+					async: true,
 					success: function(oData) {
 						Common.log("RequestDetailDialogHandler.onBeforeOpen success", oData);
 
@@ -309,6 +325,8 @@ return {
 						} else {
 							this.changeSubstituteData("onBeforeOpen");
 						}
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.onBeforeOpen error", oResponse);
@@ -317,6 +335,8 @@ return {
 						if (errData.Error && errData.Error === "E") {
 							MessageBox.error(errData.ErrorMessage);
 						}
+
+						reject();
 					}
 				}
 			);
@@ -359,7 +379,7 @@ return {
 
 		BusyIndicator.show(0);
 
-		return Common.getPromise(function () {
+		return Common.getPromise(true, function(resolve, reject) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create(
 				"/BtRequestSet",
 				{
@@ -371,7 +391,8 @@ return {
 					TableIn02: [] // 출장 Header 정보
 				},
 				{
-					success: function (oData) {
+					async: true,
+					success: function(oData) {
 						Common.log("RequestDetailDialogHandler.retrieveHeader success", oData);
 
 						var TableIn02 = Common.getTableInResults(oData, "TableIn02");
@@ -423,6 +444,8 @@ return {
 						this.toggleAdvanceAmtState(); // 가지급금 입력 활성화 여부 결정
 
 						BusyIndicator.hide();
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log("RequestDetailDialogHandler.retrieveHeader error", oResponse);
@@ -433,6 +456,8 @@ return {
 						}
 
 						BusyIndicator.hide();
+
+						reject();
 					}
 				}
 			);
@@ -487,6 +512,7 @@ return {
 					TableIn06: []			// 근태유형 코드 목록
 				},
 				{
+					async: true,
 					success: function(oData) {
 						Common.log("RequestDetailDialogHandler.calculateAmount success", oData);
 
@@ -987,6 +1013,7 @@ return {
 					Export: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						if (((((oData || {}).Export || {}).results || [{}])[0] || {}).Awchk) {
 							substituteNeedTripperList.push(o);
@@ -1065,6 +1092,7 @@ return {
 							TableIn: []
 						},
 						{
+							async: true,
 							success: function(oData) {
 								$.map(Common.getTableInResults(oData, "TableIn"), function(o, i) {
 									o.Flag = "A";

@@ -74,7 +74,7 @@ var Handler = {
 
 		this.oDialog.setTitle(this.oController.getBundleText("LABEL_19401", this.dialogTitle || " ")); // {0} 코스트센터 선택
 
-		return Common.getPromise(function() {
+		return Common.getPromise(true, function(resolve) {
 			$.app.getModel("ZHR_WORKTIME_APPL_SRV").create( // 비용귀속부서 코스트센터 코드 목록 조회
 				"/BtBaseSet",
 				{
@@ -95,11 +95,14 @@ var Handler = {
 					TableIn09: []
 				},
 				{
+					async: true,
 					success: function(oData) {
 						var TableIn02 = Common.getTableInResults(oData, "TableIn02");
 						this.oModel.setProperty("/SubCostCenter/List", TableIn02);
 
 						Common.adjustVisibleRowCount($.app.byId("SubCostCenterTable").setBusy(false), 5, TableIn02.length);
+
+						resolve();
 					}.bind(this),
 					error: function(oResponse) {
 						Common.log(oResponse);
@@ -107,6 +110,8 @@ var Handler = {
 						this.oModel.setProperty("/SubCostCenter/List", []);
 
 						Common.adjustVisibleRowCount($.app.byId("SubCostCenterTable").setBusy(false), 1, 1);
+
+						resolve();
 					}.bind(this)
 				}
 			);
