@@ -49,14 +49,26 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			IBegda: IBegda,
 			IEndda: IEndda,
 			IZzok: "0",
-			ApprovalStatusList: []
+			ApprovalStatusList: [
+				{ Code: "0", Text: "전체" },
+				{ Code: "1", Text: "미결재" },
+				{ Code: "2", Text: "결재중" },
+				{ Code: "3", Text: "결재완료" },
+				{ Code: "4", Text: "반려" }
+			]
 		});
 		this.SettlementSearchModel.setData({
 			Dtfmt: Dtfmt,
 			IBegda: IBegda,
 			IEndda: IEndda,
 			IBtStat: "0",
-			ApprovalStatusList: []
+			ApprovalStatusList: [
+				{ Code: "0", Text: "전체" },
+				{ Code: "1", Text: "미결재" },
+				{ Code: "2", Text: "결재중" },
+				{ Code: "3", Text: "결재완료" },
+				{ Code: "4", Text: "반려" }
+			]
 		});
 
 		this.RequestListModel.setData([]);
@@ -66,15 +78,11 @@ return CommonController.extend($.app.APP_ID, { // 출장
 	onAfterShow: function() {
 		Common.log("onAfterShow");
 
-		BusyIndicator.show(0);
-
-		Promise.all([
-			this.retrieveApprovalStatusList("ZHRD_OK_G", this.RequestSearchModel),		// 출장 사전 신청 - 결재상태
-			this.retrieveApprovalStatusList("ZHRD_BT_STAT", this.SettlementSearchModel)	// 출장 비용 정산 - 결재상태
-		])
-		.then(function() {
-			BusyIndicator.hide();
-
+		// Promise.all([
+		// 	this.retrieveApprovalStatusList("ZHRD_OK_G", this.RequestSearchModel),		// 출장 사전 신청 - 결재상태
+		// 	this.retrieveApprovalStatusList("ZHRD_BT_STAT", this.SettlementSearchModel)	// 출장 비용 정산 - 결재상태
+		// ])
+		// .then(function() {
 			var tab = (UriParameters.fromQuery(document.location.search).get("tab") || "").toLowerCase(),
 			html = (document.location.pathname || "").replace(/.*\/BusinessTrip(.+)\.html/, "$1").toLowerCase();
 
@@ -85,7 +93,7 @@ return CommonController.extend($.app.APP_ID, { // 출장
 				$.app.byId("BusinessTripTabBar").setSelectedKey("RequestList");
 				setTimeout(OnRequest.pressSearch.bind(this), 0);
 			}
-		}.bind(this));
+		// }.bind(this));
 	},
 
 	// 결재상태 ComboBox 공통코드 목록 조회
