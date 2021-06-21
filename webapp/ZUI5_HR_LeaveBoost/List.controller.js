@@ -237,7 +237,7 @@ sap.ui.define([
 							if(data.LeaveBoostListTab2 && data.LeaveBoostListTab2.results){
 								var data2 = data.LeaveBoostListTab2.results;
 								
-								data1.Pronm2 = data2.length;
+								// data1.Pronm2 = data2.length;
 								
 								for(var i=0; i<data2.length; i++){
 									data2[i].Zdate = dateFormat.format(new Date(common.Common.getTime(data2[i].Zdate)));
@@ -267,6 +267,10 @@ sap.ui.define([
 					oController._ListCondJSonModel.setProperty("/Data/Pronm2", oPronm);
 					
 					for(var i=0; i<oPronm; i++){
+						vData2.push({Status1 : oController._ListCondJSonModel.getProperty("/Data/Status1")});
+					}
+				} else if(vData2.length != oPronm){ // 리턴된 계획 데이터와 현황의 계획개수가 다른 경우 계획개수만큼 데이터 추가
+					for(var i=vData2.length; i<oPronm; i++){
 						vData2.push({Status1 : oController._ListCondJSonModel.getProperty("/Data/Status1")});
 					}
 				}
