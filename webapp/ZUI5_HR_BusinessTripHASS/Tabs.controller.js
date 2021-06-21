@@ -79,11 +79,15 @@ return CommonController.extend($.app.APP_ID, { // 출장 관리 HASS
 	onAfterShow: function() {
 		Common.log("onAfterShow");
 
+		BusyIndicator.show(0);
+
 		Promise.all([
 			this.retrieveApprovalStatusList("ZHRD_OK_G", this.RequestSearchModel),		// 출장 사전 신청 - 결재상태
 			this.retrieveApprovalStatusList("ZHRD_BT_STAT", this.SettlementSearchModel)	// 출장 비용 정산 - 결재상태
 		])
 		.then(function() {
+			BusyIndicator.hide();
+
 			var tab = (UriParameters.fromQuery(document.location.search).get("tab") || "").toLowerCase(),
 			html = (document.location.pathname || "").replace(/.*\/BusinessTrip(.+)\.html/, "$1").toLowerCase();
 
