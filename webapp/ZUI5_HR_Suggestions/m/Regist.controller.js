@@ -1587,6 +1587,14 @@
 				$.app.byId(oController.PAGEID + "AreaHTML").destroy();
 			}
 
+			if(Common.checkNull(vSdate) || vGubun === "X"){
+				$.app.byId("contentArea1").setVisible(true);
+				$.app.byId("contentArea2").setVisible(false);
+			}else{
+				$.app.byId("contentArea1").setVisible(false);
+				$.app.byId("contentArea2").setVisible(true);
+			}
+
 			var that = this;
 				that.oRichTextEditor = new RTE("myRTE", {
 					editorType: EditorType.TinyMCE4,

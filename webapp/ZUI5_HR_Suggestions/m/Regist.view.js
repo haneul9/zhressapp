@@ -210,12 +210,12 @@ sap.ui.define([
 					}),
                     new sap.m.VBox(oController.PAGEID + "_IsHideBox", {
                         fitContainer: true,
-                        visible: {
-							parts: [{path: "Sdate"}, {path: "/Gubun"}],
-							formatter: function(v1, v2) {
-								return !v1 || (Common.checkNull(!v1) && v2 === "X");
-							}
-						},
+                        // visible: {
+						// 	parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						// 	formatter: function(v1, v2) {
+						// 		return !v1 || (Common.checkNull(!v1) && v2 === "X");
+						// 	}
+						// },
 						items: [
                             new sap.m.HBox({
                                 height: "40px",
@@ -251,12 +251,12 @@ sap.ui.define([
                     }),
                     new sap.m.VBox("contentArea1", {
                         width: "100%",
-                        visible: {
-							parts: [{path: "Sdate"}, {path: "/Gubun"}],
-							formatter: function(v1, v2) {
-								return Common.checkNull(v1) || v2 === "X";
-							}	
-						},
+                        // visible: {
+						// 	parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						// 	formatter: function(v1, v2) {
+						// 		return Common.checkNull(v1) || v2 === "X";
+						// 	}	
+						// },
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title") // 내용
                             // new sap.m.TextArea({

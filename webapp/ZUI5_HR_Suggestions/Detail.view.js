@@ -189,42 +189,28 @@
                     new sap.m.HBox("contentArea1", {
 						width: "100%",
 						fitContainer: true,
-						visible: {
-							parts: [{path: "Sdate"}, {path: "/Gubun"}],
-							formatter: function(v1, v2) {
-								return Common.checkNull(v1) || v2 === "X";
-							}	
-						},
+						// visible: {
+						// 	parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						// 	formatter: function(v1, v2) {
+						// 		return Common.checkNull(v1) || v2 === "X";
+						// 	}	
+						// },
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
-                            // new sap.m.TextArea({
-                            //     rows: 10,
-							// 	width: "100%",
-							// 	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),	
-							// 	value:"{Detail}",
-							// 	maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
-							// 	editable: {
-							// 		parts: [{path: "Sdate"}, {path: "/Gubun"}],
-							// 		formatter: function(v1, v2) {
-							// 			return !v1 || v2 === "X";
-							// 		}
-							// 	}
-							// }).addStyleClass("mt-8px mb-8px")
 						]
 					})
 					.addStyleClass("search-field-group h-auto"),
                     new sap.m.HBox("contentArea2", {
 						width: "100%",
 						fitContainer: true,
-						visible: {
-							parts: [{path: "Sdate"}, {path: "/Gubun"}],
-							formatter: function(v1, v2) {
-								return Common.checkNull(!v1) && v2 !== "X";
-							}	
-						},
+						// visible: {
+						// 	parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						// 	formatter: function(v1, v2) {
+						// 		return Common.checkNull(!v1) && v2 !== "X";
+						// 	}	
+						// },
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
-							// new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", { content: "{Detail}" })
 						]
 					})
 					.addStyleClass("search-field-group h-auto"),
