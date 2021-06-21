@@ -90,6 +90,7 @@
             if(oEvent.data){
 				if(oEvent.data.New === "O") {
 					this.CommentModel.setProperty("/HideComment", "X");
+					this.RegistModel.setProperty("/Gubun", "");
 					oThumsBox.setVisible(false);
 					oDateBox.setVisible(false);
 					oIsHideBox.setVisible(true);
@@ -152,7 +153,13 @@
 					if (oData && oData.TableIn2) {
 						Common.log(oData);
 						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
-						oCopiedRow.Detail = oData.TableIn6.results[0].Detail;
+						// oCopiedRow.Detail = oData.TableIn6.results.Detail;
+						oCopiedRow.Detail = "";
+						
+						oData.TableIn6.results.forEach(function(e) {
+							oCopiedRow.Detail += e.Detail;
+						});
+
 						var oCommentData = oData.TableIn3.results;
 						var oSubCommentData = oData.TableIn4.results;
 						// oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
@@ -1451,25 +1458,36 @@
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vBukrs = this.getUserGubun();
 			var oRowData = this.RegistModel.getProperty("/FormData");
+			var oList = [],
+				oDetailList = [];
 
 			if(this.checkError()) return;
 
+			oList = oRowData.Detail.match(new RegExp('.{1,' + 4000 + '}', 'g'));
+			
+			oList.forEach(function(e) {
+				var oDetailObj = {};
+				oDetailObj.Detail = e;
+				oDetailList.push(Common.copyByMetadata(oModel, "SuggestionBoxTableIn6", oDetailObj));
+			});
+			
 			BusyIndicator.show(0);
 			var onPressRegist = function (fVal) {
 				if (fVal && fVal == oController.getBundleText("LABEL_56005")) { // 등록
-
+					
 					// 첨부파일 저장
 					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
-
+					
 					oRowData.Sdate = Common.checkNull(oRowData.Sdate) ? new Date() : oRowData.Sdate;
-
+					delete oRowData.Detail;
+					
 					var sendObject = {};
 					// Header
 					sendObject.IConType = "2";
 					sendObject.IBukrs = vBukrs;
 					// Navigation property
 					sendObject.TableIn2 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn2", oRowData)];
-					sendObject.TableIn6 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn6", oRowData)];
+					sendObject.TableIn6 = oDetailList;
 					
 					oModel.create("/SuggestionBoxSet", sendObject, {
 						success: function(oData, oResponse) {
@@ -1515,6 +1533,18 @@
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.RegistModel.getProperty("/FormData");
+			var oList = [],
+				oDetailList = [];
+
+			oList = oRowData.Detail.match(new RegExp('.{1,' + 4000 + '}', 'g'));
+			
+			oList.forEach(function(e) {
+				var oDetailObj = {};
+				oDetailObj.Detail = e;
+				oDetailList.push(Common.copyByMetadata(oModel, "SuggestionBoxTableIn6", oDetailObj));
+			});
+
+			delete oRowData.Detail;
 
 			var sendObject = {};
 			// Header
@@ -1522,6 +1552,7 @@
 			sendObject.IBukrs = vBukrs;
 			// Navigation property
 			sendObject.TableIn2 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn2", oRowData)];
+			sendObject.TableIn6 = oDetailList;
 			
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
@@ -1572,34 +1603,51 @@
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "",
 				vGubun = oController.RegistModel.getProperty("/Gubun") || "";
 				
-			// if($.app.byId("myRTE"))
-			// 	$.app.byId("myRTE").destroy();
+			if($.app.byId("myRTE")){
+				$.app.byId("myRTE").destroy();
+				$.app.byId(oController.PAGEID + "AreaHTML").destroy();
+			}
 
-			// var that = this;
-			// 	that.oRichTextEditor = new RTE("myRTE", {
-			// 		editorType: EditorType.TinyMCE4,
-			// 		layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-			// 		width: "99.8%",
-			// 		height: "500px",
-			// 		customToolbar: true,
-			// 		showGroupFont: true,
-			// 		showGroupLink: true,
-			// 		showGroupInsert: true,
-			// 		value: "{Detail}",
-			// 		editable: {
-			// 			parts: [{path: "Sdate"}, {path: "/Gubun"}],
-			// 			formatter: function(v1, v2) {
-			// 				return !v1 || v2 === "X";
-			// 			}
-			// 		},
-			// 		ready: function () {
-			// 			this.addButtonGroup("styleselect").addButtonGroup("table");
-			// 		}
-			// 	});
+			var that = this;
+				that.oRichTextEditor = new RTE("myRTE", {
+					editorType: EditorType.TinyMCE4,
+					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					width: "99.8%",
+					height: "500px",
+					customToolbar: true,
+					showGroupFont: true,
+					// showGroupLink: true,
+					showGroupInsert: true,
+					sanitizeValue: false,
+					value: "{Detail}",
+					editable: {
+						parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						formatter: function(v1, v2) {
+							return !v1 || v2 === "X";
+						}
+					},
+					ready: function () {
+						this.addButtonGroup("styleselect").addButtonGroup("table");
+					}
+				});
 
-			// $.app.byId("contentArea").addItem(that.oRichTextEditor);
+			$.app.byId("contentArea1").addItem(that.oRichTextEditor);
+			$.app.byId("contentArea2").addItem(
+				new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
+					content: {
+						path: "Detail",
+						formatter: function(v) {
+							if(!v){
+								return "";
+							}else{
+								return /^</i.test(v) ? v : "<p>${content}</p>".interpolate(v);
+							}
+						}
+					}
+				})
+			);
 
-			// $.app.byId("myRTE").addStyleClass("mxw-100");
+			$.app.byId("myRTE").addStyleClass("mxw-100");
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,

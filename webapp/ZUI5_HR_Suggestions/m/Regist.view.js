@@ -211,9 +211,9 @@ sap.ui.define([
                     new sap.m.VBox(oController.PAGEID + "_IsHideBox", {
                         fitContainer: true,
                         visible: {
-							path: "/Gubun",
-							formatter: function(v) {
-								return v === "X";
+							parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return !v1 || (Common.checkNull(!v1) && v2 === "X");
 							}
 						},
 						items: [
@@ -249,27 +249,43 @@ sap.ui.define([
                             })
                         ]
                     }),
-                    new sap.m.VBox("contentArea", {
+                    new sap.m.VBox("contentArea1", {
                         width: "100%",
-                        // fitContainer: true,
-					//	alignItems: sap.m.FlexAlignItems.Center,
+                        visible: {
+							parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return Common.checkNull(v1) || v2 === "X";
+							}	
+						},
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title"), // 내용
-                            new sap.m.TextArea({
-                                rows: 10,
-								width: "100%",
-								value:"{Detail}",
-                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
-								editable: {
-									parts: [{path: "Sdate"}, {path: "/Gubun"}],
-									formatter: function(v1, v2) {
-										return !v1 || v2 === "X";
-									}
-								}
-							})
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title") // 내용
+                            // new sap.m.TextArea({
+                            //     rows: 10,
+							// 	width: "100%",
+							// 	value:"{Detail}",
+                            //     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                            //     maxLength: Common.getODataPropertyLength("ZHR_COMMON_SRV", "SuggestionBoxTableIn2", "Detail", false),
+							// 	editable: {
+							// 		parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							// 		formatter: function(v1, v2) {
+							// 			return !v1 || v2 === "X";
+							// 		}
+							// 	}
+							// })
 						]
 					}).addStyleClass("w-100"),
+                    new sap.m.VBox("contentArea2", {
+                        width: "100%",
+                        visible: {
+							parts: [{path: "Sdate"}, {path: "/Gubun"}],
+							formatter: function(v1, v2) {
+								return Common.checkNull(!v1) && v2 !== "X";
+							}	
+						},
+						items: [
+							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "105px", "Left", true).addStyleClass("sub-con-title") // 내용
+						]
+					}),
                     new sap.m.HBox(oController.PAGEID + "_ThumsBox", {
 						justifyContent: sap.m.FlexJustifyContent.End,
 						alignContent: sap.m.FlexAlignContent.End,

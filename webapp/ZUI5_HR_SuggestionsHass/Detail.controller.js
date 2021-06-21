@@ -165,13 +165,18 @@
 					if (oData && oData.TableIn2) {
 						Common.log(oData);
 						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
-						oCopiedRow.Detail = oData.TableIn6.results[0].Detail;
+						oCopiedRow.Detail = "";
+						
+						oData.TableIn6.results.forEach(function(e) {
+							oCopiedRow.Detail += e.Detail;
+						});
+
 						var oCommentData = oData.TableIn3.results;
 						var oSubCommentData = oData.TableIn4.results;
-						oController.RegistModel.setData({FormData: oCopiedRow});
-						// oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
-						// 	Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
-						// })});
+						// oController.RegistModel.setData({FormData: oCopiedRow});
+						oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
+							Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
+						})});
 
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);

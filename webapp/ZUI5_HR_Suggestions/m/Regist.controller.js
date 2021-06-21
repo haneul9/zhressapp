@@ -95,6 +95,7 @@
                     oIsHideBox.setVisible(true);
 					oThumsBox.setVisible(false);
 					this.CommentModel.setProperty("/HideComment", "X");
+					this.RegistModel.setProperty("/Gubun", "");
                 }else{
                     oDateBox.setVisible(true);
                     oIsHideBox.setVisible(false);
@@ -139,12 +140,19 @@
 			sendObject.TableIn2 = [];
 			sendObject.TableIn3 = [];
 			sendObject.TableIn4 = [];
+			sendObject.TableIn6 = [];
 			
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
 					if (oData && oData.TableIn2) {
 						Common.log(oData);
 						var oCopiedRow = $.extend(true, {}, oData.TableIn2.results[0]);
+						oCopiedRow.Detail = "";
+						
+						oData.TableIn6.results.forEach(function(e) {
+							oCopiedRow.Detail += e.Detail;
+						});
+						
 						var oCommentData = oData.TableIn3.results;
 						var oSubCommentData = oData.TableIn4.results;
 						oController.RegistModel.setData({FormData: oCopiedRow});
@@ -1457,6 +1465,18 @@
 			var oModel = $.app.getModel("ZHR_COMMON_SRV");
             var vBukrs = oController.getUserGubun();
 			var oRowData = oController.RegistModel.getProperty("/FormData");
+			var oList = [],
+				oDetailList = [];
+
+			oList = oRowData.Detail.match(new RegExp('.{1,' + 4000 + '}', 'g'));
+			
+			oList.forEach(function(e) {
+				var oDetailObj = {};
+				oDetailObj.Detail = e;
+				oDetailList.push(Common.copyByMetadata(oModel, "SuggestionBoxTableIn6", oDetailObj));
+			});
+
+			delete oRowData.Detail;
 
 			var sendObject = {};
 			// Header
@@ -1464,6 +1484,7 @@
 			sendObject.IBukrs = vBukrs;
 			// Navigation property
 			sendObject.TableIn2 = [Common.copyByMetadata(oModel, "SuggestionBoxTableIn2", oRowData)];
+			sendObject.TableIn6 = oDetailList;
 			
 			oModel.create("/SuggestionBoxSet", sendObject, {
 				success: function(oData, oResponse) {
@@ -1561,34 +1582,65 @@
 				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "",
 				vGubun = oController.RegistModel.getProperty("/Gubun") || "";
 
-			// if($.app.byId("myRTE"))
-			// 	$.app.byId("myRTE").destroy();
+			if($.app.byId("myRTE")){
+				$.app.byId("myRTE").destroy();
+				$.app.byId(oController.PAGEID + "AreaHTML").destroy();
+			}
 
-			// var that = this;
-			// 	that.oRichTextEditor = new RTE("myRTE", {
-			// 		editorType: EditorType.TinyMCE4,
-			// 		// layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-			// 		width: "100%",
-			// 		height: "350px",
-			// 		customToolbar: true,
-			// 		showGroupFont: true,
-			// 		showGroupLink: true,
-			// 		showGroupInsert: true,
-			// 		value: "{Detail}",
-			// 		editable: {
-			// 			parts: [{path: "Sdate"}, {path: "/Gubun"}],
-			// 			formatter: function(v1, v2) {
-			// 				return !v1 || v2 === "X";
-			// 			}
-			// 		},
-			// 		ready: function () {
-			// 			this.addButtonGroup("styleselect").addButtonGroup("table");
-			// 		}
-			// 	});
+			var that = this;
+				that.oRichTextEditor = new RTE("myRTE", {
+					editorType: EditorType.TinyMCE4,
+					// layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+					width: "100%",
+					height: "350px",
+					customToolbar: true,
+					showGroupFont: true,
+					// showGroupLink: true,
+					// showGroupInsert: true,
+					value: "{Detail}",
+					editable: {
+						parts: [{path: "Sdate"}, {path: "/Gubun"}],
+						formatter: function(v1, v2) {
+							return !v1 || v2 === "X";
+						}
+					},
+					ready: function () {
+						this.addButtonGroup("styleselect").addButtonGroup("table");
+					}
+				});
 
-			// $.app.byId("contentArea").addItem(that.oRichTextEditor);
+			$.app.byId("contentArea1").addItem(that.oRichTextEditor);
+			$.app.byId("contentArea2").addItem(
+				new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
+					content: {
+						path: "Detail",
+						formatter: function(v) {
+							if(!v){
+								return "";
+							}else{
+								var vDetailList = v.split("<img");
+								if(vDetailList.length === 1) {
+									return /^</i.test(v) ? v : "<p>${content}</p>".interpolate(v);
+								}
 
-			// $.app.byId("myRTE").addStyleClass("mxw-100");
+								var vHtml = [];
+								vDetailList.forEach(function(ele, index) {
+									if(index === 0){
+										vHtml.push(ele);
+									}else{
+										vHtml.push(ele.replace(" src=", '<img style="max-width: 100%;" src='));
+									}
+								});
+								
+								return vHtml.join("");
+							}
+						}
+					}
+				})
+				.addStyleClass("w-100")
+			);
+
+			$.app.byId("myRTE").addStyleClass("mxw-100");
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,

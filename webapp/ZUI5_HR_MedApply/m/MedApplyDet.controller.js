@@ -489,8 +489,8 @@ sap.ui.define(
                     $.app.byId(oController.PAGEID + "_Inp5").setValue("0");
                     $.app.byId(oController.PAGEID + "_Inp6").setEditable(false);
                     $.app.byId(oController.PAGEID + "_Inp6").setValue("0");
-                    $.app.byId(oController.PAGEID + "_Inp7").setEditable(false);
-                    $.app.byId(oController.PAGEID + "_Inp7").setValue("0");
+                    // $.app.byId(oController.PAGEID + "_Inp7").setEditable(false);
+                    // $.app.byId(oController.PAGEID + "_Inp7").setValue("0");
                     $.app.byId(oController.PAGEID + "_Inp8").setEditable(false);
                     $.app.byId(oController.PAGEID + "_Inp8").setValue("0");
                     $.app.byId(oController.PAGEID + "_Inp9").setEditable(true);
@@ -504,7 +504,7 @@ sap.ui.define(
                     $.app.byId(oController.PAGEID + "_Inp4").setEditable(true);
                     $.app.byId(oController.PAGEID + "_Inp5").setEditable(true);
                     $.app.byId(oController.PAGEID + "_Inp6").setEditable(true);
-                    $.app.byId(oController.PAGEID + "_Inp7").setEditable(true);
+                    // $.app.byId(oController.PAGEID + "_Inp7").setEditable(true);
                     $.app.byId(oController.PAGEID + "_Inp8").setEditable(true);
                     $.app.byId(oController.PAGEID + "_Inp9").setEditable(false);
                     $.app.byId(oController.PAGEID + "_Inp9").setValue("0");
