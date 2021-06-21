@@ -671,7 +671,10 @@ fragment.COMMON_ATTACH_FILES = {
 		oFileUploader.clear();
 		oFileUploader.setValue("");
 		if (f1) f1.setAttribute("value", "");
-		oController.PAGEID=="MedApply"?fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox):null;
+
+		if(oController.PAGEID === "MedApply") {
+			fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
+		}
 	},
 
 	callDeleteFileService: function(fileInfo) {
@@ -917,9 +920,12 @@ fragment.COMMON_ATTACH_FILES = {
 			var oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"+vPages[i]),
 				vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [],
 				aDeleteFiles = oAttachbox.getModel().getProperty("/DelelteDatas") || [],
-				oController = this.oView.getController(),
-				vPernr = oController.getSessionInfoByKey("Pernr");
-				vFiles.push(vAttachDatas);
+				vPernr = "";
+			
+			vFiles.push(vAttachDatas);
+
+			oController = this.oView.getController();
+			vPernr = oController.getSessionInfoByKey("Pernr");
 				
 			vAppnm = oAttachbox.getModel().getProperty("/Settings/Appnm") || "";
 
@@ -943,36 +949,35 @@ fragment.COMMON_ATTACH_FILES = {
 		if (common.Common.isEmptyArray(vFiles)) return;
 
 		vFiles.forEach(function (elem,a) {
-				vFiles[a].forEach(function (elem2,b) {
-					if(elem2.New === true) {
-						oModel.refreshSecurityToken();
-						var oRequest = oModel._createRequest();
-						var oHeaders = {
-							"x-csrf-token": oRequest.headers["x-csrf-token"],
-							"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
-						};
-						if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"||vPages[a]=="006"){
-							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
-						}else{
-							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
-						}
-						common.Common.log(oHeaders.slug);
-						
-						jQuery.ajax({
-							type: "POST",
-							async: false,
-							url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
-							headers: oHeaders,
-							cache: false,
-							contentType: elem2.type,
-							processData: false,
-							data: elem2,
-							success: _handleSuccess.bind(this),
-							error: _handleError.bind(this)
-						});
+			vFiles[a].forEach(function (elem2,b) {
+				if(elem2.New === true) {
+					oModel.refreshSecurityToken();
+					var oRequest = oModel._createRequest();
+					var oHeaders = {
+						"x-csrf-token": oRequest.headers["x-csrf-token"],
+						"slug": [vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|")
+					};
+					if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"||vPages[a]=="006"){
+						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
+					}else{
+						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
 					}
-				});
-
+					common.Common.log(oHeaders.slug);
+					
+					jQuery.ajax({
+						type: "POST",
+						async: false,
+						url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
+						headers: oHeaders,
+						cache: false,
+						contentType: elem2.type,
+						processData: false,
+						data: elem2,
+						success: _handleSuccess.bind(this),
+						error: _handleError.bind(this)
+					});
+				}
+			}.bind(this));
 		}.bind(this));
 
 		return vAppnm;

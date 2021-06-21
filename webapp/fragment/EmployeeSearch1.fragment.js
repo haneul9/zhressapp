@@ -196,16 +196,9 @@ sap.ui.jsfragment("fragment.EmployeeSearch1", {
 
 		oMainLayout.createRow(oCell1, oCell2);
 
-		// var vContentHeight = window.innerHeight - 200;
-		var vContentHeight = common.SearchUser1.dialogContentHeight || (window.innerHeight - 340);       
-
-		// oFilterLayout.setHeight(vContentHeight - 90 + "px");   
-
 		var oDialog = new sap.m.Dialog(oController.PAGEID + "_ES_Dialog", {
 			content: [oMainLayout],
 			contentWidth: "1220px",
-		//	contentHeight: "520px",    
-			// contentHeight: vContentHeight + "px",
 			showHeader: true,
 			title: "{i18n>LABEL_00117}",
 			afterOpen: common.SearchUser1.onAfterOpenSearchDialog,

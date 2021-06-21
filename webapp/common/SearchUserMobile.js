@@ -97,7 +97,6 @@ common.SearchUserMobile = {
 
     onBeforeCloseSearchDialog: function () {
         var oController = common.SearchUserMobile.oController;
-        var oSearchTable = sap.ui.getCore().byId(oController.PAGEID + "_EmpSearchResult_Table");
         var oPersa = sap.ui.getCore().byId(oController.PAGEID + "_ES_Persa");
         var oEname = sap.ui.getCore().byId(oController.PAGEID + "_ES_Ename");
         var oFulln = sap.ui.getCore().byId(oController.PAGEID + "_ES_Fulln");
@@ -105,7 +104,6 @@ common.SearchUserMobile = {
         var oPersg = sap.ui.getCore().byId(oController.PAGEID + "_ES_Persg");
         var oZhgrade = sap.ui.getCore().byId(oController.PAGEID + "_ES_Zhgrade");
 
-        // if (oSearchTable) oSearchTable.clearSelection();
         oEname.setValue("");
         oFulln.removeAllTokens();
         oFulln.destroyTokens();
@@ -208,7 +206,7 @@ common.SearchUserMobile = {
                         common.Common.log(oResponse);
                     }
                 });
-            }.bind(this)
+            }
         ).then(function () {
             common.SearchUserMobile.EsBusyDialog.close();
         });
@@ -225,7 +223,6 @@ common.SearchUserMobile = {
 			for(var i = 0; i< vData.length; i++){
 				if(vData[i].Pernr === vPernr){
 					return i;
-					break;
 				}
 			}
 		};
@@ -233,7 +230,7 @@ common.SearchUserMobile = {
 		vData.forEach(function(o){
 			promises.push(
 				new Promise(function(){
-					 new JSONModelHelper()
+					 new common.JSONModelHelper()
                             .url("/odata/fix/Photo?$filter=userId eq '" + parseInt(o.Pernr) + "' and photoType eq '1'")
                             .select("photo")
                             .setAsync(true)

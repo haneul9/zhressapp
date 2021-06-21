@@ -48,7 +48,7 @@ sap.ui.jsfragment("fragment.EmployeeSearchMobile", {
 					}).addStyleClass("button-group pl-0")
 				]
 			})
-			.addStyleClass("search-box-mobile h-auto")
+			.addStyleClass("search-box-mobile h-auto");
 	    },
 	
 		getList: function(oController) {
