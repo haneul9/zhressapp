@@ -243,7 +243,7 @@ generate: function() {
 
 					setTimeout(function() {
 						$carousel.carousel({
-							interval: false
+							interval: 5000
 						});
 					}, 0);
 				}
