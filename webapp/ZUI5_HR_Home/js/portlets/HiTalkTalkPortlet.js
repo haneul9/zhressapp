@@ -82,10 +82,10 @@ fill: function() {
 					return [
 						'<a href="javascript:;" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
-								'<div class="portlet-bbs-title" style="width:100%;">',
+								'<div class="portlet-bbs-title w-100">',
 									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), o.Stitle),
 								'</div>',
-								'<small class="portlet-bbs-date" style="width:100%;">${date}</small>'.interpolate(date),
+								'<small class="portlet-bbs-date w-100">${date}</small>'.interpolate(date),
 							'</div>',
 						'</a>'
 					].join('');

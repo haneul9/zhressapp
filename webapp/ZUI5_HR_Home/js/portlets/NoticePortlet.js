@@ -82,12 +82,12 @@ fill: function() {
 					return [
 						'<a href="javascript:;" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
-								'<div class="portlet-bbs-title" style="width:100%;">',
+								'<div class="portlet-bbs-title w-100">',
 									'<span class="portlet-bbs-title-text" title="${title}">${title}</span>'.interpolate(o.Title, o.Title),
 									o.Newitem === 'X' ? '<span class="badge badge-primary badge-pill">N</span>' : '',
 									o.Impor === 'X' ? '<i class="fas fa-exclamation-circle"></i>' : '',
 								'</div>',
-								'<small class="portlet-bbs-date" style="width:100%;">${date}</small>'.interpolate(date),
+								'<small class="portlet-bbs-date w-100">${date}</small>'.interpolate(date),
 							'</div>',
 						'</a>'
 					].join('');
