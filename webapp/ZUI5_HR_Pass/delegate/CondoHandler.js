@@ -180,7 +180,7 @@ sap.ui.define(
 				}
 
 				// Set dialog height
-				this.oDialog.setContentHeight("650px");
+				// this.oDialog.setContentHeight("650px");
 
 				// Set data
 				oDetailData = $.extend(true, {}, oRowData);
@@ -218,7 +218,7 @@ sap.ui.define(
 				}
 
 				// Set dialog height
-				this.oDialog.setContentHeight("460px");
+				// this.oDialog.setContentHeight("460px");
 
 				// Set data
 				oDetailData = $.extend(true, {}, oRowData);

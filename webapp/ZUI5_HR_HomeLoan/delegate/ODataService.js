@@ -1,10 +1,9 @@
 sap.ui.define(
     [
         "common/Common", //
-        "./HomeLoan",
         "sap/m/MessageBox"
     ],
-    function (Common, HomeLoan, MessageBox) {
+    function (Common, MessageBox) {
         "use strict";
 
         var ODataService = {
@@ -26,7 +25,7 @@ sap.ui.define(
                         IBegda: arg.Begda ? moment(arg.Begda).hours(10).toDate() : undefined,
                         IEndda: arg.Endda ? moment(arg.Endda).hours(10).toDate() : undefined,
                         IStatus: arg.Status ? arg.Status : undefined,
-                        ILangu: this.getSessionInfoByKey("Langu"),
+                        ILangu: "KO",
                         IDatum: moment().hours(9).toDate(),
                         IEmpid: arg.Empid ? arg.Empid : undefined,
                         IExtryn: Common.isExternalIP() ? "X" : "",
@@ -71,7 +70,7 @@ sap.ui.define(
                     {
                         IConType: processType,
                         IPernr: payload.Pernr ? payload.Pernr : undefined,
-                        ILangu: this.getSessionInfoByKey("Langu"),
+                        ILangu: "KO",
                         IDatum: moment(payload.Datum).hours(9).toDate(),
                         IExtryn: Common.isExternalIP() ? "X" : "",
                         Export: payload.Export ? payload.Export : [],

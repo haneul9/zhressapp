@@ -38,9 +38,8 @@ sap.ui.define(
 
 			onBeforeShow: function (oEvent) {
 				var	oController = $.app.getController();
-				oController.Appye = "2020";
-				// oController.Pernr = this.getView().getModel("session").getData().Pernr;
-				oController.Pernr = "20140099"; 
+				oController.Appye = new Date().getFullYear();
+				oController.Pernr = this.getView().getModel("session").getData().Pernr;
 				oController.onSetContent();
 				oController.onSearchEvalResult();
 			},
