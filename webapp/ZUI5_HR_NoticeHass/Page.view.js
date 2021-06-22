@@ -27,9 +27,6 @@
 			var vMonth = new Date().getMonth()+1;
 			
 			var oSearchBox = new sap.m.FlexBox({
-                justifyContent: sap.m.FlexJustifyContent.SpaceBetween,
-                alignContent: sap.m.FlexAlignContent.End,
-                alignItems: sap.m.FlexAlignItems.End,
 				fitContainer: true,
 				items: [ 
 					new sap.m.HBox({
@@ -48,22 +45,31 @@
 								secondDateValue: new Date(vYear, vMonth, 0)
 							})
 						]
-                    }).addStyleClass("search-field-group"),
+                    }).addStyleClass("search-field-group mr-10px"),
 					new sap.m.HBox({
 						items: [
 							new sap.m.Button({
 								press: oController.onPressSer.bind(oController),
 								text: "{i18n>LABEL_57005}" // 조회
-							}).addStyleClass("button-search"),
-							new sap.m.Button({
-								press: oController.onPressRegi.bind(oController),
-								text: "{i18n>LABEL_57009}" // 등록
 							}).addStyleClass("button-search")
 						]
 					})
 					.addStyleClass("button-group")
 				]
 			}).addStyleClass("search-box search-bg pb-7px mt-30px");
+			
+			var infoBox = new sap.m.FlexBox({
+				justifyContent: sap.m.FlexJustifyContent.End,
+				alignContent: sap.m.FlexAlignContent.End,
+				alignItems: sap.m.FlexAlignItems.End,
+				fitContainer: true,
+				items: [
+					new sap.m.Button({
+						press: oController.onPressRegi.bind(oController),
+						text: "{i18n>LABEL_57009}" // 등록
+					}).addStyleClass("button-light")
+				]
+			}).addStyleClass("mt-10px");
 
 			var oTable = new sap.ui.table.Table(oController.PAGEID + "_Table", {
 				selectionMode: sap.ui.table.SelectionMode.None,
@@ -88,6 +94,7 @@
 			return new PageHelper({
 				contentItems: [
 					oSearchBox,
+					infoBox,
 					oTable
 				]
 			});

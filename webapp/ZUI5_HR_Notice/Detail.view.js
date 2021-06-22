@@ -1,71 +1,73 @@
 ﻿sap.ui.define([
-	"../../common/Common",
-	"../../common/PageHelper",
-    "../delegate/ViewTemplates"
-], function (Common, PageHelper, ViewTemplates) {
-"use strict";
+    "../common/Common",
+    "./delegate/ViewTemplates",
+    "../common/PageHelper"
+], function (Common, ViewTemplates, PageHelper) {
+	"use strict";
 
-	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Regist"].join($.app.getDeviceSuffix());
-	
+    var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
+
 	sap.ui.jsview(SUB_APP_ID, {
 		
 		getControllerName: function () {
 			return SUB_APP_ID;
-        },
-		
-		createContent: function (oController) {
-			
-			return new PageHelper({
-				idPrefix: "Regist-",
-                // title: "{i18n>LABEL_57013}", // 공지사항 상세내용
-                showNavButton: true,
-				navBackFunc: oController.navBack,
-				contentStyleClass: "sub-app-content",
-                contentContainerStyleClass: "app-content-container-mobile custom-title-left",
-				contentItems: [
-					this.ApplyingBox(oController)				]
-			})
-			.setModel(oController.ApplyModel)
-			.bindElement("/FormData");
 		},
-		
-		ApplyingBox: function(oController) {
-            
+
+		createContent: function (oController) {
+
+            return new PageHelper({
+				idPrefix: "Detail-",
+                showNavButton: true,
+				hideEmpInfoBox: true,
+				navBackFunc: oController.navBack,
+				contentStyleClass: "app-content",
+                contentContainerStyleClass: "app-content-container-wide custom-title-left",
+				contentItems: [
+					this.ApplyingBox(oController)
+				]
+			});
+		},
+
+        ApplyingBox: function(oController) {
+
 			return new sap.m.VBox({
+                width: "100%",
 				fitContainer: true,
 				items: [
 					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
+						width: "100%",
+						fitContainer: true,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_57008}", "105px", "Left").addStyleClass("sub-con-title"), // 제목
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57008}", "130px", "Right"), // 제
                             new sap.m.Input({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 width: "100%",
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                 value: "{Title}",
                                 editable: false
                             })
 						]
-					}),
+					})
+					.addStyleClass("search-field-group"),
 					new sap.m.HBox({
-						alignItems: sap.m.FlexAlignItems.Center,
+						width: "100%",
+						fitContainer: true,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_57011}", "105px", "Left").addStyleClass("sub-con-title"), // 등록자
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57011}", "130px", "Right"), // 등록자
                             new sap.m.Text({
                                 width: "auto",
                                 textAlign: "Begin",
                                 text: "{ApernTxt}"
-                            }).addStyleClass("custom-line pt-10px")
+                            })
 						]
-					}),
-					new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
+					})
+					.addStyleClass("search-field-group"),
+					new sap.m.HBox(oController.PAGEID + "_RegistDateBox", {
+						width: "100%",
+						fitContainer: true,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57004}", "105px", "Left").addStyleClass("sub-con-title"), // 등록일
+							ViewTemplates.getLabel("header", "{i18n>LABEL_57004}", "130px", "Right"), // 등록일
 							new sap.m.Text({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                width: "100%",
+                                width: "250px",
                                 textAlign: "Begin",
                                 text: {
                                     path: "Sdate",
@@ -73,14 +75,8 @@
                                         return v ? Common.DateFormatter(v) : "";
                                     }
                                 }
-                            })
-						]
-					}),
-                    new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
-						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57010}", "105px", "Left").addStyleClass("sub-con-title"), // 최종변경일/시
+                            }),
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57010}", "130px", "Right").addStyleClass("mr-8px"), // 최종변경일/시
                             new sap.m.Text({
                                 text : {
                                     parts: [{path: "Aedtm"}, {path: "Aetim"}],
@@ -95,12 +91,13 @@
                                 textAlign : "Begin"
                             })
 						]
-					}),
-                    new sap.m.HBox({
-						height: "40px",
-						alignItems: sap.m.FlexAlignItems.Center,
+					})
+					.addStyleClass("search-field-group"),
+                    new sap.m.HBox(oController.PAGEID + "_IsHideBox", {
+						width: "100%",
+						fitContainer: true,
 						items: [
-                            ViewTemplates.getLabel("header", "{i18n>LABEL_57012}", "105px", "Left").addStyleClass("sub-con-title"), // 중요항목
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_57012}", "130px", "Right"), // 중요항목
                             new sap.m.CheckBox({ 
                                 selected: {
                                     path: "Impor",
@@ -109,15 +106,16 @@
                                     }
                                 },
 								editable: false
-                            }).addStyleClass("mt-5px ml-6px")
+                            })
 						]
-					}),
-                    new sap.m.VBox({
+					})
+					.addStyleClass("search-field-group"),
+                    new sap.m.HBox({
+						width: "100%",
 						fitContainer: true,
-						// alignItems: sap.m.FlexAlignItems.Center,
 						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_57016}", "105px", "Left").addStyleClass("sub-con-title"), // 내용
-							new sap.ui.core.HTML({
+							ViewTemplates.getLabel("header", "{i18n>LABEL_57016}", "130px", "Right"), // 내용
+                            new sap.ui.core.HTML({
 								content: {
 									path: "Detail",
 									formatter: function(v) {
@@ -130,24 +128,25 @@
 								}
 							})
                             // new sap.m.TextArea({
-							// 	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                             //     rows: 10,
 							// 	width: "100%",
 							// 	value:"{Detail}",
 							// 	editable: false
 							// }).addStyleClass("mt-8px mb-8px")
 						]
-					}),
+					})
+					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox({
+						fitContainer: true,
 						items: [
                             sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 						]
 					})
 				]
 			})
-			.addStyleClass("vbox-form-mobile")
 			.setModel(oController.RegistModel)
-			.bindElement("/FormData");
+			.bindElement("/FormData")
+            .addStyleClass("search-inner-vbox mt-16px");
 		}
-	});
+    });
 });

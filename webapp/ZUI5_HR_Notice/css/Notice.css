@@ -2,6 +2,7 @@
 
 .tableMargin5 { margin:5px !important; }
 .background-lightblue {background-color:rgba(200, 220, 243, 0.3); }
+.app-nav-button {transform:rotate(360deg);padding-right:.625rem;}
 .IconNPosition { font-weight: 500; background-color: #0070BD; padding-left: .25rem;
     padding-right: .25rem; border-radius: .25rem; margin-left: 3px; color: #fff; display: inline-block;
     padding: .25em .4em; font-size: 10.5px; line-height: 1; text-align: center; white-space: nowrap; vertical-align: baseline;
