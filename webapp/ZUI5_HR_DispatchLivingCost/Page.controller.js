@@ -870,7 +870,7 @@ sap.ui.define([
 					Editable: this.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
 				},"005");
 			}else {
-				$.app.byViewId("Page_FilesBox").setBusyIndicatorDelay(0).setBusy(true);
+				$.app.byId("Page_FilesBox").setBusyIndicatorDelay(0).setBusy(true);
 
 				setTimeout(function () {
                     fragment.COMMON_ATTACH_FILES.once.call(this, vAppnm).then(function() {
@@ -919,7 +919,7 @@ sap.ui.define([
 								}, "004");
 							}.bind(this))
 						]).then(function () {
-                            $.app.byViewId("Page_FilesBox").setBusy(false);
+                            $.app.byId("Page_FilesBox").setBusy(false);
                         });
                     }.bind(this));
 				}.bind(this), 100);
