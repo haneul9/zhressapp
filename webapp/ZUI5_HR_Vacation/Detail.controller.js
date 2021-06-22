@@ -1817,6 +1817,7 @@ sap.ui.define([
 									});
 						break;
 					case "combobox":
+						oColumn.setHAlign("Begin");
 						oTemplate = new sap.m.ComboBox({
 										selectedKey : "{" + col_info[i].id + "}",
 										width : "100%",
