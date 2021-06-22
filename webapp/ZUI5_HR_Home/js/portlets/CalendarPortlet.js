@@ -347,7 +347,9 @@ initPopover: function() {
 	].join('');
 
 	$('.portlet-calendar .list-group-item[data-type="vacation"]') // 휴가 인원 목록
-		.on('click', this.popoverToggle)
+		.on('click', function() {
+			portlet.popoverToggle.call(this, portlet);
+		})
 		.on('inserted.bs.popover', this.popoverInserted.bind(this))
 		.on('hidden.bs.popover', this.popoverHidden.bind(this))
 		.popover(this.popoverOptions(template, function() {
@@ -377,7 +379,9 @@ initPopover: function() {
 		'.portlet-calendar .list-group-item[data-type="biztrip"]',		// 출장 인원 목록
 		'.portlet-calendar .list-group-item[data-type="telecommuting"]'	// 재택근무 인원 목록
 	].join(','))
-		.on('click', this.popoverToggle)
+		.on('click', function() {
+			portlet.popoverToggle.call(this, portlet);
+		})
 		.on('inserted.bs.popover', this.popoverInserted.bind(this))
 		.on('hidden.bs.popover', this.popoverHidden.bind(this))
 		.popover(this.popoverOptions(template, function() {
@@ -403,7 +407,9 @@ initPopover: function() {
 		}));
 
 	$('.portlet-calendar .list-group-item[data-type="birthday"]') // 생일 인원 목록
-		.on('click', this.popoverToggle)
+		.on('click', function() {
+			portlet.popoverToggle.call(this, portlet);
+		})
 		.on('inserted.bs.popover', this.popoverInserted.bind(this))
 		.on('hidden.bs.popover', this.popoverHidden.bind(this))
 		.popover(this.popoverOptions(template, function() {
@@ -428,14 +434,18 @@ initPopover: function() {
 			].join('');
 		}));
 },
-popoverToggle: function() {
+popoverToggle: function(portlet) {
 
 	var t = $(this);
 	if (t.hasClass('popover-target')) {
 		t.toggleClass('popover-target', false).popover('hide');
 	} else {
 		t.siblings().toggleClass('popover-target', false).popover('hide');
-		t.toggleClass('popover-target', true).popover('show');
+
+		var list = (portlet.calendarMap[portlet.selectedDate] || {})[t.data('type')] || [];
+		if (list.length) {
+			t.toggleClass('popover-target', true).popover('show');
+		}
 	}
 },
 popoverInserted: function() {
