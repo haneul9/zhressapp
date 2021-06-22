@@ -50,7 +50,7 @@
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
 			this.onTableSearch();
 
-			if (this.getParameterByName("Sdate") && this.getParameterByName("Seqnr")) {
+			if (this.getParameterByName("Sdate") && this.getParameterByName("Seqnr") && oEvent.data.New !== "X") {
 				this.onSelectDetail(false);
 			}
         },
