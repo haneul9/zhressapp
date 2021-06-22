@@ -80,7 +80,7 @@ sap.ui.define([
 				enableColumnReordering: false,
 				enableColumnFreeze: false,
 				enableBusyIndicator: true,
-				visibleRowCount: 10,
+				visibleRowCount: 1,
 				showOverlay: false,
 				showNoData: true,
 				width: "100%",
