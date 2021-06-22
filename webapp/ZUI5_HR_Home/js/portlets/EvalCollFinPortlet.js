@@ -3,11 +3,11 @@ function EvalCollFinPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
-	this.$selector = '.portlet-evalcollfin .list-group';
+	this.$selector = '.portlet-evalcollfin-popover .popover-scroll';
 	this.chart = null;
 	this.items = null;
-	this.tooltipBodyTemplate = null;
-	this.tooltipBodyMap = null;
+	this.popoverBodyTemplate = null;
+	this.popoverBodyMap = null;
 	this.clickedLabel = null;
 }
 
@@ -75,44 +75,32 @@ onceBefore: function() {
 			onClick: function(event, points) {
 				this._gateway.log('EvalCollFinPortlet chart onclick', arguments);
 
-				if (!points.length) {
-					if (this.popover) {
-						this.popover
-							.off('inserted.bs.popover')
-							.off('hide.bs.popover')
-							.popover('dispose');
-
-						this.popover = null;
-					}
-					return;
+				if (this.popover && this.popover.hasClass('chart-popover')) {
+					this.popover
+						.toggleClass('chart-popover', false)
+						.off('inserted.bs.popover')
+						.off('hide.bs.popover')
+						.popover('dispose');
 				}
 
-				if (this.clickedLabel && this.clickedLabel === points[0]._view.label && this.popover) {
+				if (!points.length) {
 					return;
-				} else {
-					if (this.popover) {
-						this.popover
-							.off('inserted.bs.popover')
-							.off('hide.bs.popover')
-							.popover('dispose');
-
-						this.popover = null;
-					}
 				}
 
 				this.clickedLabel = points[0]._view.label;
 				this.popover = $(event.target);
 				this.popover
-					.on('inserted.bs.popover', this.popoverInserted)
-					.on('hide.bs.popover', this.popoverHide)
+					.toggleClass('chart-popover', true)
+					.on('inserted.bs.popover', this.popoverInserted.bind(this))
+					.on('hidden.bs.popover', this.popoverHidden.bind(this))
 					.popover({
 						html: true,
 						sanitize: false,
-						container: 'body',
-						boundary: 'viewport',
-						placement: 'auto',
+						container: '.portlet-evalcollfin',
+						placement: 'bottom',
+						trigger: 'manual',
 						template: '<div class="popover portlet-evalcollfin-popover" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
-						content: this.tooltipBodyTemplate.interpolate(this.tooltipBodyMap[this.clickedLabel].join(''))
+						content: this.popoverBodyTemplate.interpolate(this.popoverBodyMap[this.clickedLabel].join(''))
 					})
 					.popover('show');
 			}.bind(this),
@@ -128,6 +116,20 @@ onceBefore: function() {
 		},
 		plugins: [ChartDataLabels]
 	});
+
+	// Tooltip 외부 영역 클릭시 tooltip 숨기기
+	$(document)
+		.off('click', '*:not(#chart-evalcollfin.chartjs-render-monitor)')
+		.on('click', '*:not(#chart-evalcollfin.chartjs-render-monitor)', function(e) {
+
+			if ($(e.target).is('#chart-evalcollfin.chartjs-render-monitor')) {
+				e.stopImmediatePropagation();
+			} else {
+				setTimeout(function() {
+					$('.chart-popover').toggleClass('chart-popover', false).popover('dispose');
+				}, 0);
+			}
+		});
 },
 fill: function() {
 
@@ -146,18 +148,13 @@ fill: function() {
 				this.items = data.TableIn.results;
 
 				var currentYear = new Date().getFullYear(),
-				map = this.tooltipBodyMap = { S: [], A: [], B: [], C: [], D: [] };
+				map = this.popoverBodyMap = { S: [], A: [], B: [], C: [], D: [] };
 
-				this.tooltipBodyTemplate = [
+				this.popoverBodyTemplate = [
 					'<div class="popover-scroll">',
-						'<table style="width:275px">',
+						'<table>',
 							'<colgroup>',
-								'<col style="width:70px" />',
-								'<col style="width:30px" />',
-								'<col style="width:30px" />',
-								'<col style="width:45px" />',
-								'<col style="width:50px" />',
-								'<col style="width:50px" />',
+								'<col /><col /><col /><col /><col /><col />',
 							'</colgroup>',
 							'<thead>',
 								'<tr>',
@@ -234,19 +231,21 @@ fill: function() {
 popoverInserted: function() {
 
 	setTimeout(function() {
-		$('.portlet-evalcollfin-popover .popover-scroll').jScrollPane({
+		this.$(true).jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
 			horizontalGutter: 0
 		});
-	}, 0);
+	}.bind(this), 0);
 },
-popoverHide: function() {
+popoverHidden: function() {
 
-	var jsp = $('.portlet-evalcollfin-popover .popover-scroll').data('jsp');
-	if (jsp) {
-		jsp.destroy();
-	}
+	setTimeout(function() {
+		var jsp = this.$(true).data('jsp');
+		if (jsp) {
+			jsp.destroy();
+		}
+	}.bind(this), 0);
 },
 changeLocale: function() {
 
@@ -257,7 +256,7 @@ clearResource: function() {
 
 	return new Promise(function(resolve) {
 		setTimeout(function() {
-			var jsp = this.$().data('jsp');
+			var jsp = this.$(true).data('jsp');
 			if (jsp) {
 				jsp.destroy();
 			}

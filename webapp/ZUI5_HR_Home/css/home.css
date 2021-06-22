@@ -205,19 +205,13 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-calendar-inline .ui-widget.ui-widget-content,.portlet-calendar-inline .ui-widget-header {border:none}
 .portlet-calendar-inline .ui-widget-header {background-color:transparent}
 .portlet-calendar-inline + .d-flex {justify-content:space-between; align-items:center; margin:1.5rem auto .8rem; width:295px}
-[device="mobile"] .portlet-calendar-inline + .d-flex {width:100%;padding:0 1rem;margin-top:1rem}
-.portlet-calendar-inline + .d-flex .btn-outline-dark.button-today {border-radius: 20px;background-color: #8dc63f;border:0;color: #fff;padding: .125rem .5rem}
+[device="mobile"] .portlet-calendar-inline + .d-flex {width:100%; padding:0 1rem; margin-top:1rem}
+.portlet-calendar-inline + .d-flex .btn-outline-dark.button-today {border-radius:20px; background-color:#8dc63f; border:0; color:#fff; padding:.125rem .5rem}
 .portlet-calendar-date {margin:0; font-weight:700}
 .portlet-calendar-daily-report .list-group-item {width:33.33%; border:0; padding:.5rem 0rem .25rem; text-align:center; cursor:pointer}
 .portlet-calendar-daily-report .list-group-item h6 {font-weight:400; font-size:15px; margin-bottom:0; padding-top:.25rem}
 .portlet-calendar-daily-report .list-group-item span {font-size:2rem; font-weight:700; color:#064975; letter-spacing:-2px}
 .portlet-calendar-daily-report .list-group-item span.unit {font-weight:400; font-size:14px; display:inline-block; padding-left:4px}
-.portlet-calendar .tooltip.show {opacity:1}
-.portlet-calendar .tooltip .arrow:before {border-bottom-color:#b8cddb; border-top-color:#b8cddb}
-.portlet-calendar .tooltip .tooltip-inner {max-width:none; padding:7px; background-color:#ebf5fe; /*box-shadow:rgba(23,25,29,0.3) 0 2px 10px;*/ color:#002D51; font-size:.75rem; border:1px solid #b8cddb}
-.portlet-calendar .tooltip .tooltip-inner .portlet-calendar-tooltip {max-height:300px; overflow:hidden}
-.portlet-calendar .tooltip .tooltip-inner th {font-weight:400; color:#002D51}
-.portlet-calendar .tooltip .tooltip-inner td {font-weight:400; padding:.125rem .375rem}
 
 .portlet-switch {margin-top:.75rem; cursor:pointer}
 .portlet-switch.active {border-color:rgba(0,112,189,.7); background-color:#ebf5fe}
@@ -301,20 +295,23 @@ body.under-construction .ehr-logo {position:static; margin:0}
 .portlet-evalgoal .my-evalgoal-info .myList {font-size:14px; height:25px; color:#333}
 .portlet-evalgoal .jspScrollable .my-evalgoal-info {margin-right:15px}
 
-.portlet-evalcollfin-popover.popover {max-width:none}
-.portlet-evalcollfin-popover {border:1px solid #b8cddb}
-.bs-popover-auto[x-placement^=top]>.arrow::before, .bs-popover-top>.arrow::before {border-top-color:#b8cddb}
-.bs-popover-auto[x-placement^=top]>.arrow::after, .bs-popover-top>.arrow::after {border-top-color:#ebf5fe}
-.bs-popover-auto[x-placement^=right]>.arrow::before, .bs-popover-right>.arrow::before {border-right-color:#b8cddb}
-.bs-popover-auto[x-placement^=right]>.arrow::after, .bs-popover-right>.arrow::after {border-right-color:#ebf5fe}
-.bs-popover-auto[x-placement^=bottom]>.arrow::before, .bs-popover-bottom>.arrow::before {border-bottom-color:#b8cddb}
-.bs-popover-auto[x-placement^=bottom]>.arrow::after, .bs-popover-bottom>.arrow::after {border-bottom-color:#ebf5fe}
-.bs-popover-auto[x-placement^=left]>.arrow::before, .bs-popover-left>.arrow::before {border-left-color:#b8cddb}
-.bs-popover-auto[x-placement^=left]>.arrow::after, .bs-popover-left>.arrow::after {border-left-color:#ebf5fe}
-.portlet-evalcollfin-popover .popover-body {width:300px; border-radius:.3rem; padding:7px; color:#002d51; font-size:.75rem; background-color:#ebf5fe}
-.portlet-evalcollfin-popover .popover-body .popover-scroll {max-height:300px; overflow:hidden}
-.portlet-evalcollfin-popover .popover-body th {font-weight:400; color:#002d51; text-align:center}
-.portlet-evalcollfin-popover .popover-body td {font-weight:400; padding:.125rem .375rem; text-align:center}
+.portlet .popover {z-index:990; max-width:none; border:1px solid #b8cddb}
+.portlet .popover-body {width:100%; border-radius:.3rem; padding:7px 0 7px 7px; color:#002d51; font-size:.75rem; background-color:#ebf5fe}
+.portlet .popover-body .popover-scroll {width:100%; max-height:300px; overflow:hidden}
+.portlet .popover-body th,
+.portlet .popover-body td {padding:.2rem .6rem; text-align:center}
+.portlet .popover-body th {font-weight:600}
+.portlet .popover-body td {font-weight:400}
+.portlet .popover-body tr th:last-child,
+.portlet .popover-body tr td:last-child {padding-right:calc(.6rem + 15px)}
+.portlet .bs-popover-auto[x-placement^=top]>.arrow::before, .bs-popover-top>.arrow::before {border-top-color:#b8cddb}
+.portlet .bs-popover-auto[x-placement^=top]>.arrow::after, .bs-popover-top>.arrow::after {border-top-color:#ebf5fe}
+.portlet .bs-popover-auto[x-placement^=right]>.arrow::before, .bs-popover-right>.arrow::before {border-right-color:#b8cddb}
+.portlet .bs-popover-auto[x-placement^=right]>.arrow::after, .bs-popover-right>.arrow::after {border-right-color:#ebf5fe}
+.portlet .bs-popover-auto[x-placement^=bottom]>.arrow::before, .bs-popover-bottom>.arrow::before {border-bottom-color:#b8cddb}
+.portlet .bs-popover-auto[x-placement^=bottom]>.arrow::after, .bs-popover-bottom>.arrow::after {border-bottom-color:#ebf5fe}
+.portlet .bs-popover-auto[x-placement^=left]>.arrow::before, .bs-popover-left>.arrow::before {border-left-color:#b8cddb}
+.portlet .bs-popover-auto[x-placement^=left]>.arrow::after, .bs-popover-left>.arrow::after {border-left-color:#ebf5fe}
 
 .color-lcc-signature-blue {color:#064975 !important}
 .color-lcc-signature-green {color:#8dc63f !important}

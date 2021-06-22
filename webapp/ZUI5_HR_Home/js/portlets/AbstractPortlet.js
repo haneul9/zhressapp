@@ -275,9 +275,11 @@ appendTo: function(parent, fill) {
 	}.bind(this), 0);
 },
 // 주로 사용될 jQuery object를 반환하는 function
-$: function() {
+$: function(force) {
 
-	if (this.$object) {
+	force = typeof force !== 'undefined' ? force : false;
+
+	if (this.$object && !force) {
 		return this.$object;
 	}
 	if (typeof this.$selector === 'undefined') {

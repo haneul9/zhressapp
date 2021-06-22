@@ -3,6 +3,7 @@ function CalendarPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
+	this.$selector = '.portlet-calendar .portlet-calendar-popover';
 	this.pattern = null;
 	this.yearMonth = null;
 	this.calendarMap = null;
@@ -74,6 +75,20 @@ onceBefore: function() {
 
 	this.yearMonth = moment().format('YYYYMM');
 	this.calendarMap = {};
+
+	// popover 외부 영역 클릭시 popover 숨기기
+	$(document)
+		.off('click', '*:not(.portlet-calendar-daily-report,.portlet-calendar-daily-report *)')
+		.on('click', '*:not(.portlet-calendar-daily-report,.portlet-calendar-daily-report *)', function(e) {
+
+			if ($(e.target).is('.portlet-calendar-daily-report,.portlet-calendar-daily-report *')) {
+				e.stopImmediatePropagation();
+			} else {
+				setTimeout(function() {
+					$('.popover-target').toggleClass('popover-target', false).popover('hide');
+				}, 0);
+			}
+		});
 
 	this.initCalendar();
 	this.initPopover();
@@ -325,22 +340,23 @@ initPopover: function() {
 
 	var portlet = this,
 	template = [
-		'<div class="tooltip" role="tooltip">',
+		'<div class="popover" role="tooltip">',
 			'<div class="arrow"></div>',
-			'<div class="tooltip-inner"></div>',
+			'<div class="popover-body"></div>',
 		'</div>'
 	].join('');
 
 	$('.portlet-calendar .list-group-item[data-type="vacation"]') // 휴가 인원 목록
-		.on('inserted.bs.tooltip', this.tooltipInserted)
-		.on('hide.bs.tooltip', this.tooltipHide)
-		.tooltip(this.tooltipOptions(template, function() {
-			var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
-			if (!tooltipBody.length) {
+		.on('click', this.popoverToggle)
+		.on('inserted.bs.popover', this.popoverInserted.bind(this))
+		.on('hidden.bs.popover', this.popoverHidden.bind(this))
+		.popover(this.popoverOptions(template, function() {
+			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
+			if (!popoverBody.length) {
 				return null;
 			}
 			return [
-				'<div class="portlet-calendar-tooltip">',
+				'<div class="portlet-calendar-popover">',
 					'<table>',
 						'<colgroup>',
 							'<col /><col /><col /><col />',
@@ -349,7 +365,7 @@ initPopover: function() {
 							'<tr><th>이름</th><th>직위</th><th>휴가명</th><th>기간</th></tr>',
 						'</thead>',
 						'<tbody>',
-							tooltipBody,
+							popoverBody,
 						'</tbody>',
 					'</table>',
 				'</div>'
@@ -361,15 +377,16 @@ initPopover: function() {
 		'.portlet-calendar .list-group-item[data-type="biztrip"]',		// 출장 인원 목록
 		'.portlet-calendar .list-group-item[data-type="telecommuting"]'	// 재택근무 인원 목록
 	].join(','))
-		.on('inserted.bs.tooltip', this.tooltipInserted)
-		.on('hide.bs.tooltip', this.tooltipHide)
-		.tooltip(this.tooltipOptions(template, function() {
-			var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
-			if (!tooltipBody.length) {
+		.on('click', this.popoverToggle)
+		.on('inserted.bs.popover', this.popoverInserted.bind(this))
+		.on('hidden.bs.popover', this.popoverHidden.bind(this))
+		.popover(this.popoverOptions(template, function() {
+			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
+			if (!popoverBody.length) {
 				return null;
 			}
 			return [
-				'<div class="portlet-calendar-tooltip">',
+				'<div class="portlet-calendar-popover">',
 					'<table>',
 						'<colgroup>', 
 							'<col /><col /><col />',
@@ -378,7 +395,7 @@ initPopover: function() {
 							'<tr><th>이름</th><th>직위</th><th>기간</th></tr>',
 						'</thead>',
 						'<tbody>',
-							tooltipBody,
+							popoverBody,
 						'</tbody>',
 					'</table>',
 				'</div>'
@@ -386,15 +403,16 @@ initPopover: function() {
 		}));
 
 	$('.portlet-calendar .list-group-item[data-type="birthday"]') // 생일 인원 목록
-		.on('inserted.bs.tooltip', this.tooltipInserted)
-		.on('hide.bs.tooltip', this.tooltipHide)
-		.tooltip(this.tooltipOptions(template, function() {
-			var tooltipBody = portlet.tooltipBody(portlet.selectedDate, $(this).data('type'));
-			if (!tooltipBody.length) {
+		.on('click', this.popoverToggle)
+		.on('inserted.bs.popover', this.popoverInserted.bind(this))
+		.on('hidden.bs.popover', this.popoverHidden.bind(this))
+		.popover(this.popoverOptions(template, function() {
+			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
+			if (!popoverBody.length) {
 				return null;
 			}
 			return [
-				'<div class="portlet-calendar-tooltip">',
+				'<div class="portlet-calendar-popover">',
 					'<table>',
 						'<colgroup>',
 							'<col /><col /><col /><col />',
@@ -403,45 +421,56 @@ initPopover: function() {
 							'<tr><th>일자</th><th>이름</th><th>직위</th><th>양음</th></tr>',
 						'</thead>',
 						'<tbody>',
-							tooltipBody,
+							popoverBody,
 						'</tbody>',
 					'</table>',
 				'</div>'
 			].join('');
 		}));
 },
-tooltipInserted: function() {
+popoverToggle: function() {
 
-	var tooltip = $(this).parents('.portlet').find('.portlet-calendar-tooltip');
+	var t = $(this);
+	if (t.hasClass('popover-target')) {
+		t.toggleClass('popover-target', false).popover('hide');
+	} else {
+		t.siblings().toggleClass('popover-target', false).popover('hide');
+		t.toggleClass('popover-target', true).popover('show');
+	}
+},
+popoverInserted: function() {
+
 	setTimeout(function() {
-		tooltip.jScrollPane({
+		this.$(true).jScrollPane({
 			resizeSensor: true,
 			verticalGutter: 0,
 			horizontalGutter: 0
 		});
-	}, 0);
+	}.bind(this), 0);
 },
-tooltipHide: function() {
+popoverHidden: function() {
 
-	var jsp = $(this).parents('.portlet').find('.portlet-calendar-tooltip').data('jsp');
-	if (jsp) {
-		jsp.destroy();
-	}
+	setTimeout(function() {
+		var jsp = this.$(true).data('jsp');
+		if (jsp) {
+			jsp.destroy();
+		}
+	}.bind(this), 0);
 },
-tooltipOptions: function(template, title) {
+popoverOptions: function(template, content) {
 
 	return {
 		html: true,
 		sanitize: false,
 		container: '.portlet-calendar',
 		placement: 'top',
-		trigger: 'click',
+		trigger: 'manual',
 		// delay: { show: 0, hide: 600 },
 		template: template,
-		title: title
+		content: content
 	};
 },
-tooltipBody: function(dateText, type) {
+popoverBody: function(dateText, type) {
 
 	var list = (this.calendarMap[dateText] || {})[type] || [];
 	if (type === 'vacation') {
