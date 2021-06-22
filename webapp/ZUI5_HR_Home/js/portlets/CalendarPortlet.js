@@ -3,7 +3,7 @@ function CalendarPortlet() {
 
 	AbstractPortlet.apply(this, arguments);
 
-	this.$selector = '.portlet-calendar .portlet-calendar-popover';
+	this.$selector = '.portlet-calendar .popover-scroll';
 	this.pattern = null;
 	this.yearMonth = null;
 	this.calendarMap = null;
@@ -356,7 +356,7 @@ initPopover: function() {
 				return null;
 			}
 			return [
-				'<div class="portlet-calendar-popover">',
+				'<div class="popover-scroll">',
 					'<table>',
 						'<colgroup>',
 							'<col /><col /><col /><col />',
@@ -386,7 +386,7 @@ initPopover: function() {
 				return null;
 			}
 			return [
-				'<div class="portlet-calendar-popover">',
+				'<div class="popover-scroll">',
 					'<table>',
 						'<colgroup>', 
 							'<col /><col /><col />',
@@ -412,7 +412,7 @@ initPopover: function() {
 				return null;
 			}
 			return [
-				'<div class="portlet-calendar-popover">',
+				'<div class="popover-scroll">',
 					'<table>',
 						'<colgroup>',
 							'<col /><col /><col /><col />',
