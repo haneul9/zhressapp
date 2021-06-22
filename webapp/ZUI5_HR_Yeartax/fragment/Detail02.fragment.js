@@ -3,62 +3,62 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 	createContent : function(oController) {
 		
 		// 1. 대상자
-		var oMatrix1 = new sap.ui.commons.layout.MatrixLayout({
-			columns : 4,
-			width : "100%",
-			widths : ["20%", "30%", "20%", "30%"],
-			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : "성명"}).addStyleClass("FontFamily")],
-									 hAlign : "Begin",
-									 vAlign : "Middle"
-								 }).addStyleClass("Label"),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Input({ 
-													width : "160px",
-													value : "{Ename}",
-													showValueHelp: true,
-													valueHelpOnly: true,
-													valueHelpRequest: oController.searchOrgehPernr,
-													customData : new sap.ui.core.CustomData({key : "Pernr", value : "{Pernr}"}),
-													editable : {
-														path : "Auth",
-														formatter : function(fVal){
-															return fVal == $.app.Auth.HASS ? true : false;
-														}
-													}
-												}).addStyleClass("FontFamily")],
-									  hAlign : "Begin",
-									  vAlign : "Middle"
-								 }).addStyleClass("Data"),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-									  content : [new sap.m.Text({text : "소속부서 / 직위"}).addStyleClass("FontFamily")],
-									  hAlign : "Begin",
-									  vAlign : "Middle"
-								 }).addStyleClass("Label"),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-									  content : [new sap.m.Text({text : "{Zzorgtx} / {ZpGradeTxt}"}).addStyleClass("FontFamily")],
-									  hAlign : "Begin",
-									  vAlign : "Middle"
-								 }).addStyleClass("Data")]
-					})]
-		});
-		
-		var oPanel1 = new sap.m.Panel({
-			expandable : true,
-			expanded : true,
-			headerToolbar : [new sap.m.Toolbar({
-								 content : [new sap.m.Text({text : "대상자"}).addStyleClass("Font15 FontBold")]
-							 }).addStyleClass("ToolbarNoBottomLine")],
-			content : [oMatrix1],
-			visible : {
-				path : "Auth",
-				formatter : function(fVal){
-					return fVal == $.app.Auth.HASS ? true : false;
-				}
-			}
-		});
+		// var oMatrix1 = new sap.ui.commons.layout.MatrixLayout({
+		// 	columns : 4,
+		// 	width : "100%",
+		// 	widths : ["20%", "30%", "20%", "30%"],
+		// 	rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+		// 				height : "45px",
+		// 				cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Text({text : "성명"}).addStyleClass("FontFamily")],
+		// 							 hAlign : "Begin",
+		// 							 vAlign : "Middle"
+		// 						 }).addStyleClass("Label"),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							 content : [new sap.m.Input({ 
+		// 											width : "160px",
+		// 											value : "{Ename}",
+		// 											showValueHelp: true,
+		// 											valueHelpOnly: true,
+		// 											valueHelpRequest: oController.searchOrgehPernr,
+		// 											customData : new sap.ui.core.CustomData({key : "Pernr", value : "{Pernr}"}),
+		// 											editable : {
+		// 												path : "Auth",
+		// 												formatter : function(fVal){
+		// 													return fVal == $.app.Auth.HASS ? true : false;
+		// 												}
+		// 											}
+		// 										}).addStyleClass("FontFamily")],
+		// 							  hAlign : "Begin",
+		// 							  vAlign : "Middle"
+		// 						 }).addStyleClass("Data"),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							  content : [new sap.m.Text({text : "소속부서 / 직위"}).addStyleClass("FontFamily")],
+		// 							  hAlign : "Begin",
+		// 							  vAlign : "Middle"
+		// 						 }).addStyleClass("Label"),
+		// 						 new sap.ui.commons.layout.MatrixLayoutCell({
+		// 							  content : [new sap.m.Text({text : "{Zzorgtx} / {ZpGradeTxt}"}).addStyleClass("FontFamily")],
+		// 							  hAlign : "Begin",
+		// 							  vAlign : "Middle"
+		// 						 }).addStyleClass("Data")]
+		// 			})]
+		// });
+		// 
+		// var oPanel1 = new sap.m.Panel({
+		// 	expandable : true,
+		// 	expanded : true,
+		// 	headerToolbar : [new sap.m.Toolbar({
+		// 						 content : [new sap.m.Text({text : "대상자"}).addStyleClass("Font15 FontBold")]
+		// 					 }).addStyleClass("ToolbarNoBottomLine")],
+		// 	content : [oMatrix1],
+		// 	visible : {
+		// 		path : "Auth",
+		// 		formatter : function(fVal){
+		// 			return fVal == $.app.Auth.HASS ? true : false;
+		// 		}
+		// 	}
+		// });
 		
 		// 2. 본인정보
 		var oMatrix2 = new sap.ui.commons.layout.MatrixLayout({
@@ -406,7 +406,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 		
 		///////////////////////////////////////////////////////////////////////
 		var oLayout = new sap.ui.layout.VerticalLayout(oController.PAGEID + "_Detail02", {
-			content : [oPanel1, oPanel2, oPanel3]
+			content : [oPanel2, oPanel3]
 		});
 		
 		oLayout.setModel(oController._DetailJSonModel);

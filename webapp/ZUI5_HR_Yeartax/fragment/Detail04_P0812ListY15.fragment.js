@@ -91,7 +91,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0812ListY15", {
 		
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "1300px",
-			contentHeight : "750px",
+			// contentHeight : "750px",
 			draggable : false,
 			content : [oTable],
 			title : "세액감면 및 세액공제(의료비)",

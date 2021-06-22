@@ -1,9 +1,10 @@
 jQuery.sap.require("common.makeTable");
 sap.ui.define(
     [
-        "common/PageHelper"
+        "common/PageHelper",
+        "common/TMEmpBasicInfoBox"
     ],
-    function (PageHelper) {
+    function (PageHelper, TMEmpBasicInfoBox) {
         "use strict";
 
         sap.ui.jsview("ZUI5_HR_Yeartax.YearTaxDetail", {
@@ -14,6 +15,7 @@ sap.ui.define(
             createContent: function (oController) {
                 $.app.setModel("ZHR_COMMON_SRV");
                 $.app.setModel("ZHR_YEARTAX_SRV");
+                $.app.setModel("ZHR_PERS_INFO_SRV");
                 
                 var oIcontabbar = new sap.m.IconTabBar(oController.PAGEID + "_Icontabbar", {
                     expandable : false,
@@ -87,40 +89,59 @@ sap.ui.define(
                 
                 /////////////////////////////////////////////////////////////
                 var oButton = new sap.m.HBox({
-                	justifyContent : "End",
+                	width : "100%",
+                    justifyContent: "End",
                     items : [
-                        new sap.m.Button({
-                            text : "삭제",
-                            press : oController.onPressDelete7,
-                            visible : {
-                                parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Key2"}],
-                                formatter : function(fVal1, fVal2, fVal3){
-                                    return fVal1 == "1" && fVal2 == "1" && fVal3 == "7" ? true : false;
-                                }
-                            }
-                        }).addStyleClass("button-light"),
-                        new sap.m.Button({
-                            text : "저장",
-                            press : oController.onPressSave,
-                            visible : {
-                                parts : [{path : "Pystat"}, {path : "Yestat"}],
-                                formatter : function(fVal1, fVal2){
-                                    return fVal1 == "1" && fVal2 == "1" ? true : false;
-                                }
-                            }
-                        }).addStyleClass("button-light"),
-                        new sap.m.Button({
-                            text : "최종입력완료",
-                            press : oController.onPressComplete,
-                            visible : {
-                                parts : [{path : "Pystat"}, {path : "Yestat"}],
-                                formatter : function(fVal1, fVal2){
-                                    return fVal1 == "1" && fVal2 == "1" ? true : false;
-                                }
-                            }
-                        }).addStyleClass("button-dark")
+                        new sap.m.HBox({
+                            width : "100%",
+                            justifyContent : "Start",
+                            visible : ($.app.getAuth() == $.app.Auth.HASS ? true : false),
+                            items : [
+                                new TMEmpBasicInfoBox(oController._DetailJSonModel)
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            justifyContent : "End",
+                            items : [
+                                new sap.m.Button({
+                                    text : "대상자 변경",
+                                    press : oController.searchOrgehPernr,
+                                    visible : ($.app.getAuth() == $.app.Auth.HASS ? true : false)
+                                }).addStyleClass("button-light"),
+                                new sap.m.Button({
+                                    text : "삭제",
+                                    press : oController.onPressDelete7,
+                                    visible : {
+                                        parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Key2"}],
+                                        formatter : function(fVal1, fVal2, fVal3){
+                                            return fVal1 == "1" && fVal2 == "1" && fVal3 == "7" ? true : false;
+                                        }
+                                    }
+                                }).addStyleClass("button-light"),
+                                new sap.m.Button({
+                                    text : "저장",
+                                    press : oController.onPressSave,
+                                    visible : {
+                                        parts : [{path : "Pystat"}, {path : "Yestat"}],
+                                        formatter : function(fVal1, fVal2){
+                                            return fVal1 == "1" && fVal2 == "1" ? true : false;
+                                        }
+                                    }
+                                }).addStyleClass("button-light"),
+                                new sap.m.Button({
+                                    text : "최종입력완료",
+                                    press : oController.onPressComplete,
+                                    visible : {
+                                        parts : [{path : "Pystat"}, {path : "Yestat"}],
+                                        formatter : function(fVal1, fVal2){
+                                            return fVal1 == "1" && fVal2 == "1" ? true : false;
+                                        }
+                                    }
+                                }).addStyleClass("button-dark")
+                            ]
+                        }).addStyleClass(($.app.getAuth() == $.app.Auth.HASS ? "button-group pt-53px pr-25px" : "button-group"))
                     ]
-                }).addStyleClass("button-group pt-10px");
+                }).addStyleClass("pt-10px");
         
                 var oPage = new PageHelper({
                     idPrefix : oController.PAGEID,

@@ -19,7 +19,7 @@ sap.ui.define([
         _vPernr : "",
         _SortDialog : null,
         _Actty : "E" ,  //ESS 에서 호출
-        
+         
         _DetailJSonModel : new sap.ui.model.json.JSONModel(),
         
         _BusyDialog : new sap.m.BusyDialog(),
@@ -160,6 +160,10 @@ sap.ui.define([
                 console.log("대상자: " , oController._Pernr, oController._Zyear, oController._Pystat, oController._Yestat);
                 
                 oController._DetailJSonModel.setData(vData);
+
+                if($.app.getAuth() == $.app.Auth.HASS){
+                    oController.setUserData(oController, oController._Pernr);
+                }
             }
         },
         
@@ -1742,6 +1746,68 @@ sap.ui.define([
                 onClose : createProcess
             });
         },
+
+        setUserData : function(oController, oPernr){
+            if(!oController || !oPernr) return;
+
+            var oPhoto = "";
+            new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + (oPernr * 1) + "' and photoType eq '1'")
+                .select("photo")
+                .setAsync(false)
+                .attachRequestCompleted(function(){
+                        var data = this.getData().d;
+                        
+                        if(data && data.results.length){
+                            oPhoto = "data:text/plain;base64," + data.results[0].photo;
+                        } else {
+                            oPhoto = "images/male.jpg";
+                        }
+                })
+                .attachRequestFailed(function() {
+                        oPhoto = "images/male.jpg";
+                })
+                .load();
+                
+            var vData = {};
+                vData.photo = oPhoto;
+                
+            var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+            var createData = {TableIn : []};
+                createData.IPernr = oPernr;
+                createData.ILangu = oController.getSessionInfoByKey("Langu");
+                
+            oModel.create("/HeaderSet", createData, {
+                success: function(data, res){
+                    if(data){
+                        if(data.TableIn && data.TableIn.results){
+                                var data1 = data.TableIn.results[0];
+                                
+                                if(data1){
+                                    $.extend(true, vData, data1);
+                                } else {
+                                    sap.m.MessageBox.error(oController.getBundleText("MSG_48015")); // 데이터 조회 중 오류가 발생하였습니다.
+                                    return;
+                                }
+                            }
+                    }
+                },
+                error: function (oError) {
+                    var Err = {};
+                    oController.Error = "E";
+                            
+                    if (oError.response) {
+                        Err = window.JSON.parse(oError.response.body);
+                        var msg1 = Err.error.innererror.errordetails;
+                        if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                        else oController.ErrorMessage = Err.error.message.value;
+                    } else {
+                        oController.ErrorMessage = oError.toString();
+                    }
+                }
+            });
+            
+            oController._DetailJSonModel.setProperty("/User", vData);
+        },
         
         // 대상자 조회 및 선택로직
         onDataProgress : function(oEvent){
@@ -1751,6 +1817,8 @@ sap.ui.define([
             var oPercod = "";
             
             if(oController._Pernr != oController.getSessionInfoByKey("Pernr")){
+                oController.setUserData(oController, oController._Pernr);
+
                 var oModel = $.app.getModel("ZHR_COMMON_SRV");
                 var createData = {Pernr : oController._Pernr, PernrEncodeNav : [{Pernr : oController._Pernr}]};
                 oModel.create("/PernrEncodingSet", createData, {
