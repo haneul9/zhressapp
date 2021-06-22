@@ -20,6 +20,30 @@ sap.ui.define([
 
 return CommonController.extend($.app.APP_ID, { // 출장
 
+	ApprovalStatusMap: {
+		KO: [
+			{ Code: "0", Text: "전체" },
+			{ Code: "1", Text: "미결재" },
+			{ Code: "2", Text: "결재중" },
+			{ Code: "3", Text: "결재완료" },
+			{ Code: "4", Text: "반려" }
+		],
+		EN: [
+			{ Code: "0", Text: "All" },
+			{ Code: "1", Text: "Not Submitted" },
+			{ Code: "2", Text: "In Progress" },
+			{ Code: "3", Text: "Complete" },
+			{ Code: "4", Text: "Rejected" }
+		],
+		ZH: [
+			{ Code: "0", Text: "All" },
+			{ Code: "1", Text: "Not Submitted" },
+			{ Code: "2", Text: "In Progress" },
+			{ Code: "3", Text: "Complete" },
+			{ Code: "4", Text: "Rejected" }
+		]
+	},
+
 	RequestSearchModel: new JSONModel(),
 	RequestListModel: new JSONModel(),
 	RequestDetailModel: new JSONModel(),
@@ -49,26 +73,14 @@ return CommonController.extend($.app.APP_ID, { // 출장
 			IBegda: IBegda,
 			IEndda: IEndda,
 			IZzok: "0",
-			ApprovalStatusList: [
-				{ Code: "0", Text: "전체" },
-				{ Code: "1", Text: "미결재" },
-				{ Code: "2", Text: "결재중" },
-				{ Code: "3", Text: "결재완료" },
-				{ Code: "4", Text: "반려" }
-			]
+			ApprovalStatusList: this.ApprovalStatusMap[this.getSessionInfoByKey("Langu")]
 		});
 		this.SettlementSearchModel.setData({
 			Dtfmt: Dtfmt,
 			IBegda: IBegda,
 			IEndda: IEndda,
 			IBtStat: "0",
-			ApprovalStatusList: [
-				{ Code: "0", Text: "전체" },
-				{ Code: "1", Text: "미결재" },
-				{ Code: "2", Text: "결재중" },
-				{ Code: "3", Text: "결재완료" },
-				{ Code: "4", Text: "반려" }
-			]
+			ApprovalStatusList: this.ApprovalStatusMap[this.getSessionInfoByKey("Langu")]
 		});
 
 		this.RequestListModel.setData([]);
