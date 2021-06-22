@@ -413,7 +413,7 @@ sap.ui.define(
                     title: "{i18n>LABEL_08022}",
                     contentWidth: "850px",
                     contentHeight: "580px",
-                    beforeOpen: oController.onBeforeOpenDetailDialog.bind(oController),
+                    afterOpen: oController.onAfterOpenDetailDialog.bind(oController),
                     buttons: [
                         new sap.m.Button(oController.PAGEID + "_SaveBtn", {
                             press: $.proxy(oController.onPressSave, oController),

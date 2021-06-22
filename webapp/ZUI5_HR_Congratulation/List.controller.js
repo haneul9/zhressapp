@@ -849,7 +849,7 @@ sap.ui.define(
                 oController.DetailModel.setProperty("/FormData/AmountT", rAmountT);
             },
 
-            onBeforeOpenDetailDialog: function () {
+            onAfterOpenDetailDialog: function () {
                 var oController = $.app.getController();
                 var vStatus = oController.DetailModel.getProperty("/FormData/Status"),
                     vInfoMessage = oController.DetailModel.getProperty("/FormData/FilePlaceholder"),
@@ -860,6 +860,7 @@ sap.ui.define(
                     Mode: "M",
                     Max: 3,
                     Required: true,
+                    ReadAsync: true,
                     Editable: !vStatus || vStatus === "AA" ? true : false,
                     InfoMessage: vInfoMessage
                 });
