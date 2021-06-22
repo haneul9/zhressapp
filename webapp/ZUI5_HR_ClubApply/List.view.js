@@ -86,7 +86,7 @@ sap.ui.define([
 				width: "100%",
 				rowHeight: 37,
 				columnHeaderHeight: 38,
-				visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Auto,
+				// visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Auto,
 				noData: "{i18n>LABEL_00901}"
 			})
 			.addStyleClass("mt-10px")
