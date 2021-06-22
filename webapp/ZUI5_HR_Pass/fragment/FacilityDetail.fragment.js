@@ -11,7 +11,7 @@ sap.ui.define([
 			var oDialog = new sap.m.Dialog(oController.PAGEID + "_FacilityDetail_Dialog", {
 				title: "{i18n>LABEL_09024}",
 				contentWidth: "800px",
-				contentHeight: "300px",
+				// contentHeight: "300px",
 				buttons: [					
 					new sap.m.Button({
 						press: FacilityHandler.onPressSaveBtn.bind(FacilityHandler),
