@@ -859,15 +859,15 @@ sap.ui.define([
 			var vStatus = this.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = this.ApplyModel.getProperty("/FormData/Appnm") || "";
 
-			if(oController.ApplyModel.getProperty("/EarlyApp") === "X") {
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 첨부파일
-					Label: oController.getBundleText("LABEL_59021"),
+			if(this.ApplyModel.getProperty("/EarlyApp") === "X") {
+				fragment.COMMON_ATTACH_FILES.setAttachFile(this, { // 첨부파일
+					Label: this.getBundleText("LABEL_59021"),
 					Required : true,
 					Appnm: vAppnm,
 					Mode: "S",
 					ReadAsync: true,
 					UseMultiCategories: true,
-					Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
+					Editable: this.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
 				},"005");
 			}else {
 				setTimeout(function () {
@@ -875,7 +875,7 @@ sap.ui.define([
                         Promise.all([
 							Common.getPromise(function () {
 								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 파견 발령지
-									Label: oController.getBundleText("LABEL_59022"),
+									Label: this.getBundleText("LABEL_59022"),
 									Required : true,
 									Appnm: vAppnm,
 									Mode: "S",
@@ -886,7 +886,7 @@ sap.ui.define([
 							}.bind(this)),
 							Common.getPromise(function () {
 								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 계약서
-									Label: oController.getBundleText("LABEL_59023"),
+									Label: this.getBundleText("LABEL_59023"),
 									Required : true,
 									Appnm: vAppnm,
 									Mode: "S",
@@ -897,7 +897,7 @@ sap.ui.define([
 							}.bind(this)),
 							Common.getPromise(function () {
 								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 주민등록등본
-									Label: oController.getBundleText("LABEL_59024"),
+									Label: this.getBundleText("LABEL_59024"),
 									Required : true,
 									Appnm: vAppnm,
 									Mode: "S",
@@ -908,7 +908,7 @@ sap.ui.define([
 							}.bind(this)),
 							Common.getPromise(function () {
 								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 기타
-									Label: oController.getBundleText("LABEL_59025"),
+									Label: this.getBundleText("LABEL_59025"),
 									Appnm: vAppnm,
 									Mode: "S",
 									ReadAsync: true,
