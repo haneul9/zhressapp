@@ -8,12 +8,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 			width : "100%",
 			widths : ["20%", "30%", "20%", "30%"],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Text({text : "성명"}).addStyleClass("FontFamily")],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel"),
+								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Input({ 
 													width : "160px",
@@ -31,17 +31,17 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 												}).addStyleClass("FontFamily")],
 									  hAlign : "Begin",
 									  vAlign : "Middle"
-								 }).addStyleClass("MatrixData"),
+								 }).addStyleClass("Data"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									  content : [new sap.m.Text({text : "소속부서 / 직급"}).addStyleClass("FontFamily")],
+									  content : [new sap.m.Text({text : "소속부서 / 직위"}).addStyleClass("FontFamily")],
 									  hAlign : "Begin",
 									  vAlign : "Middle"
-								 }).addStyleClass("MatrixLabel"),
+								 }).addStyleClass("Label"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									  content : [new sap.m.Text({text : "{Zzorgtx} / {ZpGradeTxt}"}).addStyleClass("FontFamily")],
 									  hAlign : "Begin",
 									  vAlign : "Middle"
-								 }).addStyleClass("MatrixData")]
+								 }).addStyleClass("Data")]
 					})]
 		});
 		

@@ -30,6 +30,7 @@ sap.ui.define([
         
         _Pernr : "",
         _Zyear : "",
+        _Bukrs : "",
         _Pystat : "",
         _Yestat : "",
         
@@ -141,7 +142,7 @@ sap.ui.define([
                         Yestat : oYestat,
                         Ename : oController.getSessionInfoByKey("Ename"),
                         Zzorgtx : oController.getSessionInfoByKey("Stext"),
-                        ZpGradeTxt : oController.getSessionInfoByKey("PGradeTxt"),
+                        ZpGradeTxt : oController.getSessionInfoByKey("ZtitleT"),
                         Auth : $.app.getAuth()
                     },
                     // 소득공제
@@ -151,6 +152,7 @@ sap.ui.define([
                 };
                 
                 oController._Pernr = oController.getSessionInfoByKey("Pernr");
+                oController._Bukrs = oController.getSessionInfoByKey("Bukrs");
                 oController._Zyear = oZyear;
                 oController._Pystat = oPystat;
                 oController._Yestat = oYestat;
@@ -261,7 +263,7 @@ sap.ui.define([
                                 oneData.Yestat = oData.Yestat;
                                 oneData.Ename = oData.Ename;
                                 oneData.Zzorgtx = oData.Zzorgtx;
-                                oneData.Zzjikcht = oData.Zzjikcht;
+                                oneData.ZpGradeTxt = oData.ZpGradeTxt;
                                 oneData.Auth = $.app.getAuth();
                                 
                                 oneData.Womee = oneData.Womee == "X" ? true : false; // 부녀자
@@ -1745,12 +1747,47 @@ sap.ui.define([
         onDataProgress : function(oEvent){
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
             var oController = oView.getController();
+            
+            var oPercod = "";
+            
+            if(oController._Pernr != oController.getSessionInfoByKey("Pernr")){
+                var oModel = $.app.getModel("ZHR_COMMON_SRV");
+                var createData = {Pernr : oController._Pernr, PernrEncodeNav : [{Pernr : oController._Pernr}]};
+                oModel.create("/PernrEncodingSet", createData, {
+                    success: function(data){
+                        if(data){
+                            oPercod = data.Percod;
+                        }
+                    },
+                    error: function (oError) {
+                        var Err = {};
+                        oController.Error = "E";
+                                
+                        if (oError.response) {
+                            Err = window.JSON.parse(oError.response.body);
+                            var msg1 = Err.error.innererror.errordetails;
+                            if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                            else oController.ErrorMessage = Err.error.message.value;
+                        } else {
+                            oController.ErrorMessage = oError.toString();
+                        }
+                    }
+                });
 
+                if(oController.Error == "E"){
+                    oController.Error = "";
+                    MessageBox.error(oController.ErrorMessage);
+                    return;
+                }
+            } else {
+                oPercod = oController.getSessionInfoByKey("Percod");
+            }
+            
 			var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
 			var oPath = "/YeartaxHeaderSet?$filter=IZyear eq '" + oController._DetailJSonModel.getProperty("/Data/Zyear") + "'";
-				oPath += " and IBukrs eq '" + oController.getSessionInfoByKey("Bukrs") + "'";
-				oPath += " and IPercod eq '" + encodeURIComponent(oController.getSessionInfoByKey("Percod")) + "'";
-                oPath += " and IEmpid eq '" + encodeURIComponent(oController.getSessionInfoByKey("Pernr")) + "'";
+				oPath += " and IBukrs eq '" + oController._Bukrs + "'";
+				oPath += " and IPercod eq '" + encodeURIComponent(oPercod) + "'";
+                oPath += " and IEmpid eq '" + encodeURIComponent(oController._Pernr) + "'";
 				
 			var oZyear = "", oPystat = "", oYestat = "";
 			
@@ -1760,15 +1797,18 @@ sap.ui.define([
 							oController._Zyear = data.results[0].Zyear;
 							oController._Pystat = data.results[0].Pystat;
 							oController._Yestat = data.results[0].Yestat;
+                            
+                            oController._DetailJSonModel.setProperty("/Data2/Zzorgtx", data.results[0].Orgtx);
+                            oController._DetailJSonModel.setProperty("/Data2/ZpGradeTxt", data.results[0].Titl2);
 							
 							oController._DetailJSonModel.setProperty("/Data/Zyear",  data.results[0].Zyear);
 							oController._DetailJSonModel.setProperty("/Data/Pystat", data.results[0].Pystat);
-							oController._DetailJSonModel.setProperty("/Data/Yestat", data.results[0].Yestat);
+							oController._DetailJSonModel.setProperty("/Data/Yestat", (data.results[0].Yestat == "X" ? "1" : ""));
 							oController._DetailJSonModel.setProperty("/Data/Key", "1");
 							
 							oController._DetailJSonModel.setProperty("/Data2/Zyear",  data.results[0].Zyear);
 							oController._DetailJSonModel.setProperty("/Data2/Pystat", data.results[0].Pystat);
-							oController._DetailJSonModel.setProperty("/Data2/Yestat", data.results[0].Yestat);
+							oController._DetailJSonModel.setProperty("/Data2/Yestat", (data.results[0].Yestat == "X" ? "1" : ""));
 						}
 					},
 					function(Res) {
@@ -3217,6 +3257,7 @@ sap.ui.define([
                                     });
                         break;
                     case "combobox":
+                        oColumn.setHAlign("Begin");
                         oTemplate = new sap.m.ComboBox({
                                         selectedKey : "{" + col_info[i].id + "}",
                                         width : "100%",
@@ -3344,7 +3385,8 @@ sap.ui.define([
                 oController._DetailJSonModel.setProperty("/Data2/Zzorgtx", o.PupStext);
                 oController._DetailJSonModel.setProperty("/Data2/ZpGradeTxt", o.ZpGradeTxt);
     
-                oController._Pernr = o.Objid;			
+                oController._Pernr = o.Objid;
+                oController._Bukrs = o.Bukrs;
                 
                 oController.onDataProgress();
                 oController.handleIconTabBarSelect("", "X");
@@ -3390,7 +3432,8 @@ sap.ui.define([
             oController._DetailJSonModel.setProperty("/Data2/Zzorgtx", data.Zzorgtx);
             oController._DetailJSonModel.setProperty("/Data2/ZpGradeTxt", data.ZpGradeTxt);
 
-            oController._Pernr = data.Pernr;			
+            oController._Pernr = data.Pernr;
+            oController._Bukrs = data.Bukrs;
             
             oController.onDataProgress();
             oController.handleIconTabBarSelect("", "X");
