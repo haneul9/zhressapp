@@ -353,7 +353,7 @@ initPopover: function() {
 		.popover(this.popoverOptions(template, function() {
 			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
 			if (!popoverBody.length) {
-				return null;
+				return '';
 			}
 			return [
 				'<div class="popover-scroll">',
@@ -383,7 +383,7 @@ initPopover: function() {
 		.popover(this.popoverOptions(template, function() {
 			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
 			if (!popoverBody.length) {
-				return null;
+				return '';
 			}
 			return [
 				'<div class="popover-scroll">',
@@ -409,7 +409,7 @@ initPopover: function() {
 		.popover(this.popoverOptions(template, function() {
 			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
 			if (!popoverBody.length) {
-				return null;
+				return '';
 			}
 			return [
 				'<div class="popover-scroll">',
@@ -465,7 +465,6 @@ popoverOptions: function(template, content) {
 		container: '.portlet-calendar',
 		placement: 'top',
 		trigger: 'manual',
-		// delay: { show: 0, hide: 600 },
 		template: template,
 		content: content
 	};
