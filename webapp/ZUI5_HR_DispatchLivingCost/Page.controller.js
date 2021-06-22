@@ -1,15 +1,14 @@
 ﻿/* eslint-disable no-undef */
 sap.ui.define([
-	"../common/Common",
-	"../common/CommonController",
-	"../common/JSONModelHelper",
+	"common/Common",	//
+	"common/CommonController",
+	"common/JSONModelHelper",
 	"./delegate/ViewTemplates",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
 	function (Common, CommonController, JSONModelHelper, ViewTemplates, MessageBox, BusyIndicator) {
 	"use strict";
-
 	
 	return CommonController.extend($.app.APP_ID, {
 		
@@ -36,13 +35,9 @@ sap.ui.define([
 			this.setupView()
 				.getView()
 				.addEventDelegate({
-					onBeforeShow : this.onBeforeShow
-				}, this);
-				
-			this.getView()
-				.addEventDelegate({
+					onBeforeShow : this.onBeforeShow,
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -224,7 +219,7 @@ sap.ui.define([
 			sendObject.DispatchApplyTableIn1 = [];
 			
 			oModel.create("/DispatchApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					
 					if (oData && oData.DispatchApplyTableIn1) {
 						Common.log(oData);
@@ -266,7 +261,7 @@ sap.ui.define([
 			this.setZyears(this);
 			this.setZmonths(this);
             this.getLocationList();
-		    this.onBeforeOpenDetailDialog();
+		    // this.onBeforeOpenDetailDialog();
 			this._CostApplyModel.open();
 		},
 
@@ -277,7 +272,7 @@ sap.ui.define([
 				oEarlyYears = $.app.byId(this.PAGEID + "_EarlyYears"),
 				oEarlyMonth = $.app.byId(this.PAGEID + "_EarlyMonth");
 				
-			if(this.TableModel.getProperty("/Data").every(function(e) { return Common.checkNull(e.Check)})){
+			if(this.TableModel.getProperty("/Data").every(function(e) { return Common.checkNull(e.Check);})){
 				sap.m.MessageBox.alert(oController.getBundleText("MSG_59016"), {
 					title: oController.getBundleText("LABEL_00149")
 				});
@@ -303,7 +298,7 @@ sap.ui.define([
 			this.ApplyModel.setProperty("/FormData/EarlyMonth", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(4));
 			this.getDispatchCost();
             this.getLocationList();
-		    this.onBeforeOpenDetailDialog();
+		    // this.onBeforeOpenDetailDialog();
 			this._CostApplyModel.open();
         },
 		
@@ -345,7 +340,7 @@ sap.ui.define([
 			oController.ApplyModel.setProperty("/FormData/EarlyMonth", Common.checkNull(oCopiedRow.Zseeym) || oRowData.Zseeym === "000000" ? "" : oCopiedRow.Zseeym.slice(4));
 			oController.getDispatchCost();
             oController.getLocationList();
-			oController.onBeforeOpenDetailDialog();
+			// oController.onBeforeOpenDetailDialog();
 			oController._CostApplyModel.open();
 		},
 
@@ -405,7 +400,7 @@ sap.ui.define([
 			sendObject.DispatchApplyTableIn1 = [oSendRow];
 			
 			oModel.create("/DispatchApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.DispatchApplyTableIn1) {
 						Common.log(oData);
 						var rDatas = oData.DispatchApplyTableIn1.results;
@@ -442,7 +437,7 @@ sap.ui.define([
 			sendObject.DispatchApplyTableIn3 = [];
 			
 			oModel.create("/DispatchApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					Common.log(oData);
                     oController.ApplyModel.setProperty("/LocationCombo1", oData.DispatchApplyTableIn2.results);
                     oController.ApplyModel.setProperty("/LocationCombo2", oData.DispatchApplyTableIn2.results);
@@ -466,7 +461,7 @@ sap.ui.define([
 			this.checkLocation_1(oEvent);
 		},
 
-		checkLocation_1: function(oEvent) { // 파견지 Check
+		checkLocation_1: function() { // 파견지 Check
 			var oController = $.app.getController();
 			var oLocation1 = $.app.byId(oController.PAGEID + "_LocationCombo1");
 			var oLocation2 = $.app.byId(oController.PAGEID + "_LocationCombo2");
@@ -489,7 +484,7 @@ sap.ui.define([
 			this.checkLocation_2(oEvent);
 		},
 
-		checkLocation_2: function(oEvent) { // 기준지 Check
+		checkLocation_2: function() { // 기준지 Check
 			var oController = $.app.getController();
 			var oLocation3 = $.app.byId(oController.PAGEID + "_LocationCombo3");
 			var oLocation4 = $.app.byId(oController.PAGEID + "_LocationCombo4");
@@ -613,7 +608,7 @@ sap.ui.define([
                     sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 					
 					oModel.create("/DispatchApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59015"), { title: oController.getBundleText("MSG_08107")});
 								oController.onTableSearch();
@@ -673,7 +668,7 @@ sap.ui.define([
                     sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 					
 					oModel.create("/DispatchApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59011"), { title: oController.getBundleText("MSG_08107")});
 								oController.onTableSearch();
@@ -726,7 +721,7 @@ sap.ui.define([
                     sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 					
 					oModel.create("/DispatchApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59011"), { title: oController.getBundleText("MSG_08107")});
 								oController.onTableSearch();
@@ -788,7 +783,7 @@ sap.ui.define([
                     sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 					
 					oModel.create("/DispatchApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59013"), { title: oController.getBundleText("MSG_08107")});
 								oController.onTableSearch();
@@ -834,7 +829,7 @@ sap.ui.define([
                     sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 					
 					oModel.create("/DispatchApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_59015"), { title: oController.getBundleText("MSG_08107")});
 								oController.onTableSearch();
@@ -858,12 +853,11 @@ sap.ui.define([
 				actions: [oController.getBundleText("LABEL_59028"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressDelete
 			});
-        },
-
-		onBeforeOpenDetailDialog: function() {
-			var oController = $.app.getController();
-			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
-				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
+		},
+		
+		onAfterCostApply: function() {
+			var vStatus = this.ApplyModel.getProperty("/FormData/Status"),
+				vAppnm = this.ApplyModel.getProperty("/FormData/Appnm") || "";
 
 			if(oController.ApplyModel.getProperty("/EarlyApp") === "X") {
 				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 첨부파일
@@ -871,46 +865,116 @@ sap.ui.define([
 					Required : true,
 					Appnm: vAppnm,
 					Mode: "S",
+					ReadAsync: true,
 					UseMultiCategories: true,
 					Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
 				},"005");
 			}else {
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 파견 발령지
-					Label: oController.getBundleText("LABEL_59022"),
-					Required : true,
-					Appnm: vAppnm,
-					Mode: "S",
-					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false
-				},"001");
-				
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 계약서
-					Label: oController.getBundleText("LABEL_59023"),
-					Required : true,
-					Appnm: vAppnm,
-					Mode: "S",
-					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false
-				},"002");
-	
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 주민등록등본
-					Label: oController.getBundleText("LABEL_59024"),
-					Required : true,
-					Appnm: vAppnm,
-					Mode: "S",
-					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false
-				},"003");
-	
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 기타
-					Label: oController.getBundleText("LABEL_59025"),
-					Appnm: vAppnm,
-					Mode: "S",
-					UseMultiCategories: true,
-					Editable: (!vStatus || vStatus === "AA") ? true : false
-				},"004");
+				setTimeout(function () {
+                    fragment.COMMON_ATTACH_FILES.once.call(this, vAppnm).then(function() {
+                        Promise.all([
+							Common.getPromise(function () {
+								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 파견 발령지
+									Label: oController.getBundleText("LABEL_59022"),
+									Required : true,
+									Appnm: vAppnm,
+									Mode: "S",
+									ReadAsync: true,
+									UseMultiCategories: true,
+									Editable: (!vStatus || vStatus === "AA") ? true : false
+								}, "001");
+							}.bind(this)),
+							Common.getPromise(function () {
+								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 계약서
+									Label: oController.getBundleText("LABEL_59023"),
+									Required : true,
+									Appnm: vAppnm,
+									Mode: "S",
+									ReadAsync: true,
+									UseMultiCategories: true,
+									Editable: (!vStatus || vStatus === "AA") ? true : false
+								}, "002");
+							}.bind(this)),
+							Common.getPromise(function () {
+								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 주민등록등본
+									Label: oController.getBundleText("LABEL_59024"),
+									Required : true,
+									Appnm: vAppnm,
+									Mode: "S",
+									ReadAsync: true,
+									UseMultiCategories: true,
+									Editable: (!vStatus || vStatus === "AA") ? true : false
+								}, "003");
+							}.bind(this)),
+							Common.getPromise(function () {
+								fragment.COMMON_ATTACH_FILES.setAttachFile(this, {	// 기타
+									Label: oController.getBundleText("LABEL_59025"),
+									Appnm: vAppnm,
+									Mode: "S",
+									ReadAsync: true,
+									UseMultiCategories: true,
+									Editable: (!vStatus || vStatus === "AA") ? true : false
+								}, "004");
+							}.bind(this))
+						]).then(function () {
+                            $.app.byViewId("FilePanel").setBusy(false);
+                        });
+                    }.bind(this));
+				}.bind(this), 100);
 			}
 		},
+
+		// onBeforeOpenDetailDialog: function() {
+		// 	var oController = $.app.getController();
+		// 	var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
+		// 		vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
+
+		// 	if(oController.ApplyModel.getProperty("/EarlyApp") === "X") {
+		// 		fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 첨부파일
+		// 			Label: oController.getBundleText("LABEL_59021"),
+		// 			Required : true,
+		// 			Appnm: vAppnm,
+		// 			Mode: "S",
+		// 			UseMultiCategories: true,
+		// 			Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
+		// 		},"005");
+		// 	}else {
+		// 		fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 파견 발령지
+		// 			Label: oController.getBundleText("LABEL_59022"),
+		// 			Required : true,
+		// 			Appnm: vAppnm,
+		// 			Mode: "S",
+		// 			UseMultiCategories: true,
+		// 			Editable: (!vStatus || vStatus === "AA") ? true : false
+		// 		},"001");
+				
+		// 		fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 계약서
+		// 			Label: oController.getBundleText("LABEL_59023"),
+		// 			Required : true,
+		// 			Appnm: vAppnm,
+		// 			Mode: "S",
+		// 			UseMultiCategories: true,
+		// 			Editable: (!vStatus || vStatus === "AA") ? true : false
+		// 		},"002");
+	
+		// 		fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 주민등록등본
+		// 			Label: oController.getBundleText("LABEL_59024"),
+		// 			Required : true,
+		// 			Appnm: vAppnm,
+		// 			Mode: "S",
+		// 			UseMultiCategories: true,
+		// 			Editable: (!vStatus || vStatus === "AA") ? true : false
+		// 		},"003");
+	
+		// 		fragment.COMMON_ATTACH_FILES.setAttachFile(oController, { // 기타
+		// 			Label: oController.getBundleText("LABEL_59025"),
+		// 			Appnm: vAppnm,
+		// 			Mode: "S",
+		// 			UseMultiCategories: true,
+		// 			Editable: (!vStatus || vStatus === "AA") ? true : false
+		// 		},"004");
+		// 	}
+		// },
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
 			return new JSONModelHelper({name: "20063005"}); // 20063005
