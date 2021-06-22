@@ -448,7 +448,15 @@ sap.ui.jsfragment("ZUI5_HR_FamilyApply.fragment.popup", {
                         }
                     }
                 }).addStyleClass("button-dark"),
-                new sap.m.Button({ text: oBundleText.getText("LABEL_00133"), press: oController.onClose }).addStyleClass("button-default custom-button-divide")
+                new sap.m.Button({
+                    text: oBundleText.getText("LABEL_00133"),
+                    press: function() {
+                        var oTable = $.app.byId(oController.PAGEID + "_Table");
+                        
+                        oTable.removeSelectionInterval(0, oTable.getVisibleRowCount() - 1);
+                        oController.oDialog.close();
+                    }
+                }).addStyleClass("button-default custom-button-divide")
             ],
             contentWidth: "1366px",
             afterOpen: function () {
