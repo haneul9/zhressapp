@@ -124,7 +124,21 @@
 										if(!v){
 											return "";
 										}else{
-											return /^</i.test(v) ? v : '<p style="font-size: 14px">${content}</p>'.interpolate(v);
+											var vDetailList = v.split("<img");
+											if(vDetailList.length === 1) {
+												return /^</i.test(v) ? v : '<p style="font-size: 14px>${content}</p>'.interpolate(v);
+											}
+
+											var vHtml = [];
+											vDetailList.forEach(function(ele, index) {
+												if(index === 0){
+													vHtml.push(ele);
+												}else{
+													vHtml.push(ele.replace(" src=", '<img style="max-width: 100%;" src='));
+												}
+											});
+											
+											return vHtml.join("");
 										}
 									}
 								}
