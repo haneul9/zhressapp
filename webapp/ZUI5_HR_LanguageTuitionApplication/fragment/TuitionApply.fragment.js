@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 sap.ui.define([
-	"../../common/Common",
-	"../../common/PickOnlyDateRangeSelection",
+	"common/Common",	//
+	"common/PickOnlyDateRangeSelection",
 	"../delegate/ViewTemplates",
-	"../../common/HoverIcon",
+	"common/HoverIcon",
 	"sap/m/InputBase"
 ], function (Common, PickOnlyDateRangeSelection, ViewTemplates, HoverIcon, InputBase) {
 	"use strict";
@@ -78,7 +78,8 @@ sap.ui.define([
 						return false;
 					}
 				}
-			})
+			});
+
 			// 키보드 입력 방지
 			oReceiptDate.addDelegate({
 				onAfterRendering: function () {
@@ -190,84 +191,6 @@ sap.ui.define([
 										})
 									]
 								}).addStyleClass("search-field-group")
-								// new sap.m.HBox({
-									//     height: "40px",
-								//     items: [
-									//         // 영수증
-								//         new sap.m.Label({ text: "{i18n>LABEL_29020}", required: true, design: "Bold", width: "130px" }),
-								//         new sap.ui.unified.FileUploader(oController.PAGEID + "_FileUpload1", {
-								// 			enabled: {
-								// 				path: "Status",
-								// 				formatter: function(v) {
-								// 					if (!v || v === "AA") return true;
-								// 					return false;
-								// 				}
-								// 			},
-								// 			icon: "sap-icon://attachment",
-								// 			width: "400px",
-								// 			value: {
-									// 				path: "Fname",
-								// 				formatter: function(v) {
-								// 					if(Common.checkNull(v)) return "";
-								// 					else return v;
-								// 				} 
-								// 			},
-								// 			//change: oController.onFileChange2.bind(oController),
-								// 			buttonText: "{i18n>LABEL_29033}" // 파일첨부
-								// 		}),
-								// 		new sap.m.Button(oController.PAGEID + "_FileDelBtn1", {
-									// 			//press: oController.onFileDelBtn.bind(oController),
-								// 			icon: "sap-icon://delete",
-								// 			text: "{i18n>LABEL_29034}", // 삭제
-								// 			enabled: {
-								// 				path: "Status",
-								// 				formatter: function(v) {
-								// 					if (!v || v === "AA") return true;
-								// 					return false;
-								// 				}
-								// 			}
-								// 		}).addStyleClass("ml-4px mb-6px")
-								//     ]
-								// }).addStyleClass("search-field-group"),
-								// new sap.m.HBox({
-									//     height: "40px",
-								//     items: [
-									//         // 수강확인증
-								//         new sap.m.Label({ text: "{i18n>LABEL_29021}", required: true, design: "Bold", width: "130px" }),
-								//         new sap.ui.unified.FileUploader(oController.PAGEID + "_FileUpload2", {
-								// 			enabled: {
-								// 				path: "Status",
-								// 				formatter: function(v) {
-								// 					if (!v || v === "AA") return true;
-								// 					return false;
-								// 				}
-								// 			},
-								// 			icon: "sap-icon://attachment",
-								// 			width: "400px",
-								// 			value: {
-								// 				path: "Fname",
-								// 				formatter: function(v) {
-									// 					if(Common.checkNull(v)) return "";
-								// 					else return v;
-								// 				} 
-								// 			},
-								// 			//hange: oController.onFileChange2.bind(oController),
-								// 			buttonText: "{i18n>LABEL_29033}" // 파일첨부
-								// 		}),
-								// 		new sap.m.Button(oController.PAGEID + "_FileDelBtn2", {
-								// 			//press: oController.onFileDelBtn.bind(oController),
-								// 			icon: "sap-icon://delete",
-								// 			text: "{i18n>LABEL_29034}", // 삭제
-								// 			enabled: {
-								// 				path: "Status",
-								// 				formatter: function(v) {
-								// 					if (!v || v === "AA") return true;
-								// 					return false;
-								// 				}
-								// 			}
-								// 		}).addStyleClass("ml-4px mb-6px")
-								//     ]
-								// }).addStyleClass("search-field-group")
 							]
 						}).addStyleClass("search-inner-vbox"),
 						new sap.m.VBox({
@@ -296,7 +219,7 @@ sap.ui.define([
 											width: "100px",
 											textAlign: "End",
 											value: "{Acqpot}",
-											editable: false,
+											editable: false
 										}).addStyleClass("mr-3px"),
 										new sap.m.Text({ text: "{i18n>LABEL_29029}" }),
 										new sap.m.Input({
@@ -373,10 +296,8 @@ sap.ui.define([
 													{ path: "Supen" }
 												],
 												formatter: function(v1, v2) {
-													if(v1){
-														v1 = new Date(v1);
-														v2 = new Date(v2);
-														return [Common.DateFormatter(v1, "yyyy-MM-dd"), Common.DateFormatter(v2, "yyyy-MM-dd")].join(" ~ ");
+													if(v1 && v2){
+														return [moment(v1).format("YYYY-MM-DD"), moment(v2).format("YYYY-MM-DD")].join(" ~ ");
 													}
 													else{
 														return "";
@@ -394,14 +315,14 @@ sap.ui.define([
 				.setModel(oController.DetailModel)
 				.bindElement("/FormData")
 				.addStyleClass("mb-10px"),
-				new sap.m.VBox({
+				new sap.m.VBox("filePanel", {
 					width: "100%",
 					height: "210px",
 					fitContainer: true,
 					items: [
-						ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Left").addStyleClass("sub-title mt-10px"), // 첨부파일
-						new sap.m.VBox({
+						new sap.m.HBox({
 							items: [
+								ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "70px", "Left").addStyleClass("sub-title mt-10px"), // 첨부파일
 								new sap.m.HBox({
 									items: [
 										new sap.ui.core.Icon({
@@ -410,12 +331,15 @@ sap.ui.define([
 										.addStyleClass("color-icon-blue mr-5px pt-5px"),
 										new sap.m.Text({ text: "{i18n>MSG_29020}", textAlign: "Begin" })
 									]
-								}),
+								}).addStyleClass("mt-10px")
+							]
+						}),
+						new sap.m.VBox({
+							items: [
 								fragment.COMMON_ATTACH_FILES.renderer(oController,"001"),
 								fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
 							]
-						})
-						.addStyleClass("custom-multiAttach-file")
+						}).addStyleClass("custom-multiAttach-file")
 					]
 				})
 				.addStyleClass("/*search-field-group*/")
@@ -425,7 +349,8 @@ sap.ui.define([
 			var oDialog = new sap.m.Dialog({
 				title: "{i18n>LABEL_29001}",    // 어학비신청
 				contentWidth: "1050px",
-				contentHeight: "470px",
+				// contentHeight: "470px",
+				afterOpen: oController.onAfterApply.bind(oController),
 				buttons: [					
 					new sap.m.Button({
 						press: oController.onDialogSaveBtn.bind(oController),

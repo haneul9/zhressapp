@@ -107,7 +107,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0881E9", {
 		
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "1200px",
-			contentHeight : "750px",
+			// contentHeight : "750px",
 			draggable : false,
 			content : [oTable],
 			title : "그 밖의 소득공제(기타)",

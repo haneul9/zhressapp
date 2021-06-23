@@ -109,7 +109,7 @@
                                     }
                                 },
 								editable: false
-                            }).addStyleClass("mt-5px ml--6px")
+                            }).addStyleClass("mt-5px ml-6px")
 						]
 					}),
                     new sap.m.VBox({
@@ -117,13 +117,39 @@
 						// alignItems: sap.m.FlexAlignItems.Center,
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_57016}", "105px", "Left").addStyleClass("sub-con-title"), // 내용
-                            new sap.m.TextArea({
-								layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                rows: 10,
-								width: "100%",
-								value:"{Detail}",
-								editable: false
-							}).addStyleClass("mt-8px mb-8px")
+							new sap.ui.core.HTML({
+								content: {
+									path: "Detail",
+									formatter: function(v) {
+										if(!v){
+											return "";
+										}else{
+											var vDetailList = v.split("<img");
+											if(vDetailList.length === 1) {
+												return /^</i.test(v) ? v : '<p style="font-size: 14px>${content}</p>'.interpolate(v);
+											}
+
+											var vHtml = [];
+											vDetailList.forEach(function(ele, index) {
+												if(index === 0){
+													vHtml.push(ele);
+												}else{
+													vHtml.push(ele.replace(" src=", '<img style="max-width: 100%;" src='));
+												}
+											});
+											
+											return vHtml.join("");
+										}
+									}
+								}
+							})
+                            // new sap.m.TextArea({
+							// 	layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                            //     rows: 10,
+							// 	width: "100%",
+							// 	value:"{Detail}",
+							// 	editable: false
+							// }).addStyleClass("mt-8px mb-8px")
 						]
 					}),
 					new sap.m.HBox({

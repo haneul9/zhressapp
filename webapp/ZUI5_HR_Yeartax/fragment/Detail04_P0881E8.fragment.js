@@ -62,7 +62,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0881E8", {
 		
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "1200px",
-			contentHeight : "750px",
+			// contentHeight : "750px",
 			draggable : false,
 			content : [oTable],
 			title : "특별 소득공제(장기주택 저당차입금 이자상환액)",

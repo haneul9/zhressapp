@@ -45,7 +45,7 @@
 			Common.log("onBeforeShow");
 		},
 		
-		onAfterShow: function() {
+		onAfterShow: function(oEvent) {
             var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
@@ -54,7 +54,7 @@
 			var Sdate = this.getParameterByName("Sdate"),
 				Seqnr = this.getParameterByName("Seqnr");
 
-			if (!this.alreadyDetailShown && Sdate && Seqnr) {
+			if (!this.alreadyDetailShown && Sdate && Seqnr && oEvent.data.New !== "X") {
 				var oList = {
 					Sdate: moment(Sdate).hours(9).toDate(),
 					Seqnr: Seqnr

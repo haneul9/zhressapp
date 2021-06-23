@@ -1,5 +1,5 @@
 sap.ui.define([
-    "../../common/ZHR_TABLES"
+    "common/ZHR_TABLES"	//
 ], function (ZHR_TABLES) {
 "use strict";
 
@@ -13,6 +13,7 @@ sap.ui.define([
 			{id: "Endda",		label: "{i18n>LABEL_29040}"/* 유효일자 */,  plabel: "", resize: true, span: 0, type: "date",  	sort: true,  filter: true,  width: "auto"}, 
 			{id: "TargetcT",	label: "{i18n>LABEL_29041}"/* 이수여부 */,  plabel: "", resize: true, span: 0, type: "string",  sort: false, filter: false, width: "auto"}
 		],
+
 		createContent: function (oController) {
 			var oCell = null,
 				oRow = null;
@@ -29,13 +30,13 @@ sap.ui.define([
 				},
 				selectedKey: "{Zlangu}"
 			});
+
 			// 키보드 입력 방지
 			oGubunCombo.addDelegate({
 				onAfterRendering: function () {
 					oGubunCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
 				}
             }, oGubunCombo);
-			
 			
             var oExamCombo = new sap.m.ComboBox(oController.PAGEID + "_ExamCombo", { // 시험종류
 				width: "180px",
@@ -48,6 +49,7 @@ sap.ui.define([
 				},  
 				selectedKey: "{Zltype}"
 			});
+
 			// 키보드 입력 방지
 			oExamCombo.addDelegate({
 				onAfterRendering: function () {
@@ -66,6 +68,7 @@ sap.ui.define([
 				},
 				selectedKey: "{ITepas}"
 			});
+
 			// 키보드 입력 방지
 			oCompleteCombo.addDelegate({
 				onAfterRendering: function () {
@@ -112,7 +115,7 @@ sap.ui.define([
 			oCell = new sap.ui.commons.layout.MatrixLayoutCell({
 				hAlign: sap.ui.commons.layout.HAlign.Middle,
 				vAlign: sap.ui.commons.layout.VAlign.Middle,
-				content: [new sap.m.Label({ text: "{i18n>LABEL_29041}" })] //이수여부
+				content: [new sap.m.Label({ text: "{i18n>LABEL_29041}" })] //유효/만료
 			});
 			oRow.addCell(oCell);
 
@@ -125,7 +128,7 @@ sap.ui.define([
 							oCompleteCombo,
 							new sap.m.Button({
 								press: oController.onDialogSearchBtn.bind(oController),
-								text: "{i18n>LABEL_29007}", // 조회
+								text: "{i18n>LABEL_29007}" // 조회
 							}).addStyleClass("button-search ml-20px mt-4px")
 						]
 					})
@@ -134,7 +137,6 @@ sap.ui.define([
 			oRow.addCell(oCell);
 
 			oLayout.addRow(oRow);
-			
 
             var inputTable = new sap.ui.table.Table(oController.PAGEID + "_GradeTable", {
 				selectionMode: sap.ui.table.SelectionMode.None,
@@ -160,6 +162,7 @@ sap.ui.define([
 				title: "{i18n>LABEL_29001}",    // 어학비신청
 				contentWidth: "980px",
 				contentHeight: "560px",
+				afterOpen: oController.onAfterSearchDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: function () {

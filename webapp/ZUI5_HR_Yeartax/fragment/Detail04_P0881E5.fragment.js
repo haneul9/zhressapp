@@ -63,7 +63,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0881E5", {
 		
 		var oDialog = new sap.m.Dialog({
 			contentWidth : "1500px",
-			contentHeight : "750px",
+			// contentHeight : "750px",
 			draggable : false,
 			content : [oTable],
 			title : "특별소득공제(월세임대계약)",
