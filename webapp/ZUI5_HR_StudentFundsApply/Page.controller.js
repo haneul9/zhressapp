@@ -1646,6 +1646,7 @@ sap.ui.define([
 				vStatus = oController.ApplyModel.getProperty("/FormData/Status");
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 
+				oController.SEQ = "_01_";
 				AttachFileAction.setAttachFile(oController, {
 					Appnm: vAppnm,
 					Required: true,
@@ -1666,6 +1667,7 @@ sap.ui.define([
 				vStatus = oController.HighApplyModel.getProperty("/FormData/Status");
 				vAppnm = oController.HighApplyModel.getProperty("/FormData/Appnm") || "";
 				
+				oController.SEQ = "_02_";
 				AttachFileAction.setAttachFile(oController, {
 					Appnm: vAppnm,
 					Required: true,
