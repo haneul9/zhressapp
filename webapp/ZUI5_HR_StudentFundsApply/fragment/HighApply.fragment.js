@@ -549,7 +549,8 @@ sap.ui.define([
 						width: "100%",
 						fitContainer: true,
 						items: [
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+							// fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+							sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 						]
 					})
                 ]

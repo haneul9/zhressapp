@@ -3,11 +3,12 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
+	"../common/AttachFileAction",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
 	"fragment/COMMON_ATTACH_FILES"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, FileHandler) {
 	"use strict";
 
 	
@@ -1644,27 +1645,43 @@ sap.ui.define([
 			if(vBukrs !== "A100"){
 				vStatus = oController.ApplyModel.getProperty("/FormData/Status");
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
-				
-				FileHandler.setAttachFile(oController, {
+
+				AttachFileAction.setAttachFile(oController, {
 					Appnm: vAppnm,
 					Required: true,
 					Mode: "M",
 					Max: "3",
-					UseMultiCategories: true,
 					Editable: (!vStatus || vStatus === "AA")
-				},"001");
+				});
+				
+				// FileHandler.setAttachFile(oController, {
+				// 	Appnm: vAppnm,
+				// 	Required: true,
+				// 	Mode: "M",
+				// 	Max: "3",
+				// 	UseMultiCategories: true,
+				// 	Editable: (!vStatus || vStatus === "AA")
+				// },"001");
 			}else {
 				vStatus = oController.HighApplyModel.getProperty("/FormData/Status");
 				vAppnm = oController.HighApplyModel.getProperty("/FormData/Appnm") || "";
 				
-				FileHandler.setAttachFile(oController, {
+				AttachFileAction.setAttachFile(oController, {
 					Appnm: vAppnm,
 					Required: true,
 					Mode: "M",
 					Max: "3",
-					UseMultiCategories: true,
 					Editable: (!vStatus || vStatus === "AA")
-				},"002");
+				});
+
+				// FileHandler.setAttachFile(oController, {
+				// 	Appnm: vAppnm,
+				// 	Required: true,
+				// 	Mode: "M",
+				// 	Max: "3",
+				// 	UseMultiCategories: true,
+				// 	Editable: (!vStatus || vStatus === "AA")
+				// },"002");
 			}
 		},
 		
