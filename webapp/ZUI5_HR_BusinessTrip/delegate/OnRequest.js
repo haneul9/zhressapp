@@ -1,6 +1,6 @@
 /* global moment */
 sap.ui.define([
-	// "common/ApprovalLinesHandler",
+	"common/ApprovalLinesHandler",
 	"common/Common",
 	"common/DialogHandler",
 	"common/SearchOrg",
@@ -14,7 +14,7 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 ], function(
-	// ApprovalLinesHandler,
+	ApprovalLinesHandler,
 	Common,
 	DialogHandler,
 	SearchOrg,
@@ -170,6 +170,7 @@ var OnRequest = { // 출장 event handler
 			ename: target.ename.interpolate(rowIndex)
 		};
 
+		this.RequestDetailDialogHandler.isAccompanierAdding = true;
 		this.RequestDetailDialogHandler.isSubstituteAdding = false;
 
 		if (!this._AddPersonDialog) {
@@ -362,6 +363,7 @@ var OnRequest = { // 출장 event handler
 			Wtsum: ""
 		}));
 
+		this.RequestDetailDialogHandler.isAccompanierAdding = false;
 		this.RequestDetailDialogHandler.isSubstituteAdding = false;
 		this.RequestDetailDialogHandler.isCheckedSubstituteAvailability = false;
 
@@ -386,6 +388,9 @@ var OnRequest = { // 출장 event handler
 		this.RequestDetailDialogHandler.calculateAmount().then(function() {
 			this.RequestDetailDialogHandler.changeSubstituteData("setAccompanier"); // 대근자
 		}.bind(this));
+
+		this.RequestDetailDialogHandler.isAccompanierAdding = false;
+		this.RequestDetailDialogHandler.isSubstituteAdding = false;
 
 		SearchUser1.onClose();
 	},
@@ -910,8 +915,8 @@ var OnRequest = { // 출장 event handler
 	pressRequest: function() {
 		Common.log("OnRequest.pressRequest");
 
-		var TanleInt07 = this.RequestDetailDialogHandler.getModel().getProperty("/TableIn07") || [];
-		if (TanleInt07.length && !this.RequestDetailDialogHandler.isCheckedSubstituteAvailability) {
+		var TableIn07 = this.RequestDetailDialogHandler.getModel().getProperty("/TableIn07") || [];
+		if (TableIn07.length && !this.RequestDetailDialogHandler.isCheckedSubstituteAvailability) {
 			MessageBox.alert(this.getBundleText("MSG_19039"), { // 한도체크를 진행 하세요.
 				title: this.getBundleText("LABEL_00149") // 안내
 			});
@@ -1164,25 +1169,25 @@ var OnRequest = { // 출장 event handler
 			this.RequestDetailDialogHandler.toggleButtonsState(true);
 			BusyIndicator.hide();
 		} else {
-			// if (Common.isExternalIP()) {
-			// 	setTimeout(function() {
-			// 		var initData = {
-			// 			Mode: "P",																	// PC – P, Mobile - M
-			// 			Pernr: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
-			// 			Empid: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
-			// 			Bukrs: this.getSessionInfoByKey("Bukrs"),									// 각 업무에 맞게 작성
-			// 			ZappSeq: oModel.getProperty("/TableIn03/0/ClDmtr") === "1" ? "22" : "23"	// 신청서 번호 (국내출장: 22, 해외출장: 23)
-			// 		},
-			// 		callback = function(TableIn08) {
-			// 			OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07, TableIn08);	// 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
-			// 		}.bind(this);
+			if (Common.isExternalIP()) {
+				setTimeout(function() {
+					var initData = {
+						Mode: "P",																	// PC – P, Mobile - M
+						Pernr: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+						Empid: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+						Bukrs: this.getSessionInfoByKey("Bukrs"),									// 각 업무에 맞게 작성
+						ZappSeq: oModel.getProperty("/TableIn03/0/ClDmtr") === "1" ? "22" : "23"	// 신청서 번호 (국내출장: 22, 해외출장: 23)
+					},
+					callback = function(TableIn08) {
+						OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07, TableIn08);	// 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+					}.bind(this);
 
-			// 		this.ApprovalLinesHandler = ApprovalLinesHandler.get(this, initData, callback);
-			// 		DialogHandler.open(this.ApprovalLinesHandler);
-			// 	}.bind(this), 0);
-			// } else {
+					this.ApprovalLinesHandler = ApprovalLinesHandler.get(this, initData, callback);
+					DialogHandler.open(this.ApprovalLinesHandler);
+				}.bind(this), 0);
+			} else {
 				OnRequest.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn03, TableIn04, TableIn07);
-			// }
+			}
 		}
 	},
 
@@ -1206,8 +1211,8 @@ var OnRequest = { // 출장 event handler
 				TableIn04: TableIn04,		// 동반출장자 목록
 				TableIn05: [],				// 코스트센터 소속부서
 				TableIn06: [],				// 근태유형 코드 목록
-				TableIn07: TableIn07		// 대근자 목록
-				// TableIn08: TableIn08 || []	// 결재자 목록
+				TableIn07: TableIn07,		// 대근자 목록
+				TableIn08: TableIn08 || []	// 결재자 목록
 			},
 			{
 				async: true,
@@ -1226,23 +1231,23 @@ var OnRequest = { // 출장 event handler
 							MessageBox.alert(this.getBundleText("MSG_19020"), { // ※ 출장 사전 품의시 "모인 메모품의(항공권 예약/발권 신청서)" 첨부하시기 바랍니다.
 								title: this.getBundleText("LABEL_00149"), // 안내
 								onClose: function() {
-									// if (!Common.isExternalIP()) {
+									if (!Common.isExternalIP()) {
 										this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-									// }
+									}
 								}.bind(this)
 							});
 						} else {
-							// if (!Common.isExternalIP()) {
+							if (!Common.isExternalIP()) {
 								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-							// }
+							}
 						}
 					}
 
 					MessageBox.success(this.getBundleText("MSG_00061"), { // 신청되었습니다.
 						onClose: function() {
 							BusyIndicator.hide();
+							setTimeout(OnRequest.pressSearch.bind(this), 500);
 							this.RequestDetailDialogHandler.getDialog().close();
-							setTimeout(OnRequest.pressSearch.bind(this), 0);
 						}.bind(this)
 					});
 				}.bind(this),

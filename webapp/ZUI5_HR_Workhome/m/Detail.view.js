@@ -172,29 +172,29 @@ sap.ui.define(
                                              hAlign : "Begin",
                                              vAlign : "Middle"
                                          })] 
-                            }),
-							new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
-                                height : "45px",
-                                cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-                                             content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
-                                             hAlign : "Begin",
-                                             vAlign : "Middle"
-                                        }),
-                                        new sap.ui.commons.layout.MatrixLayoutCell({
-                                            content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
-                                                           selectedKey : "{AppName}",
-                                                           width : "100%",
-                                                           editable : {
-                                                                   path : "Status",
-                                                                   formatter : function(fVal){
-                                                                        return (fVal == "" || fVal == "AA") ? true : false;
-                                                                   }
-                                                           }
-                                                       })],
-                                            hAlign : "Begin",
-                                            vAlign : "Middle"
-                                        })]
-                            }).addStyleClass("displayNone")]
+                            })]
+							// new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+                            //     height : "45px",
+                            //     cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+                            //                  content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true})], // 결재자
+                            //                  hAlign : "Begin",
+                            //                  vAlign : "Middle"
+                            //             }),
+                            //             new sap.ui.commons.layout.MatrixLayoutCell({
+                            //                 content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+                            //                                selectedKey : "{AppName}",
+                            //                                width : "100%",
+                            //                                editable : {
+                            //                                        path : "Status",
+                            //                                        formatter : function(fVal){
+                            //                                             return (fVal == "" || fVal == "AA") ? true : false;
+                            //                                        }
+                            //                                }
+                            //                            })],
+                            //                 hAlign : "Begin",
+                            //                 vAlign : "Middle"
+                            //             })]
+                            // }).addStyleClass("displayNone")]
                 });
 
                 var oLayout3 = new sap.m.VBox({
@@ -224,10 +224,8 @@ sap.ui.define(
 								},
 								headerButton : new sap.m.HBox({
 												   items : [new sap.m.Button({
-															   	text: oBundleText.getText("LABEL_00152"), // 신청
-															   	press : function(oEvent){
-													 	 			oController.onPressSave(oEvent, "C");
-													 	 		},
+															   	text: "{i18n>LABEL_00152}", // 신청
+															   	press : oController.onRequest.bind(oController),
 															   	visible : {
 															   		path : "Status",
 																	formatter : function(fVal){

@@ -1,10 +1,4 @@
-﻿sap.ui.define([
-	"../../common/Common",
-	"../../common/Formatter",
-	"../../common/PageHelper",
-	"../../common/ZHR_TABLES",
-    "../delegate/ViewTemplates"
-], function (Common, Formatter, PageHelper, ZHR_TABLES, ViewTemplates) {
+﻿sap.ui.define([], function () {
 	"use strict";
 
 	sap.ui.jsfragment("ZUI5_HR_StudentFundsApply.fragment.SearchNation", {

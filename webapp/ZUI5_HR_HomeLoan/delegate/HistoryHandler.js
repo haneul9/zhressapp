@@ -3,14 +3,12 @@
 sap.ui.define(
     [
         "common/Common", //
-        "common/DialogHandler",
         "./HomeLoan",
         "./ODataService",
-        "sap/m/MessageBox",
         "sap/ui/core/BusyIndicator",
         "sap/ui/model/json/JSONModel"
     ],
-    function (Common, DialogHandler, HomeLoan, ODataService, MessageBox, BusyIndicator, JSONModel) {
+    function (Common, HomeLoan, ODataService, BusyIndicator, JSONModel) {
         "use strict";
 
         var Handler = {
@@ -19,7 +17,7 @@ sap.ui.define(
 
             oDetailDialog: null,
             aColumnModel: null,
-
+            
             Model: function () {
                 return this.oModel;
             },

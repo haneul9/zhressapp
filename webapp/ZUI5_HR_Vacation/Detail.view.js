@@ -56,7 +56,8 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 			}
 						 	 		},
 						 	 		press : function(oEvent){
-						 	 			oController.onPressSave(oEvent, "C");
+										  oController.onRequest(oEvent, "C")
+						 	 			// oController.onPressSave(oEvent, "C");
 						 	 		}
 						 		}).addStyleClass("button-dark"),
 						 		new sap.m.Button({
@@ -73,7 +74,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 						 	 			}
 						 	 		},
 						 	 		press : function(oEvent){
-						 	 			oController.onPressSave(oEvent, "D");
+						 	 			oController.onPressSave("D", []);
 						 	 		}
 						 		}).addStyleClass("button-delete"),
 						 		new sap.m.Button({
@@ -437,31 +438,31 @@ sap.ui.jsview("ZUI5_HR_Vacation.Detail", {
 									colSpan : 3
 								}).addStyleClass("Data")]
 					}),
-					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
-						height : "45px",
-						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true, textDirection : "RTL"})], // 결재자
-									 hAlign : "End",
-									 vAlign : "Middle"
-								}).addStyleClass("Label"),
-								new sap.ui.commons.layout.MatrixLayoutCell({
-									content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
-												   selectedKey : "{AppName}",
-												   width : "100%",
-												   editable : {
-												   		path : "Status1",
-												   		formatter : function(fVal){
-												   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
-												   		}
-												   }
-											   })],
-									hAlign : "Begin",
-									vAlign : "Middle"
-								}).addStyleClass("Data"),
-								new sap.ui.commons.layout.MatrixLayoutCell({
-									colSpan : 2
-								}).addStyleClass("Data")]
-					}).addStyleClass("displayNone"),
+					// new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+					// 	height : "45px",
+					// 	cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+					// 				 content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true, textDirection : "RTL"})], // 결재자
+					// 				 hAlign : "End",
+					// 				 vAlign : "Middle"
+					// 			}).addStyleClass("Label"),
+					// 			new sap.ui.commons.layout.MatrixLayoutCell({
+					// 				content : [new sap.m.ComboBox(oController.PAGEID + "_AppName", {
+					// 							   selectedKey : "{AppName}",
+					// 							   width : "100%",
+					// 							   editable : {
+					// 							   		path : "Status1",
+					// 							   		formatter : function(fVal){
+					// 							   			return (fVal == "" || fVal == "AA" || fVal == "JJ") ? true : false;
+					// 							   		}
+					// 							   }
+					// 						   })],
+					// 				hAlign : "Begin",
+					// 				vAlign : "Middle"
+					// 			}).addStyleClass("Data"),
+					// 			new sap.ui.commons.layout.MatrixLayoutCell({
+					// 				colSpan : 2
+					// 			}).addStyleClass("Data")]
+					// }).addStyleClass("displayNone"),
 					new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_MessageRow", {
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({

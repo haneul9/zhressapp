@@ -6,9 +6,11 @@ sap.ui.define(
         "common/JSONModelHelper",
         "common/PageHelper",
         "sap/m/MessageBox",
-        "sap/ui/core/BusyIndicator"
+        "sap/ui/core/BusyIndicator",
+        "common/ApprovalLinesHandler",
+        "common/DialogHandler"
     ],
-    function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, MessageBox, BusyIndicator) {
+    function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, MessageBox, BusyIndicator, ApprovalLinesHandler, DialogHandler) {
         "use strict";
 
         return CommonController.extend($.app.APP_ID, {
@@ -329,18 +331,42 @@ sap.ui.define(
                 });
             },
 
-            onDialogRequestBtn: function () {
+            pressApprovalBtn: function () { // 신청
+                var oController =  $.app.getController();
+
+                if (oController.onErrorCheckBox()) return;
+
+				if (Common.isExternalIP()) {
+					setTimeout(function () {
+						var initData = {
+								Mode: "P",
+								Pernr: oController.getSessionInfoByKey("Pernr"),
+								Empid: oController.getSessionInfoByKey("Pernr"),
+								Bukrs: oController.getSessionInfoByKey("Bukrs3"),
+								ZappSeq: "47"
+							},
+							callback = function (o) {
+								oController.onDialogRequestBtn.call(oController, o);
+							};
+
+						oController.ApprovalLinesHandler = ApprovalLinesHandler.get(oController, initData, callback);
+						DialogHandler.open(oController.ApprovalLinesHandler);
+					}, 0);
+				} else {
+					oController.onDialogRequestBtn.call(oController, null);
+				}
+			},
+
+            onDialogRequestBtn: function (vAprdatas) {
                 //신청
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vPernr = oController.getUserId();
                 var vBukrs2 = oController.getUserGubun();
                 var oData = oController.DetailModel.getProperty("/Data"),
-                    vMobile = Common.isExternalIP() === true ? "X" : "",
+                    vExtryn = Common.isExternalIP() === true ? "X" : "",
                     oCopiedData = {};
-
-                if (oController.onErrorCheckBox()) return;
-
+                
                 oCopiedData = Object.assign({}, oData);
                 oCopiedData.Appdt = new Date();
 
@@ -350,17 +376,17 @@ sap.ui.define(
                     IBukrs: vBukrs2,
                     IReqes: "X",
                     IConType: "3",
-                    IMobile: vMobile,
+                    IExtryn: vExtryn,
                     IDatum: new Date(),
                     RegalsealRExport: [],
-                    RegalsealRTableIn1: [oCopiedData]
+                    RegalsealRTableIn1: [oCopiedData],
+                    RegalsealRTableIn4: vAprdatas || []
                 };
 
                 BusyIndicator.show(0);
                 var onProcessRequest = function (fVal) {
                     if (fVal && fVal == "신청") {
                         oModel.create("/RegalsealRImportSet", sendObject, {
-                            async: true,
                             success: function (oData) {
                                 if (oData) {
                                     //값을 제대로 받아 왔을 때
@@ -369,12 +395,17 @@ sap.ui.define(
                                     oController._DetailModel.close();
                                     oController.onTableSearch();
 
-                                    var vUrl = oData.RegalsealRExport.results[0].EUrl;
-                                    if(vUrl) {
-                                        Common.openPopup.call(oController, vUrl);
-                                    }
-
                                     BusyIndicator.hide();
+                                    var vUrl = oData.RegalsealRExport.results[0].EUrl;
+
+                                    if(vUrl) {
+                                        if(!Common.isExternalIP()) {     // 내부망 체크
+                                            if(!Common.openPopup.call(oController, vUrl)) {  // 팝업차단 시 이후 여기서 메시지 출력 후 Stop
+                                                BusyIndicator.hide();
+                                                return;
+                                            }
+                                        }
+                                    }
                                 }
                             },
                             error: function (oResponse) {
@@ -403,7 +434,6 @@ sap.ui.define(
                 var vPernr = oController.getUserId();
                 var vBukrs2 = oController.getUserGubun();
                 var oData = oController.DetailModel.getProperty("/Data"),
-                    vMobile = Common.isExternalIP() === true ? "X" : "",
                     oCopiedData = {};
                 if (oController.onErrorCheckBox()) return;
 
@@ -415,7 +445,6 @@ sap.ui.define(
                     IEmpid: vPernr,
                     IBukrs: vBukrs2,
                     IConType: Common.checkNull(oCopiedData.Status1) ? "3" : "2",
-                    IMobile: vMobile,
                     IDatum: new Date(),
                     RegalsealRTableIn1: [oCopiedData]
                 };
@@ -562,6 +591,23 @@ sap.ui.define(
                     actions: ["삭제", "취소"],
                     onClose: onProcessDelete
                 });
+            },
+
+            getApprovalLinesHandler: function() {
+
+                return this.ApprovalLinesHandler;
+            },
+
+            onESSelectPerson: function(data) {
+                return this.EmployeeSearchCallOwner 
+                        ? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+                        : null;
+            },
+
+            displayMultiOrgSearchDialog: function(oEvent) {
+                return !$.app.getController().EmployeeSearchCallOwner 
+                        ? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
+                        : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
             },
 
             onBeforeOpenDetailDialog: function () {

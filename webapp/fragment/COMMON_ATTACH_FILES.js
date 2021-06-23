@@ -388,6 +388,10 @@ fragment.COMMON_ATTACH_FILES = {
 		JSonModel.setProperty("/Settings/Length", 0);
 		JSonModel.setProperty("/Data", []);
 
+		oAttachbox.setBusyIndicatorDelay(0).setBusy(true);
+		JSonModel.setProperty("/Settings/Length", 0);
+		JSonModel.setProperty("/Data", []);
+
 		if(!vAppnm) {
 			oAttachbox.setBusy(false);
 			return;

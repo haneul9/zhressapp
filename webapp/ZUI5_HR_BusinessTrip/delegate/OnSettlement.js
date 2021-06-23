@@ -1,6 +1,6 @@
 /* global moment */
 sap.ui.define([
-	// "common/ApprovalLinesHandler",
+	"common/ApprovalLinesHandler",
 	"common/Common",
 	"common/DialogHandler",
 	"./SettlementTargetAbsenceListDialogHandler",
@@ -15,7 +15,7 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 ], function(
-	// ApprovalLinesHandler,
+	ApprovalLinesHandler,
 	Common,
 	DialogHandler,
 	SettlementTargetAbsenceListDialogHandler,
@@ -1046,25 +1046,25 @@ var OnSettlement = { // 출장 비용 정산 event handler
 		oModel.setProperty("/Header/AppTime1", null);
 		oModel.setProperty("/Header/AppName1", "");
 
-		// if (Common.isExternalIP()) {
-		// 	setTimeout(function() {
-		// 		var initData = {
-		// 			Mode: "P",																	// PC – P, Mobile - M
-		// 			Pernr: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
-		// 			Empid: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
-		// 			Bukrs: this.getSessionInfoByKey("Bukrs"),									// 각 업무에 맞게 작성
-		// 			ZappSeq: oModel.getProperty("/TableIn04/0/ClDmtr") === "1" ? "24" : "25"	// 신청서 번호 (국내출장: 24, 해외출장: 25)
-		// 		},
-		// 		callback = function(TableIn09) {
-		// 			OnSettlement.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn04, TableIn05, TableIn09);	// 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
-		// 		}.bind(this);
+		if (Common.isExternalIP()) {
+			setTimeout(function() {
+				var initData = {
+					Mode: "P",																	// PC – P, Mobile - M
+					Pernr: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+					Empid: this.getSessionInfoByKey("Pernr"),									// 각 업무에 맞게 작성
+					Bukrs: this.getSessionInfoByKey("Bukrs"),									// 각 업무에 맞게 작성
+					ZappSeq: oModel.getProperty("/TableIn04/0/ClDmtr") === "1" ? "24" : "25"	// 신청서 번호 (국내출장: 24, 해외출장: 25)
+				},
+				callback = function(TableIn09) {
+					OnSettlement.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn04, TableIn05, TableIn09);	// 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+				}.bind(this);
 
-		// 		this.ApprovalLinesHandler = ApprovalLinesHandler.get(this, initData, callback);
-		// 		DialogHandler.open(this.ApprovalLinesHandler);
-		// 	}.bind(this), 0);
-		// } else {
+				this.ApprovalLinesHandler = ApprovalLinesHandler.get(this, initData, callback);
+				DialogHandler.open(this.ApprovalLinesHandler);
+			}.bind(this), 0);
+		} else {
 			OnSettlement.callRequestOData.call(this, oModel.getProperty("/Header"), TableIn04, TableIn05);
-		// }
+		}
 	},
 
 	// 신청 OData 호출
@@ -1108,8 +1108,8 @@ var OnSettlement = { // 출장 비용 정산 event handler
 					MessageBox.success(this.getBundleText("MSG_00061"), { // 신청되었습니다.
 						onClose: function() {
 							BusyIndicator.hide();
+							setTimeout(OnSettlement.pressSearch.bind(this), 500);
 							this.SettlementDetailDialogHandler.getDialog().close();
-							setTimeout(OnSettlement.pressSearch.bind(this), 0);
 						}.bind(this)
 					});
 				}.bind(this),

@@ -49,6 +49,11 @@ sap.ui.define(
 
                 return this.OrgOfIndividualHandler;
             },
+            
+            getApprovalLinesHandler: function() {
+
+                return this.ApprovalLinesHandler;
+            },
 
             onBeforeShow: function () {
                 this.PriorHandler.load();
@@ -89,9 +94,9 @@ sap.ui.define(
             },
 
             onESSelectPerson: function(data) {
-                return !this.EmployeeSearchCallOwner 
-                        ? this.OrgOfIndividualHandler.setSelectionTagets(data)
-                        : this.EmployeeSearchCallOwner.setSelectionTagets(data);
+                return this.EmployeeSearchCallOwner 
+                        ? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+                        : null;
             },
 
             displayMultiOrgSearchDialog: function(oEvent) {

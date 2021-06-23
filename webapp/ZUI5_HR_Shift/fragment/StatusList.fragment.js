@@ -114,7 +114,7 @@ sap.ui.define(
 
             buildTable: function(oController) {
                 var oTable = new sap.ui.table.Table("StatusListTable", {
-                    selectionMode: sap.ui.table.SelectionMode.MultiToggle,
+                    selectionMode: "{= ${/Bukrs} === 'A' || (${/Zflag} === 'X' && ${/Zfxck2} !== 'X') ? 'None' : 'MultiToggle' }",
                     enableSelectAll: true,
                     enableColumnReordering: false,
                     enableColumnFreeze: false,

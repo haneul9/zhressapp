@@ -20,7 +20,7 @@ sap.ui.define(
             oDetailDialog: null,
             oDeedDialog: null,
             aColumnModel: null,
-
+            
             Model: function () {
                 return this.oModel;
             },
@@ -61,7 +61,7 @@ sap.ui.define(
 
             /**
              * @brief 검색
-             *
+             * 
              * @this {Handler}
              */
             search: function () {
@@ -78,48 +78,54 @@ sap.ui.define(
 
             /**
              * @brief 목록 조회
-             *
+             * 
              * @this {Handler}
              */
             loadTableData: function () {
-                var results = ODataService.HouseLoanRequestSet.call(this.oController, HomeLoan.ProcessType.LIST, {
-                    Pernr: this.oController.getSessionInfoByKey("Pernr"),
-                    Begda: moment().subtract(5, "years").hours(9).toDate(),
-                    Endda: moment().hours(9).toDate(),
-                    isErrorShow: false
-                });
+                var results = ODataService.HouseLoanRequestSet.call(
+                    this.oController, 
+                    HomeLoan.ProcessType.LIST, 
+                    {
+                        Pernr: this.oController.getSessionInfoByKey("Pernr"),
+                        Begda: moment().subtract(5, "years").hours(9).toDate(),
+                        Endda: moment().hours(9).toDate(),
+                        isErrorShow: false
+                    }
+                );
 
                 this.oModel.setProperty("/IsSearch", true);
                 this.oModel.setProperty("/isVisibleApprovalBtn", (results.Export[0] || {}).BtnActive === "X" ? true : false);
-                this.oModel.setProperty(
-                    "/List",
-                    results.TableIn1.map(function (elem) {
-                        return $.extend(true, elem, {
-                            Zhlrat: elem.Zhlrat ? elem.Zhlrat : "0",
-                            Zhlcat: elem.Zhlcat ? elem.Zhlcat : "0"
-                        });
-                    })
-                );
+                this.oModel.setProperty("/List", results.TableIn1.map(function(elem) {
+                    return $.extend(true, elem, {
+                        Zhlrat: elem.Zhlrat ? elem.Zhlrat : "0",
+                        Zhlcat: elem.Zhlcat ? elem.Zhlcat : "0"
+                    });
+                }));
 
                 $.app.byViewId("ApprovalTable").setFirstVisibleRow(0);
                 $.app.byViewId("ApprovalTable").clearSelection();
                 Common.adjustAutoVisibleRowCount.call($.app.byViewId("ApprovalTable"));
             },
-
-            pressOpenDeed: function () {
+            
+            pressOpenDeed: function() {
                 var vZhlsdt = this.oModel.getProperty("/Detail/Header/Zhlsdt");
 
-                this.oModel.setProperty("/Detail/Header/ZhlsdtTxt", vZhlsdt ? moment(vZhlsdt).format("YYYY년 MM월 DD일") : moment().format("YYYY년 MM월 DD일"));
+                this.oModel.setProperty(
+                    "/Detail/Header/ZhlsdtTxt",
+                    vZhlsdt
+                        ? moment(vZhlsdt).format("YYYY년 MM월 DD일")
+                        : moment().format("YYYY년 MM월 DD일")
+                );
 
                 if (!this.oDeedDialog) {
                     this.oDeedDialog = sap.ui.jsfragment([$.app.CONTEXT_PATH, "deed"].join(".fragment."), this.oController);
                     $.app.getView().addDependent(this.oDeedDialog);
                 }
-
+                
                 this.oDeedDialog.open();
             },
-
-            openDetailDialog: function () {
+			
+			openDetailDialog: function() {
                 if (!this.oDetailDialog) {
                     this.oDetailDialog = sap.ui.jsfragment([$.app.CONTEXT_PATH, "detail"].join(".fragment."), this.oController);
                     $.app.getView().addDependent(this.oDetailDialog);
@@ -290,7 +296,7 @@ sap.ui.define(
                 this.loadApprovalDetail(rowData);
             },
 
-            loadApprovalDetail: function (rowData) {
+            loadApprovalDetail: function(rowData) {
                 this.oModel.setProperty("/Detail", {
                     IsNew: false,
                     TempData: $.extend(true, {}, rowData),
@@ -433,7 +439,7 @@ sap.ui.define(
                                 default:
                                     break;
                             }
-
+                            
                             MessageBox.success(successMessage, {
                                 title: "확인",
                                 onClose: function () {

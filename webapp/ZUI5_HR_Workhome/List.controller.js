@@ -1,3 +1,4 @@
+/* eslint-disable no-native-reassign */
 jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.ui.export.Spreadsheet");
 
@@ -5,13 +6,12 @@ sap.ui.define([
 	"common/Common",
 	"common/CommonController",
 	"common/JSONModelHelper",
-	"common/PageHelper",
-	"common/AttachFileAction",
     "common/SearchOrg",
     "common/SearchUser1",
     "common/OrgOfIndividualHandler",
-    "common/DialogHandler"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
+    "common/DialogHandler",
+	"common/ApprovalLinesHandler"], 
+	function (Common, CommonController, JSONModelHelper, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler, ApprovalLinesHandler) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_Workhome.List", {
@@ -23,30 +23,36 @@ sap.ui.define([
 		
 		_Bukrs : "",
 		oExtryn : "",
+
+		EmployeeSearchCallOwner: null,
+
+		getApprovalLinesHandler: function() {
+			return this.ApprovalLinesHandler;
+		},
+			
+		getOrgOfIndividualHandler: function() {
+            return this.OrgOfIndividualHandler;
+        },
 		
 		onInit: function () {
 			this.setupView()
 				.getView()
 				.addEventDelegate({
-					onBeforeShow : this.onBeforeShow
-				}, this);
-				
-			this.getView()
-				.addEventDelegate({
+					onBeforeShow : this.onBeforeShow,
 					onAfterShow: this.onAfterShow
 				}, this);
-			gDtfmt = this.getSessionInfoByKey("Dtfmt");		
+			
+			gDtfmt = this.getSessionInfoByKey("Dtfmt");
 			// this.getView().addStyleClass("sapUiSizeCompact");
 			// this.getView().setModel($.app.getModel("i18n"), "i18n");
 		},
 
-		onBeforeShow: function(oEvent){
+		onBeforeShow: function(){
 			var oController = this;
 
 			this.oExtryn = Common.isExternalIP() === true ? "X" : "";
 		
 			 if(!oController._ListCondJSonModel.getProperty("/Data")){
-			 	var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern : "yyyy-MM-dd"});
 			 	var today = new Date();
 			 	
 				var	vData = {
@@ -76,7 +82,7 @@ sap.ui.define([
 			oController.onPressSearch(oEvent);
 		},
 		
-		onBack : function(oEvent){
+		onBack : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
 			var oController = oView.getController();
 		
@@ -89,9 +95,9 @@ sap.ui.define([
 			});
 		},
 		
-		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
-			var oController = oView.getController();
+		SmartSizing : function(){
+			// var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			// var oController = oView.getController();
 		
 		},
 		
@@ -107,7 +113,7 @@ sap.ui.define([
 			}
 		},
 		
-		onPressSearch : function(oEvent){
+		onPressSearch : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
 			var oController = oView.getController();
 			
@@ -137,7 +143,7 @@ sap.ui.define([
 					createData.IConType = "1";
 
 				oModel.create("/WorkhomeApplySet", createData, {
-					success: function(data, res){
+					success: function(data){
 						if(data){
 							if(data.WorkhomeNav && data.WorkhomeNav.results){
 								for(var i=0; i<data.WorkhomeNav.results.length; i++){   
@@ -188,15 +194,15 @@ sap.ui.define([
 				
 				oController._BusyDialog.close();
 				
-			}
+			};
 			
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
 		},
 		
-		onPressNew : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
-			var oController = oView.getController();
+		onPressNew : function(){
+			// var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			// var oController = oView.getController();
 		
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : "ZUI5_HR_Workhome.Detail",
@@ -211,11 +217,12 @@ sap.ui.define([
 		onPressDelete : function(oEvent, Flag){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
 			var oController = oView.getController();
+			var oData;
 		
 			if(oEvent){
-				var oData = oEvent.getSource().getCustomData()[0].getValue();
+				oData = oEvent.getSource().getCustomData()[0].getValue();
 			} else {
-				var oData = oController._CancelDialog.getModel().getProperty("/Data");
+				oData = oController._CancelDialog.getModel().getProperty("/Data");
 				
 				// validation check
 				if(oData.Bigo == "" || oData.Bigo.trim() == ""){
@@ -227,16 +234,58 @@ sap.ui.define([
 				}
 			}
 			
+			if(oEvent && Flag == "E") {
+				if(!oController._CancelDialog){
+					oController._CancelDialog = sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Cancel", oController);
+					oView.addDependent(oController._CancelDialog);
+				}
+				
+				var oJSONModel = oController._CancelDialog.getModel();
+				var vData = $.extend(true, {}, oData, {Bigo : "", AppNameyn : false});
+
+				oJSONModel.setData({Data : vData});
+				
+				oController._CancelDialog.open();
+			} else {
+
+				if(Flag == "E" && Common.isExternalIP()) {   // 취소신청 + 외부망인 경우 결재라인 선택
+					setTimeout(function() {
+						var initData = {
+							Mode: "P", // PC – P, Mobile - M
+							Pernr: oData.Pernr,
+							Empid: oController.getSessionInfoByKey("Pernr"),
+							Bukrs: oData.Bukrs,
+							ZappSeq: "40"
+						},
+						callback = function(o) {
+							oController.onDeleteProcess.call(oController, oData, Flag, o);   // 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+						};
+			
+						oController.ApprovalLinesHandler = ApprovalLinesHandler.get(oController, initData, callback);
+						DialogHandler.open(oController.ApprovalLinesHandler);
+					}, 0);
+				} else {
+					oController.onDeleteProcess.call(oController, oData, Flag, []); // 내부망일 경우 바로 신청 Function 호출
+				}
+
+			}
+		},
+
+		onDeleteProcess : function(oData, Flag, vAprdatas){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
+
+			var confirmMessage = "", successMessage = "";
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 				var oExtryn = Common.isExternalIP() === true ? "X" : "", oUrl = "";
 
-				var createData = {WorkhomeNav : []};
+				var createData = {WorkhomeNav : [], WorkhomeTabNav : (vAprdatas ? vAprdatas : [])};
 					createData.IPernr = oData.Pernr;
 					createData.IEmpid = oData.Pernr;
 					createData.IBukrs = oData.Bukrs;
 					createData.ILangu = oController.getSessionInfoByKey("Langu");
-					createData.IConType = Flag == "D" ? "4" : "9";
+					createData.IConType = (Flag == "D" ? "4" : "9");
 					createData.IExtryn = oExtryn;
 					
 				var detail = {};
@@ -246,35 +295,14 @@ sap.ui.define([
 					detail.Begda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 					detail.Endda = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/"; 
 					detail.Telnum = oData.Telnum;
-					detail.Bigo = oData.Bigo;
-				if(Flag == "E"){
-					detail.AppName = oData.AppName;
-				}
+					detail.Bigo = oData.Bigo; 
 					
 				createData.WorkhomeNav.push(detail);
 				
 				oModel.create("/WorkhomeApplySet", createData, {
-					success: function(data, res){
+					success: function(data){
 						if(data){
 							oUrl = data.EUrl;
-							// if(data.EUrl != "" && oExtryn == ""){
-							// 	setTimeout(function() {
-				   //                 var width = 1000, height = screen.availHeight * 0.9,
-				   //                 left = (screen.availWidth - width) / 2,
-				   //                 top = (screen.availHeight - height) / 2,
-				   //                 popup = window.open(data.EUrl, "smoin-approval-popup", [
-				   //                     "width=" + width,
-				   //                     "height=" + height,
-				   //                     "left=" + left,
-				   //                     "top=" + top,
-				   //                     "status=yes,resizable=yes,scrollbars=yes"
-				   //                 ].join(","));
-				
-				   //                 setTimeout(function() {
-				   //                     popup.focus();
-				   //                 }, 500);
-				   //             }, 0);
-							// }
 						}
 					},
 					error: function (oError) {
@@ -322,7 +350,6 @@ sap.ui.define([
 				}
 			};
 			
-			var confirmMessage = "", successMessage = "";
 			if(Flag == "D"){
 				confirmMessage = oController.getBundleText("MSG_00059"); // 삭제하시겠습니까?
 				successMessage = oController.getBundleText("MSG_00021"); // 삭제되었습니다.
@@ -331,95 +358,10 @@ sap.ui.define([
 				successMessage = oController.getBundleText("MSG_53009"); // 취소신청되었습니다.
 			}
 			
-			var confirm = function(){
-				sap.m.MessageBox.confirm(confirmMessage, {
-					actions : ["YES", "NO"],
-					onClose : beforeSave
-				});	
-			}
-			
-			if(oEvent && Flag == "E") {
-				if(!oController._CancelDialog){
-					oController._CancelDialog = sap.ui.jsfragment("ZUI5_HR_Workhome.fragment.Cancel", oController);
-					oView.addDependent(oController._CancelDialog);
-				}
-				
-				var oJSONModel = oController._CancelDialog.getModel();
-				var vData = Object.assign({}, oData, {Bigo : "", AppNameyn : false});
-
-				// 2021-05-13 결재자 리스트 생성
-				var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
-					oAppName.destroyItems();
-					oAppName.setValue("");
-				
-				var oModel = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
-				var createData = {ApprlistNav : []};
-					createData.IPernr = oData.Pernr;
-					createData.IExtryn = oController.oExtryn;
-					createData.IZappSeq = "40";
-					createData.IBukrs = oData.Bukrs;
-					createData.IMobyn = "";
-					createData.IAppkey = (oData.Appkey ? oData.Appkey : "");
-
-				if(oData.Status1 == "" || oData.Status1 == "AA" || oData.Status1 == "JJ"){
-					createData.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
-					createData.IPrcty = "1";
-				} else {
-					createData.IDatum = "\/Date(" + common.Common.getTime(new Date(oData.Begda)) + ")\/";
-					createData.IPrcty = "2";
-				}
-
-				oModel.create("/ApprListSet", createData, {
-					success: function(data, res){
-						if(data){
-							if(data.ApprlistNav && data.ApprlistNav.results){
-									var data1 = data.ApprlistNav.results;
-									
-									if(data1 && data1.length){
-										vData.AppNameyn = true;
-										for(var i=0; i<data1.length; i++){
-											oAppName.addItem(
-												new sap.ui.core.Item({
-													key : data1[i].AppName,
-													text : data1[i].AppText
-												})
-											);
-
-											if(data1[i].Defyn == "X"){
-												vData.AppName = data1[i].AppName;
-											}
-										}
-									}
-								}
-						}
-					},
-					error: function (oError) {
-						var Err = {};
-						oController.Error = "E";
-								
-						if (oError.response) {
-							Err = window.JSON.parse(oError.response.body);
-							var msg1 = Err.error.innererror.errordetails;
-							if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-							else oController.ErrorMessage = Err.error.message.value;
-						} else {
-							oController.ErrorMessage = oError.toString();
-						}
-					}
-				});
-
-				if(oController.Error == "E"){
-					oController.Error = "";
-					sap.m.MessageBox.error(oController.ErrorMessage);
-					return;
-				}
-				
-				oJSONModel.setData({Data : vData});
-				
-				oController._CancelDialog.open();
-			} else {
-				confirm();
-			}
+			sap.m.MessageBox.confirm(confirmMessage, {
+				actions : ["YES", "NO"],
+				onClose : beforeSave
+			});
 		},
 		
 		onPressTable : function(oEvent, Flag, Flag2){
@@ -448,13 +390,13 @@ sap.ui.define([
 			
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
 			      id : "ZUI5_HR_Workhome.Detail",
-			      data : Object.assign({FromPageId : "ZUI5_HR_Workhome.List"}, oData)
+			      data : $.extend(true, {FromPageId : "ZUI5_HR_Workhome.List"}, oData)
 			});
 		},
 		
 		searchOrgehPernr : function(oController){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
-			var oController = oView.getController();
+			oController = oView.getController();
 			
 			var initData = {
                 Percod: oController.getSessionInfoByKey("Percod"),
@@ -462,7 +404,7 @@ sap.ui.define([
                 Langu: oController.getSessionInfoByKey("Langu"),
                 Molga: oController.getSessionInfoByKey("Molga"),
                 Datum: new Date(),
-                Mssty: "",
+                Mssty: ""
             },
             callback = function(o) {
                 oController._ListCondJSonModel.setProperty("/Data/Pernr", "");
@@ -480,16 +422,22 @@ sap.ui.define([
             oController.OrgOfIndividualHandler = OrgOfIndividualHandler.get(oController, initData, callback);	
             DialogHandler.open(oController.OrgOfIndividualHandler);
 		},
-		
-		getOrgOfIndividualHandler: function() {
-            return this.OrgOfIndividualHandler;
-        },
         
 		/**
          * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
          */
 		displayMultiOrgSearchDialog: function (oEvent) {
-			var oController = $.app.getController();
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
+
+			return !$.app.getController().EmployeeSearchCallOwner 
+					? oController.openOrgSearchDialog(oEvent)
+					: $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
+		},
+
+		openOrgSearchDialog : function(oEvent){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
 
 			SearchOrg.oController = oController;
 			SearchOrg.vActionType = "Multi";
@@ -505,7 +453,17 @@ sap.ui.define([
 		},
 
 		onESSelectPerson : function(data){
-			var oController = $.app.getController();
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
+
+			return this.EmployeeSearchCallOwner 
+					? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+					: oController.onSelectPerson(data);
+		},
+
+		onSelectPerson : function(data){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
+			var oController = oView.getController();
 
 			oController._ListCondJSonModel.setProperty("/Data/Orgeh", "");
 			oController._ListCondJSonModel.setProperty("/Data/Pernr", data.Pernr);
@@ -528,7 +486,7 @@ sap.ui.define([
 			}
         },
 		
-		onExport : function(oEvent){
+		onExport : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.List");
 			var oController = oView.getController();
 			

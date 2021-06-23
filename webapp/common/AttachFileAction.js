@@ -40,8 +40,8 @@ common.AttachFileAction = {
 				},
 				opt
 			),
-			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"),
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX");
+			oFileUploader = sap.ui.getCore().byId([oController.PAGEID, "ATTACHFILE_BTN"].join(oController.SEQ || "_")),
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_"));
 
 		oFileUploader.setValue("");
 
@@ -61,7 +61,7 @@ common.AttachFileAction = {
 	 */
 	setSettingByKey: function (oController, opt) {
 		var options = $.extend(true, {}, opt),
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX");
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_"));
 
 		if (options.key) oAttachbox.getModel().setProperty("/Settings/" + options.key, options.value);
 	},
@@ -69,7 +69,7 @@ common.AttachFileAction = {
 	getFileLength: function (oController) {
 		var vAttachDatas = sap.ui
 			.getCore()
-			.byId(oController.PAGEID + "_ATTACHBOX")
+			.byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_"))
 			.getModel()
 			.getProperty("/Data");
 
@@ -80,10 +80,10 @@ common.AttachFileAction = {
 	 * 첨부파일 리스트를 Binding한다.
 	 */
 	refreshAttachFileList: function (oController, vExistDataFlag) {
-		var f1 = document.getElementById(oController.PAGEID + "_ATTACHFILE_BTN-fu_input-inner"),
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
-			oAttachFileList = sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"),
-			oFileUploader = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHFILE_BTN"),
+		var f1 = document.getElementById([oController.PAGEID, "ATTACHFILE_BTN-fu_input-inner"].join(oController.SEQ || "_")),
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_")),
+			oAttachFileList = sap.ui.getCore().byId([oController.PAGEID, "CAF_Table"].join(oController.SEQ || "_")),
+			oFileUploader = sap.ui.getCore().byId([oController.PAGEID, "ATTACHFILE_BTN"].join(oController.SEQ || "_")),
 			oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
 			JSonModel = oAttachbox.getModel(),
 			vAttachFileDatas = JSonModel.getProperty("/Data"),
@@ -148,7 +148,7 @@ common.AttachFileAction = {
 	onPressHelpBtn: function() {
 		var oView = $.app.getView(),
 			oController = this,
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_")),
 			JSonModel = oAttachbox.getModel(),
 			oHelpTextList = JSonModel.getProperty("/Settings/HelpTextList");
 		
@@ -156,7 +156,7 @@ common.AttachFileAction = {
 			oController._TextViewModel = sap.ui.jsfragment("fragment.TextFlexBox", oController);
 			oView.addDependent(oController._TextViewModel);
 			
-			var oTextFlexBox = sap.ui.getCore().byId(oController.PAGEID + "_TextFlexBox");
+			var oTextFlexBox = sap.ui.getCore().byId([oController.PAGEID, "TextFlexBox"].join(oController.SEQ || "_"));
 			var vLength = oHelpTextList.length;
 			for(var i=0; i<vLength; i++){
 				if(i === 0) {
@@ -249,7 +249,7 @@ common.AttachFileAction = {
 	 */
 	uploadComplete: function (oEvent) {
 		var sResponse = oEvent.getParameter("response"),
-			oFileUploader = sap.ui.getCore().byId(this.PAGEID + "_ATTACHFILE_BTN");
+			oFileUploader = sap.ui.getCore().byId([this.PAGEID, "ATTACHFILE_BTN"].join(this.SEQ || "_"));
 
 		sap.m.MessageBox.alert(sResponse, { title: this.getBundleText("LABEL_00149") }); // 안내
 
@@ -269,15 +269,15 @@ common.AttachFileAction = {
 	 * Upload할 첨부파일을 선택했을 경우 처리 내역
 	 */
 	onFileChange: function () {
-		var oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"),
-			oFileUploader = sap.ui.getCore().byId(this.PAGEID + "_ATTACHFILE_BTN"),
-			f1 = document.getElementById(this.PAGEID + "_ATTACHFILE_BTN-fu_input-inner"),
+		var oAttachbox = sap.ui.getCore().byId([this.PAGEID, "ATTACHBOX"].join(this.SEQ || "_")),
+			oFileUploader = sap.ui.getCore().byId([this.PAGEID, "ATTACHFILE_BTN"].join(this.SEQ || "_")),
+			f1 = document.getElementById([this.PAGEID, "ATTACHFILE_BTN-fu_input-inner"].join(this.SEQ || "_")),
 			JSonModel = oAttachbox.getModel(),
 			vFileData = JSonModel.getProperty("/Data"),
 			aFileList = [],
 			vMode = JSonModel.getProperty("/Settings/Mode"),
 			vMax = JSonModel.getProperty("/Settings/Max"),
-			files = jQuery.sap.domById(this.PAGEID + "_ATTACHFILE_BTN" + "-fu").files;
+			files = jQuery.sap.domById([this.PAGEID, "ATTACHFILE_BTN-fu"].join(this.SEQ || "_")).files;
 
 		if (files) {
 			vFileData.forEach(function(elem) {
@@ -315,7 +315,7 @@ common.AttachFileAction = {
 
 	callDeleteSelectedFiles: function() {
 		var oController = this,
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_")),
 			oJSonModel = oAttachbox.getModel(),
 			aDeleteFiles = oJSonModel.getProperty("/DelelteDatas") || [];
 			
@@ -360,9 +360,9 @@ common.AttachFileAction = {
 	 */
 	onDeleteAttachFile: function () {
 		var oController = this,
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_")),
 			oJSonModel = oAttachbox.getModel(),
-			oTable = sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"),
+			oTable = sap.ui.getCore().byId([oController.PAGEID, "CAF_Table"].join(oController.SEQ || "_")),
 			vContexts = oTable.getSelectedContexts(true);
 
 		if (common.Common.isEmptyArray(vContexts)) {
@@ -411,8 +411,8 @@ common.AttachFileAction = {
 	 */
 	onDeleteAttachFileRow: function (oEvent) {
 		var oController = this,
-			oAttachbox = sap.ui.getCore().byId(oController.PAGEID + "_ATTACHBOX"),
-			oTable = sap.ui.getCore().byId(oController.PAGEID + "_CAF_Table"),
+			oAttachbox = sap.ui.getCore().byId([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_")),
+			oTable = sap.ui.getCore().byId([oController.PAGEID, "CAF_Table"].join(oController.SEQ || "_")),
 			oJSonModel = oAttachbox.getModel(),
 			vPath = oEvent.getSource().getBindingContext().getPath(),
 			vContexts = oJSonModel.getProperty(vPath),
@@ -471,7 +471,7 @@ common.AttachFileAction = {
 
 	uploadFile: function () {
 		var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
-			oAttachbox = sap.ui.getCore().byId(this.PAGEID + "_ATTACHBOX"),
+			oAttachbox = sap.ui.getCore().byId([this.PAGEID, "ATTACHBOX"].join(this.SEQ || "_")),
 			vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [],
 			aDeleteFiles = oAttachbox.getModel().getProperty("/DelelteDatas") || [],
 			vAppnm = oAttachbox.getModel().getProperty("/Settings/Appnm") || "",

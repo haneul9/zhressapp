@@ -159,13 +159,13 @@ sap.ui.define(
                             new sap.ui.table.RowActionItem({
                                 type: "Navigation",
                                 press: function (oEvent) {
-                                    PageHandler.pressSelectRowDetail.call(PageHandler, oEvent.getSource().getBindingContext().getProperty());
+                                    PageHandler.pressSelectRowDetail.call(PageHandler, oEvent);
                                 }
                             })
                         ]
                     }),
                     cellClick: function (oEvent) {
-                        PageHandler.pressSelectRowDetail.call(PageHandler, oEvent.getParameters().rowBindingContext.getProperty());
+                        PageHandler.pressSelectRowDetail.call(PageHandler, oEvent);
                     }
                 })
                 .addStyleClass("mt-15px row-link")
@@ -184,7 +184,7 @@ sap.ui.define(
                     { id: "Beguz", label: "{i18n>LABEL_32010}" /* 시작 시간 */, plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width: "10%" },
                     { id: "Enduz", label: "{i18n>LABEL_32011}" /* 종료 시간 */, plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width: "10%" },
                     { id: "Jobco", label: "{i18n>LABEL_32012}" /* 작업내용 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Begin },
-                    { id: "Stext1", label: "{i18n>LABEL_32008}" /* 진행상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "15%", templateGetter: "getSmoinLink", templateGetterOwner: this },
+                    { id: "Stext1", label: "{i18n>LABEL_32008}" /* 진행상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "15%", templateGetter: "getLinkMimicTemplate", templateGetterOwner: this },
                     { id: "Stext", label: "{i18n>LABEL_32013}" /* 결재상태(담당부서) */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "15%" }
                 ];
             }

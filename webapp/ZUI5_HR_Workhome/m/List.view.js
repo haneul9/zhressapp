@@ -1,9 +1,8 @@
 sap.ui.define(
     [
-        "common/makeTable",
         "common/PageHelper"
     ],
-    function (MakeTable, PageHelper) {
+    function (PageHelper) {
         "use strict";
 
         sap.ui.jsview("ZUI5_HR_Workhome.m.List", {

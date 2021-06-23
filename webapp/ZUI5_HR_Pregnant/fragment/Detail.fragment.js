@@ -444,7 +444,8 @@ sap.ui.define(
                                 new sap.m.Button({
                                     text: "{i18n>LABEL_00101}", // 저장
                                     press: function (oEvent) {
-                                        oController.onPressSave(oEvent, "S");
+                                        oController.onRequest("S");
+                                        // oController.onPressSave(oEvent, "S");
                                     },
                                     visible: {
                                         path: "Status1",
@@ -456,7 +457,8 @@ sap.ui.define(
                                 new sap.m.Button({
                                     text: "{i18n>LABEL_39018}", // 신청
                                     press: function (oEvent) {
-                                        oController.onPressSave(oEvent, "C");
+                                        oController.onRequest("C");
+                                        // oController.onPressSave(oEvent, "C");
                                     },
                                     visible: {
                                         path: "Status1",
@@ -468,7 +470,8 @@ sap.ui.define(
                                 new sap.m.Button({
                                     text: "{i18n>LABEL_00103}", // 삭제
                                     press: function (oEvent) {
-                                        oController.onPressSave(oEvent, "D");
+                                        oController.onRequest("D");
+                                        // oController.onPressSave(oEvent, "D");
                                     },
                                     visible: {
                                         path: "Status1",

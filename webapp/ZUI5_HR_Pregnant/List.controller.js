@@ -4,9 +4,11 @@ sap.ui.define(
         "common/CommonController",
         "common/JSONModelHelper",
         "common/AttachFileAction",
-        "sap/m/MessageBox"
+        "sap/m/MessageBox",
+        "common/DialogHandler",
+        "common/ApprovalLinesHandler"
     ],
-    function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox) {
+    function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, DialogHandler, ApprovalLinesHandler) {
         "use strict";
 
         return CommonController.extend("ZUI5_HR_Pregnant.List", {
@@ -15,6 +17,24 @@ sap.ui.define(
             _ListCondJSonModel: new sap.ui.model.json.JSONModel(),
             UploadFileModel: new JSONModelHelper(),
             _Bukrs: "",
+
+            EmployeeSearchCallOwner: null,
+
+            getApprovalLinesHandler: function() {
+                return this.ApprovalLinesHandler;
+            },
+
+            onESSelectPerson: function(data) {
+                return this.EmployeeSearchCallOwner 
+                ? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+                : null;
+            },
+
+            displayMultiOrgSearchDialog: function(oEvent) {
+                return !$.app.getController().EmployeeSearchCallOwner 
+                ? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
+                : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
+            },
 
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
@@ -547,7 +567,7 @@ sap.ui.define(
             },
 
             // Flag : S 저장, C 신청, D 삭제
-            onPressSave: function (oEvent, Flag) {
+            onRequest : function(Flag){
                 var oView = sap.ui.getCore().byId("ZUI5_HR_Pregnant.List");
                 var oController = oView.getController();
 
@@ -632,8 +652,37 @@ sap.ui.define(
                     }
                 }
 
+                if(Flag == "C" && Common.isExternalIP()) {   // 외부망 여부 체크하여 분기
+                    setTimeout(function() {
+                        var initData = {
+                            Mode: "P", // PC – P, Mobile - M
+                            Pernr: oController.getSessionInfoByKey("Pernr"),
+                            Empid: oController.getSessionInfoByKey("Pernr"),
+                            Bukrs: oController.getSessionInfoByKey("Bukrs"),
+                            ZappSeq: "02"
+                        },
+                        callback = function(o) {
+                            oController.onPressSave.call(oController, Flag, o);   // 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+                        };
+            
+                        oController.ApprovalLinesHandler = ApprovalLinesHandler.get(oController, initData, callback);
+                        DialogHandler.open(oController.ApprovalLinesHandler);
+                    }, 0);
+                } else {
+                    oController.onPressSave.call(oController, Flag, []); // 내부망일 경우 바로 신청 Function 호출
+                }
+            },
+
+            // Flag : S 저장, C 신청, D 삭제
+            onPressSave: function (Flag, vAprdatas) {
+                var oView = sap.ui.getCore().byId("ZUI5_HR_Pregnant.List");
+                var oController = oView.getController();
+
+                var oData = oController._ListCondJSonModel.getProperty("/Data");
+
                 var confirmMessage = "",
                     successMessage = "";
+
                 if (Flag == "S") {
                     confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
                     successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
@@ -650,7 +699,7 @@ sap.ui.define(
                     var vExtryn = Common.isExternalIP() === true ? "X" : "";
                     var oUrl = "";
                     
-                    var createData = { PregnantApplyTableIn: [] };
+                    var createData = { PregnantApplyTableIn: [], PregnantApplyTableIn2 : (vAprdatas ? vAprdatas : []) };
                     if (Flag == "D") {
                         createData.IConType = "4";
                     } else {
@@ -670,26 +719,26 @@ sap.ui.define(
                     createData.IExtryn = vExtryn;
 
                     var detail = {};
-                    detail.Pernr = oController.getSessionInfoByKey("Pernr");
-                    detail.Preen = "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/"; // 출산예정일
-                    detail.Prebg = oData.Prebg ? "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/" : null; // 임신시작일
-                    detail.Prebn = oData.Prebn; // 태아수
-                    detail.Pampm = oData.Pampm; // 단축근무시간
-                    detail.Mptyp = oData.Mptyp ? oData.Mptyp : ""; // 법정관리유형
+                        detail.Pernr = oController.getSessionInfoByKey("Pernr");
+                        detail.Preen = "/Date(" + Common.getTime(new Date(oData.Preen)) + ")/"; // 출산예정일
+                        detail.Prebg = oData.Prebg ? "/Date(" + Common.getTime(new Date(oData.Prebg)) + ")/" : null; // 임신시작일
+                        detail.Prebn = oData.Prebn; // 태아수
+                        detail.Pampm = oData.Pampm; // 단축근무시간
+                        detail.Mptyp = oData.Mptyp ? oData.Mptyp : ""; // 법정관리유형
 
-                    // 단축근무기간
-                    detail.Begsh = oData.Begsh ? "/Date(" + Common.getTime(new Date(oData.Begsh)) + ")/" : null;
-                    detail.Endsh = oData.Endsh ? "/Date(" + Common.getTime(new Date(oData.Endsh)) + ")/" : null;
-                    detail.Begshp = oData.Begshp ? "/Date(" + Common.getTime(new Date(oData.Begshp)) + ")/" : null;
-                    detail.Endshp = oData.Endshp ? "/Date(" + Common.getTime(new Date(oData.Endshp)) + ")/" : null;
+                        // 단축근무기간
+                        detail.Begsh = oData.Begsh ? "/Date(" + Common.getTime(new Date(oData.Begsh)) + ")/" : null;
+                        detail.Endsh = oData.Endsh ? "/Date(" + Common.getTime(new Date(oData.Endsh)) + ")/" : null;
+                        detail.Begshp = oData.Begshp ? "/Date(" + Common.getTime(new Date(oData.Begshp)) + ")/" : null;
+                        detail.Endshp = oData.Endshp ? "/Date(" + Common.getTime(new Date(oData.Endshp)) + ")/" : null;
 
-                    // 신청가능기간
-                    detail.Begsh2 = oData.Begsh2 ? "/Date(" + Common.getTime(new Date(oData.Begsh2)) + ")/" : null;
-                    detail.Endsh2 = oData.Endsh2 ? "/Date(" + Common.getTime(new Date(oData.Endsh2)) + ")/" : null;
-                    detail.Begsh2p = oData.Begsh2p ? "/Date(" + Common.getTime(new Date(oData.Begsh2p)) + ")/" : null;
-                    detail.Endsh2p = oData.Endsh2p ? "/Date(" + Common.getTime(new Date(oData.Endsh2p)) + ")/" : null;
+                        // 신청가능기간
+                        detail.Begsh2 = oData.Begsh2 ? "/Date(" + Common.getTime(new Date(oData.Begsh2)) + ")/" : null;
+                        detail.Endsh2 = oData.Endsh2 ? "/Date(" + Common.getTime(new Date(oData.Endsh2)) + ")/" : null;
+                        detail.Begsh2p = oData.Begsh2p ? "/Date(" + Common.getTime(new Date(oData.Begsh2p)) + ")/" : null;
+                        detail.Endsh2p = oData.Endsh2p ? "/Date(" + Common.getTime(new Date(oData.Endsh2p)) + ")/" : null;
 
-                    detail.Reque = oData.Reque; // 요청사항
+                        detail.Reque = oData.Reque; // 요청사항
 
                     if (oData.Reqdt) {
                         detail.Reqdt = "/Date(" + Common.getTime(oData.Reqdt) + ")/"; // 신청일자
@@ -708,8 +757,8 @@ sap.ui.define(
                         }
                     }
 
-                    detail.Begda = oData.Begda ? "/Date(" + Common.getTime(oData.Begda) + ")/" : null;
-                    detail.Endda = oData.Endda ? "/Date(" + Common.getTime(oData.Endda) + ")/" : null;
+                        detail.Begda = oData.Begda ? "/Date(" + Common.getTime(oData.Begda) + ")/" : null;
+                        detail.Endda = oData.Endda ? "/Date(" + Common.getTime(oData.Endda) + ")/" : null;
 
                     createData.PregnantApplyTableIn.push(detail);
 
@@ -734,14 +783,14 @@ sap.ui.define(
                         }
                     });
 
+                    oController._BusyDialog.close();
+
                     // 2021-05-04 팝업차단 확인 후 이후 프로세스 진행
                     if(Flag == "C" && oUrl != ""){ //  && vExtryn == ""
                         if(common.Common.openPopup.call(oController, oUrl) == false){
                             return;
                         }
                     }
-
-                    oController._BusyDialog.close();
 
                     if (oController.Error == "E") {
                         oController.Error = "";
@@ -785,7 +834,7 @@ sap.ui.define(
             },
 
             getUserId: function () {
-                return oController.getSessionInfoByKey("Pernr");
+                return $.app.getController().getSessionInfoByKey("Pernr");
             },
 
             getLocalSessionModel: Common.isLOCAL()

@@ -28,6 +28,73 @@ common.SearchUser1 = {
         $.app.byId(common.SearchUser1.oController.PAGEID + "_EmpSearchResult_Table").setModel(sap.ui.getCore().getModel("EmpSearchResult"));
     },
 
+    getModel: function() {
+        if (!sap.ui.getCore().getModel("EmpSearchResult")) {
+            sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "EmpSearchResult");
+        }
+
+        return sap.ui.getCore().getModel("EmpSearchResult");
+    },
+
+    onSearch: function(oEvent) {
+        var oController = common.SearchUser1.oController;
+        var oDialog = $.app.byId(oController.PAGEID + "_ESM_Dialog");
+        var mEmpSearchResult = sap.ui.getCore().getModel("EmpSearchResult");
+        var vEmpSearchResult = { EmpSearchResultSet: [] };
+        var vEnamePernr = oEvent.getParameter("value");
+
+        if(!vEnamePernr) {
+            mEmpSearchResult.setData(vEmpSearchResult);
+            return;
+        } else if(vEnamePernr.length < 2) {
+            sap.m.MessageBox.alert("성명은 2자 이상이어야 합니다.");
+            return;
+        }
+
+        oDialog.setBusyIndicatorDelay(0);
+        oDialog.setBusy(true);
+
+        common.Common.getPromise(
+            function () {
+                $.app.getModel("ZHR_COMMON_SRV").read("/EmpSearchResultSet", {
+                    async: false,
+                    filters: [
+                        new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
+                        new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Bukrs2")),
+                        new sap.ui.model.Filter("Actty", sap.ui.model.FilterOperator.EQ, common.SearchUser1.searchAuth ? common.SearchUser1.searchAuth : $.app.getAuth()),
+                        new sap.ui.model.Filter("Actda", sap.ui.model.FilterOperator.EQ, moment().hours(9).toDate()),
+                        new sap.ui.model.Filter("Ename", sap.ui.model.FilterOperator.EQ, vEnamePernr)
+                    ],
+                    success: function (oData) {
+                        if (oData && oData.results) {
+                            vEmpSearchResult.EmpSearchResultSet = oData.results.map(function (elem) {
+                                return $.extend(true, elem, {
+                                    Chck: false
+                                });
+                            });
+                            mEmpSearchResult.setData(vEmpSearchResult);
+                        }
+                    },
+                    error: function (oResponse) {
+                        common.Common.log(oResponse);
+                    }
+                });
+            }
+        ).then(function () {
+            oDialog.setBusy(false);
+        });
+    },
+
+    onConfirm: function(oEvent) {
+        var oController = common.SearchUser1.oController;
+        var mEmpSearchResult = sap.ui.getCore().getModel("EmpSearchResult");
+        var aContexts = oEvent.getParameter("selectedContexts");
+
+        oController.onESSelectPerson.call(oController, mEmpSearchResult.getProperty(aContexts[0].getPath()));
+
+        mEmpSearchResult.setData({ EmpSearchResultSet: [] });
+    },
+
     searchFilterBar: function () {
         var oController = common.SearchUser1.oController;
         var oDialog = sap.ui.getCore().byId(oController.PAGEID + "_ES_Dialog");
@@ -323,7 +390,9 @@ common.SearchUser1 = {
 
     onClose: function () {
         var oDialog = sap.ui.getCore().byId(common.SearchUser1.oController.PAGEID + "_ES_Dialog");
+        
         if (oDialog) oDialog.close();
+        common.SearchUser1.oController.EmployeeSearchCallOwner = this;
     },
 
     onKeyUp: function (oEvent) {

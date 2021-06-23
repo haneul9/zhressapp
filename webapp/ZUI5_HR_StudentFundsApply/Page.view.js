@@ -94,7 +94,7 @@ sap.ui.define([
                                         if(v !== "A100") return true;
                                         else return false;
                                     }
-                                },
+                                }
 							}).addStyleClass("button-light")
 						]
 					})

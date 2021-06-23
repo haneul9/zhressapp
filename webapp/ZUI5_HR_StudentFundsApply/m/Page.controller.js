@@ -1,7 +1,7 @@
 ﻿sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper"
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper"
 	], 
 	function (Common, CommonController, JSONModelHelper) {
 	"use strict";
@@ -38,7 +38,7 @@
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -76,7 +76,7 @@
 			sendObject.EducationFundApplyTableIn0 = [];
 			
 			oModel.create("/EducationfundApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.EducationFundApplyTableIn0) {
 						Common.log(oData);
 						var rDatas = oData.EducationFundApplyTableIn0.results;
@@ -112,7 +112,7 @@
 			sendObject.EducationfundApplyTableIn = [];
 			
 			oModel.create("/EducationfundApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.EducationfundApplyTableIn) {
 						Common.log(oData);
 						var rDatas = oData.EducationfundApplyTableIn.results;
