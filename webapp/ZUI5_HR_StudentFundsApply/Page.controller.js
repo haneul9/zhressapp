@@ -52,12 +52,16 @@ sap.ui.define([
 		},
 		
 		onBeforeShow: function() {
+			Common.log("onBeforeShow");
 			var oView = $.app.byId("ZUI5_HR_StudentFundsApply.Page");
+			
+			this.SEQ = "_01_";
 			this._BaseApplyModel = sap.ui.jsfragment("ZUI5_HR_StudentFundsApply.fragment.BaseApply", this);
 			oView.addDependent(this._BaseApplyModel);
+			
+			this.SEQ = "_02_";
 			this._HighApplyModel = sap.ui.jsfragment("ZUI5_HR_StudentFundsApply.fragment.HighApply", this);
 			oView.addDependent(this._HighApplyModel);
-			Common.log("onBeforeShow");
 		},
 		
 		onAfterShow: function() {

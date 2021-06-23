@@ -8,8 +8,8 @@ sap.ui.define([
 
 	sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", {
 		createContent: function (oController) {
-			var oFileUploader = new ODataFileUploader(oController.PAGEID + "_ATTACHFILE_BTN", {				
-				name: oController.PAGEID + "UploadFile",
+			var oFileUploader = new ODataFileUploader([oController.PAGEID, "_ATTACHFILE_BTN"].join(oController.SEQ || "_"), {				
+				name: [oController.PAGEID, "UploadFile"].join(oController.SEQ || ""),
 				modelName: "ZHR_COMMON_SRV",
 				slug: "",
 				maximumFileSize: 10,
@@ -178,7 +178,7 @@ sap.ui.define([
 				]
 			});    
 
-			var oAttachFileTable = new sap.m.Table(oController.PAGEID + "_CAF_Table", {
+			var oAttachFileTable = new sap.m.Table([oController.PAGEID, "CAF_Table"].join(oController.SEQ || "_"), {
 				inset: false,
 				showNoData: false,
 				// mode: "{/Settings/ListMode}",
@@ -206,7 +206,7 @@ sap.ui.define([
 			.addStyleClass("mt-4px")
 			.bindItems("/Data", oColumns);
 
-			return new sap.m.FlexBox(oController.PAGEID + "_ATTACHBOX", {
+			return new sap.m.FlexBox([oController.PAGEID, "ATTACHBOX"].join(oController.SEQ || "_"), {
 				width: "100%",
 				direction: sap.m.FlexDirection.Column,				
 				items: [FileInfoBox, oAttachFileTable]
