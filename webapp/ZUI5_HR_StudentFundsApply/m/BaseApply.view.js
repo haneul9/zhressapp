@@ -1,10 +1,10 @@
-﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
-sap.ui.define([
-	"../../common/Common",
-	"../../common/PageHelper",
-    "../../common/PickOnlyDatePicker",
-    "../delegate/ViewTemplates"
-], function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates) {
+﻿sap.ui.define([
+	"common/Common",
+	"common/PageHelper",
+    "common/PickOnlyDatePicker",
+	"../delegate/ViewTemplates",
+	"fragment/COMMON_ATTACH_FILES"
+], function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates, FileHandler) {
 "use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "BaseApply"].join($.app.getDeviceSuffix());
@@ -62,11 +62,11 @@ sap.ui.define([
 				contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
-					this.ApplyingBox(oController),
+					this.ApplyingBox(oController)
 				]
 			})
 			.setModel(oController.ApplyModel)
-			.bindElement("/FormData")
+			.bindElement("/FormData");
 		},
 		
 		ApplyingBox: function(oController) {
@@ -650,7 +650,7 @@ sap.ui.define([
 					new sap.m.HBox({
 						alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"1")
+							FileHandler.renderer(oController,"001")
                         ]
                     })
 				]

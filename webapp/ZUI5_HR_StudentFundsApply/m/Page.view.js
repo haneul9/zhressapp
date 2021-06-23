@@ -202,7 +202,7 @@
                                             formatter : function(v){
                                                 return v ? Common.DateFormatter(v) : "";
                                             }
-                                        },
+                                        }
                                     })
                                     .addStyleClass("L2P13Font font-14px"),
                                     new sap.m.Text({ // 학교구분

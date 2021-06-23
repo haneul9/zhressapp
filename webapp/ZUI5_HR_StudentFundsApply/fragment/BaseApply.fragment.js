@@ -1,8 +1,9 @@
 ﻿sap.ui.define([
-    "../../common/Common",
+    "common/Common",
     "../delegate/ViewTemplates",
-	"../../common/ZHR_TABLES"
-], function (Common, ViewTemplates, ZHR_TABLES) {
+	"common/ZHR_TABLES",
+	"fragment/COMMON_ATTACH_FILES"
+], function (Common, ViewTemplates, ZHR_TABLES, FileHandler) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_StudentFundsApply.fragment.BaseApply", {
@@ -22,7 +23,7 @@
 						return false;
 					}
 				}
-			})
+			});
 
 			// 키보드 입력 방지
 			oPayDate.addDelegate({
@@ -479,7 +480,7 @@
 									}
 								},
 								value: "{Remark}"
-						 	}),
+						 	})
 						]
 					})
 					.addStyleClass("search-field-group")
@@ -569,7 +570,7 @@
 						width: "100%",
 						fitContainer: true,
 						items: [
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+							FileHandler.renderer(oController,"001")
 						]
 					})
                 ]

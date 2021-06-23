@@ -1,9 +1,9 @@
-﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
-sap.ui.define([
-	"../../common/Common",
-	"../../common/PageHelper",
-    "../delegate/ViewTemplates"
-], function (Common, PageHelper, ViewTemplates) {
+﻿sap.ui.define([
+	"common/Common",
+	"common/PageHelper",
+	"../delegate/ViewTemplates",
+	"fragment/COMMON_ATTACH_FILES"
+], function (Common, PageHelper, ViewTemplates, FileHandler) {
 "use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "HighApply"].join($.app.getDeviceSuffix());
@@ -61,11 +61,11 @@ sap.ui.define([
 				contentStyleClass: "sub-app-content",
                 contentContainerStyleClass: "app-content-container-mobile custom-title-left",
 				contentItems: [
-					this.ApplyingBox(oController),
+					this.ApplyingBox(oController)
 				]
 			})
 			.setModel(oController.HighApplyModel)
-			.bindElement("/FormData")
+			.bindElement("/FormData");
 		},
 		
 		ApplyingBox: function(oController) {
@@ -271,7 +271,7 @@ sap.ui.define([
                                     }
                                 },
                                 textAlign: "Begin"
-							}),
+							})
 						]
 					}),
 					new sap.m.HBox({
@@ -591,7 +591,7 @@ sap.ui.define([
 					new sap.m.HBox({
 					alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"2")
+							FileHandler.renderer(oController,"002")
                         ]
                     })
 				]

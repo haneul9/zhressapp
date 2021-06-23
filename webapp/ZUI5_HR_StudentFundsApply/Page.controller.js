@@ -1242,7 +1242,7 @@ sap.ui.define([
 						}
 					});
 				}
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38005"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -1271,7 +1271,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFile.call(oController, "001");
+					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["001"]);
 					
 					var sendObject = {};
 					// Header
@@ -1299,7 +1299,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38001"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -1327,7 +1327,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38048")) { // 저장
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFile.call(oController, "001");
+					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["001"]);
 
 					var sendObject = {};
 					// Header
@@ -1355,7 +1355,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38003"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -1403,7 +1403,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38005"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -1487,7 +1487,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFile.call(oController, "002");
+					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["002"]);
 					if(!oRowData.Appnm) return false;
 
 					var sendObject = {};
@@ -1516,7 +1516,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38001"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -1574,7 +1574,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38003"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -1622,7 +1622,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38005"), {
 				title: oController.getBundleText("LABEL_38001"),

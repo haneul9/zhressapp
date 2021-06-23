@@ -3,9 +3,10 @@
 	"../../common/CommonController",
 	"../../common/JSONModelHelper",
 	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator"
+	"sap/ui/core/BusyIndicator",
+	"fragment/COMMON_ATTACH_FILES"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "HighApply"].join($.app.getDeviceSuffix());
@@ -376,7 +377,7 @@
         onChangeSupport: function(oEvent) { // 지원유형 선택시 수혜주기 값 호출
 			var oController = this.getView().getController();
 			var oHiddenData = oController.HighApplyModel.getProperty("/HiddenData");
-			var vKey = oEvent ? oEvent.getSource().getSelectedKey() : oController.HighApplyModel.getProperty("/FormData/SGubun")
+			var vKey = oEvent ? oEvent.getSource().getSelectedKey() : oController.HighApplyModel.getProperty("/FormData/SGubun");
 			var oLoadData = [];
 
 			oHiddenData.forEach(function(ele) {
@@ -503,49 +504,49 @@
             if(Common.checkNull(oController.HighApplyModel.getProperty("/FormData/SchoolType"))){
                 MessageBox.error(oController.getBundleText("MSG_38008"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 지원유형
             if(Common.checkNull(oController.HighApplyModel.getProperty("/FormData/SGubun"))){
                 MessageBox.error(oController.getBundleText("MSG_38019"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 학년
             if(Common.checkNull(oController.HighApplyModel.getProperty("/FormData/Grade"))){
                 MessageBox.error(oController.getBundleText("MSG_38014"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 학교명
             if(Common.checkNull(oController.HighApplyModel.getProperty("/FormData/SchoolName"))){
                 MessageBox.error(oController.getBundleText("MSG_38009"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 학년제
             if(oGradeCombo2.getEditable() === true && Common.checkNull(oController.HighApplyModel.getProperty("/FormData/Grdrl"))){
                 MessageBox.error(oController.getBundleText("MSG_38015"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 전공명
             if(oGradeCombo2.getEditable() === true && Common.checkNull(oController.HighApplyModel.getProperty("/FormData/Majcd"))){
                 MessageBox.error(oController.getBundleText("MSG_38016"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 신청금액
             if(Common.checkNull(oController.HighApplyModel.getProperty("/FormData/ReqSum")) || oController.HighApplyModel.getProperty("/FormData/ReqSum") === "0"){
                 MessageBox.error(oController.getBundleText("MSG_38017"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
             // 첨부파일
-            if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "2") === 0) {
+            if(FileHandler.getFileLength(oController, "002") === 0) {
                 MessageBox.error(oController.getBundleText("MSG_38012"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
-            };
+            }
 
 			return false;
 		},
@@ -570,7 +571,7 @@
 				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFile.call(oController, "2");
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["002"]);
 					
 					var sendObject = {};
 					// Header
@@ -597,7 +598,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38001"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -625,7 +626,7 @@
 				if (fVal && fVal == oController.getBundleText("LABEL_38048")) { // 저장
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFile.call(oController, "2");
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["002"]);
 
 					var sendObject = {};
 					// Header
@@ -652,7 +653,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38003"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -699,7 +700,7 @@
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_38005"), {
 				title: oController.getBundleText("LABEL_38001"),
@@ -712,14 +713,14 @@
 			var vStatus = oController.HighApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.HighApplyModel.getProperty("/FormData/Appnm") || "";
 			var vNo="2";
-            fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
+            FileHandler.setAttachFile(oController, {
                 Appnm: vAppnm,
                 Required: true,
                 Mode: "M",
                 Max: "3",
-                Editable: (!vStatus || vStatus === "AA") ? true : false,
+                Editable: (!vStatus || vStatus === "AA") ? true : false
             },vNo);
-			fragment.COMMON_ATTACH_FILES.resizingLabel.call(oController,vNo);
+			FileHandler.resizingLabel.call(oController,vNo);
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {
