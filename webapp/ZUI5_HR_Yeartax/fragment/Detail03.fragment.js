@@ -47,9 +47,13 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03", {
 															text : "파일삭제",
 															press : oController.onDeleteAttachFile,
 															visible : {
-																path : "EFname",
-																formatter : function(fVal){
-																	return fVal ? true : false;
+																parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "EFname"}],
+																formatter : function(fVal1, fVal2, fVal3){
+																	if(fVal1 == "1" && fVal2 == "1" && fVal3){
+																		return true;
+																	} else {
+																		return false;
+																	}
 																}
 															}
 														}).addStyleClass("button-delete")

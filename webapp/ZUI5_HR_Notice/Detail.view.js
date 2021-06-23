@@ -138,6 +138,12 @@
 					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox({
 						fitContainer: true,
+						visible: {
+                            path: "Appnm",
+                            formatter: function(v) {
+                                return Common.checkNull(!v);
+                            }	
+                        },
 						items: [
                             sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 						]

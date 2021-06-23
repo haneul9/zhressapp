@@ -1,4 +1,5 @@
-﻿sap.ui.define([
+﻿/* eslint-disable no-undef */
+sap.ui.define([
     "../../common/Common",
     "../delegate/ViewTemplates",
     "../../common/ZHR_TABLES"
@@ -461,7 +462,7 @@
 							new sap.m.Text({text: ""})
 						]
 					})
-					.addStyleClass("search-field-group"),
+					.addStyleClass("search-field-group")
 				]
 			})
 			.addStyleClass("search-inner-vbox tableMargin5");
@@ -494,6 +495,8 @@
 				title: "{i18n>LABEL_38001}",    // 학자금 신청
 				contentWidth: "1280px",
 				contentHeight: "640px",
+				beforeOpen: oController.onBeforeHighDialog.bind(oController),
+				afterOpen: oController.onAfterHighDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onHighDialogSaveBtn.bind(oController),
@@ -542,7 +545,7 @@
                     })
                     .addStyleClass("sub-title mt-20px"),
                     oSupportTable,
-                    new sap.m.HBox({
+                    new sap.m.HBox(oController.PAGEID + "_HighFileBox", {
 						width: "100%",
 						fitContainer: true,
 						items: [

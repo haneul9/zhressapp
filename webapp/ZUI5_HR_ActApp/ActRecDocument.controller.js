@@ -602,10 +602,10 @@ sap.ui.define(
 							if (vActionSubjectListSet[i].Pchk == true) {
 								var vOneRecord = mActionSubjectList.getProperty("/ActionSubjectListSet/" + i);
 
-								if (vOneRecord.Cfmyn == "X") {
-									MessageBox.alert(oController.getBundleText("MSG_02037"));
-									return;
-								}
+								// if (vOneRecord.Cfmyn == "X") {
+								// 	MessageBox.alert(oController.getBundleText("MSG_02037"));
+								// 	return;
+								// }
 
 								process_result = false;
 

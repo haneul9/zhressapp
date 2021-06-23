@@ -474,10 +474,10 @@ sap.ui.define(
 						var process_result = false;
 
 						for (var i = 0; i < check_idxs.length; i++) {
-							if (vActionSubjectListSet[check_idxs[i]].Cfmyn == "X") {
-								MessageBox.alert(oController.getBundleText("MSG_02037"));
-								return;
-							}
+							// if (vActionSubjectListSet[check_idxs[i]].Cfmyn == "X") {
+							// 	MessageBox.alert(oController.getBundleText("MSG_02037"));
+							// 	return;
+							// }
 
 							process_result = false;
 
