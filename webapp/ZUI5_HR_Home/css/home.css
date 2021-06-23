@@ -144,6 +144,7 @@ body.under-construction .ehr-logo {position:static; margin:0}
 [device="mobile"] .portlet-employee .employee-information {width:100%; height:130px; border-radius:.5rem; padding-left:1.5rem; background-color:#064975}
 [device="mobile"] .portlet-1h.portlet-employee {height:130px}
 
+.portlet span.list-group-item-action {cursor:pointer}
 .portlet-bbs .list-group {height:100%; overflow:auto}
 .portlet-bbs .list-group-item {border:0; padding:.5rem .625rem .5rem 0}
 .portlet-bbs .list-group-item:hover {color:#0070bd; background:transparent}

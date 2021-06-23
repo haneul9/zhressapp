@@ -56,9 +56,9 @@ fill: function() {
 				if (!TableIn2.length) {
 					if (list.data('jsp')) {
 						list.find('.list-group-item').remove().end()
-							.data('jsp').getContentPane().prepend('<a href="javascript:;" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
+							.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">공지사항이 없습니다.</span>');
 					} else {
-						list.html('<a href="javascript:;" class="list-group-item list-group-item-action data-not-found">공지사항이 없습니다.</a>');
+						list.html('<span class="list-group-item data-not-found">공지사항이 없습니다.</span>');
 					}
 
 					this.spinner(false);
@@ -80,7 +80,7 @@ fill: function() {
 					o.DtfmtDate = moment(o.Sdate).format(Dtfmt);
 
 					return [
-						'<a href="javascript:;" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
+						'<span class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
 								'<div class="portlet-bbs-title w-100">',
 									'<span class="portlet-bbs-title-text" title="${title}">${title}</span>'.interpolate(o.Title, o.Title),
@@ -89,7 +89,7 @@ fill: function() {
 								'</div>',
 								'<small class="portlet-bbs-date w-100">${date}</small>'.interpolate(date),
 							'</div>',
-						'</a>'
+						'</span>'
 					].join('');
 				}.bind(this)).join(''));
 

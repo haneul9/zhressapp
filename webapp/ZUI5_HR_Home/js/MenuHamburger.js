@@ -204,6 +204,7 @@ goToLink: function(menuId, url) {
 },
 
 handleUrl: function(e) {
+	e.preventDefault();
 	e.stopImmediatePropagation();
 
 	var anchor = $(e.currentTarget), url = anchor.data('url'), menuId = anchor.data('menuId') || this.menuUrlMap[url];
@@ -488,13 +489,15 @@ generate: function() {
 					var t = $(this),
 					toggle = t.children('.dropdown-toggle');
 					if (!toggle.length) {
-						return;
+						e.preventDefault();
+						e.stopImmediatePropagation();
+						return false;
 					}
 
 					var anchor = $(e.target);
 					if (!anchor.is('a') || !/^javascript/i.test(anchor.attr('href'))) {
 						e.preventDefault();
-						e.stopPropagation();
+						e.stopImmediatePropagation();
 					}
 
 					var block = toggle.offsetParent('.dropdown-menu');

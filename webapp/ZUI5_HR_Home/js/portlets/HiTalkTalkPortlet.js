@@ -56,9 +56,9 @@ fill: function() {
 				if (!TableIn6.length) {
 					if (list.data('jsp')) {
 						list.find('.list-group-item').remove().end()
-							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
+							.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">게시글이 없습니다.</span>');
 					} else {
-						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">게시글이 없습니다.</a>');
+						list.html('<span class="list-group-item data-not-found">게시글이 없습니다.</span>');
 					}
 
 					this.spinner(false);
@@ -80,14 +80,14 @@ fill: function() {
 					o.Snotes = o.Snotes.replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/g, "");
 
 					return [
-						'<a href="javascript:;" class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
+						'<span class="list-group-item list-group-item-action"${url}>'.interpolate(this.itemUrl(o)),
 							'<div class="portlet-bbs-item">',
 								'<div class="portlet-bbs-title w-100">',
 									'<span class="portlet-bbs-title-text" title="${Snotes}">${Stitle}</span>'.interpolate(o.Snotes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), o.Stitle),
 								'</div>',
 								'<small class="portlet-bbs-date w-100">${date}</small>'.interpolate(date),
 							'</div>',
-						'</a>'
+						'</span>'
 					].join('');
 				}.bind(this)).join(''));
 

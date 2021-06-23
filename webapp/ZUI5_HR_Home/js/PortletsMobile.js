@@ -37,21 +37,31 @@ init: function() {
 	$(document)
 		.off('click', '.portlet-masonry [data-popup-menu-url]')
 		.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+
 			var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
 			if (popupMenuUrl) {
-				var paramMap = this._gateway.menuParam(popupMenuUrl, {
-					popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
-					mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
-				});
-				if (!this._gateway.isPRD()) {
-					paramMap.pernr = this._gateway.parameter('pernr') || sessionStorage.getItem('ehr.sf-user.name');
+				if (/^http/.test(popupMenuUrl)) {
+					this._gateway.openWindow({
+						url: popupMenuUrl,
+						name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, '')
+					});
+				} else {
+					var paramMap = this._gateway.menuParam(popupMenuUrl, {
+						popup: popupMenuUrl.replace(/([^?]*)\?.*/, '$1'),
+						mid: anchor.data('menuId') || this._gateway.mid(popupMenuUrl)
+					});
+					if (!this._gateway.isPRD()) {
+						paramMap.pernr = this._gateway.parameter('pernr') || sessionStorage.getItem('ehr.sf-user.name');
+					}
+					this._gateway.openWindow({ // openPopup openWindow
+						url: 'indexMobile.html?' + $.param(paramMap),
+						name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
+						width: screen.availWidth,
+						height: screen.availHeight
+					});
 				}
-				this._gateway.openWindow({ // openPopup openWindow
-					url: 'indexMobile.html?' + $.param(paramMap),
-					name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, ''),
-					width: screen.availWidth,
-					height: screen.availHeight
-				});
 			} else {
 				this._gateway.alert({
 					title: '오류', html: ['<p>', '</p>'].join('이동할 URL 정보가 없습니다.')

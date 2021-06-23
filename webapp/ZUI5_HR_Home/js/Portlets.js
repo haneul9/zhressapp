@@ -43,6 +43,9 @@ init: function() {
 	$(document)
 		.off('click', '.portlet-masonry [data-popup-menu-url]')
 		.on('click', '.portlet-masonry [data-popup-menu-url]', function(e) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+
 			var anchor = $(e.currentTarget), popupMenuUrl = anchor.data('popupMenuUrl');
 			if (popupMenuUrl) {
 				if (/^http/.test(popupMenuUrl)) {
@@ -59,7 +62,7 @@ init: function() {
 						params.pernr = this._gateway.parameter('pernr');
 					}
 					this._gateway.openWindow({ // openPopup openWindow
-						url: ('/index${}.html?'.interpolate(this._gateway.isMobile() ? 'Mobile' : '')) + $.param(params),
+						url: '/index.html?' + $.param(params),
 						name: popupMenuUrl.replace(/[^a-zA-Z0-9]/g, '')
 					});
 				}

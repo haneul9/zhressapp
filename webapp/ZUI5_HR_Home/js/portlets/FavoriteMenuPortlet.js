@@ -14,13 +14,6 @@ $.extend(FavoriteMenuPortlet.prototype, {
 
 ui: function() {
 
-	var anchor = '[data-key="${key}"].portlet a[data-menu-id]'.interpolate(this.key());
-	$(document)
-		.off('click', anchor)
-		.on('click', anchor, function(e) {
-			this._gateway.redirect(this._gateway.menuUrl($(e.currentTarget).data('menuId')));
-		}.bind(this));
-
 	var cardHeader = this.hideTitle() ? '' : [
 		'<div class="card-header">',
 			'<h6>${title}</h6>'.interpolate(this.title()),
@@ -43,9 +36,12 @@ ui: function() {
 onceBefore: function() {
 
 	setTimeout(function() {
-		$(document).on('click', '[data-key="${key}"].portlet a[data-menu-id]'.interpolate(this.key()), function(e) {
-			this._gateway.redirect(this._gateway.menuUrl($(e.currentTarget).data('menuId')));
-		}.bind(this));
+		var linkSpan = '.portlet-favorite-menu span[data-menu-id]';
+		$(document)
+			.off('click', linkSpan) // Home logo click시 다시 생성되므로 off 시켜줌
+			.on('click', linkSpan, function(e) {
+				this._gateway.redirect(this._gateway.menuUrl($(e.currentTarget).data('menuId')));
+			}.bind(this));
 	}.bind(this), 0);
 },
 fill: function() {
@@ -72,9 +68,9 @@ fill: function() {
 				if (!this.items.length) {
 					if (list.data('jsp')) {
 						list.find('.list-group-item').remove().end()
-							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
+							.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">즐겨찾는 메뉴가 없습니다.</span>');
 					} else {
-						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">즐겨찾는 메뉴가 없습니다.</a>');
+						list.html('<span class="list-group-item data-not-found">즐겨찾는 메뉴가 없습니다.</span>');
 					}
 
 					this.spinner(false);
@@ -92,9 +88,9 @@ fill: function() {
 
 				(jspPane || list).prepend($.map(this.items, function(o) {
 					return [
-						'<a href="#" class="list-group-item list-group-item-action"${data-url}>'.interpolate(this.itemUrl(o)),
+						'<span class="list-group-item list-group-item-action"${data-url}>'.interpolate(this.itemUrl(o)),
 							'<div title="${title}">'.interpolate(o.Mname), o.Mname, '</div>',
-						'</a>'
+						'</span>'
 					].join('');
 				}.bind(this)).join(''));
 
@@ -144,7 +140,7 @@ clearResource: function() {
 
 	return new Promise(function(resolve) {
 		setTimeout(function() {
-			$(document).off('click', '[data-key="${key}"].portlet a[data-menu-id]'.interpolate(this.key()));
+			$(document).off('click', '.portlet-favorite-menu span[data-menu-id]');
 			this.$().data('jsp').destroy();
 			resolve();
 		}.bind(this), 0);

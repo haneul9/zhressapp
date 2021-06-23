@@ -327,6 +327,7 @@ goToLink: function(menuId, url) {
 },
 
 handleUrl: function(e) {
+	e.preventDefault();
 	e.stopImmediatePropagation();
 
 	var anchor = $(e.currentTarget), url = anchor.data('url'), menuId = anchor.data('menuId') || this.menuUrlMap[url];
