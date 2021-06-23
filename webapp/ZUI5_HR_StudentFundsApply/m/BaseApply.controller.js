@@ -16,6 +16,7 @@
 		PAGEID: "BaseApply",
 		
 		ApplyModel: new JSONModelHelper(),
+		SEQ: "_01_",
 		
 		getUserId: function() {
 
@@ -41,7 +42,6 @@
 		onBeforeShow: function(oEvent) {
 			Common.log("onBeforeShow");
 			BusyIndicator.show(0);
-			this.SEQ = "_01_";
 			
             this.ApplyModel.setData({FormData: []});
             

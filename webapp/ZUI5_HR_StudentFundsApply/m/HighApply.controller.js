@@ -17,6 +17,7 @@
 		
         NationModel: new JSONModelHelper(),
 		HighApplyModel: new JSONModelHelper(),
+		SEQ: "_02_",
 		
 		getUserId: function() {
 
@@ -42,7 +43,6 @@
 		onBeforeShow: function(oEvent) {
 			Common.log("onBeforeShow");
 			BusyIndicator.show(0);
-			this.SEQ = "_02_";
             this.HighApplyModel.setData({FormData: []});
 
             if(oEvent.data){
