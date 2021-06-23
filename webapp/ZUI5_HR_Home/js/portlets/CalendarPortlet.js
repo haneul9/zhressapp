@@ -100,7 +100,7 @@ fill: function() {
 
 	return new Promise(function(resolve, reject) {
 		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-		
+
 		oModel.create("/MainContentsCalSet", {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
@@ -181,7 +181,7 @@ fill: function() {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.fill ' + url);
 
 				this.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});
@@ -223,12 +223,10 @@ retrieveDailyReport: function(dateText) {
 
 	var url = 'ZHR_COMMON_SRV/MainContentsCalSet',
 	loginInfo = this._gateway.loginInfo(),
-	calendarMap = this.calendarMap[dateText];
+	calendarMap = this.calendarMap[dateText] || {};
 
-	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-		
-		oModel.create("/MainContentsCalSet", {
+	return new Promise(function(resolve, reject) {
+		this._gateway.getModel("ZHR_COMMON_SRV").create("/MainContentsCalSet", {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -260,7 +258,7 @@ retrieveDailyReport: function(dateText) {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'CalendarPortlet.retrieveDailyReport ' + url);
 
 				this.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});
@@ -392,7 +390,7 @@ initPopover: function() {
 			return [
 				'<div class="popover-scroll">',
 					'<table>',
-						'<colgroup>', 
+						'<colgroup>',
 							'<col /><col /><col />',
 						'</colgroup>',
 						'<thead>',
