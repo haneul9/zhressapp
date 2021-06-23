@@ -4,9 +4,9 @@
 	"common/JSONModelHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"fragment/COMMON_ATTACH_FILES"
+	"../common/AttachFileAction"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, AttachFileAction) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "BaseApply"].join($.app.getDeviceSuffix());
@@ -345,7 +345,7 @@
             }
 
             // 첨부파일
-            if(FileHandler.getFileLength(oController, "001") === 0) {
+            if(AttachFileAction.getFileLength(oController) === 0) {
                 MessageBox.error(oController.getBundleText("MSG_38012"), { title: oController.getBundleText("LABEL_00149")});
                 return true;
             }
@@ -373,7 +373,7 @@
 				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
 
 					// 첨부파일 저장
-					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
+					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
 					
 					var sendObject = {};
 					// Header
@@ -384,7 +384,7 @@
                     sendObject.EducationfundApplyTableIn = [Common.copyByMetadata(oModel, "EducationfundApplyTableIn", oRowData)];
 					
 					oModel.create("/EducationfundApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_38002"), { title: oController.getBundleText("MSG_08107")});
 								BusyIndicator.hide();
@@ -428,7 +428,7 @@
 				if (fVal && fVal == oController.getBundleText("LABEL_38048")) { // 저장
 
 					// 첨부파일 저장
-					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
+					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
 
 					var sendObject = {};
 					// Header
@@ -439,7 +439,7 @@
                     sendObject.EducationfundApplyTableIn = [Common.copyByMetadata(oModel, "EducationfundApplyTableIn", oRowData)];
 					
 					oModel.create("/EducationfundApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_38004"), { title: oController.getBundleText("MSG_08107")});
 								BusyIndicator.hide();
@@ -486,7 +486,7 @@
                     sendObject.EducationfundApplyTableIn = [Common.copyByMetadata(oModel, "EducationfundApplyTableIn", oRowData)];
 					
 					oModel.create("/EducationfundApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_38006"), { title: oController.getBundleText("MSG_08107")});
 								BusyIndicator.hide();
@@ -514,15 +514,15 @@
         onBeforeOpenDetailDialog: function(oController) {
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
-			var vNo="1";
-            FileHandler.setAttachFile(oController, {
-                Appnm: vAppnm,
-                Required: true,
-                Mode: "M",
-                Max: "3",
-                Editable: (!vStatus || vStatus === "AA") ? true : false
-            },vNo);
-			FileHandler.resizingLabel.call(oController,vNo);
+
+			oController.SEQ = "_01_";
+			AttachFileAction.setAttachFile(oController, {
+				Appnm: vAppnm,
+				Required: true,
+				Mode: "M",
+				Max: "3",
+				Editable: (!vStatus || vStatus === "AA")
+			});
 		},
 
 		getLocalSessionModel: Common.isLOCAL() ? function() {

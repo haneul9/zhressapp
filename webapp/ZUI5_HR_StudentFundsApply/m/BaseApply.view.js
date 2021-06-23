@@ -650,7 +650,7 @@
 					new sap.m.HBox({
 						alignItems: sap.m.FlexAlignItems.Center,
                         items: [
-							FileHandler.renderer(oController,"001")
+							sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
                         ]
                     })
 				]

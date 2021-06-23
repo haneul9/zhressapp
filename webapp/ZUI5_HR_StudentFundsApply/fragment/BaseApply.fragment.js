@@ -570,7 +570,6 @@
 						width: "100%",
 						fitContainer: true,
 						items: [
-							// FileHandler.renderer(oController,"001")
 							sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 						]
 					})
