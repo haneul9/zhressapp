@@ -234,11 +234,11 @@ retrieveDailyReport: function(dateText) {
 			ILangu: loginInfo.Langu,
 			IMonth: this.yearMonth,
 			IDatum: Date.toODataString(dateText, true),
-			TableIn3: [], // 부서 휴가 인원 : 이름/직위명/휴가명/기간
-			TableIn4: [], // 부서 교육 인원 : 이름/직위명/기간
-			TableIn5: [], // 부서 출장 인원 : 이름/직위명/기간
-			TableIn6: [], // 부서 재택 인원 : 이름/직위명/기간
-			TableIn7: []  // 부서 생일 인원 : 이름/직위명/양음력 표기
+			TableIn3: [], // 부서 휴가 인원 : 성명/직위명/휴가명/기간
+			TableIn4: [], // 부서 교육 인원 : 성명/직위명/기간
+			TableIn5: [], // 부서 출장 인원 : 성명/직위명/기간
+			TableIn6: [], // 부서 재택 인원 : 성명/직위명/기간
+			TableIn7: []  // 부서 생일 인원 : 성명/직위명/양음력 표기
 		}, {
 			async: true,
 			success: function(result) {
@@ -364,7 +364,7 @@ initPopover: function() {
 							'<col /><col /><col /><col />',
 						'</colgroup>',
 						'<thead>',
-							'<tr><th>이름</th><th>직위</th><th>휴가명</th><th>기간</th></tr>',
+							'<tr><th>성명</th><th>직위</th><th>휴가명</th><th>기간</th></tr>',
 						'</thead>',
 						'<tbody>',
 							popoverBody,
@@ -396,7 +396,7 @@ initPopover: function() {
 							'<col /><col /><col />',
 						'</colgroup>',
 						'<thead>',
-							'<tr><th>이름</th><th>직위</th><th>기간</th></tr>',
+							'<tr><th>성명</th><th>직위</th><th>기간</th></tr>',
 						'</thead>',
 						'<tbody>',
 							popoverBody,
@@ -424,7 +424,7 @@ initPopover: function() {
 							'<col /><col /><col /><col />',
 						'</colgroup>',
 						'<thead>',
-							'<tr><th>일자</th><th>이름</th><th>직위</th><th>양음</th></tr>',
+							'<tr><th>일자</th><th>성명</th><th>직위</th><th>양음</th></tr>',
 						'</thead>',
 						'<tbody>',
 							popoverBody,
