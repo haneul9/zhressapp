@@ -1,9 +1,8 @@
 ﻿sap.ui.define([
 	"common/Common",
 	"common/PageHelper",
-	"../delegate/ViewTemplates",
-	"fragment/COMMON_ATTACH_FILES"
-], function (Common, PageHelper, ViewTemplates, FileHandler) {
+	"../delegate/ViewTemplates"
+], function (Common, PageHelper, ViewTemplates) {
 "use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "HighApply"].join($.app.getDeviceSuffix());

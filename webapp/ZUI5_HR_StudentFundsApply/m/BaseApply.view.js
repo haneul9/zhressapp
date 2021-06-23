@@ -2,9 +2,8 @@
 	"common/Common",
 	"common/PageHelper",
     "common/PickOnlyDatePicker",
-	"../delegate/ViewTemplates",
-	"fragment/COMMON_ATTACH_FILES"
-], function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates, FileHandler) {
+	"../delegate/ViewTemplates"
+], function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates) {
 "use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "BaseApply"].join($.app.getDeviceSuffix());
