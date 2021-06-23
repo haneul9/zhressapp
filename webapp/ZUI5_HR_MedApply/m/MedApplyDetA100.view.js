@@ -318,7 +318,7 @@ sap.ui.define(
                                 hAlign: "Begin",
                                 colSpan: 2,
                                 content: [
-                                    new sap.ui.core.HTML({ content: "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;padding-right:15px;' download>" + oController.getBundleText("LABEL_47143") + "</a>" })    // 치과(보철) 회사 양식
+                                    new sap.ui.core.HTML({ content: "<a target='_blank' href='ZUI5_HR_MedApply/manual/1. 보철_신청서 양식(롯데케미칼_첨단소재).xls' style='font-size:14px;color:#0070bd !important;padding-right:15px;' download>" + oController.getBundleText("LABEL_47143") + "</a>" })    // 첨단치과(보철) 회사 양식
                                 ]
                             })
                         ]
