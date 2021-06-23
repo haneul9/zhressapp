@@ -1,7 +1,7 @@
 ﻿sap.ui.define([
-	"../../common/Common",
-	"../../common/CommonController",
-	"../../common/JSONModelHelper"
+	"common/Common",
+	"common/CommonController",
+	"common/JSONModelHelper"
 	], 
 	function (Common, CommonController, JSONModelHelper) {
 	"use strict";

@@ -4,7 +4,7 @@
 	"common/JSONModelHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"../common/AttachFileAction"
+	"common/AttachFileAction"
 	], 
 	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, AttachFileAction) {
 	"use strict";
