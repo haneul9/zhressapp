@@ -75,11 +75,11 @@
 				mode: sap.m.ListMode.SingleSelectMaster,
 				itemPress: oController.onHighSelectedRow.bind(oController),
                 columns: [
-                    new sap.m.Column ({
+                    new sap.m.Column({
                         width: "50%",
                         hAlign: "Begin"
                     }),
-                    new sap.m.Column ({
+                    new sap.m.Column({
                         width: "50%",
                         hAlign: "Begin"
                     })
@@ -178,11 +178,11 @@
 				mode: sap.m.ListMode.SingleSelectMaster,
 				itemPress: oController.onSelectedRow.bind(oController),
                 columns: [
-                    new sap.m.Column ({
+                    new sap.m.Column({
                         width: "55%",
                         hAlign: "Begin"
                     }),
-                    new sap.m.Column ({
+                    new sap.m.Column({
                         width: "45%",
                         hAlign: "Begin"
                     })

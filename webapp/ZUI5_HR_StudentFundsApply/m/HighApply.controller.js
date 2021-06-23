@@ -558,10 +558,10 @@
 			var vBukrs = this.getUserGubun();
 			var oRowData = this.HighApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
-			oRowData.Endda = new Date(),
-			oRowData.Waers = "KRW",
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
+			oRowData.Endda = new Date();
+			oRowData.Waers = "KRW";
 			delete oRowData.Regno;
 
 			if(this.checkError(this)) return;
@@ -614,8 +614,8 @@
 			var vBukrs = this.getUserGubun();
 			var oRowData = this.HighApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
 			oRowData.Endda = new Date();
 			delete oRowData.Regno;
 

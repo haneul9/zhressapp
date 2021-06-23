@@ -1148,7 +1148,7 @@ sap.ui.define([
 				}
 	
 				// 첨부파일
-				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0) {
+				if(FileHandler.getFileLength(oController, "001") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_38012"), { title: oController.getBundleText("LABEL_00149")});
 					return true;
 				}
@@ -1198,7 +1198,7 @@ sap.ui.define([
 				}
 
 				// 첨부파일
-				if(fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0) {
+				if(FileHandler.getFileLength(oController, "002") === 0) {
 					MessageBox.error(oController.getBundleText("MSG_38012"), { title: oController.getBundleText("LABEL_00149")});
 					return true;
 				}
@@ -1258,10 +1258,10 @@ sap.ui.define([
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.ApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
-			oRowData.Endda = new Date(),
-			oRowData.Waers = "KRW",
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
+			oRowData.Endda = new Date();
+			oRowData.Waers = "KRW";
 			delete oRowData.Regno;
 
 			if(oController.checkError()) return;
@@ -1271,7 +1271,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["001"]);
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
 					
 					var sendObject = {};
 					// Header
@@ -1315,8 +1315,8 @@ sap.ui.define([
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.ApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
 			oRowData.Endda = new Date();
 			delete oRowData.Regno;
 
@@ -1327,7 +1327,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38048")) { // 저장
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["001"]);
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
 
 					var sendObject = {};
 					// Header
@@ -1473,10 +1473,10 @@ sap.ui.define([
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.HighApplyModel.getProperty("/FormData");
 			
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
-			oRowData.Endda = new Date(),
-			oRowData.Waers = "KRW",
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
+			oRowData.Endda = new Date();
+			oRowData.Waers = "KRW";
 
 			delete oRowData.Regno;
 
@@ -1487,7 +1487,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38044")) { // 신청
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["002"]);
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["002"]);
 					if(!oRowData.Appnm) return false;
 
 					var sendObject = {};
@@ -1532,8 +1532,8 @@ sap.ui.define([
 			var vBukrs = oController.getUserGubun();
 			var oRowData = oController.HighApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
 			oRowData.Endda = new Date();
 
 			delete oRowData.Regno;
@@ -1545,7 +1545,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_38048")) { // 저장
 
 					// 첨부파일 저장
-					oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFile.call(oController, "002");
+					oRowData.Appnm = FileHandler.uploadFile.call(oController, "002");
 					if(!oRowData.Appnm) return false;
 
 					var sendObject = {};
@@ -1641,7 +1641,7 @@ sap.ui.define([
 				vStatus = oController.ApplyModel.getProperty("/FormData/Status");
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 				
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
+				FileHandler.setAttachFile(oController, {
 					Appnm: vAppnm,
 					Required: true,
 					Mode: "M",
@@ -1653,7 +1653,7 @@ sap.ui.define([
 				vStatus = oController.HighApplyModel.getProperty("/FormData/Status");
 				vAppnm = oController.HighApplyModel.getProperty("/FormData/Appnm") || "";
 				
-				fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
+				FileHandler.setAttachFile(oController, {
 					Appnm: vAppnm,
 					Required: true,
 					Mode: "M",

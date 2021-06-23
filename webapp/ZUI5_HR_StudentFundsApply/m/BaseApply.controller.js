@@ -115,7 +115,7 @@
 			sendObject.NavCommonCodeList = [];
 			//학교구분
 			oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.NavCommonCodeList) {
 						Common.log(oData);
                         oController.ApplyModel.setProperty("/SchoolCombo", oData.NavCommonCodeList.results);
@@ -140,7 +140,7 @@
             sendObject.NavCommonCodeList = [];
             // 학년
             oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-                success: function(oData, oResponse) {
+                success: function(oData) {
                     if (oData && oData.NavCommonCodeList) {
                         Common.log(oData);
                         oController.ApplyModel.setProperty("/GradeCombo", oData.NavCommonCodeList.results);
@@ -164,7 +164,7 @@
             sendObject.NavCommonCodeList = [];
             // 구분
             oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-                success: function(oData, oResponse) {
+                success: function(oData) {
                     if (oData && oData.NavCommonCodeList) {
                         Common.log(oData);
                         oController.ApplyModel.setProperty("/GubunCombo", oData.NavCommonCodeList.results);
@@ -189,7 +189,7 @@
             sendObject.NavCommonCodeList = [];
             // 등록학기/분기
             oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-                success: function(oData, oResponse) {
+                success: function(oData) {
                     if (oData && oData.NavCommonCodeList) {
                         Common.log(oData);
                         oController.ApplyModel.setProperty("/SemesterCombo", oData.NavCommonCodeList.results);
@@ -360,10 +360,10 @@
 			var vBukrs = this.getUserGubun();
 			var oRowData = this.ApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
-			oRowData.Endda = new Date(),
-			oRowData.Waers = "KRW",
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
+			oRowData.Endda = new Date();
+			oRowData.Waers = "KRW";
 			delete oRowData.Regno;
 
 			if(this.checkError(this)) return;
@@ -416,8 +416,8 @@
 			var vBukrs = this.getUserGubun();
 			var oRowData = this.ApplyModel.getProperty("/FormData");
 
-			oRowData.Pernr = vPernr,
-			oRowData.Begda = new Date(),
+			oRowData.Pernr = vPernr;
+			oRowData.Begda = new Date();
 			oRowData.Endda = new Date();
 			delete oRowData.Regno;
 
