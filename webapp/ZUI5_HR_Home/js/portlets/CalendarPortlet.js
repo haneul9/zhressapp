@@ -350,7 +350,7 @@ initPopover: function() {
 		.on('click', function() {
 			portlet.popoverToggle.call(this, portlet);
 		})
-		.on('inserted.bs.popover', this.popoverInserted.bind(this))
+		.on('show.bs.popover', this.popoverShow.bind(this))
 		.on('hidden.bs.popover', this.popoverHidden.bind(this))
 		.popover(this.popoverOptions(template, function() {
 			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
@@ -382,7 +382,7 @@ initPopover: function() {
 		.on('click', function() {
 			portlet.popoverToggle.call(this, portlet);
 		})
-		.on('inserted.bs.popover', this.popoverInserted.bind(this))
+		.on('show.bs.popover', this.popoverShow.bind(this))
 		.on('hidden.bs.popover', this.popoverHidden.bind(this))
 		.popover(this.popoverOptions(template, function() {
 			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
@@ -410,7 +410,7 @@ initPopover: function() {
 		.on('click', function() {
 			portlet.popoverToggle.call(this, portlet);
 		})
-		.on('inserted.bs.popover', this.popoverInserted.bind(this))
+		.on('show.bs.popover', this.popoverShow.bind(this))
 		.on('hidden.bs.popover', this.popoverHidden.bind(this))
 		.popover(this.popoverOptions(template, function() {
 			var popoverBody = portlet.popoverBody(portlet.selectedDate, $(this).data('type'));
@@ -448,7 +448,7 @@ popoverToggle: function(portlet) {
 		}
 	}
 },
-popoverInserted: function() {
+popoverShow: function() {
 
 	setTimeout(function() {
 		this.$(true).jScrollPane({
