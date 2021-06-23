@@ -515,6 +515,8 @@
 				title: "{i18n>LABEL_38001}",    // 학자금 신청
 				contentWidth: "1280px",
 				contentHeight: "640px",
+				beforeOpen: oController.onBeforeBaseDialog.bind(oController),
+				afterOpen: oController.onAfterBaseDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogApplyBtn.bind(oController),
@@ -563,7 +565,7 @@
                     })
                     .addStyleClass("sub-title mt-20px"),
                     oSupportTable,
-					new sap.m.HBox({
+					new sap.m.HBox(oController.PAGEID + "_BeseFileBox", {
 						width: "100%",
 						fitContainer: true,
 						items: [
