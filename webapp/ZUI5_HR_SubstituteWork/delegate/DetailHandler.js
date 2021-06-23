@@ -4,6 +4,7 @@ sap.ui.define(
         "common/Common", //
         "common/DialogHandler",
         "common/OrgOfIndividualHandler",
+        "common/ApprovalLinesHandler",
         "./SubstituteWork",
         "./ODataService",
         "sap/m/MessageBox",
@@ -11,7 +12,7 @@ sap.ui.define(
         "sap/ui/core/BusyIndicator",
         "sap/ui/model/json/JSONModel"
     ],
-    function (Common, DialogHandler, OrgOfIndividualHandler, SubstituteWork, ODataService, MessageBox, MessageToast, BusyIndicator, JSONModel) {
+    function (Common, DialogHandler, OrgOfIndividualHandler, ApprovalLinesHandler, SubstituteWork, ODataService, MessageBox, MessageToast, BusyIndicator, JSONModel) {
         "use strict";
 
         var Handler = {
@@ -203,15 +204,22 @@ sap.ui.define(
                 
                 switch (conType) {
                     case SubstituteWork.ProcessType.APPROVAL_REQUEST:
-                        // 변경신청내역 탭 refresh 및 이동
-                        this.oController.changeTab(SubstituteWork.Tab.APPROVAL);
-
-                        this.oController.oDetailDialog.close();
-
-                        // s모인 결재창을 띄운다.
-                        if(data.EAppurl) {
-                            Common.openPopup.call(this.oController, data.EAppurl);
+                        if(!Common.isExternalIP()) {     // 내부망 체크
+                            if(!Common.openPopup.call(oController, data.EAppurl)) {  // 팝업차단 시 이후 여기서 메시지 출력 후 Stop
+                                BusyIndicator.hide();
+                                return;
+                            }
                         }
+
+                        MessageBox.success(this.oController.getBundleText("MSG_00061"), {   // 신청되었습니다.
+                            title: this.oController.getBundleText("LABEL_00149"),
+                            onClose: function () {
+                                // 변경신청내역 탭 refresh 및 이동
+                                this.oController.changeTab(SubstituteWork.Tab.APPROVAL);
+
+                                this.oController.oDetailDialog.close(); 
+                            }.bind(this)
+                        });
 
                         break;
                     case SubstituteWork.ProcessType.APPROVAL_CANCEL:
@@ -337,6 +345,28 @@ sap.ui.define(
              * 신청 버튼 event
              */
             pressApprovalBtn: function() {
+                if(Common.isExternalIP()) {   // 외부망 여부 체크하여 분기
+                    setTimeout(function() {
+                        var initData = {
+                            Mode: "P",                                                // PC – P, Mobile - M
+                            Pernr: this.oController.getSessionInfoByKey("Pernr"),       // 각 업무에 맞게 작성
+                            Empid: this.oController.getSessionInfoByKey("Pernr"),       // 각 업무에 맞게 작성
+                            Bukrs: this.oController.getSessionInfoByKey("Bukrs3"),       // 각 업무에 맞게 작성
+                            ZappSeq: "42"                                             // 신청서 번호 (담당 ABAP 확인)
+                        },
+                        callback = function(o) {
+                            this.onRequest.call(this, o);   // 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+                        }.bind(this);
+            
+                        this.oController.ApprovalLinesHandler = ApprovalLinesHandler.get(this.oController, initData, callback);
+                        DialogHandler.open(this.oController.ApprovalLinesHandler);
+                    }.bind(this), 0);
+                } else {
+                    this.onRequest.call(this, null); // 내부망일 경우 바로 신청 Function 호출
+                }
+            },
+
+            onRequest: function(vAprdatas) {
                 var oModel = $.app.getModel("ZHR_WORKSCHEDULE_SRV");
                 var oInputData = this.oModel.getProperty("/List");
                 var vExtryn = Common.isExternalIP() === true ? "X" : "";
@@ -358,6 +388,7 @@ sap.ui.define(
                             Endda: moment(elem.Endda).hours(10).toDate()
                         });
                     });
+                    payload.AlterWorkApplyAppr = vAprdatas || [];
 
                     ODataService.AlterWorkApplyHeaderSetByProcess.call(
                         this.oController, 

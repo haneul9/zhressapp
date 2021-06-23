@@ -10,8 +10,9 @@ sap.ui.define([
     "common/SearchOrg",
     "common/SearchUser1",
     "common/OrgOfIndividualHandler",
-    "common/DialogHandler"], 
-	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler) {
+    "common/DialogHandler",
+	"common/ApprovalLinesHandler"], 
+	function (Common, CommonController, JSONModelHelper, PageHelper, AttachFileAction, SearchOrg, SearchUser1, OrgOfIndividualHandler, DialogHandler, ApprovalLinesHandler) {
 	"use strict";
 
 	return CommonController.extend("ZUI5_HR_Workhome.Detail", {
@@ -21,6 +22,12 @@ sap.ui.define([
 		_DetailJSonModel : new sap.ui.model.json.JSONModel(),
 		oData : null,
 		oExtryn : "",
+
+		EmployeeSearchCallOwner: null,
+
+		getApprovalLinesHandler: function() {
+			return this.ApprovalLinesHandler;
+		},
 
 		onInit: function () {
 			this.setupView()
@@ -53,18 +60,18 @@ sap.ui.define([
 			if(oEvent.data.Status != ""){
 				oData.Data.Zdate1 = oEvent.data.Begda;
 				
-				oData.Data = Object.assign(oData.Data, oEvent.data);
+				oData.Data = $.extend(true, oData.Data, oEvent.data);
 			}
 			
 			oController._DetailJSonModel.setData(oData);
 			oController.onPressSearch(oEvent);
 		},
 		
-		onAfterShow: function(oEvent){
+		onAfterShow: function(){
 			
 		},
 		
-		onBack : function(oEvent){
+		onBack : function(){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
 			var oController = oView.getController();
 		
@@ -77,9 +84,9 @@ sap.ui.define([
 			});
 		},
 		
-		SmartSizing : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
-			var oController = oView.getController();
+		SmartSizing : function(){
+			// var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
+			// var oController = oView.getController();
 		
 		},
 		
@@ -175,13 +182,13 @@ sap.ui.define([
 				createData.ILangu = oController.getSessionInfoByKey("Langu");
 				
 			oModel.create("/HeaderSet", createData, {
-				success: function(data, res){
+				success: function(data){
 					if(data){
 						if(data.TableIn && data.TableIn.results){
 								var data1 = data.TableIn.results[0];
 								
 								if(data1){
-									Object.assign(vData, data1);
+									$.extend(true, vData, data1);
 								} else {
 									sap.m.MessageBox.error(oController.getBundleText("MSG_48015"), { // 데이터 조회 중 오류가 발생하였습니다.
 										onClose : oController.onBack
@@ -222,72 +229,73 @@ sap.ui.define([
 			}
 
 			// 2021-05-13 결재자 리스트 생성 : Defyn == "X"인 경우 default 결재자로 세팅한다. 
-			var oRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
-			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
-				oAppName.destroyItems();
-				oAppName.setValue("");
+			// 2021-06-16 공통 결재선 로직 추가
+			// var oRow = sap.ui.getCore().byId(oController.PAGEID + "_AppNameRow");
+			// var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+			// 	oAppName.destroyItems();
+			// 	oAppName.setValue("");
 			
-			var oModel2 = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
-			var createData2 = {ApprlistNav : []};
-				createData2.IPernr = Pernr;
-				createData2.IExtryn = oController.oExtryn;
-				createData2.IZappSeq = "39";
-				createData2.IBukrs = vData.Bukrs2;
-				createData2.IMobyn = "";
-				createData2.IAppkey = "";
-				createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
-				createData2.IPrcty = "1";
+			// var oModel2 = $.app.getModel("ZHR_BATCHAPPROVAL_SRV");
+			// var createData2 = {ApprlistNav : []};
+			// 	createData2.IPernr = Pernr;
+			// 	createData2.IExtryn = oController.oExtryn;
+			// 	createData2.IZappSeq = "39";
+			// 	createData2.IBukrs = vData.Bukrs2;
+			// 	createData2.IMobyn = "";
+			// 	createData2.IAppkey = "";
+			// 	createData2.IDatum = "\/Date(" + common.Common.getTime(new Date()) + ")\/"; 
+			// 	createData2.IPrcty = "1";
 
-			oModel2.create("/ApprListSet", createData2, {
-				success: function(data, res){
-					if(data){
-						if(data.ApprlistNav && data.ApprlistNav.results){
-								var data1 = data.ApprlistNav.results;
+			// oModel2.create("/ApprListSet", createData2, {
+			// 	success: function(data, res){
+			// 		if(data){
+			// 			if(data.ApprlistNav && data.ApprlistNav.results){
+			// 					var data1 = data.ApprlistNav.results;
 								
-								if(data1){
-									for(var i=0; i<data1.length; i++){
-										oAppName.addItem(
-											new sap.ui.core.Item({
-												key : data1[i].AppName,
-												text : data1[i].AppText
-											})
-										);
+			// 					if(data1){
+			// 						for(var i=0; i<data1.length; i++){
+			// 							oAppName.addItem(
+			// 								new sap.ui.core.Item({
+			// 									key : data1[i].AppName,
+			// 									text : data1[i].AppText
+			// 								})
+			// 							);
 
-										if(data1[i].Defyn == "X"){
-											oController._DetailJSonModel.setProperty("/Data/AppName", data1[i].AppName);
-										}
-									}
-								}
-							}
-					}
-				},
-				error: function (oError) {
-			    	var Err = {};
-			    	oController.Error = "E";
+			// 							if(data1[i].Defyn == "X"){
+			// 								oController._DetailJSonModel.setProperty("/Data/AppName", data1[i].AppName);
+			// 							}
+			// 						}
+			// 					}
+			// 				}
+			// 		}
+			// 	},
+			// 	error: function (oError) {
+			//     	var Err = {};
+			//     	oController.Error = "E";
 							
-					if (oError.response) {
-						Err = window.JSON.parse(oError.response.body);
-						var msg1 = Err.error.innererror.errordetails;
-						if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
-						else oController.ErrorMessage = Err.error.message.value;
-					} else {
-						oController.ErrorMessage = oError.toString();
-					}
-				}
-			});
+			// 		if (oError.response) {
+			// 			Err = window.JSON.parse(oError.response.body);
+			// 			var msg1 = Err.error.innererror.errordetails;
+			// 			if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+			// 			else oController.ErrorMessage = Err.error.message.value;
+			// 		} else {
+			// 			oController.ErrorMessage = oError.toString();
+			// 		}
+			// 	}
+			// });
 
-			if(oController.Error == "E"){
-				oController.Error = "";
-				sap.m.MessageBox.error(oController.ErrorMessage);
-			}
+			// if(oController.Error == "E"){
+			// 	oController.Error = "";
+			// 	sap.m.MessageBox.error(oController.ErrorMessage);
+			// }
 
-			// 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
-			if(oAppName.getItems().length == 0){
-				oController._DetailJSonModel.setProperty("/Data/AppName", "");
-				oRow.addStyleClass("displayNone");
-			} else {
-				oRow.removeStyleClass("displayNone");
-			}	
+			// // 리스트가 존재하지 않으면 결재자 row를 invisible 처리한다.
+			// if(oAppName.getItems().length == 0){
+			// 	oController._DetailJSonModel.setProperty("/Data/AppName", "");
+			// 	oRow.addStyleClass("displayNone");
+			// } else {
+			// 	oRow.removeStyleClass("displayNone");
+			// }	
 		},
 		
 		// 대상자 변경 시 pernr
@@ -320,7 +328,7 @@ sap.ui.define([
 				}
 				
 				oController._BusyDialog.close();
-			}
+			};
 			
 			oController._BusyDialog.open();
 			setTimeout(search, 100);
@@ -331,21 +339,77 @@ sap.ui.define([
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
 			var oController = oView.getController();
 			
-			eval("oController._DetailJSonModel.setProperty('/Data/Zdate" + Flag + "', '');");
+			oController._DetailJSonModel.setProperty("/Data/Zdate" + Flag, "");
+		},
+
+		onRequest : function(oEvent, Flag){
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
+			var oController = oView.getController();
+		
+			var oData = oController._DetailJSonModel.getProperty("/Data"),
+				validationData = [];
+			
+			// validation check
+			for(var i=1; i<=5; i++){
+				var date = oData["Zdate" + i];
+				if(date && date != ""){
+					var detail = {};
+						detail.Begda = "\/Date(" + common.Common.getTime(new Date(date)) + ")\/";
+
+					if(validationData.length > 0){
+						for(var j=0; j<validationData.length; j++){
+							if(validationData[j].Begda == detail.Begda){
+								sap.m.MessageBox.error(oController.getBundleText("MSG_53012")); // 동일일자 신청은 불가합니다.
+								return;
+							}
+						}
+					}
+					
+					validationData.push(detail);
+				}
+			}
+			
+			if(validationData.length == 0){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_53006")); // 재택근무일을 하나 이상 입력하여 주십시오.
+				return;
+			} else if(!oData.Telnum || oData.Telnum.trim() == ""){
+				sap.m.MessageBox.error(oController.getBundleText("MSG_53007")); // 연락처를 입력하여 주십시오.
+				return;
+			}
+
+			if(Common.isExternalIP()) {   // 외부망 여부 체크하여 분기
+				setTimeout(function() {
+					var initData = {
+						Mode: "P", // PC – P, Mobile - M
+						Pernr: oData.Pernr,
+						Empid: oController.getSessionInfoByKey("Pernr"),
+						Bukrs: oData.Bukrs,
+						ZappSeq: "39"
+					},
+					callback = function(o) {
+						oController.onPressSave.call(oController, Flag, o);   // 결재선 Dialog에서 신청 버튼 클릭시 호출 되는 Function
+					};
+		
+					oController.ApprovalLinesHandler = ApprovalLinesHandler.get(oController, initData, callback);
+					DialogHandler.open(oController.ApprovalLinesHandler);
+				}, 0);
+			} else {
+				oController.onPressSave.call(oController, Flag, []); // 내부망일 경우 바로 신청 Function 호출
+			}
 		},
 		
 		// 신청 (Flag : C 신청, D 삭제)
-		onPressSave : function(oEvent, Flag){
+		onPressSave : function(Flag, vAprdatas){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
 			var oController = oView.getController();
 		
 			var oData = oController._DetailJSonModel.getProperty("/Data");
 			
-			var createData = {WorkhomeNav : []};
+			var createData = {WorkhomeNav : [], WorkhomeTabNav : (vAprdatas ? vAprdatas : [])};
 			
 			// validation check
 			for(var i=1; i<=5; i++){
-				var date = eval("oData.Zdate" + i);
+				var date = oData["Zdate" + i];
 				if(date && date != ""){
 					var detail = {};
 						detail.Pernr = oData.Pernr;
@@ -380,14 +444,15 @@ sap.ui.define([
 			}
 
 			// 2021-05-11 결재자 리스트가 있는 경우 결재자 선택 여부 체크
-			var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
-			if(oAppName.getItems().length != 0){
-				if(!oData.AppName){
-					sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
-					return;
-				}
-			}
+			// var oAppName = sap.ui.getCore().byId(oController.PAGEID + "_AppName");
+			// if(oAppName.getItems().length != 0){
+			// 	if(!oData.AppName){
+			// 		sap.m.MessageBox.error(oController.getBundleText("MSG_48026")); // 결재자를 선택하여 주십시오.
+			// 		return;
+			// 	}
+			// }
 			
+			var confirmMessage = "", successMessage = "";
 			var onProcess = function(){
 				var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
 
@@ -399,7 +464,7 @@ sap.ui.define([
 					createData.IExtryn = oController.oExtryn;
 					
 				oModel.create("/WorkhomeApplySet", createData, {
-					success: function(data, res){
+					success: function(data){
 						if(data){
 							// 2021-05-04 리턴된 결재키 세팅
 							if(data.WorkhomeNav.results && data.WorkhomeNav.results.length){
@@ -456,7 +521,6 @@ sap.ui.define([
 				}
 			};
 			
-			var confirmMessage = "", successMessage = "";
 			if(Flag == "C"){
 				confirmMessage = oController.getBundleText("MSG_00060"); // 신청하시겠습니까?
 				successMessage = oController.getBundleText("MSG_00061"); // 신청되었습니다.
@@ -537,6 +601,15 @@ sap.ui.define([
          * @brief 공통-사원검색 > 조직검색 팝업 호출 event handler
          */
 		displayMultiOrgSearchDialog: function (oEvent) {
+			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
+			var oController = oView.getController();
+
+			return !$.app.getController().EmployeeSearchCallOwner 
+					? oController.openOrgSearchDialog(oEvent)
+					: $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);			
+		},
+
+		openOrgSearchDialog : function(oEvent){
 			var oController = $.app.getController();
 
 			SearchOrg.oController = oController;
@@ -553,6 +626,12 @@ sap.ui.define([
 		},
 
 		onESSelectPerson : function(data){
+			return this.EmployeeSearchCallOwner 
+					? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+					: this.onSelectPerson(data);
+		},
+
+		onSelectPerson : function(data){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_Workhome.Detail");
 			var oController = oView.getController();
 

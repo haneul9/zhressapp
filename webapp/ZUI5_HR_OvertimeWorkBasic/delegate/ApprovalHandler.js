@@ -5,6 +5,7 @@ sap.ui.define(
         "common/Common", //
         "common/DialogHandler",
         "common/OrgOfIndividualHandler",
+        "common/ApprovalLinesHandler",
         "./OvertimeWork",
         "./ODataService",
         "common/PickOnlyDatePicker",
@@ -13,7 +14,7 @@ sap.ui.define(
         "sap/ui/core/BusyIndicator",
         "sap/ui/model/json/JSONModel"
     ],
-    function (Common, DialogHandler, OrgOfIndividualHandler, OvertimeWork, ODataService, PickOnlyDatePicker, MessageBox, MessageToast, BusyIndicator, JSONModel) {
+    function (Common, DialogHandler, OrgOfIndividualHandler, ApprovalLinesHandler, OvertimeWork, ODataService, PickOnlyDatePicker, MessageBox, MessageToast, BusyIndicator, JSONModel) {
         "use strict";
 
         var Handler = {
@@ -251,8 +252,11 @@ sap.ui.define(
                             );
                         } else {
                             // s모인 결재창을 띄운다.
-                            if(data.EAppurl) {
-                                Common.openPopup.call(this.oController, data.EAppurl);
+                            if(!Common.isExternalIP()) {
+                                if(!Common.openPopup.call(this.oController, data.EAppurl)) {
+                                    BusyIndicator.hide();
+                                    return;
+                                }
                             }
 
                             // 목록 조회
@@ -371,9 +375,30 @@ sap.ui.define(
              * 신청 버튼 event
              */
             pressApprovalBtn: function() {
+                if(Common.isExternalIP()) {
+                    setTimeout(function() {
+                        var initData = {
+                            Mode: "P",
+                            Pernr: this.oController.getSessionInfoByKey("Pernr"),
+                            Empid: this.oController.getSessionInfoByKey("Pernr"),
+                            Bukrs: this.oController.getSessionInfoByKey("Bukrs3"),
+                            ZappSeq: "27"
+                        },
+                        callback = function(o) {
+                            this.onRequest.call(this, o);
+                        }.bind(this);
+            
+                        this.oController.ApprovalLinesHandler = ApprovalLinesHandler.get(this.oController, initData, callback);
+                        DialogHandler.open(this.oController.ApprovalLinesHandler);
+                    }.bind(this), 0);
+                } else {
+                    this.onRequest.call(this, null);
+                }
+            },
+
+            onRequest: function(vAprdatas) {
                 var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
                 var oInputData = this.oModel.getProperty("/List");
-				var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
                 if (!this.DetailProcessValidation.call(this, oInputData)) return;
 
@@ -383,7 +408,6 @@ sap.ui.define(
                     BusyIndicator.show(0);
 
                     var payload = {};
-                    payload.Extryn = vExtryn;
                     payload.OvertimeApply = oInputData.map(function (elem) {
                         return Common.copyByMetadata(oModel, "OvertimeApply", $.extend(true, elem, {
                             Subty: elem.Awart,
@@ -392,6 +416,7 @@ sap.ui.define(
                             Comment: null
                         }));
                     });
+                    payload.OvertimeApplyTab = vAprdatas || [];
 
                     ODataService.OvertimeApplySetByProcess.call(
                         this.oController, 
@@ -402,7 +427,9 @@ sap.ui.define(
                     );
                 };
 
-                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_00060") : this.oController.getBundleText("MSG_31010");
+                var confirmMessage = Common.isExternalIP() 
+                    ? this.oController.getBundleText("MSG_00060")   // 신청하시겠습니까?
+                    : this.oController.getBundleText("MSG_31010");  // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
 
                 MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?

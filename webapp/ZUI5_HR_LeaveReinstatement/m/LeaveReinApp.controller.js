@@ -5,9 +5,11 @@
         "common/JSONModelHelper",
         "common/AttachFileAction",
         "sap/m/MessageBox",
-        "sap/ui/core/BusyIndicator"
+        "sap/ui/core/BusyIndicator",
+        "common/ApprovalLinesHandler",
+        "common/DialogHandler"
     ],
-    function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator) {
+    function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ApprovalLinesHandler, DialogHandler) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "LeaveReinApp"].join($.app.getDeviceSuffix());
@@ -527,14 +529,38 @@
                 return false;
             },
 
-            onDialogApplyBtn: function () {
+            pressApprovalBtn: function () { // 신청
+                var oController =  this;
+
+                if (oController.checkError("X")) return;
+
+				if (Common.isExternalIP()) {
+					setTimeout(function () {
+						var initData = {
+								Mode: "M",
+								Pernr: oController.getSessionInfoByKey("Pernr"),
+								Empid: oController.getSessionInfoByKey("Pernr"),
+								Bukrs: oController.getSessionInfoByKey("Bukrs3"),
+								ZappSeq: "45"
+							},
+							callback = function (o) {
+								oController.onDialogApplyBtn.call(oController, o);
+							};
+
+						oController.ApprovalLinesHandler = ApprovalLinesHandler.get(oController, initData, callback);
+						DialogHandler.open(oController.ApprovalLinesHandler);
+					}, 0);
+				} else {
+					oController.onDialogApplyBtn.call(oController, null);
+				}
+			},
+
+            onDialogApplyBtn: function (vAprdatas) {
                 // 신청
-                var oController = this;
+                var oController = this.getView().getController();
                 var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
                 var vPernr = oController.getUserId();
                 var oRowData = oController.ApplyModel.getProperty("/FormData");
-
-                if (oController.checkError("X")) return;
 
                 BusyIndicator.show(0);
                 var onPressApply = function (fVal) {
@@ -558,6 +584,7 @@
                         // Navigation property
                         sendObject.Export = [];
                         sendObject.TableIn1 = [Common.copyByMetadata(oModel, "LeaveRequestTableIn1", oRowData)];
+                        sendObject.TableIn4 = vAprdatas || [];
 
                         oModel.create("/LeaveRequestSet", sendObject, {
                             success: function (oData) {
@@ -683,6 +710,23 @@
                     actions: [oController.getBundleText("LABEL_42032"), oController.getBundleText("LABEL_00119")],
                     onClose: onPressDelete
                 });
+            },
+
+            getApprovalLinesHandler: function() {
+
+                return this.ApprovalLinesHandler;
+            },
+
+            onESSelectPerson: function(data) {
+                return this.EmployeeSearchCallOwner 
+                        ? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+                        : null;
+            },
+
+            displayMultiOrgSearchDialog: function(oEvent) {
+                return !$.app.getController().EmployeeSearchCallOwner 
+                        ? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
+                        : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
             },
 
             onBeforeOpenDetailDialog: function () {

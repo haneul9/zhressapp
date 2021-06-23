@@ -4,11 +4,12 @@
         "common/CommonController",
         "common/AttachFileAction",
         "common/JSONModelHelper",
-        "common/PageHelper",
         "sap/m/MessageBox",
-        "sap/ui/core/BusyIndicator"
+        "sap/ui/core/BusyIndicator",
+        "common/ApprovalLinesHandler",
+        "common/DialogHandler"
     ],
-    function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, MessageBox, BusyIndicator) {
+    function (Common, CommonController, AttachFileAction, JSONModelHelper, MessageBox, BusyIndicator, ApprovalLinesHandler, DialogHandler) {
         "use strict";
 
         return CommonController.extend($.app.APP_ID, {
@@ -31,13 +32,7 @@
             onInit: function () {
                 this.setupView().getView().addEventDelegate(
                     {
-                        onBeforeShow: this.onBeforeShow
-                    },
-                    this
-                );
-
-                this.getView().addEventDelegate(
-                    {
+                        onBeforeShow: this.onBeforeShow,
                         onAfterShow: this.onAfterShow
                     },
                     this
@@ -72,8 +67,8 @@
                 sendObject.IPernr = vPernr;
                 sendObject.IEmpid = vPernr;
                 sendObject.IDatum = new Date();
-                sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate(),
-                sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate(),
+                sendObject.IBegda = moment(oSearchDate.getDateValue()).hours(10).toDate();
+                sendObject.IEndda = moment(oSearchDate.getSecondDateValue()).hours(10).toDate();
                 sendObject.IConType = "1";
                 // Navigation property
                 sendObject.Export = [];
@@ -724,14 +719,38 @@
                 });
             },
 
-            onDialogApplyBtn: function () {
+            pressApprovalBtn: function () { // 신청
+                var oController =  $.app.getController();
+
+                if (oController.checkError("X")) return;
+                
+				if (Common.isExternalIP()) {
+					setTimeout(function () {
+						var initData = {
+								Mode: "P",
+								Pernr: oController.getSessionInfoByKey("Pernr"),
+								Empid: oController.getSessionInfoByKey("Pernr"),
+								Bukrs: oController.getSessionInfoByKey("Bukrs3"),
+								ZappSeq: "45"
+							},
+							callback = function (o) {
+								oController.onDialogApplyBtn.call(oController, o);
+							};
+
+						oController.ApprovalLinesHandler = ApprovalLinesHandler.get(oController, initData, callback);
+						DialogHandler.open(oController.ApprovalLinesHandler);
+					}, 0);
+				} else {
+					oController.onDialogApplyBtn.call(oController, null);
+				}
+			},
+
+            onDialogApplyBtn: function (vAprdatas) {
                 // 신청
                 var oController = $.app.getController();
                 var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
                 var vPernr = oController.getUserId();
                 var oRowData = oController.ApplyModel.getProperty("/FormData");
-
-                if (oController.checkError("X")) return;
 
                 BusyIndicator.show(0);
                 var onPressApply = function (fVal) {
@@ -755,6 +774,7 @@
                         // Navigation property
                         sendObject.Export = [];
                         sendObject.TableIn1 = [Common.copyByMetadata(oModel, "LeaveRequestTableIn1", oRowData)];
+                        sendObject.TableIn4 = vAprdatas || [];
 
                         oModel.create("/LeaveRequestSet", sendObject, {
                             success: function (oData) {
@@ -762,8 +782,14 @@
                                 oController.onTableSearch();
                                 BusyIndicator.hide();
                                 oController._ApplyModel.close();
+
                                 if (vExtryn !== "X" && Common.checkNull(!oData.Export.results[0].Url)) {
-                                    window.open(oData.Export.results[0].Url, "_blank", "height = 600, width = 900");
+                                    if(!Common.isExternalIP()) {     // 내부망 체크
+                                        if(!Common.openPopup.call(oController, oData.Export.results[0].Url)) {  // 팝업차단 시 이후 여기서 메시지 출력 후 Stop
+                                            BusyIndicator.hide();
+                                            return;
+                                        }
+                                    }
                                 }
                                 sap.m.MessageBox.alert(oController.getBundleText("MSG_42002"), { title: oController.getBundleText("MSG_08107") });
                             },
@@ -883,6 +909,23 @@
                     actions: [oController.getBundleText("LABEL_42032"), oController.getBundleText("LABEL_00119")],
                     onClose: onPressDelete
                 });
+            },
+
+            getApprovalLinesHandler: function() {
+
+                return this.ApprovalLinesHandler;
+            },
+
+            onESSelectPerson: function(data) {
+                return this.EmployeeSearchCallOwner 
+                        ? this.EmployeeSearchCallOwner.setSelectionTagets(data)
+                        : null;
+            },
+
+            displayMultiOrgSearchDialog: function(oEvent) {
+                return !$.app.getController().EmployeeSearchCallOwner 
+                        ? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
+                        : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
             },
 
             onBeforeOpenDetailDialog: function () {

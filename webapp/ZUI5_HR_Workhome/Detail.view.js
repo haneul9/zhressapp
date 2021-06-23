@@ -55,7 +55,8 @@ sap.ui.define(
                                                   }
                                               },
                                               press : function(oEvent){
-                                                  oController.onPressSave(oEvent, "C");
+                                                  oController.onRequest(oEvent, "C");
+                                                //   oController.onPressSave(oEvent, "C");
                                               }
                                          }).addStyleClass("button-dark"),
                                          new sap.m.Button({
@@ -67,7 +68,7 @@ sap.ui.define(
                                                   }
                                               },
                                               press : function(oEvent){
-                                                  oController.onPressSave(oEvent, "D");
+                                                  oController.onPressSave("D", []);
                                               }
                                          }).addStyleClass("button-delete"),
                                          new sap.m.Button({
@@ -377,7 +378,7 @@ sap.ui.define(
                                              vAlign : "Middle"
                                          }).addStyleClass("Data")]
                             }),
-                            new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
+                            /*new sap.ui.commons.layout.MatrixLayoutRow(oController.PAGEID + "_AppNameRow", {
                                 height : "45px",
                                 cells : [new sap.ui.commons.layout.MatrixLayoutCell({
                                              content : [new sap.m.Label({text : "{i18n>LABEL_48066}", required : true, textDirection : "RTL"})], // 결재자
@@ -398,7 +399,7 @@ sap.ui.define(
                                             hAlign : "Begin",
                                             vAlign : "Middle"
                                         }).addStyleClass("Data")]
-                            }).addStyleClass("displayNone")]
+                            }).addStyleClass("displayNone")*/]
                 });
                 
                 var oPanel3 = new sap.m.Panel({

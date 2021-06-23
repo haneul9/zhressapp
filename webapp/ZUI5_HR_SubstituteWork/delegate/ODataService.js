@@ -159,7 +159,8 @@ sap.ui.define(
                         IAppkey1: payload.Appkey1 ? payload.Appkey1 : undefined,
                         IExtryn: payload.Extryn ? payload.Extryn : undefined,
                         IPernr: payload.Pernr ? payload.Pernr : undefined,
-                        AlterWorkApply: payload.AlterWorkApply
+                        AlterWorkApply: payload.AlterWorkApply,
+                        AlterWorkApplyAppr: payload.AlterWorkApplyAppr || []
                     },
                     {
                         success: function (data) {

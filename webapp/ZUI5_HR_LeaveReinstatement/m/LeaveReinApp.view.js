@@ -35,7 +35,7 @@
                                 }
                             }).addStyleClass("button-light"),
                             new sap.m.Button({
-                                press: oController.onDialogApplyBtn.bind(oController),
+                                press: oController.pressApprovalBtn.bind(oController),
                                 text: "{i18n>LABEL_42030}", // 신청,
                                 visible: {
                                     path: "Status1",

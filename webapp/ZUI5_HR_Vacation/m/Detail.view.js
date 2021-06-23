@@ -1002,7 +1002,8 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 										   items : [new sap.m.Button({
 													   	text: oBundleText.getText("LABEL_00152"), // 신청
 													   	press : function(oEvent){
-											 	 			oController.onPressSave(oEvent, "C");
+											 	 			// oController.onPressSave(oEvent, "C");
+															  oController.onRequest(oEvent, "C");
 											 	 		},
 													   	visible : {
 													   		parts : [{path : "Status1"}, {path : "Flag"}, {path : "Delapp"}, {path : "ListStatus"}],
@@ -1031,7 +1032,7 @@ sap.ui.jsview("ZUI5_HR_Vacation.m.Detail", {
 											 	 			}
 											 	 		},
 											 	 		press : function(oEvent){
-											 	 			oController.onPressSave(oEvent, "D");
+											 	 			oController.onPressSave("D", []);
 											 	 		}
 											 		}).addStyleClass("button-default")]
 									   }).addStyleClass("app-nav-button-right"),

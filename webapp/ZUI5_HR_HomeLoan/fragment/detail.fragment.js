@@ -325,7 +325,14 @@ sap.ui.define(
                         ]
                     }).addStyleClass("pl-0"),
                     content: new sap.m.VBox({
-                        items: [fragment.COMMON_ATTACH_FILES.renderer(oController, "001"), fragment.COMMON_ATTACH_FILES.renderer(oController, "002"), fragment.COMMON_ATTACH_FILES.renderer(oController, "003"), fragment.COMMON_ATTACH_FILES.renderer(oController, "004"), fragment.COMMON_ATTACH_FILES.renderer(oController, "005"), fragment.COMMON_ATTACH_FILES.renderer(oController, "006")]
+                        items: [
+                            fragment.COMMON_ATTACH_FILES.renderer(oController,"001"),
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"002"),
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"003"),
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"004"),
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"005"),
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"006")
+                        ]
                     }).addStyleClass("custom-multiAttach-file h-auto p-30px")
                 }).addStyleClass("custom-panel");
             },

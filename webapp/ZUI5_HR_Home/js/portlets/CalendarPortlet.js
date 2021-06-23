@@ -98,7 +98,7 @@ fill: function() {
 	var url = 'ZHR_COMMON_SRV/MainContentsCalSet',
 	loginInfo = this._gateway.loginInfo();
 
-	return new Promise(function (resolve, reject) {
+	return new Promise(function(resolve, reject) {
 		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
 		
 		oModel.create("/MainContentsCalSet", {

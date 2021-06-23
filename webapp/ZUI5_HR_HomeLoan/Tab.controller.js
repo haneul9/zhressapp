@@ -32,7 +32,6 @@ sap.ui.define(
 
                 return this.ApprovalHandler;
             },
-
             getHistoryHandler: function () {
                 if (!this.HistoryHandler) {
                     this.HistoryHandler = HistoryHandler.initialize(this);
@@ -40,7 +39,7 @@ sap.ui.define(
 
                 return this.HistoryHandler;
             },
-
+            
             onBeforeShow: function () {
                 this.ApprovalHandler.load();
             },
@@ -79,11 +78,9 @@ sap.ui.define(
                 }
             },
 
-            getLocalSessionModel: Common.isLOCAL()
-                ? function () {
-                      return new JSONModelHelper({ name: "35110041" });
-                  }
-                : null
+            getLocalSessionModel: Common.isLOCAL() ? function () {
+                return new JSONModelHelper({ name: "35110041" });
+            } : null
         });
     }
 );

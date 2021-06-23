@@ -1,20 +1,16 @@
-/* eslint-disable no-undef */
 sap.ui.define(
     [
         "./Common", //
         "./SearchUser1",
         "./SearchOrg",
-        "sap/ui/core/BusyIndicator",
         "sap/ui/model/json/JSONModel"
     ],
-    function (Common, SearchUser1, SearchOrg, BusyIndicator, JSONModel) {
+    function (Common, SearchUser1, SearchOrg, JSONModel) {
         "use strict";
 
         var Handler = {
 			oController: null,
 			oDialog: null,
-			oEmployeeSearchDialog: null,
-			oOrgSearchDialog: null,
             oModel: new JSONModel(),
 			
 			callback: null,
@@ -306,7 +302,7 @@ sap.ui.define(
 								node.nodes = node.nodes || [];
 								
 								Common.removeProperties(item, "__metadata", "IBukrs", "IDatum", "IEmpid", "ILangu", "IMolga", "INoP", "IOrgAll", "IOrgeh", "IPernr");
-								arrayList.splice(index, 1)[0];
+								arrayList.splice(index, 1);
 
 								if(item.Otype === "O") {
 									return node.nodes.push($.extend(true, item, {
@@ -331,7 +327,7 @@ sap.ui.define(
 					arrayList.some(function (item, index) {
 						if (item.PupObjid === "00000000") {
 							Common.removeProperties(item, "__metadata", "IBukrs", "IDatum", "IEmpid", "ILangu", "IMolga", "INoP", "IOrgAll", "IOrgeh", "IPernr");
-							arrayList.splice(index, 1)[0];
+							arrayList.splice(index, 1);
 
 							return rootNodes.push($.extend(true, item, {
 								ref: item.Otype === "O" 
@@ -353,6 +349,8 @@ sap.ui.define(
 			 * 공통 사원검색 Dialog 호출
 			 */
 			pressEmployeeSearch: function() {
+				this.oController.EmployeeSearchCallOwner = this;
+
 				SearchUser1.oController = this.oController;
 				SearchUser1.fPersaEnabled = true;
 				// SearchUser1.searchAuth = "A";
@@ -360,14 +358,12 @@ sap.ui.define(
 				SearchUser1._vPersa = this.oController.getSessionInfoByKey("Persa");
 				SearchUser1.dialogContentHeight = 480;
 				
-				if(this.oEmployeeSearchDialog) {
-					this.oEmployeeSearchDialog.destroy();
+				if(!this.oController._AddPersonDialog) {
+					this.oController._AddPersonDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this.oController);
+					$.app.getView().addDependent(this.oController._AddPersonDialog);
 				}
 				
-				this.oEmployeeSearchDialog = sap.ui.jsfragment("fragment.EmployeeSearch1", this.oController);
-				$.app.getView().addDependent(this.oEmployeeSearchDialog);
-
-                this.oEmployeeSearchDialog.open();
+                this.oController._AddPersonDialog.open();
 			},
 
 			/**
@@ -418,12 +414,12 @@ sap.ui.define(
                 SearchOrg.vCallControlId = oEvent.getSource().getId();
                 SearchOrg.vCallControlType = "MultiInput";
 
-                if (!this.oOrgSearchDialog) {
-                    this.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
-                    $.app.getView().addDependent(this.oOrgSearchDialog);
+                if (!this.oController.oOrgSearchDialog) {
+                    this.oController.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", this.oController);
+                    $.app.getView().addDependent(this.oController.oOrgSearchDialog);
                 }
 
-                this.oOrgSearchDialog.open();
+                this.oController.oOrgSearchDialog.open();
             }
         };
 

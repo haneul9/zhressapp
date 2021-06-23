@@ -156,7 +156,8 @@ sap.ui.define(
                         IAppkey1: payload.Appkey1 ? payload.Appkey1 : undefined,
                         IExtryn: payload.Extryn ? payload.Extryn : undefined,
                         IPernr: payload.Pernr ? payload.Pernr : undefined,
-                        ShiftWorkScheduleChange: payload.ShiftWorkScheduleChange
+                        ShiftWorkScheduleChange: payload.ShiftWorkScheduleChange,
+                        ShiftWorkScheduleAppr: payload.ShiftWorkScheduleAppr || []
                     },
                     {
                         success: function (data) {

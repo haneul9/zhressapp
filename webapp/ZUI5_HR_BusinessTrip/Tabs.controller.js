@@ -162,30 +162,35 @@ return CommonController.extend($.app.APP_ID, { // 출장
 
 	onESSelectPerson: function(o) {
 
-		// 외부망인 경우 결재자 지정
-		if (this.EmployeeSearchCallOwner) {
-			this.EmployeeSearchCallOwner.setSelectionTagets(o);
+		// 동반출장자 지정
+		if (this.RequestDetailDialogHandler.isAccompanierAdding) {
+			OnRequest.setAccompanier.call(this, o);
 		}
 		// 대근자 지정
 		else if (this.RequestDetailDialogHandler.isSubstituteAdding) {
 			OnRequest.setSubstitute.call(this, o);
 		}
-		// 동반출장자 지정
 		else {
-			OnRequest.setAccompanier.call(this, o);
+			// 외부망인 경우 결재자 지정
+			if (this.EmployeeSearchCallOwner) {
+				this.EmployeeSearchCallOwner.setSelectionTagets(o);
+			}
 		}
 	},
 
 	displayMultiOrgSearchDialog: function(oEvent) {
 
 		var oController = $.app.getController();
-		// 외부망인 경우 결재자 검색시
-		if (oController.EmployeeSearchCallOwner) {
-			oController.EmployeeSearchCallOwner.openOrgSearchDialog.call(oController, oEvent);
-		}
 		// 동반출장자/대근자 검색시
-		else {
+		if (oController.RequestDetailDialogHandler.isAccompanierAdding
+		 || oController.RequestDetailDialogHandler.isSubstituteAdding) {
 			OnRequest.searchOrg.call(oController, oEvent);
+		}
+		else {
+			// 외부망인 경우 결재자 검색시
+			if (oController.EmployeeSearchCallOwner) {
+				oController.EmployeeSearchCallOwner.openOrgSearchDialog.call(oController, oEvent);
+			}
 		}
 	},
 

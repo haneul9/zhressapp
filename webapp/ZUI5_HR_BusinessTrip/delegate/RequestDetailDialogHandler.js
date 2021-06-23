@@ -21,6 +21,7 @@ return {
 	oDialog: null,
 	oSubstituteDialog: null,
 	aTripperList: null,
+	isAccompanierAdding: false,
 	isSubstituteAdding: false,
 	isCheckedSubstituteAvailability: false,
 	oModel: new JSONModel({
@@ -618,6 +619,7 @@ return {
 		SearchUser1.dialogContentHeight = 480;
 		SearchUser1.targetPath = targetPath + rowIndex;
 
+		this.RequestDetailDialogHandler.isAccompanierAdding = false;
 		this.RequestDetailDialogHandler.isSubstituteAdding = true;
 
 		if (!this._AddPersonDialog) {
