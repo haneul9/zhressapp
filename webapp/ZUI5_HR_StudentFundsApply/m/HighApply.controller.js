@@ -42,6 +42,7 @@
 		onBeforeShow: function(oEvent) {
 			Common.log("onBeforeShow");
 			BusyIndicator.show(0);
+			this.SEQ = "_02_";
             this.HighApplyModel.setData({FormData: []});
 
             if(oEvent.data){
@@ -51,14 +52,14 @@
 					this.onChangeSupport();
 				}
             }
-			this.onBeforeOpenDetailDialog(this);
 		},
 		
 		onAfterShow: function() {
-            var oRowData = this.HighApplyModel.getProperty("/FormData");
-
+			var oRowData = this.HighApplyModel.getProperty("/FormData");
+			
             this.setZyears(oRowData);
             this.getComboCodeList(oRowData);
+			this.onBeforeOpenDetailDialog(this);
 			BusyIndicator.hide();
         },
 
@@ -713,7 +714,6 @@
 			var vStatus = oController.HighApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.HighApplyModel.getProperty("/FormData/Appnm") || "";
 
-			oController.SEQ = "_02_";
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
 				Required: true,

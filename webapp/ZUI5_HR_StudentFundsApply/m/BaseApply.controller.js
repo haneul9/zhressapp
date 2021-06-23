@@ -41,6 +41,7 @@
 		onBeforeShow: function(oEvent) {
 			Common.log("onBeforeShow");
 			BusyIndicator.show(0);
+			this.SEQ = "_01_";
 			
             this.ApplyModel.setData({FormData: []});
             
@@ -52,14 +53,14 @@
                     this.ApplyModel.setProperty("/FormData/RelationTx", this.ApplyModel.getProperty("/NameCombo")[0].KdsvhT);
                 }
             }
-			this.onBeforeOpenDetailDialog(this);
 		},
 		
 		onAfterShow: function() {
-            var oRowData = this.ApplyModel.getProperty("/FormData") ? this.ApplyModel.getProperty("/FormData") : [];
-
+			var oRowData = this.ApplyModel.getProperty("/FormData") ? this.ApplyModel.getProperty("/FormData") : [];
+			
             this.setZyears(oRowData);
             this.getComboCodeList(oRowData);
+			this.onBeforeOpenDetailDialog(this);
 			BusyIndicator.hide();
         },
 
@@ -515,7 +516,6 @@
 			var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
 				vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 
-			oController.SEQ = "_01_";
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
 				Required: true,

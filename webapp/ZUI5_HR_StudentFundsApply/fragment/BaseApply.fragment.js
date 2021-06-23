@@ -1,9 +1,8 @@
 ﻿sap.ui.define([
     "common/Common",
     "../delegate/ViewTemplates",
-	"common/ZHR_TABLES",
-	"fragment/COMMON_ATTACH_FILES"
-], function (Common, ViewTemplates, ZHR_TABLES, FileHandler) {
+	"common/ZHR_TABLES"
+], function (Common, ViewTemplates, ZHR_TABLES) {
 	"use strict";
 
     sap.ui.jsfragment("ZUI5_HR_StudentFundsApply.fragment.BaseApply", {
