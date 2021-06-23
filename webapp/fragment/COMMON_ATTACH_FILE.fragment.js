@@ -8,8 +8,8 @@ sap.ui.define([
 
 	sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", {
 		createContent: function (oController) {
-			var oFileUploader = new ODataFileUploader([oController.PAGEID, "_ATTACHFILE_BTN"].join(oController.SEQ || "_"), {				
-				name: [oController.PAGEID, "UploadFile"].join(oController.SEQ || ""),
+			var oFileUploader = new ODataFileUploader([oController.PAGEID, "ATTACHFILE_BTN"].join(oController.SEQ || "_"), {				
+				name: [oController.PAGEID, "UploadFile"].join(oController.SEQ || "_"),
 				modelName: "ZHR_COMMON_SRV",
 				slug: "",
 				maximumFileSize: 10,
