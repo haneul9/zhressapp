@@ -40,6 +40,7 @@
 		},
 		
 		onBeforeShow: function(oEvent) {
+			Common.log("onBeforeShow");
 			BusyIndicator.show(0);
             this.HighApplyModel.setData({FormData: []});
 
@@ -50,13 +51,12 @@
 					this.onChangeSupport();
 				}
             }
-			Common.log("onBeforeShow");
+			this.onBeforeOpenDetailDialog(this);
 		},
 		
 		onAfterShow: function() {
             var oRowData = this.HighApplyModel.getProperty("/FormData");
 
-            this.onBeforeOpenDetailDialog(this);
             this.setZyears(oRowData);
             this.getComboCodeList(oRowData);
 			BusyIndicator.hide();

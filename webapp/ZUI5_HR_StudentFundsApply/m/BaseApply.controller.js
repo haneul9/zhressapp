@@ -39,6 +39,7 @@
 		},
 		
 		onBeforeShow: function(oEvent) {
+			Common.log("onBeforeShow");
 			BusyIndicator.show(0);
 			
             this.ApplyModel.setData({FormData: []});
@@ -51,13 +52,12 @@
                     this.ApplyModel.setProperty("/FormData/RelationTx", this.ApplyModel.getProperty("/NameCombo")[0].KdsvhT);
                 }
             }
-			Common.log("onBeforeShow");
+			this.onBeforeOpenDetailDialog(this);
 		},
 		
 		onAfterShow: function() {
             var oRowData = this.ApplyModel.getProperty("/FormData") ? this.ApplyModel.getProperty("/FormData") : [];
 
-            this.onBeforeOpenDetailDialog(this);
             this.setZyears(oRowData);
             this.getComboCodeList(oRowData);
 			BusyIndicator.hide();
