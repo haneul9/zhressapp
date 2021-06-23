@@ -158,7 +158,7 @@ fill: function() {
 							'</colgroup>',
 							'<thead>',
 								'<tr>',
-									'<th>이름</th>',
+									'<th>성명</th>',
 									'<th>직급</th>',
 									'<th>년차</th>',
 									'<th>', --currentYear, '년</th>',

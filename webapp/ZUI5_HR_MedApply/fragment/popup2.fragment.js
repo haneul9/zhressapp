@@ -554,7 +554,7 @@ sap.ui.define(
                             content: [
                                 new sap.ui.core.HTML({ content: "<span class='sub-title'>" + oController.getBundleText("LABEL_47028") + "</span>" }),   // 진료비 내역
                                 new sap.m.ToolbarSpacer(),
-                                new sap.ui.core.HTML({ content: "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalc.xls' style='font-size:14px;color:#0070bd !important;padding-right:15px;' download>" + oController.getBundleText("LABEL_47143") + "</a>" })    // 치과(보철) 회사 양식
+                                new sap.ui.core.HTML({ content: "<a target='_blank' href='ZUI5_HR_MedApply/manual/MedApplyCalcHigh.xlsx' style='font-size:14px;color:#0070bd !important;padding-right:15px;' download>" + oController.getBundleText("LABEL_47143") + "</a>" })    // 첨단 치과(보철) 회사 양식
                             ]
                         })
                     ],

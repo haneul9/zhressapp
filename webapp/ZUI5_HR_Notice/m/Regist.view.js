@@ -153,6 +153,12 @@
 						]
 					}),
 					new sap.m.HBox({
+						visible: {
+                            path: "Appnm",
+                            formatter: function(v) {
+                                return Common.checkNull(!v);
+                            }	
+                        },
 						items: [
                             sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 						]
