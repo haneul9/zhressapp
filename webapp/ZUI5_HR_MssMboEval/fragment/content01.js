@@ -251,16 +251,16 @@ ZUI5_HR_MssMboEval.fragment.content01={
 			eval("var oHTML"+i+"=new sap.ui.core.HTML({preferDOM:false});");
 		}
 		if(vPage=="1"){
-			oMsg1=oMsg1+=redStar;
-			oMsg2=oMsg2+=redStar;
+			// oMsg1=oMsg1+=redStar;
+			// oMsg2=oMsg2+=redStar;
 			oMsg3=oMsg3+=redStar;
 		}else if(vPage=="2"){
-			oMsg4=oMsg4+=redStar;
-			oMsg5=oMsg5+=redStar;
+			// oMsg4=oMsg4+=redStar;
+			// oMsg5=oMsg5+=redStar;
 			oMsg6=oMsg6+=redStar;
 		}else if(vPage=="3"){
-			oMsg7=oMsg7+=redStar;
-			oMsg8=oMsg8+=redStar;
+			// oMsg7=oMsg7+=redStar;
+			// oMsg8=oMsg8+=redStar;
 			oMsg9=oMsg9+=redStar;
 		}
 		for(var i=1;i<=9;i++){
