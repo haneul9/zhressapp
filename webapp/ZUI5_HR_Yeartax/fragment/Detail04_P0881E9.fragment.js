@@ -14,6 +14,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0881E9", {
 			visibleRowCount : 1,
 			noData : "No data found",
 			extension : [new sap.m.Toolbar({
+				 			 visible : {
+			 					parts : [{path : "Pystat"}, {path : "Yestat"}],
+			 					formatter : function(fVal1, fVal2){
+			 						return fVal1 == "1" && fVal2 == "1" ? true : false;
+			 					}
+				 			 },
 							content : [new sap.m.Button({
 											icon : "sap-icon://add",
 											type : "Emphasized",

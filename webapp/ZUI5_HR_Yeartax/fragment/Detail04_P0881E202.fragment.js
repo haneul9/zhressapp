@@ -15,6 +15,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P0881E202", {
 			noData : "No data found",
 			extension : [new sap.m.Toolbar({
 							 height : "40px",
+				 			 visible : {
+			 					parts : [{path : "Pystat"}, {path : "Yestat"}],
+			 					formatter : function(fVal1, fVal2){
+			 						return fVal1 == "1" && fVal2 == "1" ? true : false;
+			 					}
+				 			 },
 							 content : [new sap.m.Button({
 											text : "라인추가",
 											visible : {

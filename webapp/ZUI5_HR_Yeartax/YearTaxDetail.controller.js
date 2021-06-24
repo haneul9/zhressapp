@@ -2118,6 +2118,12 @@ sap.ui.define([
                                         data.NavYeartax0858Data.results[i].Idx = i;
                                         data.NavYeartax0858Data.results[i].Flnts = data.NavYeartax0858Data.results[i].Flnts == "X" ? true : false;
                                         
+                                        if(oData.Pystat == "1" && oData.Yestat == "1" && data.NavYeartax0858Data.results[i].Zflnts == ""){
+                                            data.NavYeartax0858Data.results[i].Editable = true;
+                                        } else {
+                                            data.NavYeartax0858Data.results[i].Editable = false;
+                                        }
+
                                         vData.Data.push(data.NavYeartax0858Data.results[i]);
                                     }
                                 }

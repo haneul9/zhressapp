@@ -15,6 +15,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P088107", {
 			noData : "No data found",
 			extension : [new sap.m.Toolbar({
 							 height : "40px",
+				 			 visible : {
+			 					parts : [{path : "Pystat"}, {path : "Yestat"}],
+			 					formatter : function(fVal1, fVal2){
+			 						return fVal1 == "1" && fVal2 == "1" ? true : false;
+			 					}
+				 			 },
 							 content : [new sap.m.Button({
 											text : "라인추가",
 											visible : {
@@ -41,7 +47,13 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P088107", {
 									   }).addStyleClass("button-light"),
 									   new sap.m.ToolbarSpacer(),
 									   new sap.m.Text({
-										   text : "데이터(라인 추가/삭제) 수정 후 반드시 저장버튼을 클릭해야 데이터가 반영됩니다."
+										   text : "데이터(라인 추가/삭제) 수정 후 반드시 저장버튼을 클릭해야 데이터가 반영됩니다.",
+							 			   visible : {
+							 					parts : [{path : "Pystat"}, {path : "Yestat"}],
+							 					formatter : function(fVal1, fVal2){
+							 						return fVal1 == "1" && fVal2 == "1" ? true : false;
+							 					}
+							 			   }
 									   }).addStyleClass("colorBlue Font14")]
 						 }).addStyleClass("ToolbarNoBottomLine")
 						   .setModel(oController._DetailJSonModel)
