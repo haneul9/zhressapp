@@ -1915,10 +1915,12 @@ sap.ui.define([
             var oController = oView.getController();
             
             var oPercod = "";
+
+            if($.app.getAuth() == $.app.Auth.HASS){
+                oController.setUserData(oController, oController._Pernr);
+            }
             
             if(oController._Pernr != oController.getSessionInfoByKey("Pernr")){
-                oController.setUserData(oController, oController._Pernr);
-
                 var oModel = $.app.getModel("ZHR_COMMON_SRV");
                 var createData = {Pernr : oController._Pernr, PernrEncodeNav : [{Pernr : oController._Pernr}]};
                 oModel.create("/PernrEncodingSet", createData, {
