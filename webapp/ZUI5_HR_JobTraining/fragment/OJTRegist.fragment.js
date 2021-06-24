@@ -473,7 +473,12 @@ sap.ui.define([
 											}
 										}
 									}).addStyleClass("mt-5px"),
-									fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+									new sap.m.HBox(oController.PAGEID + "_LearnFileBox", {
+										width: "100%",
+										items: [
+											fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+										]
+									})
 								]
 							})
 						]
@@ -491,7 +496,12 @@ sap.ui.define([
 							ViewTemplates.getLabel("header", "{i18n>LABEL_70048}", "150px", "Right" ), // 평가서
 							new sap.m.VBox({
 								items: [
-									fragment.COMMON_ATTACH_FILES.renderer(oController,"002"),
+									new sap.m.HBox(oController.PAGEID + "_EvalFileBox", {
+										width: "100%",
+										items: [
+											fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+										]
+									}),
 									new sap.m.Text({
 										text: "{i18n>MSG_70015}",
 										textAlign: "Begin"
@@ -650,7 +660,7 @@ sap.ui.define([
 						width: "100%",
 						items: [
 							ViewTemplates.getLabel("header", "{i18n>LABEL_70053}", "150px", "Right" ), // 영수증
-							new sap.m.VBox({
+							new sap.m.VBox(oController.PAGEID + "_ReceiptFileBox", {
 								items: [
 									fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
 								]
@@ -716,6 +726,8 @@ sap.ui.define([
 				title: "{i18n>LABEL_70001}",    // 직무교육(OJT) 신청
 				contentWidth: "980px",
 				contentHeight: "650px",
+				beforeOpen: oController.onBeforeDialog.bind(oController),
+				afterOpen: oController.onAfterDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogApplyBtn.bind(oController),

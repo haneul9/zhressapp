@@ -1,4 +1,5 @@
-﻿/* eslint-disable no-undef */
+﻿/* eslint-disable no-irregular-whitespace */
+/* eslint-disable no-undef */
 sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
@@ -28,6 +29,7 @@ sap.ui.define([
 		g_TeacherType: "",
 		g_IDelTeacherList: [],
 		g_ODelTeacherList: [],
+		g_IsNew: "",
 		
 		getUserId: function() {
 
@@ -64,6 +66,7 @@ sap.ui.define([
 		
 		onAfterShow: function() {
             
+			this.ApplyModel.setData({FormData: []});
             this.initDateCreate(this);
 			this.getComboData();
 			this.onTableSearch();
@@ -406,6 +409,7 @@ sap.ui.define([
 			var vStatus = oController.SearchModel.getProperty("/Data/Status");
 			var vIsReport = oController.SearchModel.getProperty("/Data/IsReport");
 			
+			oTable.setBusyIndicatorDelay(0).setBusy(true);
 			if(oController.SearchModel.getProperty("/Data/Zmonth1") === "ALL"){
 				vMonth1 = "1";
 				vMonth2 = "12";
@@ -432,7 +436,7 @@ sap.ui.define([
 			sendObject.TrainingOjtApplyTableIn1 = [];
 			
 			oModel.create("/TrainingOjtApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					
 					if (oData && oData.TrainingOjtApplyTableIn1) { //값을 제대로 받아 왔을 때
 						Common.log(oData);
@@ -451,6 +455,69 @@ sap.ui.define([
 			});
 
 			Common.adjustAutoVisibleRowCount.call(oTable);
+			oTable.setBusyIndicatorDelay(0).setBusy(false);
+		},
+
+		onPressAppBtn: function() { // 신청서 작성
+			var oView = $.app.byId("ZUI5_HR_JobTraining.Page");
+
+			this.g_IsNew = "N";
+			
+			if (!this._ApplyModel) {
+				this._ApplyModel = sap.ui.jsfragment("ZUI5_HR_JobTraining.fragment.OJTRegist", this);
+				oView.addDependent(this._ApplyModel);
+			}
+
+			this._ApplyModel.setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(this.PAGEID + "_LearnFileBox").setBusyIndicatorDelay(0).setBusy(true);
+			this._ApplyModel.open();
+		},
+
+		onPressRepBtn: function() { // 결과보고
+			var oView = $.app.byId("ZUI5_HR_JobTraining.Page");
+			var oController = this;
+			var oTableData = this.TableModel.getProperty("/Data");
+			var oCopyRow = {};
+
+			this.g_IsNew = "R";
+
+			if(oTableData.every(function(e) {return e.Pchk !== true;})){
+				MessageBox.error(oController.getBundleText("MSG_40031"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			var oList = [];
+
+			oTableData.forEach(function(e){
+				if(e.Pchk) {
+					oList.push(e);
+					oCopyRow = e;
+				}	
+			});
+
+			if(oList.length > 1){
+				MessageBox.error(oController.getBundleText("MSG_40030"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			if(Common.checkNull(!oCopyRow.RepstT) || oCopyRow.Status1 !== "99" || oCopyRow.Edoty !== "1"){
+				MessageBox.error(oController.getBundleText("MSG_40037"), { title: oController.getBundleText("MSG_08107")});
+				return ;
+			}
+
+			if (!this._ApplyModel) {
+				this._ApplyModel = sap.ui.jsfragment("ZUI5_HR_JobTraining.fragment.OJTRegist", this);
+				oView.addDependent(this._ApplyModel);
+			}
+
+			oCopyRow = $.extend(true, {}, oCopyRow);
+			this.ApplyModel.setData({FormData: oCopyRow});
+
+			this._ApplyModel.setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(this.PAGEID + "_LearnFileBox").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(this.PAGEID + "_EvalFileBox").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(this.PAGEID + "_ReceiptFileBox").setBusyIndicatorDelay(0).setBusy(true);
+			this._ApplyModel.open();
 		},
 		
 		onSelectedRow: function(oEvent) { // Row선택
@@ -460,6 +527,8 @@ sap.ui.define([
 			var oRowData = oController.TableModel.getProperty(oPath);
 			
 			var oCopyRow = $.extend(true, {}, oRowData);
+
+			oController.g_IsNew = "D";
 
 			if(oEvent.mParameters.columnIndex === "8" && Common.checkNull(!oRowData.UrlA1)) return;
 			if(oEvent.mParameters.columnIndex === "7" && Common.checkNull(!oRowData.UrlA1)) return;
@@ -472,54 +541,119 @@ sap.ui.define([
 
 			oController.ApplyModel.setData({FormData: oCopyRow});
 			oController.AttModel.setData({Data: []});
+
+			oController._ApplyModel.setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(oController.PAGEID + "_LearnFileBox").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(oController.PAGEID + "_EvalFileBox").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(oController.PAGEID + "_ReceiptFileBox").setBusyIndicatorDelay(0).setBusy(true);
 			
-			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000"){
-				oController.ApplyModel.setProperty("/Checked", "X");
-				oController.onDInput(true);
-			}else {
-				oController.ApplyModel.setProperty("/Checked", "");
-			}
+			oController._ApplyModel.open();
+		},
 
-			oController.TeacherInfoModel.setData({InData: [], OutData: []});
-			var vStatus1 = oController.ApplyModel.getProperty("/FormData/Status1");
-			var vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty");
-			var vOJTResult = oController.ApplyModel.getProperty("/OJTResult");
-
-			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
-			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
-			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
-			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
-
-			oController.g_IDelTeacherList = [];
-			oController.g_ODelTeacherList = [];
-			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
-			var oOutTeacherBox = $.app.byId(oController.PAGEID + "_OutTeacherBox");
+		onBeforeDialog: function() {
+			var oTeacherBox = $.app.byId(this.PAGEID + "_InTeacherBox");
+			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
+			this.g_IDelTeacherList = [];
+			this.g_ODelTeacherList = [];
 			oTeacherBox.destroyItems();
 			oOutTeacherBox.destroyItems();
+			this.TeacherInfoModel.setData({InData: [], OutData: []});
 
-			var vTime1 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm" }).format(new Date(oCopyRow.Beguz.ms), true);
-			var vTime2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm" }).format(new Date(oCopyRow.Enduz.ms), true);
-			vTime1 = vTime1.split(":");
-			vTime2 = vTime2.split(":");
-			
-			oController.setHour();
-			oController.setMin();
-			oController.ApplyModel.setProperty("/FormData/BTime1", vTime1[0]);
-			oController.ApplyModel.setProperty("/FormData/BTime2", vTime1[1]);
-			oController.ApplyModel.setProperty("/FormData/ETime1", vTime2[0]);
-			oController.ApplyModel.setProperty("/FormData/ETime2", vTime2[1]);
+			if(this.g_IsNew === "N"){
+				// this.ApplyModel.setProperty("/FormData", {});
+				this.ApplyModel.setData({FormData: []});
+				
+				this.ApplyModel.setProperty("/FormData/Descr", this.getBundleText("MSG_70001"));
+				this.ApplyModel.setProperty("/Checked", "");
+			}else if(this.g_IsNew === "R") {
+				var vStatus1 = this.ApplyModel.getProperty("/FormData/Status1");
+				var vEdoty = this.ApplyModel.getProperty("/FormData/Edoty");
+				var oCopyRow = this.ApplyModel.getProperty("/FormData");
+				
+				this.TeacherInfoModel.setProperty("/Status1", vStatus1);
+				this.TeacherInfoModel.setProperty("/Edoty", vEdoty);
+				this.TeacherInfoModel.setProperty("/OJTResult", "X");
+				
+				this.AttModel.setData({Data: []});
+				
+				this.ApplyModel.setProperty("/OJTResult", "X");
+				
+				if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000"){
+					this.ApplyModel.setProperty("/Checked", "X");
+					this.onDInput(true);
+				}else {
+					this.ApplyModel.setProperty("/Checked", "");
+				}
+			}else if(this.g_IsNew === "D") {
+				var vStatus1 = this.ApplyModel.getProperty("/FormData/Status1");
+				var vEdoty = this.ApplyModel.getProperty("/FormData/Edoty");
+				var vOJTResult = this.ApplyModel.getProperty("/OJTResult");
+				var oCopyRow = this.ApplyModel.getProperty("/FormData");
 
-			if(oCopyRow.Edoty === "2"){
-				oController.getAttTable(oCopyRow);
-				oController.ApplyModel.setProperty("/OJTResult", "X");
+				if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000"){
+					this.ApplyModel.setProperty("/Checked", "X");
+					this.onDInput(true);
+				}else {
+					this.ApplyModel.setProperty("/Checked", "");
+				}
+	
+				this.TeacherInfoModel.setProperty("/Status1", vStatus1);
+				this.TeacherInfoModel.setProperty("/Edoty", vEdoty);
+				this.TeacherInfoModel.setProperty("/OJTResult", vOJTResult);
 			}
+		},
+
+		onAfterDialog: function() {
+			var IsNew = this.g_IsNew;
 			
-			oController.getTeacherInfo(oCopyRow);
-			oController.getCodeList(oCopyRow);
-			oController.onBeforeOpenDetailDialog();
-			oController._ApplyModel.open();
+			Common.getPromise(
+				function () {
+					this.getCodeList(IsNew !== "N" ? this.ApplyModel.getProperty("/FormData") : "");
+					this.setHour();
+					this.setMin();
+					
+					if(IsNew === "N") {
+						this.ApplyModel.setProperty("/FormData/BTime1", "01");
+						this.ApplyModel.setProperty("/FormData/ETime1", "01");
+						this.ApplyModel.setProperty("/FormData/BTime2", "00");
+						this.ApplyModel.setProperty("/FormData/ETime2", "00");
+						this.getTypeCombo(false);
+					}else {
+						var oCopyRow = this.ApplyModel.getProperty("/FormData");
+						var vTime1 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm" }).format(new Date(oCopyRow.Beguz.ms), true);
+						var vTime2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm" }).format(new Date(oCopyRow.Enduz.ms), true);
+						vTime1 = vTime1.split(":");
+						vTime2 = vTime2.split(":");
+						
+						this.ApplyModel.setProperty("/FormData/BTime1", vTime1[0]);
+						this.ApplyModel.setProperty("/FormData/BTime2", vTime1[1]);
+						this.ApplyModel.setProperty("/FormData/ETime1", vTime2[0]);
+						this.ApplyModel.setProperty("/FormData/ETime2", vTime2[1]);
+						this.getTeacherInfo(oCopyRow);
+
+						if(IsNew === "D" && oCopyRow.Edoty === "2"){
+							this.getAttTable(oCopyRow);
+							this.ApplyModel.setProperty("/OJTResult", "X");
+						}
+					}
+				}.bind(this)
+			).then(
+				function () {
+					this._ApplyModel.setBusy(false);
+				}.bind(this)
+			);
+
+			Common.getPromise(
+				function () {
+					this.onBeforeOpenDetailDialog();
+				}.bind(this)
+			).then(
+				function () {
+					$.app.byId(this.PAGEID + "_LearnFileBox").setBusyIndicatorDelay(0).setBusy(false);
+					$.app.byId(this.PAGEID + "_EvalFileBox").setBusyIndicatorDelay(0).setBusy(false);
+					$.app.byId(this.PAGEID + "_ReceiptFileBox").setBusyIndicatorDelay(0).setBusy(false);
+				}.bind(this)
+			);
 		},
 
 		getTeacherInfo: function(oRowData) { // 강사정보 받아옴
@@ -554,7 +688,7 @@ sap.ui.define([
 			sendObject.TrainingOjtApplyTableIn2 = [];
 			
 			oModel.create("/TrainingOjtApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.TrainingOjtApplyTeacher) { 
 						Common.log(oData);
 						var rDatas1 = oData.TrainingOjtApplyTeacher.results,
@@ -601,7 +735,7 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 구분
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						oData.NavCommonCodeList.results.unshift({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
 						oController.SearchModel.setProperty("/GubunCombo", oData.NavCommonCodeList.results);
@@ -627,7 +761,7 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 결재상태
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						oData.NavCommonCodeList.results.unshift({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
 						oController.SearchModel.setProperty("/StatusCombo", oData.NavCommonCodeList.results);
@@ -650,7 +784,7 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 보고서 제출여부
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						oData.NavCommonCodeList.results.unshift({ Code: "ALL", Text: oController.getBundleText("LABEL_40059") });
 						oController.SearchModel.setProperty("/IsReportCombo", oData.NavCommonCodeList.results);
@@ -680,7 +814,7 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 교육유형
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						var vStatus = oController.ApplyModel.getProperty("/FormData/Status1");
 						var vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty");
@@ -692,7 +826,7 @@ sap.ui.define([
 						if((Common.checkNull(vStatus) || vStatus === "AA") && Common.checkNull(vRepstT) && (Common.checkNull(vEdoty) || vEdoty === "1") && vChecked === "X"){
 							var oList2 = [];
 							
-							oData.NavCommonCodeList.results.forEach(function(e, i) {
+							oData.NavCommonCodeList.results.forEach(function(e) {
 								if(e.Sortk !== "999"){
 									oList2.push(e);
 								}
@@ -721,7 +855,7 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 필수/선택
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
 						oController.ApplyModel.setProperty("/SelectCombo", oData.NavCommonCodeList.results);
@@ -745,7 +879,7 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 법정/일반
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
 						oController.ApplyModel.setProperty("/NomalCombo", oData.NavCommonCodeList.results);
@@ -776,14 +910,14 @@ sap.ui.define([
 			sendObject.NavCommonCodeList = [];
 			
 			oCommonModel.create("/CommonCodeListHeaderSet", sendObject, { // 교육유형
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.NavCommonCodeList){
 						oData.NavCommonCodeList.results.unshift({ Code: "Null", Text: oController.getBundleText("LABEL_40062") });
 
 						if(IsVal){
 							var oList2 = [];
 							
-							oData.NavCommonCodeList.results.forEach(function(e, i) {
+							oData.NavCommonCodeList.results.forEach(function(e) {
 								if(e.Sortk !== "999"){
 									oList2.push(e);
 								}
@@ -798,121 +932,6 @@ sap.ui.define([
 					Common.log(oResponse);
 				}
 			});
-		},
-
-		onPressAppBtn: function() { // 신청서 작성
-			var oView = $.app.byId("ZUI5_HR_JobTraining.Page");
-
-			
-			if (!this._ApplyModel) {
-				this._ApplyModel = sap.ui.jsfragment("ZUI5_HR_JobTraining.fragment.OJTRegist", this);
-				oView.addDependent(this._ApplyModel);
-			}
-
-			this.ApplyModel.setData({FormData: []});
-			this.TeacherInfoModel.setData({InData: [], OutData: []});
-
-			this.g_IDelTeacherList = [];
-			this.g_ODelTeacherList = [];
-			
-			var oTeacherBox = $.app.byId(this.PAGEID + "_InTeacherBox");
-			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
-			oTeacherBox.destroyItems();
-			oOutTeacherBox.destroyItems();
-			
-			this.ApplyModel.setProperty("/FormData/Descr", this.getBundleText("MSG_70001"));
-			this.ApplyModel.setProperty("/Checked", "");
-
-			this.getCodeList();
-			this.setHour();
-			this.ApplyModel.setProperty("/FormData/BTime1", "01");
-			this.ApplyModel.setProperty("/FormData/ETime1", "01");
-			this.ApplyModel.setProperty("/FormData/BTime2", "00");
-			this.ApplyModel.setProperty("/FormData/ETime2", "00");
-			this.setMin();
-			this.getTypeCombo(false);
-			this.onBeforeOpenDetailDialog();
-			this._ApplyModel.open();
-		},
-
-		onPressRepBtn: function() { // 결과보고
-			var oView = $.app.byId("ZUI5_HR_JobTraining.Page");
-			var oController = this;
-			var oTableData = this.TableModel.getProperty("/Data");
-			var oCopyRow = {};
-
-			if(oTableData.every(function(e) {return e.Pchk !== true})){
-				MessageBox.error(oController.getBundleText("MSG_40031"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
-
-			var oList = [];
-
-			oTableData.forEach(function(e){
-				if(e.Pchk) {
-					oList.push(e);
-					oCopyRow = e;
-				}	
-			});
-
-			if(oList.length > 1){
-				MessageBox.error(oController.getBundleText("MSG_40030"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
-
-			if(Common.checkNull(!oCopyRow.RepstT) || oCopyRow.Status1 !== "99" || oCopyRow.Edoty !== "1"){
-				MessageBox.error(oController.getBundleText("MSG_40037"), { title: oController.getBundleText("MSG_08107")});
-				return ;
-			}
-
-			if (!this._ApplyModel) {
-				this._ApplyModel = sap.ui.jsfragment("ZUI5_HR_JobTraining.fragment.OJTRegist", this);
-				oView.addDependent(this._ApplyModel);
-			}
-
-			this.TeacherInfoModel.setData({InData: [], OutData: []});
-			var vStatus1 = oController.ApplyModel.getProperty("/FormData/Status1");
-			var vEdoty = oController.ApplyModel.getProperty("/FormData/Edoty");
-
-			oController.TeacherInfoModel.setProperty("/Status1", vStatus1);
-			oController.TeacherInfoModel.setProperty("/Edoty", vEdoty);
-			oController.TeacherInfoModel.setProperty("/OJTResult", "X");
-
-			this.AttModel.setData({Data: []});
-			this.g_IDelTeacherList = [];
-			this.g_ODelTeacherList = [];
-			var oTeacherBox = $.app.byId(this.PAGEID + "_InTeacherBox");
-			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
-			oTeacherBox.destroyItems();
-			oOutTeacherBox.destroyItems();
-
-			oCopyRow = $.extend(true, {}, oCopyRow);
-			
-			this.ApplyModel.setData({FormData: oCopyRow});
-			this.ApplyModel.setProperty("/OJTResult", "X");
-			
-			if(Common.checkNull(oCopyRow.Course) || oCopyRow.Course === "00000000"){
-				oController.ApplyModel.setProperty("/Checked", "X");
-				oController.onDInput(true);
-			}else {
-				oController.ApplyModel.setProperty("/Checked", "");
-			}
-
-			var vTime1 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm" }).format(new Date(oCopyRow.Beguz.ms), true);
-			var vTime2 = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "HH:mm" }).format(new Date(oCopyRow.Enduz.ms), true);
-			vTime1 = vTime1.split(":");
-			vTime2 = vTime2.split(":");
-			
-			this.setHour();
-			this.setMin();
-			this.ApplyModel.setProperty("/FormData/BTime1", vTime1[0]);
-			this.ApplyModel.setProperty("/FormData/BTime2", vTime1[1]);
-			this.ApplyModel.setProperty("/FormData/ETime1", vTime2[0]);
-			this.ApplyModel.setProperty("/FormData/ETime2", vTime2[1]);
-			this.getTeacherInfo(oCopyRow);
-			this.getCodeList(oCopyRow);
-			this.onBeforeOpenDetailDialog();
-			this._ApplyModel.open();
 		},
 
 		onDInput: function(oEvent) { // 직접입력 CheckBox
@@ -964,7 +983,8 @@ sap.ui.define([
 				MessageBox.error(oController.getBundleText("MSG_40043"), { title: oController.getBundleText("MSG_08107")});
 				return true;
 			}
-
+			
+			oTraningTable.setBusyIndicatorDelay(0).setBusy(true);
 			var sendObject = {};
 			// Header
 			sendObject.IBukrs = vBukrs2;
@@ -973,7 +993,7 @@ sap.ui.define([
 			sendObject.TrainingEventtypeTableIn = [];
 			
 			oModel.create("/TrainingEventtypeSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.TrainingEventtypeTableIn){
 						var dataLength = 10;
 						var rDatas1 = oData.TrainingEventtypeTableIn.results;
@@ -992,6 +1012,8 @@ sap.ui.define([
 					BusyIndicator.hide();
 				}
 			});
+
+			oTraningTable.setBusyIndicatorDelay(0).setBusy(false);
 		},
 
 		onSelectedTraningRow: function(oEvent) {
@@ -1153,7 +1175,7 @@ sap.ui.define([
 			oController._TeacherModel.close();
 		},
 
-		onInCheck: function(oEvent) {
+		onInCheck: function() {
 			var oController = this;
 			var oTeacherBox = $.app.byId(oController.PAGEID + "_InTeacherBox");
 			oController.g_IDelTeacherList = [];
@@ -1172,7 +1194,7 @@ sap.ui.define([
 			});
 		},
 
-		onOutCheck: function(oEvent) {
+		onOutCheck: function() {
 			var oController = this;
 			var oOutTeacherBox = $.app.byId(this.PAGEID + "_OutTeacherBox");
 			oController.g_ODelTeacherList = [];
@@ -1245,7 +1267,7 @@ sap.ui.define([
 			sendObject.TrainingLearnerTableIn = [];
 			
 			oModel.create("/TrainingLearnerSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.TrainingLearnerTableIn){
 						var dataLength = 10;
 						var rDatas1 = oData.TrainingLearnerTableIn.results;
@@ -1278,14 +1300,14 @@ sap.ui.define([
 			oController._AttDetailModel.close();
 		},
 
-		onPressDelRow: function(oEvent) { // 참석자 삭제
+		onPressDelRow: function() { // 참석자 삭제
 			var oController = this;
 			var oAttTable = $.app.byId(this.PAGEID + "_AttTable");
 			var oAttData = this.AttModel.getProperty("/Data");
 			var oAttList = [];
 			var vLength = 5;
 
-			if(oAttData.every(function(e) {return e.Pchk !== true})){
+			if(oAttData.every(function(e) {return e.Pchk !== true;})){
 				MessageBox.error(oController.getBundleText("MSG_40005"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
@@ -1310,7 +1332,7 @@ sap.ui.define([
 			var oTableData = this.TableModel.getProperty("/Data");
 			var isReturn = false;
 
-			if(oTableData.every(function(e) {return e.Pchk !== true})){
+			if(oTableData.every(function(e) {return e.Pchk !== true;})){
 				MessageBox.error(oController.getBundleText("MSG_40035"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
@@ -1331,6 +1353,7 @@ sap.ui.define([
 			oList.forEach(function(ele) {			
 				if(!((ele.Status1 === "AA" && ele.Edoty === "1") || (ele.Status1 === "AA" && ele.Edoty === "2"))){
 					MessageBox.error(oController.getBundleText("MSG_40045"), { title: oController.getBundleText("MSG_08107")});
+					// eslint-disable-next-line no-return-assign
 					return isReturn = true;
 				}
 			});
@@ -1345,7 +1368,7 @@ sap.ui.define([
 					var oSendList = [];
 
 					oList.forEach(function(e){
-						oSendList.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", e))
+						oSendList.push(Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", e));
 					});
 
 					var sendObject = {};
@@ -1359,7 +1382,7 @@ sap.ui.define([
 					sendObject.TrainingOjtApplyTableIn1 = oSendList;
 					
 					oModel.create("/TrainingOjtApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							Common.log(oData);
 							oController.onTableSearch();
 							BusyIndicator.hide();
@@ -1422,7 +1445,7 @@ sap.ui.define([
 			sendObject.TrainingOjtApplyTableIn2 = [];
 			
 			oModel.create("/TrainingOjtApplySet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.TrainingOjtApplyLearner) { 
 						Common.log(oData);
 						var rDatas1 = oData.TrainingOjtApplyLearner.results;
@@ -1456,7 +1479,7 @@ sap.ui.define([
 			var oModel = $.app.getModel("ZHR_TRAINING_SRV");
 			var oData = this.TableModel.getProperty("/Data");
 
-			if(oData.every(function(e) {return e.Pchk !== true})){
+			if(oData.every(function(e) {return e.Pchk !== true;})){
 				MessageBox.error(oController.getBundleText("MSG_40026"), { title: oController.getBundleText("MSG_08107")});
 				return ;
 			}
@@ -1479,7 +1502,7 @@ sap.ui.define([
 							sendObject.TrainingOjtApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", ele)];
 							
 							oModel.create("/TrainingOjtApplySet", sendObject, {
-								success: function(oData, oResponse) {
+								success: function(oData) {
 									Common.log(oData);
 									vMsg = "Y";
 								},
@@ -1537,7 +1560,7 @@ sap.ui.define([
 								}
 							},
 							value: "",
-							liveChange: oController.getDyNameComma.bind(oController),
+							liveChange: oController.getDyNameComma.bind(oController)
 						}).addStyleClass("mr-10px"),
 						ViewTemplates.getLabel("header", "{i18n>LABEL_70030}", "85px", "Right").addStyleClass(""), // 시간
 						new sap.m.Input({
@@ -1584,6 +1607,8 @@ sap.ui.define([
 				return true;
 			}
 
+			oTeacherTable.setBusyIndicatorDelay(0).setBusy(true);
+
 			var sendObject = {};
 			// Header
 			sendObject.IBukrs = vBukrs2;
@@ -1593,7 +1618,7 @@ sap.ui.define([
 			sendObject.TrainingTeacherTableIn = [];
 			
 			oModel.create("/TrainingTeacherSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if(oData && oData.TrainingTeacherTableIn){
 						var dataLength = 10;
 						var rDatas1 = oData.TrainingTeacherTableIn.results;
@@ -1611,9 +1636,11 @@ sap.ui.define([
 					});
 				}
 			});
+
+			oTeacherTable.setBusyIndicatorDelay(0).setBusy(false);
 		},
 
-		onInPressAddRow: function(oEvent) { // 강사(내부)
+		onInPressAddRow: function() { // 강사(내부)
 			var oView = $.app.byId("ZUI5_HR_JobTraining.Page");
 
 			this.TeacherModel.setData({FormData: []});
@@ -1629,7 +1656,7 @@ sap.ui.define([
 			this._TeacherModel.open();
 		},
 
-		onInPressDelRow: function(oEvent) { // 강사(내부)
+		onInPressDelRow: function() { // 강사(내부)
 			var oController = this;
 
 			if(Common.checkNull(this.g_IDelTeacherList)){
@@ -1642,7 +1669,7 @@ sap.ui.define([
 			this.g_IDelTeacherList = [];
 		},
 
-		onOutPressAddRow: function(oEvent) { // 강사(외부)
+		onOutPressAddRow: function() { // 강사(외부)
 			var oView = $.app.byId("ZUI5_HR_JobTraining.Page");
 
 			this.TeacherModel.setData({FormData: []});
@@ -1658,7 +1685,7 @@ sap.ui.define([
 			this._TeacherModel.open();
 		},
 
-		onOutPressDelRow: function(oEvent) { // 강사(외부)
+		onOutPressDelRow: function() { // 강사(외부)
 			var oController = this;
 
 			if(Common.checkNull(this.g_ODelTeacherList)){
@@ -2009,7 +2036,7 @@ sap.ui.define([
 					
 					oModel.create("/TrainingOjtApplySet", sendObject, {
 						async: true,
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							Common.log(oData);
 							sap.m.MessageBox.alert(oController.getBundleText("MSG_70007"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
@@ -2035,7 +2062,7 @@ sap.ui.define([
 			});
 		},
 		
-		onDialogSaveBtn: function(oEvent) { // Dialog 저장
+		onDialogSaveBtn: function() { // Dialog 저장
 			var oController = $.app.getController();
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
@@ -2127,7 +2154,7 @@ sap.ui.define([
 					
 					oModel.create("/TrainingOjtApplySet", sendObject, {
 						async: true,
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							Common.log(oData);
 							oController.onTableSearch();
 							BusyIndicator.hide();
@@ -2153,7 +2180,7 @@ sap.ui.define([
 			});
 		},
 
-		onDialogDelBtn: function(oEvent) { // Dialog 삭제
+		onDialogDelBtn: function() { // Dialog 삭제
 			var oController = $.app.getController();
 			var vPernr = oController.getUserId();
 			var vBukrs2 = oController.getUserGubun();
@@ -2178,7 +2205,7 @@ sap.ui.define([
 					sendObject.TrainingOjtApplyTableIn1 = [Common.copyByMetadata(oModel, "TrainingOjtApplyTableIn1", oSendData)];
 					
 					oModel.create("/TrainingOjtApplySet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							Common.log(oData);
 							oController.onTableSearch();
 							BusyIndicator.hide();
@@ -2289,7 +2316,7 @@ sap.ui.define([
 					
 					oModel.create("/TrainingOjtApplySet", sendObject, {
 						async: true,
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							Common.log(oData);
 							sap.m.MessageBox.alert(oController.getBundleText("MSG_70007"), { title: oController.getBundleText("MSG_08107")});
 							oController.onTableSearch();
