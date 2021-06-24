@@ -47,10 +47,13 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03", {
 															text : "파일삭제",
 															press : oController.onDeleteAttachFile,
 															visible : {
-																parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "EFname"}],
-																formatter : function(fVal1, fVal2, fVal3){
-																	if(fVal1 == "1" && fVal2 == "1" && fVal3){
-																		return true;
+																parts : [{path : "EFname"}],
+																formatter : function(fVal){
+																	if(fVal){
+																		var oPystat = oController._DetailJSonModel.getProperty("/Data/Pystat"),
+																			oYestat = oController._DetailJSonModel.getProperty("/Data/Yestat");
+
+																		return (oPystat == "1" && oYestat == "1") ? true : false;
 																	} else {
 																		return false;
 																	}
