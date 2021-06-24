@@ -1781,47 +1781,47 @@ sap.ui.define([
 		onValid : function(oController){
 			switch (oController.vPage) {
 				case "1":
-					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA1_3").getValue().trim()==""){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_36001"));
-						return false;
-					}
-					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA1_32").getValue().trim()==""){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_36002"));
-						return false;
-					}
+					// if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA1_3").getValue().trim()==""){
+					// 	sap.m.MessageBox.alert(oBundleText.getText("MSG_36001"));
+					// 	return false;
+					// }
+					// if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA1_32").getValue().trim()==""){
+					// 	sap.m.MessageBox.alert(oBundleText.getText("MSG_36002"));
+					// 	return false;
+					// }
 					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel1_3").getSelectedKey()==""){
 						sap.m.MessageBox.alert(oBundleText.getText("MSG_36003"));
 						return false;
 					}
 					break;
 				case "2":
-					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA2_3").getValue().trim()==""){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_36001"));
-						return false;
-					}
-					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA2_32").getValue().trim()==""){
-						sap.m.MessageBox.alert(oBundleText.getText("MSG_36002"));
-						return false;
-					}
+					// if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA2_3").getValue().trim()==""){
+					// 	sap.m.MessageBox.alert(oBundleText.getText("MSG_36001"));
+					// 	return false;
+					// }
+					// if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA2_32").getValue().trim()==""){
+					// 	sap.m.MessageBox.alert(oBundleText.getText("MSG_36002"));
+					// 	return false;
+					// }
 					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel2_3").getSelectedKey()==""){
 						sap.m.MessageBox.alert(oBundleText.getText("MSG_36003"));
 						return false;
 					}
 					break;
 				case "3":
-						if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA3_3").getValue().trim()==""){
-							sap.m.MessageBox.alert(oBundleText.getText("MSG_36001"));
-							return false;
-						}
-						if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA3_32").getValue().trim()==""){
-							sap.m.MessageBox.alert(oBundleText.getText("MSG_36002"));
-							return false;
-						}
-						if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel3_3").getSelectedKey()==""){
-							sap.m.MessageBox.alert(oBundleText.getText("MSG_36003"));
-							return false;
-						}
-						break;
+					// if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA3_3").getValue().trim()==""){
+					// 	sap.m.MessageBox.alert(oBundleText.getText("MSG_36001"));
+					// 	return false;
+					// }
+					// if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_TextA3_32").getValue().trim()==""){
+					// 	sap.m.MessageBox.alert(oBundleText.getText("MSG_36002"));
+					// 	return false;
+					// }
+					if($.app.byId(oController.PAGEID+"_"+oController.vPage+"_Sel3_3").getSelectedKey()==""){
+						sap.m.MessageBox.alert(oBundleText.getText("MSG_36003"));
+						return false;
+					}
+					break;
 				default:
 					break;
 			}
@@ -2132,10 +2132,11 @@ sap.ui.define([
 
 		onSave : function(Sig){
 			var oView = sap.ui.getCore().byId("ZUI5_HR_MssMboEval.MssMboEval");
-			var oController = oView.getController();			
-			var oValid = oController.onValid(oController);
-			if(Sig=="F"){				
-				if(oValid){
+			var oController = oView.getController();
+			// var oValid = oController.onValid(oController);
+
+			if(Sig=="F"){	// 평가확정
+				if(oController.onValid(oController)){
 					var oMsg="";
 					Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
 					sap.m.MessageBox.show(
@@ -2153,7 +2154,7 @@ sap.ui.define([
 				}
 			}else{
 				if(oController.vPage=="2"||oController.vPage=="3"){
-					if(oValid){
+					if(oController.onValid(oController)){
 						var oMsg="";
 						Sig=="S"?oMsg=oBundleText.getText("MSG_35001"):oMsg=oBundleText.getText("MSG_35004");
 						sap.m.MessageBox.show(
