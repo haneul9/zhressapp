@@ -3,7 +3,6 @@ sap.ui.define(
         "common/Common", //
         "common/DialogHandler",
         "common/OrgOfIndividualHandler",
-        "common/ApprovalLinesHandler",
         "./OvertimeWork",
         "./ODataService",
 		"sap/m/MessageBox",
@@ -11,7 +10,7 @@ sap.ui.define(
 		"sap/ui/export/Spreadsheet",
         "sap/ui/model/json/JSONModel"
     ],
-    function (Common, DialogHandler, OrgOfIndividualHandler, ApprovalLinesHandler, OvertimeWork, ODataService, MessageBox, BusyIndicator, Spreadsheet, JSONModel) {
+    function (Common, DialogHandler, OrgOfIndividualHandler, OvertimeWork, ODataService, MessageBox, BusyIndicator, Spreadsheet, JSONModel) {
         "use strict";
 
         var Handler = {
@@ -155,15 +154,8 @@ sap.ui.define(
              * 
              * @param rowData
              */
-            pressSelectRowDetail: function (oEvent) {
-                var columnId = oEvent.getParameter("columnId"),
-                p = columnId ? oEvent.getParameter("rowBindingContext").getProperty() : oEvent.getSource().getBindingContext().getProperty();
-
-                if (p.Status1 !== "AA" && columnId === "ApprovalTableStext1" && p.UrlA1) { // 결재상태
-                    Common.openPopup.call(this.oController, p.UrlA1);
-                } else {
-                    this.loadApprovalDetail(p);
-                }
+            pressSelectRowDetail: function (rowData) {
+                this.loadApprovalDetail(rowData);
             },
 
             loadApprovalDetail: function(rowData) {
@@ -254,30 +246,9 @@ sap.ui.define(
              * @brief 상세팝업 신청 버튼 handler
              */
             pressApprovalBtn: function() {
-                if(Common.isExternalIP()) {
-                    setTimeout(function() {
-                        var initData = {
-                            Mode: "P",
-                            Pernr: this.oController.getSessionInfoByKey("Pernr"),
-                            Empid: this.oController.getSessionInfoByKey("Pernr"),
-                            Bukrs: this.oController.getSessionInfoByKey("Bukrs3"),
-                            ZappSeq: "27"
-                        },
-                        callback = function(o) {
-                            this.onRequest.call(this, o);
-                        }.bind(this);
-            
-                        this.oController.ApprovalLinesHandler = ApprovalLinesHandler.get(this.oController, initData, callback);
-                        DialogHandler.open(this.oController.ApprovalLinesHandler);
-                    }.bind(this), 0);
-                } else {
-                    this.onRequest.call(this, null);
-                }
-            },
-
-            onRequest: function(vAprdatas) {
                 var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
                 var oInputData = this.oModel.getProperty("/Detail");
+				var vExtryn = Common.isExternalIP() === true ? "X" : "";
 
                 var Process = function (fVal) {
                     if (!fVal || fVal === MessageBox.Action.NO) return;
@@ -285,8 +256,8 @@ sap.ui.define(
                     BusyIndicator.show(0);
 
                     var payload = {};
+                    payload.Extryn = vExtryn;
                     payload.OvertimeApply = [Common.copyByMetadata(oModel, "OvertimeApply", oInputData)];
-                    payload.OvertimeApplyTab = vAprdatas || [];
 
                     ODataService.OvertimeApplySetByProcess.call(
                         this.oController, 
@@ -297,9 +268,7 @@ sap.ui.define(
                     );
                 };
 
-                var confirmMessage = Common.isExternalIP()
-                    ? this.oController.getBundleText("MSG_00060")   // 신청하시겠습니까?
-                    : this.oController.getBundleText("MSG_31010");  // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
+                var confirmMessage = vExtryn === "X" ? this.oController.getBundleText("MSG_00060") : this.oController.getBundleText("MSG_31010");
 
                 MessageBox.show(confirmMessage, {
                     // S모인 결재창으로 이동해 결재를 진행하셔야 합니다.\n진행하시겠습니까?
@@ -375,21 +344,37 @@ sap.ui.define(
                 }.bind(this), 0);
             },
 
-            getLinkMimicTemplate: function(columnInfo) {
+            getSmoinLink: function(columnInfo, oController) {
+                var PageHandler = oController.getPageHandler();
 
-                return new sap.m.Text({
-                    textAlign: sap.ui.core.HorizontalAlign.Center,
-                    text: {
-                        parts: [
-                            { path: columnInfo.id },
-                            { path: "Status1" },
-                            { path: "UrlA1" }
-                        ],
-                        formatter: function(v, Status1, UrlA1) {
-                            this.toggleStyleClass("mimic-link", Status1 !== "AA" && !!UrlA1);
-                            return v;
-                        }
-                    }
+                return new sap.m.HBox({
+                    justifyContent: sap.m.FlexJustifyContent.Center,
+                    items: [
+                        new sap.m.Text({ 
+                            text: "{Stext1}",
+                            textAlign: sap.ui.core.TextAlign.Center,
+                            visible: {
+                                path: "Status1",
+                                formatter: function(v) {
+                                    return v === OvertimeWork.Approval.NONE ? true : false;
+                                }
+                            }
+                        }),
+                        new sap.m.Link({
+                            text: "{Stext1}",
+                            textAlign: sap.ui.core.TextAlign.Center,
+                            press: PageHandler.pressSmoinLink.bind(PageHandler),
+                            visible: {
+                                path: "Status1",
+                                formatter: function(v) {
+                                    return v === OvertimeWork.Approval.NONE ? false : true;
+                                }
+                            },
+                            customData: [
+                                new sap.ui.core.CustomData({key : "url", value : "{UrlA1}"})
+                            ]
+                        })
+                    ]
                 });
             }
         };

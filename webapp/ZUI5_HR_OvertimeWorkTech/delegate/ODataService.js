@@ -157,10 +157,8 @@ sap.ui.define(
                         IDatum: payload.Datum,
                         IAftck: payload.Aftck,
                         IReqes: payload.Reqes,
-                        IExtryn: Common.isExternalIP() ? "X" : null,
                         OtWorkTab1: payload.OtWorkTab1,
-                        OtWorkTab2: payload.OtWorkTab2,
-                        OtWorkTab3: payload.OtWorkTab3
+                        OtWorkTab2: payload.OtWorkTab2
                     }, {
                         success: function (data) {
                             if (typeof success === "function") success.call(null, data, processType, payload.Reqes);

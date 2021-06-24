@@ -47,11 +47,6 @@ sap.ui.define(
 
                 return this.OrgOfIndividualHandler;
             },
-            
-            getApprovalLinesHandler: function() {
-
-                return this.ApprovalLinesHandler;
-            },
 
             onBeforeShow: function () {
                 this.PageHandler.load();
@@ -62,15 +57,11 @@ sap.ui.define(
             },
 
             onESSelectPerson: function(data) {
-                return this.EmployeeSearchCallOwner 
-                        ? this.EmployeeSearchCallOwner.setSelectionTagets(data)
-                        : null;
+                return this.OrgOfIndividualHandler.setSelectionTagets(data);
             },
 
             displayMultiOrgSearchDialog: function(oEvent) {
-                return !$.app.getController().EmployeeSearchCallOwner 
-                        ? $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent)
-                        : $.app.getController().EmployeeSearchCallOwner.openOrgSearchDialog(oEvent);
+                return $.app.getController().OrgOfIndividualHandler.openOrgSearchDialog(oEvent);
             },
 
             getLocalSessionModel: Common.isLOCAL() ? function () {

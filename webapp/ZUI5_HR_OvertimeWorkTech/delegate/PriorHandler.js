@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-empty */
 sap.ui.define(
     [
         "common/Common", //
@@ -5,7 +7,6 @@ sap.ui.define(
         "common/SearchOrg",
         "common/DialogHandler",
         "common/OrgOfIndividualHandler",
-        "common/ApprovalLinesHandler",
         "./OvertimeWork",
         "./ODataService",
 		"sap/m/MessageBox",
@@ -13,7 +14,7 @@ sap.ui.define(
 		"sap/ui/export/Spreadsheet",
         "sap/ui/model/json/JSONModel"
     ],
-    function (Common, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, ApprovalLinesHandler, OvertimeWork, ODataService, MessageBox, BusyIndicator, Spreadsheet, JSONModel) {
+    function (Common, SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, OvertimeWork, ODataService, MessageBox, BusyIndicator, Spreadsheet, JSONModel) {
         "use strict";
 
         var Handler = {
@@ -60,7 +61,6 @@ sap.ui.define(
                         IsPossibleSave: false,  // 저장버튼 활성화 여부
                         IsPossibleApproval: false,  // 신청버튼 활성화 여부
                         IsPossibleDelete: false,  // 삭제버튼 활성화 여부
-                        VisibleApprs: false,    // 결재라인 테이블 show
                         Header: {},
                         List: []
                     }  // 상세
@@ -161,15 +161,8 @@ sap.ui.define(
              * 
              * @param rowData
              */
-            pressSelectRowDetail: function (oEvent) {
-                var columnId = oEvent.getParameter("columnId"),
-                p = columnId ? oEvent.getParameter("rowBindingContext").getProperty() : oEvent.getSource().getBindingContext().getProperty();
-
-                if (p.Status1 !== "AA" && columnId === "ZUI5_HR_OvertimeWorkTech.Tab--PriorTableStatus1T" && p.UrlA1) { // 결재상태
-                    Common.openPopup.call(this.oController, p.UrlA1);
-                } else {
-                    this.loadApprovalDetail(p);
-                }
+            pressSelectRowDetail: function (rowData) {
+                this.loadApprovalDetail(rowData);
             },
 
             loadApprovalDetail: function(rowData) {
@@ -206,7 +199,6 @@ sap.ui.define(
                     OtentmT: results.OtWorkTab1[0].Otentm.substring(0, 2) === "24" ? "00" : results.OtWorkTab1[0].Otentm.substring(0, 2),
                     OtentmM: results.OtWorkTab1[0].Otentm.substring(2, 4)
                 }));
-                this.oModel.setProperty("/Detail/VisibleApprs", results.OtWorkTab2.length ? true : false);
                 this.oModel.setProperty("/Detail/List", results.OtWorkTab2.map(function(elem) {
                     return $.extend(true, elem, {
                         AprsqTx: this.oController.getBundleText("LABEL_32042").interpolate(elem.Aprsq)  // ${v}차 결재자
@@ -231,7 +223,6 @@ sap.ui.define(
                     IsPossibleSave: false,
                     IsPossibleApproval: false,
                     IsPossibleDelete: false,
-                    VisibleApprs: false,
                     Header: {
                         Status1: "",
                         Ename: vZshft === "X" ? "" : this.oController.getSessionInfoByKey("Ename"),
@@ -334,13 +325,6 @@ sap.ui.define(
                         break;
                 }
 
-                if(vReqes === "X" && !Common.isExternalIP()) {
-                    if(!Common.openPopup.call(this.oController, data.EUrl)) {
-                        BusyIndicator.hide();
-                        return;
-                    }
-                }
-
                 MessageBox.success(successMessage, {
                     title: this.oController.getBundleText("LABEL_00150"),
                     onClose: function () {
@@ -390,7 +374,9 @@ sap.ui.define(
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
                     ];
-                    payload.OtWorkTab2 = [];
+                    payload.OtWorkTab2 = oInputData.List.map(function (elem) {
+                        return Common.copyByMetadata(oModel, "OvertimeWorkApplyTab2", elem);
+                    });
 
                     ODataService.OvertimeWorkApplySetByProcess.call(
                         this.oController, 
@@ -415,28 +401,6 @@ sap.ui.define(
              * @this {Handler}
              */
             pressApprovalBtn: function() {
-                if(Common.isExternalIP()) {
-                    setTimeout(function() {
-                        var initData = {
-                            Mode: "P",
-                            Pernr: this.oController.getSessionInfoByKey("Pernr"),
-                            Empid: this.oController.getSessionInfoByKey("Pernr"),
-                            Bukrs: this.oController.getSessionInfoByKey("Bukrs3"),
-                            ZappSeq: "34"
-                        },
-                        callback = function(o) {
-                            this.onRequest.call(this, o);
-                        }.bind(this);
-            
-                        this.oController.ApprovalLinesHandler = ApprovalLinesHandler.get(this.oController, initData, callback);
-                        DialogHandler.open(this.oController.ApprovalLinesHandler);
-                    }.bind(this), 0);
-                } else {
-                    this.onRequest.call(this, null);
-                }
-            },
-
-            onRequest: function(vAprdatas) {
                 var oModel = $.app.getModel("ZHR_WORKTIME_APPL_SRV");
                 var oInputData = this.oModel.getProperty("/Detail");
 
@@ -458,8 +422,9 @@ sap.ui.define(
                             Otentm: oInputData.Header.OtentmT + oInputData.Header.OtentmM
                         })
                     ];
-                    payload.OtWorkTab2 = [];
-                    payload.OtWorkTab3 = vAprdatas || [];
+                    payload.OtWorkTab2 = oInputData.List.map(function (elem) {
+                        return Common.copyByMetadata(oModel, "OvertimeWorkApplyTab2", elem);
+                    });
 
                     ODataService.OvertimeWorkApplySetByProcess.call(
                         this.oController, 
@@ -630,6 +595,7 @@ sap.ui.define(
              * @brief 결재라인 추가 버튼 event handler
              */
             pressAddApprovalLine: function() {
+                this.oController.EmployeeSearchCallOwner = this;
                 SearchUser1.oController = this.oController;
                 SearchUser1.searchAuth = "A";
                 SearchUser1.oTargetPaths = null;
@@ -675,6 +641,7 @@ sap.ui.define(
                     this.oModel.setProperty(oTargetPaths.sPath + "/ApgrdT", data.ZpGradetx);
                 }
 
+                this.oController.EmployeeSearchCallOwner = null;
                 SearchUser1.oTargetPaths = null;
                 SearchUser1.onClose();
             },
@@ -763,6 +730,7 @@ sap.ui.define(
              * @this {Handler}
              */
             searchOrgehPernr: function(callback) {
+                this.EmployeeSearchCallOwner = null;
                 
                 setTimeout(function() {
                     var initData = {
@@ -776,7 +744,6 @@ sap.ui.define(
                         };
         
                     this.OrgOfIndividualHandler = OrgOfIndividualHandler.get(this, initData, callback);
-                    this.EmployeeSearchCallOwner = this.OrgOfIndividualHandler;
                     DialogHandler.open(this.OrgOfIndividualHandler);
                 }.bind(this), 0);
             },
@@ -801,24 +768,6 @@ sap.ui.define(
                 }, oCheckBox);
 
                 return oCheckBox;
-            },
-
-            getLinkMimicTemplate: function(columnInfo) {
-
-                return new sap.m.Text({
-                    textAlign: sap.ui.core.HorizontalAlign.Center,
-                    text: {
-                        parts: [
-                            { path: columnInfo.id },
-                            { path: "Status1" },
-                            { path: "UrlA1" }
-                        ],
-                        formatter: function(v, Status1, UrlA1) {
-                            this.toggleStyleClass("mimic-link", Status1 !== "AA" && !!UrlA1);
-                            return v;
-                        }
-                    }
-                });
             }
         };
 

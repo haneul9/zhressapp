@@ -117,8 +117,7 @@ sap.ui.define(
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IPernr: this.getSessionInfoByKey("Pernr"),
                         IOrgeh: this.getSessionInfoByKey("Orgeh"),
-                        ILangu: this.getSessionInfoByKey("Langu"),
-                        IExtryn: Common.isExternalIP() ? "X" : null
+                        ILangu: this.getSessionInfoByKey("Langu")
                     }),
                     {
                         success: function (data) {

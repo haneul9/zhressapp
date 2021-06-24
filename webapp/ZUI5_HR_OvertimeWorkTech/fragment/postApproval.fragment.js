@@ -140,13 +140,13 @@ sap.ui.define(
                             new sap.ui.table.RowActionItem({
                                 type: "Navigation",
                                 press: function (oEvent) {
-                                    PostHandler.pressSelectRowDetail.call(PostHandler, oEvent);
+                                    PostHandler.pressSelectRowDetail.call(PostHandler, oEvent.getSource().getBindingContext().getProperty());
                                 }
                             })
                         ]
                     }),
                     cellClick: function (oEvent) {
-                        PostHandler.pressSelectRowDetail.call(PostHandler, oEvent);
+                        PostHandler.pressSelectRowDetail.call(PostHandler, oEvent.getParameters().rowBindingContext.getProperty());
                     }
                 })
                 .addStyleClass("mt-8px row-link")
@@ -168,7 +168,7 @@ sap.ui.define(
                     { id: "Otent", label: "{i18n>LABEL_32011}" /* 종료 시간 */, plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true, width: "10%" },
                     { id: "Horex", label: "{i18n>LABEL_32022}" /* 신청사유 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto", align: sap.ui.core.HorizontalAlign.Begin },
                     { id: "Rjres", label: "{i18n>LABEL_32023}" /* 반려사유 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "13%", align: sap.ui.core.HorizontalAlign.Begin },
-                    { id: "Status1T", label: "{i18n>LABEL_32024}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "10%", templateGetter: "getLinkMimicTemplate", templateGetterOwner: this }
+                    { id: "Status1T", label: "{i18n>LABEL_32024}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "10%" }
                 ];
             }
         });

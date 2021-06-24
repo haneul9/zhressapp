@@ -122,14 +122,13 @@ sap.ui.define(
                     expanded: true,
                     expandable: false,
                     headerText: "{i18n>LABEL_55019}",   // 결재정보
-                    visible : "{/Data/VisibleApprs}",
                     content: new sap.m.VBox({
                         width: "100%",
                         items: [
                             this.buildTable(oController)
                         ]
                     })
-                }).addStyleClass("custom-panel mt-6px");
+                }).addStyleClass("custom-panel mt-6px")
                 
         		var titleitem = [
 					new sap.m.FlexBox({
@@ -162,7 +161,7 @@ sap.ui.define(
 					window._CommonEmployeeModel.retrieve(parent._gateway.pernr());
 		
 					titleitem.push(new common.EmpBasicInfoBox(window._CommonEmployeeModel));
-				}
+				};
 				
 				var title = new sap.m.FlexBox({
 					justifyContent : "SpaceBetween",
@@ -272,7 +271,7 @@ sap.ui.define(
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" }),
                                     templateShareable: true
                                 },
-                                editable: "{EditMode}"
+                                editable: "{EditMode}",
                                 // change: PriorHandler.toggleIsPossibleSave.bind(PriorHandler)
                             }).addStyleClass("custom-select-time"),
                             new sap.m.Text({ text: ":" }).addStyleClass("mx-2px"),
@@ -285,7 +284,7 @@ sap.ui.define(
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" }),
                                     templateShareable: true
                                 },
-                                editable: "{EditMode}"
+                                editable: "{EditMode}",
                                 // change: PriorHandler.toggleIsPossibleSave.bind(PriorHandler)
                             }).addStyleClass("custom-select-time"),
                             new sap.m.Text({ text: "~" }).addStyleClass("mx-7px"),
@@ -298,7 +297,7 @@ sap.ui.define(
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" }),
                                     templateShareable: true
                                 },
-                                editable: "{EditMode}"
+                                editable: "{EditMode}",
                                 // change: PriorHandler.toggleIsPossibleSave.bind(PriorHandler)
                             }).addStyleClass("custom-select-time"),
                             new sap.m.Text({ text: ":" }).addStyleClass("mx-2px"),
@@ -311,7 +310,7 @@ sap.ui.define(
                                     template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" }),
                                     templateShareable: true
                                 },
-                                editable: "{EditMode}"
+                                editable: "{EditMode}",
                                 // change: PriorHandler.toggleIsPossibleSave.bind(PriorHandler)
                             }).addStyleClass("custom-select-time")
                            ]
