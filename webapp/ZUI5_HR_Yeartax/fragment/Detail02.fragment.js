@@ -81,7 +81,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 									 hAlign : "Begin",
 									 vAlign : "Middle"
 								 }),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
+								 /*new sap.ui.commons.layout.MatrixLayoutCell({
 									content : [new sap.m.CheckBox({
 													selected : "{Pdcid}",
 													text : "인적공제 항목변경",
@@ -95,7 +95,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 									 hAlign : "Begin",
 									 vAlign : "Middle",
 									 colSpan : 2
-								 })]
+								 })*/]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "35px",
@@ -345,11 +345,9 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 									 	  		// },
 									 	  		press : oController.onPressFamilyApply,
 									 	  		visible : {
-									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
-									 	  			formatter : function(fVal1, fVal2, fVal3){
-									 	  				if(!fVal3 || fVal3 == false)
-									 	  					return false;
-									 	  				else if(fVal1 == "1" && fVal2 == "1")
+									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}],
+									 	  			formatter : function(fVal1, fVal2){
+														   if(fVal1 == "1" && fVal2 == "1")
 									 	  					return true;
 									 	  				else
 									 	  					return false;

@@ -5,7 +5,12 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03_PDF", {
 		var oPanel = new sap.m.Panel(oController.PAGEID + "_Detail3Panel", {
 			expandable : false,
 			expanded : true,
-			content : []
+			content : [
+				// new sap.m.PDFViewer({
+				// 	displayType: sap.m.PDFViewerDisplayType.Embedded,
+				// 	source: "{Url}"
+				// })
+			]
 		});
 	
 		var oDialog = new sap.m.Dialog({
@@ -16,6 +21,8 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03_PDF", {
 		});
 		
 		oDialog.addStyleClass("custom-dialog-popup");
+		oDialog.setModel(new sap.ui.model.json.JSONModel());
+		oDialog.bindElement("/Data");
 		
 		return oDialog;
 	}

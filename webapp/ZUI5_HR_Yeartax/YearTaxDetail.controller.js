@@ -1006,8 +1006,10 @@ sap.ui.define([
                                     data.NavYeartaxPrevWorkN2.results[i].Pystat = oData.Pystat;
                                     data.NavYeartaxPrevWorkN2.results[i].Yestat = oData.Yestat;
                                     
-                                    data.NavYeartaxPrevWorkN2.results[i].Pabeg = data.NavYeartaxPrevWorkN2.results[i].Pabeg ? dateFormat.format(data.NavYeartaxPrevWorkN2.results[i].Pabeg) : null;
-                                    data.NavYeartaxPrevWorkN2.results[i].Paend = data.NavYeartaxPrevWorkN2.results[i].Paend ? dateFormat.format(data.NavYeartaxPrevWorkN2.results[i].Paend) : null;
+                                    data.NavYeartaxPrevWorkN2.results[i].Pabeg = data.NavYeartaxPrevWorkN2.results[i].Pabeg ? 
+                                                                                    dateFormat.format(new Date(Common.setTime(data.NavYeartaxPrevWorkN2.results[i].Pabeg))) : null;
+                                    data.NavYeartaxPrevWorkN2.results[i].Paend = data.NavYeartaxPrevWorkN2.results[i].Paend ? 
+                                                                                    dateFormat.format(new Date(Common.setTime(data.NavYeartaxPrevWorkN2.results[i].Paend))) : null;
                                     
                                     data.NavYeartaxPrevWorkN2.results[i].Bet01 = data.NavYeartaxPrevWorkN2.results[i].Bet01.trim();
                                     data.NavYeartaxPrevWorkN2.results[i].Bet02 = data.NavYeartaxPrevWorkN2.results[i].Bet02.trim();
@@ -1098,6 +1100,13 @@ sap.ui.define([
                         preferDOM : false
                     })
                 );
+
+            // var tmp = Common.base64ToArrayBuffer(oData.EPdfbn);
+            // console.log(tmp);
+            // var tmp2 = Common.getBlobURL("application/pdf", tmp);
+            // console.log(tmp2)
+
+            // oController._Detail3Dialog.getModel().setData({Data : {Url : tmp2}})
                 
             oController._Detail3Dialog.setTitle(oData.EFname);
             oController._Detail3Dialog.open();
@@ -1345,6 +1354,7 @@ sap.ui.define([
                 for(var i=0; i<oData3.length; i++){
                     var detail = {};
                         detail.Pernr = oData2.Pernr;
+                        detail.Zdelfg = oData3[i].Zdelfg;
                         detail.Bizno = oData3[i].Bizno ? oData3[i].Bizno : "";
                         detail.Comnm = oData3[i].Comnm ? oData3[i].Comnm : "";
                         detail.Pabeg = oData3[i].Pabeg ? "\/Date(" + common.Common.getTime(new Date(oData3[i].Pabeg)) + ")\/" : null;
@@ -1558,6 +1568,7 @@ sap.ui.define([
                 for(var i=0; i<oData3.length; i++){
                     var detail = {};
                         detail.Pernr = oData2.Pernr;
+                        detail.Zdelfg = oData3[i].Zdelfg;
                         detail.Bizno = oData3[i].Bizno ? oData3[i].Bizno : "";
                         detail.Comnm = oData3[i].Comnm ? oData3[i].Comnm : "";
                         detail.Pabeg = oData3[i].Pabeg ? "\/Date(" + common.Common.getTime(new Date(oData3[i].Pabeg)) + ")\/" : null;
