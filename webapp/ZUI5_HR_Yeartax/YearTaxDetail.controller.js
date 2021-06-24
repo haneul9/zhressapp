@@ -3812,6 +3812,11 @@ sap.ui.define([
         onDeleteAttachFile : function(oEvent) {
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
             var oController = oView.getController();
+
+            if(!(oController._DetailJSonModel.getProperty("/Data/Pystat") == "1" && oController._DetailJSonModel.getProperty("/Data/Yestat") == "1")){
+                MessageBox.error("삭제 불가능한 상태입니다.");
+                return;
+            }
                         
             MessageBox.confirm("삭제하시겠습니까?", {
                 actions : ["YES", "NO"],
