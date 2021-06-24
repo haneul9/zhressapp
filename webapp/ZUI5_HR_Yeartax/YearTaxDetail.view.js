@@ -137,7 +137,17 @@ sap.ui.define(
                                             return fVal1 == "1" && fVal2 == "1" ? true : false;
                                         }
                                     }
-                                }).addStyleClass("button-dark")
+                                }).addStyleClass("button-dark"),
+                                new sap.m.Button({
+                                    text : "재작성",
+                                    press : oController.onChangeStatus,
+                                    visible : {
+                                        parts : [{path : "Pystat"}, {path : "Yestat"}],
+                                        formatter : function(fVal1, fVal2){
+                                            return fVal1 == "2" && fVal2 == "1" ? true : false;
+                                        }
+                                    }
+                                }).addStyleClass("button-light")
                             ]
                         }).addStyleClass(($.app.getAuth() == $.app.Auth.HASS ? "button-group pt-53px pr-25px" : "button-group"))
                     ]

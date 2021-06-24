@@ -405,7 +405,7 @@ sap.ui.define([
                 
                 var sPath = oTable.getContextByIndex(oIndices[0]).sPath;
                 
-                vData = Object.assign({}, oJSONModel.getProperty(sPath));
+                vData = $.extend(true, {}, oJSONModel.getProperty(sPath));
                 
                 // checkbox 데이터 변환
                 vData.Dptid = vData.Dptid == "X" ? true : false;
@@ -784,7 +784,7 @@ sap.ui.define([
             var oData = oController._DetailJSonModel.getProperty("/Data");
             var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
             
-            var vData = Object.assign({}, oData);
+            var vData = $.extend(true, {}, oData);
             
             oController._DetailJSonModel.setProperty("/Data4", vData);
             
@@ -799,7 +799,7 @@ sap.ui.define([
                     success : function(data,res){
                         if(data){
                             if(data.Yeartax0542DataTableIn1Set && data.Yeartax0542DataTableIn1Set.results){
-                                vData = Object.assign(vData, data.Yeartax0542DataTableIn1Set.results[0]);
+                                vData = $.extend(true, vData, data.Yeartax0542DataTableIn1Set.results[0]);
                             }
                         }
                     },
@@ -832,7 +832,7 @@ sap.ui.define([
                     success : function(data,res){
                         if(data){
                             if(data.Yeartax0542DataTableIn2Set && data.Yeartax0542DataTableIn2Set.results){
-                                vData = Object.assign(vData, data.Yeartax0542DataTableIn2Set.results[0]);
+                                vData = $.extend(true, vData, data.Yeartax0542DataTableIn2Set.results[0]);
                             }
                         }
                     },
@@ -1669,7 +1669,7 @@ sap.ui.define([
 								"\n- 기본공제 대상자에 해당하지 않는데 부양가족으로 체크된 경우 가족등록신청 메뉴에서 수정하시기 바랍니다." +
 								"\n* 기본공제 대상자 나이요건" +
 								"\n 직계존속: " + year1 + "년 12월 31일 이전 출생자" +
-								"\n 직계비속: " + year2 +"년 1월 1일 이후 출생자" +
+								"\n 직계비속: " + year2 + "년 1월 1일 이후 출생자" +
 								"\n\n(2) 부양가족 중복공제 여부 확인" +
 								"\n- 독립적인 생계능력이 없는 부모님에 대해 가족 구성원이 중복하여 공제받지 않았는지 확인하십시오." +
 								"\n- 맞벌이 부부인 경우 자녀에 대한 보험료, 의료비, 교육비, 기부금, 신용카드 등의 사용액을 부부가 중복으로 공제받지 않았는지 반드시 확인하십시오." + 
@@ -1679,6 +1679,105 @@ sap.ui.define([
             });
         },
         
+        // 재작성
+        onChangeStatus : function(){
+            var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
+            var oController = oView.getController();
+
+            var onProcess = function(){
+                var oPercod = "";            
+                if(oController._Pernr != oController.getSessionInfoByKey("Pernr")){
+                    var oModel2 = $.app.getModel("ZHR_COMMON_SRV");
+                    var createData2 = {Pernr : oController._Pernr, PernrEncodeNav : [{Pernr : oController._Pernr}]};
+                    oModel2.create("/PernrEncodingSet", createData2, {
+                        success: function(data){
+                            if(data){
+                                oPercod = data.Percod;
+                            }
+                        },
+                        error: function (oError) {
+                            var Err = {};
+                            oController.Error = "E";
+                                    
+                            if (oError.response) {
+                                Err = window.JSON.parse(oError.response.body);
+                                var msg1 = Err.error.innererror.errordetails;
+                                if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                                else oController.ErrorMessage = Err.error.message.value;
+                            } else {
+                                oController.ErrorMessage = oError.toString();
+                            }
+                        }
+                    });
+    
+                    if(oController.Error == "E"){
+                        oController.Error = "";
+                        MessageBox.error(oController.ErrorMessage);
+                        return;
+                    }
+                } else {
+                    oPercod = oController.getSessionInfoByKey("Percod");
+                }
+
+                var createData = {};
+                    createData.Pystat = "1";
+                    createData.IBukrs = oController._Bukrs;
+                    createData.IPercod = oPercod;
+                    createData.IZyear = oController._DetailJSonModel.getProperty("/Data/Zyear");
+                    createData.ILangu = oController.getSessionInfoByKey("Langu");
+
+                var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
+                oModel.create("/YeartaxHeaderSet", createData,
+                    {
+                        success: function(data,res){
+                            if(data){
+                                
+                            }
+                        },
+                        error: function (oError) {
+                            var Err = {};
+                            oController.Error = "E";
+                            
+                            if (oError.response) {
+                                Err = window.JSON.parse(oError.response.body);
+                                var msg1 = Err.error.innererror.errordetails;
+                                if(msg1 && msg1.length) oController.ErrorMessage = Err.error.innererror.errordetails[0].message;
+                                else oController.ErrorMessage = Err.error.message.value;
+                            } else {
+                                oController.ErrorMessage = oError.toString();
+                            }
+                        }
+                    }
+                );
+
+                oController._BusyDialog.close();
+
+                if(oController.Error == "E"){
+                    oController.Error = "";
+                    MessageBox.error(oController.ErrorMessage);
+                    return;
+                }
+
+                oController.onDataProgress();
+
+                MessageBox.success("상태가 변경되었습니다.", {
+                    onClose : function(){
+                        oController.handleIconTabBarSelect("", "X");
+                    }
+                });
+            };
+
+            MessageBox.confirm("재작성하시겠습니까?", {
+                actions : ["YES", "NO"],
+                onClose : function(fVal){
+                    if(fVal && fVal == "YES"){
+                        oController._BusyDialog.open();
+                        setTimeout(onProcess, 100);
+                    }
+                }
+            });
+        },
+                
         // 소득공제 - 주택자금 국세청 금액 삭제
         onPressDelete : function(oEvent){
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
@@ -1747,6 +1846,7 @@ sap.ui.define([
             });
         },
 
+        // HASS - 대상자 데이터 세팅
         setUserData : function(oController, oPernr){
             if(!oController || !oPernr) return;
 
@@ -1785,7 +1885,7 @@ sap.ui.define([
                                 if(data1){
                                     $.extend(true, vData, data1);
                                 } else {
-                                    sap.m.MessageBox.error(oController.getBundleText("MSG_48015")); // 데이터 조회 중 오류가 발생하였습니다.
+                                    MessageBox.error(oController.getBundleText("MSG_48015")); // 데이터 조회 중 오류가 발생하였습니다.
                                     return;
                                 }
                             }
@@ -1856,15 +1956,13 @@ sap.ui.define([
 				oPath += " and IBukrs eq '" + oController._Bukrs + "'";
 				oPath += " and IPercod eq '" + encodeURIComponent(oPercod) + "'";
                 oPath += " and IEmpid eq '" + encodeURIComponent(oController._Pernr) + "'";
-				
-			var oZyear = "", oPystat = "", oYestat = "";
 			
 			oModel.read(oPath, null, null, false,
 					function(data, oResponse) {
 						if(data && data.results.length) {
 							oController._Zyear = data.results[0].Zyear;
 							oController._Pystat = data.results[0].Pystat;
-							oController._Yestat = data.results[0].Yestat;
+							oController._Yestat = (data.results[0].Yestat == "X" ? "1" : "");
                             
                             oController._DetailJSonModel.setProperty("/Data2/Zzorgtx", data.results[0].Orgtx);
                             oController._DetailJSonModel.setProperty("/Data2/ZpGradeTxt", data.results[0].Titl2);
@@ -2786,7 +2884,7 @@ sap.ui.define([
                 onClose : saveProcess 
             });
         },
-        
+
         // 사업자등록번호 확인
         check_busino : function(vencod) {
             vencod = vencod.replace(/-/gi,"");
