@@ -90,7 +90,7 @@ sap.ui.define([
             if(!oController._DetailJSonModel.getProperty("/Data")){
             	var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
 	            var oPath = "/YeartaxHeaderSet?$filter=IZyear eq '2019'";
-	                oPath += " and IBukrs eq '" + oController.getSessionInfoByKey("Bukrs") + "'";
+	                oPath += " and IBukrs eq '" + oController.getSessionInfoByKey("Bukrs2") + "'";
 	                oPath += " and IPercod eq '" + encodeURIComponent(oController.getSessionInfoByKey("Percod")) + "'";
 	                oPath += " and IEmpid eq '" + encodeURIComponent(oController.getSessionInfoByKey("Pernr")) + "'";
 	                
@@ -152,7 +152,7 @@ sap.ui.define([
                 };
                 
                 oController._Pernr = oController.getSessionInfoByKey("Pernr");
-                oController._Bukrs = oController.getSessionInfoByKey("Bukrs");
+                oController._Bukrs = oController.getSessionInfoByKey("Bukrs2");
                 oController._Zyear = oZyear;
                 oController._Pystat = oPystat;
                 oController._Yestat = oYestat;
