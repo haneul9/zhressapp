@@ -91,7 +91,7 @@ sap.ui.define([
 		
 		onChangeDate : function(oEvent){
 			if(oEvent && oEvent.getParameters().valid == false){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_02047")); // 잘못된 일자형식입니다.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_02047")); // 잘못된 일자형식입니다.
 				oEvent.getSource().setValue("");
 				return;
 			}
@@ -212,13 +212,13 @@ sap.ui.define([
 									
 									switch(data1.Status1){
 										case "AA":
-											data1.Statustx = oBundleText.getText("LABEL_52009"); // 미작성
+											data1.Statustx = oController.getBundleText("LABEL_52009"); // 미작성
 											break;
 										case "00":
-											data1.Statustx = oBundleText.getText("LABEL_52010"); // 저장
+											data1.Statustx = oController.getBundleText("LABEL_52010"); // 저장
 											break;
 										case "99":
-											data1.Statustx = oBundleText.getText("LABEL_52011"); // 확정
+											data1.Statustx = oController.getBundleText("LABEL_52011"); // 확정
 											break;
 									}
 									
@@ -313,7 +313,7 @@ sap.ui.define([
 				rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 							height : "45px",
 							cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-										 content : [new sap.m.Text({text : oBundleText.getText("LABEL_52012")}).addStyleClass("sub-title")], // 연차사용계획
+										 content : [new sap.m.Text({text : oController.getBundleText("LABEL_52012")}).addStyleClass("sub-title")], // 연차사용계획
 										 hAlign : "Begin",
 										 vAlign : "Middle",
 										 colSpan : 2
@@ -328,7 +328,7 @@ sap.ui.define([
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({text : oBundleText.getText("LABEL_00901")})], // No data found
+									 content : [new sap.m.Text({text : oController.getBundleText("LABEL_00901")})], // No data found
 									 hAlign : "Center",
 									 vAlign : "Middle",
 									 colSpan : 2
@@ -341,7 +341,7 @@ sap.ui.define([
 						new sap.ui.commons.layout.MatrixLayoutRow({
 							height : "45px",
 							cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-										 content : [new sap.m.Text({text : oBundleText.getText("LABEL_52013") + " " + (i+1)}).addStyleClass("font-bold")], // 연차사용계획일
+										 content : [new sap.m.Text({text : oController.getBundleText("LABEL_52013") + " " + (i+1)}).addStyleClass("font-bold")], // 연차사용계획일
 										 hAlign : "Center",
 										 vAlign : "Middle"
 									 }).addStyleClass("Label2"),
@@ -387,19 +387,28 @@ sap.ui.define([
 			
 			// validation check
 			if(oController._Signcheck == "" && oData.Appnm == ""){
-				sap.m.MessageBox.error(oBundleText.getText("MSG_52011")); // 먼저 서명하여 주십시오.
+				sap.m.MessageBox.error(oController.getBundleText("MSG_52011")); // 먼저 서명하여 주십시오.
 				return;
 			}
 			
 			for(var i=0; i<oData2.length; i++){
 				if(!oData2[i].Zdate || oData2[i].Zdate == ""){
-					sap.m.MessageBox.error(oBundleText.getText("MSG_52009")); // 연차사용계획일을 모두 입력하여 주십시오.
+					sap.m.MessageBox.error(oController.getBundleText("MSG_52009")); // 연차사용계획일을 모두 입력하여 주십시오.
 					return;
 				} else {
 					var zdate = dateFormat.format(new Date(oData2[i].Zdate)) * 1;
 					if(zdate < begda || endda < zdate){
-						sap.m.MessageBox.error(oBundleText.getText("MSG_52010")); // 연차사용계획일이 지정가능기간을 벗어난 데이터가 존재합니다.
+						sap.m.MessageBox.error(oController.getBundleText("MSG_52010")); // 연차사용계획일이 지정가능기간을 벗어난 데이터가 존재합니다.
 						return;
+					}
+
+					for(var j=0; j<createData.LeaveBoostListTab2.length; j++){
+						var tmp = createData.LeaveBoostListTab2[j].Zdate.replace(/[^0-9]/g, ""),
+						    tmp2 = dateFormat.format(new Date(tmp * 1)) * 1;
+						if(tmp2 == zdate){
+							sap.m.MessageBox.error(oController.getBundleText("MSG_52012")); // 중복일자가 존재합니다.
+							return;
+						}
 					}
 				}
 				
@@ -415,11 +424,11 @@ sap.ui.define([
 			
 			var confirmMessage = "", successMessage = "";
 			if(Flag == "S"){
-				confirmMessage = oBundleText.getText("MSG_00058"); // 저장하시겠습니까?
-				successMessage = oBundleText.getText("MSG_00017"); // 저장되었습니다.
+				confirmMessage = oController.getBundleText("MSG_00058"); // 저장하시겠습니까?
+				successMessage = oController.getBundleText("MSG_00017"); // 저장되었습니다.
 			} else {
-				confirmMessage = oBundleText.getText("MSG_52007"); // 확정하시겠습니까?
-				successMessage = oBundleText.getText("MSG_52008"); // 확정되었습니다.
+				confirmMessage = oController.getBundleText("MSG_52007"); // 확정하시겠습니까?
+				successMessage = oController.getBundleText("MSG_52008"); // 확정되었습니다.
 			}
 			
 			var onProcess = function(){
