@@ -309,7 +309,7 @@ sap.ui.define([
 					.setModel(oController.UploadFileModel)
 					.bindElement("/PDFFile")
 					.addStyleClass("search-field-group"),
-					new sap.m.HBox({
+					new sap.m.HBox(oController.PAGEID + "_FileUploadBox", {
 						alignItems: sap.m.FlexAlignItems.Center,
 						fitContainer: true,
 						items: [

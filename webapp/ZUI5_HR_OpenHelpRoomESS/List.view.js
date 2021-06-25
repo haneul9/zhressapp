@@ -53,6 +53,7 @@ sap.ui.define([
 
 			var ListBox = new sap.m.FlexBox(oController.PAGEID + "_listBox", {
 				width: "100%",
+				height: "100%",
 				direction: sap.m.FlexDirection.Column,
 				fitContainer: true,
 				items: [

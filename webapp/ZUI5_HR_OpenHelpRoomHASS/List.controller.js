@@ -2,12 +2,9 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/AttachFileAction",
-	"../common/JSONModelHelper",
-	"../common/PageHelper",
-	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator"
+	"../common/JSONModelHelper"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, PageHelper, MessageBox, BusyIndicator) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper) {
 	"use strict"; // 주석
 
 	
@@ -44,7 +41,7 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -80,7 +77,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn5 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.OpenhelpTableIn1) { //값을 제대로 받아 왔을 때
 						Common.log(oData);
 						var rDatas1 = oData.OpenhelpTableIn1.results;
@@ -100,6 +97,7 @@ sap.ui.define([
 								}
 
 							} else if (o.L3id) {
+								// eslint-disable-next-line no-redeclare
 								var mapId = [o.L1id, o.L2id, ""].join();
 								if (treeMap[mapId]) {
 									treeMap[mapId].push($.extend(o, {title: o.L3txt}));
@@ -113,6 +111,7 @@ sap.ui.define([
 								}
 
 							} else if (o.L2id) {
+								// eslint-disable-next-line no-redeclare
 								var mapId = [o.L1id, "", ""].join();
 								if (treeMap[mapId]) {
 									treeMap[mapId].push($.extend(o, {title: o.L2txt}));
@@ -126,6 +125,7 @@ sap.ui.define([
 								}
 
 							} else {
+								// eslint-disable-next-line no-redeclare
 								var mapId = [o.L1id, "", ""].join();
 								o.title = o.L1txt;
 								o.nodes = treeMap[mapId] = [];
@@ -152,25 +152,25 @@ sap.ui.define([
 			if(isNew) oTree.expandToLevel(4);
 			
 			oTree.getItems().forEach(function(elem) {
-				if(oFullData.some(function(e){ return e.L4txt === elem.getTitle()})){
+				if(oFullData.some(function(e){ return e.L4txt === elem.getTitle();})){
 					if(oController.TreeModel.getProperty(elem.getBindingContextPath()).L4use === "X"){
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","N");
 					}else{
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","Y");
 					}
-				}else if(oFullData.some(function(e){ return e.L4txt !== elem.getTitle() && e.L3txt === elem.getTitle()})){
+				}else if(oFullData.some(function(e){ return e.L4txt !== elem.getTitle() && e.L3txt === elem.getTitle();})){
 					if(oController.TreeModel.getProperty(elem.getBindingContextPath()).L3use === "X"){
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","N");
 					}else{
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","Y");
 					}
-				}else if(oFullData.some(function(e){ return e.L4txt !== elem.getTitle() && e.L3txt !== elem.getTitle() && e.L2txt === elem.getTitle()})){
+				}else if(oFullData.some(function(e){ return e.L4txt !== elem.getTitle() && e.L3txt !== elem.getTitle() && e.L2txt === elem.getTitle();})){
 					if(oController.TreeModel.getProperty(elem.getBindingContextPath()).L2use === "X"){
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","N");
 					}else{
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","Y");
 					}
-				}else if(oFullData.some(function(e){ return e.L4txt !== elem.getTitle() && e.L3txt !== elem.getTitle() && e.L2txt !== elem.getTitle() && e.L1txt === elem.getTitle()})){
+				}else if(oFullData.some(function(e){ return e.L4txt !== elem.getTitle() && e.L3txt !== elem.getTitle() && e.L2txt !== elem.getTitle() && e.L1txt === elem.getTitle();})){
 					if(oController.TreeModel.getProperty(elem.getBindingContextPath()).L1use === "X"){
 						oController.TreeModel.setProperty(elem.getBindingContextPath()+"/Gubun","N");
 					}else{
@@ -192,7 +192,7 @@ sap.ui.define([
 
 				if(isNew && elem.aCustomStyleClasses.toString() !== "color-signature-blue" && oController.TreeModel.getProperty(elem.getBindingContextPath() + "/Gubun") === "Y" && Common.checkNull(!oController.TreeModel.getProperty(elem.getBindingContextPath()).L2id)){
 					if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.length !== 0){
-						if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.every(function(e) { return e.Gubun === "Y" })){
+						if(oController.TreeModel.getProperty(elem.getBindingContextPath()).nodes.every(function(e) { return e.Gubun === "Y"; })){
 							oTree.collapse(Number(elem.sId.slice(elem.sId.lastIndexOf("-")+1)));
 						}
 					}
@@ -202,7 +202,7 @@ sap.ui.define([
 			});
 		},
 		
-		onItemPress: function(oEvent) {
+		onItemPress: function() {
 			var oController = this;
 			oController.getHighlight(oController, false);
 		},
@@ -220,6 +220,9 @@ sap.ui.define([
 			if(Cancel === "Cancel") this.getBtnVisible(oController.TreePath);
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
+			$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(oController.PAGEID + "_FileUpload").setBusyIndicatorDelay(0).setBusy(true);
 			
 			var sendObject = {};
 			// Header
@@ -236,31 +239,52 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn5 = [];
 			
 			oController.OpenHelpModel.setProperty("/Route", oController.gSelectedRoute);
-			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
-					if (oData) {
-						Common.log(oData);
-						var rExportData = oData.OpenhelpExport.results[0];
-						var rTopData = oData.OpenhelpTableIn2.results[0];
-						var rMiddleData = oData.OpenhelpTableIn2.results[1];
-						var rBottomData= oData.OpenhelpTableIn2.results[2];
-						
-						oController.OpenHelpModel.setProperty("/Export", rExportData);
-						oController.OpenHelpModel.setProperty("/TopData", rTopData || {});
-						oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData || {});
-						oController.OpenHelpModel.setProperty("/BottomData", rBottomData || {});
-						oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
-						oController.OpenHelpModel.setProperty("/FileData2", oData.OpenhelpTableIn5.results);
-						oController.onBeforeOpenDetailDialog();
-						oController.refreshAttachFileList2(oController);
-					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
+
+			Common.getPromise(
+				function () {
+					oModel.create("/OpenhelpImportSet", sendObject, {
+						success: function(oData) {
+							if (oData) {
+								Common.log(oData);
+								var rExportData = oData.OpenhelpExport.results[0];
+								var rTopData = oData.OpenhelpTableIn2.results[0];
+								var rMiddleData = oData.OpenhelpTableIn2.results[1];
+								var rBottomData= oData.OpenhelpTableIn2.results[2];
+								
+								oController.OpenHelpModel.setProperty("/Export", rExportData);
+								oController.OpenHelpModel.setProperty("/TopData", rTopData || {});
+								oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData || {});
+								oController.OpenHelpModel.setProperty("/BottomData", rBottomData || {});
+								oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
+								oController.OpenHelpModel.setProperty("/FileData2", oData.OpenhelpTableIn5.results);
+							}
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+						}
 					});
-				}
+				}.bind(this)
+			).then(function () {
+				$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(false);
+			});	
+
+			Common.getPromise(
+				function () {
+					oController.onBeforeOpenDetailDialog();
+				}.bind(this)
+			).then(function () {
+				$.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(false);
+			});
+
+			Common.getPromise(
+				function () {
+					oController.refreshAttachFileList2(oController);
+				}.bind(this)
+			).then(function () {
+				$.app.byId(oController.PAGEID + "_FileUpload").setBusyIndicatorDelay(0).setBusy(false);
 			});
 		},
 		
@@ -309,19 +333,19 @@ sap.ui.define([
 			
 			oModifiedBtn.setVisible(false);
 			
-			if(oFullData.some(function(e){ return e.L4txt === vSeletedData})){
+			if(oFullData.some(function(e){ return e.L4txt === vSeletedData;})){
 				if(oController.TreeModel.getProperty(Path).L4use === "X"){
 					oModifiedBtn.setVisible(true);
 				}
-			}else if(oFullData.some(function(e){ return e.L4txt !== vSeletedData && e.L3txt === vSeletedData})){
+			}else if(oFullData.some(function(e){ return e.L4txt !== vSeletedData && e.L3txt === vSeletedData;})){
 				if(oController.TreeModel.getProperty(Path).L3use === "X"){
 					oModifiedBtn.setVisible(true);
 				}
-			}else if(oFullData.some(function(e){ return e.L4txt !== vSeletedData && e.L3txt !== vSeletedData && e.L2txt === vSeletedData})){
+			}else if(oFullData.some(function(e){ return e.L4txt !== vSeletedData && e.L3txt !== vSeletedData && e.L2txt === vSeletedData;})){
 				if(oController.TreeModel.getProperty(Path).L2use === "X"){
 					oModifiedBtn.setVisible(true);
 				}
-			}else if(oFullData.some(function(e){ return e.L4txt !== vSeletedData && e.L3txt !== vSeletedData && e.L2txt !== vSeletedData && e.L1txt === vSeletedData})){
+			}else if(oFullData.some(function(e){ return e.L4txt !== vSeletedData && e.L3txt !== vSeletedData && e.L2txt !== vSeletedData && e.L1txt === vSeletedData;})){
 				if(oController.TreeModel.getProperty(Path).L1use === "X"){
 					oModifiedBtn.setVisible(true);
 				}
@@ -341,7 +365,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L4txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L4id === ele.L4id
+				return ele.L4txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L4id === ele.L4id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -352,7 +376,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L3txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L3id === ele.L3id
+				return ele.L3txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L3id === ele.L3id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -363,7 +387,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L2txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L2id === ele.L2id
+				return ele.L2txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L2id === ele.L2id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -374,7 +398,7 @@ sap.ui.define([
 			if(oDetailData.some(function(ele) {
 				oCopyData = "";
 				oCopyData = ele;
-				return ele.L1txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L1id === ele.L1id
+				return ele.L1txt === vSeletedData && oController.TreeModel.getProperty(oTree._aSelectedPaths.toString()).L1id === ele.L1id;
 			})){
 				delete oCopyData.nodes;
 				delete oCopyData.title;
@@ -383,7 +407,7 @@ sap.ui.define([
 			}
 		},
 		
-		onSearchBtn: function(oEvent) { //관리자조회
+		onSearchBtn: function() { //관리자조회
 			var oController = this;
 			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
 			var vBukrs2 = oController.getUserGubun();
@@ -415,7 +439,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn4 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData) {
 						Common.log(oData);
 						var rData = oData.OpenhelpTableIn3.results;
@@ -507,7 +531,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn5 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					Common.log(oData);
 					oController.onTreeSetData("Cancel");
 				},
@@ -553,7 +577,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn5 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function() {
 					oController.onTreeSetData();
 					oController.onRefresh(true);
 					oController.onBeforeOpenDetailDialog();
@@ -620,7 +644,7 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn3 = [];
 			
 			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function() {
 					oController.onTreeSetData();
 				},
 				error: function(oResponse) {
@@ -645,7 +669,7 @@ sap.ui.define([
 			}
 	
 			oModel.read("/FileListSet", {
-				async: false,
+				async: true,
 				filters: [
 					new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
 				],
@@ -655,18 +679,16 @@ sap.ui.define([
 						data.results[0].Type = data.results[0].Fname.substring(data.results[0].Fname.lastIndexOf(".") + 1);
 
 						Datas.Data.push(data.results[0]);
+						oController.UploadFileModel.setProperty("/PDFFile", Datas.Data[0]);
 					}
 				},
 				error: function (res) {
 					common.Common.log(res);
 				}
 			});
-	
-			oController.UploadFileModel.setProperty("/PDFFile", Datas.Data[0]);
 		},
 
-		onFileDelBtn: function(oEvent) {
-			var oController = this;
+		onFileDelBtn: function() {
 			var oFileUpload= $.app.byId(this.PAGEID + "_FileUpload");
 			
 			oFileUpload.setValue("");
@@ -790,13 +812,13 @@ sap.ui.define([
 				oFileUpload.setEnabled(false);
 				oFileBtn.setEnabled(false);
 			}
-			
+
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
 				Mode: "M",
 				Max: "10",
 				Editable: oSaveBtn.getVisible()
-			});
+			});						
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {

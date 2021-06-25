@@ -152,6 +152,8 @@ sap.ui.define([
 			if(!oMenuScroll.getVisible()) oMenuScroll.setVisible(true);
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
+			$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(true);
 
 			oController.OpenHelpModel.setData({TopData: []});
 			
@@ -168,60 +170,72 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn3 = [];
 			sendObject.OpenhelpTableIn4 = [];
 			sendObject.OpenhelpTableIn5 = [];
-			
-			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function(oData) {
-					if (oData) {
-						Common.log(oData);
-						var rExportData = oData.OpenhelpExport.results[0];
-						var rTopData = oData.OpenhelpTableIn2.results[0];
-						var rMiddleData = oData.OpenhelpTableIn2.results[1];
-						var rBottomData= oData.OpenhelpTableIn2.results[2];
-						
-						// var oNoDataBox = $.app.byId(oController.PAGEID + "_NoDataBox");
-						if(Common.checkNull(rTopData) && Common.checkNull(rMiddleData) && Common.checkNull(rBottomData) && Common.checkNull(oData.OpenhelpTableIn4.results[0]) && Common.checkNull(oData.OpenhelpTableIn5.results[0])){
-							// oNoDataBox.setVisible(true);
-							oController.OpenHelpModel.setProperty("/TopData/Zcomment", "");
-							oController.OpenHelpModel.setProperty("/MiddleData", []);
-							oController.OpenHelpModel.setProperty("/BottomData", []);
-							oController.OpenHelpModel.setProperty("/FileData", []);
-							oController.OpenHelpModel.setProperty("/PDFData", []);
 
-						}else{
-							jQuery.sap.addUrlWhitelist("https", "clri-ltc.ca");
-							jQuery.sap.addUrlWhitelist("https", "esslddev.lottechem.com");
-							jQuery.sap.addUrlWhitelist("https", "essprd.lottechem.com");
-							jQuery.sap.addUrlWhitelist("blob");
-							// jQuery.sap.addUrlWhitelist("http", "ssvess1d", "7097");
-
-							// oNoDataBox.setVisible(false);
-							oController.OpenHelpModel.setProperty("/Export", rExportData);
-							oController.OpenHelpModel.setProperty("/TopData", rTopData);
-							oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
-							oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
-							oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
-							oController.OpenHelpModel.setProperty("/PDFData", {});
-							
-							// 외부망 - binary파일로 대체
-							if(Common.isExternalIP()) {
-								oController.displayBinaryPDF(oData.OpenhelpTableIn5.results[0]);
-							} else {
-								oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
+			Common.getPromise(
+				function () {
+					oModel.create("/OpenhelpImportSet", sendObject, {
+						success: function(oData) {
+							if (oData) {
+								Common.log(oData);
+								var rExportData = oData.OpenhelpExport.results[0];
+								var rTopData = oData.OpenhelpTableIn2.results[0];
+								var rMiddleData = oData.OpenhelpTableIn2.results[1];
+								var rBottomData= oData.OpenhelpTableIn2.results[2];
+								
+								// var oNoDataBox = $.app.byId(oController.PAGEID + "_NoDataBox");
+								if((Common.checkNull(rTopData) || Common.checkNull(rTopData.Zcomment)) && Common.checkNull(rMiddleData) && Common.checkNull(rBottomData) && Common.checkNull(oData.OpenhelpTableIn4.results[0]) && Common.checkNull(oData.OpenhelpTableIn5.results[0])){
+									// oNoDataBox.setVisible(true);
+									oController.OpenHelpModel.setProperty("/TopData/Zcomment", "");
+									oController.OpenHelpModel.setProperty("/MiddleData", []);
+									oController.OpenHelpModel.setProperty("/BottomData", []);
+									oController.OpenHelpModel.setProperty("/FileData", []);
+									oController.OpenHelpModel.setProperty("/PDFData", []);
+								}else{
+									jQuery.sap.addUrlWhitelist("https", "clri-ltc.ca");
+									jQuery.sap.addUrlWhitelist("https", "esslddev.lottechem.com");
+									jQuery.sap.addUrlWhitelist("https", "essprd.lottechem.com");
+									jQuery.sap.addUrlWhitelist("blob");
+									// jQuery.sap.addUrlWhitelist("http", "ssvess1d", "7097");
+		
+									// oNoDataBox.setVisible(false);
+									oController.OpenHelpModel.setProperty("/Export", rExportData);
+									oController.OpenHelpModel.setProperty("/TopData", rTopData);
+									oController.OpenHelpModel.setProperty("/MiddleData", rMiddleData);
+									oController.OpenHelpModel.setProperty("/BottomData", rBottomData);
+									oController.OpenHelpModel.setProperty("/FileData", oData.OpenhelpTableIn4.results);
+									oController.OpenHelpModel.setProperty("/PDFData", {});
+									
+									// 외부망 - binary파일로 대체
+									if(Common.isExternalIP()) {
+										oController.displayBinaryPDF(oData.OpenhelpTableIn5.results[0]);
+									} else {
+										oController.OpenHelpModel.setProperty("/PDFData", oData.OpenhelpTableIn5.results[0]);
+									}
+								}
+								
+								if(Common.checkNull(!oController.gSelectedRoute.Url)){
+									window.open("http://" + oController.gSelectedRoute.Url);
+								}
 							}
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
 						}
-						oController.onBeforeOpenDetailDialog();
-						
-						if(Common.checkNull(!oController.gSelectedRoute.Url)){
-							window.open("http://" + oController.gSelectedRoute.Url);
-						}
-					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
 					});
-				}
+				}.bind(this)
+			).then(function () {
+				$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(false);
+			});
+
+			Common.getPromise(
+				function () {
+					oController.onBeforeOpenDetailDialog();
+				}.bind(this)
+			).then(function () {
+				$.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(false);
 			});
 		},
 
@@ -358,7 +372,7 @@ sap.ui.define([
 			}
 	
 			oModel.read("/FileListSet", {
-				async: false,
+				async: true,
 				filters: [
 					new sap.ui.model.Filter("Appnm", sap.ui.model.FilterOperator.EQ, vAppnm)
 				],
@@ -369,13 +383,13 @@ sap.ui.define([
 
 						Datas.Data.push(data.results[0]);
 					}
+					oController.UploadFileModel.setProperty("/PDFFile", Datas.Data[0]);
 				},
 				error: function (res) {
 					common.Common.log(res);
 				}
 			});
 	
-			oController.UploadFileModel.setProperty("/PDFFile", Datas.Data[0]);
 		},
 		
 		uploadFile2: function () {
