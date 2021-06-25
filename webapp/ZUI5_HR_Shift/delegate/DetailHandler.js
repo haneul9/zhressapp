@@ -172,7 +172,7 @@ sap.ui.define(
                 switch (conType) {
                     case Shift.ProcessType.APPROVAL_REQUEST:
                         if(!Common.isExternalIP()) {     // 내부망 체크
-                            if(!Common.openPopup.call(oController, data.EAppurl)) {  // 팝업차단 시 이후 여기서 메시지 출력 후 Stop
+                            if(!Common.openPopup.call(this.oController, data.EAppurl)) {  // 팝업차단 시 이후 여기서 메시지 출력 후 Stop
                                 BusyIndicator.hide();
                                 return;
                             }
