@@ -18,7 +18,7 @@ sap.ui.define([
             {id: "GradeTx",     label: "{i18n>LABEL_38008}" /* 학년 */,          plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"},
             {id: "ReqSum",      label: "{i18n>LABEL_38009}" /* 신청금액 */,      plabel: "", resize: true, span: 0, type: "currency",  sort: true,  filter: true,  width: "10%"},
             {id: "AdmSum",      label: "{i18n>LABEL_38010}" /* 지원금액 */,      plabel: "", resize: true, span: 0, type: "currency",  sort: true,  filter: true,  width: "10%"},
-            {id: "PayDate",     label: "{i18n>LABEL_38011}" /* 지급(예정)년월 */,plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "10%", templateGetter: "getPayDate"},
+            {id: "PayDate",     label: "{i18n>LABEL_38011}" /* 지급(예정)년월 */,plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "10%"},
             {id: "StatusT",     label: "{i18n>LABEL_38012}" /* 결재상태 */,      plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "13%", templateGetter: "getStatus"}
         ],
 

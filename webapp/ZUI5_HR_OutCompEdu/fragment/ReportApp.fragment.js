@@ -571,6 +571,8 @@ sap.ui.define([
 				title: "{i18n>LABEL_40001}",    // 사외위탁교육 신청
 				contentWidth: "980px",
 				contentHeight: "650px",
+				beforeOpen: oController.onBeforeReportDialog.bind(oController),
+				afterOpen: oController.onAfterReportDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogApplyBtn.bind(oController),

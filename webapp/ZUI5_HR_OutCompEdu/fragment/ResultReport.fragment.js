@@ -427,7 +427,11 @@ sap.ui.define([
 											}
                                         }
                                     }),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+									new sap.m.VBox(oController.PAGEID + "_FileBox2",{
+										items: [
+											fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
+										]
+									})
                                 ]
                             })
 						]
@@ -449,7 +453,11 @@ sap.ui.define([
 											}
                                         }
                                     }),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
+									new sap.m.VBox(oController.PAGEID + "_FileBox3",{
+										items: [
+											fragment.COMMON_ATTACH_FILES.renderer(oController,"003")
+										]
+									})
                                 ]
                             })
 						]
@@ -463,7 +471,11 @@ sap.ui.define([
                                     new sap.m.Text({text: "{i18n>MSG_40027}", width: "auto", textAlign: "Begin"}),
                                     new sap.m.Text({text: "{i18n>MSG_40028}", width: "auto", textAlign: "Begin"}),
                                     new sap.m.Text({text: "{i18n>MSG_40029}", width: "auto", textAlign: "Begin"}),
-                                    fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
+									new sap.m.VBox(oController.PAGEID + "_FileBox4",{
+										items: [
+											fragment.COMMON_ATTACH_FILES.renderer(oController,"004")
+										]
+									})
                                 ]
                             })
 						]
@@ -638,6 +650,8 @@ sap.ui.define([
 				title: "{i18n>LABEL_40001}",    // 사외위탁교육 신청
 				contentWidth: "980px",
 				contentHeight: "650px",
+				beforeOpen: oController.onBeforeResultDialog.bind(oController),
+				afterOpen: oController.onAfterResultDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogResultBtn.bind(oController),

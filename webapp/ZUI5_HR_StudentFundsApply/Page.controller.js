@@ -485,8 +485,8 @@
 			var vPernr = oController.getUserId();
             var vBukrs = RowBukrs ? RowBukrs : oController.getUserGubun();
 
-			if ((!oController.HighApplyModel.getProperty("/SchoolCombo")) ||
-				(!oController.ApplyModel.getProperty("/SchoolCombo"))){
+			if ((RowBukrs === "A100" && !oController.HighApplyModel.getProperty("/SchoolCombo")) ||
+				(RowBukrs !== "A100" && !oController.ApplyModel.getProperty("/SchoolCombo"))){
 				var sendObject = {};
 				// Header
 				sendObject.IPernr = vPernr;
@@ -661,20 +661,23 @@
 					// Navigation property
 					sendObject.NavCommonCodeList = [];
 					// 학년
-					oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-						success: function(oData) {
-							if (oData && oData.NavCommonCodeList) {
-								Common.log(oData);
-								oController.HighApplyModel.setProperty("/GradeCombo", oData.NavCommonCodeList.results);
+
+					if(!oController.HighApplyModel.getProperty("/GradeCombo")) {
+						oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
+							success: function(oData) {
+								if (oData && oData.NavCommonCodeList) {
+									Common.log(oData);
+									oController.HighApplyModel.setProperty("/GradeCombo", oData.NavCommonCodeList.results);
+								}
+							},
+							error: function(oResponse) {
+								Common.log(oResponse);
+								sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+									title: oController.getBundleText("LABEL_09030")
+								});
 							}
-						},
-						error: function(oResponse) {
-							Common.log(oResponse);
-							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-								title: oController.getBundleText("LABEL_09030")
-							});
-						}
-					});
+						});
+					}
 
 					var oGradeCombo2 = $.app.byId(oController.PAGEID + "_GradeCombo2");
 					var oMajorInput = $.app.byId(oController.PAGEID + "_MajorInput");
@@ -693,20 +696,22 @@
 						// Navigation property
 						sendObject.NavCommonCodeList = [];
 						//학년제
-						oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-							success: function(oData) {
-								if (oData && oData.NavCommonCodeList) {
-									Common.log(oData);
-									oController.HighApplyModel.setProperty("/GradeCombo2", oData.NavCommonCodeList.results);
+						if(!oController.HighApplyModel.getProperty("/GradeCombo2")) {
+							oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
+								success: function(oData) {
+									if (oData && oData.NavCommonCodeList) {
+										Common.log(oData);
+										oController.HighApplyModel.setProperty("/GradeCombo2", oData.NavCommonCodeList.results);
+									}
+								},
+								error: function(oResponse) {
+									Common.log(oResponse);
+									sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+										title: oController.getBundleText("LABEL_09030")
+									});
 								}
-							},
-							error: function(oResponse) {
-								Common.log(oResponse);
-								sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-									title: oController.getBundleText("LABEL_09030")
-								});
-							}
-						});
+							});
+						}
 					}else {
 						oController.HighApplyModel.setProperty("/GradeCombo2", []);
 						oGradeCombo2.setEditable(false);
@@ -745,20 +750,22 @@
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			// 지원유형 
-			oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-				success: function(oData) {
-					if (oData && oData.NavCommonCodeList) {
-						Common.log(oData);
-						oController.HighApplyModel.setProperty("/SupportCombo", oData.NavCommonCodeList.results);
+			if(!oController.HighApplyModel.getProperty("/SupportCombo")) {
+				oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
+					success: function(oData) {
+						if (oData && oData.NavCommonCodeList) {
+							Common.log(oData);
+							oController.HighApplyModel.setProperty("/SupportCombo", oData.NavCommonCodeList.results);
+						}
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
 					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
-					});
-				}
-			});
+				});
+			}
 
 			sendObject = {};
 			// Header
@@ -771,20 +778,22 @@
 			// Navigation property
 			sendObject.NavCommonCodeList = [];
 			// 학년
-			oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-				success: function(oData) {
-					if (oData && oData.NavCommonCodeList) {
-						Common.log(oData);
-						oController.HighApplyModel.setProperty("/GradeCombo", oData.NavCommonCodeList.results);
+			if(!oController.HighApplyModel.getProperty("/GradeCombo")) {
+				oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
+					success: function(oData) {
+						if (oData && oData.NavCommonCodeList) {
+							Common.log(oData);
+							oController.HighApplyModel.setProperty("/GradeCombo", oData.NavCommonCodeList.results);
+						}
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
 					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
-					});
-				}
-			});
+				});
+			}
 
 			sendObject = {};
 			// Header
