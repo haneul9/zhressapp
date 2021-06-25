@@ -1082,6 +1082,10 @@ sap.ui.define([
             var oController = oView.getController();
             
             var oData = oEvent.getSource().getCustomData()[0].getValue();
+
+            var sampleArr = common.Common.base64ToArrayBuffer(oData.EPdfbn);
+		    common.Common.saveByteArray(oData.EFname, "application/pdf", sampleArr);
+            return;
             
             if(!oController._Detail3Dialog){
                 oController._Detail3Dialog = sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03_PDF", oController);
@@ -1089,24 +1093,24 @@ sap.ui.define([
             }
             
             var oPanel = sap.ui.getCore().byId(oController.PAGEID + "_Detail3Panel");
-                oPanel.destroyContent();
+                // oPanel.destroyContent();
                 
-                oPanel.addContent(
-                    new sap.ui.core.HTML({	
-                        content : ["<iframe id='iWorkerPDF'" +
-                                        "name='iWorkerPDF' src='data:application/pdf;base64," + oData.EPdfbn + "'" +
-                                        "width='100%' height='" + (parseInt(window.innerHeight - 300) + "px") + "'" +
-                                        "frameborder='0' border='0' scrolling='no'></>"],
-                        preferDOM : false
-                    })
-                );
+                // oPanel.addContent(
+                //     new sap.ui.core.HTML({	
+                //         content : ["<iframe id='iWorkerPDF'" +
+                //                         "name='iWorkerPDF' src='data:application/pdf;base64," + oData.EPdfbn + "'" +
+                //                         "width='100%' height='" + (parseInt(window.innerHeight - 300) + "px") + "'" +
+                //                         "frameborder='0' border='0' scrolling='no'></>"],
+                //         preferDOM : false
+                //     })
+                // );
 
             // var tmp = Common.base64ToArrayBuffer(oData.EPdfbn);
             // console.log(tmp);
             // var tmp2 = Common.getBlobURL("application/pdf", tmp);
             // console.log(tmp2)
 
-            // oController._Detail3Dialog.getModel().setData({Data : {Url : tmp2}})
+            oController._Detail3Dialog.getModel().setData({Data : {Url : "data:application/pdf;base64," + oData.EPdfbn}});
                 
             oController._Detail3Dialog.setTitle(oData.EFname);
             oController._Detail3Dialog.open();
