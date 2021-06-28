@@ -40,7 +40,7 @@ sap.ui.define(
                 });
             },
 
-            loadModel: function () {
+            loadModel: function () { 
                 $.app.setModel("ZHR_WORKSCHEDULE_SRV");
                 $.app.setModel("ZHR_COMMON_SRV");
             }
