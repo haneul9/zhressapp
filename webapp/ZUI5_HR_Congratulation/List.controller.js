@@ -217,7 +217,7 @@ sap.ui.define(
                     vSelectedType = "";
 
                 // Data setting
-                oController.DetailModel.setData({ FormData: [] });
+                oController.DetailModel.setProperty("/FormData", {});
 
                 if (!oController._DetailModel) {
                     oController._DetailModel = sap.ui.jsfragment("ZUI5_HR_Congratulation.fragment.CongratulationDetail", oController);
@@ -281,7 +281,7 @@ sap.ui.define(
 
                 oWarningMsg.setVisible(false);
 
-                if (vBurks === "A100") {
+                if (vBurks === "A100" && Common.checkNull(oController.g_BDate) && Common.checkNull(oController.g_EDate)) {
                     oCodeHeaderParams.ICodeT = "018";
                     oCodeHeaderParams.ICodty = "PB120";
                     oCodeHeaderParams.IPernr = vPernr;
@@ -320,20 +320,22 @@ sap.ui.define(
                     if (!isBegda) delete oCodeHeaderParams.IBegda;
                 }
 
-                oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
-                    //경조사유형 값받아오는곳
-                    success: function (oData) {
-                        if (oData && oData.NavCommonCodeList.results) {
-                            //값을 제대로 받아 왔을 때
-                            var rDatas = oData.NavCommonCodeList.results;
-
-                            oController.DetailModel.setProperty("/MultiBoxData", rDatas);
+                if(!oController.DetailModel.getProperty("/MultiBoxData")) {
+                    oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
+                        //경조사유형 값받아오는곳
+                        success: function (oData) {
+                            if (oData && oData.NavCommonCodeList.results) {
+                                //값을 제대로 받아 왔을 때
+                                var rDatas = oData.NavCommonCodeList.results;
+    
+                                oController.DetailModel.setProperty("/MultiBoxData", rDatas);
+                            }
+                        },
+                        error: function (oResponse) {
+                            Common.log(oResponse);
                         }
-                    },
-                    error: function (oResponse) {
-                        Common.log(oResponse);
-                    }
-                });
+                    });
+                }
 
                 oCodeHeaderParams = {};
                 oCodeHeaderParams.ICodeT = "018";
@@ -341,20 +343,22 @@ sap.ui.define(
                 oCodeHeaderParams.ILangu = "3";
                 oCodeHeaderParams.NavCommonCodeList = [];
 
-                oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
-                    //경조사유형에따른 상조도우미 Code값 받아오는곳
-                    success: function (oData) {
-                        if (oData && oData.NavCommonCodeList.results) {
-                            //값을 제대로 받아 왔을 때
-                            var rDatas = oData.NavCommonCodeList.results;
-
-                            oController.DetailModel.setProperty("/MultiBoxDataInfo", rDatas);
+                if(!oController.DetailModel.getProperty("/MultiBoxDataInfo")) {
+                    oCommonModel.create("/CommonCodeListHeaderSet", oCodeHeaderParams, {
+                        //경조사유형에따른 상조도우미 Code값 받아오는곳
+                        success: function (oData) {
+                            if (oData && oData.NavCommonCodeList.results) {
+                                //값을 제대로 받아 왔을 때
+                                var rDatas = oData.NavCommonCodeList.results;
+    
+                                oController.DetailModel.setProperty("/MultiBoxDataInfo", rDatas);
+                            }
+                        },
+                        error: function (oResponse) {
+                            Common.log(oResponse);
                         }
-                    },
-                    error: function (oResponse) {
-                        Common.log(oResponse);
-                    }
-                });
+                    });
+                }
             },
 
             onHelperCheck: function () {

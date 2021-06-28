@@ -153,7 +153,7 @@ sap.ui.define([
 
 			this.getTreeRoute(vSeletedData); // 경로 넣어주면 그경로에맞는 Route를 반환함
 			$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(true);
-			$.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(true);
+			// $.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(true);
 
 			oController.OpenHelpModel.setData({TopData: []});
 			
@@ -225,17 +225,12 @@ sap.ui.define([
 							});
 						}
 					});
-				}.bind(this)
+					
+					oController.onBeforeOpenDetailDialog();
+				}
 			).then(function () {
 				$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(false);
-			});
-
-			Common.getPromise(
-				function () {
-					oController.onBeforeOpenDetailDialog();
-				}.bind(this)
-			).then(function () {
-				$.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(false);
+				// $.app.byId(oController.PAGEID + "_FileUploadBox").setBusyIndicatorDelay(0).setBusy(false);
 			});
 		},
 
