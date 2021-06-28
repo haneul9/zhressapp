@@ -1,28 +1,31 @@
 function AbstractPortlet(_gateway, o) {
 /*
-	Colno: '1',
-	Seqno: '01',
-	Htall: '2',
-	Fixed: 'X',
-	HideName: 'X',
-	Zhide: 'X',
-	Iconid: 'fas fa-user',
-	LinkMenid1: '',
-	LinkMenid2: '',
-	LinkUrl1: 'FamilyApply.html',
-	LinkUrl2: '',
-	Mocat: '',
-	Odataid: 'MainContents',
-	Potid: 'P101',
-	Potnm: '개인정보',
-	TooltipTx: '개인정보_tooltip_Person Info'
+	Colno: '1',									// Portlet 컬럼 3개중 해당 portlet이 들어갈 컬럼 순서
+	Seqno: '01',								// Portlet 컬럼 내에서의 순서
+	Htall: '2',									// Portlet의 높이
+	Fixed: 'X',									// 사용/미사용 지정 가능 여부
+	HideName: 'X',								// Portlet title 표시 여부
+	Zhide: 'X',									// 사용자가 지정한 사용 여부
+	Iconid: 'fas fa-user',						// Portlet 설정 popup에서 보여질 아이콘 CSS class
+	LinkMenid1: '',								// Portlet에 연결된 메뉴의 ID - PC
+	LinkMenid2: '',								// Portlet에 연결된 메뉴의 ID - Mobile
+	LinkUrl1: 'FamilyApply.html',				// Portlet에 연결된 메뉴의 URL - PC
+	LinkUrl2: '',								// Portlet에 연결된 메뉴의 URL - Mobile
+	Mepop: '',									// LinkUrl1, LinkUrl2를 열 때 popup으로 열지 여부
+	Mocat: '',									// Mobile app의 carousel에 표시할지 여부
+	MSeq: '',									// Mobile app에서의 portlet 표시 순서
+	Odataid: 'MainContents',					// 사용하지 않음
+	Potid: 'P101',								// Portlet ID
+	Potnm: '개인정보',							// Portlet 설정 popup에서 보여질 이름
+	TooltipTx: '개인정보_tooltip_Person Info'	// Portlet에 mouse over시 보여질 tooltip text
 */
 	this._gateway = _gateway;
 	this._o = o;
 	this._key = o.Potid;
 	this._mobile = $('html').attr('device') === 'mobile';
 
-	this.position(this._mobile ? Number(o.MSeq || 0) : Number(o.Colno || 0), Number(o.Seqno || 0))
+	this.carousel(o.Mocat === 'A')
+		.position(this._mobile ? Number(o.MSeq || 0) : Number(o.Colno || 0), Number(o.Seqno || 0))
 		.size(Number(o.Htall || 1))
 		.icon(o.Iconid || null)
 		.title(o.Potnm || null)
@@ -31,7 +34,6 @@ function AbstractPortlet(_gateway, o) {
 		.mid(this._mobile ? (o.LinkMenid2 || null) : (o.LinkMenid1 || null))
 		.use(o.Zhide !== 'X')
 		.popup(o.Mepop === 'X')
-		.carousel(o.Mocat === 'A')
 		.switchable(o.Fixed !== 'X')
 		.hideTitle(o.HideName === 'X');
 }
@@ -49,7 +51,7 @@ mobile: function() {
 position: function(column, row) {
 
 	if (typeof column !== 'undefined' && typeof row !== 'undefined') {
-		if (this._mobile) {
+		if (this.mobile()) {
 			this._position = Number(column || 0);
 		} else {
 			this._position = {
@@ -59,7 +61,7 @@ position: function(column, row) {
 		}
 		return this;
 	}
-	return this._mobile ? this._position : $.extend(true, {}, this._position);
+	return this.mobile() ? this._position : $.extend(true, {}, this._position);
 },
 size: function(size) {
 
@@ -107,7 +109,7 @@ mid: function(mid) {
 		this._mid = mid || '';
 		return this;
 	}
-	return this._mid; // || this._gateway.mid(this._url);
+	return this._mid;
 },
 use: function(use) {
 
@@ -155,6 +157,7 @@ hideTitle: function(hideTitle) {
 	}
 	return this._hideTitle;
 },
+// Mobile app에서 carousel에 들어가지 않는 경우 portlet 크기를 고정하지 않으므로 scrollbar 생성시 scroll 가능 여부 판단이 필요
 scrollable: function() {
 
 	return this.carousel() || !this.mobile();
@@ -167,7 +170,7 @@ row: function() {
 
 	return this._position.row;
 },
-// UI html 생성시 header의 link 버튼 또는 link 정보 html
+// UI html 생성시 header의 link button 또는 link attribute html
 link: function(button) {
 
 	var attributes;
