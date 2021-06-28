@@ -80,7 +80,7 @@ sap.ui.define([
 						return false;
 					}
 				}
-			})
+			});
 			// 키보드 입력 방지
 			oAppDate.addDelegate({
 				onAfterRendering: function () {
@@ -230,7 +230,7 @@ sap.ui.define([
 											formatter: function(v) {
 												return v === "1";
 											}
-										},
+										}
 									}),
 									new sap.m.RadioButton({
 										text: "{i18n>LABEL_34009}", // 가족동반
@@ -240,7 +240,7 @@ sap.ui.define([
 											formatter: function(v) {
 												return v === "2";
 											}
-										},
+										}
 									})
 								]
 							}).addStyleClass("mr-10px"),
@@ -383,7 +383,7 @@ sap.ui.define([
 									}).addStyleClass("ml-0px")
 								]
 							}).addStyleClass("info-field-group message-strip"),
-							new sap.m.HBox({
+							new sap.m.HBox(oController.PAGEID + "_FileBox", {
 								items: [
 									sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
 								]
@@ -398,6 +398,8 @@ sap.ui.define([
 				title: "{i18n>LABEL_34001}",    // 부임이전비 신청
 				contentWidth: "980px",
 				contentHeight: "560px",
+				beforeOpen: oController.onBeforeDialog.bind(oController),
+				afterOpen: oController.onAfterDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogApplyBtn.bind(oController),

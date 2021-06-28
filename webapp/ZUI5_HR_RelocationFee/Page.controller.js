@@ -3,11 +3,10 @@ sap.ui.define([
 	"../common/CommonController",
 	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
-	"../common/ZHR_TABLES",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, ZHR_TABLES, MessageBox, BusyIndicator) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, MessageBox, BusyIndicator) {
 	"use strict";
 
 	
@@ -19,6 +18,8 @@ sap.ui.define([
 		CostModel: new JSONModelHelper(),
 		DetailModel: new JSONModelHelper(),
 		LogModel: new JSONModelHelper(),
+
+		g_IsNew: "",
 		
 		getUserId: function() {
 
@@ -41,7 +42,7 @@ sap.ui.define([
 			this.getView()
 				.addEventDelegate({
 					onAfterShow: this.onAfterShow
-				}, this)
+				}, this);
 		},
 		
 		onBeforeShow: function() {
@@ -51,6 +52,7 @@ sap.ui.define([
 		onAfterShow: function() {
 			var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
 			oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
+			this.DetailModel.setData({FormData: []});
 			this.onTableSearch();
 			this.onInitData(this);
         },
@@ -67,7 +69,7 @@ sap.ui.define([
 			sendObject.NewPostExport = [];
 			
 			oModel.create("/NewPostImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					var LogData = oData.NewPostExport.results[0];
 					oController.LogModel.setData({LogData: LogData});
 
@@ -107,7 +109,7 @@ sap.ui.define([
 			sendObject.NewPostTableIn1 = [];
 			
 			oModel.create("/NewPostImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.NewPostTableIn1) {
 						Common.log(oData);
 						var rDatas1 = oData.NewPostTableIn1.results;
@@ -135,7 +137,7 @@ sap.ui.define([
 						return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 					}
 				}
-			})
+			});
 		},
         
         getRelocation: function() {
@@ -148,7 +150,7 @@ sap.ui.define([
                         else return "";
                     }
                 }
-            })
+            });
         },
 
         getStatus: function() {
@@ -197,22 +199,16 @@ sap.ui.define([
 		
 		onPressReq: function() { //신청
 			var oView = $.app.byId("ZUI5_HR_RelocationFee.Page");
-			
-			this.DetailModel.setData({FormData: []});
-			this.CostModel.setData({Data: []});
+			this.g_IsNew = "N";
 
-			this.DetailModel.setProperty("/Bukrs", this.getUserGubun());
-			
 			if (!this._DetailModel) {
 				this._DetailModel = sap.ui.jsfragment("ZUI5_HR_RelocationFee.fragment.Apply", this);
 				oView.addDependent(this._DetailModel);
 			}
-			this.getTableMakeColums();
-			this.getLocationList();
-			this.DetailModel.setProperty("/FormData/Zfwkps","CheckNull");
-			this.DetailModel.setProperty("/FormData/Ztwkps","CheckNull");
-			this.onBeforeOpenDetailDialog();
+			
 			this._DetailModel.open();
+			this._DetailModel.setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(this.PAGEID + "_FileBox").setBusyIndicatorDelay(0).setBusy(true);
 		},
 		
 		onSelectedRow: function(oEvent) {
@@ -220,22 +216,66 @@ sap.ui.define([
 			var vPath = oEvent.getParameters().rowBindingContext.getPath();
 			var oRowData = this.TableModel.getProperty(vPath);
             oRowData = $.extend(true, {}, oRowData);
-			this.DetailModel.setProperty("/Bukrs", oRowData.Bukrs); 
+			this.DetailModel.setProperty("/FormData", oRowData);
+			this.g_IsNew = "D";
 
 			if (!this._DetailModel) {
 				this._DetailModel = sap.ui.jsfragment("ZUI5_HR_RelocationFee.fragment.Apply", this);
 				oView.addDependent(this._DetailModel);
 			}
 
-			this.getTableMakeColums();
-			this.onTableSearch();
-			this.CostModel.setData({Data: [oRowData]});
-			this.DetailModel.setData({FormData: oRowData});
-			this.DetailModel.setProperty("/Status", oRowData.Status);
-			this.getLocationList(oRowData);
-			this.getCriteria();
-			this.onBeforeOpenDetailDialog();
 			this._DetailModel.open();
+			this._DetailModel.setBusyIndicatorDelay(0).setBusy(true);
+			$.app.byId(this.PAGEID + "_FileBox").setBusyIndicatorDelay(0).setBusy(true);
+		},
+
+		onBeforeDialog: function() {
+			this.CostModel.setData({Data: []});
+			if(this.g_IsNew === "N") {
+
+				this.DetailModel.setProperty("/FormData", {});
+				this.DetailModel.setProperty("/Bukrs", this.getUserGubun());
+			}else {
+				var oRowData = this.DetailModel.getProperty("/FormData");
+
+				this.DetailModel.setProperty("/Bukrs", oRowData.Bukrs); 
+				this.CostModel.setData({Data: [oRowData]});
+			}
+		},
+
+		onAfterDialog: function() {
+			var IsNew = this.g_IsNew;
+
+			Common.getPromise(
+				function () {
+					this.getTableMakeColums();
+
+					if(IsNew === "N") {
+						this.getLocationList();
+						this.DetailModel.setProperty("/FormData/Zfwkps","CheckNull");
+						this.DetailModel.setProperty("/FormData/Ztwkps","CheckNull");
+					}else if(IsNew === "D") {
+						var oRowData = this.DetailModel.getProperty("/FormData");
+
+						this.getLocationList(oRowData);
+						this.getCriteria();
+					}
+				}.bind(this)
+			).then(
+				function () {
+					this._DetailModel.setBusy(false);
+				}.bind(this)
+			);
+
+			Common.getPromise(
+				function () {
+					this.onBeforeOpenDetailDialog();
+				}.bind(this)
+			).then(
+				function () {
+					$.app.byId(this.PAGEID + "_FileBox").setBusyIndicatorDelay(0).setBusy(false);
+				}.bind(this)
+			);
 		},
 
 		getTableMakeColums: function() {
@@ -249,7 +289,7 @@ sap.ui.define([
 			}else {
 				oMidTable.setVisible(false);
 				oMidTable2.setVisible(true);
-			};
+			}
 		},
 		
 		getLocationList: function(oRowData) {
@@ -278,7 +318,7 @@ sap.ui.define([
 			sendObject.NewPostTableIn3 = [];
 			
 			oModel.create("/NewPostImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.NewPostTableIn3) {
 						Common.log(oData);
 						oData.NewPostTableIn3.results.unshift({ Subtx1: oController.getBundleText("LABEL_00181"), Subcd: "CheckNull"});
@@ -336,7 +376,7 @@ sap.ui.define([
 				sendObject.BukrsExport = [];
 				
 				oModel.create("/BukrsImportSet", sendObject, { // 발령일자에 따른 Bukrs
-					success: function(oData, oResponse) {
+					success: function(oData) {
 						if (oData && oData.BukrsExport) {
 							Common.log(oData);
 							oController.DetailModel.setProperty("/Bukrs", oData.BukrsExport.results[0].Bukrs); 
@@ -362,7 +402,7 @@ sap.ui.define([
 			sendObject.NewPostExport = [];
 			
 			oModel.create("/NewPostImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.NewPostExport) {
 						Common.log(oData);
 						oController.DetailModel.setProperty("/CriAge",oData.NewPostExport.results[0].EDate); 
@@ -430,9 +470,9 @@ sap.ui.define([
 				liveChange: oController.InputTransCost.bind(oController),
 				textAlign: "End",
 				editable: {
-					path: "/Status",
+					path: "Status",
 					formatter: function(v) {
-						if(v === "10" || !v) return true;
+						if(v === "AA" || !v) return true;
 						else return false; 
 					}
 				}
@@ -454,9 +494,9 @@ sap.ui.define([
 				liveChange: oController.InputTransCost2.bind(oController),
 				textAlign: "End",
 				editable: {
-					path: "/Status",
+					path: "Status",
 					formatter: function(v) {
-						if(v === "10" || !v) return true;
+						if(v === "AA" || !v) return true;
 						else return false; 
 					}
 				}
@@ -525,14 +565,14 @@ sap.ui.define([
 			) 	return;
 
 			if(oController.DetailModel.getProperty("/FormData/Zwtfml") === "2"){
-				oSendData.Zolda6 = oController.DetailModel.getProperty("/FormData/Zolda6") ? oController.DetailModel.getProperty("/FormData/Zolda6") : "0", // 6세이상 인원
-				oSendData.Zunda6 = oController.DetailModel.getProperty("/FormData/Zunda6") ? oController.DetailModel.getProperty("/FormData/Zunda6") : "0" // 6세미만 인원
-			};
+				oSendData.Zolda6 = oController.DetailModel.getProperty("/FormData/Zolda6") ? oController.DetailModel.getProperty("/FormData/Zolda6") : "0"; // 6세이상 인원
+				oSendData.Zunda6 = oController.DetailModel.getProperty("/FormData/Zunda6") ? oController.DetailModel.getProperty("/FormData/Zunda6") : "0"; // 6세미만 인원
+			}
 
-			oSendData.Zfwkps = oController.DetailModel.getProperty("/FormData/Zfwkps"), // 현근무지
-			oSendData.Ztwkps = oController.DetailModel.getProperty("/FormData/Ztwkps"), // 부임지
-			oSendData.Zactdt = Common.setUTCDateTime(oController.DetailModel.getProperty("/FormData/Zactdt")), // 발령일자
-			oSendData.Zmvcst = oController.CostModel.getProperty("/Data/0/Zmvcst") ? oController.CostModel.getProperty("/Data/0/Zmvcst") : "0", // 가재운송비
+			oSendData.Zfwkps = oController.DetailModel.getProperty("/FormData/Zfwkps"); // 현근무지
+			oSendData.Ztwkps = oController.DetailModel.getProperty("/FormData/Ztwkps"); // 부임지
+			oSendData.Zactdt = Common.setUTCDateTime(oController.DetailModel.getProperty("/FormData/Zactdt")); // 발령일자
+			oSendData.Zmvcst = oController.CostModel.getProperty("/Data/0/Zmvcst") ? oController.CostModel.getProperty("/Data/0/Zmvcst") : "0"; // 가재운송비
 			oSendData.Zwtfml = String(oRadioGroup.getSelectedIndex() + 1); // 가족동반여부
 			
 
@@ -545,11 +585,11 @@ sap.ui.define([
 			sendObject.NewPostTableIn1 = [Common.copyByMetadata(oModel, "NewPostTableIn1", oSendData)];
 			
 			oModel.create("/NewPostImportSet", sendObject, {
-				success: function(oData, oResponse) {
+				success: function(oData) {
 					if (oData && oData.NewPostTableIn1) {
 						Common.log(oData);
 						var rData = oData.NewPostTableIn1.results;
-						rData[0].Zmvcst = oSendData.Zmvcst
+						rData[0].Zmvcst = oSendData.Zmvcst;
 						
 						if(vBukrs === "A100")
 							rData[0].Ztexme = Common.checkNull(oController.CostModel.getProperty("/Data/0/Ztexme")) ? "0" : oController.CostModel.getProperty("/Data/0/Ztexme");
@@ -621,7 +661,7 @@ sap.ui.define([
 					sendObject.NewPostTableIn1 = [Common.copyByMetadata(oModel, "NewPostTableIn1", oRowData)];
 					
 					oModel.create("/NewPostImportSet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							if (oData && oData.NewPostTableIn1) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_34012"), { title: oController.getBundleText("MSG_08107")});
@@ -639,7 +679,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_34011"), {
 				title: oController.getBundleText("LABEL_34001"),
@@ -654,21 +694,22 @@ sap.ui.define([
 			var vPernr = oController.getUserId();
 			var oRowData = oController.DetailModel.getProperty("/FormData");
 
-			oRowData.Zmvcst = oController.CostModel.getProperty("/Data/0/Zmvcst") ? oController.CostModel.getProperty("/Data/0/Zmvcst") : "0", // 가재운송비
-			oRowData.Ztexme = oController.CostModel.getProperty("/Data/0/Ztexme"), // 여비 (본인)
-			oRowData.Ztexo6 = oController.CostModel.getProperty("/Data/0/Ztexo6"), // 여비 (6세 이상)
-			oRowData.Ztexu6 = oController.CostModel.getProperty("/Data/0/Ztexu6"), // 여비 (6세 미만)
-			oRowData.Zdexme = oController.CostModel.getProperty("/Data/0/Zdexme"), // 일비 (본인)
-			oRowData.Zdexo6 = oController.CostModel.getProperty("/Data/0/Zdexo6"), // 일비 (6세 이상)
-			oRowData.Zdexu6 = oController.CostModel.getProperty("/Data/0/Zdexu6"), // 일비 (6세 미만)
-			oRowData.Ztsrsv = oController.CostModel.getProperty("/Data/0/Ztsrsv"), // 이전 준비금
+			oRowData.Zmvcst = oController.CostModel.getProperty("/Data/0/Zmvcst") ? oController.CostModel.getProperty("/Data/0/Zmvcst") : "0"; // 가재운송비
+			oRowData.Ztexme = oController.CostModel.getProperty("/Data/0/Ztexme"); // 여비 (본인)
+			oRowData.Ztexo6 = oController.CostModel.getProperty("/Data/0/Ztexo6"); // 여비 (6세 이상)
+			oRowData.Ztexu6 = oController.CostModel.getProperty("/Data/0/Ztexu6"); // 여비 (6세 미만)
+			oRowData.Zdexme = oController.CostModel.getProperty("/Data/0/Zdexme"); // 일비 (본인)
+			oRowData.Zdexo6 = oController.CostModel.getProperty("/Data/0/Zdexo6"); // 일비 (6세 이상)
+			oRowData.Zdexu6 = oController.CostModel.getProperty("/Data/0/Zdexu6"); // 일비 (6세 미만)
+			oRowData.Ztsrsv = oController.CostModel.getProperty("/Data/0/Ztsrsv"); // 이전 준비금
 			oRowData.Ztstot = oController.CostModel.getProperty("/Data/0/Ztstot"); // 합계
 			oRowData.Zactdt = Common.setUTCDateTime(oController.DetailModel.getProperty("/FormData/Zactdt"));
 
 			if(oRowData.Zwtfml === "2"){
-				oRowData.Zolda6 = oRowData.Zolda6 ? oRowData.Zolda6 : "0", // 6세이상 인원
+				oRowData.Zolda6 = oRowData.Zolda6 ? oRowData.Zolda6 : "0"; // 6세이상 인원
 				oRowData.Zunda6 = oRowData.Zunda6 ? oRowData.Zunda6 : "0"; // 6세미만 인원
-			};
+			}
+
 			oRowData.Zwtfml = oRowData.Zwtfml ? oRowData.Zwtfml : "1"; // 가족동반 Radio
 			oRowData.Waers = "KRW";
 
@@ -692,7 +733,7 @@ sap.ui.define([
 					sendObject.NewPostTableIn1 = [Common.copyByMetadata(oModel, "NewPostTableIn1", oRowData)];
 					
 					oModel.create("/NewPostImportSet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							if (oData && oData.NewPostTableIn1) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_34008"), { title: oController.getBundleText("MSG_08107")});
@@ -711,7 +752,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_34007"), {
 				title: oController.getBundleText("LABEL_34001"),
@@ -727,17 +768,18 @@ sap.ui.define([
 			var oRowData = oController.DetailModel.getProperty("/FormData");
 
 			if(oRowData.Zwtfml === "2"){
-				oRowData.Zolda6 = oRowData.Zolda6 ? oRowData.Zolda6 : "0", // 6세이상 인원
-				oRowData.Zunda6 = oRowData.Zunda6 ? oRowData.Zunda6 : "0" // 6세미만 인원
-			};
-			oRowData.Zmvcst = oController.CostModel.getProperty("/Data/0/Zmvcst") ? oController.CostModel.getProperty("/Data/0/Zmvcst") : "0", // 가재운송비
-			oRowData.Ztexme = oController.CostModel.getProperty("/Data/0/Ztexme"), // 여비 (본인)
-			oRowData.Ztexo6 = oController.CostModel.getProperty("/Data/0/Ztexo6"), // 여비 (6세 이상)
-			oRowData.Ztexu6 = oController.CostModel.getProperty("/Data/0/Ztexu6"), // 여비 (6세 미만)
-			oRowData.Zdexme = oController.CostModel.getProperty("/Data/0/Zdexme"), // 일비 (본인)
-			oRowData.Zdexo6 = oController.CostModel.getProperty("/Data/0/Zdexo6"), // 일비 (6세 이상)
-			oRowData.Zdexu6 = oController.CostModel.getProperty("/Data/0/Zdexu6"), // 일비 (6세 미만)
-			oRowData.Ztsrsv = oController.CostModel.getProperty("/Data/0/Ztsrsv"), // 이전 준비금
+				oRowData.Zolda6 = oRowData.Zolda6 ? oRowData.Zolda6 : "0"; // 6세이상 인원
+				oRowData.Zunda6 = oRowData.Zunda6 ? oRowData.Zunda6 : "0"; // 6세미만 인원
+			}
+		
+			oRowData.Zmvcst = oController.CostModel.getProperty("/Data/0/Zmvcst") ? oController.CostModel.getProperty("/Data/0/Zmvcst") : "0"; // 가재운송비
+			oRowData.Ztexme = oController.CostModel.getProperty("/Data/0/Ztexme"); // 여비 (본인)
+			oRowData.Ztexo6 = oController.CostModel.getProperty("/Data/0/Ztexo6"); // 여비 (6세 이상)
+			oRowData.Ztexu6 = oController.CostModel.getProperty("/Data/0/Ztexu6"); // 여비 (6세 미만)
+			oRowData.Zdexme = oController.CostModel.getProperty("/Data/0/Zdexme"); // 일비 (본인)
+			oRowData.Zdexo6 = oController.CostModel.getProperty("/Data/0/Zdexo6"); // 일비 (6세 이상)
+			oRowData.Zdexu6 = oController.CostModel.getProperty("/Data/0/Zdexu6"); // 일비 (6세 미만)
+			oRowData.Ztsrsv = oController.CostModel.getProperty("/Data/0/Ztsrsv"); // 이전 준비금
 			oRowData.Ztstot = oController.CostModel.getProperty("/Data/0/Ztstot"); // 합계
 			oRowData.Zactdt = Common.setUTCDateTime(oController.DetailModel.getProperty("/FormData/Zactdt"));
 			
@@ -760,7 +802,7 @@ sap.ui.define([
 					sendObject.NewPostTableIn1 = [Common.copyByMetadata(oModel, "NewPostTableIn1", oRowData)];
 					
 					oModel.create("/NewPostImportSet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							if (oData && oData.NewPostTableIn1) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_34010"), { title: oController.getBundleText("MSG_08107")});
@@ -779,7 +821,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_34009"), {
 				title: oController.getBundleText("LABEL_34001"),
@@ -795,9 +837,10 @@ sap.ui.define([
 			var oRowData = oController.DetailModel.getProperty("/FormData");
 
 			if(oRowData.Zwtfml === "2"){
-				oRowData.Zolda6 = oRowData.Zolda6 ? oRowData.Zolda6 : "0", // 6세이상 인원
-				oRowData.Zunda6 = oRowData.Zunda6 ? oRowData.Zunda6 : "0" // 6세미만 인원
-			};
+				oRowData.Zolda6 = oRowData.Zolda6 ? oRowData.Zolda6 : "0"; // 6세이상 인원
+				oRowData.Zunda6 = oRowData.Zunda6 ? oRowData.Zunda6 : "0"; // 6세미만 인원
+			}
+
 			oRowData.Zmvcst = oRowData.Zmvcst ? oRowData.Zmvcst : "0"; // 가재운송비
 
 			BusyIndicator.show(0);
@@ -812,7 +855,7 @@ sap.ui.define([
 					sendObject.NewPostTableIn1 = [Common.copyByMetadata(oModel, "NewPostTableIn1", oRowData)];
 					
 					oModel.create("/NewPostImportSet", sendObject, {
-						success: function(oData, oResponse) {
+						success: function(oData) {
 							if (oData && oData.NewPostTableIn1) {
 								Common.log(oData);
 								sap.m.MessageBox.alert(oController.getBundleText("MSG_34012"), { title: oController.getBundleText("MSG_08107")});
@@ -831,7 +874,7 @@ sap.ui.define([
 					});
 				}
 				BusyIndicator.hide();
-			}
+			};
 
 			sap.m.MessageBox.confirm(oController.getBundleText("MSG_34011"), {
 				title: oController.getBundleText("LABEL_34001"),
@@ -843,14 +886,14 @@ sap.ui.define([
 		onBeforeOpenDetailDialog: function() {
 			var oController = $.app.getController();
 			var vStatus = oController.DetailModel.getProperty("/FormData/Status"),
-				vAppnm = oController.DetailModel.getProperty("/FormData/Appnm") || ""
+				vAppnm = oController.DetailModel.getProperty("/FormData/Appnm") || "";
 			
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
 				Required: true,
 				Mode: "M",
 				Max: "10",
-				Editable: (!vStatus || vStatus === "AA") ? true : false,
+				Editable: (!vStatus || vStatus === "AA") ? true : false
 			});
 		},
 		

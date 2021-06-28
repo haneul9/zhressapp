@@ -20,6 +20,7 @@
             ApplyModel: new JSONModelHelper(),
             HistoryModel: new JSONModelHelper(),
             IsFileRequired: "",
+            g_IsNew: "",
 
             getUserId: function () {
                 return this.getView().getModel("session").getData().name;
@@ -45,6 +46,7 @@
 
             onAfterShow: function () {
                 var oSearchDate = sap.ui.getCore().byId(this.PAGEID + "_SearchDate");
+                this.ApplyModel.setData({ FormData: [] });
                 oSearchDate.setDisplayFormat(this.getSessionInfoByKey("Dtfmt"));
                 this.onTableSearch();
             },
@@ -165,24 +167,16 @@
                 var oView = $.app.byId("ZUI5_HR_LeaveReinstatement.Page");
                 var oController = $.app.getController();
 
-                oController.ApplyModel.setData({ FormData: [] });
+                oController.g_IsNew = "N";
 
                 if (!oController._ApplyModel) {
                     oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_LeaveReinstatement.fragment.Apply", oController);
                     oView.addDependent(oController._ApplyModel);
                 }
 
-                var oFamilyInfoBox = $.app.byId(oController.PAGEID + "_FamilyInfoBox");
-                var oSickInfoBox = $.app.byId(oController.PAGEID + "_SickInfoBox");
-                var oBabyDateBox = $.app.byId(oController.PAGEID + "_BabyDateBox");
-                oBabyDateBox.setVisible(false);
-                oSickInfoBox.setVisible(false);
-                oFamilyInfoBox.setVisible(false);
-
-                oController.getLeaveReinCombo();
-                oController.getPartnerCheck();
-                oController.onBeforeOpenDetailDialog();
                 oController._ApplyModel.open();
+                oController._ApplyModel.setBusyIndicatorDelay(0).setBusy(true);
+                $.app.byId(oController.PAGEID + "_FileBox").setBusyIndicatorDelay(0).setBusy(true);
             },
 
             onSelectedRow: function (oEvent) {
@@ -192,19 +186,61 @@
                 var oRowData = oController.TableModel.getProperty(vPath);
                 oRowData = $.extend(true, {}, oRowData);
 
-                oController.ApplyModel.setData({ FormData: oRowData });
+                oController.g_IsNew = "D";
+                oController.ApplyModel.setProperty("/FormData", oRowData);
 
                 if (!oController._ApplyModel) {
                     oController._ApplyModel = sap.ui.jsfragment("ZUI5_HR_LeaveReinstatement.fragment.Apply", oController);
                     oView.addDependent(oController._ApplyModel);
                 }
 
-                oController.getLeaveReinCombo();
-                oController.changeType();
-                oController.changeUsedType();
-                oController.getPartnerCheck();
-                oController.onBeforeOpenDetailDialog();
                 oController._ApplyModel.open();
+                oController._ApplyModel.setBusyIndicatorDelay(0).setBusy(true);
+                $.app.byId(oController.PAGEID + "_FileBox").setBusyIndicatorDelay(0).setBusy(true);
+            },
+
+            onBeforeDialog: function() {
+                if(this.g_IsNew === "N") {
+                    var oFamilyInfoBox = $.app.byId(this.PAGEID + "_FamilyInfoBox");
+                    var oSickInfoBox = $.app.byId(this.PAGEID + "_SickInfoBox");
+                    var oBabyDateBox = $.app.byId(this.PAGEID + "_BabyDateBox");
+
+                    this.ApplyModel.setProperty("/FormData", {});
+
+                    oBabyDateBox.setVisible(false);
+                    oSickInfoBox.setVisible(false);
+                    oFamilyInfoBox.setVisible(false);
+                }
+            },
+
+            onAfterDialog: function() {
+                var IsNew = this.g_IsNew;
+
+                Common.getPromise(
+                    function () {
+                        this.getLeaveReinCombo();
+                        this.getPartnerCheck();
+    
+                        if(IsNew === "D") {
+                            this.changeType();
+                            this.changeUsedType();
+                        }
+                    }.bind(this)
+                ).then(
+                    function () {
+                        this._ApplyModel.setBusy(false);
+                    }.bind(this)
+                );
+    
+                Common.getPromise(
+                    function () {
+                        this.onBeforeOpenDetailDialog();
+                    }.bind(this)
+                ).then(
+                    function () {
+                        $.app.byId(this.PAGEID + "_FileBox").setBusyIndicatorDelay(0).setBusy(false);
+                    }.bind(this)
+                );
             },
 
             getLeaveReinCombo: function () {
@@ -223,20 +259,22 @@
                 // Navigation property
                 sendObject.NavCommonCodeList = [];
                 // 휴/복직 구분
-                oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
-                    success: function (oData) {
-                        if (oData && oData.NavCommonCodeList) {
-                            Common.log(oData);
-                            oController.ApplyModel.setProperty("/TypeCombo", oData.NavCommonCodeList.results);
+                if(!oController.ApplyModel.getProperty("/TypeCombo")) {
+                    oCodeModel.create("/CommonCodeListHeaderSet", sendObject, {
+                        success: function (oData) {
+                            if (oData && oData.NavCommonCodeList) {
+                                Common.log(oData);
+                                oController.ApplyModel.setProperty("/TypeCombo", oData.NavCommonCodeList.results);
+                            }
+                        },
+                        error: function (oResponse) {
+                            Common.log(oResponse);
+                            sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+                                title: oController.getBundleText("LABEL_09030")
+                            });
                         }
-                    },
-                    error: function (oResponse) {
-                        Common.log(oResponse);
-                        sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-                            title: oController.getBundleText("LABEL_09030")
-                        });
-                    }
-                });
+                    });
+                }
             },
 
             changeType: function (oEvent) {
@@ -472,8 +510,11 @@
                     })
                 )
                     oController.ApplyModel.setProperty("/IsFileRequired", true);
-                else oController.ApplyModel.setProperty("/IsFileRequired", false);
-                oController.onBeforeOpenDetailDialog();
+                else 
+                    oController.ApplyModel.setProperty("/IsFileRequired", false);
+
+                if(Common.checkNull(!oEvent))
+                    oController.onBeforeOpenDetailDialog();
             },
 
             getPartnerCheck: function () {

@@ -22,7 +22,7 @@
 						if (v === "AA") return true;
 						return false;
 					}
-				},
+				}
 			});
 
 			// 키보드 입력 방지
@@ -534,6 +534,8 @@
 				title: "{i18n>LABEL_42002}",    // 휴/복직 신청
 				contentWidth: "928px",
 				contentHeight: "620px",
+				beforeOpen: oController.onBeforeDialog.bind(oController),
+				afterOpen: oController.onAfterDialog.bind(oController),
 				buttons: [
 					new sap.m.Button({
 						press: oController.onDialogSaveBtn.bind(oController),
@@ -600,7 +602,7 @@
                     })
                     .addStyleClass("mt-20px"),
                     oPaymentBox,
-                    new sap.m.HBox({
+                    new sap.m.HBox(oController.PAGEID + "_FileBox", {
 						fitContainer: true,
 						items: [
                             sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
