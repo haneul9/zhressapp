@@ -425,6 +425,7 @@ sap.ui.define([
 			
 			if(this.g_IsNew === "N") {
 				this.ApplyModel.setProperty("/FormData", {});
+				this.ApplyModel.setProperty("/FileData", {});
 				var oAttTable = $.app.byId(this.PAGEID + "_AttTable");
 				
 				this.ApplyModel.setProperty("/FormData/Planx", this.getBundleText("MSG_40004"));

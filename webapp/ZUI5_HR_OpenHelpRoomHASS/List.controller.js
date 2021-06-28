@@ -628,6 +628,8 @@ sap.ui.define([
 			}
 			oBottomData.InfoCd = "3";
 			
+			$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(true);
+			
 			// 첨부파일 저장
 			sendObject.OpenhelpTableIn4 = [{Appnm: AttachFileAction.uploadFile.call(oController)}];
 			sendObject.OpenhelpTableIn5 = [{Appnm: oController.uploadFile2.call(oController)}];
@@ -643,17 +645,26 @@ sap.ui.define([
 			sendObject.OpenhelpTableIn2 = [oTopData, oMiddleData, oBottomData];
 			sendObject.OpenhelpTableIn3 = [];
 			
-			oModel.create("/OpenhelpImportSet", sendObject, {
-				success: function() {
-					oController.onTreeSetData();
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
+			Common.getPromise(
+				function () {
+					oModel.create("/OpenhelpImportSet", sendObject, {
+						success: function() {
+							
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+						}
 					});
 				}
-			});
+			).then(
+				function () {
+					oController.onTreeSetData();
+					$.app.byId(oController.PAGEID + "_MenuScroll").setBusyIndicatorDelay(0).setBusy(false);
+				}
+			);
 		},
 		
 		refreshAttachFileList2: function (oController) {
