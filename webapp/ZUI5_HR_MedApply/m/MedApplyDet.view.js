@@ -28,7 +28,9 @@ sap.ui.define(
                         items: [
                             new sap.m.Button({
                                 text: "{i18n>LABEL_47101}", // 저장
-                                press: oController.onDialogBaseSaveBtn.bind(oController),
+                                busyIndicatorDelay: 0,
+                                busy: "{= !${/IsFileLoaded}}",
+                                press: oController.onDialogBaseSaveBtn.bind(oController, "2"),
                                 visible: {
                                     parts: [{ path: "Close" }, { path: "Status" }],
                                     formatter: function (fVal, fVal2) {
@@ -37,7 +39,33 @@ sap.ui.define(
                                 }
                             }).addStyleClass("button-light"),
                             new sap.m.Button({
+                                text: "{i18n>LABEL_47101}", // 저장
+                                press: oController.onDialogBaseSaveBtn.bind(oController, "6"),
+                                busyIndicatorDelay: 0,
+                                busy: "{= !${/IsFileLoaded}}",
+                                visible: {
+                                    parts: [{ path: "Close" }, { path: "Status" }],
+                                    formatter: function (fVal, fVal2) {
+                                        return (fVal2 === "ZZ" && fVal !== "X") ? true : false;
+                                    }
+                                }
+                            }).addStyleClass("button-light"),
+                            new sap.m.Button({
+                                text: "{i18n>LABEL_47151}", // 추가
+                                press: oController.onDialogBaseSaveBtn.bind(oController, "5"),
+                                busyIndicatorDelay: 0,
+                                busy: "{= !${/IsFileLoaded}}",
+                                visible: {
+                                    parts: [{ path: "Close" }, { path: "Status" }],
+                                    formatter: function (fVal, fVal2) {
+                                        return (Common.checkNull(fVal2) && fVal !== "X") ? true : false;
+                                    }
+                                }
+                            }).addStyleClass("button-light"),
+                            new sap.m.Button({
                                 text: "{i18n>LABEL_47006}", // 신청
+                                busyIndicatorDelay: 0,
+                                busy: "{= !${/IsFileLoaded}}",
                                 press: function () {
                                     oController.onSave("1000");
                                 },
@@ -50,11 +78,13 @@ sap.ui.define(
                             }).addStyleClass("button-dark"),
                             new sap.m.Button({
                                 text: "{i18n>LABEL_47149}", // 삭제
+                                busyIndicatorDelay: 0,
+                                busy: "{= !${/IsFileLoaded}}",
                                 press: oController.onDialogBaseDelBtn.bind(oController),
                                 visible: {
                                     parts: [{ path: "Close" }, { path: "Status" }],
                                     formatter: function (fVal, fVal2) {
-                                        return ((fVal2 === "AA" || fVal2 === "88") && fVal !== "X") ? true : false;
+                                        return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88") && fVal !== "X") ? true : false;
                                     }
                                 }
                             }).addStyleClass("button-light")
@@ -88,7 +118,7 @@ sap.ui.define(
                                     editable: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     },
                                     change: oController.getBukrs.bind(oController)
@@ -109,7 +139,7 @@ sap.ui.define(
                                     editable: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     }
                                 }).addStyleClass("height38px")
@@ -144,7 +174,7 @@ sap.ui.define(
                                     editable: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     },
                                     change: oController.changeSel2
@@ -167,7 +197,7 @@ sap.ui.define(
                                     editable: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     }
                                 })
@@ -202,7 +232,7 @@ sap.ui.define(
                                     editable: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     }
                                 })
@@ -238,7 +268,7 @@ sap.ui.define(
                                         editable: {
                                             parts: [{ path: "Close" }, { path: "Status" }],
                                             formatter: function (fVal, fVal2) {
-                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                                return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                             }
                                         }
                                     }),
@@ -268,7 +298,7 @@ sap.ui.define(
                                         editable: {
                                             parts: [{ path: "Close" }, { path: "Status" }],
                                             formatter: function (fVal, fVal2) {
-                                                return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                                return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                             }
                                         }
                                     }),
@@ -298,7 +328,7 @@ sap.ui.define(
                                     editable: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     }
                                 })
@@ -557,7 +587,7 @@ sap.ui.define(
                                     visible: {
                                         parts: [{ path: "Close" }, { path: "Status" }],
                                         formatter: function (fVal, fVal2) {
-                                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                                         }
                                     },
                                     press: function () {
@@ -649,25 +679,40 @@ sap.ui.define(
                     }),
                     new MatrixLayoutRow({
                         cells: [
-                            // 5대암
-                            this.getLabel({ Text: "{i18n>LABEL_47107}", Required: false }), //
-                            this.getFileField(oController, "001")
-                        ]
-                    }),
-                    new MatrixLayoutRow({
-                        cells: [
-                            // 난임
-                            this.getLabel({ Text: "{i18n>LABEL_47105}", Required: false }), //
-                            this.getFileField(oController, "002")
-                        ]
-                    }),
-                    new MatrixLayoutRow({
-                        cells: [
-                            // 기타
-                            this.getLabel({ Text: "{i18n>LABEL_47106}", Required: false }), //
-                            this.getFileField(oController, "009")
+                            new MatrixLayoutCell({
+                                hAlign: "Begin",
+                                colSpan: 2,
+                                content: new sap.m.VBox({
+                                    fitContainer: true,
+                                    width: "100%",
+                                    items: [
+                                        sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+                                    ]
+                                })
+                            })
                         ]
                     })
+                    // new MatrixLayoutRow({
+                    //     cells: [
+                    //         // 5대암
+                    //         this.getLabel({ Text: "{i18n>LABEL_47107}", Required: false }), //
+                    //         this.getFileField(oController, "001")
+                    //     ]
+                    // }),
+                    // new MatrixLayoutRow({
+                    //     cells: [
+                    //         // 난임
+                    //         this.getLabel({ Text: "{i18n>LABEL_47105}", Required: false }), //
+                    //         this.getFileField(oController, "002")
+                    //     ]
+                    // }),
+                    // new MatrixLayoutRow({
+                    //     cells: [
+                    //         // 기타
+                    //         this.getLabel({ Text: "{i18n>LABEL_47106}", Required: false }), //
+                    //         this.getFileField(oController, "009")
+                    //     ]
+                    // })
                 ];
 
                 return new sap.m.VBox({
@@ -709,7 +754,7 @@ sap.ui.define(
                     editable: {
                         parts: [{ path: param.Close }, { path: param.Status }],
                         formatter: function (fVal, fVal2) {
-                            return ((fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
+                            return ((fVal2 === "ZZ" || fVal2 === "AA" || fVal2 === "88" || Common.checkNull(fVal2)) && fVal !== "X") ? true : false;
                         }
                     }
                 });

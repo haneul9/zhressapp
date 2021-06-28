@@ -3,12 +3,13 @@ sap.ui.define(
         "common/Common", //
         "common/CommonController",
         "common/JSONModelHelper",
-        "fragment/COMMON_ATTACH_FILES",
+        "common/DialogHandler",
+        "../delegate/AllRequestFileHandler",
         "sap/m/InputBase",
         "sap/ui/core/BusyIndicator",
         "sap/m/MessageBox"
     ],
-    function (Common, CommonController, JSONModelHelper, COMMON_ATTACH_FILES, InputBase, BusyIndicator, MessageBox) {
+    function (Common, CommonController, JSONModelHelper, DialogHandler, AllRequestFileHandler, InputBase, BusyIndicator, MessageBox) {
         "use strict";
 
         return CommonController.extend("ZUI5_HR_MedApply.MedApply", {
@@ -331,96 +332,6 @@ sap.ui.define(
                 $.app.byId(oController.PAGEID + "_CAF_Table" + vPage).removeSelections(true);
             },
 
-            onChk1: function () {
-                var oController = $.app.getController();
-                var oPro = $.app
-                    .byId(oController.PAGEID + "_Dialog")
-                    .getModel()
-                    .getProperty("/Pop1/0");
-                var vAppnm = oController._onDialog === "M" ? oPro.Appnm : null;
-
-                if (oPro.Chk1) {
-                    COMMON_ATTACH_FILES.setAttachFile(
-                        oController,
-                        {
-                            Appnm: vAppnm,
-                            Mode: "S",
-                            Cntnm: "001",
-                            Max: "1",
-                            Label: "",
-                            Editable: true,
-                            UseMultiCategories: true
-                        },
-                        "001"
-                    );
-
-                    oPro.Chk2 = false;
-                    COMMON_ATTACH_FILES.availLine.call(oController, "001");
-                    oController.onChk2();
-                } else {
-                    oController.initFile("001");
-
-                    COMMON_ATTACH_FILES.setAttachFile(
-                        oController,
-                        {
-                            Appnm: "",
-                            Mode: "S",
-                            Cntnm: "001",
-                            Max: "1",
-                            Label: "",
-                            Editable: false,
-                            UseMultiCategories: true
-                        },
-                        "001"
-                    );
-                }
-            },
-
-            onChk2: function () {
-                var oController = $.app.getController();
-                var oPro = $.app
-                    .byId(oController.PAGEID + "_Dialog")
-                    .getModel()
-                    .getProperty("/Pop1/0");
-                var vAppnm = oController._onDialog === "M" ? oPro.Appnm : null;
-
-                if (oPro.Chk2) {
-                    COMMON_ATTACH_FILES.setAttachFile(
-                        oController,
-                        {
-                            Appnm: vAppnm,
-                            Mode: "S",
-                            Cntnm: "001",
-                            Max: "1",
-                            Label: "",
-                            Editable: true,
-                            UseMultiCategories: true
-                        },
-                        "002"
-                    );
-
-                    oPro.Chk1 = false;
-                    COMMON_ATTACH_FILES.availLine.call(oController, "002");
-                    oController.onChk1();
-                } else {
-                    oController.initFile("002");
-
-                    COMMON_ATTACH_FILES.setAttachFile(
-                        oController,
-                        {
-                            Appnm: "",
-                            Mode: "S",
-                            Cntnm: "001",
-                            Max: "1",
-                            Label: "",
-                            Editable: false,
-                            UseMultiCategories: true
-                        },
-                        "002"
-                    );
-                }
-            },
-
             getBukrs: function (vDatum) {
                 var oController = $.app.getController();
                 var oSessionData = oController._SessionData;
@@ -552,8 +463,8 @@ sap.ui.define(
                     $.app.getModel("ZHR_BENEFIT_SRV").create("/MedicalApplySet", vData, {
                         success: function (data) {
                             if (data && data.MedicalApplyTableIn.results.length) {
-                                data.MedicalApplyTableIn.results.forEach(function (e) {
-                                    aData.oData.push(e);
+                                aData.oData = data.MedicalApplyTableIn.results.map(function(o) {
+                                    return $.extend(true, o, { Chkitem: false });
                                 });
                             }
                             if (data && data.MedicalApplyExport.results.length) {
@@ -577,6 +488,8 @@ sap.ui.define(
                     oTable.setModel(oJSON);
                     oTable.bindItems("/oData", oCol);
 
+                    oController.toggleApprovalAllBtn.call(oController);
+
                     if (oController._onClose === "X" && oController._FirstTime === "X") {
                         MessageBox.alert(oController.getBundleText("MSG_47040")); // 신청기간이 아닙니다.
                         oController._FirstTime = "";
@@ -592,6 +505,16 @@ sap.ui.define(
                 }, 10);
             },
 
+            toggleApprovalAllBtn: function () {
+                var oTable = $.app.byId(this.PAGEID + "_Table");
+
+                if(oTable.getModel().getProperty("/oData").some(function(o) { return o.Status === "ZZ"; })) {
+                    $.app.byId("requestallBtn").setEnabled(true);
+                } else {
+                    $.app.byId("requestallBtn").setEnabled(false);
+                }
+            },
+
             onSelectedRow: function (oEvent) {
                 var oController = $.app.getController();
                 var oTable = sap.ui.getCore().byId(oController.PAGEID + "_Table");
@@ -599,6 +522,7 @@ sap.ui.define(
                 var oData = oTable.getModel().getProperty(vPath);
 
                 oController._tData = $.extend(true, {}, oData);
+                delete oController._tData.Chkitem;
                 oController._tData.Close = oController._onClose;
                 if (oController._Bukrs === "") {
                     oController._Bukrs = oData.Bukrs;
@@ -607,118 +531,6 @@ sap.ui.define(
                 oController._NewGubun = "X";
 
                 oController.onDialog("M", oController._GubunBukrs);
-            },
-
-            onValid: function (oController) {
-                var oPro;
-                var oMsg = "";
-
-                if (oController._Bukrs === "1000") {
-                    oPro = $.app
-                        .byId(oController.PAGEID + "_Dialog")
-                        .getModel()
-                        .getProperty("/Pop1/0");
-
-                    if (oPro.MedDate === "" || oPro.MedDate === null) {
-                        oMsg = oController.getBundleText("MSG_47011"); // 진료일을 입력 해 주세요.
-                    }
-                    if (oPro.Relation === "") {
-                        oMsg = oController.getBundleText("MSG_47017"); // 관계를 입력 해 주세요.
-                    }
-                    if (oPro.HospType.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47019"); // 의료기관을 입력 해 주세요.
-                    }
-                    if (oPro.HospName.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47012"); // 병원명을 입력 해 주세요.
-                    }
-                    if ($.app.byId(oController.PAGEID + "_dSel1").getSelectedKey() === "" || $.app.byId(oController.PAGEID + "_dSel2").getSelectedKey() === "" || oPro.DiseName.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47034"); // 환자명을 입력하신 후 잔여한도를 확인하시기 바랍니다.
-                    }
-
-                    if (oPro.Zkibbm.trim() !== "0" && COMMON_ATTACH_FILES.getFileLength(oController, "009") === 0) {
-                        oMsg = oController.getBundleText("MSG_47021"); // 증빙자료를 업로드 해 주세요.
-                    }
-                    if (oPro.Zkijbm.trim() !== "0" && COMMON_ATTACH_FILES.getFileLength(oController, "009") === 0) {
-                        oMsg = oController.getBundleText("MSG_47021"); // 증빙자료를 업로드 해 주세요.
-                    }
-                    if (oPro.Znoctm.trim() !== "0" && COMMON_ATTACH_FILES.getFileLength(oController, "009") === 0) {
-                        oMsg = oController.getBundleText("MSG_47021"); // 증빙자료를 업로드 해 주세요.
-                    }
-                    if (oPro.Znocum.trim() !== "0" && COMMON_ATTACH_FILES.getFileLength(oController, "009") === 0) {
-                        oMsg = oController.getBundleText("MSG_47021"); // 증빙자료를 업로드 해 주세요.
-                    }
-                    if (oPro.Znobcm.trim() !== "0" && COMMON_ATTACH_FILES.getFileLength(oController, "009") === 0) {
-                        oMsg = oController.getBundleText("MSG_47021"); // 증빙자료를 업로드 해 주세요.
-                    }
-
-                    if (oPro.Chk1 && COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0) {
-                        oMsg = oController.getBundleText("MSG_47031"); // 5대암 여부 첨부파일을 업로드 해 주세요.
-                    }
-                    if (oPro.Chk2 && COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0) {
-                        oMsg = oController.getBundleText("MSG_47032"); // 난임 여부 첨부파일을 업로드 해 주세요.
-                    }
-                    if (oPro.DiseName.trim() == "") {
-                        oMsg = oController.getBundleText("MSG_47035"); // 진료내용을 입력 해 주세요.
-                    }
-                } else {
-                    oPro = $.app
-                        .byId(oController.PAGEID + "_Dialog2")
-                        .getModel()
-                        .getProperty("/Pop2/0");
-
-                    if (oPro.MedDate === "" || oPro.MedDate === null) {
-                        oMsg = oController.getBundleText("MSG_47011"); // 진료일을 입력 해 주세요.
-                    }
-                    if (oPro.Relation === "") {
-                        oMsg = oController.getBundleText("MSG_47017"); // 관계를 입력 해 주세요.
-                    }
-                    if (oPro.Gtz51.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47026"); // 의료비 구분을 입력 해 주세요.
-                    }
-                    if (oPro.Gtz51s.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47037"); // 진료항목을 입력 해 주세요.
-                    }
-                    if (oPro.PatiName.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47018"); // 환자명을 입력 해 주세요.
-                    }
-                    if (oPro.Gtz51 !== "C" && oPro.Gtz51 !== "D") {
-                        if (oPro.Inpdt === "" || oPro.Inpdt === null) {
-                            oMsg = oController.getBundleText("MSG_47015"); // 보험사 지급일을 입력 해 주세요.
-                        }
-                    }
-                    if (oPro.HospName.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47012"); // 병원명을 입력 해 주세요.
-                    }
-                    if (oPro.Recno.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47016"); // 영수증 번호를 입력 해 주세요.
-                    }
-                    if (oPro.DiseName.trim() === "") {
-                        oMsg = oController.getBundleText("MSG_47027"); // 병명을 입력 해 주세요.
-                    }
-                    if (oPro.Gtz51 !== "C" && oPro.Gtz51 !== "D") {
-                        if (oPro.Ptamt.trim() === "0") {
-                            oMsg = oController.getBundleText("MSG_47028"); // 환자부담 총액을 입력 해 주세요.
-                        }
-                    }
-                    if (oPro.Gtz51 !== "D") {
-                        if (oPro.Medsp.trim() === "0") {
-                            oMsg = oController.getBundleText("MSG_47029"); // 급여 본인부담금을 입력 해 주세요.
-                        }
-                    }
-                    if (oPro.Framt.trim() === "0") {
-                        oMsg = oController.getBundleText("MSG_47036"); // 회사 지원금이 0원이면 신청 하실 수 없습니다.
-                    }
-                    if (COMMON_ATTACH_FILES.getFileLength(oController, "008") === 0) {
-                        oMsg = oController.getBundleText("MSG_47030"); // 첨부파일을 업로드 해 주세요.
-                    }
-                }
-
-                if (oMsg !== "") {
-                    MessageBox.alert(oMsg);
-                    return false;
-                }
-
-                return true;
             },
 
             onCal: function (vSig) {
@@ -880,141 +692,6 @@ sap.ui.define(
                 return vTmp;
             },
 
-            onSaveProcess: function (oController, vSig) {
-                var oSessionData = oController._SessionData;
-                var oPro;
-                var uFiles = [];
-
-                // if (oController.onCal(vSig, "S")) {
-                if (oController.onCal(vSig)) {
-                    var vData = {
-                        IConType: "",
-                        IBukrs: vSig,
-                        IPernr: oSessionData.Pernr,
-                        ILangu: oSessionData.Langu,
-                        IMolga: oSessionData.Molga,
-                        MedicalApplyExport: [],
-                        MedicalApplyTableIn: [],
-                        MedicalApplyTableIn0: [],
-                        MedicalApplyTableIn3: [],
-                        MedicalApplyTableIn4: [],
-                        MedicalApplyTableIn5: [],
-                        MedicalApplyTableInH: []
-                    };
-
-                    vData.IConType = oController._onDialog === "M" ? "2" : "3";
-
-                    if (vSig === "1000") {
-                        oPro = oController._DataModel.getProperty("/Pop1/0");
-
-                        vData.IMedDate = oPro.MedDate;
-                        vData.MedicalApplyTableIn.push(oPro);
-
-                        if (oPro.Begda !== "" && oPro.Begda !== null && oPro.Begda !== "Invalid Date") {
-                            vData.MedicalApplyTableIn[0].Begda = moment(vData.MedicalApplyTableIn[0].Begda).hours(9).toDate();
-                        } else {
-                            vData.MedicalApplyTableIn[0].Begda = null;
-                        }
-
-                        oController._vArr1.forEach(function (e) {
-                            vData.MedicalApplyTableIn[0][e] = vData.MedicalApplyTableIn[0][e].replace(/,/gi, "");
-                        });
-
-                        vData.MedicalApplyTableIn[0].Zfvcgb = vData.MedicalApplyTableIn[0].Chk1 ? "X" : "";
-                        vData.MedicalApplyTableIn[0].Ziftgb = vData.MedicalApplyTableIn[0].Chk2 ? "X" : "";
-
-                        if (oPro.Begda !== "" && oPro.Begda !== null && oPro.Begda !== "Invalid Date") {
-                            vData.MedicalApplyTableIn[0].Begda = moment(vData.MedicalApplyTableIn[0].Begda).hours(9).toDate();
-                        } else {
-                            vData.MedicalApplyTableIn[0].Begda = null;
-                        }
-
-                        if (oPro.Inpdt !== "" && oPro.Inpdt !== null && oPro.Inpdt !== "Invalid Date") {
-                            vData.MedicalApplyTableIn[0].Inpdt = moment(vData.MedicalApplyTableIn[0].Inpdt).hours(9).toDate();
-                        } else {
-                            vData.MedicalApplyTableIn[0].Inpdt = null;
-                        }
-
-                        for (var i = 1; i <= 2; i++) {
-                            if (COMMON_ATTACH_FILES.getFileLength(oController, "00" + i) !== 0) {
-                                uFiles.push("00" + i);
-                            }
-                        }
-
-                        if (COMMON_ATTACH_FILES.getFileLength(oController, "009") !== 0) {
-                            uFiles.push("009");
-                        }
-
-                        vData.MedicalApplyTableIn[0].Appnm = COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
-                        vData.MedicalApplyTableIn[0].PatiName = $.app
-                            .byId(oController.PAGEID + "_dSel1")
-                            .getSelectedItem()
-                            .getText();
-                    } else {
-                        oPro = oController._DataModel.getProperty("/Pop2/0");
-
-                        vData.IMedDate = oPro.MedDate;
-                        vData.MedicalApplyTableIn.push(oPro);
-
-                        oController._vArr2.forEach(function (e) {
-                            vData.MedicalApplyTableIn[0][e] = vData.MedicalApplyTableIn[0][e].replace(/,/gi, "");
-                        });
-
-                        vData.MedicalApplyTableIn[0].Appnm = COMMON_ATTACH_FILES.uploadFile.call(oController, "008");
-                    }
-
-                    delete vData.MedicalApplyTableIn[0].Close;
-                    delete vData.MedicalApplyTableIn[0].Chk1;
-                    delete vData.MedicalApplyTableIn[0].Chk2;
-
-                    $.app.getModel("ZHR_BENEFIT_SRV").create("/MedicalApplySet", vData, {
-                        success: function (data) {
-                            if (data && data.MedicalApplyTableIn.results.length) {
-                                MessageBox.alert(oController.getBundleText("MSG_44002"), {
-                                    // 신청 되었습니다.
-                                    title: oController.getBundleText("LABEL_35023"), // 안내
-                                    onClose: function () {
-                                        if (vSig === "1000") {
-                                            oController.onClose();
-                                            oController.onSearch();
-                                        } else {
-                                            oController.onClose2();
-                                            oController.onSearch();
-                                        }
-                                    }
-                                });
-                            }
-                        },
-                        error: function (oError) {
-                            var Err = {};
-                            if (oError.response) {
-                                Err = window.JSON.parse(oError.response.body);
-                                var msg1 = Err.error.innererror.errordetails;
-                                if (msg1 && msg1.length) MessageBox.alert(Err.error.innererror.errordetails[0].message);
-                                else MessageBox.alert(Err.error.innererror.errordetails[0].message);
-                            } else {
-                                MessageBox.alert(oError.toString());
-                            }
-                        }
-                    });
-
-                    if (vSig === "1000") {
-                        oController._DataModel.setProperty("/Pop1/0/Chk1", vData.MedicalApplyTableIn[0].Zfvcgb === "X" ? true : false);
-                        oController._DataModel.setProperty("/Pop1/0/Chk2", vData.MedicalApplyTableIn[0].Ziftgb === "X" ? true : false);
-
-                        oPro = oController._DataModel.getProperty("/Pop1/0");
-                        oController._vArr1.forEach(function (e) {
-                            oController._DataModel.setProperty("/Pop1/0/" + e, Common.numberWithCommas(oPro[e]));
-                        });
-                    } else {
-                        oPro = oController._DataModel.getProperty("/Pop2/0");
-                        oController._vArr2.forEach(function (e) {
-                            oController._DataModel.setProperty("/Pop2/0/" + e, Common.numberWithCommas(oPro[e]));
-                        });
-                    }
-                }
-            },
-
             eqFunc: function () {
                 var oController = $.app.getController();
                 var oPro;
@@ -1091,6 +768,38 @@ sap.ui.define(
                         }
                     }
                 }
+            },
+
+            onApprovalAll: function() {
+                var oTable = $.app.byId(this.PAGEID + "_Table"),
+                selectedRows = oTable.getModel().getProperty("/oData").filter(function (o) {
+                    return o.Chkitem;
+                });
+
+                if (!selectedRows.length) {
+                    MessageBox.alert(this.getBundleText("MSG_00066")); // 대상 항목을 선택하세요.
+                    return;
+                }
+
+                var initData = {
+                    List: selectedRows
+                };
+                var callback = function () {
+                    MessageBox.success(this.getBundleText("MSG_00061"), {   // 신청되었습니다.
+                        title: this.getBundleText("LABEL_00150"),
+                        onClose: function () {
+                            this.onSearch();
+                            this.getAllRequestFileHandler().getDialog().close();
+                        }.bind(this)
+                    });
+                }.bind(this);
+
+                this.AllRequestFileHandler = AllRequestFileHandler.get(this, initData, callback);
+                DialogHandler.open(this.AllRequestFileHandler);
+            },
+
+            getAllRequestFileHandler: function() {
+                return this.AllRequestFileHandler;
             },
 
             getLocalSessionModel: Common.isLOCAL()

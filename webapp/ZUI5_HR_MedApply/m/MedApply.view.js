@@ -34,12 +34,17 @@ sap.ui.define(
                         }),
                         new sap.m.FlexBox({
                             items: [
+                                new sap.m.Button("requestallBtn", {
+                                    text: "{i18n>LABEL_47152}", // 일괄신청
+                                    enabled: false,
+                                    press: oController.onApprovalAll.bind(oController)
+                                }).addStyleClass("button-light"),
                                 new sap.m.Button(oController.PAGEID + "_NewBtn", {
                                     press: function () {
                                         oController._NewGubun = "O";
                                         oController.getBukrs();
                                     },
-                                    text: "{i18n>LABEL_47006}" // 신청
+                                    text: "{i18n>LABEL_47151}" // 추가
                                 }).addStyleClass("button-light"),
                                 new sap.ui.commons.layout.HorizontalLayout(oController.PAGEID + "_NewIcon", {
                                     visible: false,
@@ -61,15 +66,15 @@ sap.ui.define(
                     mode: "None",
                     columns: [
                         new sap.m.Column({
-                            width: "30%",
+                            width: "10%",
+                            hAlign: sap.ui.core.TextAlign.Begin
+                        }),
+                        new sap.m.Column({
+                            width: "50%",
                             hAlign: sap.ui.core.TextAlign.Begin
                         }),
                         new sap.m.Column({
                             width: "40%",
-                            hAlign: sap.ui.core.TextAlign.Begin
-                        }),
-                        new sap.m.Column({
-                            width: "30%",
                             hAlign: sap.ui.core.TextAlign.Begin
                         })
                     ]
@@ -80,6 +85,20 @@ sap.ui.define(
                     press: oController.onSelectedRow,
                     type: "Active",
                     cells: [
+                        new sap.m.FlexBox({
+                            direction: sap.m.FlexDirection.Column,
+                            items: [
+                                new sap.m.CheckBox({
+                                    visible: {
+                                        path: "Status",
+                                        formatter: function (vStatus) {
+                                            return vStatus === "ZZ" ? true : false;
+                                        }
+                                    },
+                                    selected: "{Chkitem}"
+                                })
+                            ]
+                        }),
                         new sap.m.FlexBox({
                             direction: sap.m.FlexDirection.Column,
                             items: [
@@ -97,15 +116,6 @@ sap.ui.define(
                             direction: sap.m.FlexDirection.Column,
                             items: [
                                 new sap.m.Text({
-                                    text: "{Regnot}",
-                                    textAlign: "Begin"
-                                })
-                            ]
-                        }),
-                        new sap.m.FlexBox({
-                            direction: sap.m.FlexDirection.Column,
-                            items: [
-                                new sap.m.Text({
                                     text: {
                                         path: "MedDate",
                                         type: new sap.ui.model.type.Date({ pattern: "yyyy-MM-dd" })
@@ -113,7 +123,7 @@ sap.ui.define(
                                     textAlign: "Begin"
                                 }),
                                 new sap.m.Text({
-                                    text: "{StatusText}",
+                                    text: "{StatusT}",
                                     textAlign: "Begin"
                                 })
                             ]

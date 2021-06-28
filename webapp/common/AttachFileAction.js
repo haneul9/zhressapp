@@ -13,6 +13,7 @@ jQuery.sap.require("common.Common");
 common.AttachFileAction = {
 	oController: null,
 	fnChange: null,
+	fnRetrieveCallback: null,
 
 	/**
 	 * @memberOf common.AttachFileAction
@@ -36,7 +37,8 @@ common.AttachFileAction = {
 					HelpButton: false,
 					ReadAsync: false,
 					HelpTextList: [],
-					fnChange: null
+					fnChange: null,
+					fnRetrieveCallback: null
 				},
 				opt
 			),
@@ -48,6 +50,7 @@ common.AttachFileAction = {
 		options.ListMode = options.Editable ? sap.m.ListMode.MultiSelect : sap.m.ListMode.None;
 		options.FileTypes = ["ppt", "pptx", "doc", "docx", "xls", "xlsx", "jpg", "bmp", "gif", "png", "txt", "pdf", "jpeg"];
 		if(typeof options.fnChange === "function") common.AttachFileAction.fnChange = options.fnChange;
+		if(typeof options.fnRetrieveCallback === "function") common.AttachFileAction.fnRetrieveCallback = options.fnRetrieveCallback;
 
 		oAttachbox.getModel().setProperty("/Settings", options);
 		oAttachbox.getModel().setProperty("/DelelteDatas", []);
@@ -95,6 +98,7 @@ common.AttachFileAction = {
 		JSonModel.setProperty("/Data", []);
 
 		if(!vAppnm) {
+			if(typeof common.AttachFileAction.fnRetrieveCallback === "function") common.AttachFileAction.fnRetrieveCallback.call(this);
 			return;
 		}
 
@@ -134,10 +138,12 @@ common.AttachFileAction = {
 				JSonModel.setProperty("/Data", Datas.Data);
 
 				oAttachbox.setBusy(false);
+				if(typeof common.AttachFileAction.fnRetrieveCallback === "function") common.AttachFileAction.fnRetrieveCallback.call(this);
 			},
 			error: function (res) {
 				common.Common.log(res);
 				oAttachbox.setBusy(false);
+				if(typeof common.AttachFileAction.fnRetrieveCallback === "function") common.AttachFileAction.fnRetrieveCallback.call(this);
 			}
 		});
 	},
@@ -540,5 +546,51 @@ common.AttachFileAction = {
 		}
 
 		return vAppnm;
+	},
+
+	uploadQueue: function(vAppnm) {
+		var oModel = sap.ui.getCore().getModel("ZHR_COMMON_SRV"),
+			oAttachbox = sap.ui.getCore().byId([this.PAGEID, "ATTACHBOX"].join(this.SEQ || "_")),
+			vAttachDatas = oAttachbox.getModel().getProperty("/Data") || [],
+			oController = this.oView.getController(),
+			vPernr = oController.getSessionInfoByKey("Pernr");
+
+		oModel.refreshSecurityToken();
+		var oRequest = oModel._createRequest();
+
+		return vAttachDatas.map(function(elem) {
+			return common.Common.getPromise(true, function(resolve, reject) {
+				var oHeaders = {
+					"x-csrf-token": oRequest.headers["x-csrf-token"],
+					"slug": [vAppnm, vPernr, encodeURI(elem.Fname), vPernr].join("|")
+				};
+
+				jQuery.ajax({
+					type: "POST",
+					async: false,
+					url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_COMMON_SRV/FileAttachSet/",
+					headers: oHeaders,
+					cache: false,
+					contentType: elem.type,
+					processData: false,
+					data: elem,
+					success: function(data) {
+						if(!vAppnm) vAppnm = $(data).find("content").next().children().eq(7).text();
+						common.Common.log(this.getBundleText("MSG_00034") + ", " + data);
+
+						resolve(vAppnm);
+					}.bind(this),
+					error: function(data) {
+						vAppnm = null;
+						var errorMsg = this.getBundleText("MSG_00031");
+		
+						common.Common.log("Error: " + data);
+						sap.m.MessageToast.show(errorMsg, { my: "center center", at: "center center"});
+
+						reject();
+					}.bind(this)
+				});
+			}.bind(this));
+		}.bind(this));
 	}
 };
