@@ -242,16 +242,18 @@ return CommonController.extend($.app.APP_ID, { // 출장 관리 HASS
 
 	onESSelectPerson: function(o) {
 
+		var handler = this.RequestDetailDialogHandler;
+
 		// HASS 대상자 지정
 		if (this.isProxyTargetSelecting) {
 			this.setProxyTargetEmpInfo(o.Pernr);
 		}
 		// 동반출장자 지정
-		else if (this.RequestDetailDialogHandler.isAccompanierAdding) {
+		else if (handler && handler.isAccompanierAdding) {
 			OnRequest.setAccompanier.call(this, o);
 		}
 		// 대근자 지정
-		else if (this.RequestDetailDialogHandler.isSubstituteAdding) {
+		else if (handler && handler.isSubstituteAdding) {
 			OnRequest.setSubstitute.call(this, o);
 		}
 		else {
@@ -264,10 +266,12 @@ return CommonController.extend($.app.APP_ID, { // 출장 관리 HASS
 
 	displayMultiOrgSearchDialog: function(oEvent) {
 
-		var oController = $.app.getController();
+		var oController = $.app.getController(),
+		handler = oController.RequestDetailDialogHandler;
+
 		// 동반출장자/대근자 검색시
-		if (oController.RequestDetailDialogHandler.isAccompanierAdding
-		 || oController.RequestDetailDialogHandler.isSubstituteAdding) {
+		if (handler && handler.isAccompanierAdding
+		 || handler && handler.isSubstituteAdding) {
 			OnRequest.searchOrg.call(oController, oEvent);
 		}
 		else {
