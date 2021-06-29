@@ -60,12 +60,7 @@ sap.ui.define(
                                             valueHelpOnly: true,
                                             showValueHelp: true,
                                             width: "240px"
-                                        }),
-                                        new sap.m.Text({
-                                            width: "auto",
-                                            text: "{i18n>MSG_47049}",
-                                            textAlign: "Begin"
-                                        }).addStyleClass("info-text-red ml-8px")
+                                        })
                                     ]
                                 }),
                                 new sap.m.Label({
@@ -158,7 +153,12 @@ sap.ui.define(
                                         leave: function (oEvent) {
                                             Common.onPressTableHeaderInformation.call(oController, oEvent);
                                         }
-                                    }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue")
+                                    }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                                    new sap.m.Text({
+                                        width: "100%",
+                                        text: "{i18n>MSG_47049}",
+                                        textAlign: "Begin"
+                                    }).addStyleClass("info-text-red ml-8px")
                                 ]
                             }),
                             new MatrixLayoutCell({
