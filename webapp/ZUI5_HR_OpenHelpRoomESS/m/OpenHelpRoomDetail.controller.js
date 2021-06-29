@@ -88,28 +88,25 @@ sap.ui.define(
 				else oFileBox.setVisible(true);
 
 
-				FileHandler.once.call(oController, vAppnm).then(function() {
-					Promise.all([
-						Common.getPromise(function() {
-							if(Common.checkNull(!vPDFAppnm)){
-								FileHandler.setAttachFile(oController, {
-									Appnm: vPDFAppnm,
-									Mode: "S",
-									Max: 1,
-									Editable: false
-								},"001");
-							}
-						}),
-						Common.getPromise(function() {
-							FileHandler.setAttachFile(oController, {
-								Appnm: vAppnm,
-								Mode: "M",
-								Max: 3,
-								Editable: false
-							},"002");
-						})
-					]);
-				}, 100);
+				Common.getPromise(function() {
+					if(Common.checkNull(!vPDFAppnm)){
+						FileHandler.setAttachFile(oController, {
+							Appnm: vPDFAppnm,
+							Mode: "S",
+							Max: 1,
+							Editable: false
+						},"001");
+					}
+				});
+				
+				Common.getPromise(function() {
+					FileHandler.setAttachFile(oController, {
+						Appnm: vAppnm,
+						Mode: "M",
+						Max: 3,
+						Editable: false
+					},"002");
+				});
 			},
 			
 			getLocalSessionModel: Common.isLOCAL() ? function() {

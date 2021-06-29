@@ -70,7 +70,7 @@ sap.ui.define([
 						alignItems: sap.m.FlexAlignItems.Center,
 						fitContainer: true,
 						items: [
-							fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"002")
 						]
 					}),
 					new sap.m.FlexBox({
