@@ -1,6 +1,12 @@
 function AppPrefilter() {
 
 	try {
+		if (/PerinfoNewEmp\.html/.test(location.pathname)) {
+			this.initDefault();
+
+			return this;
+		}
+
 		if (!parent || !parent._gateway) {
 			alert("잘못된 메뉴 접속입니다.\nHome 화면에서 접속해주시기 바랍니다.");
 
@@ -13,12 +19,7 @@ function AppPrefilter() {
 		}
 	} catch(e) {
 		// SF에서 평가 메뉴 접속시
-		window._menu_prefilter = this;
-		this._menu_authorized = true;
-
-		document.addEventListener("DOMContentLoaded", function () {
-			window.startAppInit();
-		});
+		this.initDefault();
 
 		return this;
 	}
@@ -31,6 +32,18 @@ function AppPrefilter() {
 
 	this.init();
 }
+
+AppPrefilter.prototype.initDefault = function() {
+
+	window._menu_prefilter = this;
+	this._menu_authorized = true;
+
+	document.addEventListener("DOMContentLoaded", function() {
+		setTimeout(function() {
+			window.startAppInit();
+		}, 0);
+	});
+};
 
 AppPrefilter.prototype.init = function() {
 
@@ -208,7 +221,7 @@ AppPrefilter.prototype.confirmADPW = function(result) {
 		document.addEventListener("DOMContentLoaded", function() {
 			setTimeout(function() {
 				window.startAppInit();
-			}, 0);
+			}, 300);
 		});
 
 	}

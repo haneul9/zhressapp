@@ -41,7 +41,7 @@ check: function(callback) {
 			this.confirm();
 		} else {
 			// MFA 대상 IP인지 확인
-			this.targetIP = sessionStorage.getItem('ehr.client.ip.external') === "E";
+			this.targetIP = sessionStorage.getItem('ehr.client.ip.external') === 'E';
 
 			if (this._gateway.parameter('xptmxmwhagkrpTtmqslek') !== 'true') {
 				if (this.targetIP && this.targetPernr) {
@@ -73,14 +73,12 @@ check: function(callback) {
 
 isTargetPernr: function() {
 
-	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-		
-		oModel.read("/TwoFactorAuthCheckSet", {
+	return new Promise(function(resolve, reject) {
+		this._gateway.getModel('ZHR_COMMON_SRV').read('/TwoFactorAuthCheckSet', {
 			async: true,
 			filters: [
-				new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
-				new sap.ui.model.Filter("Device", sap.ui.model.FilterOperator.EQ, this._gateway.isMobile() ? 'M' : '')
+				new sap.ui.model.Filter('Percod', sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+				new sap.ui.model.Filter('Device', sap.ui.model.FilterOperator.EQ, this._gateway.isMobile() ? 'M' : '')
 			],
 			success: function(oData) {
 				this.targetPernr = oData.results[0].Authyn === 'Y';
@@ -204,9 +202,7 @@ requestCode: function(type) {
 			return;
 		}
 
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-
-		oModel.create("/TwoFactorAuthNumberSet", {
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/TwoFactorAuthNumberSet', {
 			Ttype: type,
 			Cernm: code,
 			Percod: sessionStorage.getItem('ehr.odata.user.percod')
@@ -308,7 +304,7 @@ setStatus: function(status, type) {
 			$('#code-mfa').prop('disabled', INIT);
 			$('.fn-code-request').prop('disabled', !INIT);
 			$('.fn-code-confirm').prop('disabled', INIT);
-	
+
 		}
 	}, 0);
 },
@@ -328,7 +324,7 @@ done: function() {
 ui: function() {
 
 	return [
-		'<div class="modal fade" style="display:none" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-mfa-modal">',
+		'<div class="modal fade" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-mfa-modal">',
 			'<div class="modal-dialog" role="document">',
 				'<div class="modal-content">',
 					'<div class="modal-header">',

@@ -241,7 +241,7 @@ isPRD: function() {
 },
 readyModal: function() {
 
-	$([	'<div class="modal fade" style="display:none" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-alert-modal">',
+	$([	'<div class="modal fade" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-alert-modal">',
 			'<div class="modal-dialog" role="document">',
 				'<div class="modal-content">',
 					'<div class="modal-header">',
@@ -257,7 +257,7 @@ readyModal: function() {
 		'</div>'
 	].join('')).appendTo('body');
 
-	$([	'<div class="modal fade" style="display:none" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-confirm-modal">',
+	$([	'<div class="modal fade" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-confirm-modal">',
 			'<div class="modal-dialog" role="document">',
 				'<div class="modal-content">',
 					'<div class="modal-header">',

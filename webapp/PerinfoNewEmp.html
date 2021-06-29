@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-100.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-300.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-500.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-700.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/noto-sans-kr-v12-latin_korean-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/cmis/3868fc5f124c35d7e47cc206/root/zhressapp/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="css/lotte-chemical-init.css">
+<script src="common/AppPrefilter.js"></script>
+<script id="sap-ui-bootstrap"
+	src="resources/sap-ui-cachebuster/sap-ui-core.js"
+	data-sap-ui-theme="sap_fiori_3"
+	data-sap-ui-appCacheBuster="./"
+	data-sap-ui-resourceroots='{"ZHR_ESSAPP.ZHR_ESSAPP": "./"}'
+	data-sap-ui-compatVersion="edge"
+	data-sap-ui-async="true"
+	data-sap-ui-frameOptions="allow"
+	data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.commons, sap.uxap, sap.ui.unified">
+</script>
+<script src="common/moment-with-locales.js"></script>
+<script src="common/AppBasis.js"></script>
+<script>	
+var gDtfmt = "yyyy-MM-dd",
+gPercod = "",
+gPersa = "",
+gMolga = "",
+gDcpfm = "",
+gEeapp = "",
+gPernr = "",
+gBukrs = "",
+gAuth = "E";
+
+var oBundleText = $.app.geti18nResource();
+
+function startAppInit() {
+
+	var contextPath = "ZUI5_HR_PerinfoNewEmp";
+	$.extend(true, $.app, {
+		CONTEXT_PATH: contextPath,
+		APP_SFMAIN_ID: "ZUI5_SF.SFMain",
+		APP_ID: [contextPath, "List"].join("."),
+		APP_AUTH: $.app.Auth.ESS,
+		APP_TILE: oBundleText.getText("LABEL_37001"), // 사원 프로파일
+		APP_TYPE: "M",	// W, M
+		includeStyleSheets: [
+			"ZUI5_HR_PerinfoNewEmp/css/perinfo.css"
+		],
+		LOG: {
+			ENABLE_SUCCESS: true
+		}
+	});
+
+	$.app.init();
+}
+</script>
+<style type="text/css">
+/** m.panel 관련 standard css 변경 **/
+.sapMPanelContent:not(.sapMPanelBGTransparent) {
+	border-bottom: 0 !important;
+}
+.sapMPanel>.sapMPanelHdr, .sapMPanelWrappingDiv, .sapMPanelWrappingDivTb {
+	border-bottom: 0 !important;
+}
+.sapUxAPObjectPageHeaderContent{
+	width: 95%;
+	margin-right: 0 !important;
+}
+.sapMSplitContainerMaster{
+	border-right: 0 !important;
+}
+.sapUxAPObjectPageLayoutNoAnchorBar .sapUxAPObjectPageHeaderContent {
+	box-shadow: none !important;
+}
+.sapUxAPObjectPageNoNavigation .sapUxAPObjectPageHeaderContent {
+	box-shadow: none !important;
+}
+.employee-basic-info-box{
+	top : -10px !important;
+}
+.DisplayNone {
+	display: none;
+}
+.AlignEnd{
+	text-align : End;
+}
+.EmployeePic {
+	border-radius : 100% !important; 
+	/*border : 0.2rem solid #4f667a !important;*/
+}
+/* .EmployeeLayout {
+	background-color : #064975 !important;
+	min-height: 130px !important;
+	border-radius : 0.5rem;
+}
+.EmployeeLayoutPadding {
+	padding-top: 20px;
+	padding-left: 24px;
+}
+.EmployeeLayoutHeader {
+	font-size : 1rem !important;
+	color : #fff !important;
+	font-weight : 500 !important;
+	letter-spacing : 0.5px !important;
+	padding-bottom : 0.25rem !important;
+	line-height:24px !important;
+	min-height : auto !important;
+}
+.EmployeeLayoutText {
+	font-size : 14px !important;
+	color : rgba(255, 255, 255, 0.8) !important;
+	line-height : 1.2 !important;
+	min-height : auto !important;
+}
+.EmployeeLayoutText span{
+	line-height:20px !important;
+}
+.EmployeeLayoutPic {
+	padding-top: 20px;
+	padding-right : 16px;
+} */
+.EmployeeLayoutPadding {
+	padding-left: 24px;
+}
+.EmployeeLayoutHeader {
+	font-size : 1rem !important;
+	font-weight : 500 !important;
+	letter-spacing : 0.5px !important;
+	padding-bottom : 0.25rem !important;
+	line-height:24px !important;
+	min-height : auto !important; 
+}
+.EmployeeLayoutText {
+	font-size : 14px !important;
+	line-height : 1.2 !important;
+	min-height : auto !important;
+}
+.EmployeeLayoutText span{
+	line-height:20px !important;
+}
+.EmployeeLayoutPic {
+	padding-left: 20px;
+}
+</style>
+</head>
+<body id="ui-body" class="sapUiBody" oncontextmenu="return false">
+<div class="app-preparing">
+	<div class="spinner"></div>
+</div>
+</body>
+</html>

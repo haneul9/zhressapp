@@ -94,17 +94,11 @@ isPopup: function() {
 
 	return !!this._basis.parameter('popup');
 },
-restorePreviousMenu: function() {
-
-
-},
 restoreHome: function() {
 
 	if (this.isPopup()) {
 		return;
 	}
-
-	// TODO : 메뉴 이탈 하시겠습니까?
 
 	$(document).attr('title', 'Hi HR');
 	this._menu.changeState(false, true);
