@@ -215,7 +215,7 @@ sap.ui.define(
 
                 return new MatrixLayout({
                     columns: 2,
-                    widths: ["30%", "70%"],
+                    widths: ["20%", ""],
                     rows: aRows
                 });
             }
