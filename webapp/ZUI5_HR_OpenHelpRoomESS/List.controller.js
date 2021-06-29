@@ -3,10 +3,9 @@ sap.ui.define([
 	"../common/CommonController",
 	"../common/AttachFileAction",
 	"../common/JSONModelHelper",
-	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator"
+	"sap/m/MessageBox"
 	], 
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, MessageBox, BusyIndicator) {
+	function (Common, CommonController, AttachFileAction, JSONModelHelper, MessageBox) {
 	"use strict";
 
 	
@@ -46,13 +45,11 @@ sap.ui.define([
 		
 		onBeforeShow: function() {
 			Common.log("onBeforeShow");
-			BusyIndicator.show(0);
 		},
 		
 		onAfterShow: function() {
 			
 			this.onTableSearch();
-			BusyIndicator.hide();
 		},
 		
 		onTableSearch: function() {

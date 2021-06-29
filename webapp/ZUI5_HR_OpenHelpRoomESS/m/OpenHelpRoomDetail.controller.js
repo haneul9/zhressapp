@@ -43,6 +43,7 @@ sap.ui.define(
 			},
 
 			onBeforeShow: function (oEvent) {
+				BusyIndicator.show(0);
 				var	oController = this.getView().getController();
 				
 				oController.OpenHelpModel.setData({ TopData: {} });
@@ -66,6 +67,7 @@ sap.ui.define(
 				
 				oController.onTableSearch();
 				oController.onBeforeOpenDetailDialog();
+				BusyIndicator.hide();
 			},
 			
 			navBack: function() {
