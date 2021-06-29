@@ -91,6 +91,7 @@ sap.ui.define(
 				Common.getPromise(function() {
 					if(Common.checkNull(!vPDFAppnm)){
 						FileHandler.setAttachFile(oController, {
+							Label: oController.getBundleText("LABEL_25020"),
 							Appnm: vPDFAppnm,
 							Mode: "S",
 							Max: 1,
@@ -98,7 +99,7 @@ sap.ui.define(
 						},"001");
 					}
 				});
-				
+
 				Common.getPromise(function() {
 					FileHandler.setAttachFile(oController, {
 						Appnm: vAppnm,
