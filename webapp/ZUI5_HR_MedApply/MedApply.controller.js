@@ -2106,6 +2106,7 @@ sap.ui.define(
                                                 });
                                                 oController.onSearch("NoBukrs");
                                                 oController.onAfterLoad2();
+                                                oController.onChange5("B");
                                             }
                                         }
                                     });
