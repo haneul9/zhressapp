@@ -60,7 +60,12 @@ sap.ui.define(
                                             valueHelpOnly: true,
                                             showValueHelp: true,
                                             width: "240px"
-                                        })
+                                        }),
+                                        new sap.m.Text({
+                                            width: "auto",
+                                            text: "{i18n>MSG_47049}",
+                                            textAlign: "Begin"
+                                        }).addStyleClass("info-text-red ml-8px")
                                     ]
                                 }),
                                 new sap.m.Label({
