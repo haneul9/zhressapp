@@ -110,6 +110,7 @@ sap.ui.define(
                             this.oModel.setProperty("/IsBusy", false);
                         }.bind(this)).catch(function(err) {
                             Common.log(err);
+                            MessageBox.error("파일 업로드에 실패했습니다.");
                         });
                     }.bind(this), 100);
                 };
