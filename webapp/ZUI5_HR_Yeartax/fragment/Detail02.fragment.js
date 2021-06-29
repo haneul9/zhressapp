@@ -319,56 +319,53 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 			enableSelectAll : false,
 			extension : new sap.m.Toolbar({
 								 height : "40px",
-								 content : [new sap.m.Text({text : "가족정보"}).addStyleClass("Font15 FontBold"),
-									 	  	new sap.m.ToolbarSpacer(),
-									 	  	// new sap.m.Button({
-									 	  	// 	text : "신규",
-									 	  	// 	press : function(oEvent){
-									 	  	// 		oController.onPressFamInfo(oEvent, "C");
-	 								 	  //		},
-									 	  	// 	visible : {
-									 	  	// 		parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
-									 	  	// 		formatter : function(fVal1, fVal2, fVal3){
-									 	  	// 			if(!fVal3 || fVal3 == false)
-									 	  	// 				return false;
-									 	  	// 			else if(fVal1 == "1" && fVal2 == "1")
-									 	  	// 				return true;
-									 	  	// 			else
-									 	  	// 				return false;
-									 	  	// 		}
-									 	  	// 	}
-									 	  	// }).addStyleClass("button-light"),
-									 	  	new sap.m.Button({
-									 	  		text : "수정",
-									 	  		// press : function(oEvent){
-									 	  		// 	oController.onPressFamInfo(oEvent, "M");
-									 	  		// },
-									 	  		press : oController.onPressFamilyApply,
-									 	  		visible : {
-									 	  			parts : [{path : "Pystat"}, {path : "Yestat"}],
-									 	  			formatter : function(fVal1, fVal2){
-														   if(fVal1 == "1" && fVal2 == "1")
-									 	  					return true;
-									 	  				else
-									 	  					return false;
-									 	  			}
-									 	  		}
-									 	  	}).addStyleClass("button-light"),
-									 	  	// new sap.m.Button({
-									 	  	// 	text : "삭제",
-									 	  	// 	press : oController.onDeleteFamInfo,
-									 	  	// 	visible : {
-								 	  		// 		parts : [{path : "Pystat"}, {path : "Yestat"}, {path : "Pdcid"}],
-									 	  	// 		formatter : function(fVal1, fVal2, fVal3){
-									 	  	// 			if(!fVal3 || fVal3 == false)
-									 	  	// 				return false;
-									 	  	// 			else if(fVal1 == "1" && fVal2 == "1")
-									 	  	// 				return true;
-									 	  	// 			else
-									 	  	// 				return false;
-									 	  	// 		}
-									 	  	// 	}
-									 	  	// }).addStyleClass("button-delete"),
+								 content : [
+												new sap.m.Text({text : "가족정보"}).addStyleClass("Font15 FontBold"),
+												new sap.m.ToolbarSpacer(),
+												new sap.m.Button({
+													text : "신규",
+													press : function(oEvent){
+														oController.onPressFamInfo(oEvent, "C");
+													},
+													visible : {
+														parts : [{path : "Pystat"}, {path : "Yestat"}],
+														formatter : function(fVal1, fVal2){
+															if(fVal1 == "1" && fVal2 == "1")
+																return true;
+															else
+																return false;
+														}
+													}
+												}).addStyleClass("button-light"),
+												new sap.m.Button({
+													text : "수정",
+													press : function(oEvent){
+														oController.onPressFamInfo(oEvent, "M");
+													},
+													// press : oController.onPressFamilyApply,
+													visible : {
+														parts : [{path : "Pystat"}, {path : "Yestat"}],
+														formatter : function(fVal1, fVal2){
+															if(fVal1 == "1" && fVal2 == "1")
+																return true;
+															else
+																return false;
+														}
+													}
+												}).addStyleClass("button-light"),
+												new sap.m.Button({
+													text : "삭제",
+													press : oController.onDeleteFamInfo,
+													visible : {
+														parts : [{path : "Pystat"}, {path : "Yestat"}],
+														formatter : function(fVal1, fVal2){
+															if(fVal1 == "1" && fVal2 == "1")
+																return true;
+															else
+																return false;
+														}
+													}
+												}).addStyleClass("button-delete")
 									 	  	]
 							 }).addStyleClass("ToolbarNoBottomLine")
 							   .setModel(oController._DetailJSonModel)
@@ -386,6 +383,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 						{id: "Dptid", label : "부양가족", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Ageid", label : "경로자", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Fstid", label : "위탁아동", plabel : "", span : 0, type : "YET", sort : false, filter : false},
+						{id: "Fstid", label : "6개월이상 위탁아동", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Hndid", label : "장애인", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Zzinsyn", label : "보험료", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Zzmedyn", label : "의료비", plabel : "", span : 0, type : "YET", sort : false, filter : false},

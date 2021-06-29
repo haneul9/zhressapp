@@ -75,7 +75,8 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_09", {
 									 vAlign : "Middle"
 								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
-									 content : [new sap.m.Text({
+									 content : [
+										 		new sap.m.Text({
 													text : "• 퇴직연금 :근로자퇴직급여보장법에 따른 확정기여형퇴직연금(DC), 개인형퇴직연금(IRP)에 납입한 금액(회사부담액 제외)" + 
 														   "\n과학기술인공제회법에 따른 과학기술인연금에 납입한 금액"
 												}).addStyleClass("FontFamily"),
@@ -84,17 +85,103 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_09", {
 													text : "• 연금저축 : 연금저축에 납입한 보험료(2001.1.1 이후 가입분)"
 												}).addStyleClass("FontFamily"),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
-												new sap.m.Text({
-													text : "• 납입액의 12% 세액공제(총 급여액이 5500만원 이하는 15%)"
-												}).addStyleClass("FontFamily"),
-												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
-												new sap.m.Text({
-													text : "• 공제한도 : 퇴직연금 + 연금저축 = 연 700만원"
+												new sap.m.FormattedText({
+													htmlText : "<span class='FontFamily colorRed'>• 공제율 및 공제한도 : 만 50세 이상 연금계좌세액공제 한도 확대</span>"
 												}),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
-												new sap.m.Text({
-													text : "(단, 연금저축은 1억 2천만원 이하자는 400만원, 초과자는 300만원 공제한도 적용)"
-												}).addStyleClass("FontFamily PaddingLeft5")],
+												new sap.ui.commons.layout.MatrixLayout({
+													columns : 4,
+													width : "100%",
+													widths : ["", "", "", ""],
+													rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+																cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "총급여액"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Label3"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "만 50세 미만\n세액공제대상 납입한도", textAlign : "Center"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Label3"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "만 50세 이상\n세액공제대상 납입한도", textAlign : "Center"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Label3"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "공제율"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Label3")]	
+															}),
+															new sap.ui.commons.layout.MatrixLayoutRow({
+																height : "30px",
+																cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "5.5천만원 이하"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Data2"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "400만원 (퇴직연금 포함 연 700만원)", textAlign : "Center"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle",
+																			 rowSpan : 2
+																		 }).addStyleClass("Data2"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "600만원 (퇴직연금 포함 연 900만원)", textAlign : "Center"}).addStyleClass("colorRed")],
+																			 hAlign : "Center",
+																			 vAlign : "Middle",
+																			 rowSpan : 2
+																		 }).addStyleClass("Data2"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "15%"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Data2")]	
+															}),
+															new sap.ui.commons.layout.MatrixLayoutRow({
+																height : "30px",
+																cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "1.2억원 이하"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Data2"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "12%"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle",
+																			 rowSpan : 2	
+																		 }).addStyleClass("Data2")]	
+															}),
+															new sap.ui.commons.layout.MatrixLayoutRow({
+																height : "30px",
+																cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "1.2억원 초과"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle"	
+																		 }).addStyleClass("Data2"),
+																		 new sap.ui.commons.layout.MatrixLayoutCell({
+																			 content : [new sap.m.Text({text : "300만원 (퇴직연금 포함 연 700만원)", textAlign : "Center"})],
+																			 hAlign : "Center",
+																			 vAlign : "Middle",
+																			 colSpan : 2
+																		 }).addStyleClass("Data2")]	
+															})]
+												})
+												// new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
+												// new sap.m.Text({
+												// 	text : "• 납입액의 12% 세액공제(총 급여액이 5500만원 이하는 15%)"
+												// }).addStyleClass("FontFamily"),
+												// new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
+												// new sap.m.Text({
+												// 	text : "• 공제한도 : 퇴직연금 + 연금저축 = 연 700만원"
+												// }),
+												// new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
+												// new sap.m.Text({
+												// 	text : "(단, 연금저축은 1억 2천만원 이하자는 400만원, 초과자는 300만원 공제한도 적용)"
+												// }).addStyleClass("FontFamily PaddingLeft5")
+										],
 									 hAlign : "Begin",
 									 vAlign : "Top",
 									 rowSpan : 2
