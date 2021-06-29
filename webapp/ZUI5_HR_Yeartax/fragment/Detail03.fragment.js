@@ -15,9 +15,9 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail03", {
 	//		mimeType: "application",
 			fileType: ["pdf"],
 			buttonText : "첨부파일",
-			uploadUrl : "/sap/opu/odata/sap/ZHR_YEARTAX_SRV/YeartaxPdfFileAttachSet/",
-			uploadComplete: oController.uploadComplete,
-			uploadAborted : oController.uploadAborted,
+			// uploadUrl : "/sap/opu/odata/sap/ZHR_YEARTAX_SRV/YeartaxPdfFileAttachSet/",
+			// uploadComplete: oController.uploadComplete,
+			// uploadAborted : oController.uploadAborted,
 			fileSizeExceed: oController.fileSizeExceed,
 			typeMissmatch: oController.typeMissmatch,
 			change : oController.onFileChange

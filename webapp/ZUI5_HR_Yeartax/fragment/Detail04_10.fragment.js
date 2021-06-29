@@ -40,7 +40,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_10", {
 									  content : [new sap.m.Text({text : "기부금 세액공제"}).addStyleClass("FontFamily")],
 									  hAlign : "Center",
 									  vAlign : "Middle",
-									  rowSpan : 4
+									  rowSpan : 5
 								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									  content : [new sap.m.Text({text : "정치자금기부금"}).addStyleClass("FontFamily")],
@@ -65,7 +65,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_10", {
 												 }).addStyleClass("button-light")],
 									  hAlign : "Center",
 									  vAlign : "Middle",
-									  rowSpan : 4
+									  rowSpan : 5
 								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									  content : [new sap.m.Input(oController.PAGEID + "_Poldn", {
@@ -91,11 +91,15 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_10", {
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.FormattedText({
 													htmlText : "<span class='FontFamily colorRed PaddingLeft5'>- 법정/우리사주조합/지정기부금 : 1천만원 이하: 15%, 1천만원 초과: 30%</span>" +
-															   "<br><span class='FontFamily colorRed PaddingLeft5'>※ 2013.1.1 이후 지출한 기부금액에 대해 이월공제기간 10년 적용</span>"
+															   "<br><span class='FontFamily colorRed PaddingLeft5'>※ 2013.1.1 이후 지출한 기부금액에 대해 이월공제기간 10년 적용(2018.1.1 이후부터)</span>"
+												}),
+												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
+												new sap.m.FormattedText({
+													htmlText : "<span class='FontFamily colorBlue PaddingLeft10'>→ 이월기부금 내에서는 기부연도가 빠른 기부금부터 공제</span>"
 												})],
 									  hAlign : "Begin",
 									  vAlign : "Top",
-									  rowSpan : 4
+									  rowSpan : 5
 								 }).addStyleClass("Data2 PaddingTop5 PaddingBottom5")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
@@ -141,6 +145,23 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_10", {
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									  content : [new sap.m.Input(oController.PAGEID + "_Reldo", {
 													  value : "{Reldo}",
+													  editable : false,
+													  textAlign : "End"
+												 }).addStyleClass("FontFamily")],
+									  hAlign : "Center",
+									  vAlign : "Middle"
+								 }).addStyleClass("Data2")]
+					}),
+					new sap.ui.commons.layout.MatrixLayoutRow({
+						height : "35px",
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									  content : [new sap.m.Text({text : "우리사주조합기부금"}).addStyleClass("FontFamily")],
+									  hAlign : "Center",
+									  vAlign : "Middle"
+								 }).addStyleClass("Data2"),
+								 new sap.ui.commons.layout.MatrixLayoutCell({
+									  content : [new sap.m.Input(oController.PAGEID + "_Fdsdo", {
+													  value : "{Fdsdo}",
 													  editable : false,
 													  textAlign : "End"
 												 }).addStyleClass("FontFamily")],

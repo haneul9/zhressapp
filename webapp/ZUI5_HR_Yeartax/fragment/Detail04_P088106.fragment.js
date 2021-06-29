@@ -66,6 +66,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_P088106", {
 			 			{id: "Emnam", label : "성명", plabel : "", span : 0, type : "string", editable : true, sort : true, filter : true},
 			 			{id: "Regno", label : "주민등록번호", plabel : "", span : 0, type : "regnr", editable : true, sort : true, filter : true},
 			 			{id: "Cadme", label : "사용구분", plabel : "", span : 0, type : "combobox", editable : true, sort : true, filter : true, width : "250px"},
+			 			{id: "Exprd", label : "비용기간", plabel : "", span : 0, type : "combobox", editable : true, sort : true, filter : true, width : "150px"},
 			 			{id: "Ntsam", label : "국세청금액", plabel : "", span : 0, type : "input", editable : true, sort : true, filter : true},
 			 			{id: "Otham", label : "기타금액", plabel : "", span : 0, type : "input", editable : true, sort : true, filter : true},
 			 			{id: "Zflnts", label : "", plabel : "", span : 0, type : "pdf", editable : true, sort : true, filter : true, width : "40px"}];
