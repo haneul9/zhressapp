@@ -158,10 +158,10 @@ sap.ui.define(
                             }),
                             new MatrixLayoutCell({
                                 hAlign: "Right",
-                                vAlign: "Bottom",
                                 content: [
                                     new sap.m.HBox({
                                         fitContainer: true,
+                                        alignItems: sap.m.FlexAlignItems.End,
                                         items: [
                                             new sap.m.Text({
                                                 width: "100%",
