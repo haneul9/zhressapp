@@ -215,16 +215,12 @@ fragment.COMMON_ATTACH_FILES = {
 		if(!vFileInfo) return;
 
 		if(common.Common.isExternalIP()) {
-			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {
-				fragment.COMMON_ATTACH_FILES.retrieveFile(vFileInfo);
+			if(common.Common.isPRD() && parent._gateway.isMobile()) {
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
+					title: this.getBundleText("LABEL_09029")
+				});
 			} else {
-				if(common.Common.isPRD() && parent._gateway.isMobile()) {
-					sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
-						title: this.getBundleText("LABEL_09029")
-					});
-				} else {
-					fragment.COMMON_ATTACH_FILES.retrieveFile(vFileInfo);
-				}
+				fragment.COMMON_ATTACH_FILES.retrieveFile(vFileInfo);
 			}
 		} else {
 			var popup = window.open(vFileInfo.Url, '_blank');

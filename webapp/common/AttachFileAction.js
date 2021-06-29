@@ -193,16 +193,12 @@ common.AttachFileAction = {
 		if(!vFileInfo) return;
 
 		if(common.Common.isExternalIP()) {	// 외부망
-			if(/image+\/[-+.\w]+/.test(vFileInfo.Mimetype) && vFileInfo.Mresource) {	// 이미지
-				common.AttachFileAction.retrieveFile(vFileInfo);
+			if(common.Common.isPRD() && parent._gateway.isMobile()) {	// 운영 & 모바일
+				sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
+					title: this.getBundleText("LABEL_09029")
+				});
 			} else {
-				if(common.Common.isPRD() && parent._gateway.isMobile()) {	// 운영 & 모바일
-					sap.m.MessageBox.alert(this.getBundleText("MSG_00074"), {	// 조회할 수 없습니다.
-						title: this.getBundleText("LABEL_09029")
-					});
-				} else {
-					common.AttachFileAction.retrieveFile(vFileInfo);
-				}
+				common.AttachFileAction.retrieveFile(vFileInfo);
 			}
 		} else {	// 내부망
 			var popup = window.open(vFileInfo.Url, '_blank');
