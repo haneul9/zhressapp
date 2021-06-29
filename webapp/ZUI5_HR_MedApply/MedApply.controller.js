@@ -336,42 +336,38 @@ sap.ui.define(
 
                 oController.oDialog.setBusyIndicatorDelay(0).setBusy(true);
 
-                Common.getPromise(function () {
-                    oController.getSelector("A");
-                    oController.getSelData();
+                oController.getSelector("A");
+                oController.getSelData();
 
-                    oController._tData.Chk1 = oController._tData.Zfvcgb == "X" ? true : false;
-                    oController._tData.Chk2 = oController._tData.Ziftgb == "X" ? true : false;
+                oController._tData.Chk1 = oController._tData.Zfvcgb == "X" ? true : false;
+                oController._tData.Chk2 = oController._tData.Ziftgb == "X" ? true : false;
 
-                    oController._vArr1.forEach(function (fieldTxt) {
-                        var oPro = $.app.getController()._DataModel.getProperty("/Pop1/0");
+                oController._vArr1.forEach(function (fieldTxt) {
+                    var oPro = $.app.getController()._DataModel.getProperty("/Pop1/0");
 
-                        oPro[fieldTxt] = parseInt(oPro[fieldTxt]);
+                    oPro[fieldTxt] = parseInt(oPro[fieldTxt]);
 
-                        if (fieldTxt === "Zmedrl" && oPro[fieldTxt] > 90000000) {
-                            oController._vC = oPro[fieldTxt];
-                            oPro[fieldTxt] = oController.getBundleText("MSG_47044"); // 한도 없음
-                            oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, oPro[fieldTxt]);
-                        } else {
-                            oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
-                        }
-                    });
-
-                    $.app.byId(oController.PAGEID + "_Dialog").bindElement("/Pop1/0");
-
-                    if (oController._Hass === "X") {
-                        EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
-                        $.app.byId(oController.PAGEID + "_PerInfo").setVisible(true);
+                    if (fieldTxt === "Zmedrl" && oPro[fieldTxt] > 90000000) {
+                        oController._vC = oPro[fieldTxt];
+                        oPro[fieldTxt] = oController.getBundleText("MSG_47044"); // 한도 없음
+                        oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, oPro[fieldTxt]);
                     } else {
-                        $.app.byId(oController.PAGEID + "_PerInfo").setVisible(false);
+                        oController._DataModel.setProperty("/Pop1/0/" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
                     }
-
-                    if (oController._NewGubun !== "O") {
-                        oController.changeSel2();
-                    }
-                }).then(function () {
-                    oController.oDialog.setBusy(false);
                 });
+
+                $.app.byId(oController.PAGEID + "_Dialog").bindElement("/Pop1/0");
+
+                if (oController._Hass === "X") {
+                    EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
+                    $.app.byId(oController.PAGEID + "_PerInfo").setVisible(true);
+                } else {
+                    $.app.byId(oController.PAGEID + "_PerInfo").setVisible(false);
+                }
+
+                if (oController._NewGubun !== "O") {
+                    oController.changeSel2();
+                }
             },
 
             onAfterLoad: function () {
@@ -406,6 +402,8 @@ sap.ui.define(
                         }
                     });
                 }, 100);
+
+                oController.oDialog.setBusy(false);
             },
 
             onAfterLoad2: function () {
