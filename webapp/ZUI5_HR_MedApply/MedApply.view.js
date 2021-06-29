@@ -154,6 +154,11 @@ sap.ui.define(
                                             Common.onPressTableHeaderInformation.call(oController, oEvent);
                                         }
                                     }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                                ]
+                            }),
+                            new MatrixLayoutCell({
+                                vAlign: "Bottom",
+                                content: [
                                     new sap.m.Text({
                                         width: "100%",
                                         text: "{i18n>MSG_47049}",
