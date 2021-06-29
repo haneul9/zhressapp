@@ -158,6 +158,7 @@ sap.ui.define(
                             }),
                             new MatrixLayoutCell({
                                 hAlign: "Right",
+                                vAlign: "Bottom",
                                 content: [
                                     new sap.m.HBox({
                                         fitContainer: true,
