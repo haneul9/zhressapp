@@ -19,7 +19,7 @@ sap.ui.define(
 
 				var oDialog = new sap.m.Dialog({
 						contentWidth: "1400px",
-						contentHeight: "70vh",
+						// contentHeight: "70vh",
 						title: "{i18n>LABEL_32006}", // 사후신청
 						content: [
 							this.buildInfoBox(oController, PostHandler),
@@ -546,7 +546,8 @@ sap.ui.define(
 							this.buildTableButtons(oController),
 							this.buildTable(oController)
 						]
-					}).addStyleClass("pt-30px")
+					}).addStyleClass("pt-30px"),
+                    visible: "{/Detail/VisibleApprs}"
 				}).addStyleClass("custom-panel mt-6px");
 			},
 

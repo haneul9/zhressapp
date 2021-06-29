@@ -12,7 +12,7 @@ sap.ui.define(
         "common/OrgOfIndividualHandler",
         "./delegate/ODataService",
         "sap/m/MessageBox",
-        "sap/ui/core/BusyIndicator",
+        "sap/ui/core/BusyIndicator"
     ],
     function (Common, CommonController, JSONModelHelper, WorkSchedule, PriorHandler, PostHandler,
               SearchUser1, SearchOrg, DialogHandler, OrgOfIndividualHandler, ODataService, MessageBox, BusyIndicator) {
@@ -72,7 +72,14 @@ sap.ui.define(
                 this.oModel.setData({
                 	Dtfmt: "yyyy-MM-dd",
                     Auth: $.app.getAuth(), 
-                    Data : {Key : oEvent.data.Data.Key, Dtfmt : "yyyy-MM-dd", Begda : oBegda, Endda : oEndda, Bukrs : this.getSessionInfoByKey("Bukrs3")},
+                    Data : {
+                        Key : oEvent.data.Data.Key, 
+                        Dtfmt : "yyyy-MM-dd",
+                        Begda : oBegda, 
+                        Endda : oEndda, 
+                        Bukrs : this.getSessionInfoByKey("Bukrs3"),
+                        VisibleApprs : false
+                    },
                     Data1 : [],
                     Data2 : [],
                     Copy : null,
@@ -83,7 +90,7 @@ sap.ui.define(
 					Minutes : oEvent.data.Minutes
                 });
                 
-                console.log("Detail : ", this.oModel.getData())
+                console.log("Detail : ", this.oModel.getData());
             },
 
             onAfterShow: function () {
@@ -317,6 +324,7 @@ sap.ui.define(
                             }
     
                             oController.oModel.setProperty("/Data2", result.Worktimetab2);
+                            oController.oModel.setProperty("/Data/VisibleApprs", result.Worktimetab2.length == 0 ? false : true);
                             
                             Common.adjustVisibleRowCount(sap.ui.getCore().byId(oController.PAGEID + "_ApprovalLineTable"), 3, oController.oModel.getProperty("/Data2").length);
                         }
@@ -559,7 +567,7 @@ sap.ui.define(
                         
                         if(Flag && Flag == "X"){
                             MessageBox.success(successMessage, {                                
-                                title: oController.getBundleText("LABEL_00149"),
+                                title: oController.getBundleText("LABEL_00149")
                             });
                         }
                     }
@@ -713,13 +721,19 @@ sap.ui.define(
                         payload, 
                         function (data, Prcty) {           
                             BusyIndicator.hide(); 
+
+                            if(Prcty == WorkSchedule.ProcessType.APPROVE){
+                                if(!Common.isExternalIP() && data.Url != "") {
+                                    if(!Common.openPopup.call(oController, data.Url)) {
+                                        BusyIndicator.hide();
+                                        return;
+                                    }
+                                }
+                            }                         
+
                             MessageBox.success(successMessage, {                                
                                 title: oController.getBundleText("LABEL_00149"),
                                 onClose: function () {
-                                    if(data.Url) {
-                                        Common.openPopup.call(oController, data.Url);
-                                    }
-                                    
                                     if(Prcty == WorkSchedule.ProcessType.DELETE || Prcty == WorkSchedule.ProcessType.APPROVE_CANCEL){
                                         oController.resetTarget(oController, data);
                                     } else {
@@ -733,6 +747,7 @@ sap.ui.define(
                                     }
                                 }.bind(this)
                             });
+                            
                         }, 
                         function (res) {
                             BusyIndicator.hide();
