@@ -91,7 +91,7 @@ sap.ui.define(["common/ZHR_TABLES"], function (ZHR_TABLES) {
                     new sap.ui.commons.TextView({
                         text: "{" + columnInfo.id + "}",
                         textAlign: "Center"
-                    }).addStyleClass("table-font"),
+                    }).addStyleClass("FontFamily"),
                     new sap.m.Button({
                         press: ApprovalLinesHandler.onLineModify.bind(ApprovalLinesHandler),
                         text: "변경", // 변경
