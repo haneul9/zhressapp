@@ -166,7 +166,7 @@ sap.ui.define(
                                                 width: "100%",
                                                 text: "{i18n>MSG_47049}",
                                                 textAlign: "Begin"
-                                            }).addStyleClass("info-text-red mr-12px"),
+                                            }).addStyleClass("info-text-red pr-12px"),
                                             new sap.m.Button({
                                                 text: "{i18n>LABEL_47152}", // 일괄신청
                                                 enabled: "{/isPossibleApprovalAll}",
@@ -213,7 +213,7 @@ sap.ui.define(
 
                 return new MatrixLayout({
                     columns: 2,
-                    widths: ["70%", ""],
+                    widths: ["", "70%"],
                     rows: aRows
                 });
             }
