@@ -170,12 +170,16 @@ sap.ui.define(
                             oSendData.TopData = rTopData;
                             oSendData.MiddleData = rMiddleData;
                             oSendData.BottomData = rBottomData;
+
+                            if(oData.OpenhelpTableIn5.results.length !== 0)
+                                oData.OpenhelpTableIn4.results.push(oData.OpenhelpTableIn5.results[0]);
+                                
                             oSendData.FileData = oData.OpenhelpTableIn4.results;
                             oSendData.Url = "http://" + oController.gSelectedRoute.Url;
 
                             sap.ui.getCore().getEventBus().publish("nav", "to", {
                                 id: [$.app.CONTEXT_PATH, "OpenHelpRoomDetail"].join($.app.getDeviceSuffix()),
-                                data: oSendData,
+                                data: oSendData
                             });
                         };
                         
