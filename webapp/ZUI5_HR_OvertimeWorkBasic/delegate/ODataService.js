@@ -157,8 +157,9 @@ sap.ui.define(
                         IMolga: this.getSessionInfoByKey("Molga"),
                         IEmpid: this.getSessionInfoByKey("Pernr"),
                         IDatum: moment().hours(10).toDate(),
-                        IExtryn: payload.Extryn ? payload.Extryn : undefined,
-                        NavOtApply1: payload.OvertimeApply
+                        IExtryn: Common.isExternalIP() ? "X" : null,
+                        NavOtApply1: payload.OvertimeApply,
+                        NavOtApply2: payload.OvertimeApplyTab
                     },
                     {
                         success: function (data) {
