@@ -110,7 +110,9 @@ sap.ui.define(
                             this.oModel.setProperty("/IsBusy", false);
                         }.bind(this)).catch(function(err) {
                             Common.log(err);
-                        });
+                            this.oModel.setProperty("/IsBusy", false);
+                            MessageBox.error("일괄신청이 실패했습니다.");
+                        }.bind(this));
                     }.bind(this), 100);
                 };
 
