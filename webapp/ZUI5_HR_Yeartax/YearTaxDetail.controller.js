@@ -3828,57 +3828,59 @@ sap.ui.define([
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
             var oController = oView.getController();
         
-            oController._BusyDialog.open();
+            // oController._BusyDialog.open();
 
-            try {
-                var _handleSuccess = function (data) {
-                    if(!vAppnm) vAppnm = $(data).find("content").next().children().eq(7).text();
+            // try {
+            //     var _handleSuccess = function (data) {
+            //         // if(!vAppnm) vAppnm = $(data).find("content").next().children().eq(7).text();
                     
-                    common.Common.log(oController.getBundleText("MSG_00034") + ", " + data);
-                };
-                var _handleError = function (data) {
-                    var errorMsg = oController.getBundleText("MSG_00031");
+            //         // common.Common.log(oController.getBundleText("MSG_00034") + ", " + data);
 
-                    if (data.responseText){
-                        errorMsg = /<message xml:lang="ko">(.*?)<\/message>/.exec(data.responseText);
-                        if(errorMsg && errorMsg.length){
-                            errorMsg = errorMsg[1];
-                        }
-                    }else{
-                        errorMsg = oBundleText.getText("MSG_00031");
-                    }
+            //         oController.refreshAttachFileList(oController);
+            //     };
+            //     var _handleError = function (data) {
+            //         var errorMsg = oController.getBundleText("MSG_00031");
+
+            //         if (data.responseText){
+            //             errorMsg = /<message xml:lang="ko">(.*?)<\/message>/.exec(data.responseText);
+            //             if(errorMsg && errorMsg.length){
+            //                 errorMsg = errorMsg[1];
+            //             }
+            //         }else{
+            //             errorMsg = oBundleText.getText("MSG_00031");
+            //         }
     
-                    common.Common.log(data);
-                    MessageBox.error(errorMsg);
-                };
+            //         common.Common.log(data);
+            //         MessageBox.error(errorMsg);
+            //     };
 
-                var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
-                var oFile = jQuery.sap.domById("yeaUploader" + "-fu").files[0];
+            //     var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
+            //     var oFile = jQuery.sap.domById("yeaUploader" + "-fu").files[0];
                 
-                oModel.refreshSecurityToken();
-                var oRequest = oModel._createRequest();
-                var oHeaders = {
-                    "x-csrf-token": oRequest.headers["x-csrf-token"],
-                    "slug": [encodeURI(oFile.name)]
-                };
+            //     oModel.refreshSecurityToken();
+            //     var oRequest = oModel._createRequest();
+            //     var oHeaders = {
+            //         "x-csrf-token": oRequest.headers["x-csrf-token"],
+            //         "slug": [encodeURI(oFile.name)]
+            //     };
 
-                common.Common.log(oHeaders.slug);
+            //     common.Common.log(oHeaders.slug);
 
-                jQuery.ajax({
-                    type: "POST",
-                    async: false,
-                    url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_YEARTAX_SRV/YeartaxPdfFileAttachSet/",
-                    headers: oHeaders,
-                    cache: false,
-                    contentType: oFile.type,
-                    processData: false,
-                    data: oFile,
-                    success: _handleSuccess.bind(this),
-                    error: _handleError.bind(this)
-                });
-            } catch (oException) {
-                jQuery.sap.log.error("File upload failed:\n" + oException.message);
-            }
+            //     jQuery.ajax({
+            //         type: "POST",
+            //         async: false,
+            //         url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_YEARTAX_SRV/YeartaxPdfFileAttachSet/",
+            //         headers: oHeaders,
+            //         cache: false,
+            //         contentType: oFile.type,
+            //         processData: false,
+            //         data: oFile,
+            //         success: _handleSuccess.bind(this),
+            //         error: _handleError.bind(this)
+            //     });
+            // } catch (oException) {
+            //     jQuery.sap.log.error("File upload failed:\n" + oException.message);
+            // }
         },
         
         onDeleteAttachFile : function(oEvent) {
