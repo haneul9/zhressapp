@@ -433,6 +433,8 @@ sap.ui.define(
                         }
                     });
                 }, 100);
+
+                oController.oDialog2.setBusy(false);
             },
 
             onAfterOpen2: function () {
@@ -441,37 +443,33 @@ sap.ui.define(
 
                 oController.oDialog2.setBusyIndicatorDelay(0).setBusy(true);
 
-                Common.getPromise(function () {
-                    oController.getSelector("A");
+                oController.getSelector("A");
 
-                    oPro = oController._DataModel.getProperty("/Pop2/0");
-                    oController._vArr2.forEach(function (fieldTxt) {
-                        oController._DataModel.setProperty("/Pop2/0" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
-                    });
-
-                    if (oController._onDialog === "M") {
-                        oController.getSelData2("B");
-                        $.app.byId(oController.PAGEID + "_dSel5").setSelectedKey(oPro.Relation);
-
-                        oController.onChange5("B");
-                        $.app.byId(oController.PAGEID + "_dSel6").setSelectedKey(oPro.PatiName);
-                        $.app.byId(oController.PAGEID + "_dSel3").setSelectedKey(oPro.Gtz51);
-                        $.app.byId(oController.PAGEID + "_dSel4").setSelectedKey(oPro.Gtz51s);
-                    } else {
-                        oController.getSelData2();
-                    }
-
-                    $.app.byId(oController.PAGEID + "_Dialog2").bindElement("/Pop2/0");
-
-                    if (oController._Hass === "X") {
-                        $.app.byId(oController.PAGEID + "_PerInfo2").setVisible(true);
-                        EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
-                    } else {
-                        $.app.byId(oController.PAGEID + "_PerInfo2").setVisible(false);
-                    }
-                }).then(function () {
-                    oController.oDialog2.setBusy(false);
+                oPro = oController._DataModel.getProperty("/Pop2/0");
+                oController._vArr2.forEach(function (fieldTxt) {
+                    oController._DataModel.setProperty("/Pop2/0" + fieldTxt, Common.numberWithCommas(oPro[fieldTxt]));
                 });
+
+                if (oController._onDialog === "M") {
+                    oController.getSelData2("B");
+                    $.app.byId(oController.PAGEID + "_dSel5").setSelectedKey(oPro.Relation);
+
+                    oController.onChange5("B");
+                    $.app.byId(oController.PAGEID + "_dSel6").setSelectedKey(oPro.PatiName);
+                    $.app.byId(oController.PAGEID + "_dSel3").setSelectedKey(oPro.Gtz51);
+                    $.app.byId(oController.PAGEID + "_dSel4").setSelectedKey(oPro.Gtz51s);
+                } else {
+                    oController.getSelData2();
+                }
+
+                $.app.byId(oController.PAGEID + "_Dialog2").bindElement("/Pop2/0");
+
+                if (oController._Hass === "X") {
+                    $.app.byId(oController.PAGEID + "_PerInfo2").setVisible(true);
+                    EmpBasicInfoBoxCustomHass.setHeader(oController._vPernr);
+                } else {
+                    $.app.byId(oController.PAGEID + "_PerInfo2").setVisible(false);
+                }
             },
 
             onAfterOpen3: function (vDatum) {
