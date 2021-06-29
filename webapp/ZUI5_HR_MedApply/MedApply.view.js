@@ -143,27 +143,27 @@ sap.ui.define(
                             new MatrixLayoutCell({
                                 vAlign: "Bottom",
                                 content: [
-                                    new sap.ui.core.HTML({ content: "<span class='sub-title'>" + oBundleText.getText("LABEL_47002") + "</span>" }),	// 신청현황
-                                    new HoverIcon({
-                                        size: "14px",
-                                        src: "sap-icon://information",
-                                        hover: function (oEvent) {
-                                            Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47001")); // ο 의료비지원 대상은 당사 임직원의 피부양자로서 건강보험증에 등록한 직계가족에 한함.<br/>(신생아 출생 등 주민등록번호의 생성 및 소멸 사유가 있는 경우 증빙서류 제출 요망)<br/>ο 대상자가 조회되지 않으면 가족사항 수정화면에서 건강보험대상에 체크하여 수정 완료 후 신청 진행.<br/>치과의 치료기관 입력 방법 : 치과 보철 치료 시 치과(보철)로 입력, 치과 일반 치료 시 치과(일반)으로 입력 요망.
-                                        },
-                                        leave: function (oEvent) {
-                                            Common.onPressTableHeaderInformation.call(oController, oEvent);
-                                        }
-                                    }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
-                                ]
-                            }),
-                            new MatrixLayoutCell({
-                                vAlign: "Bottom",
-                                content: [
-                                    new sap.m.Text({
-                                        width: "100%",
-                                        text: "{i18n>MSG_47049}",
-                                        textAlign: "Begin"
-                                    }).addStyleClass("info-text-red ml-8px")
+                                    new sap.m.HBox({
+                                        fitContainer: true,
+                                        items: [
+                                            new sap.ui.core.HTML({ content: "<span class='sub-title'>" + oBundleText.getText("LABEL_47002") + "</span>" }),	// 신청현황
+                                            new HoverIcon({
+                                                size: "14px",
+                                                src: "sap-icon://information",
+                                                hover: function (oEvent) {
+                                                    Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_47001")); // ο 의료비지원 대상은 당사 임직원의 피부양자로서 건강보험증에 등록한 직계가족에 한함.<br/>(신생아 출생 등 주민등록번호의 생성 및 소멸 사유가 있는 경우 증빙서류 제출 요망)<br/>ο 대상자가 조회되지 않으면 가족사항 수정화면에서 건강보험대상에 체크하여 수정 완료 후 신청 진행.<br/>치과의 치료기관 입력 방법 : 치과 보철 치료 시 치과(보철)로 입력, 치과 일반 치료 시 치과(일반)으로 입력 요망.
+                                                },
+                                                leave: function (oEvent) {
+                                                    Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                                }
+                                            }).addStyleClass(oController.InputBase.ICON_CSS_CLASS + " color-icon-blue"),
+                                            new sap.m.Text({
+                                                width: "100%",
+                                                text: "{i18n>MSG_47049}",
+                                                textAlign: "Begin"
+                                            }).addStyleClass("info-text-red ml-8px")
+                                        ]
+                                    })
                                 ]
                             }),
                             new MatrixLayoutCell({
