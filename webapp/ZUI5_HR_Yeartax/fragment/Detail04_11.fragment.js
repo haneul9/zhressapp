@@ -382,7 +382,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_11", {
 											 	new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 											 	new sap.m.Text({
 											 		text : "※ 투자조합출자 등 공제 금액은 해당 화면에서 직접 입력할 수 없으며, 소득공제자료는 연말정산 담당자에게 직접 제출해주시기 바랍니다." +
-											 			   "\n(적용 금액은 연말정산 예상결과 2페이지 Ⅳ.정산명세 항목에서 확인 가능합니다.)"
+											 			   "\n(공제금액은 연말정산 예상결과 2페이지 [IV. 정산명세] 41.투자조합출자 등 항목에서 확인가능합니다.)"
 											 	}).addStyleClass("FontFamily colorBlue")],
 								 	 hAlign : "Begin",
 								 	 vAlign : "Top",

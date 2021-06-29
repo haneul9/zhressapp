@@ -191,7 +191,7 @@ sap.ui.define([
             
             var sKey = sap.ui.getCore().byId(oController.PAGEID + "_Icontabbar").getSelectedKey();
         
-            if(sKey == "1"){
+            if(sKey == "1" || sKey == "6"){
                 return;
             }
             
@@ -411,6 +411,7 @@ sap.ui.define([
                 vData.Dptid = vData.Dptid == "X" ? true : false;
                 vData.Ageid = vData.Ageid == "X" ? true : false;
                 vData.Fstid = vData.Fstid == "X" ? true : false;
+                vData.Sixid = vData.Sixid == "X" ? true : false;
                 vData.Hndid = vData.Hndid == "X" ? true : false;
                 vData.Sesch = vData.Sesch == "X" ? true : false;
                 vData.Zzinsyn = vData.Zzinsyn == "X" ? true : false;
@@ -623,6 +624,7 @@ sap.ui.define([
                     detail.Dptid = (oData.Dptid && oData.Dptid == true ? "X" : "");
                     detail.Kdbsl = (oData.Kdbsl ? oData.Kdbsl : "");
                     detail.Fstid = (oData.Fstid && oData.Fstid == true ? "X" : "");
+                    detail.Sixid = (oData.Sixid && oData.Sixid == true ? "X" : "");
                     detail.Hndid = (oData.Hndid && oData.Hndid == true ? "X" : "");
                     detail.Hndcd = (oData.Hndcd ? oData.Hndcd : "");
                     detail.Zzinsyn = (oData.Zzinsyn && oData.Zzinsyn == true ? "X" : "");
@@ -941,6 +943,7 @@ sap.ui.define([
                     var oPath = "/YeartaxPdfFormSet?$filter=IYear eq '" + oData.Zyear + "'";
                         oPath += " and IPernr eq '" + oData.Pernr + "'";
                         oPath += " and IType eq '5'";
+                        oPath += " and IAmt01 eq '" + (oData.IAmt01 ? oData.IAmt01.replace(/[^0-9\.]/g, "") : "") + "'";
                         
                     oModel.read(oPath, null, null, false, 
                             function(data, oResponse) {
@@ -949,7 +952,7 @@ sap.ui.define([
                                         new sap.ui.core.HTML({	
                                             content : ["<iframe id='iWorkerPDF'" +
                                                             "name='iWorkerPDF' src='data:application/pdf;base64," + data.results[0].EPdfTable + "'" +
-                                                            "width='1500px' height='" + (parseInt(window.innerHeight - 210) + "px") + "'" +
+                                                            "width='1500px' height='" + (parseInt(window.innerHeight - 300) + "px") + "'" +
                                                             "frameborder='0' border='0' scrolling='no'></>"],
                                             preferDOM : false
                                         })	
@@ -2562,6 +2565,10 @@ sap.ui.define([
                                         MessageBox.error("사용구분을 선택하여 주십시오." + name);
                                         oController._BusyDialog.close();
                                         return;
+                                    } else if(!oData[i].Exprd){
+                                        MessageBox.error("비용기간을 선택하여 주십시오." + name);
+                                        oController._BusyDialog.close();
+                                        return;
                                     } else if(!oData[i].Ntsam && !oData[i].Otham){
                                         MessageBox.error("기타금액을 입력하여 주십시오." + name);
                                         oController._BusyDialog.close();
@@ -2578,6 +2585,7 @@ sap.ui.define([
                                     detail.Objps = oData[i].Objps;
                                     detail.Regno = oData[i].Regno;
                                     detail.Cadme = oData[i].Cadme;
+                                    detail.Exprd = oData[i].Exprd;
                                     detail.Ntsam = oData[i].Ntsam ? oData[i].Ntsam.replace(/[^0-9]/g, "") : "";
                                     detail.Otham = oData[i].Otham ? oData[i].Otham.replace(/[^0-9]/g, "") : "";
                                     detail.Zflnts = oData[i].Zflnts;
@@ -3467,6 +3475,9 @@ sap.ui.define([
                             case "Cadme": // 신용카드/현금영수증/제로페이-사용구분
                                 oPath += "'801'";
                                 break;
+                            case "Exprd": // 신용카드/현금영수증/제로페이-비용기간
+                                oPath += "'899' and ICodty eq 'PKR_EXPRD'";
+                                break;
                             case "Finco": // 개인연금저축공제-금융사
                                 oPath += "'803'";
                                 
@@ -3817,19 +3828,57 @@ sap.ui.define([
             var oView = sap.ui.getCore().byId("ZUI5_HR_Yeartax.YearTaxDetail");
             var oController = oView.getController();
         
-            // if(!oController.loadDialog) {
-            // 	oController.loadDialog = new sap.m.Dialog({showHeader : false}); 
-            // 	oController.loadDialog.addContent(new sap.m.BusyIndicator({text : "파일 업로드 중입니다. 잠시만 기다려 주십시오."}));
-            // 	oController.getView().addDependent(oController.loadDialog);
-            // } else {
-            // 	oController.loadDialog.removeAllContent();
-            // 	oController.loadDialog.destroyContent();
-            // 	oController.loadDialog.addContent(new sap.m.BusyIndicator({text : "파일 업로드 중입니다. 잠시만 기다려 주십시오."}));
-            // }
-            // if(!oController.loadDialog.isOpen()) {
-            // 	oController.loadDialog.open();
-            // }
             oController._BusyDialog.open();
+
+            try {
+                var _handleSuccess = function (data) {
+                    if(!vAppnm) vAppnm = $(data).find("content").next().children().eq(7).text();
+                    
+                    common.Common.log(oController.getBundleText("MSG_00034") + ", " + data);
+                };
+                var _handleError = function (data) {
+                    var errorMsg = oController.getBundleText("MSG_00031");
+
+                    if (data.responseText){
+                        errorMsg = /<message xml:lang="ko">(.*?)<\/message>/.exec(data.responseText);
+                        if(errorMsg && errorMsg.length){
+                            errorMsg = errorMsg[1];
+                        }
+                    }else{
+                        errorMsg = oBundleText.getText("MSG_00031");
+                    }
+    
+                    common.Common.log(data);
+                    MessageBox.error(errorMsg);
+                };
+
+                var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
+                var oFile = jQuery.sap.domById("yeaUploader" + "-fu").files[0];
+                
+                oModel.refreshSecurityToken();
+                var oRequest = oModel._createRequest();
+                var oHeaders = {
+                    "x-csrf-token": oRequest.headers["x-csrf-token"],
+                    "slug": [encodeURI(oFile.name)]
+                };
+
+                common.Common.log(oHeaders.slug);
+
+                jQuery.ajax({
+                    type: "POST",
+                    async: false,
+                    url: $.app.getDestination() + "/sap/opu/odata/sap/ZHR_YEARTAX_SRV/YeartaxPdfFileAttachSet/",
+                    headers: oHeaders,
+                    cache: false,
+                    contentType: oFile.type,
+                    processData: false,
+                    data: oFile,
+                    success: _handleSuccess.bind(this),
+                    error: _handleError.bind(this)
+                });
+            } catch (oException) {
+                jQuery.sap.log.error("File upload failed:\n" + oException.message);
+            }
         },
         
         onDeleteAttachFile : function(oEvent) {

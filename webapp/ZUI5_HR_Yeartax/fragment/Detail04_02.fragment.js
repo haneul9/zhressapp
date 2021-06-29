@@ -5,7 +5,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_02", {
 		var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 			columns : 5,
 			width : "100%",
-			widths : ["", "", "", "150px", "40%"],
+			widths : ["", "", "", "300px", "40%"],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "35px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
@@ -39,7 +39,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_02", {
 									 content : [new sap.m.Text({text : "의료비 세액공제"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
 									 vAlign : "Middle",
-									 rowSpan : 3
+									 rowSpan : 4
 								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Text({text : "본인 / 65세 이상 부양가족 / \n장애인 / 건강보험산정특례자 의료비", textAlign : "Center"}).addStyleClass("FontFamily")],
@@ -64,7 +64,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_02", {
 												 }).addStyleClass("button-light")],
 									 hAlign : "Center",
 									 vAlign : "Middle",
-									 rowSpan : 3
+									 rowSpan : 4
 								 }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Input(oController.PAGEID + "_Fmdoh", {
@@ -81,8 +81,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_02", {
 												}).addStyleClass("FontFamily"),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.FormattedText({
-													htmlText : "<span class='FontFamily colorBlue'>• 의료비 지출금액 중 보험사로부터 지급받은 실손의료보험금은 공제금액에서 제외</span><br>" +
-															   "<span class='FontFamily colorBlue PaddingLeft5'>(수령한 보험금은 My홈택스 또는 보험사를 통해 확인가능 : 실손보험 수익자 기준으로 조회)</span>"
+													htmlText : "<span class='FontFamily colorBlue'>• 의료비 지출금액 중 보험사로부터 지급받은 실손의료보험금은 공제금액에서 제외</span><br>"
 												}),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.Text({
@@ -99,11 +98,11 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_02", {
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.FormattedText({
 													htmlText : "<span style='color:#32363a' class='FontFamily PaddingLeft5'>- 안경,렌즈 구입비(인당 50만원),</span>" + 
-																"<span class='FontFamily colorRed'> 산후조리비용(출산 1회당 200만원, 총급여 7천만원 이하자)</span>"
+																"<span class='FontFamily'> 산후조리비용(출산 1회당 200만원, 총급여 7천만원 이하자)</span>"
 												})],
 									 hAlign : "Begin",
 									 vAlign : "Top",
-									 rowSpan : 3
+									 rowSpan : 4
 								 }).addStyleClass("Data2 PaddingTop5 PaddingBottom5")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
@@ -135,6 +134,52 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_02", {
 													value : "{Fmsft}",
 													textAlign : "End"
 												}).addStyleClass("FontFamily")],
+									 hAlign : "Center",
+									 vAlign : "Middle"
+								 }).addStyleClass("Data2")]
+					}),
+					new sap.ui.commons.layout.MatrixLayoutRow({
+						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [new sap.m.Text({text : "실손 의료비"}).addStyleClass("FontFamily")],
+									 hAlign : "Center",
+									 vAlign : "Middle"
+								 }).addStyleClass("Data2"),
+								 new sap.ui.commons.layout.MatrixLayoutCell({
+									 content : [
+										new sap.ui.commons.layout.MatrixLayout({
+											columns : 2,
+											width : "100%",
+											widths : ["", ""],
+											rows : [new sap.ui.commons.layout.MatrixLayoutRow({
+														cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																	 content : [new sap.m.Text({text : "본인/만65세이상/장애인/건강보험산정특례자 의료비", textAlign : "Center"})],
+																	 hAlign : "Center",
+																	 vAlign : "Middle"	
+																 }).addStyleClass("PeriodData border_right border_bottom"),
+																 new sap.ui.commons.layout.MatrixLayoutCell({
+																	content : [new sap.m.Input(oController.PAGEID + "_Fmhoi", {
+																				   value : "{Fmhoi}", editable : false, textAlign : "End"
+																			   })],
+																	hAlign : "Center",
+																	vAlign : "Middle"	
+																}).addStyleClass("PeriodData border_bottom")]		
+													}),
+													new sap.ui.commons.layout.MatrixLayoutRow({
+														cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+																	 content : [new sap.m.Text({text : "그 밖의 부양가족"})],
+																	 hAlign : "Center",
+																	 vAlign : "Middle"	
+																 }).addStyleClass("PeriodData border_right"),
+																 new sap.ui.commons.layout.MatrixLayoutCell({
+																	content : [new sap.m.Input(oController.PAGEID + "_Fmdpi", {
+																				   value : "{Fmdpi}", editable : false, textAlign : "End"
+																			   })],
+																	hAlign : "Center",
+																	vAlign : "Middle"	
+																}).addStyleClass("PeriodData")]		
+													})]
+										})
+									 ],
 									 hAlign : "Center",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data2")]
