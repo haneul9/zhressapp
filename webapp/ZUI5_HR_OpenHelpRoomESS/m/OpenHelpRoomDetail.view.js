@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 sap.ui.define([
 	"../../common/Common",
 	"../../common/PageHelper"
@@ -52,11 +53,24 @@ sap.ui.define([
 							}).addStyleClass("custom-OpenHelp-field")
 						]
 					}),
+					new sap.m.HBox({
+						alignItems: sap.m.FlexAlignItems.Center,
+						fitContainer: true,
+						visible: {
+							path: "/PDFFileData",
+							formatter: function(v) {
+								return Common.checkNull(!v);
+							}
+						},
+						items: [
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
+						]
+					}),
 					new sap.m.HBox(oController.PAGEID + "_FileBox", {
 						alignItems: sap.m.FlexAlignItems.Center,
 						fitContainer: true,
 						items: [
-							sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+							fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
 						]
 					}),
 					new sap.m.FlexBox({

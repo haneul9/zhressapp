@@ -2,14 +2,14 @@ sap.ui.define(
 	[
 		"../../common/Common",
 		"../../common/CommonController",
-		"../../common/AttachFileAction",
 		"../../common/JSONModelHelper",
 		"sap/ui/core/IconPool",
 		"sap/ui/core/BusyIndicator",
 		"sap/m/MessageBox",
-		"sap/ui/unified/library"
+		"sap/ui/unified/library",
+		"fragment/COMMON_ATTACH_FILES"
 	],
-	function (Common, CommonController, AttachFileAction, JSONModelHelper, IconPool, BusyIndicator, MessageBox, unifiedLibrary) {
+	function (Common, CommonController, JSONModelHelper, IconPool, BusyIndicator, MessageBox, unifiedLibrary, FileHandler) {
 		"use strict";
 
 		var SUB_APP_ID = [$.app.CONTEXT_PATH, "OpenHelpRoomDetail"].join($.app.getDeviceSuffix());
@@ -54,6 +54,7 @@ sap.ui.define(
 					oController.OpenHelpModel.setProperty("/MiddleData", oEvent.data.MiddleData);
 					oController.OpenHelpModel.setProperty("/BottomData", oEvent.data.BottomData);
 					oController.OpenHelpModel.setProperty("/FileData",  oEvent.data.FileData);
+					oController.OpenHelpModel.setProperty("/PDFFileData", Common.checkNull(oEvent.data.PDFFileData) ? "" : oEvent.data.PDFFileData);
 					oController.OpenHelpModel.setProperty("/UrlData",  oEvent.data.Url);
 				}
 				
@@ -80,17 +81,35 @@ sap.ui.define(
 			onBeforeOpenDetailDialog: function(oEvent) {
 				var oController = this.getView().getController();
 				var vAppnm = oController.OpenHelpModel.getProperty("/FileData/0/Appnm") || "";
+				var vPDFAppnm = oController.OpenHelpModel.getProperty("/PDFFileData");
 				var oFileBox = $.app.byId(oController.PAGEID + "_FileBox");
 
 				if(Common.checkNull(vAppnm)) oFileBox.setVisible(false);
 				else oFileBox.setVisible(true);
 
-				AttachFileAction.setAttachFile(oController, {
-					Appnm: vAppnm,
-					Mode: "M",
-					Max: 3,
-					Editable: false
-				});
+
+				FileHandler.once.call(oController, vAppnm).then(function() {
+					Promise.all([
+						Common.getPromise(function() {
+							if(Common.checkNull(!vPDFAppnm)){
+								FileHandler.setAttachFile(oController, {
+									Appnm: vPDFAppnm,
+									Mode: "S",
+									Max: 1,
+									Editable: false
+								},"001");
+							}
+						}),
+						Common.getPromise(function() {
+							FileHandler.setAttachFile(oController, {
+								Appnm: vAppnm,
+								Mode: "M",
+								Max: 3,
+								Editable: false
+							},"002");
+						})
+					]);
+				}, 100);
 			},
 			
 			getLocalSessionModel: Common.isLOCAL() ? function() {

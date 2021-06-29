@@ -172,8 +172,8 @@ sap.ui.define(
                             oSendData.BottomData = rBottomData;
 
                             if(oData.OpenhelpTableIn5.results.length !== 0)
-                                oData.OpenhelpTableIn4.results.push(oData.OpenhelpTableIn5.results[0]);
-                                
+                                oSendData.PDFFileData = oData.OpenhelpTableIn5.results[0];
+
                             oSendData.FileData = oData.OpenhelpTableIn4.results;
                             oSendData.Url = "http://" + oController.gSelectedRoute.Url;
 
