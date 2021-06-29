@@ -14,6 +14,7 @@ function HomeSession(_gateway, callback) {
 		ehr.mfa.done
 		ehr.client.ip
 		ehr.client.ip.external
+		ehr.new.emp.id
 	}
 	*/
 	this.localeChangeCallbackOwners = [];
@@ -43,6 +44,7 @@ clearSessionStorage: function() {
 	sessionStorage.removeItem('ehr.odata.destination');
 	sessionStorage.removeItem('ehr.session.token');
 	sessionStorage.removeItem('ehr.mfa.done');
+	sessionStorage.removeItem('ehr.new.emp.id');
 },
 
 init: function(callback) {
@@ -83,6 +85,13 @@ init: function(callback) {
 		// }
 	}.bind(this))
 	.catch(function(e) {
+		if (sessionStorage.getItem('ehr.new.emp.id')) {
+			if (typeof callback === 'function') {
+				callback();
+			}
+			return;
+		}
+
 		var message = (e.message ? e.message : this._gateway.handleError(this._gateway.ODataDestination.ETC, e, 'HomeSession.init').message) || '알 수 없는 오류가 발생하였습니다.';
 
 		$(function() {
@@ -148,7 +157,7 @@ dkdlTlqpfmffls: function(resolve) {
 	this._gateway.confirm(options);
 },
 
-checkNewEmp: function(resolve) {
+checkNewEmp: function(reject) {
 
 	var session = this,
 	fn = {
@@ -205,8 +214,9 @@ checkNewEmp: function(resolve) {
 					this._gateway.prepareLog('HomeSession.encodePernr ${url} success'.interpolate('ZHR_COMMON_SRV/PernrEncodingSet'), arguments).log();
 
 					if (result) {
+						sessionStorage.setItem('ehr.new.emp.id', this._gateway.odataResults(result).Percod);
 						$('#ehr-new-emp-check-modal').modal('hide');
-						resolve({ data: result });
+						reject({ data: result }); // 이후 session 생성 절차를 건너뛰기 위해 reject로 처리함
 					}
 				}.bind(session),
 				error: function(jqXHR) {
@@ -262,7 +272,7 @@ checkNewEmp: function(resolve) {
 			}
 		});
 	})
-	.on('hidden.bs.modal', function () {
+	.on('hidden.bs.modal', function() {
 		$('#ehr-new-emp-check-modal').modal('dispose').remove();
 	})
 	.modal();
@@ -287,7 +297,7 @@ retrieveClientIP: function() {
 	}).promise();
 },
 
-_retrieveSFUserName: function(resolve) {
+_retrieveSFUserName: function(resolve, reject) {
 
 	$.getJSON({
 		url: '/services/userapi/currentUser',
@@ -300,12 +310,15 @@ _retrieveSFUserName: function(resolve) {
 				(this._gateway.isPRD() && /95023137/i.test(data.name)) ||
 				(this._gateway.isQAS() && /hpjt0857/i.test(data.name))) {
 				this.dkdlTlqpfmffls(resolve);
+
 			} else if ((/sfdev3/i.test(data.name) || /hpjt0832/i.test(data.name) || /hpjt0857/i.test(data.name)) && /PerinfoNewEmp\.html/.test(this._gateway.parameter('popup'))) {
-				this.checkNewEmp(resolve);
+				this.checkNewEmp(reject);
+
 			} else {
 				sessionStorage.setItem('ehr.sf-user.name', data.name);
 
 				resolve();
+
 			}
 		}.bind(this),
 		error: function(jqXHR) {
@@ -328,12 +341,12 @@ retrieveSFUserName: function() {
 		return new Promise(function(v) { v(); });
 	}
 
-	return new Promise(function(resolve) {
+	return new Promise(function(resolve, reject) {
 
 		if (!this._gateway.isPRD() && this._gateway.isMobile()) {
 			this.dkdlTlqpfmffls(resolve);
 		} else {
-			this._retrieveSFUserName(resolve);
+			this._retrieveSFUserName(resolve, reject);
 		}
 	}.bind(this));
 },
