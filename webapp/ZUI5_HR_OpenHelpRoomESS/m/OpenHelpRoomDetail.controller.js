@@ -54,7 +54,7 @@ sap.ui.define(
 					oController.OpenHelpModel.setProperty("/MiddleData", oEvent.data.MiddleData);
 					oController.OpenHelpModel.setProperty("/BottomData", oEvent.data.BottomData);
 					oController.OpenHelpModel.setProperty("/FileData",  oEvent.data.FileData);
-					oController.OpenHelpModel.setProperty("/PDFFileData", Common.checkNull(oEvent.data.PDFFileData) ? "" : oEvent.data.PDFFileData);
+					oController.OpenHelpModel.setProperty("/PDFFileData", Common.checkNull(oEvent.data.PDFFileData) ? "" : oEvent.data.PDFFileData.Appnm);
 					oController.OpenHelpModel.setProperty("/UrlData",  oEvent.data.Url);
 				}
 				
