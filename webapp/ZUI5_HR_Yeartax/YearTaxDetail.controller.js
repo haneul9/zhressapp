@@ -919,7 +919,7 @@ sap.ui.define([
             var oLayout = sap.ui.getCore().byId(oController.PAGEID + "_Detail6_PDF");
                 oLayout.destroyContent();
                 
-            if(oController._DetailJSonModel.getProperty("/Data/Yeatat") == "3"){
+            if(oController._DetailJSonModel.getProperty("/Data/Yestat") == "3"){
                 oLayout.addContent(
                     new sap.m.MessageStrip({
                         showIcon : true,
