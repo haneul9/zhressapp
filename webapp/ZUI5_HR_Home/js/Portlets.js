@@ -454,11 +454,10 @@ save: function(o) {
 		});
 	}
 
-	var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
-	url = 'ZHR_COMMON_SRV/PortletInfoSet';
+	var url = 'ZHR_COMMON_SRV/PortletInfoSet';
 
-	oModel.create(
-		"/PortletInfoSet",
+	this._gateway.getModel('ZHR_COMMON_SRV').create(
+		'/PortletInfoSet',
 		{
 			IMode: 'U',
 			IPernr: this._gateway.pernr(),
@@ -510,12 +509,11 @@ generate: function() {
 
 	setTimeout(this.initSwitchModal.bind(this), 0);
 
-	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
-		url = 'ZHR_COMMON_SRV/PortletInfoSet',
+	return new Promise(function(resolve, reject) {
+		var url = 'ZHR_COMMON_SRV/PortletInfoSet',
 		loginInfo = this._gateway.loginInfo();
-		
-		oModel.create("/PortletInfoSet", {
+
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/PortletInfoSet', {
 			IMode: 'R',
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
@@ -616,7 +614,7 @@ generate: function() {
 				].join('<br />') });
 
 				this._gateway.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});

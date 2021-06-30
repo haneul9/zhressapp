@@ -179,22 +179,22 @@ checkNewEmp: function(reject) {
 /*
 				if (!input1Value) {
 					fn.spin(false);
-					$('#ehr-new-emp-check-modal .invalid-feedback').text('앞 6자리수를 입력하세요.').show();
+					$('#ehr-new-emp-check-modal .invalid-feedback').text('앞 6자릿수를 입력하세요.').show();
 					return;
 				}
 				if (!/^\d{6}$/.test(input1Value)) {
 					fn.spin(false);
-					$('#ehr-new-emp-check-modal .invalid-feedback').text('앞 6자리수를 입력하세요.').show();
+					$('#ehr-new-emp-check-modal .invalid-feedback').text('앞 6자릿수를 입력하세요.').show();
 					return;
 				}
 				if (!input2Value) {
 					fn.spin(false);
-					$('#ehr-new-emp-check-modal .invalid-feedback').text('뒤 7자리수를 입력하세요.').show();
+					$('#ehr-new-emp-check-modal .invalid-feedback').text('뒤 7자릿수를 입력하세요.').show();
 					return;
 				}
 				if (!/^\d{7}$/.test(input2Value)) {
 					fn.spin(false);
-					$('#ehr-new-emp-check-modal .invalid-feedback').text('뒤 7자리수를 입력하세요.').show();
+					$('#ehr-new-emp-check-modal .invalid-feedback').text('뒤 7자릿수를 입력하세요.').show();
 					return;
 				}
 */

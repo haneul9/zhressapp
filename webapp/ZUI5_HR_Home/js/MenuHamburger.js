@@ -453,11 +453,10 @@ getMenuTree: function(data) {
 generate: function() {
 
 	return new Promise(function(resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
-		url = 'ZHR_COMMON_SRV/GetMnlvSet',
+		var url = 'ZHR_COMMON_SRV/GetMnlvSet',
 		loginInfo = this._gateway.loginInfo();
-		
-		oModel.create("/GetMnlvSet", {
+
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/GetMnlvSet', {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,

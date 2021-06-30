@@ -99,9 +99,7 @@ fill: function() {
 	loginInfo = this._gateway.loginInfo();
 
 	return new Promise(function(resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-
-		oModel.create("/MainContentsCalSet", {
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/MainContentsCalSet', {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,
@@ -226,7 +224,7 @@ retrieveDailyReport: function(dateText) {
 	calendarMap = this.calendarMap[dateText] || {};
 
 	return new Promise(function(resolve, reject) {
-		this._gateway.getModel("ZHR_COMMON_SRV").create("/MainContentsCalSet", {
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/MainContentsCalSet', {
 			IPernr: this._gateway.pernr(),
 			IBukrs: loginInfo.Bukrs,
 			ILangu: loginInfo.Langu,

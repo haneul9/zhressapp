@@ -84,10 +84,8 @@ fill: function() {
 
 	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-		
-		oModel.create("/MainContentsSet", {
+	return new Promise(function(resolve, reject) {
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/MainContentsSet', {
 			IMode: 'R',
 			IConType: '3',
 			IPernr: this._gateway.pernr(),
@@ -108,7 +106,7 @@ fill: function() {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'QuickLinkPortlet.fill ' + url);
 
 				this.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});
@@ -228,18 +226,17 @@ save: function() {
 		return o;
 	});
 
-	var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
-	url = 'ZHR_COMMON_SRV/MainContentsSet';
+	var url = 'ZHR_COMMON_SRV/MainContentsSet';
 
-	oModel.create(
-		"/MainContentsSet", 
+	this._gateway.getModel('ZHR_COMMON_SRV').create(
+		'/MainContentsSet',
 		{
 			IMode: 'U',
 			IConType: '3',
 			IPernr: this._gateway.pernr(),
 			ILangu: this._gateway.loginInfo('Langu'),
 			TableIn3: this.urlList
-		}, 
+		},
 		{
 			async: true,
 			success: function() {

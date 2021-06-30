@@ -31,7 +31,7 @@ ui: function() {
 			cardHeader,
 			'<div class="card-body">',
 				'<div class="evalgoal-legend d-none">평균진척률</div>',
-				'<div class="list-group"></div>',				
+				'<div class="list-group"></div>',
 			'</div>',
 			this.spinner(),
 		'</div>'
@@ -56,11 +56,10 @@ fill: function() {
 	}.bind(this));
 },
 getTargetReports: function(goalId, resolve) { // 평가대상 확인여부
-	var oModel = this._gateway.getModel("ZHR_COMMON_SRV"),
-	url = 'ZHR_COMMON_SRV/CommonCodeListHeaderSet';
-	
-	oModel.create("/CommonCodeListHeaderSet", {
-		ICodeT : "066",
+	var url = 'ZHR_COMMON_SRV/CommonCodeListHeaderSet';
+
+	this._gateway.getModel('ZHR_COMMON_SRV').create('/CommonCodeListHeaderSet', {
+		ICodeT : '066',
 		NavCommonCodeList : []
 	}, {
 		async: true,
@@ -89,37 +88,37 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 				list = this.$();
 
 			oEmpDataList.forEach(function(e) {
-				if(this.checkNull(!e.custom04)){
+				if (this.checkNull(!e.custom04)) {
 					this.targetList.forEach(function(ele) {
-						if(ele.Code === e.custom07){
+						if (ele.Code === e.custom07) {
 							e.Seqnr = ele.Seqnr;
 							exEmpDataList.push(e);
 						}
 					});
 
 					exEmpDataList.sort(function(a, b) {
-						if(a['Seqnr'] === b['Seqnr']) {
-							var x = a['nickname'].toLowerCase();
-							var y = b['nickname'].toLowerCase();
+						if (a.Seqnr === b.Seqnr) {
+							var x = a.nickname.toLowerCase();
+							var y = b.nickname.toLowerCase();
 							return x < y ? -1 : x > y ? 1 : 0;
 						}
-						return a['Seqnr'] - b['Seqnr']; 
+						return a.Seqnr - b.Seqnr;
 					});
 				}else {
 					this.targetList.forEach(function(ele) {
-						if(ele.Code === e.custom07){
+						if (ele.Code === e.custom07) {
 							e.Seqnr = ele.Seqnr;
 							empDataList.push(e);
 						}
 					});
 
 					empDataList.sort(function(a, b) {
-						if(a['Seqnr'] === b['Seqnr']) {
-							var x = a['nickname'].toLowerCase();
-							var y = b['nickname'].toLowerCase();
+						if (a.Seqnr === b.Seqnr) {
+							var x = a.nickname.toLowerCase();
+							var y = b.nickname.toLowerCase();
 							return x < y ? -1 : x > y ? 1 : 0;
 						}
-						return a['Seqnr'] - b['Seqnr']; 
+						return a.Seqnr - b.Seqnr;
 					});
 				}
 			}.bind(this));
@@ -131,9 +130,9 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 				if (list.data('jsp')) {
 					list.find('.evalgoal-area,list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가대상이 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가대상이 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
 				}
 
 				setTimeout(function() {
@@ -154,7 +153,7 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 			$.map(empDataList, function(e, i) {
 				this.goalDataMap[e.userId] = {
 					nickname: e.nickname,
-					position: e.custom01 ? e.custom01.split("(")[0] : ""
+					position: e.custom01 ? e.custom01.split('(')[0] : ''
 				};
 
 				list.append([
@@ -215,9 +214,9 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 						$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
 						if (list.data('jsp')) {
-							list.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가대상이 없습니다.</a>');
+							list.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
 						} else {
-							list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가대상이 없습니다.</a>');
+							list.html('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
 						}
 					} else {
 						$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', false);
@@ -256,32 +255,32 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 
 	if(this.checkNull(goalId)){
 		this.goalDataMap[pernr].score = 0;
-		this.goalDataMap[pernr].groundColor = "bg-danger";
+		this.goalDataMap[pernr].groundColor = 'bg-danger';
 	}else {
 		var url4 = "/odata/v2/Goal_${goalId}?$select=name,done&$filter=userId eq '${pernr}'".interpolate(goalId, pernr);
-	
+
 		return $.getJSON({ // 목표조회
 			url: url4,
 			success: function(data) {
 				var oDetailData = data.d.results;
-	
+
 				var vDetailIndex = oDetailData.length,
-				oGroundColor = "",
+				oGroundColor = '',
 				vScore = 0,
 				oBackGround = [
-					"bg-danger",    /* bg-lcc-signature-red */
-					"bg-warning",   /* bg-signature-orange */
-					"bg-info",      /* bg-lcc-signature-green */ 
-					"bg-success"    /* bg-lcc-signature-blue */
+					'bg-danger',    /* bg-lcc-signature-red */
+					'bg-warning',   /* bg-signature-orange */
+					'bg-info',      /* bg-lcc-signature-green */
+					'bg-success'    /* bg-lcc-signature-blue */
 				];
-	
+
 				if (vDetailIndex !== 0) {
 					for (var i = 0; i < vDetailIndex; i++) {
 						vScore += parseFloat(oDetailData[i].done);
 					}
 					vScore = vScore / vDetailIndex;
 				}
-	
+
 				if (parseFloat(vScore) > 80) {
 					oGroundColor= oBackGround[3];
 				} else if (parseFloat(vScore) > 60) {
@@ -291,7 +290,7 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 				} else {
 					oGroundColor= oBackGround[0];
 				}
-	
+
 				this.goalDataMap[pernr].score = vScore;
 				this.goalDataMap[pernr].groundColor = oGroundColor;
 			}.bind(this),
@@ -303,7 +302,7 @@ retrieveGoalData: function(pernr, goalId) { // 사원목표정보
 
 },
 checkNull: function (v) {
-	return v === undefined || v === null || v == "" ? true : false;
+	return v === undefined || v === null || v == '' ? true : false;
 },
 onceAfter: function() {
 

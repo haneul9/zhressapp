@@ -35,18 +35,17 @@ ui: function() {
 },
 fill: function() {
 
-	this._gateway.setModel("ZHR_PERS_INFO_SRV");
+	this._gateway.setModel('ZHR_PERS_INFO_SRV');
 
 	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_PERS_INFO_SRV"),
-		url = 'ZHR_PERS_INFO_SRV/LanguScoreSet';
-		
-		oModel.create("/LanguScoreSet", {
+		var url = 'ZHR_PERS_INFO_SRV/LanguScoreSet';
+
+		this._gateway.getModel('ZHR_PERS_INFO_SRV').create('/LanguScoreSet', {
 			IPernr: this._gateway.pernr(),
 			IDatum: moment().hours(9).toDate(),
 			IBukrs: this._gateway.loginInfo('Bukrs2'),
 			IMolga: this._gateway.loginInfo('Molga'),
-			ILangu: "3",
+			ILangu: '3',
 			TableIn: []
 		}, {
 			async: true,
@@ -59,13 +58,13 @@ fill: function() {
 				if (!TableIn.length) {
 					if (list.data('jsp')) {
 						list.find('.list-group-item').remove().end()
-							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
+							.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">어학성적 데이터가 없습니다.</a>');
 					} else {
-						list.html('<a href="#" class="list-group-item list-group-item-action data-not-found">어학성적 데이터가 없습니다.</a>');
+						list.html('<a href="#" class="list-group-item data-not-found">어학성적 데이터가 없습니다.</a>');
 					}
 
 					this.spinner(false);
-					
+
 					return;
 				}
 
@@ -90,9 +89,9 @@ fill: function() {
 
 				// MSS 권한 -> MSS 링크로 변경
 				try {
-					if(window._menu.ownMenuDataMap && window._menu.ownMenuDataMap["1720"]) {
-						this.url(window._menu.menuDataMap["1720"].url);
-						this.mid("1720");
+					if(window._menu.ownMenuDataMap && window._menu.ownMenuDataMap['1720']) {
+						this.url(window._menu.menuDataMap['1720'].url);
+						this.mid('1720');
 
 						this.$().parent().parent().find('.card-header :button').eq(1)
 							.attr('data-url', this.url())
@@ -114,7 +113,7 @@ fill: function() {
 					$('.languageTable').append([
 						'<div class="table-body">',
 							'<div style="width: 55%;">',
-								e.ZlanguTxt + " " + e.ZltypeTxt,
+								e.ZlanguTxt + ' ' + e.ZltypeTxt,
 							'</div>',
 							'<div style="width: 30%;">',
 								date,
@@ -134,7 +133,7 @@ fill: function() {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'LanguageScore.fill ' + url);
 
 				this.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});

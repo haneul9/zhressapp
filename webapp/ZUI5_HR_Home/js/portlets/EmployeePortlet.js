@@ -111,10 +111,8 @@ fill: function() {
 		return new Promise(function(v) { v(); });
 	}
 
-	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_COMMON_SRV");
-		
-		oModel.create("/MainContentsSet", {
+	return new Promise(function(resolve, reject) {
+		this._gateway.getModel('ZHR_COMMON_SRV').create('/MainContentsSet', {
 			IMode: 'R',
 			IConType: '1',
 			IPernr: this._gateway.pernr(),
@@ -149,7 +147,7 @@ fill: function() {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'EmployeePortlet.fill ' + url);
 
 				this.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});

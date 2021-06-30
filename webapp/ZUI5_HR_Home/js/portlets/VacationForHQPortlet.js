@@ -75,15 +75,13 @@ onceBefore: function() {
 
 fill: function() {
 
-	this._gateway.setModel("ZHR_LEAVE_APPL_SRV");
+	this._gateway.setModel('ZHR_LEAVE_APPL_SRV');
 
 	var url = 'ZHR_LEAVE_APPL_SRV/YeaQuotaMainSet';
 	var loginInfo = this._gateway.loginInfo();
 
-	return new Promise(function (resolve, reject) {
-		var oModel = this._gateway.getModel("ZHR_LEAVE_APPL_SRV");
-		
-		oModel.create("/YeaQuotaMainSet", {
+	return new Promise(function(resolve, reject) {
+		this._gateway.getModel('ZHR_LEAVE_APPL_SRV').create('/YeaQuotaMainSet', {
 			IPernr: loginInfo.Pernr,
 			ILangu: loginInfo.Langu,
 			YeaQuotaNav: []
@@ -98,14 +96,13 @@ fill: function() {
 					this.cardBody().find('.blue-banner-value').text('0%');
 
 					this.spinner(false);
-					
+
 					return;
 				}
 
 				var totalPercentage = YeaQuotaNav.shift();
 				this.cardBody().find('.blue-banner-value').text(String.toNumber(totalPercentage.Userte) + '%');
 
-				// this.chart.data.datasets[0].barThickness = YeaQuotaNav.length === 1 ? 40 : 20;
 				$.map(YeaQuotaNav, function(o) {
 					this.chart.data.labels.push(o.HgradeT);
 					this.chart.data.datasets[0].data.push(String.toNumber(o.Userte));
@@ -121,7 +118,7 @@ fill: function() {
 				this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'VacationForHQPortlet.fill ' + url);
 
 				this.spinner(false);
-				
+
 				reject(jqXHR);
 			}.bind(this)
 		});

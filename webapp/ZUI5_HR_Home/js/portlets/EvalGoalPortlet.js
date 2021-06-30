@@ -46,9 +46,9 @@ fill: function() {
 			if (!results || !results.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
 				} else {
-					list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
+					list.html('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
 				}
 				return;
 			}
@@ -60,18 +60,18 @@ fill: function() {
 				success: function(data) {
 					var oDetailData = data.d.results;
 					var oBackGround = [
-						"bg-danger",
-						"bg-warning",
-						"bg-info",
-						"bg-success"
+						'bg-danger',
+						'bg-warning',
+						'bg-info',
+						'bg-success'
 					];
 
 					if (!oDetailData.length) {
 						if (list.data('jsp')) {
 							list.find('.list-group-item').remove().end()
-								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
+								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
 						} else {
-							list.html('<a href="#" class="list-group-item list-group-item-action border-0 data-not-found">평가목표가 없습니다.</a>');
+							list.html('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
 						}
 						return;
 					}
@@ -96,8 +96,8 @@ fill: function() {
 
 						oList3.push({iDone: iDone, index: i, vGroundColor: oGroundColor});
 
-						v.name = v.name.replace(/\n/g, "</br>");
-							
+						v.name = v.name.replace(/\n/g, '<br />');
+
 						list.append([
 							'<div class="my-evalgoal-info">',
 								'<div class="mylist1" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">',
@@ -113,7 +113,7 @@ fill: function() {
 							'</div>'
 						].join(''));
 					});
-					
+
 					$.map(oList3, function(v) {
 						if (v.iDone > 0) {
 							$('#i' + v.index)
