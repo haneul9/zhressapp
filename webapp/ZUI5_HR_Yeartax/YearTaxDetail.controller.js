@@ -697,29 +697,21 @@ sap.ui.define([
             if(oIndices.length == 0){
                 MessageBox.error("삭제할 대상자를 선택하여 주십시오.");
                 return;
+            } else if(oIndices.length != 1){
+                MessageBox.error("대상자를 한명만 선택하여 주십시오.");
+                return;
             }
             
             var process = function(){
                 var oModel = $.app.getModel("ZHR_YEARTAX_SRV");
+                var sPath = oTable.getContextByIndex(oIndices[0]).sPath;
+                var oData = oTable.getModel().getProperty(sPath);
 
                 var createData = {RESULT : []};
-
-                for(var i=0; i<oIndices.length; i++){
-                    var sPath = oTable.getContextByIndex(oIndices[i]).sPath;
-                    var oData = oTable.getModel().getProperty(sPath);
-
-                    var detail = {};
-                        detail.Zyear = oData.Zyear;
-                        detail.Pernr = oData.Pernr;
-                        detail.Regno = oData.Regno.replace(/-/g, "");
-                        detail.Objps = oData.Objps;
-
-                        createData.RESULT.push(detail);  
-                }
-
                     createData.IMode = "2";
-                    createData.IPernr = oData.Pernr;
-                    createData.IYear = oData.Zyear;
+                    createData.IPernr = oController._Pernr;
+                    createData.IZyear = oController._Zyear;
+                    createData.IRegno = oData.Regno.replace(/-/g, "");
                     
                 oModel.create("/YeartaxGetFamResultHeaderSet", createData, 
                     {
