@@ -262,32 +262,58 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 					new sap.ui.commons.layout.MatrixLayoutRow({height : "5px"}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
-									  content : [new sap.m.Text({
-													  text : {
-														  path : "Zyear",
-														  formatter : function(fVal){
-															var year1 = "0000", year2 = "0000";
-															if(fVal){
-																fVal = fVal * 1;
+									//   content : [new sap.m.Text({
+									// 				  text : {
+									// 					  path : "Zyear",
+									// 					  formatter : function(fVal){
+									// 						var year1 = "0000", year2 = "0000";
+									// 						if(fVal){
+									// 							fVal = fVal * 1;
 
-																var year1 = fVal - 60, year2 = fVal - 20;
-															}
+									// 							var year1 = fVal - 60, year2 = fVal - 20;
+									// 						}
 
-															return "※ '인적공제 항목변경' 체크 후 가족정보 변경이 가능합니다." +
-															"\n\n※ 최종 제출 전 반드시 확인하십시오." +
-															"\n(1) 부양가족이 올바르게 체크 되었는지 확인" +
-															"\n- 기본공제 대상자에 해당하지 않는데 부양가족으로 체크되어 있는 경우, 연말정산 > 인적공제 > 가족정보에서 반드시 체크 해제하시기 바랍니다." +
-															"\n* 기본공제 대상자 나이요건" +
-															"\n 직계존속: " + year1 + "년 12월 31일 이전 출생자(60세이상)" +
-															"\n 직계비속: " + year2 + "년 1월 1일 이후 출생자(20세이상)" +
-															//"\n 추가공제(경로우대공제): 1949.12.31 이전 출생자(70세이상)" + 
-															"\n " + (fVal + 1) + "년 1월 1일 이후 출생자는 인적공제 대상자에 해당되지 않습니다." +
-															"\n\n(2) 부양가족 중복공제 여부 확인" +
-															"\n- 독립적인 생계능력이 없는 부모님에 대해 가족 구성원이 중복하여 공제받지 않았는지 확인하십시오." +
-															"\n- 맞벌이 부부인 경우 자녀에 대한 보험료, 의료비, 교육비, 기부금, 신용카드 등의 사용액을 부부가 중복으로 공제받지 않았는지 반드시 확인하십시오.";
-														  }
-													  }
-												 }).addStyleClass("FontFamily PaddingLeft10 PaddingRight10")],
+									// 						return "※ '인적공제 항목변경' 체크 후 가족정보 변경이 가능합니다." +
+									// 						"\n\n※ 최종 제출 전 반드시 확인하십시오." +
+									// 						"\n(1) 부양가족이 올바르게 체크 되었는지 확인" +
+									// 						"\n- 기본공제 대상자에 해당하지 않는데 부양가족으로 체크되어 있는 경우, 연말정산 > 인적공제 > 가족정보에서 반드시 체크 해제하시기 바랍니다." +
+									// 						"\n* 기본공제 대상자 나이요건" +
+									// 						"\n 직계존속: " + year1 + "년 12월 31일 이전 출생자(60세이상)" +
+									// 						"\n 직계비속: " + year2 + "년 1월 1일 이후 출생자(20세이상)" +
+									// 						//"\n 추가공제(경로우대공제): 1949.12.31 이전 출생자(70세이상)" + 
+									// 						"\n " + (fVal + 1) + "년 1월 1일 이후 출생자는 인적공제 대상자에 해당되지 않습니다." +
+									// 						"\n\n(2) 부양가족 중복공제 여부 확인" +
+									// 						"\n- 독립적인 생계능력이 없는 부모님에 대해 가족 구성원이 중복하여 공제받지 않았는지 확인하십시오." +
+									// 						"\n- 맞벌이 부부인 경우 자녀에 대한 보험료, 의료비, 교육비, 기부금, 신용카드 등의 사용액을 부부가 중복으로 공제받지 않았는지 반드시 확인하십시오.";
+									// 					  }
+									// 				  }
+									// 			 }).addStyleClass("FontFamily PaddingLeft10 PaddingRight10")],
+									  content : [
+										  new sap.m.FormattedText({
+											  htmlText : {
+												  path : "Zyear",
+												  formatter : function(fVal){
+														var year1 = "0000", year2 = "0000";
+														if(fVal){
+															fVal = fVal * 1;
+															year1 = fVal - 60, year2 = fVal - 20;
+														}
+
+														return "<span class='colorRed'>국세청 PDF파일 업로드 전 본인/가족정보 확인 및 공제여부 체크 표시를 반드시 확인하십시오.</span>" +
+															   "<span class='colorRed'> (체크하지 않은 항목은 공제 자료가 반영되지 않습니다.)</span>" +
+															   "<br/><br/><span>1. 본인 정보</span>" +
+															   "<br/><span class='pl-10px'>- 세대주 여부</span>" + 
+															   "<br/><span class='pl-10px'>- 기본공제대상자 나이요건</span>" + 
+															   "<br/><span class='pl-10px'>- 본인 추가공제 및 본인 공제자료 반영여부 확인</span>" +
+															   "<br/><span>2. 가족 정보</span>" +
+															   "<br/><span class='pl-10px'>- 현재 부양가족 체크되어 있는 대상자는 " + fVal + "년 12월 31일 기준으로 월급여에 반영되고 있는 부양가족을 표시하고 있습니다.</span>"+
+															   "<br/><span class='pl-10px'>- 부양가족 공제여부 신규/변경 : 연말정산 → 인적공제 → 가족정보 → 신규/변경 (가족정보를 삭제하는 것은 불가하며 공제받지 않을 경우 체크 유무로 수정)</span>"+
+															   "<br/><span class='pl-10px'>- 부양가족 나이/소득요건 및 중복공제 여부 확인 후 공제자료 반영</span>" +
+															   "<br/><span>3. " + fVal + "년 12월 31일 이전 기 등록된 정보의 변경 또는 삭제는 연말정산 담당자에게 문의하시기 바랍니다.</span>" ;
+												  }
+											  }
+										  })
+									  ],
 									  hAlign : "Begin",
 									  vAlign : "Middle",
 									  colSpan : 5
