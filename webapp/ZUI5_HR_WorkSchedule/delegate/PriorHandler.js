@@ -607,7 +607,7 @@ sap.ui.define(
                     payload.IBfchk = "X";
                     payload.ITttyp = "P";
                     payload.IDatum = moment(oInputData.Header.Schda).hours(10).toDate();
-                    payload.IEmpid = oInputData.Header.Pernr;
+                    payload.IEmpid = this.oController.getSessionInfoByKey("Pernr");
 
                     payload.Worktimetab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oInputData.Header), {
@@ -681,7 +681,7 @@ sap.ui.define(
                     payload.IBfchk = "X";
                     payload.ITttyp = "P";
                     payload.IDatum = moment(oInputData.Header.Schda).hours(10).toDate();
-                    payload.IEmpid = oInputData.Header.Pernr;
+                    payload.IEmpid = this.oController.getSessionInfoByKey("Pernr");
 
                     payload.Worktimetab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oInputData.Header), {
@@ -731,7 +731,7 @@ sap.ui.define(
                     payload.IBfchk = "X";
                     payload.ITttyp = "P";
                     payload.IDatum = moment(oInputData.Header.Schda).hours(10).toDate();
-                    payload.IEmpid = oInputData.Header.Pernr;
+                    payload.IEmpid = this.oController.getSessionInfoByKey("Pernr");
 
                     payload.Worktimetab1 = [
                         $.extend(true, Common.copyByMetadata(oModel, "WorktimeApplyTab1", oInputData.Header), {
