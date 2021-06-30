@@ -130,9 +130,9 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 
 				if (list.data('jsp')) {
 					list.find('.evalgoal-area,list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">평가대상이 없습니다.</span>');
 				} else {
-					list.html('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
+					list.html('<span class="list-group-item data-not-found">평가대상이 없습니다.</span>');
 				}
 
 				setTimeout(function() {
@@ -214,9 +214,9 @@ retrieveDirectReports: function(goalId, resolve) { // 평가사원들 조회
 						$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', true);
 
 						if (list.data('jsp')) {
-							list.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
+							list.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">평가대상이 없습니다.</span>');
 						} else {
-							list.html('<a href="#" class="list-group-item data-not-found">평가대상이 없습니다.</a>');
+							list.html('<span class="list-group-item data-not-found">평가대상이 없습니다.</span>');
 						}
 					} else {
 						$('.portlet-evalgoal-progress .evalgoal-legend').toggleClass('d-none', false);

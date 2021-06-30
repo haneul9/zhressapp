@@ -82,7 +82,7 @@ fill: function() {
                     oVacationData = result.VacationQuotaNav.results;
 
                 if (!oVacationData.length) {
-                    list.html('<a href="#" class="list-group-item data-not-found">휴가사용 현황 데이터가 없습니다.</a>');
+                    list.html('<span class="list-group-item data-not-found">휴가사용 현황 데이터가 없습니다.</span>');
 
                     this.spinner(false);
 

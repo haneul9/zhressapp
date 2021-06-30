@@ -46,9 +46,9 @@ fill: function() {
 			if (!results || !results.length) {
 				if (list.data('jsp')) {
 					list.find('.list-group-item').remove().end()
-						.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
+						.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">평가목표가 없습니다.</span>');
 				} else {
-					list.html('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
+					list.html('<span class="list-group-item data-not-found">평가목표가 없습니다.</span>');
 				}
 				return;
 			}
@@ -69,9 +69,9 @@ fill: function() {
 					if (!oDetailData.length) {
 						if (list.data('jsp')) {
 							list.find('.list-group-item').remove().end()
-								.data('jsp').getContentPane().prepend('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
+								.data('jsp').getContentPane().prepend('<span class="list-group-item data-not-found">평가목표가 없습니다.</span>');
 						} else {
-							list.html('<a href="#" class="list-group-item data-not-found">평가목표가 없습니다.</a>');
+							list.html('<span class="list-group-item data-not-found">평가목표가 없습니다.</span>');
 						}
 						return;
 					}
