@@ -90,8 +90,8 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_10", {
 												}).addStyleClass("FontFamily PaddingLeft5"),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.FormattedText({
-													htmlText : "<span class='FontFamily colorRed PaddingLeft5'>- 법정/우리사주조합/지정기부금 : 1천만원 이하: 15%, 1천만원 초과: 30%</span>" +
-															   "<br><span class='FontFamily colorRed PaddingLeft5'>※ 2013.1.1 이후 지출한 기부금액에 대해 이월공제기간 10년 적용(2018.1.1 이후부터)</span>"
+													htmlText : "<span class='FontFamily pl-5px'>- 법정/우리사주조합/지정기부금 : 1천만원 이하: 15%, 1천만원 초과: 30%</span>" +
+															   "<br><span class='FontFamily pl-5px'>※ 2013.1.1 이후 지출한 기부금액에 대해 이월공제기간 10년 적용(2018.1.1 이후부터)</span>"
 												}),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.FormattedText({

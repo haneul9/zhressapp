@@ -277,11 +277,15 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_04", {
 												// }),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.Text({
+													text : "* 총 급여 7천만원 이하자만 적용"
+												}).addStyleClass("FontFamily"),
+												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
+												new sap.m.Text({
 													text : "• 공제한도 : 총급여수준별로 차등적용 → 2020년 한시적 소득공제 한도 30만원 상향"
 												}).addStyleClass("FontFamily colorRed"),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.Text({
-													text : "- 총급여 7천만원 이하 : min(총급여의 20%, 330만원)"
+													text : "- 총급여 7천만원 이하 : MIN(총급여의 20%, 330만원)"
 												}).addStyleClass("FontFamily PaddingLeft5 colorRed"),
 												new sap.ui.core.HTML({content : "<div style='height:3px' />"}),
 												new sap.m.Text({

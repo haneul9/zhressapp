@@ -390,7 +390,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_11", {
 								 }).addStyleClass("Data2 PaddingTop5 PaddingBottom5")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "35px",
+						// height : "35px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Text({text : "2018년 이후 투자분"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",

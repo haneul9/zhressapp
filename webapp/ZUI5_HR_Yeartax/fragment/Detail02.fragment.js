@@ -405,7 +405,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02", {
 						{id: "Emnam", label : "성명", plabel : "", span : 0, type : "string", sort : false, filter : false},
 						{id: "Regno2", label : "주민번호", plabel : "", span : 0, type : "string", sort : false, filter : false},
 						{id: "Kdbtx", label : "자녀구분", plabel : "", span : 0, type : "string", sort : false, filter : false},
-						{id: "Sesch", label : "7세미만취학아동", plabel : "", span : 0, type : "YET", sort : false, filter : false},
+						// {id: "Sesch", label : "7세미만취학아동", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Dptid", label : "부양가족", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Ageid", label : "경로자", plabel : "", span : 0, type : "YET", sort : false, filter : false},
 						{id: "Fstid", label : "위탁아동", plabel : "", span : 0, type : "YET", sort : false, filter : false},

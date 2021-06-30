@@ -61,6 +61,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 														// 위탁아동
 														oDialog.getModel().setProperty("/Data/Fstid", (oKdsvh == "53" ? true : false));
 														oDialog.getModel().setProperty("/Data/Sixid", false);
+														oDialog.getModel().setProperty("/Data/Kdbsl", ""); // 자녀구분
 													}
 											 	})],
 									 hAlign : "Begin",
@@ -144,9 +145,9 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 		}).addStyleClass("mt-5px");
 		
 		var oMatrix2 = new sap.ui.commons.layout.MatrixLayout({
-			columns : 6,
+			columns : 5,
 			width : "100%",
-			widths : ["", "250px", "", "", "", "300px"],
+			widths : ["", "250px", "", "", "300px"],
 			rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 						height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
@@ -158,7 +159,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 								 	 content : [new sap.m.Label({text : "추가공제"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle",
-								 	 colSpan : 5
+								 	 colSpan : 4
 								 }).addStyleClass("Label3")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
@@ -173,11 +174,11 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 								 	 hAlign : "Center",
 								 	 vAlign : "Middle"
 								 }).addStyleClass("Label3"),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.Text({text : "7세미만\n취학아동", textAlign : "Center"}).addStyleClass("FontFamily font-medium")],
-								 	 hAlign : "Center",
-								 	 vAlign : "Middle"
-								 }).addStyleClass("Label3"),
+								//  new sap.ui.commons.layout.MatrixLayoutCell({
+								//  	 content : [new sap.m.Text({text : "7세미만\n취학아동", textAlign : "Center"}).addStyleClass("FontFamily font-medium")],
+								//  	 hAlign : "Center",
+								//  	 vAlign : "Middle"
+								//  }).addStyleClass("Label3"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.Label({text : "위탁아동"}).addStyleClass("FontFamily")],
 								 	 hAlign : "Center",
@@ -213,17 +214,23 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail02_FamInfo", {
 								 	 content : [new sap.m.ComboBox(oController.PAGEID + "_Kdbsl", {
 											 	 	selectedKey : "{Kdbsl}", // 자녀구분
 											 	 	width : "100%",
+													editable : {
+														path : "Kdsvh",
+														formatter : function(fVal){
+															return fVal == "53" ? false : true;
+														}
+													}
 											 	})],
 									 hAlign : "Begin",
 									 vAlign : "Middle"
 								 }).addStyleClass("Data2"),
-								 new sap.ui.commons.layout.MatrixLayoutCell({
-								 	 content : [new sap.m.CheckBox({
-											 	 	selected : "{Sesch}" // 7세미만취학아동
-											 	})],
-								 	 hAlign : "Center",
-								 	 vAlign : "Middle"
-								 }).addStyleClass("Data2"),
+								//  new sap.ui.commons.layout.MatrixLayoutCell({
+								//  	 content : [new sap.m.CheckBox({
+								// 			 	 	selected : "{Sesch}" // 7세미만취학아동
+								// 			 	})],
+								//  	 hAlign : "Center",
+								//  	 vAlign : "Middle"
+								//  }).addStyleClass("Data2"),
 								 new sap.ui.commons.layout.MatrixLayoutCell({
 								 	 content : [new sap.m.CheckBox({
 											 	 	selected : "{Fstid}", // 위탁아동

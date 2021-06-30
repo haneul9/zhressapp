@@ -623,6 +623,7 @@ sap.ui.define([
                     detail.Regno = (oData.Regno1 + oData.Regno2);
                     detail.Dptid = (oData.Dptid && oData.Dptid == true ? "X" : "");
                     detail.Kdbsl = (oData.Kdbsl ? oData.Kdbsl : "");
+                    detail.Sesch = (oData.Sesch && oData.Sesch == true ? "X" : "");
                     detail.Fstid = (oData.Fstid && oData.Fstid == true ? "X" : "");
                     detail.Sixid = (oData.Sixid && oData.Sixid == true ? "X" : "");
                     detail.Hndid = (oData.Hndid && oData.Hndid == true ? "X" : "");

@@ -92,7 +92,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_09", {
 												new sap.ui.commons.layout.MatrixLayout({
 													columns : 4,
 													width : "100%",
-													widths : ["", "", "", ""],
+													widths : ["", "30%", "30%", ""],
 													rows : [new sap.ui.commons.layout.MatrixLayoutRow({
 																cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 																			 content : [new sap.m.Text({text : "총급여액"})],
@@ -123,13 +123,13 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_09", {
 																			 vAlign : "Middle"	
 																		 }).addStyleClass("Data2"),
 																		 new sap.ui.commons.layout.MatrixLayoutCell({
-																			 content : [new sap.m.Text({text : "400만원 (퇴직연금 포함 연 700만원)", textAlign : "Center"})],
+																			 content : [new sap.m.Text({text : "400만원\n(퇴직연금 포함 연 700만원)", textAlign : "Center"})],
 																			 hAlign : "Center",
 																			 vAlign : "Middle",
 																			 rowSpan : 2
 																		 }).addStyleClass("Data2"),
 																		 new sap.ui.commons.layout.MatrixLayoutCell({
-																			 content : [new sap.m.Text({text : "600만원 (퇴직연금 포함 연 900만원)", textAlign : "Center"}).addStyleClass("colorRed")],
+																			 content : [new sap.m.Text({text : "600만원\n(퇴직연금 포함 연 900만원)", textAlign : "Center"}).addStyleClass("colorRed")],
 																			 hAlign : "Center",
 																			 vAlign : "Middle",
 																			 rowSpan : 2
@@ -188,7 +188,7 @@ sap.ui.jsfragment("ZUI5_HR_Yeartax.fragment.Detail04_09", {
 								 }).addStyleClass("Data2 PaddingTop5 PaddingBottom5")]
 					}),
 					new sap.ui.commons.layout.MatrixLayoutRow({
-						height : "45px",
+						// height : "45px",
 						cells : [new sap.ui.commons.layout.MatrixLayoutCell({
 									 content : [new sap.m.Text({text : "연금저축"}).addStyleClass("FontFamily")],
 									 hAlign : "Center",
