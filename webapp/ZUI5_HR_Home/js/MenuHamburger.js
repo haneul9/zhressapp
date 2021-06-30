@@ -485,9 +485,6 @@ generate: function() {
 					var t = $(this),
 					toggle = t.children('.dropdown-toggle');
 					if (!toggle.length) {
-						// e.preventDefault();
-						// e.stopImmediatePropagation();
-						// return false;
 						return;
 					}
 
