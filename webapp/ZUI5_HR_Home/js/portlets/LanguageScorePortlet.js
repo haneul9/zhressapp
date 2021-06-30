@@ -52,8 +52,26 @@ fill: function() {
 			success: function(result) {
 				this._gateway.prepareLog('LanguageScore.fill ${url} success'.interpolate(url), arguments).log();
 
+				// MSS 권한 -> MSS 링크로 변경
+				try {
+					setTimeout(function() {
+						if (window._menu.ownMenuDataMap && window._menu.ownMenuDataMap['1720']) {
+							this.url(window._menu.menuDataMap['1720'].url);
+							this.mid('1720');
+
+							this.$().parent().parent().find('.card-header :button').eq(1)
+								.attr('data-url', this.url())
+								.attr('data-menu-id', this.mid());
+						}
+					}.bind(this), 0);
+				} catch (e) {
+					// skip
+				}
+
 				var list = this.$(),
-					TableIn = result.TableIn.results;
+				TableIn = result.TableIn.results.filter(function (e) {
+					return moment(e.Endda).isAfter(moment());
+				});
 
 				if (!TableIn.length) {
 					if (list.data('jsp')) {
@@ -68,62 +86,31 @@ fill: function() {
 					return;
 				}
 
-				list.append([
-					'<div class="table-header">',
-						'<div style="width:55%;">',
-							"어종/평가구분",
+				list.find('.list-group-item').remove().end()
+					.append([
+						'<div class="table-header">',
+							'<div style="width:55%">어종/평가구분</div>',
+							'<div style="width:30%">만료예정일</div>',
+							'<div style="width:15%">성적</div>',
 						'</div>',
-						'<div style="width: 30%;">',
-							"만료예정일",
-						'</div>',
-						'<div style="width: 15%;">',
-							"성적",
-						'</div>',
-					'</div>',
-					'<div class="languageTable" class="table-body"></div>'
-				].join(''));
+						'<div class="languageTable" class="table-body"></div>'
+					].join(''));
 
-				if (list.data('jsp')) {
-					list = list.find('.list-group-item').remove().end().data('jsp').getContentPane();
-				}
+				var Dtfmt = this._gateway.loginInfo('Dtfmt').toUpperCase(),
+				languageTable = $('.languageTable');
 
-				// MSS 권한 -> MSS 링크로 변경
-				try {
-					if(window._menu.ownMenuDataMap && window._menu.ownMenuDataMap['1720']) {
-						this.url(window._menu.menuDataMap['1720'].url);
-						this.mid('1720');
-
-						this.$().parent().parent().find('.card-header :button').eq(1)
-							.attr('data-url', this.url())
-							.attr('data-menu-id', this.mid());
-					}
-				} catch(e) {
-					// skip
-				}
-
-				TableIn.filter(function(elem) {
-					return moment(elem.Endda).isAfter(moment());
-				})
-				.sort(function(a, b) {
+				TableIn.sort(function(a, b) {
 					return moment(b.Endda) - moment(a.Endda);
 				})
 				.forEach(function(e) {
-					var date = moment(e.Endda).format(this._gateway.loginInfo('Dtfmt').toUpperCase());
-
-					$('.languageTable').append([
+					languageTable.append([
 						'<div class="table-body">',
-							'<div style="width: 55%;">',
-								e.ZlanguTxt + ' ' + e.ZltypeTxt,
-							'</div>',
-							'<div style="width: 30%;">',
-								date,
-							'</div>',
-							'<div style="width: 15%;">',
-								e.Acqpot,
-							'</div>',
+							'<div style="width:55%">', e.ZlanguTxt + ' ' + e.ZltypeTxt, '</div>',
+							'<div style="width:30%">', moment(e.Endda).format(Dtfmt), '</div>',
+							'<div style="width:15%">', e.Acqpot, '</div>',
 						'</div>'
 					].join(''));
-				}.bind(this));
+				});
 
 				this.spinner(false);
 
