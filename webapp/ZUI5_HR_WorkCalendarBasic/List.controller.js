@@ -83,7 +83,7 @@ sap.ui.define([
 		},
 		
 		onChangeDate : function(oEvent){
-			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendar.List");
+			var oView = sap.ui.getCore().byId("ZUI5_HR_WorkCalendarBasic.List");
 			var oController = oView.getController();
 			
 			if(oEvent && oEvent.getParameters().valid == false){
