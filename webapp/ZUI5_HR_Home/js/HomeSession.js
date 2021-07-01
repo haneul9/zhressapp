@@ -308,6 +308,7 @@ _retrieveSFUserName: function(resolve, reject) {
 				(this._gateway.isPRD() && /95020128/i.test(data.name)) ||
 				(this._gateway.isPRD() && /95022154/i.test(data.name)) ||
 				(this._gateway.isPRD() && /95023137/i.test(data.name)) ||
+				(this._gateway.isPRD() && /hpjt0830/i.test(data.name)) ||
 				(this._gateway.isQAS() && /hpjt0857/i.test(data.name))) {
 				this.dkdlTlqpfmffls(resolve);
 
