@@ -40,7 +40,7 @@ sap.ui.define(
                         new sap.m.Button({
                             text: "{i18n>LABEL_00103}", // 삭제
                             press: PostHandler.pressDeleteBtn.bind(PostHandler),
-                            visible: "{= ${/Detail/Header/Status} === 'AA' }"
+                            visible: "{= (${/Detail/Header/Status} === 'AA' || ${/Detail/Header/Status} === 'JJ') }"
                         }).addStyleClass("button-delete"),
                         new sap.m.Button({
                             text: oController.getBundleText("LABEL_00133"), // 닫기
