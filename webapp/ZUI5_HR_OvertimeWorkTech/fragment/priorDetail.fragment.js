@@ -42,7 +42,8 @@ sap.ui.define(
                             text: "{i18n>LABEL_00103}", // 삭제
                             press: PriorHandler.pressDeleteBtn.bind(PriorHandler),
                             enabled: "{/Detail/IsPossibleDelete}",
-                            visible: "{= !${/Detail/IsViewMode}}"
+                            // visible: "{= !${/Detail/IsViewMode}}"
+                            visible : "{= (${/Detail/Header/Status1} === 'AA' || ${/Detail/Header/Status1} === 'JJ') }"
                         }).addStyleClass("button-delete"),
                         new sap.m.Button({
                             text: oController.getBundleText("LABEL_00133"), // 닫기
