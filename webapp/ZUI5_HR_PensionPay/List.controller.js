@@ -324,10 +324,11 @@ sap.ui.define(
                 // validation check
                 if (oEtpay == 0) {
                     // 증액
+                    
+                    //oDeamtT = oDeamtT + oSelfAmtT;
 
-                    oDeamtT = oDeamtT + oSelfAmtT;
-
-                    if (oSelfAmtT + oDeamtT + oSuppAmtT > 990000) {
+                    //if (oSelfAmtT + oDeamtT + oSuppAmtT > 990000) {
+                    if (oDeamtT + oSuppAmtT > 990000) {  //증액 + 회사지원금 > 99만원
                         sap.m.MessageBox.error(oController.getBundleText("MSG_17015"), {
                             // 합계는 99만원을 초과할 수 없습니다. 다시 입력하시기 바랍니다.
                             onClose: resetData
