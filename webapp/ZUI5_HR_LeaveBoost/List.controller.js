@@ -402,14 +402,22 @@ sap.ui.define([
 						return;
 					}
 
-					for(var j=0; j<createData.LeaveBoostListTab2.length; j++){
-						var tmp = createData.LeaveBoostListTab2[j].Zdate.replace(/[^0-9]/g, ""),
-						    tmp2 = dateFormat.format(new Date(tmp * 1)) * 1;
-						if(tmp2 == zdate){
+					for(var j=0; j<i; j++){
+						var tmp = dateFormat.format(new Date(oData2[j].Zdate)) * 1
+						if(tmp == zdate){
 							sap.m.MessageBox.error(oController.getBundleText("MSG_52012")); // 중복일자가 존재합니다.
 							return;
 						}
 					}
+
+					// for(var j=0; j<createData.LeaveBoostListTab2.length; j++){
+					// 	var tmp = createData.LeaveBoostListTab2[j].Zdate.replace(/[^0-9]/g, ""),
+					// 	    tmp2 = dateFormat.format(new Date(tmp * 1)) * 1;
+					// 	if(tmp2 == zdate){
+					// 		sap.m.MessageBox.error(oController.getBundleText("MSG_52012")); // 중복일자가 존재합니다.
+					// 		return;
+					// 	}
+					// }
 				}
 				
 				var detail = {};
