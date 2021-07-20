@@ -141,7 +141,7 @@ sap.ui.define(
                     "/MedicalApplySet",
                     {
                         IConType: "7",  // 일괄신청
-                        IBukrs: this.oController.getSessionInfoByKey("Bukrs"),
+                        IBukrs: this.oController.getSessionInfoByKey("Bukrs3"),
                         IPernr: this.oController.getSessionInfoByKey("Pernr"),
                         ILangu: this.oController.getSessionInfoByKey("Langu"),
                         IEmpid: this.oController.getSessionInfoByKey("Pernr"),
