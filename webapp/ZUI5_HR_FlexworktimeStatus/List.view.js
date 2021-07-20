@@ -331,6 +331,10 @@ sap.ui.define(
                                 {id: "Wrktm", label: "{i18n>LABEL_69010}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
                                 {id: "Exttm", label: "{i18n>LABEL_69011}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
                                 {id: "Holtm", label: "{i18n>LABEL_69012}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+                                // 소정근로시작, 소정근로종료
+                                {id: "Beguz3", label: "{i18n>LABEL_69059}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+                                {id: "Enduz3", label: "{i18n>LABEL_69060}", plabel: "", resize: true, span: 0, type: "time", sort: true, filter: true},
+                                // 변경
                                 {id: "", label: "{i18n>LABEL_69050}", plabel: "", resize: true, span: 0, type: "change", sort: true, filter: true, width : "60px"}];
                 
                 oController.makeTable(oController, oTable, col_info);
