@@ -60,7 +60,7 @@ sap.ui.define([
 					FromPageId : oEvent.data.FromPageId,
 					Status1 : oEvent.data.Status1,
 					ListStatus : oEvent.data.Status1,
-					Bukrs : oController.getSessionInfoByKey("Bukrs"),
+					Bukrs : oController.getSessionInfoByKey("Bukrs3"),
 					Persa : oController.getSessionInfoByKey("Werks"),
 					Pernr : (oEvent.data.Pernr ? oEvent.data.Pernr : oController.getSessionInfoByKey("Pernr")),
 					Flag : (oEvent.data.Flag ? oEvent.data.Flag : ""),
