@@ -44,7 +44,7 @@ sap.ui.define([
                             new sap.m.Button({
                                 icon : "sap-icon://nav-back",
                                 type : "Default",
-                                press : oController.navBack,
+                                press : oController.navBack
                             }),
                             new sap.m.Label({
                                 text : {

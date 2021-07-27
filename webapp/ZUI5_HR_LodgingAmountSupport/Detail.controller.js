@@ -4,10 +4,9 @@ sap.ui.define([
 	"../common/JSONModelHelper",
     "../common/AttachFileAction",
 	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator",
-	"./delegate/ViewTemplates"
+	"sap/ui/core/BusyIndicator"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator, ViewTemplates) {
+	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
