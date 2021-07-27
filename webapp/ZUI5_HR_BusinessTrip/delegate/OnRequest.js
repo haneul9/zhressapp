@@ -1231,15 +1231,15 @@ var OnRequest = { // 출장 event handler
 							MessageBox.alert(this.getBundleText("MSG_19020"), { // ※ 출장 사전 품의시 "모인 메모품의(항공권 예약/발권 신청서)" 첨부하시기 바랍니다.
 								title: this.getBundleText("LABEL_00149"), // 안내
 								onClose: function() {
-									if (!Common.isExternalIP()) {
+									// if (!Common.isExternalIP()) {
 										this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-									}
+									// }
 								}.bind(this)
 							});
 						} else {
-							if (!Common.isExternalIP()) {
+							// if (!Common.isExternalIP()) {
 								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
-							}
+							// }
 						}
 					}
 

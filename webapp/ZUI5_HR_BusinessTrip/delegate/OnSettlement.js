@@ -1099,7 +1099,7 @@ var OnSettlement = { // 출장 비용 정산 event handler
 						if (exports.length) {
 							smoinUrl = exports[0].Url;
 
-							if (smoinUrl && !Common.isExternalIP()) {
+							if (smoinUrl) { //  && !Common.isExternalIP()
 								this.openWindow({ name: "smoin-approval-popup", width: 1000, height: screen.availHeight * 0.9, url: smoinUrl });
 							}
 						}
