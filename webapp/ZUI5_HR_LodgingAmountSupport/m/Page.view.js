@@ -81,7 +81,7 @@ sap.ui.define(
                     itemPress: oController.onSelectedRow.bind(oController),
                     columns: [
                         new sap.m.Column({
-                            width: "35%",
+                            width: "25%",
                             hAlign: "Begin"
                         }),
                         new sap.m.Column({
