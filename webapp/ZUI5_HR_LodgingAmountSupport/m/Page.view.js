@@ -81,11 +81,15 @@ sap.ui.define(
                     itemPress: oController.onSelectedRow.bind(oController),
                     columns: [
                         new sap.m.Column({
-                            width: "70%",
+                            width: "20%",
                             hAlign: "Begin"
                         }),
                         new sap.m.Column({
                             width: "auto",
+                            hAlign: "Begin"
+                        }),
+                        new sap.m.Column({
+                            width: "20%",
                             hAlign: "Begin"
                         })
                     ],
@@ -98,6 +102,11 @@ sap.ui.define(
                                 new sap.m.VBox({
                                     items: [
                                         new sap.m.Text({
+                                            // 상태
+                                            text: "{Statust}",
+                                            textAlign: "Begin"
+                                        }).addStyleClass("L2P13Font font-14px Bold"),
+                                        new sap.m.Text({
                                             // 신청일
                                             text: {
                                                 path: "Appda",
@@ -106,10 +115,24 @@ sap.ui.define(
                                                 }
                                             },
                                             textAlign: "Begin"
-                                        }).addStyleClass("L2P13Font font-14px"),
+                                        }).addStyleClass("L2P13Font font-14px")
+                                    ]
+                                }),
+                                new sap.m.VBox({
+                                    items: [
                                         new sap.m.Text({
                                             // 숙박기간
                                             text: "{Ngtprd}",
+                                            textAlign: "Begin"
+                                        }).addStyleClass("L2P13Font font-14px"),
+                                        new sap.m.Text({
+                                            // 지원금액
+                                            text: {
+                                                path: "Supamttx",
+                                                formatter: function(v) {
+                                                    return Common.checkNull(v) ? "0원" : v + "원";
+                                                }
+                                            },
                                             textAlign: "Begin"
                                         }).addStyleClass("L2P13Font font-14px")
                                     ]
@@ -117,13 +140,23 @@ sap.ui.define(
                                 new sap.m.VBox({
                                     items: [
                                         new sap.m.Text({
-                                            // 지원금액
-                                            text: "{Supamttx}",
+                                            // 숙박일수
+                                            text: {
+                                                path: "Ngtcnt",
+                                                formatter: function(v) {
+                                                    return Common.checkNull(v) ? "숙박 0박" : "숙박 " + v + "박";
+                                                }
+                                            },
                                             textAlign: "Begin"
                                         }).addStyleClass("L2P13Font font-14px"),
                                         new sap.m.Text({
-                                            // 상태
-                                            text: "{Statust}",
+                                            // 지원일수
+                                            text: {
+                                                path: "Supcnt",
+                                                formatter: function(v) {
+                                                    return Common.checkNull(v) ? "지원 0박" : "지원 " + v + "박";
+                                                }
+                                            },
                                             textAlign: "Begin"
                                         }).addStyleClass("L2P13Font font-14px")
                                     ]
