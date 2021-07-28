@@ -99,7 +99,7 @@ sap.ui.define(
                                                 }
                                             },
                                             press : oController.onDateRange.bind(oController)
-                                        }).addStyleClass("resultBtn button-default ml-10px")
+                                        }).addStyleClass("resultBtn button-default")
                                     ]
                                 })
                             ]
