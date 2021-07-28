@@ -70,7 +70,7 @@ sap.ui.define(
                 return new sap.m.VBox({
                     items: [
                         new sap.m.HBox({
-                            height: "40px",
+                            height: "auto",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_74014}", "105px", "Left", true).addStyleClass("sub-con-title"), // 숙박기간
@@ -99,7 +99,7 @@ sap.ui.define(
                                                 }
                                             },
                                             press : oController.onDateRange.bind(oController)
-                                        }).addStyleClass("button-light-sm ml-10px")
+                                        }).addStyleClass("resultBtn button-default ml-10px")
                                     ]
                                 })
                             ]
@@ -146,7 +146,7 @@ sap.ui.define(
                                 new sap.m.Text({
                                     width: "auto",
                                     textAlign: "Begin",
-                                    text: "{Restxt}"
+                                    text: "{Resttxt}"
                                 })
                             ]
                         }),
@@ -226,7 +226,7 @@ sap.ui.define(
                                 fragment.COMMON_ATTACH_FILES.renderer(oController, "001")
                             ]
                         }),
-                        ViewTemplates.getLabel("header", "{i18n>LABEL_74021}", "auto", "Left").addStyleClass("sub-title"),
+                        ViewTemplates.getLabel("header", "{i18n>LABEL_74021}", "auto", "Left").addStyleClass("sub-title mt-30px"),
                         new sap.m.VBox({
                             width: "100%",
                             fitContainer: true,
@@ -236,7 +236,7 @@ sap.ui.define(
                                 new sap.m.Text({ text: "{i18n>MSG_74003}", textAlign: "Begin"}).addStyleClass("ml-10px"),
                                 new sap.m.Text({ text: "{i18n>MSG_74004}", textAlign: "Begin"}).addStyleClass("info-text-red Bold")
                             ]
-                        }).addStyleClass("MSGBox mt-20px font-12px")
+                        }).addStyleClass("MSGBox font-12px")
                     ]
                 }).addStyleClass("vbox-form-mobile");
             }
