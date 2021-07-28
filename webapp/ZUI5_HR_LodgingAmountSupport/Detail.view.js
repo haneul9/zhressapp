@@ -150,7 +150,7 @@ sap.ui.define([
                                             }
                                         },
                                         press : oController.onDateRange.bind(oController)
-                                    }).addStyleClass("button-default ml-10px")
+                                    }).addStyleClass("resultBtn button-default ml-10px")
                                 ]
                             })
                             .addStyleClass("search-field-group")

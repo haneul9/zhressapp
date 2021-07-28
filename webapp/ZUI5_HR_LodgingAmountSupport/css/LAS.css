@@ -7,6 +7,7 @@
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication02 { background-color: #8dc63f !important; }
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
 .sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
+.resultBtn.button-default .sapMBtnInner.sapMBtnText { align-items: center;}
 .DataCell{
     border : 1px solid #d8dadf;
     padding : 4px !important;
