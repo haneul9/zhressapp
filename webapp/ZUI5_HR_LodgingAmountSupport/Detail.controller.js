@@ -176,6 +176,9 @@ sap.ui.define([
 				},
 				error: function(oResponse) {
 					Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
 				}
 			});
         },
@@ -217,6 +220,10 @@ sap.ui.define([
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
 						}
 					});
 				}
@@ -261,6 +268,10 @@ sap.ui.define([
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+							BusyIndicator.hide();
 						}
 					});
 				}
