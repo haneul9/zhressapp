@@ -8,17 +8,17 @@ sap.ui.define([
 	sap.ui.jsview($.app.APP_ID, {
         
         _Model: [
-            {id: "Statust",     label: "{i18n>LABEL_74011}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
-            {id: "Pernr",       label: "{i18n>LABEL_74012}" /* 사번 */,     plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
-            {id: "Ename",       label: "{i18n>LABEL_74013}" /* 성명 */,     plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
-            {id: "Ngtprd",      label: "{i18n>LABEL_74014}" /* 숙박기간 */, plabel: "", resize: true, span: 0, type: "string",   sort: true,  filter: true,  width: "auto"},
-            {id: "Ngtcnt",	    label: "{i18n>LABEL_74028}" /* 숙박일수 */, plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
-            {id: "Supcnt",      label: "{i18n>LABEL_74035}" /* 지원일수 */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
-            {id: "Supamttx",    label: "{i18n>LABEL_74030}" /* 지원금액 */, plabel: "", resize: true, span: 0, type: "money",  sort: true,  filter: true,  width: "10%"},
-            {id: "Restxt",      label: "{i18n>LABEL_74017}" /* 콘도 */,     plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
-            {id: "Appda",       label: "{i18n>LABEL_74018}" /* 신청일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "10%"},
-            {id: "Sgnda",       label: "{i18n>LABEL_74040}" /* 결재일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "10%"},
-            {id: "Payym",       label: "{i18n>LABEL_74020}" /* 지급년월 */, plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "10%", templateGetter: "getPayDate"}
+            {id: "Statust", label: "{i18n>LABEL_74011}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
+            {id: "Pernr",   label: "{i18n>LABEL_74012}" /* 사번 */,     plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
+            {id: "Ename",   label: "{i18n>LABEL_74013}" /* 성명 */,     plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
+            {id: "Ngtprd",  label: "{i18n>LABEL_74014}" /* 숙박기간 */, plabel: "", resize: true, span: 0, type: "string",   sort: true,  filter: true,  width: "auto"},
+            {id: "Ngtcnt",	label: "{i18n>LABEL_74028}" /* 숙박일수 */, plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
+            {id: "Supcnt",  label: "{i18n>LABEL_74035}" /* 지원일수 */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
+            {id: "Supamttx",label: "{i18n>LABEL_74030}" /* 지원금액 */, plabel: "", resize: true, span: 0, type: "money",  sort: true,  filter: true,  width: "10%", align: sap.ui.core.HorizontalAlign.Right},
+            {id: "Resttxt", label: "{i18n>LABEL_74017}" /* 콘도 */,     plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
+            {id: "Appda",   label: "{i18n>LABEL_74018}" /* 신청일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "10%"},
+            {id: "Sgnda",   label: "{i18n>LABEL_74040}" /* 결재일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "10%"},
+            {id: "Payym",   label: "{i18n>LABEL_74020}" /* 지급년월 */, plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "10%", templateGetter: "getPayDate"}
         ],
 		
 		getControllerName: function () {

@@ -1,10 +1,10 @@
+/* eslint-disable no-undef */
 sap.ui.define([
-    "../common/Common",
     "./delegate/ViewTemplates",
     "../common/PageHelper",
     "../common/TMEmpBasicInfoBox",
     "../common/PickOnlyDateRangeSelection"
-], function (Common, ViewTemplates, PageHelper, TMEmpBasicInfoBox,PickOnlyDateRangeSelection) {
+], function ( ViewTemplates, PageHelper, TMEmpBasicInfoBox,PickOnlyDateRangeSelection) {
 	"use strict";
 
     var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -53,7 +53,7 @@ sap.ui.define([
                                         // N = 숙박비 지원 신규신청 else 숙박비 지원 조회
                                         return !v || v === "AA" ? oController.getBundleText("LABEL_74031") : oController.getBundleText("LABEL_74032") ;
                                     }
-                                },
+                                }
                             }).addStyleClass("app-title ml-10px")
                         ]
                     }),
@@ -150,7 +150,7 @@ sap.ui.define([
                                             }
                                         },
                                         press : oController.onDateRange.bind(oController)
-                                    }).addStyleClass("button-light-sm ml-10px")
+                                    }).addStyleClass("button-default ml-10px")
                                 ]
                             })
                             .addStyleClass("search-field-group")
@@ -200,7 +200,7 @@ sap.ui.define([
 							new sap.m.Text({
                                 width: "auto",
                                 textAlign: "Begin",
-                                text: "{Restxt}"
+                                text: "{Resttxt}"
                             })
 						]
 					})
@@ -234,12 +234,6 @@ sap.ui.define([
                     new sap.m.HBox({
 						width: "100%",
 						fitContainer: true,
-                        visible: {
-                            path: "Status",
-                            formatter: function(v) {
-                                return !v;
-                            }
-                        },
 						items: [
                             ViewTemplates.getLabel("header", "{i18n>LABEL_74035}", "130px", "Right"), // 지원일수
 							new sap.m.Text({
@@ -285,7 +279,7 @@ sap.ui.define([
 					new sap.m.HBox({
 						fitContainer: true,
 						items: [
-                            sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+                            fragment.COMMON_ATTACH_FILES.renderer(oController, "001")
 						]
 					})
 				]

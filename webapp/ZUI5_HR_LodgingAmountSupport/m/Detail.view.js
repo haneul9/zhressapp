@@ -87,17 +87,24 @@ sap.ui.define(
                                     delimiter: "~",
                                     dateValue: "{Begda}",  
                                     secondDateValue: "{Endda}"
-                                }),
+                                })
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            justifyContent: sap.m.FlexJustifyContent.End,
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            visible: {
+                                path: "Status",
+                                formatter: function(v) {
+                                    return !v;
+                                }
+                            },
+                            items: [
                                 new sap.m.Button({
                                     text : "{i18n>LABEL_74025}", // 계산
-                                    visible: {
-                                        path: "Status",
-                                        formatter: function(v) {
-                                            return !v;
-                                        }
-                                    },
                                     press : oController.onDateRange.bind(oController)
-                                }).addStyleClass("button-light-sm ml-10px")
+                                }).addStyleClass("button-light-sm")
                             ]
                         }),
                         new sap.m.HBox({
@@ -216,6 +223,12 @@ sap.ui.define(
                                 })
                             ]
                         }),
+                        new sap.m.HBox({
+                            fitContainer: true,
+                            items: [
+                                fragment.COMMON_ATTACH_FILES.renderer(oController, "001")
+                            ]
+                        }),
                         new sap.m.VBox({
                             width: "100%",
                             fitContainer: true,
@@ -225,13 +238,7 @@ sap.ui.define(
                                 new sap.m.Text({ text: "{i18n>MSG_74003}", textAlign: "Begin"}).addStyleClass("ml-10px"),
                                 new sap.m.Text({ text: "{i18n>MSG_74004}", textAlign: "Begin"}).addStyleClass("info-text-red Bold")
                             ]
-                        }).addStyleClass("MSGBox mt-20px font-12px"),
-                        new sap.m.HBox({
-                            fitContainer: true,
-                            items: [
-                                sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
-                            ]
-                        })
+                        }).addStyleClass("MSGBox mt-20px font-12px")
                     ]
                 }).addStyleClass("vbox-form-mobile");
             }

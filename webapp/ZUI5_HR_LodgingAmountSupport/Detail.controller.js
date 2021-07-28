@@ -2,11 +2,11 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-    "../common/AttachFileAction",
 	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator"
+	"sap/ui/core/BusyIndicator",
+	"fragment/COMMON_ATTACH_FILES"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -104,6 +104,12 @@ sap.ui.define([
 				return true;
 			}
 
+			// 첨부파일 필수
+			if(FileHandler.getFileLength(oController, "001") === 0){
+				MessageBox.error(oController.getBundleText("MSG_74015"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
 			return false;
 		},
 
@@ -171,6 +177,7 @@ sap.ui.define([
 						var rDatas = oData.RoomChargeNav1.results[0];
                         oController.ApplyModel.setData({FormData: rDatas});
 						oController.getDataColor(rDatas);
+						oController.onBeforeOpenDetailDialog();
 						oController.g_Check = "Y";
 					}
 				},
@@ -179,6 +186,8 @@ sap.ui.define([
 					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
 						title: oController.getBundleText("LABEL_09030")
 					});
+
+					oController.ApplyModel.setData({FormData: {}});
 				}
 			});
         },
@@ -197,7 +206,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_74010")) { // 신청
 					
 					// 첨부파일 저장
-					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
 					oRowData.Pernr = vPernr;
 										
 					var sendObject = {};
@@ -290,12 +299,13 @@ sap.ui.define([
 			var	vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
                 vStatus = oController.ApplyModel.getProperty("/FormData/Status");
 
-			AttachFileAction.setAttachFile(oController, {
+			FileHandler.setAttachFile(oController, { // 숙박비 영수증
+				Label: oController.getBundleText("LABEL_74045"),
+				Required: true,
 				Appnm: vAppnm,
-				Mode: "M",
-				Max: "5",
+				Mode: "S",
 				Editable: !vStatus
-			});
+			},"001");
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {
