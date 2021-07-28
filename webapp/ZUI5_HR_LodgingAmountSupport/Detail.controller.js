@@ -187,7 +187,10 @@ sap.ui.define([
 						title: oController.getBundleText("LABEL_09030")
 					});
 
-					oController.ApplyModel.setData({FormData: {}});
+					oController.ApplyModel.setData({FormData: {
+						Begda : oSearchDate.getDateValue(),
+						Endda : oSearchDate.getSecondDateValue()
+					}});
 				}
 			});
         },

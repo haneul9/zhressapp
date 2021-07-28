@@ -74,37 +74,34 @@ sap.ui.define(
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_74014}", "105px", "Left", true).addStyleClass("sub-con-title"), // 숙박기간
-                                new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
-                                    width: "100%",
-                                    editable: {
-                                        path: "Status",
-                                        formatter: function(v) {
-                                            return !v;
-                                        }
-                                    },
-                                    change: oController.setPicker.bind(oController),
-                                    displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
-                                    delimiter: "~",
-                                    dateValue: "{Begda}",  
-                                    secondDateValue: "{Endda}"
+                                new sap.m.VBox({
+                                    items: [
+                                        new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
+                                            width: "100%",
+                                            editable: {
+                                                path: "Status",
+                                                formatter: function(v) {
+                                                    return !v;
+                                                }
+                                            },
+                                            change: oController.setPicker.bind(oController),
+                                            displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
+                                            delimiter: "~",
+                                            dateValue: "{Begda}",  
+                                            secondDateValue: "{Endda}"
+                                        }),
+                                        new sap.m.Button({
+                                            text : "{i18n>LABEL_74025}", // 계산
+                                            visible: {
+                                                path: "Status",
+                                                formatter: function(v) {
+                                                    return !v;
+                                                }
+                                            },
+                                            press : oController.onDateRange.bind(oController)
+                                        }).addStyleClass("button-light-sm ml-10px")
+                                    ]
                                 })
-                            ]
-                        }),
-                        new sap.m.HBox({
-                            height: "40px",
-                            justifyContent: sap.m.FlexJustifyContent.End,
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            visible: {
-                                path: "Status",
-                                formatter: function(v) {
-                                    return !v;
-                                }
-                            },
-                            items: [
-                                new sap.m.Button({
-                                    text : "{i18n>LABEL_74025}", // 계산
-                                    press : oController.onDateRange.bind(oController)
-                                }).addStyleClass("button-light-sm")
                             ]
                         }),
                         new sap.m.HBox({
@@ -229,6 +226,7 @@ sap.ui.define(
                                 fragment.COMMON_ATTACH_FILES.renderer(oController, "001")
                             ]
                         }),
+                        ViewTemplates.getLabel("header", "{i18n>LABEL_74021}", "auto", "Left").addStyleClass("sub-title"),
                         new sap.m.VBox({
                             width: "100%",
                             fitContainer: true,
