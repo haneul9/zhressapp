@@ -286,7 +286,7 @@ sap.ui.define([
 			})
 			.setModel(oController.ApplyModel)
 			.bindElement("/FormData")
-            .addStyleClass("search-inner-vbox mt-16px pb-50px");
+            .addStyleClass("search-inner-vbox mt-16px pb-50px BtNone");
 		}
 	});
 });
