@@ -168,6 +168,12 @@ sap.ui.define(
                                     width: "180px",
                                     value: "{Zyear}",
                                     textAlign: "Begin",
+                                    liveChange : function(oEvent){
+                                        var value = oEvent.getParameters().value;
+                                        
+                                        oEvent.getSource().setValue(value.replace(/[^0-9\.]/g, ""));
+                                    },
+                                    maxLength : Common.getODataPropertyLength("ZHR_CERTI_SRV", "CertiAppTableIn", "Zyear", false),
                                     editable: {
                                         // 재신청일 경우 수정 불가
                                         path: "actmode",
