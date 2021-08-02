@@ -1,11 +1,12 @@
 /* eslint-disable no-undef */
 sap.ui.define(
     [
+        "common/Common",
         "common/PageHelper",
         "../delegate/ViewTemplates",
         "common/PickOnlyDateRangeSelection"
     ],
-    function (PageHelper, ViewTemplates, PickOnlyDateRangeSelection) {
+    function (Common, PageHelper, ViewTemplates, PickOnlyDateRangeSelection) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -78,6 +79,8 @@ sap.ui.define(
                                     items: [
                                         new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
                                             width: "100%",
+                                            minDate: new Date(2021, 6, 1),
+                                            layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                             editable: {
                                                 path: "Status",
                                                 formatter: function(v) {
@@ -217,6 +220,25 @@ sap.ui.define(
                                     width: "auto",
                                     textAlign: "Begin",
                                     text: "{Statust}"
+                                })
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_74046}", "105px", "Left").addStyleClass("sub-con-title"), // 의견
+                                new sap.m.Input({
+                                    width: "100%",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "RoomChargeApplyTab1", "Zopni", false),
+                                    editable: {
+                                        path: "Status",
+                                        formatter: function(v) {
+                                            return !v;
+                                        }
+                                    },
+                                    value: "{Zopni}"
                                 })
                             ]
                         }),

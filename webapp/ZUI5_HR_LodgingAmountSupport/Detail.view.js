@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 sap.ui.define([
+    "../common/Common",
     "./delegate/ViewTemplates",
     "../common/PageHelper",
     "../common/TMEmpBasicInfoBox",
     "../common/PickOnlyDateRangeSelection"
-], function ( ViewTemplates, PageHelper, TMEmpBasicInfoBox,PickOnlyDateRangeSelection) {
+], function (Common, ViewTemplates, PageHelper, TMEmpBasicInfoBox,PickOnlyDateRangeSelection) {
 	"use strict";
 
     var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -129,6 +130,7 @@ sap.ui.define([
                                     ViewTemplates.getLabel("header", "{i18n>LABEL_74014}", "130px", "Right", true), // 숙박기간
                                     new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
                                         width: "250px",
+                                        minDate: new Date(2021, 6, 1),
                                         editable: {
                                             path: "Status",
                                             formatter: function(v) {
@@ -273,6 +275,26 @@ sap.ui.define([
                                 textAlign: "Begin",
                                 text: "{Statust}"
                             })
+						]
+					})
+					.addStyleClass("search-field-group"),
+                    new sap.m.HBox({
+						width: "100%",
+						fitContainer: true,
+						items: [
+                            ViewTemplates.getLabel("header", "{i18n>LABEL_74046}", "130px", "Right"), // 의견
+							new sap.m.Input({
+								width: "100%",
+                                maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "RoomChargeApplyTab1", "Zopni", false),
+                                layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                editable: {
+                                    path: "Status",
+                                    formatter: function(v) {
+                                        return !v;
+                                    }
+                                },
+								value: "{Zopni}"
+							})
 						]
 					})
 					.addStyleClass("search-field-group"),

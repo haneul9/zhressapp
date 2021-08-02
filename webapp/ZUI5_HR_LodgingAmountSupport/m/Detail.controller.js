@@ -175,6 +175,10 @@ sap.ui.define(
                             Common.log(oData);
                             var rDatas = oData.RoomChargeNav1.results[0];
                             oController.ApplyModel.setData({FormData: rDatas});
+
+                            if(!Common.checkNull(oFormData.Zopni))
+                                oController.ApplyModel.setProperty("/FormData/Zopni", oFormData.Zopni);
+                                
                             oController.getDataColor(rDatas);
                             oController.g_Check = "Y";
                         }
