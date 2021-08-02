@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 sap.ui.define(
     [
+        "common/Common",
         "common/PageHelper",
         "../delegate/ViewTemplates"
     ],
-    function (PageHelper, ViewTemplates) {
+    function (Common, PageHelper, ViewTemplates) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());

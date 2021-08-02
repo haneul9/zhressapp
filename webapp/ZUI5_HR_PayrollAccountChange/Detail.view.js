@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 $.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define([
+    "../common/Common",
     "./delegate/ViewTemplates",
     "../common/PageHelper",
     "../common/TMEmpBasicInfoBox"
-], function ( ViewTemplates, PageHelper, TMEmpBasicInfoBox) {
+], function (Common, ViewTemplates, PageHelper, TMEmpBasicInfoBox) {
 	"use strict";
 
     var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
