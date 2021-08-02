@@ -165,7 +165,7 @@ sap.ui.define([
 
 		setAccountNumber: function(oEvent) {
 			var inputValue = oEvent.getParameter('value').trim(),
-				convertValue = inputValue.replace(/[^\d || ^\-]/g, '');
+				convertValue = inputValue.replace(/[^\d]/g, '');
 
 			oEvent.getSource().setValue(convertValue);
 			this.ApplyModel.setProperty("/FormData/Bankn", convertValue);
