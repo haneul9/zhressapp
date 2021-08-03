@@ -87,8 +87,6 @@
             this.RegistModel.setData({FormData: []});
             this.PWordModel.setData({Data: {}});
 
-			this.onBeforeOpenDetailDialog();
-			
             if(oEvent.data){
 				if(oEvent.data.New === "O") {
 					this.CommentModel.setProperty("/HideComment", "X");
@@ -109,6 +107,7 @@
 		},
 		
 		onAfterShow: function() {
+			this.onBeforeOpenDetailDialog();
             BusyIndicator.hide();
         },
 
@@ -1642,26 +1641,28 @@
 					}
 				});
 
-			$.app.byId("contentArea1").addItem(that.oRichTextEditor);
-			$.app.byId("contentArea2").addItem(
-				ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
-			);
-			$.app.byId("contentArea2").addItem(
-				new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
-					content: {
-						path: "Detail",
-						formatter: function(v) {
-							if(!v){
-								return "";
-							}else{
-								return /^</i.test(v) ? v : "<p>${content}</p>".interpolate(v);
+			if(!$.app.byId("myRTE")){
+				$.app.byId("contentArea1").addItem(that.oRichTextEditor);
+				$.app.byId("contentArea2").addItem(
+					ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
+				);
+				$.app.byId("contentArea2").addItem(
+					new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
+						content: {
+							path: "Detail",
+							formatter: function(v) {
+								if(!v){
+									return "";
+								}else{
+									return /^</i.test(v) ? v : "<p>${content}</p>".interpolate(v);
+								}
 							}
 						}
-					}
-				})
-			);
-
-			$.app.byId("myRTE").addStyleClass("mxw-100");
+					})
+				);
+	
+				$.app.byId("myRTE").addStyleClass("mxw-100");
+			}
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
