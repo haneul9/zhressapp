@@ -1618,7 +1618,9 @@
 				$.app.byId("contentArea2").setVisible(true);
 			}
 
-			var that = this;
+			if(!$.app.byId("myRTE")){
+				var that = this;
+				
 				that.oRichTextEditor = new RTE("myRTE", {
 					editorType: EditorType.TinyMCE4,
 					layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
@@ -1641,7 +1643,6 @@
 					}
 				});
 
-			if(!$.app.byId("myRTE")){
 				$.app.byId("contentArea1").addItem(that.oRichTextEditor);
 				$.app.byId("contentArea2").addItem(
 					ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
