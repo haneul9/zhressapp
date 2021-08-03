@@ -87,6 +87,8 @@
             this.RegistModel.setData({FormData: []});
             this.PWordModel.setData({Data: {}});
 
+			this.onBeforeOpenDetailDialog();
+			
             if(oEvent.data){
 				if(oEvent.data.New === "O") {
 					this.CommentModel.setProperty("/HideComment", "X");
@@ -107,7 +109,6 @@
 		},
 		
 		onAfterShow: function() {
-			this.onBeforeOpenDetailDialog();
             BusyIndicator.hide();
         },
 
