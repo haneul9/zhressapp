@@ -40,13 +40,13 @@ sap.ui.define([
 							}),
 							new sap.m.Label({text: "{i18n>LABEL_75016}"}), // 은행
 							new sap.m.Input({
-								width: "140px",
+								width: "250px",
 								value: "{IBanka}",
                                 editable: false
 							}),
 							new sap.m.Label({text: "{i18n>LABEL_75017}"}), // 계좌번호
 							new sap.m.Input({
-								width: "170px",
+								width: "200px",
 								value: "{IBankn}",
                                 editable: false
 							})
