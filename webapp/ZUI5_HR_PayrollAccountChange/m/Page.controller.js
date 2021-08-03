@@ -74,7 +74,7 @@ sap.ui.define(
                             oController.TableModel.setProperty("/BankList", oData.BankAccountApplyNav2.results);
                             oController.EmpModel.setProperty("/User/IBanka", oData.IBanka);
                             oController.EmpModel.setProperty("/User/IBankn", oData.IBankn);
-                            oController.EmpModel.setProperty("/User/IBankl", oData.IBanknL);
+                            oController.EmpModel.setProperty("/User/IBankl", oData.IBankl);
                             oController.EmpModel.setProperty("/User/Ename", oController.getSessionInfoByKey("Ename"));
                         }
                     },
