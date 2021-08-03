@@ -209,9 +209,7 @@
 						// 		return Common.checkNull(!v1) && v2 !== "X";
 						// 	}	
 						// },
-						items: [
-							ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
-						]
+						items: []
 					})
 					.addStyleClass("search-field-group h-auto"),
 					new sap.m.HBox(oController.PAGEID + "_ThumsBox", {

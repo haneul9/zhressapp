@@ -1605,7 +1605,9 @@
 				
 			if($.app.byId("myRTE")){
 				$.app.byId("myRTE").destroy();
-				$.app.byId(oController.PAGEID + "AreaHTML").destroy();
+				// $.app.byId(oController.PAGEID + "AreaHTML").destroy();
+				$.app.byId("contentArea2").destroyItems();
+				
 			}
 
 			if(Common.checkNull(vSdate) || vGubun === "X"){
@@ -1641,6 +1643,7 @@
 
 			$.app.byId("contentArea1").addItem(that.oRichTextEditor);
 			$.app.byId("contentArea2").addItem(
+				ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true), // 내용
 				new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
 					content: {
 						path: "Detail",
