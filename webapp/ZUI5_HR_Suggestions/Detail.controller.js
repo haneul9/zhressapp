@@ -1643,7 +1643,9 @@
 
 			$.app.byId("contentArea1").addItem(that.oRichTextEditor);
 			$.app.byId("contentArea2").addItem(
-				ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true), // 내용
+				ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
+			);
+			$.app.byId("contentArea2").addItem(
 				new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
 					content: {
 						path: "Detail",
