@@ -155,6 +155,7 @@
 						
 						var oCommentData = oData.TableIn3.results;
 						var oSubCommentData = oData.TableIn4.results;
+						oCopiedRow.Detail = oCopiedRow.Detail.replace(/id=\"DetailAreaHTML\"/g, '');
 						oController.RegistModel.setData({FormData: oCopiedRow});
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
 						oController.RegistModel.setProperty("/SubCommentData", oSubCommentData);

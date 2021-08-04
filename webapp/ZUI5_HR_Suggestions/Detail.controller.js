@@ -166,6 +166,7 @@
 						// oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
 						// 	Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
 						// })});
+						oCopiedRow.Detail = oCopiedRow.Detail.replace(/id=\"DetailAreaHTML\"/g, '');
 						oController.RegistModel.setData({FormData: oCopiedRow });
 
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
