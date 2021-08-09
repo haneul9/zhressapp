@@ -64,9 +64,9 @@ sap.ui.define(
                                     }
                                 }).addStyleClass("button-light mr-10px"),
                                 new sap.m.Button({
-                                    // 계약기간 조기 종료 신청
+                                    // 월생활경비신청
                                     press: oController.onPressEnd.bind(oController),
-                                    text: "{i18n>LABEL_59027}",
+                                    text: "{i18n>LABEL_59040}",
                                     visible: {
                                         path: "EClose",
                                         formatter: function (v) {
@@ -117,12 +117,6 @@ sap.ui.define(
                                             select: oController.onChecked.bind(oController),
                                             selected: {
                                                 path: "Check",
-                                                formatter: function (v) {
-                                                    return v === "X";
-                                                }
-                                            },
-                                            visible: {
-                                                path: "Zflag",
                                                 formatter: function (v) {
                                                     return v === "X";
                                                 }

@@ -1,12 +1,14 @@
 ﻿/* eslint-disable no-undef */
 sap.ui.define(
     [
-        "common/Common", //
+        "common/Common",
         "common/PageHelper",
         "common/PickOnlyDatePicker",
-        "../delegate/ViewTemplates"
+        "../delegate/ViewTemplates",
+        "common/HoverIcon",
+        "sap/m/InputBase"
     ],
-    function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates) {
+    function (Common, PageHelper, PickOnlyDatePicker, ViewTemplates, HoverIcon, InputBase) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "CostApply"].join($.app.getDeviceSuffix());
@@ -28,9 +30,9 @@ sap.ui.define(
                                 press: oController.onDialogSaveBtn.bind(oController),
                                 text: "{i18n>LABEL_59029}", // 저장
                                 visible: {
-                                    path: "Status",
-                                    formatter: function (v) {
-                                        return v === "AA";
+                                    parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                    formatter: function (v1, v2) {
+                                        return !v2 && v1 === "AA";
                                     }
                                 }
                             }).addStyleClass("button-light"),
@@ -38,9 +40,9 @@ sap.ui.define(
                                 press: oController.onDialogApplyBtn.bind(oController),
                                 text: "{i18n>LABEL_59026}", // 신청
                                 visible: {
-                                    parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                                    parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                                     formatter: function (v1, v2) {
-                                        return !v1 || (v1 === "99" && v2 === "X");
+                                        return !v1 || v2 === "X";
                                     }
                                 }
                             }).addStyleClass("button-dark"),
@@ -48,9 +50,9 @@ sap.ui.define(
                                 press: oController.onDialogDelBtn.bind(oController),
                                 text: "{i18n>LABEL_59028}", // 삭제
                                 visible: {
-                                    path: "Status",
-                                    formatter: function (v) {
-                                        return v === "AA";
+                                    parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                    formatter: function (v1, v2) {
+                                        return !v2 && v1 === "AA";
                                     }
                                 }
                             }).addStyleClass("button-light")
@@ -71,10 +73,9 @@ sap.ui.define(
                     width: "100%",
                     change: oController.checkLocation1.bind(oController),
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -103,10 +104,9 @@ sap.ui.define(
                     width: "97%",
                     change: oController.checkLocation2.bind(oController),
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -135,10 +135,9 @@ sap.ui.define(
                     width: "100%",
                     change: oController.checkLocation3.bind(oController),
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -167,10 +166,9 @@ sap.ui.define(
                     width: "100%",
                     change: oController.checkLocation4.bind(oController),
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -197,10 +195,9 @@ sap.ui.define(
                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                     width: "100%",
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -227,10 +224,9 @@ sap.ui.define(
                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                     width: "95%",
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -257,10 +253,9 @@ sap.ui.define(
                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                     width: "100%",
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -287,10 +282,9 @@ sap.ui.define(
                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                     width: "95%",
                     editable: {
-                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                         formatter: function (v1, v2) {
-                            if (Common.checkNull(v2) && (!v1 || v1 === "AA")) return true;
-                            return false;
+                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
@@ -313,88 +307,65 @@ sap.ui.define(
                     oRangMonthE
                 );
 
-                var oEarlyYears = new sap.m.ComboBox(oController.PAGEID + "_EarlyYears", {
-                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                var oTargetYears = new sap.m.ComboBox({
                     width: "100%",
+                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                    change: oController.TargetYears.bind(oController),
                     editable: {
-                        path: "/EarlyApp",
-                        formatter: function (v) {
-                            if (v === "X") return true;
-                            return false;
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                        formatter: function (v1, v2) {
+                            return v2 === "X" || Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
-                        path: "/EarlyYears",
+                        path: "/TargetYears",
                         template: new sap.ui.core.ListItem({
                             key: "{Code}",
                             text: "{Text}"
                         })
                     },
-                    selectedKey: "{EarlyYears}"
+                    selectedKey: "{TargetYears}"
                 });
 
                 // 키보드 입력 방지
-                oEarlyYears.addDelegate(
+                oTargetYears.addDelegate(
                     {
                         onAfterRendering: function () {
-                            oEarlyYears.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+                            oTargetYears.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
                         }
                     },
-                    oEarlyYears
+                    oTargetYears
                 );
 
-                var oEarlyMonth = new sap.m.ComboBox(oController.PAGEID + "_EarlyMonth", {
+                var oTargetMonth = new sap.m.ComboBox({
+                    width: "auto",
                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                    width: "95%",
+                    change: oController.TargetMonth.bind(oController),
                     editable: {
-                        path: "/EarlyApp",
-                        formatter: function (v) {
-                            if (v === "X") return true;
-                            return false;
+                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                        formatter: function (v1, v2) {
+                            return v2 === "X" || Common.checkNull(v2) && (!v1 || v1 === "AA");
                         }
                     },
                     items: {
-                        path: "/EarlyMonth",
+                        path: "/TargetMonth",
                         template: new sap.ui.core.ListItem({
                             key: "{Code}",
                             text: "{Text}"
                         })
                     },
-                    selectedKey: "{EarlyMonth}"
+                    selectedKey: "{TargetMonth}"
                 });
 
                 // 키보드 입력 방지
-                oEarlyMonth.addDelegate(
+                oTargetMonth.addDelegate(
                     {
                         onAfterRendering: function () {
-                            oEarlyMonth.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+                            oTargetMonth.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
                         }
                     },
-                    oEarlyMonth
+                    oTargetMonth
                 );
-
-                var oBotFlexBox = new sap.m.VBox(oController.PAGEID + "_FilesBox", {
-                    width: "100%",
-                    height: "280px",
-                    fitContainer: true,
-                    items: [
-                        ViewTemplates.getLabel("header", "{i18n>LABEL_59021}", "150px", "Left").addStyleClass("sub-title mt-10px"), // 첨부파일
-                        new sap.m.VBox({
-                            fitContainer: true,
-                            items: [
-								fragment.COMMON_ATTACH_FILES.renderer(oController, "001"),	//
-								fragment.COMMON_ATTACH_FILES.renderer(oController, "002"),
-								fragment.COMMON_ATTACH_FILES.renderer(oController, "003"),
-								fragment.COMMON_ATTACH_FILES.renderer(oController, "004")
-							]
-                        }).addStyleClass("custom-multiAttach-file")
-                    ]
-                }).addStyleClass("/*search-field-group*/");
-
-                var oFlexBox = new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
-                    fitContainer: true,
-                    items: [fragment.COMMON_ATTACH_FILES.renderer(oController, "005")]
-                }).addStyleClass("mt-8px");
 
                 return new sap.m.VBox({
                     items: [
@@ -421,7 +392,7 @@ sap.ui.define(
                                     valueFormat: "yyyy-MM-dd",
                                     placeholder: "yyyy-mm-dd",
                                     editable: {
-                                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                                         formatter: function (v1, v2) {
                                             return Common.checkNull(v2) && (!v1 || v1 === "AA");
                                         }
@@ -438,7 +409,7 @@ sap.ui.define(
                                     layoutData: new sap.m.FlexItemData({ maxHeight: "44px" }),
                                     width: "100%",
                                     editable: {
-                                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                                         formatter: function (v1, v2) {
                                             return Common.checkNull(v2) && (!v1 || v1 === "AA");
                                         }
@@ -482,7 +453,7 @@ sap.ui.define(
                                     width: "100%",
                                     maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Zadres", false),
                                     editable: {
-                                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
                                         formatter: function (v1, v2) {
                                             return Common.checkNull(v2) && (!v1 || v1 === "AA");
                                         }
@@ -509,26 +480,6 @@ sap.ui.define(
                             ]
                         }),
                         new sap.m.HBox({
-                            height: "40px",
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_59016}", "105px", "Left", true).addStyleClass("sub-con-title"), // 비고
-                                new sap.m.Input({
-                                    textAlign: "Begin",
-                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
-                                    width: "100%",
-                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Remark", false),
-                                    editable: {
-                                        parts: [{ path: "Status" }, { path: "/EarlyApp" }],
-                                        formatter: function (v1, v2) {
-                                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
-                                        }
-                                    },
-                                    value: "{Remark}"
-                                })
-                            ]
-                        }),
-                        new sap.m.HBox({
                             items: [
                                 ViewTemplates.getLabel("header", "{i18n>LABEL_59008}", "105px", "Left", true).addStyleClass("sub-con-title"), // 숙소 계약기간
                                 new sap.m.VBox({
@@ -551,22 +502,111 @@ sap.ui.define(
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_59009}", "105px", "Left", true).addStyleClass("sub-con-title"), // 조기 종료월
-                                oEarlyYears,
-                                oEarlyMonth.addStyleClass("ml-5px")
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59032}", "105px", "Left", true).addStyleClass("sub-con-title"), // 보증금
+                                new sap.m.Input({
+                                    textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
+                                    liveChange: oController.getCost1.bind(oController),
+                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Zdpamt", false),
+                                    editable: {
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                        formatter: function (v1, v2) {
+                                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
+                                        }
+                                    },
+                                    value: {
+                                        path: "Zdpamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
+                                        }
+                                    }
+                                })
                             ]
                         }),
                         new sap.m.HBox({
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_59018}", "105px", "Left").addStyleClass("sub-con-title"), // 숙소비
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59036}", "105px", "Left", true).addStyleClass("sub-con-title"), // 월세
+                                new sap.m.Input({
+                                    textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
+                                    liveChange: oController.getCost2.bind(oController),
+                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Zmnamt", false),
+                                    editable: {
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                        formatter: function (v1, v2) {
+                                            return Common.checkNull(v2) && (!v1 || v1 === "AA");
+                                        }
+                                    },
+                                    value: {
+                                        path: "Zmnamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
+                                        }
+                                    }
+                                })
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59016}", "105px", "Left", true).addStyleClass("sub-con-title"), // 비고
+                                new sap.m.Input({
+                                    textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
+                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Remark", false),
+                                    editable: {
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                        formatter: function (v1, v2) {
+                                            return v2 === "X" || Common.checkNull(v2) && (!v1 || v1 === "AA");
+                                        }
+                                    },
+                                    value: "{Remark}"
+                                })
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            // height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59041}", "auto", "Left").addStyleClass("app-title"), // 월 생활경비 내역
+                                new HoverIcon({
+                                    src: "sap-icon://information",
+                                    hover: function (oEvent) {
+                                        Common.onPressTableHeaderInformation.call(oController, oEvent, oController.getBundleText("MSG_59003") + oController.getBundleText("MSG_59004") + oController.getBundleText("MSG_59005") + oController.getBundleText("MSG_59006") + oController.getBundleText("MSG_59007"));
+                                    },
+                                    leave: function (oEvent) {
+                                        Common.onPressTableHeaderInformation.call(oController, oEvent);
+                                    }
+                                }).addStyleClass(InputBase.ICON_CSS_CLASS + " color-icon-blue")
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59035}", "105px", "Left", true).addStyleClass("sub-con-title"), // 대상년월
+                                oTargetYears,
+                                oTargetMonth.addStyleClass("ml-3px")
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59036}", "105px", "Left").addStyleClass("sub-con-title"), // 월세
                                 new sap.m.Text({
-                                    width: "auto",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
                                     text: {
-                                        path: "Zssamt",
-                                        formatter: function (v) {
-                                            return v ? Common.numberWithCommas(v) : "0";
+                                        path: "Zmnamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
                                         }
                                     },
                                     textAlign: "Begin"
@@ -577,14 +617,40 @@ sap.ui.define(
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_59019}", "105px", "Left").addStyleClass("sub-con-title"),
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59037}", "105px", "Left", true).addStyleClass("sub-con-title"), // 관리비
+                                new sap.m.Input({
+                                    textAlign: "Begin",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
+                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Ztramt", false),
+                                    liveChange: oController.getCost3.bind(oController),
+                                    editable: {
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                        formatter: function (v1, v2) {
+                                            return v2 === "X" || Common.checkNull(v2) && (!v1 || v1 === "AA");
+                                        }
+                                    },
+                                    value: {
+                                        path: "Zaeamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
+                                        }
+                                    }
+                                })
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59019}", "105px", "Left").addStyleClass("sub-con-title"), // 교통비
                                 new sap.m.Text({
                                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     width: "100%",
                                     text: {
                                         path: "Ztramt",
-                                        formatter: function (v) {
-                                            return v ? Common.numberWithCommas(v) : "0";
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
                                         }
                                     },
                                     textAlign: "Begin"
@@ -595,48 +661,111 @@ sap.ui.define(
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_59010}", "105px", "Left").addStyleClass("sub-con-title"), // 회사 지원금액
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59038}", "105px", "Left").addStyleClass("sub-con-title"), // 보증금지원
                                 new sap.m.Text({
                                     layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     width: "100%",
                                     text: {
-                                        path: "Zcoamt",
-                                        formatter: function (v) {
-                                            return v ? Common.numberWithCommas(v) : "0";
+                                        path: "Zdsamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
                                         }
                                     },
                                     textAlign: "Begin"
                                 })
                             ]
                         }),
-                        new sap.m.VBox({
-                            height: "auto",
+                        new sap.m.HBox({
+                            height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                new sap.m.Text({
-                                    text: "{i18n>MSG_59003}",
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59025}", "105px", "Left").addStyleClass("sub-con-title"), // 기타
+                                new sap.m.Input({
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    maxLength: Common.getODataPropertyLength("ZHR_BENEFIT_SRV", "DispatchApplyTableIn1", "Zetamt", false),
+                                    liveChange: oController.getCost4.bind(oController),
+                                    width: "100%",
+                                    editable: {
+                                        parts: [{ path: "Status" }, { path: "/MonExpenses" }],
+                                        formatter: function (v1, v2) {
+                                            return v2 === "X" || Common.checkNull(v2) && (!v1 || v1 === "AA");
+                                        }
+                                    },
+                                    value: {
+                                        path: "Zetamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
+                                        }
+                                    },
                                     textAlign: "Begin"
-                                }).addStyleClass("line-height-24 mt-16px"),
-                                new sap.m.Text({
-                                    text: "{i18n>MSG_59004}",
-                                    textAlign: "Begin"
-                                }).addStyleClass("line-height-24 mt-16px"),
-                                new sap.m.Text({
-                                    text: "{i18n>MSG_59005}",
-                                    textAlign: "Begin"
-                                }).addStyleClass("line-height-24 mt-16px"),
-                                new sap.m.Text({
-                                    text: "{i18n>MSG_59006}",
-                                    textAlign: "Begin"
-                                }).addStyleClass("line-height-24 mt-16px"),
-                                new sap.m.Text({
-                                    text: "{i18n>MSG_59007}",
-                                    textAlign: "Begin"
-                                }).addStyleClass("line-height-24 mt-16px")
+                                })
                             ]
                         }),
-                        oBotFlexBox,
-                        oFlexBox
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59010}", "105px", "Left").addStyleClass("sub-con-title"), // 회사지원금
+                                new sap.m.Text({
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
+                                    text: {
+                                        path: "Zcoamt",
+                                        formatter: function(v) {
+                                            return Common.checkNull(v) ? "0" : Common.numberWithCommas(v);
+                                        }
+                                    },
+                                    textAlign: "Begin"
+                                })
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_59039}", "105px", "Left").addStyleClass("sub-con-title"), // 지급년월
+                                new sap.m.Text({
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    width: "100%",
+                                    text: {
+                                        path: "PayDate",
+                                        formatter: function (v) {
+                                            if (!v || v === "000000") return "";
+                                            v = v.substr(0, 4) + "-" + v.substr(4);
+
+                                            return v;
+                                        }
+                                    },
+                                    textAlign: "Begin"
+                                })
+                            ]
+                        }),
+                        ViewTemplates.getLabel("header", "{i18n>LABEL_59034}", "auto", "Left").addStyleClass("app-title mt-10px"), // 증빙서류 안내
+                        new sap.m.VBox({
+                            height: "auto",
+                            items: [
+                                new sap.m.Text({
+                                    text: "{i18n>MSG_59028}",
+                                    textAlign: "Begin"
+                                }).addStyleClass("line-height-24"),
+                                new sap.m.Text({
+                                    text: "{i18n>MSG_59029}",
+                                    textAlign: "Begin"
+                                }).addStyleClass("line-height-24"),
+                                new sap.m.Text({
+                                    text: "{i18n>MSG_59030}",
+                                    textAlign: "Begin"
+                                }).addStyleClass("line-height-24 ml-10px"),
+                                new sap.m.Text({
+                                    text: "{i18n>MSG_59031}",
+                                    textAlign: "Begin"
+                                }).addStyleClass("line-height-24 ml-10px")
+                            ]
+                        }),
+                        new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
+                            fitContainer: true,
+                            items: [fragment.COMMON_ATTACH_FILES.renderer(oController, "001")]
+                        }).addStyleClass("mt-8px")
                     ]
                 }).addStyleClass("vbox-form-mobile");
             }

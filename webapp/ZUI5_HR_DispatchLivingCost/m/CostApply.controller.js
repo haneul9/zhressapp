@@ -1,13 +1,14 @@
 ﻿/* eslint-disable no-undef */
 sap.ui.define(
     [
-        "common/Common", //
+        "common/Common",
         "common/CommonController",
         "common/JSONModelHelper",
         "sap/m/MessageBox",
-        "sap/ui/core/BusyIndicator"
+        "sap/ui/core/BusyIndicator",
+        "fragment/COMMON_ATTACH_FILES"
     ],
-    function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator) {
+    function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "CostApply"].join($.app.getDeviceSuffix());
@@ -16,7 +17,6 @@ sap.ui.define(
             PAGEID: "CostApply",
 
             ApplyModel: new JSONModelHelper(),
-            IsFileRequired: "",
 
             getUserId: function () {
                 return $.app.getController().getUserId();
@@ -39,68 +39,48 @@ sap.ui.define(
             },
 
             onBeforeShow: function (oEvent) {
+                Common.log("onBeforeShow");
                 BusyIndicator.show(0);
-                var oFilesB = $.app.byId(this.PAGEID + "_FilesBox"),
-                    oFileB = $.app.byId(this.PAGEID + "_FileFlexBox"),
-                    oEarlyYears = $.app.byId(this.PAGEID + "_EarlyYears"),
-                    oEarlyMonth = $.app.byId(this.PAGEID + "_EarlyMonth");
                 this.ApplyModel.setData({ FormData: [] });
 
-                if (oEvent.data) {
-                    this.ApplyModel.setData({ FormData: [] });
-
+                if(oEvent.data){
                     if (Common.checkNull(oEvent.data.RowData)) {
                         // 새로운 신청
-                        oFilesB.setVisible(true);
-                        oFileB.setVisible(false);
-                        oEarlyYears.setEditable(false);
-                        oEarlyMonth.setEditable(false);
                         this.ApplyModel.setProperty("/FormData/Begda", new Date());
                         this.ApplyModel.setProperty("/FormData/Zmuflg", "1");
-                        this.ApplyModel.setProperty("/EarlyApp", "");
-                    } else {
+                        this.ApplyModel.setProperty("/MonExpenses", "");
+                        this.setZyears(this);
+                        this.setZmonths(this);
+                        this.ApplyModel.setProperty("/FormData/TargetMonth", Common.lpad(new Date().getMonth()+1, "2"));
+                        this.ApplyModel.setProperty("/FormData/TargetYears", String(new Date().getFullYear()));
+                    } else { // RowData가 있을때
                         var oRowData = $.extend(true, {}, oEvent.data.RowData);
                         this.ApplyModel.setData({ FormData: oRowData });
-
-                        if (oEvent.data.Gubun === "N") {
-                            // 신청된 데이터 수정 & 상세보기
-                            if (Common.checkNull(this.ApplyModel.getProperty("/FormData/Zseeym")) || this.ApplyModel.getProperty("/FormData/Zseeym") === "000000") {
-                                this.ApplyModel.setProperty("/EarlyApp", "");
-                                oFilesB.setVisible(true);
-                                oFileB.setVisible(false);
-                                oEarlyYears.setEditable(false);
-                                oEarlyMonth.setEditable(false);
-                            } else {
-                                this.ApplyModel.setProperty("/EarlyApp", "X");
-                                oFilesB.setVisible(false);
-                                oFileB.setVisible(true);
-                                oEarlyYears.setEditable(true);
-                                oEarlyMonth.setEditable(true);
-                            }
+                        this.setZyears(this);
+                        this.setZmonths(this);
+    
+                        if (oEvent.data.Gubun === "E") {
+                            // 월 생활경비 신청일 경우
+                            this.ApplyModel.setProperty("/FormData/Appnm", "");
+                            this.ApplyModel.setProperty("/MonExpenses", "X");
+                            this.ApplyModel.setProperty("/FormData/Begda", new Date());
+                            this.ApplyModel.setProperty("/FormData/TargetMonth", Common.lpad(new Date().getMonth()+1, "2"));
+                            this.ApplyModel.setProperty("/FormData/TargetYears", String(new Date().getFullYear()));
                         } else {
-                            // 조기종료 신청
-                            this.ApplyModel.setProperty("/EarlyApp", "X");
-                            oFilesB.setVisible(false);
-                            oFileB.setVisible(true);
-                            oEarlyYears.setEditable(true);
-                            oEarlyMonth.setEditable(true);
+                            // 데이터 상세조회
+                            this.ApplyModel.setProperty("/FormData/TargetYears", oRowData.Ztrgym.slice(0, 4));
+                            this.ApplyModel.setProperty("/FormData/TargetMonth", oRowData.Ztrgym.slice(4));
                         }
-
                         this.ApplyModel.setProperty("/FormData/RangYearB", oRowData.Zscsym.slice(0, 4));
                         this.ApplyModel.setProperty("/FormData/RangMonthB", oRowData.Zscsym.slice(4));
                         this.ApplyModel.setProperty("/FormData/RangYearsE", oRowData.Zsceym.slice(0, 4));
                         this.ApplyModel.setProperty("/FormData/RangMonthE", oRowData.Zsceym.slice(4));
-                        this.ApplyModel.setProperty("/FormData/EarlyYears", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(0, 4));
-                        this.ApplyModel.setProperty("/FormData/EarlyMonth", Common.checkNull(oRowData.Zseeym) || oRowData.Zseeym === "000000" ? "" : oRowData.Zseeym.slice(4));
                         this.getDispatchCost();
                     }
                 }
-                Common.log("onBeforeShow");
             },
 
             onAfterShow: function () {
-                this.setZyears(this);
-                this.setZmonths(this);
                 this.getLocationList();
                 this.onBeforeOpenDetailDialog();
                 BusyIndicator.hide();
@@ -130,7 +110,7 @@ sap.ui.define(
 
                 oController.ApplyModel.setProperty("/RangYearsB", aYears);
                 oController.ApplyModel.setProperty("/RangYearsE", aYears);
-                oController.ApplyModel.setProperty("/EarlyYears", aYears);
+                oController.ApplyModel.setProperty("/TargetYears", aYears);
             },
 
             setZmonths: function (oController) {
@@ -144,11 +124,93 @@ sap.ui.define(
 
                 oController.ApplyModel.setProperty("/RangMonthB", aMonths);
                 oController.ApplyModel.setProperty("/RangMonthE", aMonths);
-                oController.ApplyModel.setProperty("/EarlyMonth", aMonths);
+                oController.ApplyModel.setProperty("/TargetMonth", aMonths);
+            },
+
+            TargetYears: function(oEvent){
+                var vKey = oEvent.getSource().getSelectedKey();
+                this.ApplyModel.setProperty("/FormData/TargetYears", vKey);
+            },
+
+            TargetMonth: function(oEvent){
+                var vKey = oEvent.getSource().getSelectedKey();
+                this.ApplyModel.setProperty("/FormData/TargetMonth", vKey);
+            },
+
+            getCost1: function(oEvent) { // 보증금
+                var oController = this;
+                var inputValue = oEvent.getParameter('value').trim(),
+                    convertValue = inputValue.replace(/[^\d]/g, '');
+
+                if(convertValue.charAt(0) === "0"){
+                    convertValue = convertValue.slice(1);
+
+                }
+                oController.ApplyModel.setProperty("/FormData/Zdpamt", convertValue);
+                oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : Common.numberWithCommas(convertValue));
+
+                var vZdsamt = "0";
+                if(parseInt(convertValue) > 999999) {
+                    vZdsamt = convertValue.slice(0, -6) + "0000";
+                }
+
+                oController.ApplyModel.setProperty("/FormData/Zdsamt", vZdsamt);
+                oController.getSupAmount();
+            },
+
+            getCost2: function(oEvent) { // 월세
+                var oController = this;
+                var inputValue = oEvent.getParameter('value').trim(),
+                    convertValue = inputValue.replace(/[^\d]/g, '');
+
+                if(convertValue.charAt(0) === "0")
+                    convertValue = convertValue.slice(1);
+
+                oController.ApplyModel.setProperty("/FormData/Zmnamt", convertValue);
+                oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : Common.numberWithCommas(convertValue));
+                oController.getSupAmount();
+            },
+
+            getCost3: function(oEvent) { // 관리비
+                var oController = this;
+                var inputValue = oEvent.getParameter('value').trim(),
+                    convertValue = inputValue.replace(/[^\d]/g, '');
+
+                if(convertValue.charAt(0) === "0")
+                    convertValue = convertValue.slice(1);
+
+                oController.ApplyModel.setProperty("/FormData/Zaeamt", convertValue);
+                oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : Common.numberWithCommas(convertValue));
+                oController.getSupAmount();
+            },
+
+            getCost4: function(oEvent) {
+                var oController = this;
+                var inputValue = oEvent.getParameter('value').trim(),
+                    convertValue = inputValue.replace(/[^\d]/g, '');
+
+                if(convertValue.charAt(0) === "0")
+                    convertValue = convertValue.slice(1);
+
+                oController.ApplyModel.setProperty("/FormData/Zetamt", convertValue);
+                oEvent.getSource().setValue(Common.checkNull(convertValue) ? "0" : Common.numberWithCommas(convertValue));
+                oController.getSupAmount();
+            },
+
+            getSupAmount: function() { // 회사지원금액
+                var oController = this.getView().getController();
+                var vZmnamt = Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zmnamt")) ? 0 : parseInt(oController.ApplyModel.getProperty("/FormData/Zmnamt")),
+                    vZaeamt = Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zaeamt")) ? 0 : parseInt(oController.ApplyModel.getProperty("/FormData/Zaeamt")),
+                    vZtramt = Common.checkNull(oController.ApplyModel.getProperty("/FormData/Ztramt")) ? 0 : parseInt(oController.ApplyModel.getProperty("/FormData/Ztramt")),
+                    vZdsamt = Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zdsamt")) ? 0 : parseInt(oController.ApplyModel.getProperty("/FormData/Zdsamt")),
+                    vZetamt = Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zetamt")) ? 0 : parseInt(oController.ApplyModel.getProperty("/FormData/Zetamt"));
+                var vSum = vZmnamt + vZaeamt + vZtramt + vZdsamt + vZetamt;
+
+                oController.ApplyModel.setProperty("/FormData/Zcoamt", String(vSum));
             },
 
             getDispatchCost: function () {
-                // 숙소비, 교통비, 회사금액
+                // 교통비
                 var oController = this.getView().getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vBukrs = oController.getUserGubun();
@@ -175,9 +237,8 @@ sap.ui.define(
                             Common.log(oData);
                             var rDatas = oData.DispatchApplyTableIn1.results;
 
-                            oController.ApplyModel.setProperty("/FormData/Zssamt", rDatas[0].Zssamt);
                             oController.ApplyModel.setProperty("/FormData/Ztramt", rDatas[0].Ztramt);
-                            oController.ApplyModel.setProperty("/FormData/Zcoamt", rDatas[0].Zcoamt);
+                            oController.getSupAmount();
                         }
                     },
                     error: function (oResponse) {
@@ -300,7 +361,7 @@ sap.ui.define(
                     return true;
                 }
 
-                // 거주지
+                // 원생활근거지
                 if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zadres"))) {
                     MessageBox.error(oController.getBundleText("MSG_59020"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
@@ -310,7 +371,7 @@ sap.ui.define(
                 if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zwkpls")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zlfpls"))) {
                     MessageBox.error(oController.getBundleText("MSG_59021"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
-                }
+                }   
 
                 // 숙소계약기간
                 if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/RangYearB")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/RangMonthB")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/RangYearsE")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/RangMonthE"))) {
@@ -321,37 +382,55 @@ sap.ui.define(
                     oController.ApplyModel.setProperty("/FormData/Zsceym", oController.ApplyModel.getProperty("/FormData/RangYearsE") + oController.ApplyModel.getProperty("/FormData/RangMonthE"));
                 }
 
-                // 조기종료월
-                if (oController.ApplyModel.getProperty("/EarlyApp") === "X") {
-                    if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/EarlyYears")) || Common.checkNull(oController.ApplyModel.getProperty("/FormData/EarlyMonth"))) {
-                        MessageBox.error(oController.getBundleText("MSG_59023"), { title: oController.getBundleText("LABEL_00149") });
-                        return true;
-                    } else oController.ApplyModel.setProperty("/FormData/Zseeym", oController.ApplyModel.getProperty("/FormData/EarlyYears") + oController.ApplyModel.getProperty("/FormData/EarlyMonth"));
+                // 보증금
+                if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zdpamt"))) {
+                    MessageBox.error(oController.getBundleText("MSG_59033"), { title: oController.getBundleText("LABEL_00149") });
+                    return true;
                 }
 
-                if (Common.checkNull(oController.ApplyModel.getProperty("/EarlyApp"))) {
-                    // 파견 발령지
-                    if (fragment.COMMON_ATTACH_FILES.getFileLength(oController, "001") === 0) {
-                        MessageBox.error(oController.getBundleText("MSG_59024"), { title: oController.getBundleText("LABEL_00149") });
-                        return true;
-                    }
+                // 월세
+                if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zmnamt"))) {
+                    MessageBox.error(oController.getBundleText("MSG_59034"), { title: oController.getBundleText("LABEL_00149") });
+                    return true;
+                }
 
-                    // 계약서
-                    if (fragment.COMMON_ATTACH_FILES.getFileLength(oController, "002") === 0) {
-                        MessageBox.error(oController.getBundleText("MSG_59025"), { title: oController.getBundleText("LABEL_00149") });
-                        return true;
-                    }
+                // 회사지원금액
+                if (Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zcoamt"))) {
+                    MessageBox.error(oController.getBundleText("MSG_59035"), { title: oController.getBundleText("LABEL_00149") });
+                    return true;
+                }
 
-                    // 주민등록등본
-                    if (fragment.COMMON_ATTACH_FILES.getFileLength(oController, "003") === 0) {
-                        MessageBox.error(oController.getBundleText("MSG_59026"), { title: oController.getBundleText("LABEL_00149") });
-                        return true;
-                    }
-                } else {
-                    if (fragment.COMMON_ATTACH_FILES.getFileLength(oController, "005") === 0) {
-                        MessageBox.error(oController.getBundleText("MSG_59027"), { title: oController.getBundleText("LABEL_00149") });
-                        return true;
-                    }
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/TargetMonth")) && !Common.checkNull(oController.ApplyModel.getProperty("/FormData/TargetYears"))){
+                    oController.ApplyModel.setProperty("/FormData/Ztrgym", oController.ApplyModel.getProperty("/FormData/TargetYears") + oController.ApplyModel.getProperty("/FormData/TargetMonth"));
+                }
+
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zaeamt"))){
+                    oController.ApplyModel.setProperty("/FormData/Zaeamt", oController.ApplyModel.getProperty("/FormData/Zaeamt"));
+                }
+
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/Ztramt"))){
+                    oController.ApplyModel.setProperty("/FormData/Ztramt", oController.ApplyModel.getProperty("/FormData/Ztramt"));
+                }
+
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zdsamt"))){
+                    oController.ApplyModel.setProperty("/FormData/Zdsamt", oController.ApplyModel.getProperty("/FormData/Zdsamt"));
+                }
+
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zetamt"))){
+                    oController.ApplyModel.setProperty("/FormData/Zetamt", oController.ApplyModel.getProperty("/FormData/Zetamt"));
+                }
+
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/Zcoamt"))){
+                    oController.ApplyModel.setProperty("/FormData/Zcoamt", oController.ApplyModel.getProperty("/FormData/Zcoamt"));
+                }
+
+                if(!Common.checkNull(oController.ApplyModel.getProperty("/FormData/PayDate"))){
+                    oController.ApplyModel.setProperty("/FormData/PayDate", oController.ApplyModel.getProperty("/FormData/PayDate"));
+                }
+                
+                if (FileHandler.getFileLength(oController, "001") === 0) {
+                    MessageBox.error(oController.getBundleText("MSG_59027"), { title: oController.getBundleText("LABEL_00149") });
+                    return true;
                 }
 
                 return false;
@@ -359,7 +438,7 @@ sap.ui.define(
 
             onDialogApplyBtn: function () {
                 // 신청
-                if (this.ApplyModel.getProperty("/EarlyApp") === "X") this.onDialogApplyBtn2();
+                if (this.ApplyModel.getProperty("/MonExpenses") === "X") this.onDialogApplyBtn2();
                 else this.onDialogApplyBtn1();
             },
 
@@ -379,13 +458,9 @@ sap.ui.define(
                         // 신청
 
                         // 첨부파일 저장
-                        var uFiles = [];
-                        for (var i = 1; i < 4; i++) uFiles.push("00" + i);
-
-                        if (fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
-
-                        oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
+                        oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
                         oRowData.Pernr = vPernr;
+                        oRowData.Waers = "KRW";
 
                         var sendObject = {};
                         // Header
@@ -422,7 +497,7 @@ sap.ui.define(
             },
 
             onDialogApplyBtn2: function () {
-                // 조기신청
+                // 월생활경비신청
                 var oController = this.getView().getController();
                 var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                 var vPernr = oController.getUserId();
@@ -434,18 +509,17 @@ sap.ui.define(
                 BusyIndicator.show(0);
                 var onPressApply = function (fVal) {
                     if (fVal && fVal == oController.getBundleText("LABEL_59026")) {
-                        // 신청
-
                         // 첨부파일 저장
-
-                        oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["005"]);
+                        oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
                         oRowData.Pernr = vPernr;
+                        oRowData.Waers = "KRW";
+                        delete oRowData.Appkey;
 
                         var sendObject = {};
                         // Header
                         sendObject.IEmpid = vPernr;
                         sendObject.IBukrs = vBukrs;
-                        sendObject.IConType = "8";
+                        sendObject.IConType = "3";
                         // Navigation property
                         sendObject.DispatchApplyTableIn1 = [Common.copyByMetadata(oModel, "DispatchApplyTableIn1", oRowData)];
 
@@ -491,17 +565,7 @@ sap.ui.define(
                         // 저장
 
                         // 첨부파일 저장
-                        if (oController.ApplyModel.getProperty("/EarlyApp") === "X") {
-                            oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, ["005"]);
-                        } else {
-                            var uFiles = [];
-                            for (var i = 1; i < 4; i++) uFiles.push("00" + i);
-
-                            if (fragment.COMMON_ATTACH_FILES.getFileLength(oController, "004") !== 0) uFiles.push("004");
-
-                            oRowData.Appnm = fragment.COMMON_ATTACH_FILES.uploadFiles.call(oController, uFiles);
-                        }
-
+                        oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
                         oRowData.Pernr = vPernr;
 
                         var sendObject = {};
@@ -588,78 +652,23 @@ sap.ui.define(
             onBeforeOpenDetailDialog: function () {
                 var oController = this.getView().getController();
                 var vStatus = oController.ApplyModel.getProperty("/FormData/Status"),
+                    vMonExpenses = this.ApplyModel.getProperty("/MonExpenses"),
                     vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "";
 
-                if (oController.ApplyModel.getProperty("/EarlyApp") === "X") {
-                    fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
-						// 첨부파일
-						Label: oController.getBundleText("LABEL_59021"),
-						Required: true,
-						Appnm: vAppnm,
-						Mode: "S",
-						ReadAsync: true,
-						UseMultiCategories: true,
-						Editable: oController.ApplyModel.getProperty("/EarlyApp") === "X" ? true : false
-					}, "005");
-                } else {
-					$.app.byId(oController.PAGEID + "_FilesBox").setBusyIndicatorDelay(0).setBusy(true);
-
-					setTimeout(function() {
-						fragment.COMMON_ATTACH_FILES.once.call(oController, vAppnm).then(function() {
-							Promise.all([
-								Common.getPromise(function() {
-									fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
-										// 파견 발령지
-										Label: oController.getBundleText("LABEL_59022"),
-										Required: true,
-										Appnm: vAppnm,
-										Mode: "S",
-										ReadAsync: true,
-										UseMultiCategories: true,
-										Editable: !vStatus || vStatus === "AA" ? true : false
-									}, "001");
-								}),
-								Common.getPromise(function() {
-									fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
-										// 계약서
-										Label: oController.getBundleText("LABEL_59023"),
-										Required: true,
-										Appnm: vAppnm,
-										Mode: "S",
-										ReadAsync: true,
-										UseMultiCategories: true,
-										Editable: !vStatus || vStatus === "AA" ? true : false
-									}, "002");
-								}),
-								Common.getPromise(function() {
-									fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
-										// 주민등록등본
-										Label: oController.getBundleText("LABEL_59024"),
-										Required: true,
-										Appnm: vAppnm,
-										Mode: "S",
-										ReadAsync: true,
-										UseMultiCategories: true,
-										Editable: !vStatus || vStatus === "AA" ? true : false
-									}, "003");
-								}),
-								Common.getPromise(function() {
-									fragment.COMMON_ATTACH_FILES.setAttachFile(oController, {
-										// 기타
-										Label: oController.getBundleText("LABEL_59025"),
-										Appnm: vAppnm,
-										Mode: "S",
-										ReadAsync: true,
-										UseMultiCategories: true,
-										Editable: !vStatus || vStatus === "AA" ? true : false
-									}, "004");
-								})
-							]).then(function() {
-								$.app.byId(oController.PAGEID + "_FilesBox").setBusy(false);
-							});
-						});
-					}, 100);
-                }
+                FileHandler.setAttachFile(
+                    this,
+                    {
+                        // 첨부파일
+                        Label: this.getBundleText("LABEL_59021"),
+                        Required: true,
+                        Appnm: vAppnm,
+                        Mode: "S",
+                        ReadAsync: true,
+                        UseMultiCategories: true,
+                        Editable: vMonExpenses === "X" || (Common.checkNull(vMonExpenses) && !vStatus || vStatus === "AA")
+                    },
+                    "001"
+                );
             },
 
             getLocalSessionModel: Common.isLOCAL()
