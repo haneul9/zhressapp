@@ -1115,7 +1115,7 @@ sap.ui.define(
                     vAppnm = this.ApplyModel.getProperty("/FormData/Appnm") || "";
                     
 
-                AttachFileAction.setAttachFile(oController, {
+                AttachFileAction.setAttachFile(this, {
                     Appnm: vAppnm,
                     Required: true,
                     Mode: "M",
