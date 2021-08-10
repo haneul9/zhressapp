@@ -412,35 +412,43 @@ fragment.COMMON_ATTACH_FILES = {
 
 			oAttachbox.setBusy(false);
 		} else {
-			if(aTempDatas.length) {
+			if(aTempDatas.length && (vAppnm == aTempDatas[0].Appnm)) {
 				aTempDatas.forEach(function(elem) {
 					elem.Url = elem.Url.replace(/retriveScpAttach/, "retriveAttach");
 					elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
 
 					if(vUse){
-						if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
+						if(oController.PAGEID == "PerinfoNewEmp" || oController.PAGEID == "PerinfoNewEmpDetail-School" || oController.PAGEID == "PerinfoNewEmpDetail-Career"){
 							if(vPage==elem.Cntnm){
 								elem.New = false;
 								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 								Datas.Data.push(elem);
 							}
-						}else if(vPage=="009"){
-							if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
-								if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+						} else {
+							if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
+								if(vPage==elem.Cntnm){
 									elem.New = false;
 									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 									Datas.Data.push(elem);
 								}
+							}else if(vPage=="009"){
+								if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
+									if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+										elem.New = false;
+										elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+										Datas.Data.push(elem);
+									}
+								}else{
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}									
 							}else{
-								elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
-							}									
-						}else{
-							if(elem.Cntnm =="009"){
-								elem.New = false;
-								elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-								Datas.Data.push(elem);
+								if(elem.Cntnm =="009"){
+									elem.New = false;
+									elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+									Datas.Data.push(elem);
+								}
 							}
 						}
 					}else{
@@ -475,29 +483,37 @@ fragment.COMMON_ATTACH_FILES = {
 								elem.Mresource_convert = "data:${mimetype};base64,${resource}".interpolate(elem.Mimetype, elem.Mresource);
 	
 								if(vUse){
-									if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
+									if(oController.PAGEID === "PerinfoNewEmp" || oController.PAGEID === "PerinfoNewEmpDetail-School" || oController.PAGEID == "PerinfoNewEmpDetail-Career"){
 										if(vPage==elem.Cntnm){
 											elem.New = false;
 											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 											Datas.Data.push(elem);
 										}
-									}else if(vPage=="009"){
-										if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
-											if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+									} else {
+										if(vPage=="001"||vPage=="002"||vPage=="003"||vPage=="004"||vPage=="005"||vPage=="006"){
+											if(vPage==elem.Cntnm){
 												elem.New = false;
 												elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
 												Datas.Data.push(elem);
 											}
+										}else if(vPage=="009"){
+											if(oController.PAGEID=="MedApply"||oController.PAGEID=="MedApplyDet"){
+												if(elem.Cntnm!="001"&&elem.Cntnm!="002"){
+													elem.New = false;
+													elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+													Datas.Data.push(elem);
+												}
+											}else{
+												elem.New = false;
+												elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+												Datas.Data.push(elem);
+											}									
 										}else{
-											elem.New = false;
-											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-											Datas.Data.push(elem);
-										}									
-									}else{
-										if(elem.Cntnm =="009"){
-											elem.New = false;
-											elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
-											Datas.Data.push(elem);
+											if(elem.Cntnm =="009"){
+												elem.New = false;
+												elem.Type = elem.Fname.substring(elem.Fname.lastIndexOf(".") + 1);
+												Datas.Data.push(elem);
+											}
 										}
 									}
 								}else{
@@ -674,6 +690,8 @@ fragment.COMMON_ATTACH_FILES = {
 
 		if(oController.PAGEID === "MedApply") {
 			fragment.COMMON_ATTACH_FILES.hideLine(oAttachbox);
+		} else if(oController.PAGEID === "PerinfoNewEmp"){
+			oController.onPressSave2(oController, vPage);
 		}
 	},
 
@@ -790,6 +808,8 @@ fragment.COMMON_ATTACH_FILES = {
 				sap.m.MessageToast.show(oController.getBundleText("MSG_00032"), { my: "center center", at: "center center"}); // 파일 삭제가 완료되었습니다.
 				if(oController.PAGEID=="MedApply"){
 					fragment.COMMON_ATTACH_FILES.availLine.call(oController,vPage);
+				} else if(oController.PAGEID == "PerinfoNewEmp"){
+					oController.onPressSave2(oController, vPage);
 				}
 			} catch (ex) {
 				common.Common.log(ex);
@@ -961,6 +981,10 @@ fragment.COMMON_ATTACH_FILES = {
 						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
 					}else{
 						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
+						
+						if(oController.PAGEID === "PerinfoNewEmp" || oController.PAGEID === "PerinfoNewEmpDetail-School"){
+							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
+						}
 					}
 					common.Common.log(oHeaders.slug);
 					

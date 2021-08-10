@@ -48,10 +48,11 @@ function startAppInit() {
 		APP_SFMAIN_ID: "ZUI5_SF.SFMain",
 		APP_ID: [contextPath, "List"].join("."),
 		APP_AUTH: $.app.Auth.ESS,
-		APP_TILE: oBundleText.getText("LABEL_37001"), // 사원 프로파일
+		APP_TILE: oBundleText.getText("LABEL_76001"), // 신규입사자정보 입력
 		APP_TYPE: "M",	// W, M
 		includeStyleSheets: [
-			"ZUI5_HR_PerinfoNewEmp/css/perinfo.css"
+			"ZUI5_HR_PerinfoNewEmp/css/perinfo.css",
+			"css/matrixenhance.css"
 		],
 		LOG: {
 			ENABLE_SUCCESS: true
@@ -62,6 +63,35 @@ function startAppInit() {
 }
 </script>
 <style type="text/css">
+/* 첨부파일(Multi Row) UI수정 */
+.custom-multiAttach-file {border-top: 1px solid #e4e4e4;}
+.custom-multiAttach-file .sub-title {width:300px; font-size:14px}
+.custom-multiAttach-file > div {flex-direction: row;}
+.custom-multiAttach-file > div > div {align-items: stretch;border-bottom:1px solid #e4e4e4;}
+.custom-multiAttach-file > div > div.mt-10px{margin-top:0 !important}
+.custom-multiAttach-file > div > div > div:first-child {background-color:#f3f4f5;}
+.custom-multiAttach-file > div > div > div .sapMLabel {text-align:right !important; font-weight:500px; padding-right:8px; padding-top: 10px !important; padding-bottom: 7px !important;}
+.custom-multiAttach-file .sapMListTblCnt {border-top:0}
+.custom-multiAttach-file .sapMLIBShowSeparator>td {border:0}
+.custom-multiAttach-file .sapMListShowSeparatorsAll .sapMLIBShowSeparator:last-child>td:not(.sapMListTblDummyCell) {border-bottom:0}
+.custom-multiAttach-file .sapUiFupButtonOnly {padding-left:10px; padding-top: 5px;}
+.custom-multiAttach-file .sapMListTbl .sapUiIcon:not(.sapMLIBImgNav):not(.sapMBtnIcon):not(.sapFAvatarTypeIcon) {font-size:1rem !important}
+
+/*.custom-multiAttach-file-mobile {border-top: 1px solid #e4e4e4;}*/
+.custom-multiAttach-file-mobile .sub-title {width:150px; font-size:14px !important;}
+.custom-multiAttach-file-mobile > div {flex-direction: row;}
+.custom-multiAttach-file-mobile > div > div {align-items: stretch;}
+.custom-multiAttach-file-mobile > div > div.mt-10px{margin-top:0 !important}
+/*.custom-multiAttach-file-mobile > div > div > div:first-child {background-color:#f3f4f5;}*/
+.custom-multiAttach-file-mobile > div > div > div .sapMLabel {text-align:Begin !important; font-weight:400 !important; color: #6e6e6e; padding-bottom: 7px !important;}
+.custom-multiAttach-file-mobile .sapMListTblCnt {border-top:0}
+.custom-multiAttach-file-mobile .sapMLIBShowSeparator>td {border:0}
+.custom-multiAttach-file-mobile .sapMListShowSeparatorsAll .sapMLIBShowSeparator:last-child>td:not(.sapMListTblDummyCell) {border-bottom:0}
+.custom-multiAttach-file-mobile .sapUiFupButtonOnly {padding-top: 5px;}
+.custom-multiAttach-file-mobile .sapMListTbl .sapUiIcon:not(.sapMLIBImgNav):not(.sapMBtnIcon):not(.sapFAvatarTypeIcon) {font-size:1rem !important}
+
+.border-bottom-0{border-bottom: 0 !important;}
+
 /** m.panel 관련 standard css 변경 **/
 .sapMPanelContent:not(.sapMPanelBGTransparent) {
 	border-bottom: 0 !important;

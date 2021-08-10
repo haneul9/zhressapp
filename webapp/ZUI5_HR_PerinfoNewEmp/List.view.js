@@ -1,257 +1,135 @@
-sap.ui.define([], function () {
-"use strict";
+$.sap.require("fragment.COMMON_ATTACH_FILES");
 
-sap.ui.jsview("ZUI5_HR_PerinfoNewEmp.List", {
-    getControllerName: function () {
-        return "ZUI5_HR_PerinfoNewEmp.List";
-    },
+sap.ui.define([
+    "common/makeTable",
+    "common/PageHelper"
+], function (makeTalbe, PageHelper) {
+    "use strict";
+    
+    sap.ui.jsview("ZUI5_HR_PerinfoNewEmp.List", {
+        getControllerName: function () {
+            return "ZUI5_HR_PerinfoNewEmp.List";
+        },
+    
+        createContent: function (oController) {
+            $.app.setModel("ZHR_COMMON_SRV");
+            $.app.setModel("ZHR_PERS_INFO_SRV");
+            // $.app.setModel("ZHR_PERS_RECORD_SRV");
+            // $.app.setModel("ZHR_APPRAISAL_SRV");
+    
+            var oObjectPageLayout = new sap.uxap.ObjectPageLayout(oController.PAGEID + "_ObjectPageLayout", {
+                enableLazyLoading: false,
+                showTitleInHeaderContent: false,
+                showHeaderContent: false,
+                alwaysShowContentHeader: false,
+                sections: [
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76002}", // 인적사항
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail01", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76003}", // 입사서류
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail02", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76004}", // 주소정보
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail03", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76005}", // 학력사항
+                        showTitle: false,
+                        subSections: [
+                             new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail04", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76006}", // 경력사항
+                        showTitle: false,
+                        subSections: [
+                             new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail05", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76007}", // 병역사항
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail06", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76008}", // 보훈사항
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail07", oController)]
+                            })
+                        ]
+                    }),
+                    new sap.uxap.ObjectPageSection({
+                        title: "{i18n>LABEL_76009}", // 장애사항
+                        showTitle: false,
+                        subSections: [
+                            new sap.uxap.ObjectPageSubSection({
+                                title: "",
+                                blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Detail08", oController)]
+                            })
+                        ]
+                    })
+                ]
+            }).addStyleClass("sapUiSizeCompact tab-group mt-26px");
+            
+             var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
+                customHeader: [],
+                showHeader: false,
+                enableScrolling: false,
+                content: [
+                    new sap.m.FlexBox({
+                        direction: sap.m.FlexDirection.Column,
+                        items: [
+                            new sap.m.FlexBox({
+                                alignItems: "End",
+                                fitContainer: true,
+                                items: [new sap.m.Text({text : oController.getBundleText("LABEL_76001")}).addStyleClass("app-title")] // 신규입사자정보 입력
+                            }).addStyleClass("app-title-container mb-16px")
+                        ]
+                    }).addStyleClass("app-content-container-wide"),
+                    oObjectPageLayout
+                ]
+            }).addStyleClass("app-content");
 
-    createContent: function (oController) {
-        $.app.setModel("ZHR_COMMON_SRV");
-        $.app.setModel("ZHR_PERS_INFO_SRV");
-        $.app.setModel("ZHR_PERS_RECORD_SRV");
-        $.app.setModel("ZHR_APPRAISAL_SRV");
-
-        oController.setupView.call(oController);
-
-        var oObjectPageLayout = new sap.uxap.ObjectPageLayout(oController.PAGEID + "_ObjectPageLayout", {
-            enableLazyLoading: false,
-            showTitleInHeaderContent: false,
-            showHeaderContent: false,
-            alwaysShowContentHeader: false,
-            sections: [
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37008}", // 기본인적사항
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Basic", oController, "2")]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37009}", // 주소정보
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Address", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37029}", // 차량관리
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Car", oController)]
-                        })
-                    ],
-                    visible: {
-                        path: "Auth",
-                        formatter: function (v) {
-                            if (v == "E") return true;
-                            else return false;
-                        }
-                    }
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37044}", // 여권/비자관리
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Passport", oController)]
-                        })
-                    ],
-                    visible: {
-                        path: "Auth",
-                        formatter: function (v) {
-                            if (v == "E") return true;
-                            else return false;
-                        }
-                    }
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_02194}", // 학력사항
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.School", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_02198}", // 병역사항
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Military", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_02197}", // 자격면허
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.License", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_02195}", // 경력사항
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Career", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_18010}", // 포상
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Award", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_13040}", // 징계
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Punish", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_18008}", // 발령사항
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Announcement", oController)]
-                        })
-                    ]
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37086}", // 보훈 및 장애
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Handicap", oController)]
-                        })
-                    ],
-                    visible: {
-                        path: "Auth",
-                        formatter: function (v) {
-                            if (v == "E") return true;
-                            else return false;
-                        }
-                    }
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37106}", // 가족사항
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Family", oController)]
-                        })
-                    ],
-                    visible: {
-                        path: "Auth",
-                        formatter: function (v) {
-                            if (v == "M") return true;
-                            else return false;
-                        }
-                    }
-                }),
-                new sap.uxap.ObjectPageSection({
-                    title: "{i18n>LABEL_37115}", // 평가이력
-                    showTitle: false,
-                    subSections: [
-                        new sap.uxap.ObjectPageSubSection({
-                            title: "",
-                            blocks: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Eval", oController)]
-                        })
-                    ],
-                    visible: {
-                        path: "Auth",
-                        formatter: function (v) {
-                            if (v == "M") return true;
-                            else return false;
-                        }
-                    }
-                }),
-            ]
-        }).addStyleClass("tab-group");
-
-        oObjectPageLayout.addStyleClass("sapUiSizeCompact tab-group mt-26px");
-
-        var oScrollContainer = new sap.m.ScrollContainer({
-            vertical: true,
-            content: []
-        });
-
-        if ($.app.getAuth() === "M") {
-            oScrollContainer = new sap.m.ScrollContainer({
-                vertical: true,
-                content: [sap.ui.jsfragment("fragment.OrgOfIndividualForEP", oController)]
-            });
+            oPage.setModel(oController._ListCondJSonModel);
+            oPage.bindElement("/Data");
+    
+            return oPage;
         }
-
-        var oSplitContainer = new sap.m.SplitContainer(oController.PAGEID + "_SplitContainer", {
-            mode: {
-                path: "Auth",
-                formatter: function (fVal) {
-                    return fVal == "M" ? "ShowHideMode" : "HideMode";
-                }
-            },
-            detailPages: [oObjectPageLayout],
-            masterPages: [oScrollContainer]
-        })
-        .setModel(oController._ListCondJSonModel)
-        .bindElement("/Data");
-        var vTitile = $.app.getAuth() === "M" ? oBundleText.getText("LABEL_37109") : oBundleText.getText("LABEL_37001");
-        var oPage = new sap.m.Page(oController.PAGEID + "_PAGE", {
-            customHeader: [new sap.m.Bar().addStyleClass("app-content-header")],
-            showHeader: false,
-            enableScrolling: false,
-            content: [
-                new sap.m.FlexBox({
-                    direction: sap.m.FlexDirection.Column,
-                    items: [
-                        new sap.m.FlexBox({
-                            alignItems: "End",
-                            fitContainer: true,
-                            items: [
-                                // sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.Header", oController),
-                                new sap.m.Text({ text: vTitile }).addStyleClass("app-title") // 사원 프로파일
-                            ]
-                        }).addStyleClass("app-title-container mb-16px")
-                    ]
-                }).addStyleClass("app-content-container-wide"),
-                oSplitContainer
-            ]
-        }).addStyleClass("app-content");
-
-        oPage.setModel(oController._ListCondJSonModel);
-        oPage.bindElement("/Data");
-
-        return oPage;
-    }
-});
-
-});
+    });
+    
+    });

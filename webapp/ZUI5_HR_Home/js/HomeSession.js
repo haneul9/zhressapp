@@ -176,7 +176,7 @@ checkNewEmp: function(reject) {
 				input2 = $('#ehr-new-emp-check-modal #new-emp-input2'),
 				input1Value = input1.val().replace(/\s|\D/g, ''),
 				input2Value = input2.val().replace(/\s|\D/g, '');
-/*
+
 				if (!input1Value) {
 					fn.spin(false);
 					$('#ehr-new-emp-check-modal .invalid-feedback').text('앞 6자릿수를 입력하세요.').show();
@@ -197,25 +197,57 @@ checkNewEmp: function(reject) {
 					$('#ehr-new-emp-check-modal .invalid-feedback').text('뒤 7자릿수를 입력하세요.').show();
 					return;
 				}
-*/
+
 				$('#ehr-new-emp-check-modal .invalid-feedback').text('').hide();
 
 				fn.retrieveNewEmp([input1Value, input2Value].join(''));
 			}, 0);
 		},
 		retrieveNewEmp: function(value) {
-
-			session._gateway.getModel('ZHR_COMMON_SRV').create('/PernrEncodingSet', {
-				Pernr: value,
-				PernrEncodeNav: [{ Pernr: value }]
+			session._gateway.setModel('ZHR_PERS_INFO_SRV');
+			session._gateway.getModel('ZHR_PERS_INFO_SRV').create('/NewEmpinfoSet', {
+				IConType : '1',
+				IRegno : value,
+				ILangu : 'KO',
+				NewEmpinfoBasicNav: []
 			}, {
 				async: true,
 				success: function(result) {
-					this._gateway.prepareLog('HomeSession.encodePernr ${url} success'.interpolate('ZHR_COMMON_SRV/PernrEncodingSet'), arguments).log();
+					this._gateway.prepareLog('HomeSession.checkNewEmp ${url} success'.interpolate('ZHR_PERS_INFO_SRV/NewEmpinfoSet'), arguments).log();
 
 					if (result) {
-						sessionStorage.setItem('ehr.new.emp.id', this._gateway.odataResults(result).Percod);
+						sessionStorage.setItem('ehr.new.emp.id', result.IPernr);
+						sessionStorage.setItem('ehr.sf-user.name', result.IPernr);
+						sessionStorage.setItem('ehr.sf-user.language', "KO");
+						
+						Promise.all([
+							this.encodePernr()
+						])
+						.then(function() {
+							Promise.all([
+								this.retrieveLoginInfo()
+							]);
+						}.bind(this))
+						.catch(function(e) {
+							if (sessionStorage.getItem('ehr.new.emp.id')) {
+								if (typeof callback === 'function') {
+									callback();
+								}
+								return;
+							}
+					
+							var message = (e.message ? e.message : this._gateway.handleError(this._gateway.ODataDestination.ETC, e, 'HomeSession.init').message) || '알 수 없는 오류가 발생하였습니다.';
+					
+							$(function() {
+								this._gateway.alert({
+									title: '오류',
+									html: ['<p>', '</p>'].join(message)
+								});
+							}.bind(this));
+						}.bind(this));
+						
 						$('#ehr-new-emp-check-modal').modal('hide');
+						
 						reject({ data: result }); // 이후 session 생성 절차를 건너뛰기 위해 reject로 처리함
 					}
 				}.bind(session),
@@ -233,11 +265,11 @@ checkNewEmp: function(reject) {
 			'<div class="modal-dialog" role="document">',
 				'<div class="modal-content">',
 					'<div class="modal-header">',
-						'<h4 class="modal-title">신규 입사자 확인</h4>',
+						'<h4 class="modal-title">신규입사자 주민등록번호 입력</h4>',
 					'</div>',
 					'<div class="modal-body">',
 						'<div class="form-group mx-1 my-3 px-5px">',
-							'<label>주민등록번호를 입력하세요.</label>',
+							'<label>대상자 주민등록번호를 입력하세요.</label>',
 						'</div>',
 						'<div class="form-row mx-1">',
 							'<div class="col-6">',
@@ -312,7 +344,7 @@ _retrieveSFUserName: function(resolve, reject) {
 				(this._gateway.isQAS() && /hpjt0857/i.test(data.name))) {
 				this.dkdlTlqpfmffls(resolve);
 
-			} else if ((/sfdev3/i.test(data.name) || /hpjt0832/i.test(data.name) || /hpjt0857/i.test(data.name)) && /PerinfoNewEmp\.html/.test(this._gateway.parameter('popup'))) {
+			} else if ((/sfdev1/i.test(data.name) || /sfdev3/i.test(data.name) || /hpjt0830/i.test(data.name) || /hpjt0832/i.test(data.name) || /hpjt0857/i.test(data.name)) && /PerinfoNewEmp\.html/.test(this._gateway.parameter('popup'))) {
 				this.checkNewEmp(reject);
 
 			} else {
@@ -345,7 +377,11 @@ retrieveSFUserName: function() {
 	return new Promise(function(resolve, reject) {
 
 		if (!this._gateway.isPRD() && this._gateway.isMobile()) {
-			this.dkdlTlqpfmffls(resolve);
+			if(/PerinfoNewEmp\.html/.test(this._gateway.parameter('popup'))){
+				this._retrieveSFUserName(resolve, reject);
+			} else {
+				this.dkdlTlqpfmffls(resolve);
+			}
 		} else {
 			this._retrieveSFUserName(resolve, reject);
 		}

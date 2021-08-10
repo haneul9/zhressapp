@@ -1,8 +1,8 @@
 sap.ui.define(
     [
-        "common/makeTable" //
+        "common/Common" //
     ],
-    function (MakeTable) {
+    function (Common) {
         "use strict";
 
         sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.fragment.School", {
@@ -12,127 +12,263 @@ sap.ui.define(
              */
 
             createContent: function (oController) {
-                var col_info;
-                var vIndex = -1;
-                // 번호, 기간, 유형, 학위, 학교명, 전공 , 최종학력
-                col_info = [
-                    { id: "Idx", label: "{i18n>LABEL_13005}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "100px" },
-                    { id: "Period", label: "{i18n>LABEL_19501}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Stext", label: "{i18n>LABEL_18026}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Etext", label: "{i18n>LABEL_02168}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Insti", label: "{i18n>LABEL_02169}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Zzmajor", label: "{i18n>LABEL_02170}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true },
-                    { id: "Zzlmark", label: "{i18n>LABEL_02231}", plabel: "", resize: true, span: 0, type: "select", sort: true, filter: true }
-                ];
-
-                var oTable = new sap.ui.table.Table(oController.PAGEID + "_SchoolTable", {
-                    selectionBehavior: sap.ui.table.SelectionBehavior.RowOnly,
-                    selectionMode: sap.ui.table.SelectionMode.Single,
-                    enableColumnReordering: false,
-                    enableColumnFreeze: false,
-                    enableBusyIndicator: true,
-                    visibleRowCount: 1,
-                    columnHeaderHeight: 38,
-                    rowHeight: 38,
-                    showOverlay: false,
-                    showNoData: true,
-                    noData: "{i18n>LABEL_00901}" // No data found
-                }).addStyleClass("row-link");
-
-                oTable.attachEvent("cellClick", function (oEvent) {
-                    oTable.clearSelection();
-                    vIndex = -1;
-                    vIndex = oEvent.getParameters().rowIndex;
-                });
-
-                oTable.attachBrowserEvent("dblclick", function () {
-                    oTable.clearSelection();
-                    oTable.addSelectionInterval(vIndex, vIndex);
-                    oController.onSchoolDblClick("1"); // only display mode
-                });
-
-                oTable.setModel(new sap.ui.model.json.JSONModel());
-                oTable.bindRows("/Data");
-
-                MakeTable.makeColumn(oController, oTable, col_info);
-
                 var oMatrix = new sap.ui.commons.layout.MatrixLayout({
-                    columns: 1,
-                    widths: [""],
+                    columns: 2,
+                    widths: ["313px", ""],
                     width: "100%",
                     rows: [
                         new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76060}" })], // 학교구분
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
                                     content: [
-                                        new sap.m.Toolbar({
-                                            content: [
-                                                new sap.m.Text({ text: "{i18n>LABEL_02194}" }).addStyleClass("sub-title"), // 학력사항
-                                                new sap.m.ToolbarSpacer(),
-                                                new sap.m.Button({
-                                                    text: "{i18n>LABEL_37042}", // 신규
-                                                    press: function () {
-                                                        oController.onSchoolDblClick("3");
-                                                    },
-                                                    visible: {
-                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                        formatter: function (v1, v2) {
-                                                            if (v1 == "E" && v2 === "Y") return true;
-                                                            else return false;
-                                                        }
-                                                    }
-                                                }).addStyleClass("button-light"),
-                                                new sap.m.Button({
-                                                    text: "{i18n>LABEL_00102}", // 수정
-                                                    press: function () {
-                                                        oController.onSchoolDblClick("2");
-                                                    },
-                                                    visible: {
-                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                        formatter: function (v1, v2) {
-                                                            if (v1 == "E" && v2 === "Y") return true;
-                                                            else return false;
-                                                        }
-                                                    }
-                                                }).addStyleClass("button-light"),
-                                                new sap.m.Button({
-                                                    text: "{i18n>LABEL_00103}", // 삭제
-                                                    press: function () {
-                                                        oController.onSchoolDblClick("4");
-                                                    },
-                                                    visible: {
-                                                        parts: [{ path: "Auth" }, { path: "Openf" }],
-                                                        formatter: function (v1, v2) {
-                                                            if (v1 == "E" && v2 === "Y") return true;
-                                                            else return false;
-                                                        }
-                                                    }
-                                                }).addStyleClass("button-light")
-                                            ]
-                                        })
-                                            .setModel(oController._ListCondJSonModel)
-                                            .bindElement("/Data")
-                                            .addStyleClass("toolbarNoBottomLine h-40px"),
-                                        new sap.ui.core.HTML({ content: "<div style='height:5px' />" })
+                                        new sap.m.ComboBox(oController.PAGEID + "_School-Slart", {
+                                        	width : "50%",
+						                    selectedKey: "{Slart}",
+						                    change : oController.onChangeSlart,
+						                    editable : "{Editable}"
+						                })
                                     ],
                                     hAlign: "Begin",
                                     vAlign: "Middle"
-                                })
+                                }).addStyleClass("Data")
                             ]
                         }),
                         new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
                             cells: [
                                 new sap.ui.commons.layout.MatrixLayoutCell({
-                                    content: [oTable],
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76061}" })], // 입학일/졸업일
                                     hAlign: "Center",
                                     vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.DatePicker({
+                                            valueFormat: "yyyy-MM-dd",
+                                            displayFormat: gDtfmt,
+                                            value: "{Begda}",
+                                            width: "50%",
+                                            textAlign: "Begin",
+                                            change: oController.onChangeDate,
+						                    editable : "{Editable}"
+                                        }),
+                                        new sap.m.DatePicker({
+                                            valueFormat: "yyyy-MM-dd",
+                                            displayFormat: gDtfmt,
+                                            value: "{Endda}",
+                                            width: "50%",
+                                            textAlign: "Begin",
+                                            change: oController.onChangeDate,
+						                    editable : "{Editable}"
+                                        }).addStyleClass("pl-5px")
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76062}" })], // 국가
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.ComboBox(oController.PAGEID + "_School-Sland", {
+						                   selectedKey: "{Sland}",
+						                   width : "50%",
+						                   editable : "{Editable}"
+						               })
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76063}" })], // 교육기관구분
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.Input({
+                                           value: "{Ausbi}",
+                                           width : "100%",
+                                           valueHelpOnly : true,
+                                           showValueHelp : true,
+                                           valueHelpRequest : function(oEvent){
+                                           		oController.onSearchSchoolCode(oEvent, "Ausbi");
+                                           },
+						                   editable : "{Editable}"
+                                       })
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76064}" })], // 학교
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.Input({
+						                   value: "{Insti}",
+						                   width : "100%",
+						                   editable : {
+						                   		path : "Slart",
+						                   		parts : [{path : "Slart"}, {path : "Editable"}],
+						                   		formatter : function(fVal, fVal2){
+						                   			if(fVal2 == true){
+					                   					return fVal && (fVal == "H4" || fVal == "H5" || fVal == "H6") ? false : true;
+						                   			} else {
+						                   				return fVal2;
+						                   			}
+						                   		}
+						                   },
+						                   maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "NewEmpinfoEdu", "Insti")
+						               })
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76065}" })], // 전공
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.Input({
+						                   value : "{Ftext1}",
+						                   width : "100%",
+						                   valueHelpOnly : true,
+                                           showValueHelp : true,
+                                           valueHelpRequest : function(oEvent){
+                                           		oController.onSearchSchoolCode(oEvent, "Sltp1");
+                                           },
+						                   editable : "{Editable}"
+						               })
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76066}" })], // 학위
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.ComboBox(oController.PAGEID + "_School-Slabs", {
+						                   selectedKey: "{Slabs}",
+						                   width : "50%",
+						                   editable : "{Editable}"
+						               })
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [new sap.m.Label({ text: "{i18n>LABEL_76067}" })], // 최종학력
+                                    hAlign: "Center",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Label border-bottom-0"),
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                       new sap.m.CheckBox({
+	                                       selected: "{Zzlmark}",
+						                   editable : "{Editable}"
+	                                   })
+                                    ],
+                                    hAlign: "Begin",
+                                    vAlign: "Middle"
+                                }).addStyleClass("Data border-bottom-0")
+                            ]
+                        }),
+                        new sap.ui.commons.layout.MatrixLayoutRow({
+                            // height: "45px",
+                            cells: [
+                                new sap.ui.commons.layout.MatrixLayoutCell({
+                                    content: [
+                                    	new sap.m.VBox({
+				                            fitContainer: true,
+				                            items: [
+				                            	fragment.COMMON_ATTACH_FILES.renderer(oController, "007")
+				                            ]
+				                        }).addStyleClass("custom-multiAttach-file")
+                                    ],
+                                    hAlign: "Center",
+                                    vAlign: "Middle",
+                                    colSpan : 2
                                 })
                             ]
-                        })
+                        }).addStyleClass("sapUiSizeCompact")
                     ]
                 });
 
-                return oMatrix;
+                var oDialog = new sap.m.Dialog({
+                    contentWidth: "1000px",
+                    contentHeight: "",
+                    draggable: false,
+                    horizontalScrolling: false,
+                    content: [oMatrix],
+                    title: "{i18n>LABEL_76005}", // 학력사항
+                    buttons: [
+                        new sap.m.Button({
+                            text: "{i18n>LABEL_00101}", // 저장
+                            press : function(oEvent){
+                            	oController.onPressSave("S4");
+                            },
+                            visible : "{Editable}"
+                        }).addStyleClass("button-dark"),
+                        new sap.m.Button({
+                            type: "Default",
+                            text: "{i18n>LABEL_06122}", // 닫기
+                            press: function () {
+                                oDialog.close();
+                            }
+                        }).addStyleClass("button-default custom-button-divide")
+                    ]
+                }).addStyleClass("custom-dialog-popup");
+
+                oDialog.setModel(new sap.ui.model.json.JSONModel());
+                oDialog.bindElement("/Data");
+
+                return oDialog;
             }
         });
     }

@@ -1,3 +1,4 @@
+$.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define(
     [
         "common/PageHelper" //
@@ -12,95 +13,51 @@ sap.ui.define(
 
             createContent: function (oController) {
                 this.loadModel();
-                var searchBox = new sap.m.HBox({
-                    fitContainer: true,
-                    height : "auto",
-                    items: [
-                        new sap.m.HBox({
-                        	width : "120px", 
-                            items: [
-                               new sap.m.Image({
-                               		src : "{photo}",
-                               		height : "85px"
-                               })
-                            ]
-                        }).addStyleClass("EmployeeLayoutPic"),
-                        new sap.m.HBox({
-                        	width : "100%",
-                            items: [
-                            	new sap.m.VBox({
-                            		items : [new sap.m.Text({ text: "{Ename}" }).addStyleClass("EmployeeLayoutHeader"), 
-                            				 new sap.m.Text({ 
-                            				 	layoutData : new sap.m.FlexItemData({ lineHeight: "16px" }),
-                            				 	text: "{Stext}" 
-                            				 }).addStyleClass("EmployeeLayoutText"),
-                            				 new sap.m.Text({ 
-                            				 	text : {
-                                                    parts: [{ path: "Pernr" },{ path: "PGradeTxt" },{ path: "ZtitleT" } ],
-                                                    formatter: function (v1, v2, v3) {
-                                                        if (v3 != "") return v1+ " / " + v2 + " / " + v3;
-                                                        else return  v1+ " / " + v2 ;
-                                                    }
-                                                 }
-                            				 }).addStyleClass("EmployeeLayoutText")
-                            		]
-                            	})
-                            ]
-                        }).addStyleClass("EmployeeLayoutPadding")
-                    ]
-                }).addStyleClass("EmployeeLayout");
-                searchBox.setModel(oController._ListCondJSonModel);
-                searchBox.bindElement("/Data");
+                
                 var tabBox = new sap.m.IconTabBar(oController.PAGEID + "_IconBar", {
                     expandable: false,
                     select: oController.handleTabBarSelect.bind(oController),
-                    selectedKey: "Basic",
+                    selectedKey: "01",
                     items: [
-                        new sap.m.IconTabFilter(oController.PAGEID + "_Basic", {
-                            key: "Basic",
-                            text: "{i18n>LABEL_37008}", // 기본인적사항
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Basic", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "01",
+                            text: "{i18n>LABEL_76002}", // 인적사항
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail01", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_Address", {
-                            key: "Address",
-                            text: "{i18n>LABEL_37009}",
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.AddressList", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "02",
+                            text: "{i18n>LABEL_76003}", // 입사서류
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail02", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_Car", {
-                            key: "Car",
-                            text: "{i18n>LABEL_37029}", // 차량관리
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Car", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "03",
+                            text: "{i18n>LABEL_76004}", // 주소정보
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail03", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_School", {
-                            key: "School",
-                            text: "{i18n>LABEL_02194}", // 학력사항
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.SchoolList", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "04",
+                            text: "{i18n>LABEL_76005}", // 학력사항
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail04", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_License", {
-                            key: "License",
-                            text: "{i18n>LABEL_02197}", // 자격면허
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.LicenseList", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "05",
+                            text: "{i18n>LABEL_76006}", // 경력사항
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail05", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_Career", {
-                            key: "Career",
-                            text: "{i18n>LABEL_02195}", // 경력사항
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.CareerList", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "06",
+                            text: "{i18n>LABEL_76007}", // 병역사항
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail06", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_Announcement", {
-                            key: "Announcement",
-                            text: "{i18n>LABEL_18008}", // 발령사항
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.AnnouncementList", oController)]
+                        new sap.m.IconTabFilter({
+                            key: "07",
+                            text: "{i18n>LABEL_76008}", // 보훈사항
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail07", oController)]
                         }),
-                        new sap.m.IconTabFilter(oController.PAGEID + "_Eval", {
-                            key: "Eval",
-                            text: "{i18n>LABEL_37115}", // 평가이력
-                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Eval", oController)],
-                            visible: {
-                                path : "Chief",
-                                formatter : function(v){
-                                  return v === "X" ? true : false; 
-                                }
-                            } 
+                        new sap.m.IconTabFilter({
+                            key: "08",
+                            text: "{i18n>LABEL_76009}", // 장애사항
+                            content: [sap.ui.jsfragment("ZUI5_HR_PerinfoNewEmp.m.fragment.Detail08", oController)]
                         })
                     ]
                 }).addStyleClass("tab-group");
@@ -109,9 +66,11 @@ sap.ui.define(
                     {
                         onAfterRendering: function () {
                         	if(oController.doubleRendering == "X"){
-	                        	this.setSelectedKey("Basic");
+                        		var sKey = oController._ListCondJSonModel.getProperty("/Data/Key");
+                        			
+	                        	this.setSelectedKey(sKey ? sKey : "01");
 	                            this.fireSelect();	
-                        	}
+                        	} 
                             oController.doubleRendering = "X";
                         }
                     },
@@ -119,24 +78,36 @@ sap.ui.define(
                 );
                 
                 var oMainBox = new sap.m.VBox({
-                    items:  [searchBox, tabBox]
-                })
-                .addStyleClass("vbox-form-mobile-etc pt-16px");
+                    items:  [tabBox]
+                }).addStyleClass("vbox-form-mobile-etc pt-16px");
                 
                 return new PageHelper({
+                	idPrefix : oController.PAGEID,
                 	contentContainerStyleClass: "app-content-container-mobile",
                     contentItems: [oMainBox],
                     headerButton : new sap.m.FlexBox({
                                     items: [ 
                                         new sap.m.Button({ 
-                                            press: oController.moveSearch,
-                                            text : "{i18n>LABEL_00205}",  //사원검색
-                                            visible: {
-                                                path : "Chief",
-                                                formatter : function(v){
-                                                  return v === "X" ? true : false; 
-                                                }
-                                            } 
+                                            text : "{i18n>LABEL_00101}",  // 저장
+                                            press : oController.onPressSave,
+                                            visible : {
+                                            	path : "Key",
+                                            	formatter : function(fVal){
+                                            		return (fVal == "03" || fVal == "04" || fVal == "05") ? false : true;
+                                            	}
+                                            }
+                                        }).addStyleClass("button-light"),
+                                        new sap.m.Button({ 
+                                            text : "{i18n>LABEL_00153}",  // 추가
+                                            press : function(oEvent){
+                                            	oController.onSelectTable();
+                                            },
+                                            visible : {
+                                            	path : "Key",
+                                            	formatter : function(fVal){
+                                            		return (fVal == "03" || fVal == "04" || fVal == "05") ? true : false;
+                                            	}
+                                            }
                                         }).addStyleClass("button-light")
                                     ]
                                 }).addStyleClass("app-nav-button-right")
@@ -146,12 +117,10 @@ sap.ui.define(
                 .bindElement("/Data");
             },
 
+            // Model 선언
             loadModel: function () {
-                // Model 선언
                 $.app.setModel("ZHR_PERS_INFO_SRV");
-                $.app.setModel("ZHR_PERS_RECORD_SRV");
                 $.app.setModel("ZHR_COMMON_SRV");
-                $.app.setModel("ZHR_APPRAISAL_SRV");
             }
         });
     }

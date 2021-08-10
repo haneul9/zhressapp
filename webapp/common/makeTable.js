@@ -371,6 +371,17 @@ common.makeTable = {
 					break;
 				case "formatter":
 					switch(col_info[i].id){
+						case "Zzlmark":
+							oTemplate = new sap.ui.commons.TextView({
+								text : {
+									path : col_info[i].id,
+									formatter : function(fVal){
+										return fVal == true ? "O" : "";
+									}
+								},
+								textAlign : "Center"
+							});
+							break;
 						case "DutycT":
 							oTemplate = new sap.ui.commons.TextView({
 								text : {
