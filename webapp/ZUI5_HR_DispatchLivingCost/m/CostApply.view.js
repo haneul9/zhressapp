@@ -1,5 +1,4 @@
-﻿/* eslint-disable no-undef */
-sap.ui.define(
+﻿sap.ui.define(
     [
         "common/Common",
         "common/PageHelper",

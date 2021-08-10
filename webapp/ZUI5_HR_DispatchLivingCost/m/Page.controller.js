@@ -1,6 +1,6 @@
 ﻿sap.ui.define(
     [
-        "common/Common", //
+        "common/Common",
         "common/CommonController",
         "common/JSONModelHelper"
     ],
