@@ -85,7 +85,7 @@ sap.ui.define(
 
                 var oField = [];
                 var createData = { PregnantApplyTableIn: [] };
-                createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+                createData.IBukrs = oController.getSessionInfoByKey("Bukrs3");
                 createData.IPernr = oController.getSessionInfoByKey("Pernr");
                 createData.IEmpid = oController.getSessionInfoByKey("Pernr");
                 createData.ILangu = oController.getSessionInfoByKey("Langu");
@@ -293,7 +293,7 @@ sap.ui.define(
                     var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
                     var createData = { PregnantApplyTableIn: [] };
                     createData.IConType = "1";
-                    createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+                    createData.IBukrs = oController.getSessionInfoByKey("Bukrs3");
                     createData.IMolga = oController.getSessionInfoByKey("Molga");
                     createData.IEmpid = oController.getSessionInfoByKey("Pernr");
                     createData.IPernr = oController.getSessionInfoByKey("Pernr");
@@ -658,7 +658,7 @@ sap.ui.define(
                             Mode: "P", // PC – P, Mobile - M
                             Pernr: oController.getSessionInfoByKey("Pernr"),
                             Empid: oController.getSessionInfoByKey("Pernr"),
-                            Bukrs: oController.getSessionInfoByKey("Bukrs"),
+                            Bukrs: oController.getSessionInfoByKey("Bukrs3"),
                             ZappSeq: "02"
                         },
                         callback = function(o) {
@@ -712,7 +712,7 @@ sap.ui.define(
                     createData.IPernr = oController.getSessionInfoByKey("Pernr");
                     createData.IEmpid = oController.getSessionInfoByKey("Pernr");
                     createData.IMolga = oController.getSessionInfoByKey("Molga");
-                    createData.IBukrs = oController.getSessionInfoByKey("Bukrs");
+                    createData.IBukrs = oController.getSessionInfoByKey("Bukrs3");
                     createData.ILangu = oController.getSessionInfoByKey("Langu");
                     createData.IBegda = oData.Begda ? "/Date(" + Common.getTime(oData.Begda) + ")/" : null;
                     createData.IEndda = oData.Endda ? "/Date(" + Common.getTime(oData.Endda) + ")/" : null;
