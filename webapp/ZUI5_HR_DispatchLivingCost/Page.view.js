@@ -1,7 +1,7 @@
 ﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
 sap.ui.define(
     [
-        "common/PageHelper", //
+        "common/PageHelper",
         "common/ZHR_TABLES",
         "common/PickOnlyDateRangeSelection"
     ],
@@ -10,16 +10,16 @@ sap.ui.define(
 
         sap.ui.jsview($.app.APP_ID, {
             _colModel: [
-                { id: "Check", label: "{i18n>LABEL_59003}" /* 선택 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "7%", templateGetter: "getChoice" },
-                { id: "Begda", label: "{i18n>LABEL_59004}" /* 신청일 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "auto" },
-                { id: "ZfwkpsT", label: "{i18n>LABEL_59005}" /* 파견지 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getLocation" },
-                { id: "ZmuflgT", label: "{i18n>LABEL_59006}" /* 기혼/미혼 여부 */, plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width: "auto" },
-                { id: "ZlfplsT", label: "{i18n>LABEL_59007}" /* 교통비 지급 기준지 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getCostPlace" },
-                { id: "Zscsym", label: "{i18n>LABEL_59008}" /* 숙소계약기간 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getDatepicker" },
-                { id: "Zseeym", label: "{i18n>LABEL_59009}" /* 조기 종료월 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getEalryDate" },
-                { id: "Zcoamt", label: "{i18n>LABEL_59010}" /* 회사 지원금액 */, plabel: "", resize: true, span: 0, type: "currency", sort: true, filter: true, width: "auto" },
-                { id: "Zactdt", label: "{i18n>LABEL_59011}" /* 발령일자 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "auto" },
-                { id: "Status", label: "{i18n>LABEL_59012}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getStatus" }
+                { id: "Check",   label: "{i18n>LABEL_59003}" /* 선택 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "4%", templateGetter: "getChoice" },
+                { id: "Begda",   label: "{i18n>LABEL_59004}" /* 신청일 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "auto" },
+                { id: "Ztrgym",  label: "{i18n>LABEL_59035}" /* 대상년월 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getTargetDate2"},
+                { id: "ZfwkpsT", label: "{i18n>LABEL_59005}" /* 파견지 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "15%", templateGetter: "getLocation" },
+                { id: "ZlfplsT", label: "{i18n>LABEL_59007}" /* 교통비 지급 기준지 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "15%", templateGetter: "getCostPlace" },
+                { id: "Zscsym",  label: "{i18n>LABEL_59008}" /* 숙소계약기간 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getDatepicker" },
+                { id: "Zcoamt",  label: "{i18n>LABEL_59010}" /* 회사 지원금액 */, plabel: "", resize: true, span: 0, type: "currency", sort: true, filter: true, width: "auto" },
+                { id: "Zactdt",  label: "{i18n>LABEL_59011}" /* 발령일자 */, plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width: "auto" },
+                { id: "PayDate", label: "{i18n>LABEL_59039}" /* 지급년월 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getPayDate"},
+                { id: "Status",  label: "{i18n>LABEL_59012}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "template", sort: true, filter: true, width: "auto", templateGetter: "getStatus" }
             ],
 
             getControllerName: function () {
@@ -67,7 +67,11 @@ sap.ui.define(
                             items: [
                                 new sap.m.Label({
                                     text: "{i18n>LABEL_59002}" // 신청 현황
-                                }).addStyleClass("sub-title")
+                                }).addStyleClass("sub-title mr-8px"),
+                                new sap.m.Text({
+                                    text: "{i18n>MSG_59032}",
+                                    textAlign: "Begin"
+                                }).addStyleClass("info-text-red font-14px")
                             ]
                         }).addStyleClass("info-field-group"),
 
@@ -85,9 +89,9 @@ sap.ui.define(
                                     }
                                 }).addStyleClass("button-light mr-10px"),
                                 new sap.m.Button({
-                                    // 계약기간 조기 종료 신청
+                                    // 월 생활경비 신청
                                     press: oController.onPressEnd.bind(oController),
-                                    text: "{i18n>LABEL_59027}",
+                                    text: "{i18n>LABEL_59040}",
                                     visible: {
                                         path: "/Data/EClose",
                                         formatter: function (v) {

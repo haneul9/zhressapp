@@ -2,11 +2,11 @@ sap.ui.define([
 	"../common/Common",
 	"../common/CommonController",
 	"../common/JSONModelHelper",
-    "../common/AttachFileAction",
 	"sap/m/MessageBox",
-	"sap/ui/core/BusyIndicator"
+	"sap/ui/core/BusyIndicator",
+	"fragment/COMMON_ATTACH_FILES"
 	], 
-	function (Common, CommonController, JSONModelHelper, AttachFileAction, MessageBox, BusyIndicator) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -17,8 +17,7 @@ sap.ui.define([
 		
         TableModel: new JSONModelHelper(),
 		ApplyModel: new JSONModelHelper(),
-
-		g_Check: "",
+		SearchModel: new JSONModelHelper(),
 
 		getUserId: function() {
 
@@ -50,16 +49,27 @@ sap.ui.define([
             BusyIndicator.show(0);
 
             this.ApplyModel.setData({FormData: []});
-			this.g_Check= "N";
-            
+			
             if(oEvent.data.RowData){
-                this.ApplyModel.setData({FormData: oEvent.data.RowData});
-				this.getDataColor(oEvent.data.RowData);
-            }
+				this.ApplyModel.setData({FormData: oEvent.data.RowData});
+            }else {
+				this.ApplyModel.setData({
+					FormData: {
+						Banka2: oEvent.data.User.IBanka,
+						Bankn2: oEvent.data.User.IBankn,
+						Bankl2: oEvent.data.User.IBankl
+					}
+				});
+			}
+
+			this.ApplyModel.setProperty("/BankList", oEvent.data.BankList);
 		},
 		
 		onAfterShow: function() {
 			this.onBeforeOpenDetailDialog();
+
+			if(!this.SearchModel.getProperty("/User")) this.onSetInfo();
+			
 			$("#Detail-app-title-container").remove();
             BusyIndicator.hide();
         },
@@ -70,119 +80,100 @@ sap.ui.define([
             });
         },
 
+		onSetInfo : function(){
+			var oView = $.app.byId("ZUI5_HR_PayrollAccountChange.Detail");
+			var oController = oView.getController();
+			var Pernr = oController.getUserId();
+		
+			var oPhoto = "";
+			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + Pernr + "' and photoType eq '1'")
+				 .select("photo")
+				 .setAsync(false)
+				 .attachRequestCompleted(function(){
+						var data = this.getData().d;
+						
+						if(data && data.results.length){
+							oPhoto = "data:text/plain;base64," + data.results[0].photo;
+						} else {
+							oPhoto = "images/male.jpg";
+						}
+				 })
+				 .attachRequestFailed(function() {
+						oPhoto = "images/male.jpg";
+				 })
+				 .load();
+				 
+			var vData = {};
+				vData.photo = oPhoto;
+
+			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
+			var createData = {TableIn : []};
+				createData.IPernr = Pernr;
+				createData.ILangu = $.app.getModel("session").getData().Langu;
+				
+			oModel.create("/HeaderSet", createData, {
+				success: function(data){
+					if(data){
+						if(data.TableIn && data.TableIn.results){
+							var data1 = data.TableIn.results[0];
+							
+							if(data1){
+								Object.assign(vData, data1);
+							}
+						}
+					}
+				},
+				error: function (oResponse) {
+			    	Common.log(oResponse);
+					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+						title: oController.getBundleText("LABEL_09030")
+					});
+				}
+			});
+			
+			oController.SearchModel.setData({User: vData});
+		},
+
 		checkError :function() { // Error Check
 			var oController = this.getView().getController();
 			var oFormData = oController.ApplyModel.getProperty("/FormData");
 
-			// 숙박기간
-			if(Common.checkNull(oFormData.Begda)){
-				MessageBox.error(oController.getBundleText("MSG_74009"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			}
-			
-			// 계산하지 않았을경우
-			if(oController.g_Check === "N"){
-				MessageBox.error(oController.getBundleText("MSG_74005"), { title: oController.getBundleText("LABEL_00149")});
+			// 은행(변경후)
+			if(Common.checkNull(oFormData.Bankl)){
+				MessageBox.error(oController.getBundleText("MSG_75006"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
 
-			// 연차없음일 경우
-			if(oFormData.Vacprd === oController.getBundleText("LABEL_74039")){
-				MessageBox.error(oController.getBundleText("MSG_74006"), { title: oController.getBundleText("LABEL_00149")});
+			// 계좌번호(변경후)
+			if(Common.checkNull(oFormData.Bankn)){
+				MessageBox.error(oController.getBundleText("MSG_75007"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
 
-			// 힐링휴가 중복일경우
-			if(oFormData.Healdup === "X"){
-				MessageBox.error(oController.getBundleText("MSG_74007"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			}
-
-			// 잔여한도 0일경우
-			if(oFormData.Avacnt === "0"){
-				MessageBox.error(oController.getBundleText("MSG_74008"), { title: oController.getBundleText("LABEL_00149")});
-				return true;
-			}
+			// if(FileHandler.getFileLength(oController, "001") === 0){
+			// 	MessageBox.error(oController.getBundleText("MSG_75008"), { title: oController.getBundleText("MSG_08107")});
+			// 	return true;
+			// }
 
 			return false;
 		},
 
-		setPicker: function() {
-			this.g_Check= "N";
+		getBankName: function(oEvent) {
+			var vBankName = oEvent.getSource().getValue();
+			this.ApplyModel.setProperty("/FormData/Banka", vBankName);
 		},
 
-		getDataColor: function(oRowData) {
-			var oController = this.getView().getController();
-			var oVacText = $.app.byId(oController.PAGEID + "_VacText");
-			var oHelText = $.app.byId(oController.PAGEID + "_HelText");
-			var oAvaText = $.app.byId(oController.PAGEID + "_AvaText");
+		setAccountNumber: function(oEvent) {
+			var inputValue = oEvent.getParameter('value').trim(),
+				convertValue = inputValue.replace(/[^\d]/g, '');
 
-			if(oRowData.Vacprd === oController.getBundleText("LABEL_74039")) {
-				oVacText.toggleStyleClass("info-text-red", true);
-			}else {
-				oVacText.toggleStyleClass("info-text-red", false);
-			}
-			
-			if(oRowData.Healdup === "X") {
-				oHelText.toggleStyleClass("info-text-red", true);
-				oHelText.toggleStyleClass("color-blue", false);
-			}else {
-				oHelText.toggleStyleClass("info-text-red", false);
-				oHelText.toggleStyleClass("color-blue", true);
-			}
-
-			if(oRowData.Avacnt === "0") {
-				oAvaText.toggleStyleClass("info-text-red", true);
-				oAvaText.toggleStyleClass("color-blue", false);
-			}else {
-				oAvaText.toggleStyleClass("info-text-red", false);
-				oAvaText.toggleStyleClass("color-blue", true);
-			}
+			oEvent.getSource().setValue(convertValue);
+			this.ApplyModel.setProperty("/FormData/Bankn", convertValue);
 		},
 
-        onDateRange: function() { // 숙박기간 계산
-            var oController = this;
-			var oSearchDate = $.app.byId(oController.PAGEID + "_SearchDate");
-			var oFormData = oController.ApplyModel.getProperty("/FormData");
-			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
-			var vPernr = oController.getUserId();
-			
-			// 숙박기간
-			if(Common.checkNull(oFormData.Begda)){
-				MessageBox.error(oController.getBundleText("MSG_74014"), { title: oController.getBundleText("LABEL_00149")});
-				return;
-			}
-
-			var sendObject = {};
-			// Header
-			sendObject.IPernr = vPernr;
-            sendObject.IConType = "2";
-			// Navigation property
-			sendObject.RoomChargeNav1 = [{
-                Pernr: vPernr,
-                Begda: moment(oSearchDate.getDateValue()).hours(10).toDate(),
-                Endda: moment(oSearchDate.getSecondDateValue()).hours(10).toDate()
-            }];
-			
-			oModel.create("/RoomChargeApplySet", sendObject, {
-				success: function(oData) {
-					if (oData && oData.RoomChargeNav1) {
-						Common.log(oData);
-						var rDatas = oData.RoomChargeNav1.results[0];
-                        oController.ApplyModel.setData({FormData: rDatas});
-						oController.getDataColor(rDatas);
-						oController.g_Check = "Y";
-					}
-				},
-				error: function(oResponse) {
-					Common.log(oResponse);
-				}
-			});
-        },
-
-		onDialogApplyBtn: function() { // 신청
+        onDialogApplyBtn: function() { // 신청
 			var oController = this;
-			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
 			var vBukrs = this.getUserGubun();
 			var vPernr = this.getUserId();
 			var oRowData = this.ApplyModel.getProperty("/FormData");
@@ -191,85 +182,93 @@ sap.ui.define([
 			
 			BusyIndicator.show(0);
 			var onPressApply = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_74010")) { // 신청
+				if (fVal && fVal == oController.getBundleText("LABEL_75012")) { // 신청
 					
 					// 첨부파일 저장
-					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
+					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
 					oRowData.Pernr = vPernr;
 										
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
-					sendObject.IEmpid = oController.getSessionInfoByKey("name");
+					sendObject.IEmpid = vPernr;
 					sendObject.IBukrs = vBukrs;
 					sendObject.IConType = "3";
 					// Navigation property
-					sendObject.RoomChargeNav1 = [Common.copyByMetadata(oModel, "RoomChargeApplyTab1", oRowData)];
+					sendObject.BankAccountApplyNav1 = [Common.copyByMetadata(oModel, "BankAccountApplyTab1", oRowData)];
 					
-					oModel.create("/RoomChargeApplySet", sendObject, {
+					oModel.create("/BankAccountApplySet", sendObject, {
 						success: function(oData) {
-							if (oData && oData.RoomChargeNav1) {
+							if (oData && oData.BankAccountApplyNav1) {
 								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_74011"), { title: oController.getBundleText("MSG_08107")});
+								sap.m.MessageBox.alert(oController.getBundleText("MSG_75003"), { title: oController.getBundleText("MSG_08107")});
 								oController.navBack();
 								BusyIndicator.hide();
 							}
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
+
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
 						}
 					});
 				}
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_74010"), {
-				title: oController.getBundleText("LABEL_74001"),
-				actions: [oController.getBundleText("LABEL_74010"), oController.getBundleText("LABEL_00119")],
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_75002"), {
+				title: oController.getBundleText("LABEL_75001"),
+				actions: [oController.getBundleText("LABEL_75012"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressApply
 			});
 		},
 
 		onDialogDeleteBtn: function() { // 삭제
 			var oController = this;
-			var oModel = $.app.getModel("ZHR_BENEFIT_SRV");
+			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
 			var vBukrs = this.getUserGubun();
 			var vPernr = this.getUserId();
 			var oRowData = this.ApplyModel.getProperty("/FormData");
 
 			BusyIndicator.show(0);
 			var onPressDelete = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_74033")) { // 삭제
+				if (fVal && fVal == oController.getBundleText("LABEL_75022")) { // 삭제
 										
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
-					sendObject.IEmpid = oController.getSessionInfoByKey("name");
+					sendObject.IEmpid = vPernr;
 					sendObject.IBukrs = vBukrs;
 					sendObject.IConType = "4";
 					// Navigation property
-					sendObject.RoomChargeNav1 = [Common.copyByMetadata(oModel, "RoomChargeApplyTab1", oRowData)];
+					sendObject.BankAccountApplyNav1 = [Common.copyByMetadata(oModel, "BankAccountApplyTab1", oRowData)];
 					
-					oModel.create("/RoomChargeApplySet", sendObject, {
+					oModel.create("/BankAccountApplySet", sendObject, {
 						success: function(oData) {
-							if (oData && oData.RoomChargeNav1) {
+							if (oData && oData.BankAccountApplyNav1) {
 								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_74013"), { title: oController.getBundleText("MSG_08107")});
+								sap.m.MessageBox.alert(oController.getBundleText("MSG_75005"), { title: oController.getBundleText("MSG_08107")});
 								oController.navBack();
 								BusyIndicator.hide();
 							}
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
+
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
 						}
 					});
 				}
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_74012"), {
-				title: oController.getBundleText("LABEL_74001"),
-				actions: [oController.getBundleText("LABEL_74033"), oController.getBundleText("LABEL_00119")],
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_75004"), {
+				title: oController.getBundleText("LABEL_75001"),
+				actions: [oController.getBundleText("LABEL_75022"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressDelete
 			});
 		},
@@ -279,12 +278,13 @@ sap.ui.define([
 			var	vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
                 vStatus = oController.ApplyModel.getProperty("/FormData/Status");
 
-			AttachFileAction.setAttachFile(oController, {
+			FileHandler.setAttachFile(oController, { // 교육안내문
+				Label: oController.getBundleText("LABEL_75023"),
+				// Required: true,
 				Appnm: vAppnm,
-				Mode: "M",
-				Max: "5",
+				Mode: "S",
 				Editable: !vStatus
-			});
+			},"001");
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {

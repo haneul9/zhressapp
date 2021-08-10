@@ -87,6 +87,7 @@
             this.RegistModel.setData({FormData: []});
             this.PWordModel.setData({Data: {}});
 
+			this.setHTML();
             if(oEvent.data){
 				if(oEvent.data.New === "O") {
 					this.CommentModel.setProperty("/HideComment", "X");
@@ -165,6 +166,7 @@
 						// oController.RegistModel.setData({FormData: $.extend(true, oCopiedRow, {
 						// 	Detail: /^</i.test(oCopiedRow.Detail) ? oCopiedRow.Detail : "<p>${content}</p>".interpolate(oCopiedRow.Detail)
 						// })});
+						oCopiedRow.Detail = oCopiedRow.Detail.replace(/id=\"DetailAreaHTML\"/g, '');
 						oController.RegistModel.setData({FormData: oCopiedRow });
 
 						oController.RegistModel.setProperty("/CommentData", oCommentData);
@@ -1597,23 +1599,13 @@
 			});
 		},
 
-        onBeforeOpenDetailDialog: function() {
+		setHTML: function() {
 			var oController = this.getView().getController();
-			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
-				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "",
-				vGubun = oController.RegistModel.getProperty("/Gubun") || "";
-				
+
 			if($.app.byId("myRTE")){
 				$.app.byId("myRTE").destroy();
-				$.app.byId(oController.PAGEID + "AreaHTML").destroy();
-			}
-
-			if(Common.checkNull(vSdate) || vGubun === "X"){
-				$.app.byId("contentArea1").setVisible(true);
-				$.app.byId("contentArea2").setVisible(false);
-			}else{
-				$.app.byId("contentArea1").setVisible(false);
-				$.app.byId("contentArea2").setVisible(true);
+				// $.app.byId(oController.PAGEID + "AreaHTML").destroy();
+				$.app.byId("contentArea2").destroyItems();
 			}
 
 			var that = this;
@@ -1641,6 +1633,9 @@
 
 			$.app.byId("contentArea1").addItem(that.oRichTextEditor);
 			$.app.byId("contentArea2").addItem(
+				ViewTemplates.getLabel("header", "{i18n>LABEL_56010}", "130px", "Right", true) // 내용
+			);
+			$.app.byId("contentArea2").addItem(
 				new sap.ui.core.HTML(oController.PAGEID + "AreaHTML", {
 					content: {
 						path: "Detail",
@@ -1656,6 +1651,21 @@
 			);
 
 			$.app.byId("myRTE").addStyleClass("mxw-100");
+		},
+
+        onBeforeOpenDetailDialog: function() {
+			var oController = this.getView().getController();
+			var	vSdate = oController.RegistModel.getProperty("/FormData/Sdate"),
+				vAppnm = oController.RegistModel.getProperty("/FormData/Appnm") || "",
+				vGubun = oController.RegistModel.getProperty("/Gubun") || "";
+
+			if(Common.checkNull(vSdate) || vGubun === "X"){
+				$.app.byId("contentArea1").setVisible(true);
+				$.app.byId("contentArea2").setVisible(false);
+			}else{
+				$.app.byId("contentArea1").setVisible(false);
+				$.app.byId("contentArea2").setVisible(true);
+			}
 
 			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,

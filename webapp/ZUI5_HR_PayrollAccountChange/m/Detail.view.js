@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 sap.ui.define(
     [
+        "common/Common",
         "common/PageHelper",
-        "../delegate/ViewTemplates",
-        "common/PickOnlyDateRangeSelection"
+        "../delegate/ViewTemplates"
     ],
-    function (PageHelper, ViewTemplates, PickOnlyDateRangeSelection) {
+    function (Common, PageHelper, ViewTemplates) {
         "use strict";
 
         var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -21,8 +21,8 @@ sap.ui.define(
                     title: {
                         path: "Status",
                         formatter: function(v) {
-                            // N = 숙박비 지원 신규신청 else 숙박비 지원 조회
-                            return !v || v === "AA" ? oController.getBundleText("LABEL_74031") : oController.getBundleText("LABEL_74032") ;
+                            // 급여계좌변경 신규신청 else 급여계좌변경 조회
+                            return !v || v === "AA" ? oController.getBundleText("LABEL_75018") : oController.getBundleText("LABEL_75019");
                         }
                     },
                     showNavButton: true,
@@ -67,48 +67,56 @@ sap.ui.define(
 
             ApplyingBox: function (oController) {
 
+                var oBankList = new sap.m.ComboBox({ // 은행(변경후)
+                    selectedKey: "{Bankl}",
+                    width: "100%",
+                    change: oController.getBankName.bind(oController),
+                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                    editable: {
+                        path: "Status",
+                        formatter: function(v) {
+                            return !v;
+                        }
+                    },
+                    items: {
+                        path: "/BankList",
+                        template: new sap.ui.core.ListItem({ key: "{Bankl}", text: "{Banka}" })
+                    }
+                });
+    
+                oBankList.addDelegate({
+                    onAfterRendering: function () {
+                        oBankList.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
+                    }
+                }, oBankList);
+
                 return new sap.m.VBox({
                     items: [
                         new sap.m.HBox({
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74014}", "105px", "Left", true).addStyleClass("sub-con-title"), // 숙박기간
-                                new PickOnlyDateRangeSelection(oController.PAGEID + "_SearchDate", {
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_75005}", "110px", "Left", true).addStyleClass("sub-con-title"), // 은행(변경후)
+                                oBankList
+                            ]
+                        }),
+                        new sap.m.HBox({
+                            height: "40px",
+                            alignItems: sap.m.FlexAlignItems.Center,
+                            items: [
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_75006}", "110px", "Left", true).addStyleClass("sub-con-title"), // 계좌번호(변경후)
+                                new sap.m.Input({
                                     width: "100%",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+                                    maxLength: Common.getODataPropertyLength("ZHR_PAY_RESULT_SRV", "BankAccountApplyTab1", "Bankn", false),
                                     editable: {
                                         path: "Status",
                                         formatter: function(v) {
                                             return !v;
                                         }
                                     },
-                                    change: oController.setPicker.bind(oController),
-                                    displayFormat: $.app.getController().getSessionInfoByKey("Dtfmt"),
-                                    delimiter: "~",
-                                    dateValue: "{Begda}",  
-                                    secondDateValue: "{Endda}"
-                                }),
-                                new sap.m.Button({
-                                    text : "{i18n>LABEL_74025}", // 계산
-                                    visible: {
-                                        path: "Status",
-                                        formatter: function(v) {
-                                            return !v;
-                                        }
-                                    },
-                                    press : oController.onDateRange.bind(oController)
-                                }).addStyleClass("button-light-sm ml-10px")
-                            ]
-                        }),
-                        new sap.m.HBox({
-                            height: "40px",
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74024}", "105px", "Left").addStyleClass("sub-con-title"), // 연차
-                                new sap.m.Text(oController.PAGEID + "_VacText", {
-                                    width: "auto",
-                                    textAlign: "Begin",
-                                    text: "{Vacprd}"
+                                    value: "{Bankn}",
+                                    liveChange: oController.setAccountNumber.bind(oController)
                                 })
                             ]
                         }),
@@ -116,33 +124,12 @@ sap.ui.define(
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74026}", "105px", "Left").addStyleClass("sub-con-title"), // 힐링휴가
-                                new sap.m.Text(oController.PAGEID + "_HelText", {
-                                    width: "auto",
-                                    textAlign: "Begin",
-                                    text: {
-                                        path: "Healdup",
-                                        formatter: function(v) {
-                                            if(v === undefined || v === null) return "";
-    
-                                            if(v === "X")
-                                                return oController.getBundleText("LABEL_74037");
-                                            else
-                                                return oController.getBundleText("LABEL_74038");
-                                        }
-                                    }
-                                })
-                            ]
-                        }),
-                        new sap.m.HBox({
-                            height: "40px",
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74027}", "105px", "Left").addStyleClass("sub-con-title"), // 콘도사용
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_75007}", "110px", "Left").addStyleClass("sub-con-title"), // 은행(변경전)
                                 new sap.m.Text({
                                     width: "auto",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     textAlign: "Begin",
-                                    text: "{Restxt}"
+                                    text: "{Banka2}"
                                 })
                             ]
                         }),
@@ -150,86 +137,27 @@ sap.ui.define(
                             height: "40px",
                             alignItems: sap.m.FlexAlignItems.Center,
                             items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74028}", "105px", "Left").addStyleClass("sub-con-title"), // 숙박일수
+                                ViewTemplates.getLabel("header", "{i18n>LABEL_75008}", "110px", "Left").addStyleClass("sub-con-title"), // 계좌번호(변경전)
                                 new sap.m.Text({
                                     width: "auto",
+                                    layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
                                     textAlign: "Begin",
-                                    text: "{Ngtcnt}"
+                                    text: "{Bankn2}"
                                 })
                             ]
                         }),
-                        new sap.m.HBox({
-                            height: "40px",
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74029}", "105px", "Left").addStyleClass("sub-con-title"), // 잔여한도
-                                new sap.m.Text(oController.PAGEID + "_AvaText", {
-                                    width: "auto",
-                                    textAlign: "Begin",
-                                    text: "{Avacnt}"
-                                })
-                            ]
-                        }),
-                        new sap.m.HBox({
-                            visible: {
-                                path: "Status",
-                                formatter: function(v) {
-                                    return !v;
-                                }
-                            },
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74035}", "105px", "Left").addStyleClass("sub-con-title"), // 지원일수
-                                new sap.m.Text({
-                                    width: "auto",
-                                    textAlign: "Begin",
-                                    text: "{Supcnt}"
-                                })
-                            ]
-                        }),
-                        new sap.m.HBox({
-                            height: "40px",
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74030}", "105px", "Left").addStyleClass("sub-con-title"), // 지원금액
-                                new sap.m.Text({
-                                    width: "auto",
-                                    textAlign: "Begin",
-                                    text: "{Supamttx}"
-                                })
-                            ]
-                        }),
-                        new sap.m.HBox({
-                            height: "40px",
-                            alignItems: sap.m.FlexAlignItems.Center,
-                            visible: {
-                                path: "Status",
-                                formatter: function(v) {
-                                    return v === "00";
-                                }
-                            },
-                            items: [
-                                ViewTemplates.getLabel("header", "{i18n>LABEL_74036}", "105px", "Left").addStyleClass("sub-con-title"), // 진행상태
-                                new sap.m.Text({
-                                    width: "auto",
-                                    textAlign: "Begin",
-                                    text: "{Statust}"
-                                })
-                            ]
-                        }),
+                        ViewTemplates.getLabel("header", "{i18n>LABEL_75020}", "auto", "Left").addStyleClass("sub-title mt-20px"), // 신청안내
                         new sap.m.VBox({
                             width: "100%",
                             fitContainer: true,
                             items: [
-                                new sap.m.Text({ text: "{i18n>MSG_74001}", textAlign: "Begin"}).addStyleClass("Bold"),
-                                new sap.m.Text({ text: "{i18n>MSG_74002}", textAlign: "Begin"}).addStyleClass("Bold"),
-                                new sap.m.Text({ text: "{i18n>MSG_74003}", textAlign: "Begin"}).addStyleClass("ml-10px"),
-                                new sap.m.Text({ text: "{i18n>MSG_74004}", textAlign: "Begin"}).addStyleClass("info-text-red Bold")
+                                new sap.m.Text({ text: "{i18n>MSG_75001}", textAlign: "Begin"}).addStyleClass("Bold")
                             ]
-                        }).addStyleClass("MSGBox mt-20px font-12px"),
+                        }).addStyleClass("MSGBox font-12px"),
                         new sap.m.HBox({
                             fitContainer: true,
                             items: [
-                                sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)
+                                fragment.COMMON_ATTACH_FILES.renderer(oController,"001")
                             ]
                         })
                     ]

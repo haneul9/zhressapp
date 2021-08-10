@@ -8,17 +8,16 @@ sap.ui.define([
 	sap.ui.jsview($.app.APP_ID, {
         
         _Model: [
-            {id: "Statust",     label: "{i18n>LABEL_74011}" /* 결재상태 */, plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
-            {id: "Pernr",       label: "{i18n>LABEL_74012}" /* 사번 */,     plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
-            {id: "Ename",       label: "{i18n>LABEL_74013}" /* 성명 */,     plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
-            {id: "Ngtprd",      label: "{i18n>LABEL_74014}" /* 숙박기간 */, plabel: "", resize: true, span: 0, type: "string",   sort: true,  filter: true,  width: "auto"},
-            {id: "Ngtcnt",	    label: "{i18n>LABEL_74028}" /* 숙박일수 */, plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
-            {id: "Supcnt",      label: "{i18n>LABEL_74035}" /* 지원일수 */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
-            {id: "Supamttx",    label: "{i18n>LABEL_74030}" /* 지원금액 */, plabel: "", resize: true, span: 0, type: "money",  sort: true,  filter: true,  width: "10%"},
-            {id: "Restxt",      label: "{i18n>LABEL_74017}" /* 콘도 */,     plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "8%"},
-            {id: "Appda",       label: "{i18n>LABEL_74018}" /* 신청일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "10%"},
-            {id: "Sgnda",       label: "{i18n>LABEL_74040}" /* 결재일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "10%"},
-            {id: "Payym",       label: "{i18n>LABEL_74020}" /* 지급년월 */, plabel: "", resize: true, span: 0, type: "template",  sort: true,  filter: true,  width: "10%", templateGetter: "getPayDate"}
+            {id: "Statust",label: "{i18n>LABEL_75002}" /* 진행상태 */, plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
+            {id: "Pernr",  label: "{i18n>LABEL_75003}" /* 사번 */,     plabel: "", resize: true, span: 0, type: "string",sort: true,  filter: true,  width: "8%"},
+            {id: "Ename",  label: "{i18n>LABEL_75004}" /* 성명 */,     plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "8%"},
+            {id: "Banka",  label: "{i18n>LABEL_75005}" /* 은행(변경후) */, plabel: "", resize: true, span: 0, type: "string",   sort: true,  filter: true,  width: "10%"},
+            {id: "Bankn",  label: "{i18n>LABEL_75006}" /* 계좌번호(변경후) */, plabel: "", resize: true, span: 0, type: "string",    sort: true,  filter: true,  width: "13%"},
+            {id: "Banka2", label: "{i18n>LABEL_75007}" /* 은행(변경전) */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "10%"},
+            {id: "Bankn2", label: "{i18n>LABEL_75008}" /* 계좌번호(변경전) */,     plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "13%"},
+            {id: "Appda",  label: "{i18n>LABEL_75009}" /* 신청일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "auto"},
+            {id: "Sgnda",  label: "{i18n>LABEL_75010}" /* 결재일 */,   plabel: "", resize: true, span: 0, type: "date",  sort: true,  filter: true,  width: "auto"},
+            {id: "Payym",  label: "{i18n>LABEL_75011}" /* 적용년월 */, plabel: "", resize: true, span: 0, type: "string",  sort: true,  filter: true,  width: "auto"}
         ],
 		
 		getControllerName: function () {
@@ -27,52 +26,35 @@ sap.ui.define([
 
 		createContent: function (oController) {
 			this.loadModel();
-
-            var oDateYearCombo = new sap.m.ComboBox({ // 대상년도
-                selectedKey: "{Zyear}",
-                width: "150px",
-                items: {
-                    path: "/Zyears",
-                    template: new sap.ui.core.ListItem({ key: "{Code}", text: "{Text}" })
-                }
-            })
-            .addStyleClass("mr-5px");
-
-			oDateYearCombo.addDelegate({
-				onAfterRendering: function () {
-					oDateYearCombo.$().find("INPUT").attr("disabled", true).css("color", "#ccc !important");
-				}
-            }, oDateYearCombo);
 			
 			var oSearchBox = new sap.m.FlexBox({
 				fitContainer: true,
 				items: [ 
 					new sap.m.HBox({
 						items: [
-							new sap.m.Label({text: "{i18n>LABEL_74002}" }), // 부서/사원
-							new sap.m.Input(oController.PAGEID + "_EmpInput", {
+							new sap.m.Label({text: "{i18n>LABEL_75015}" }), // 사원
+							new sap.m.Input({
 								width: "140px",
 								value: "{Ename}",
-								showValueHelp: true,
-								valueHelpOnly: true,
-								valueHelpRequest: oController.searchOrgehPernr
+                                editable: false
 							}),
-							new sap.m.Label({text: "{i18n>LABEL_74003}"}), // 대상년도
-                            oDateYearCombo
+							new sap.m.Label({text: "{i18n>LABEL_75016}"}), // 은행
+							new sap.m.Input({
+								width: "250px",
+								value: "{IBanka}",
+                                editable: false
+							}),
+							new sap.m.Label({text: "{i18n>LABEL_75017}"}), // 계좌번호
+							new sap.m.Input({
+								width: "200px",
+								value: "{IBankn}",
+                                editable: false
+							})
 						]
                     })
-					.setModel(oController.SearchModel)
+					.setModel(oController.EmpModel)
                     .bindElement("/User")
-                    .addStyleClass("search-field-group"),
-					new sap.m.HBox({
-						items: [
-							new sap.m.Button({
-								press: oController.onPressSer.bind(oController),
-								text: "{i18n>LABEL_74004}" // 조회
-							}).addStyleClass("button-search")
-						]
-					})
-					.addStyleClass("button-group")
+                    .addStyleClass("search-field-group")
 				]
 			})
 			.addStyleClass("search-box search-bg pb-7px mt-16px");
@@ -86,13 +68,11 @@ sap.ui.define([
                     new sap.m.HBox({
                         items: [
                             new sap.m.Label().addStyleClass("custom-legend-color bg-signature-gray"),
-                            new sap.m.Label({ text: "{i18n>LABEL_74041}" }).addStyleClass("custom-legend-item"), // 결재중
+                            new sap.m.Label({ text: "{i18n>LABEL_75012}" }).addStyleClass("custom-legend-item"), // 신청
                             new sap.m.Label().addStyleClass("custom-legend-color bg-signature-darkgreen"),
-                            new sap.m.Label({ text: "{i18n>LABEL_74006}" }).addStyleClass("custom-legend-item"), // 승인
+                            new sap.m.Label({ text: "{i18n>LABEL_75013}" }).addStyleClass("custom-legend-item"), // 승인
                             new sap.m.Label().addStyleClass("custom-legend-color bg-signature-orange"),
-                            new sap.m.Label({ text: "{i18n>LABEL_74007}" }).addStyleClass("custom-legend-item"), // 반려
-                            new sap.m.Label().addStyleClass("custom-legend-color bg-signature-cyanblue"),
-                            new sap.m.Label({ text: "{i18n>LABEL_74008}" }).addStyleClass("custom-legend-item") // 지급
+                            new sap.m.Label({ text: "{i18n>LABEL_75014}" }).addStyleClass("custom-legend-item")  // 반려
                         ]
                     }).addStyleClass("custom-legend-group mb-5px mr-10px"),
                     new sap.m.HBox({
@@ -103,7 +83,7 @@ sap.ui.define([
                             })
                             .addStyleClass("button-light"),
                             new sap.m.Button({
-                                press: oController.onPressReq,
+                                press: oController.onPressReq.bind(oController),
                                 text: "{i18n>LABEL_74005}" // 신청
                             }).addStyleClass("button-light")
                         ]
@@ -133,8 +113,6 @@ sap.ui.define([
                                     return sap.ui.core.IndicationColor.Indication02;
                                 case "88":
                                     return sap.ui.core.IndicationColor.Indication03;
-                                case "ZZ":
-                                    return sap.ui.core.IndicationColor.Indication04;
                                 default:
                                     return null;
                             }
@@ -175,7 +153,7 @@ sap.ui.define([
 
 		loadModel: function () {
 			// Model 선언
-			$.app.setModel("ZHR_BENEFIT_SRV");
+			$.app.setModel("ZHR_PAY_RESULT_SRV");
 			$.app.setModel("ZHR_COMMON_SRV");
 		}
 	});

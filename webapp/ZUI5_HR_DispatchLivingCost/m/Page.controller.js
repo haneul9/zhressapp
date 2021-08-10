@@ -121,7 +121,7 @@
             },
 
             onPressEnd: function () {
-                // 조기종료 신청
+                // 월 생활경비 신청
                 var oController = this;
 
                 if (
@@ -155,8 +155,7 @@
                     .publish("nav", "to", {
                         id: [$.app.CONTEXT_PATH, "CostApply"].join($.app.getDeviceSuffix()),
                         data: {
-                            RowData: oRowData,
-                            Gubun: "N"
+                            RowData: oRowData
                         }
                     });
             },
