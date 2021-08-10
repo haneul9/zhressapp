@@ -310,7 +310,8 @@ sap.ui.define([
 				Label: oController.getBundleText("LABEL_74045"),
 				Required: true,
 				Appnm: vAppnm,
-				Mode: "S",
+				Mode: "M",
+				Max: "3",
 				Editable: !vStatus
 			},"001");
 		},
