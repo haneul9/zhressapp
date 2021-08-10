@@ -1,5 +1,4 @@
-﻿$.sap.require("fragment.COMMON_ATTACH_FILES");
-sap.ui.define(
+﻿sap.ui.define(
     [
         "common/PageHelper", //
         "common/Common",
