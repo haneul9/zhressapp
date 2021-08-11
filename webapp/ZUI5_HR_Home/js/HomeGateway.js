@@ -54,6 +54,7 @@ homeSession: function(_session) {
 		loginInfo: _session.loginInfo.bind(_session),
 		usePrivateLog: _session.usePrivateLog.bind(_session),
 		confirmADPW: _session.confirmADPW.bind(_session),
+		checkNewEmp2: _session.checkNewEmp2.bind(_session),
 		addLocaleChangeCallbackOwner: _session.addLocaleChangeCallbackOwner.bind(_session),
 		removeLocaleChangeCallbackOwner: _session.removeLocaleChangeCallbackOwner.bind(_session)
 	});
@@ -75,7 +76,8 @@ homeMenu: function(_menu) {
 		handleUrl: _menu.handleUrl.bind(_menu),
 		handleMissingMenuId: _menu.handleMissingMenuId.bind(_menu),
 		handleUnauthorized: _menu.handleUnauthorized.bind(_menu),
-		handleAuthCancel: _menu.handleAuthCancel.bind(_menu)
+		handleAuthCancel: _menu.handleAuthCancel.bind(_menu),
+		// handleNewEmpCancel: _menu.handleNewEmpCancel.bind(_menu)
 	});
 },
 homePortlet: function(_portlet) {

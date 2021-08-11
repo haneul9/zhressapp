@@ -310,6 +310,170 @@ checkNewEmp: function(reject) {
 	.modal();
 },
 
+checkNewEmp2 : function(o){
+	console.log(o)
+	var session = this;
+	var options = {
+		title: '신규입사자 주민등록번호 입력',
+		html: [
+			// '<div class="modal fade" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="ehr-new-emp-check-modal">',
+				// '<div class="modal-dialog" role="document">',
+					// '<div class="modal-content">',
+						// '<div class="modal-header">',
+						// 	'<h4 class="modal-title">신규입사자 주민등록번호 입력</h4>',
+						// '</div>',
+						// '<div class="modal-body">',
+							'<div class="form-group mx-1 my-3 px-5px">',
+								'<label>대상자 주민등록번호를 입력하세요.</label>',
+							'</div>',
+							'<div class="form-row mx-1">',
+								'<div class="col-6">',
+									'<input type="text" maxlength="6" class="form-control" id="new-emp-input1" />',
+								'</div>',
+								'<div class="col-6">',
+									'<input type="password" maxlength="7" class="form-control" id="new-emp-input2" />',
+								'</div>',
+							'</div>',
+							'<div class="form-group mx-1 my-3 px-5px">',
+								'<div class="feedback-message invalid-feedback"></div>',
+							'</div>',
+						// '</div>',
+						// '<div class="modal-footer">',
+						// 	'<button type="button" class="btn btn-primary fn-new-emp-check">',
+						// 		'<span class="spinner-border spinner-border-sm mb-2px mr-8px d-none" role="status" aria-hidden="true"></span>',
+						// 		'확인',
+						// 	'</button>',
+						// '</div>',
+					// '</div>',
+				// '</div>',
+			// '</div>'
+		].join(''),
+		show: function() {
+			$('#ehr-confirm-modal #new-emp-input1, #ehr-confirm-modal #new-emp-input2').keydown(function(e) {
+				var key = e.keyCode || e.which;
+				if (key === 13 && $.trim($(e.currentTarget).val())) {
+					options.confirm();
+				}
+			});
+		},
+		spin: function(on) {
+			setTimeout(function() {
+				$('#ehr-confirm-modal .fn-new-emp-check')
+					.prop('disabled', on)
+					.find('.spinner-border').toggleClass('d-none', !on);
+			}, 0);
+		},
+		confirm: function(e) {
+			if (e) {
+				e.stopImmediatePropagation();
+			}
+
+			setTimeout(function() {
+				// var input1 = $('#ehr-new-emp-check-modal #new-emp-input1'),
+				// 	input2 = $('#ehr-new-emp-check-modal #new-emp-input2'),
+				// 	input1Value = input1.val().replace(/\s|\D/g, ''),
+				// 	input2Value = input2.val().replace(/\s|\D/g, '');
+				
+				var input1 = $('#ehr-confirm-modal #new-emp-input1'),
+					input2 = $('#ehr-confirm-modal #new-emp-input2'),
+					input1Value = input1.val().replace(/\s|\D/g, ''),
+					input2Value = input2.val().replace(/\s|\D/g, '');
+
+				if (!input1Value) {
+					options.spin(false);
+					$('#ehr-confirm-modal .invalid-feedback').text('앞 6자릿수를 입력하세요.').show();
+					return;
+				}
+				if (!/^\d{6}$/.test(input1Value)) {
+					options.spin(false);
+					$('#ehr-confirm-modal .invalid-feedback').text('앞 6자릿수를 입력하세요.').show();
+					return;
+				}
+				if (!input2Value) {
+					options.spin(false);
+					$('#ehr-confirm-modal .invalid-feedback').text('뒤 7자릿수를 입력하세요.').show();
+					return;
+				}
+				if (!/^\d{7}$/.test(input2Value)) {
+					options.spin(false);
+					$('#ehr-confirm-modal .invalid-feedback').text('뒤 7자릿수를 입력하세요.').show();
+					return;
+				}
+
+				$('#ehr-confirm-modal .invalid-feedback').text('').hide();
+				
+				session._gateway.setModel('ZHR_PERS_INFO_SRV');
+				session._gateway.getModel('ZHR_PERS_INFO_SRV').create('/NewEmpinfoSet', {
+					IConType : '1',
+					IRegno : ([input1Value, input2Value].join('')),
+					ILangu : 'KO',
+					NewEmpinfoBasicNav: []
+				}, {
+					async: true,
+					success: function(result) {
+						this._gateway.prepareLog('HomeSession.checkNewEmp ${url} success'.interpolate('ZHR_PERS_INFO_SRV/NewEmpinfoSet'), arguments).log();
+	
+						if (result) {
+							sessionStorage.setItem('ehr.new.emp.id', result.IPernr);
+							sessionStorage.setItem('ehr.sf-user.name', result.IPernr);
+							sessionStorage.setItem('ehr.sf-user.language', "KO");
+							
+							Promise.all([
+								this.encodePernr()
+							])
+							.then(function() {
+								Promise.all([
+									this.retrieveLoginInfo()
+								])
+								.then(function(){
+									o.confirm()
+								});
+							}.bind(this))
+							.catch(function(e) {
+								if (sessionStorage.getItem('ehr.new.emp.id')) {
+									if (typeof callback === 'function') {
+										callback();
+									}
+									return;
+								}
+						
+								var message = (e.message ? e.message : this._gateway.handleError(this._gateway.ODataDestination.ETC, e, 'HomeSession.init').message) || '알 수 없는 오류가 발생하였습니다.';
+						
+								$(function() {
+									this._gateway.alert({
+										title: '오류',
+										html: ['<p>', '</p>'].join(message)
+									});
+								}.bind(this));
+							}.bind(this));
+							
+							$('#ehr-confirm-modal').modal('hide');
+							
+							// reject({ data: result }); // 이후 session 생성 절차를 건너뛰기 위해 reject로 처리함
+						}
+					}.bind(session),
+					error: function(jqXHR) {
+						var message = this._gateway.handleError(this._gateway.ODataDestination.S4HANA, jqXHR, 'HomeSession.encodePernr ZHR_COMMON_SRV/PernrEncodingSet').message;
+	
+						options.spin(false);
+						$('#ehr-confirm-modal .invalid-feedback').text(message).show();
+					}.bind(session)
+				});
+				
+				// options.retrieveNewEmp([input1Value, input2Value].join(''));
+			}, 0);
+		}.bind(this),
+		retrieveNewEmp: function(value) {
+			
+		},
+		cancel: o.cancel,
+		
+	};
+
+	this._gateway.confirm(options);
+},
+
+
 retrieveClientIP: function() {
 
 	return $.getJSON({
