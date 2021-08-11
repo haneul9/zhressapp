@@ -1,14 +1,13 @@
-﻿/* eslint-disable no-undef */
-sap.ui.define(
+﻿sap.ui.define(
     [
         "common/Common",
         "common/CommonController",
         "common/JSONModelHelper",
         "sap/m/MessageBox",
         "sap/ui/core/BusyIndicator",
-        "fragment/COMMON_ATTACH_FILES"
+        "common/AttachFileAction"
     ],
-    function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
+    function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, AttachFileAction) {
         "use strict";
 
         return CommonController.extend($.app.APP_ID, {
@@ -841,7 +840,7 @@ sap.ui.define(
                     oController.ApplyModel.setProperty("/FormData/PayDate", oController.CostModel.getProperty("/Data/0/PayDate"));
                 }
                 
-                if (FileHandler.getFileLength(oController, "001") === 0) {
+                if (AttachFileAction.getFileLength(oController) === 0) {
                     MessageBox.error(oController.getBundleText("MSG_59027"), { title: oController.getBundleText("LABEL_00149") });
                     return true;
                 }
@@ -914,7 +913,7 @@ sap.ui.define(
                         // 신청
 
                         // 첨부파일 저장
-                        oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
+                        oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
                         oRowData.Pernr = vPernr;
                         oRowData.Waers = "KRW";
 
@@ -967,7 +966,7 @@ sap.ui.define(
                 var onPressApply = function (fVal) {
                     if (fVal && fVal == oController.getBundleText("LABEL_59026")) {
                         // 첨부파일 저장
-                        oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
+                        oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
                         oRowData.Pernr = vPernr;
                         oRowData.Waers = "KRW";
                         delete oRowData.Appkey;
@@ -1023,7 +1022,7 @@ sap.ui.define(
                         // 저장
 
                         // 첨부파일 저장
-                        oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
+                        oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
                         oRowData.Pernr = vPernr;
 
                         var sendObject = {};
@@ -1114,20 +1113,14 @@ sap.ui.define(
                     vMonExpenses = this.ApplyModel.getProperty("/MonExpenses"),
                     vAppnm = this.ApplyModel.getProperty("/FormData/Appnm") || "";
                     
-                FileHandler.setAttachFile(
-                    this,
-                    {
-                        // 첨부파일
-                        Label: this.getBundleText("LABEL_59021"),
-                        Required: true,
-                        Appnm: vAppnm,
-                        Mode: "S",
-                        ReadAsync: true,
-                        UseMultiCategories: true,
-                        Editable: vMonExpenses === "X" || (Common.checkNull(vMonExpenses) && !vStatus || vStatus === "AA")
-                    },
-                    "001"
-                );
+
+                AttachFileAction.setAttachFile(this, {
+                    Appnm: vAppnm,
+                    Required: true,
+                    Mode: "M",
+                    Max: "3",
+                    Editable: vMonExpenses === "X" || (Common.checkNull(vMonExpenses) && !vStatus || vStatus === "AA")
+                });
             },
 
             getLocalSessionModel: Common.isLOCAL()

@@ -1,5 +1,4 @@
-﻿/* eslint-disable no-undef */
-sap.ui.define(
+﻿sap.ui.define(
     [
         "common/Common",
         "common/PageHelper",
@@ -764,7 +763,7 @@ sap.ui.define(
                         }),
                         new sap.m.HBox(oController.PAGEID + "_FileFlexBox", {
                             fitContainer: true,
-                            items: [fragment.COMMON_ATTACH_FILES.renderer(oController, "001")]
+                            items: [sap.ui.jsfragment("fragment.COMMON_ATTACH_FILE", oController)]
                         }).addStyleClass("mt-8px")
                     ]
                 }).addStyleClass("vbox-form-mobile");

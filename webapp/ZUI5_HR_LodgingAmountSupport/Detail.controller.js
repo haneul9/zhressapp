@@ -213,7 +213,7 @@ sap.ui.define([
 				if (fVal && fVal == oController.getBundleText("LABEL_74010")) { // 신청
 					
 					// 첨부파일 저장
-					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
+					oRowData.Appnm = FileHandler.uploadFile.call(oController, ["001"]);
 					oRowData.Pernr = vPernr;
 										
 					var sendObject = {};
@@ -310,7 +310,8 @@ sap.ui.define([
 				Label: oController.getBundleText("LABEL_74045"),
 				Required: true,
 				Appnm: vAppnm,
-				Mode: "S",
+				Mode: "M",
+				Max: "3",
 				Editable: !vStatus
 			},"001");
 		},
