@@ -203,6 +203,27 @@ sap.ui.define([
                             	]
                             })
                         ]
+                    }),
+                    new sap.m.HBox({
+                        height: "40px",
+                        alignItems: sap.m.FlexAlignItems.Center,
+                        items: [
+                            new sap.m.Label({ width: "150px", text: "{i18n>LABEL_76092}", textAlign: "Left" }).addStyleClass("sub-conRead-title"), // 국적
+                            new sap.m.HBox({
+                            	width : "100%",
+                            	items : [
+                            		new sap.m.VBox({
+										layoutData: new sap.m.FlexItemData({ growFactor: 1 }),
+										items : [
+											new sap.m.ComboBox(oController.PAGEID + "_Natio", {
+                                                width : "100%",
+                                                selectedKey : "{Natio}"
+                                            })
+										]
+									})
+                            	]
+                            })
+                        ]
                     })
                 ]
             });

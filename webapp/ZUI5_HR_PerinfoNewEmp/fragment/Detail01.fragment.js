@@ -225,6 +225,28 @@ sap.ui.define(
                                             hAlign : "Begin",
                                             vAlign : "Middle"
                                         }).addStyleClass("Data")]
+                            }),
+                            new sap.ui.commons.layout.MatrixLayoutRow({
+                                height : "45px",
+                                cells : [new sap.ui.commons.layout.MatrixLayoutCell({
+                                             content : [new sap.m.Text({text : "{i18n>LABEL_76092}"})], // 국적
+                                             hAlign : "End",
+                                             vAlign : "Middle"
+                                         }).addStyleClass("Label"),
+                                         new sap.ui.commons.layout.MatrixLayoutCell({
+                                             content : [new sap.m.ComboBox(oController.PAGEID + "_Natio", {
+                                                            width : "50%",
+                                                            selectedKey : "{Natio}"
+                                                        })],
+                                             hAlign : "Begin",
+                                             vAlign : "Middle"
+                                         }).addStyleClass("Data"),
+                                        new sap.ui.commons.layout.MatrixLayoutCell({
+                                            content : [],
+                                            hAlign : "Begin",
+                                            vAlign : "Middle",
+                                            colSpan : 2
+                                        }).addStyleClass("Data")]
                             })]
                 });
                 

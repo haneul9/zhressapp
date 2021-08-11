@@ -37,6 +37,7 @@ sap.ui.define(
 				var field = [{name : "Gesch", code : "GESCH", code2 : "004"}, // 인적사항-성별
 							 {name : "Zzclass", code : "ZCLASS", code2 : "004"}, // 인적사항-생일 양/음력
 							 {name : "Famst", code : "", code2 : "007"}, // 인적사항-결혼여부
+							 {name : "Natio", code : "", code2 : "009"}, // 인적사항-국적
 							 {name : "Mrank", code : "17", code2 : "999"}, // 병역사항-계급
 							 {name : "Serty", code : "18", code2 : "999"}, // 병역사항-병역유형
 							 {name : "Jobcl", code : "19", code2 : "999"}, // 병역사항-보직분류
@@ -745,7 +746,8 @@ sap.ui.define(
 							Zzbdate : oData.Zzbdate ? "\/Date(" + common.Common.getTime(new Date(oData.Zzbdate)) + ")\/" : null,
 							Zzclass : oData.Zzclass,
 							Famst : oData.Famst,
-							Famdt : oData.Famdt && oData.Famdt != "" ? "\/Date(" + common.Common.getTime(new Date(oData.Famdt)) + ")\/" : null
+							Famdt : oData.Famdt && oData.Famdt != "" ? "\/Date(" + common.Common.getTime(new Date(oData.Famdt)) + ")\/" : null,
+							Natio : oData.Natio
 						});
 						break;
 					case "S3": // 주소정보 저장
