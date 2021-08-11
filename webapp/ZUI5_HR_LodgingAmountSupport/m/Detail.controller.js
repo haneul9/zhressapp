@@ -296,7 +296,7 @@ sap.ui.define(
                     title: oController.getBundleText("LABEL_74001"),
                     actions: [oController.getBundleText("LABEL_74033"), oController.getBundleText("LABEL_00119")],
                     onClose: onPressDelete
-                });
+                }); 
             },
     
             onBeforeOpenDetailDialog: function() {
