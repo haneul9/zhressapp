@@ -979,11 +979,55 @@ fragment.COMMON_ATTACH_FILES = {
 					};
 					if(vPages[a]=="001"||vPages[a]=="002"||vPages[a]=="003"||vPages[a]=="004"||vPages[a]=="005"||vPages[a]=="006"){
 						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
+						
+						// 신규입사자정보입력 - 첨부파일명 변경
+						if(oController.PAGEID === "PerinfoNewEmp"){
+							var name = oController._ListCondJSonModel.getProperty("/Data/Lnmhg") + oController._ListCondJSonModel.getProperty("/Data/Fnmhg") + "-";
+							
+							switch(vPages[a]){
+								case "001":
+									name += oController.getBundleText("LABEL_76093"); // 등본
+									break;
+								case "002":
+									name += oController.getBundleText("LABEL_76094"); // 초본
+									break;
+								case "003":
+									name += oController.getBundleText("LABEL_76095"); // 가족
+									break;
+								case "004":
+									name += oController.getBundleText("LABEL_76096"); // 사진
+									break;
+								case "006":
+									name += oController.getBundleText("LABEL_76098"); // 경력
+									break;
+							}
+							
+							oHeaders.slug=[vAppnm, vPernr, encodeURI(name + " " + elem2.Fname), vPernr, vPages[a]].join("|");
+						}
+						
 					}else{
 						oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, parseInt(b)+3].join("|");
 						
+						// 신규입사자정보입력 - 첨부파일명 변경
 						if(oController.PAGEID === "PerinfoNewEmp" || oController.PAGEID === "PerinfoNewEmpDetail-School"){
-							oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
+							
+							var name = oController._ListCondJSonModel.getProperty("/Data/Lnmhg") + oController._ListCondJSonModel.getProperty("/Data/Fnmhg") + "-";
+								
+							switch(vPages[a]){
+								case "007":
+									name += oController.getBundleText("LABEL_76097"); // 학력
+									break;
+								case "008":
+									name += oController.getBundleText("LABEL_76099"); // 보훈
+									break;
+								case "009":
+									name += oController.getBundleText("LABEL_76100"); // 장애
+									break;
+							}
+							
+							oHeaders.slug=[vAppnm, vPernr, encodeURI(name + " " + elem2.Fname), vPernr, vPages[a]].join("|");
+						
+							// oHeaders.slug=[vAppnm, vPernr, encodeURI(elem2.Fname), vPernr, vPages[a]].join("|");
 						}
 					}
 					common.Common.log(oHeaders.slug);
