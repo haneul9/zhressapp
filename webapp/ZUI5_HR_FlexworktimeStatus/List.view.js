@@ -120,7 +120,7 @@ sap.ui.define(
                                             vAlign : "Middle"
                                         }).addStyleClass("Label2"),
                                         new sap.ui.commons.layout.MatrixLayoutCell({
-                                            content : [new sap.m.Text({text : "{i18n>LABEL_63006}", textAlign : "Center"}).addStyleClass("font-bold")], // 휴일근로\n(C)
+                                            content : [new sap.m.Text({text : "{i18n>LABEL_69061}", textAlign : "Center"}).addStyleClass("font-bold")], // 연장신청\n(C)
                                             hAlign : "Center",
                                             vAlign : "Middle"
                                         }).addStyleClass("Label2"),
