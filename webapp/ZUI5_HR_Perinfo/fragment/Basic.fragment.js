@@ -12,7 +12,7 @@ sap.ui.define(
              */
 
             createContent: function (oController) {
-                var oZzbdate, oGbort, oFamst, oFamdt, oEname2, oEname3;
+                var oZzbdate, oGbort, oFamst, oFamdt, oEname2, oEname3, oLnmch, oFnmch, oNachn, oVorna;
 
                 oZzbdate = new sap.m.DatePicker({
                     width: "120px",
@@ -67,10 +67,9 @@ sap.ui.define(
                         }
                     }
                 });
-                oEname2 = new sap.m.Input({
+                oEname2 = new sap.m.Input({ //이름(한자 full)
                     width: "100%",
                     value: "{Ename2}",
-                    //maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "PerinfoBasicTab", "Gbort"),
                     editable: {
                         path: "disyn",
                         formatter: function (v) {
@@ -79,10 +78,53 @@ sap.ui.define(
                         }
                     }
                 });
-                oEname3 = new sap.m.Input({
+                oLnmch = new sap.m.Input({ //성(한자)
+                    width: "20%",
+                    value: "{Lnmch}",
+                    editable: {
+                        path: "disyn",
+                        formatter: function (v) {
+                            if (v === "1") return true;
+                            else return false;
+                        }
+                    }
+                });
+                oFnmch = new sap.m.Input({ //이름(한자)
+                    width: "80%",
+                    value: "{Fnmch}",
+                    editable: {
+                        path: "disyn",
+                        formatter: function (v) {
+                            if (v === "1") return true;
+                            else return false;
+                        }
+                    }
+                });
+                oEname3 = new sap.m.Input({  //이름(영문 full)
                     width: "100%",
                     value: "{Ename3}",
-                    //maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "PerinfoBasicTab", "Gbort"),
+                    editable: {
+                        path: "disyn",
+                        formatter: function (v) {
+                            if (v === "1") return true;
+                            else return false;
+                        }
+                    }
+                });
+                oNachn = new sap.m.Input({  //성(영문)
+                    width: "20%",
+                    value: "{Nachn}",
+                    editable: {
+                        path: "disyn",
+                        formatter: function (v) {
+                            if (v === "1") return true;
+                            else return false;
+                        }
+                    }
+                });
+                oVorna = new sap.m.Input({  //이름(영문)
+                    width: "80%",
+                    value: "{Vorna}",
                     editable: {
                         path: "disyn",
                         formatter: function (v) {
@@ -217,7 +259,7 @@ sap.ui.define(
                                 }).addStyleClass("Label"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     //content: [new sap.m.Text({ text: "{Ename2}" })],
-                                    content: [oEname2],
+                                    content: [oLnmch, oFnmch],
                                     hAlign: "Begin",
                                     vAlign: "Middle"
                                 }).addStyleClass("Data")
@@ -233,7 +275,7 @@ sap.ui.define(
                                 }).addStyleClass("Label"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
                                     //content: [new sap.m.Text({ text: "{Ename3}" })],
-                                    content: [oEname3],
+                                    content: [oNachn, oVorna],
                                     hAlign: "Begin",
                                     vAlign: "Middle"                                    
                                 }).addStyleClass("Data"),                            
