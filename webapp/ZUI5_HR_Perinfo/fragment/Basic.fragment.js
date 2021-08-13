@@ -12,7 +12,7 @@ sap.ui.define(
              */
 
             createContent: function (oController) {
-                var oZzbdate, oGbort, oFamst, oFamdt, oEname2, Ename3;
+                var oZzbdate, oGbort, oFamst, oFamdt, oEname2, oEname3;
 
                 oZzbdate = new sap.m.DatePicker({
                     width: "120px",
