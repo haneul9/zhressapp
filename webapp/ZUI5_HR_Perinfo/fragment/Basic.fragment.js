@@ -12,7 +12,7 @@ sap.ui.define(
              */
 
             createContent: function (oController) {
-                var oZzbdate, oGbort, oFamst, oFamdt;
+                var oZzbdate, oGbort, oFamst, oFamdt, oEname2, Ename3;
 
                 oZzbdate = new sap.m.DatePicker({
                     width: "120px",
@@ -59,6 +59,30 @@ sap.ui.define(
                     valueFormat: "yyyy-MM-dd",
                     displayFormat: gDtfmt,
                     value: "{Famdt}",
+                    editable: {
+                        path: "disyn",
+                        formatter: function (v) {
+                            if (v === "1") return true;
+                            else return false;
+                        }
+                    }
+                });
+                oEname2 = new sap.m.Input({
+                    width: "100%",
+                    value: "{Ename2}",
+                    //maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "PerinfoBasicTab", "Gbort"),
+                    editable: {
+                        path: "disyn",
+                        formatter: function (v) {
+                            if (v === "1") return true;
+                            else return false;
+                        }
+                    }
+                });
+                oEname3 = new sap.m.Input({
+                    width: "100%",
+                    value: "{Ename3}",
+                    //maxLength: Common.getODataPropertyLength("ZHR_PERS_INFO_SRV", "PerinfoBasicTab", "Gbort"),
                     editable: {
                         path: "disyn",
                         formatter: function (v) {
@@ -187,7 +211,8 @@ sap.ui.define(
                                     vAlign: "Middle"
                                 }).addStyleClass("Data"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
-                                    content: [new sap.m.Text({ text: "{i18n>LABEL_37013}" })], // 한자
+                                    //content: [new sap.m.Text({ text: "{i18n>LABEL_37013}" })], // 한자
+                                    content: [oEname2],
                                     hAlign: "Center",
                                     vAlign: "Middle"
                                 }).addStyleClass("Label"),
@@ -207,7 +232,8 @@ sap.ui.define(
                                     vAlign: "Middle"
                                 }).addStyleClass("Label"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
-                                    content: [new sap.m.Text({ text: "{Ename3}" })],
+                                    //content: [new sap.m.Text({ text: "{Ename3}" })],
+                                    content: [oEname3],
                                     hAlign: "Begin",
                                     vAlign: "Middle"                                    
                                 }).addStyleClass("Data"),                            
