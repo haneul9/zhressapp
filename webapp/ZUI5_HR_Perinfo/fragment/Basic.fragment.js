@@ -211,13 +211,13 @@ sap.ui.define(
                                     vAlign: "Middle"
                                 }).addStyleClass("Data"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
-                                    //content: [new sap.m.Text({ text: "{i18n>LABEL_37013}" })], // 한자
-                                    content: [oEname2],
+                                    content: [new sap.m.Text({ text: "{i18n>LABEL_37013}" })], // 한자
                                     hAlign: "Center",
                                     vAlign: "Middle"
                                 }).addStyleClass("Label"),
                                 new sap.ui.commons.layout.MatrixLayoutCell({
-                                    content: [new sap.m.Text({ text: "{Ename2}" })],
+                                    //content: [new sap.m.Text({ text: "{Ename2}" })],
+                                    content: [oEname2],
                                     hAlign: "Begin",
                                     vAlign: "Middle"
                                 }).addStyleClass("Data")
