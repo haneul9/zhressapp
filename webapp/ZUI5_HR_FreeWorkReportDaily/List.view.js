@@ -123,31 +123,6 @@ sap.ui.jsview("ZUI5_HR_FreeWorkReportDaily.List", {
 		oTable.setModel(new sap.ui.model.json.JSONModel());
 		oTable.bindRows("/Data");
 		
-						// 근무일자, 사번, 성명, 부서, 유형, 요일
-		var col_info = [{id: "Begda", label: "{i18n>LABEL_64013}", plabel: "", resize: true, span: 0, type: "date", sort: true, filter: true, width : "110px"},
-						{id: "Pernr", label: "{i18n>LABEL_00191}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "110px"},
-						{id: "Ename", label: "{i18n>LABEL_00121}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "110px"},
-						{id: "Orgtx", label: "{i18n>LABEL_00155}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Rtext", label: "{i18n>LABEL_64014}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Day", label: "{i18n>LABEL_64015}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
-						// 출근시간, 퇴근시간, 재근시간, 소명시간
-						{id: "Entbg", label: "{i18n>LABEL_64016}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
-						{id: "Enten", label: "{i18n>LABEL_64017}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
-						{id: "Norwk", label: "{i18n>LABEL_64018}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
-						{id: "PrchkW", label: "{i18n>LABEL_64019}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
-						// 근태명, 근태인정시간, 추가인정시간, 비근무시간(PC OFF), 추가비근무시간
-						{id: "Absence", label: "{i18n>LABEL_64020}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true},
-						{id: "Comtm", label: "{i18n>LABEL_64021}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "85px"},
-						{id: "Etctt", label: "{i18n>LABEL_64022}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "85px"},
-						{id: "Nonwt2", label: "{i18n>LABEL_64023}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "85px"},
-						{id: "Brktm1", label: "{i18n>LABEL_64024}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "85px"},
-						// 법정휴게시간, 근무시간, 정상여부, 비고
-						{id: "Brktm2", label: "{i18n>LABEL_64025}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "70px"},
-						{id: "Workt3", label: "{i18n>LABEL_64026}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, width : "60px"},
-						{id: "Error", label: "{i18n>LABEL_64027}", plabel: "", resize: true, span: 0, type: "formatter", sort: true, filter: true, width : "60px"},
-						{id: "Reqrn", label: "{i18n>LABEL_64028}", plabel: "", resize: true, span: 0, type: "string", sort: true, filter: true, align : "Begin"}];
-		
-		common.makeTable.makeColumn(oController, oTable, col_info);
 		
 		var oPage = new common.PageHelper({
 						idPrefix : oController.PAGEID,
