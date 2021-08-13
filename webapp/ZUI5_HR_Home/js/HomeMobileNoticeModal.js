@@ -7,7 +7,7 @@ function HomeMobileNoticeModal(o) {
 
 	this.options = o;
 
-	this.init();
+	//this.init();
 }
 
 $.extend(HomeMobileNoticeModal.prototype, {
