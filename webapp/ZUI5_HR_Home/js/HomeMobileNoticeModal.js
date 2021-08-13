@@ -2,8 +2,9 @@
 function HomeMobileNoticeModal(o) {
 
 	if (o && o.os !== 'aos') {
-		return;
+		//return;
 	}
+	return;
 
 	this.options = o;
 
@@ -50,7 +51,7 @@ init: function() {
 
 ui: function() {
 
-	return [
+	return [  
 		'<div class="modal fade mobile-notice-modal" style="display:none" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" id="mobile-notice-modal">',
 			'<div class="modal-dialog" role="document">',
 				'<div class="modal-content">',
