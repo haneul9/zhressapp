@@ -218,7 +218,7 @@ sap.ui.define([
 				workbook: { columns: oController._Columns },
 				dataSource: oJSONModel.getProperty("/Data"),
 				worker: false, // We need to disable worker because we are using a MockServer as OData Service
-			    fileName: oController.getBundleText("LABEL_75001") + ".xlsx" // 급여계좌변경신청
+			    fileName: oController.getBundleText("LABEL_77001") + ".xlsx" // 인재충원요청서
 			};
 	
 			var oSpreadsheet = new Spreadsheet(oSettings);
