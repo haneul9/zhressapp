@@ -4,9 +4,10 @@ sap.ui.define([
 	"../common/JSONModelHelper",
 	"sap/m/MessageBox",
 	"sap/ui/core/BusyIndicator",
-	"fragment/COMMON_ATTACH_FILES"
+	"common/SearchOrg",
+	"common/AttachFileAction"
 	], 
-	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, FileHandler) {
+	function (Common, CommonController, JSONModelHelper, MessageBox, BusyIndicator, SearchOrg, AttachFileAction) {
 	"use strict";
 
 	var SUB_APP_ID = [$.app.CONTEXT_PATH, "Detail"].join($.app.getDeviceSuffix());
@@ -15,9 +16,7 @@ sap.ui.define([
 		
 		PAGEID: "Detail",
 		
-        TableModel: new JSONModelHelper(),
 		ApplyModel: new JSONModelHelper(),
-		SearchModel: new JSONModelHelper(),
 
 		getUserId: function() {
 
@@ -45,30 +44,20 @@ sap.ui.define([
 		
 		onBeforeShow: function(oEvent) {
             Common.log("onBeforeShow");
-
             BusyIndicator.show(0);
+			var oDeptInput = $.app.byId(this.PAGEID + "_Orgeh");
 
             this.ApplyModel.setData({FormData: []});
+			oDeptInput.destroyTokens();
 			
             if(oEvent.data.RowData){
 				this.ApplyModel.setData({FormData: oEvent.data.RowData});
-            }else {
-				this.ApplyModel.setData({
-					FormData: {
-						Banka2: oEvent.data.User.IBanka,
-						Bankn2: oEvent.data.User.IBankn,
-						Bankl2: oEvent.data.User.IBankl
-					}
-				});
-			}
-
-			this.ApplyModel.setProperty("/BankList", oEvent.data.BankList);
+            }
 		},
 		
 		onAfterShow: function() {
+			this.getReasonList();
 			this.onBeforeOpenDetailDialog();
-
-			if(!this.SearchModel.getProperty("/User")) this.onSetInfo();
 			
 			$("#Detail-app-title-container").remove();
             BusyIndicator.hide();
@@ -80,78 +69,224 @@ sap.ui.define([
             });
         },
 
-		onSetInfo : function(){
-			var oView = $.app.byId("ZUI5_HR_PayrollAccountChange.Detail");
-			var oController = oView.getController();
-			var Pernr = oController.getUserId();
-		
-			var oPhoto = "";
-			new JSONModelHelper().url("/odata/v2/Photo?$filter=userId eq '" + Pernr + "' and photoType eq '1'")
-				 .select("photo")
-				 .setAsync(false)
-				 .attachRequestCompleted(function(){
-						var data = this.getData().d;
-						
-						if(data && data.results.length){
-							oPhoto = "data:text/plain;base64," + data.results[0].photo;
-						} else {
-							oPhoto = "images/male.jpg";
-						}
-				 })
-				 .attachRequestFailed(function() {
-						oPhoto = "images/male.jpg";
-				 })
-				 .load();
-				 
-			var vData = {};
-				vData.photo = oPhoto;
+		getReasonList: function() {
+			var oController = this.getView().getController();
+			var oModel = $.app.getModel("ZHR_COMMON_SRV");
+			var vPernr = oController.getUserId();
+			var vBukrs = oController.getUserGubun();
+			var sendObject = {};
+			var vPersonnel = "",
+                oList = [];
 
-			var oModel = $.app.getModel("ZHR_PERS_INFO_SRV");
-			var createData = {TableIn : []};
-				createData.IPernr = Pernr;
-				createData.ILangu = $.app.getModel("session").getData().Langu;
-				
-			oModel.create("/HeaderSet", createData, {
-				success: function(data){
-					if(data){
-						if(data.TableIn && data.TableIn.results){
-							var data1 = data.TableIn.results[0];
-							
-							if(data1){
-								Object.assign(vData, data1);
-							}
-						}
-					}
-				},
-				error: function (oResponse) {
-			    	Common.log(oResponse);
-					sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
-						title: oController.getBundleText("LABEL_09030")
-					});
-				}
+			Common.makeNumbersArray({length: 99, isZeroStart: false}).forEach(function(idx) {
+				vPersonnel = String(idx);
+				oList.push({ Code: vPersonnel, Text: vPersonnel + "명" });
 			});
+
+			oController.ApplyModel.setProperty("/FormData/Reccnt", "1");
+			oController.ApplyModel.setProperty("/PersonnelCombo", oList);
 			
-			oController.SearchModel.setData({User: vData});
+			if(!oController.ApplyModel.getProperty("/ReasonList")) {
+				sendObject = {};
+				// Header
+				sendObject.IPernr = vPernr;
+				sendObject.IBukrs = vBukrs;
+				sendObject.ICodeT = "004";
+				sendObject.ICodty = "ZHRD_RECRSN";
+				// Navigation property
+				sendObject.NavCommonCodeList = [];
+				// 사유코드
+				oModel.create("/CommonCodeListHeaderSet", sendObject, {
+					success: function(oData) {
+						if (oData && oData.NavCommonCodeList) {
+							Common.log(oData);
+							oController.ApplyModel.setProperty("/ReasonList", oData.NavCommonCodeList.results);
+						}
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
+					}
+				});
+			}
+
+			if(!oController.ApplyModel.getProperty("/StaffingCombo")) {
+				sendObject = {};
+				// Header
+				sendObject.IPernr = vPernr;
+				sendObject.IBukrs = vBukrs;
+				sendObject.ICodeT = "004";
+				sendObject.ICodty = "ZHRD_RECCHN";
+				// Navigation property
+				sendObject.NavCommonCodeList = [];
+				// 채널코드
+				oModel.create("/CommonCodeListHeaderSet", sendObject, {
+					success: function(oData) {
+						if (oData && oData.NavCommonCodeList) {
+							Common.log(oData);
+							oController.ApplyModel.setProperty("/StaffingCombo", oData.NavCommonCodeList.results);
+						}
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
+					}
+				});
+			}
+
+			if(!oController.ApplyModel.getProperty("/WorkGroup")) {
+				sendObject = {};
+				// Header
+				sendObject.IPernr = vPernr;
+				sendObject.IBukrs = vBukrs;
+				sendObject.ICodeT = "004";
+				sendObject.ICodty = "ZHRD_HGRADE";
+				// Navigation property
+				sendObject.NavCommonCodeList = [];
+				// 직군코드
+				oModel.create("/CommonCodeListHeaderSet", sendObject, {
+					success: function(oData) {
+						if (oData && oData.NavCommonCodeList) {
+							Common.log(oData);
+							oController.ApplyModel.setProperty("/WorkGroup", oData.NavCommonCodeList.results);
+						}
+					},
+					error: function(oResponse) {
+						Common.log(oResponse);
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
+					}
+				});
+			}
+
+			if(!oController.ApplyModel.getProperty("/PersonnelArea")) {
+				// 인사영역
+				oModel.read("/WerksListAuthSet", {
+					filters: [
+						new sap.ui.model.Filter("ICusrid", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.odata.user.percod')),
+						new sap.ui.model.Filter("ICusrse", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.session.token')),
+						new sap.ui.model.Filter("ICusrpn", sap.ui.model.FilterOperator.EQ, sessionStorage.getItem('ehr.sf-user.name')),
+						new sap.ui.model.Filter("ICmenuid", sap.ui.model.FilterOperator.EQ, $.app.getMenuId()),
+						new sap.ui.model.Filter("Percod", sap.ui.model.FilterOperator.EQ, oController.getSessionInfoByKey("Percod")),
+						new sap.ui.model.Filter("Bukrs", sap.ui.model.FilterOperator.EQ, vBukrs)
+					],
+					success: function (data) {
+						if (data && data.results.length) {
+							oController.ApplyModel.setProperty("/PersonnelArea", data.results);
+						}
+					},
+					error: function (oResponse) {
+						sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+							title: oController.getBundleText("LABEL_09030")
+						});
+					}
+				});
+				// sendObject = {};
+				// // Header
+				// sendObject.ICusrid = sessionStorage.getItem('ehr.odata.user.percod');
+				// sendObject.ICusrse = sessionStorage.getItem('ehr.session.token');
+				// sendObject.ICusrpn = sessionStorage.getItem('ehr.sf-user.name');
+				// sendObject.ICmenuid = $.app.getMenuId();
+				// sendObject.Percod = oController.getSessionInfoByKey("Percod");
+				// sendObject.Bukrs = vBukrs;
+				// // 인사영역
+				// oModel.read("/WerksListAuthSet", sendObject, {
+				// 	success: function(oData) {
+				// 		if (oData && oData.results.length) {
+				// 			Common.log(oData);
+				// 			oController.ApplyModel.setProperty("/PersonnelArea", oData.results);
+				// 		}
+				// 	},
+				// 	error: function(oResponse) {
+				// 		Common.log(oResponse);
+				// 		sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+				// 			title: oController.getBundleText("LABEL_09030")
+				// 		});
+				// 	}
+				// });
+			}
 		},
 
 		checkError :function() { // Error Check
 			var oController = this.getView().getController();
 			var oFormData = oController.ApplyModel.getProperty("/FormData");
+			var oDeptInput = $.app.byId(oController.PAGEID + "_Orgeh");
 
-			// 은행(변경후)
-			if(Common.checkNull(oFormData.Bankl)){
-				MessageBox.error(oController.getBundleText("MSG_75006"), { title: oController.getBundleText("LABEL_00149")});
+			// 요청부서
+			if(Common.checkNull(oDeptInput.getTokens()[0])){
+				MessageBox.error(oController.getBundleText("MSG_77008"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}else {
+				oController.ApplyModel.setProperty("/FormData/Orgeh", oDeptInput.getTokens()[0].mProperties.key);
+			}
+
+			// 충원사유
+			if(Common.checkNull(oFormData.Recrsn)){
+				MessageBox.error(oController.getBundleText("MSG_77009"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+			
+			// 상세사유
+			if(Common.checkNull(oFormData.Detrsn)){
+				MessageBox.error(oController.getBundleText("MSG_77010"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
 
-			// 계좌번호(변경후)
-			if(Common.checkNull(oFormData.Bankn)){
-				MessageBox.error(oController.getBundleText("MSG_75007"), { title: oController.getBundleText("LABEL_00149")});
+			// 담당인사영역
+			if(Common.checkNull(oFormData.Werks)){
+				MessageBox.error(oController.getBundleText("MSG_77011"), { title: oController.getBundleText("LABEL_00149")});
 				return true;
 			}
 
-			// if(FileHandler.getFileLength(oController, "001") === 0){
-			// 	MessageBox.error(oController.getBundleText("MSG_75008"), { title: oController.getBundleText("MSG_08107")});
+			// 채용희망일
+			if(Common.checkNull(oFormData.Recda)){
+				MessageBox.error(oController.getBundleText("MSG_77012"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 직군
+			if(Common.checkNull(oFormData.Zhgrade)){
+				MessageBox.error(oController.getBundleText("MSG_77013"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 직무
+			if(Common.checkNull(oFormData.Recjob)){
+				MessageBox.error(oController.getBundleText("MSG_77014"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 수행업무
+			if(Common.checkNull(oFormData.Rectask)){
+				MessageBox.error(oController.getBundleText("MSG_77015"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 학위
+			if(Common.checkNull(oFormData.Recdegree)){
+				MessageBox.error(oController.getBundleText("MSG_77016"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 전공
+			if(Common.checkNull(oFormData.Recmajor)){
+				MessageBox.error(oController.getBundleText("MSG_77017"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// 필수경력
+			if(Common.checkNull(oFormData.Reccareer)){
+				MessageBox.error(oController.getBundleText("MSG_77018"), { title: oController.getBundleText("LABEL_00149")});
+				return true;
+			}
+
+			// if (AttachFileAction.getFileLength(oController) === 0) {
+			// 	MessageBox.error(oController.getBundleText("MSG_59027"), { title: oController.getBundleText("LABEL_00149") });
 			// 	return true;
 			// }
 
@@ -163,17 +298,27 @@ sap.ui.define([
 			this.ApplyModel.setProperty("/FormData/Banka", vBankName);
 		},
 
-		setAccountNumber: function(oEvent) {
-			var inputValue = oEvent.getParameter('value').trim(),
-				convertValue = inputValue.replace(/[^\d]/g, '');
+		// 소속부서 검색
+		displayMultiOrgSearchDialog: function (oEvent) {
+			var oView = sap.ui.getCore().byId("ZUI5_HR_TalentRecruitmentRequestForm.Page");
+			var oController = oView.getController();
 
-			oEvent.getSource().setValue(convertValue);
-			this.ApplyModel.setProperty("/FormData/Bankn", convertValue);
+			SearchOrg.oController = oController;
+			SearchOrg.vCallControlId = oEvent.getSource().getId();
+			SearchOrg.vActionType = "Single";
+			SearchOrg.vCallControlType = "MultiInput";
+
+			if (!oController.oOrgSearchDialog) {
+				oController.oOrgSearchDialog = sap.ui.jsfragment("fragment.COMMON_SEARCH_ORG", oController);
+				oView.addDependent(oController.oOrgSearchDialog);
+			}
+
+			oController.oOrgSearchDialog.open();
 		},
 
         onDialogApplyBtn: function() { // 신청
 			var oController = this;
-			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
+			var oModel = $.app.getModel("ZHR_HRDOC_SRV");
 			var vBukrs = this.getUserGubun();
 			var vPernr = this.getUserId();
 			var oRowData = this.ApplyModel.getProperty("/FormData");
@@ -182,29 +327,27 @@ sap.ui.define([
 			
 			BusyIndicator.show(0);
 			var onPressApply = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_75012")) { // 신청
-					
+				if (fVal && fVal == oController.getBundleText("LABEL_77014")) { // 신청
+												
 					// 첨부파일 저장
-					oRowData.Appnm = FileHandler.uploadFiles.call(oController, ["001"]);
-					oRowData.Pernr = vPernr;
-										
+					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
+
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
-					sendObject.IEmpid = vPernr;
 					sendObject.IBukrs = vBukrs;
-					sendObject.IConType = "3";
+					sendObject.IEmpid = vPernr;
+					sendObject.IOrgeh = oController.ApplyModel.getProperty("/FormData/Orgeh");
+					sendObject.IConType = "2";
 					// Navigation property
-					sendObject.BankAccountApplyNav1 = [Common.copyByMetadata(oModel, "BankAccountApplyTab1", oRowData)];
+					sendObject.EmpRecruitNav = [Common.copyByMetadata(oModel, "NewEmpRecruitTab", oRowData)];
 					
-					oModel.create("/BankAccountApplySet", sendObject, {
+					oModel.create("/NewEmpRecruitSet", sendObject, {
 						success: function(oData) {
-							if (oData && oData.BankAccountApplyNav1) {
-								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_75003"), { title: oController.getBundleText("MSG_08107")});
-								oController.navBack();
-								BusyIndicator.hide();
-							}
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_77002"), { title: oController.getBundleText("MSG_08107")});
+							oController.navBack();
+							BusyIndicator.hide();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -218,41 +361,93 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_75002"), {
-				title: oController.getBundleText("LABEL_75001"),
-				actions: [oController.getBundleText("LABEL_75012"), oController.getBundleText("LABEL_00119")],
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_77001"), {
+				title: oController.getBundleText("LABEL_77001"),
+				actions: [oController.getBundleText("LABEL_77014"), oController.getBundleText("LABEL_00119")],
+				onClose: onPressApply
+			});
+		},
+
+        onDialogReAplBtn: function() { // 재신청
+			var oController = this;
+			var oModel = $.app.getModel("ZHR_HRDOC_SRV");
+			var vBukrs = this.getUserGubun();
+			var vPernr = this.getUserId();
+			var oRowData = this.ApplyModel.getProperty("/FormData");
+
+			if(this.checkError()) return;
+			
+			BusyIndicator.show(0);
+			var onPressApply = function (fVal) {
+				if (fVal && fVal == oController.getBundleText("LABEL_77054")) { // 재신청
+												
+					// 첨부파일 저장
+					oRowData.Appnm = AttachFileAction.uploadFile.call(oController);
+
+					var sendObject = {};
+					// Header
+					sendObject.IPernr = vPernr;
+					sendObject.IBukrs = vBukrs;
+					sendObject.IEmpid = vPernr;
+					sendObject.IOrgeh = oController.ApplyModel.getProperty("/FormData/Orgeh");
+					sendObject.IConType = "2";
+					// Navigation property
+					sendObject.EmpRecruitNav = [Common.copyByMetadata(oModel, "NewEmpRecruitTab", oRowData)];
+					
+					oModel.create("/NewEmpRecruitSet", sendObject, {
+						success: function(oData) {
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_77020"), { title: oController.getBundleText("MSG_08107")});
+							oController.navBack();
+							BusyIndicator.hide();
+						},
+						error: function(oResponse) {
+							Common.log(oResponse);
+
+							sap.m.MessageBox.alert(Common.parseError(oResponse).ErrorMessage, {
+								title: oController.getBundleText("LABEL_09030")
+							});
+						}
+					});
+				}
+				BusyIndicator.hide();
+			};
+
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_77019"), {
+				title: oController.getBundleText("LABEL_77001"),
+				actions: [oController.getBundleText("LABEL_77054"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressApply
 			});
 		},
 
 		onDialogDeleteBtn: function() { // 삭제
 			var oController = this;
-			var oModel = $.app.getModel("ZHR_PAY_RESULT_SRV");
+			var oModel = $.app.getModel("ZHR_HRDOC_SRV");
 			var vBukrs = this.getUserGubun();
 			var vPernr = this.getUserId();
 			var oRowData = this.ApplyModel.getProperty("/FormData");
 
 			BusyIndicator.show(0);
 			var onPressDelete = function (fVal) {
-				if (fVal && fVal == oController.getBundleText("LABEL_75022")) { // 삭제
+				if (fVal && fVal == oController.getBundleText("LABEL_77043")) { // 삭제
 										
 					var sendObject = {};
 					// Header
 					sendObject.IPernr = vPernr;
-					sendObject.IEmpid = vPernr;
 					sendObject.IBukrs = vBukrs;
-					sendObject.IConType = "4";
+					sendObject.IEmpid = vPernr;
+					sendObject.ISeqnr = oController.ApplyModel.getProperty("/FormData/Seqnr");
+					sendObject.IOrgeh = oController.ApplyModel.getProperty("/FormData/Orgeh");
+					sendObject.IConType = "3";
 					// Navigation property
-					sendObject.BankAccountApplyNav1 = [Common.copyByMetadata(oModel, "BankAccountApplyTab1", oRowData)];
+					sendObject.EmpRecruitNav = [Common.copyByMetadata(oModel, "NewEmpRecruitTab", oRowData)];
 					
-					oModel.create("/BankAccountApplySet", sendObject, {
+					oModel.create("/NewEmpRecruitSet", sendObject, {
 						success: function(oData) {
-							if (oData && oData.BankAccountApplyNav1) {
-								Common.log(oData);
-								sap.m.MessageBox.alert(oController.getBundleText("MSG_75005"), { title: oController.getBundleText("MSG_08107")});
-								oController.navBack();
-								BusyIndicator.hide();
-							}
+							Common.log(oData);
+							sap.m.MessageBox.alert(oController.getBundleText("MSG_77004"), { title: oController.getBundleText("MSG_08107")});
+							oController.navBack();
+							BusyIndicator.hide();
 						},
 						error: function(oResponse) {
 							Common.log(oResponse);
@@ -266,25 +461,26 @@ sap.ui.define([
 				BusyIndicator.hide();
 			};
 
-			sap.m.MessageBox.confirm(oController.getBundleText("MSG_75004"), {
-				title: oController.getBundleText("LABEL_75001"),
-				actions: [oController.getBundleText("LABEL_75022"), oController.getBundleText("LABEL_00119")],
+			sap.m.MessageBox.confirm(oController.getBundleText("MSG_77003"), {
+				title: oController.getBundleText("LABEL_77001"),
+				actions: [oController.getBundleText("LABEL_77043"), oController.getBundleText("LABEL_00119")],
 				onClose: onPressDelete
 			});
 		},
 
-        onBeforeOpenDetailDialog: function() {
+		onBeforeOpenDetailDialog: function () {
 			var oController = this.getView().getController();
 			var	vAppnm = oController.ApplyModel.getProperty("/FormData/Appnm") || "",
-                vStatus = oController.ApplyModel.getProperty("/FormData/Status");
+                vRecsta = oController.ApplyModel.getProperty("/FormData/Recsta");
+				
 
-			FileHandler.setAttachFile(oController, { // 교육안내문
-				Label: oController.getBundleText("LABEL_75023"),
-				// Required: true,
+			AttachFileAction.setAttachFile(oController, {
 				Appnm: vAppnm,
-				Mode: "S",
-				Editable: !vStatus
-			},"001");
+				Required: true,
+				Mode: "M",
+				Max: "3",
+				Editable: !vRecsta
+			});
 		},
 		
 		getLocalSessionModel: Common.isLOCAL() ? function() {

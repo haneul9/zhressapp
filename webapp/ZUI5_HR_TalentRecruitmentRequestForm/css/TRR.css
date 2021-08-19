@@ -3,16 +3,34 @@
     padding : 4px !important;
     background : #f3f4f6;
 }
-.sapUiTableRowHighlight.sapUiTableRowHighlightIndication01 { background-color: #A6A6A6 !important; }
-.sapUiTableRowHighlight.sapUiTableRowHighlightIndication02 { background-color: #8dc63f !important; }
-.sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: #ffb400 !important; }
-.sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: #82b0df !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication01 { background-color: rgb(127,127,127) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication02 { background-color: rgb(255,255,0) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication03 { background-color: rgb(255,0,0) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication04 { background-color: rgb(255,192,0) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication05 { background-color: rgb(0,176,80) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication06 { background-color: rgb(106,247,230) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication07 { background-color: rgb(255,0,255) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication08 { background-color: rgb(128,0,0) !important; }
+.sapUiTableRowHighlight.sapUiTableRowHighlightIndication09 { background-color: rgb(0,112,192) !important; }
+.custom-legend-color.Indication01 { background-color: rgb(127,127,127) !important; }
+.custom-legend-color.Indication02 { background-color: rgb(255,255,0) !important; }
+.custom-legend-color.Indication03 { background-color: rgb(255,0,0) !important; }
+.custom-legend-color.Indication04 { background-color: rgb(255,192,0) !important; }
+.custom-legend-color.Indication05 { background-color: rgb(0,176,80) !important; }
+.custom-legend-color.Indication06 { background-color: rgb(106,247,230) !important; }
+.custom-legend-color.Indication07 { background-color: rgb(255,0,255) !important; }
+.custom-legend-color.Indication08 { background-color: rgb(128,0,0) !important; }
+.custom-legend-color.Indication09 { background-color: rgb(0,112,192) !important; }
 .DataCell{
     border : 1px solid #d8dadf;
     padding : 4px !important;
 }
 .Bold{
     font-weight:bold !important;
+}
+.NumBold{
+    font-weight:bold !important;
+    color: blue;
 }
 .BtNone{
     border-top: none;
