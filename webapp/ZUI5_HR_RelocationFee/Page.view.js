@@ -4,7 +4,7 @@ sap.ui.define([
 	"../common/PickOnlyDateRangeSelection"
 ], function (PageHelper, ZHR_TABLES, PickOnlyDateRangeSelection) {
 "use strict";
-//test
+
 	sap.ui.jsview($.app.APP_ID, {
 		
 		_colModel: [
